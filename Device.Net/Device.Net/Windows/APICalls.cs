@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace Hid.Net
 {
-    internal static class APICalls
+    public static class APICalls
     {
         #region Constants
         public const int DigcfDeviceinterface = 16;
