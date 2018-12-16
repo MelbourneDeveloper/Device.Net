@@ -1,9 +1,8 @@
 ﻿using Microsoft.Win32.SafeHandles;
 using System;
-using System.IO;
 using System.Runtime.InteropServices;
 
-namespace Hid.Net
+namespace Device.Net
 {
     public static class APICalls
     {
@@ -21,24 +20,24 @@ namespace Hid.Net
 
         #region Kernel32
         [DllImport("kernel32.dll", SetLastError = true)]
-        internal static extern SafeFileHandle CreateFile(string lpFileName, uint dwDesiredAccess, uint dwShareMode, IntPtr lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);
+        public static extern SafeFileHandle CreateFile(string lpFileName, uint dwDesiredAccess, uint dwShareMode, IntPtr lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);
         #endregion
 
         #region SetupAPI
         [DllImport("setupapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        internal static extern bool SetupDiDestroyDeviceInfoList(IntPtr deviceInfoSet);
+        public static extern bool SetupDiDestroyDeviceInfoList(IntPtr deviceInfoSet);
 
         /// <summary>
         /// https://docs.microsoft.com/en-us/windows/desktop/api/setupapi/nf-setupapi-setupdienumdeviceinterfaces
         /// </summary>
         [DllImport(@"setupapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        internal static extern bool SetupDiEnumDeviceInterfaces(IntPtr hDevInfo, IntPtr devInfo, ref Guid interfaceClassGuid, uint memberIndex, ref SpDeviceInterfaceData deviceInterfaceData);
+        public static extern bool SetupDiEnumDeviceInterfaces(IntPtr hDevInfo, IntPtr devInfo, ref Guid interfaceClassGuid, uint memberIndex, ref SpDeviceInterfaceData deviceInterfaceData);
 
         [DllImport("setupapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        internal static extern IntPtr SetupDiGetClassDevs(ref Guid classGuid, IntPtr enumerator, IntPtr hwndParent, uint flags);
+        public static extern IntPtr SetupDiGetClassDevs(ref Guid classGuid, IntPtr enumerator, IntPtr hwndParent, uint flags);
 
         [DllImport(@"setupapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-        internal static extern bool SetupDiGetDeviceInterfaceDetail(IntPtr hDevInfo, ref SpDeviceInterfaceData deviceInterfaceData, ref SpDeviceInterfaceDetailData deviceInterfaceDetailData, uint deviceInterfaceDetailDataSize, out uint requiredSize, ref SpDeviceInfoData deviceInfoData);
+        public static extern bool SetupDiGetDeviceInterfaceDetail(IntPtr hDevInfo, ref SpDeviceInterfaceData deviceInterfaceData, ref SpDeviceInterfaceDetailData deviceInterfaceDetailData, uint deviceInterfaceDetailDataSize, out uint requiredSize, ref SpDeviceInfoData deviceInfoData);
         #endregion
 
         #endregion

@@ -1,12 +1,11 @@
-﻿using Device.Net;
-using Microsoft.Win32.SafeHandles;
+﻿using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace Hid.Net
+namespace Device.Net
 {
     public abstract class WindowsDeviceBase : DeviceBase, IDevice
     {

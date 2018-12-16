@@ -1,9 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Hid.Net
+namespace Device.Net
 {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal struct SpDeviceInterfaceDetailData
+    public struct SpDeviceInterfaceDetailData
     {
         public int CbSize;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]

@@ -1,4 +1,4 @@
-﻿namespace Hid.Net
+﻿namespace Device.Net
 {
     public class DeviceInformation
     {

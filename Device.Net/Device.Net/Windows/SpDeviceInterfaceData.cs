@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Hid.Net
+namespace Device.Net
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal struct SpDeviceInterfaceData
+    public struct SpDeviceInterfaceData
     {
         public uint CbSize;
         public Guid InterfaceClassGuid;
