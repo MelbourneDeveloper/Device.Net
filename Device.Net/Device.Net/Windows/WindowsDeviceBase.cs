@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Device.Net
 {
+    /// <summary>
+    /// This class remains untested
+    /// </summary>
     public abstract class WindowsDeviceBase : DeviceBase, IDevice
     {
         //TODO: Implement
