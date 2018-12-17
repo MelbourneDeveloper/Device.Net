@@ -5,9 +5,15 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Device.Net/blob/master/LICENSE</PackageLicenseUrl>
-    <AssemblyVersion>1.5.0.0</AssemblyVersion>
-    <FileVersion>1.5.0.0</FileVersion>
-    <Version>1.5.0</Version>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
+    <Version>2.0.0</Version>
+    <Authors>Christian Findlay</Authors>
+    <Description>Cross platform C# library for talking to connected devices in a uniform way through dependency injection.</Description>
+    <Copyright>Copyright (c) 2018 Christian Findlay</Copyright>
+    <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
+    <PackageTags>Hid USB Android UWP Windows C#</PackageTags>
   </PropertyGroup>
 
 </Project>
