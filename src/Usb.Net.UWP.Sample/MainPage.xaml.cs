@@ -21,7 +21,9 @@ namespace Usb.Net.UWP.Sample
         private async void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
             Loaded -= MainPage_Loaded;
-            var deviceIds = await DeviceManager.GetDeviceIds(0x1209, 0x53C1);
+
+            var deviceIds = await DeviceManager.Current.GetDeviceIds(0x1209, 0x53C1);
+
             //Old firmware always returns null but new firmware does attach to the device.
             var trezorUsbDeviceId = deviceIds.FirstOrDefault(d => (d.ToLower().Contains("534c") || d.ToLower().Contains("1209")) && !d.ToLower().Contains("hid"));
             var trezorUsbDevice = new UWPUsbDevice(trezorUsbDeviceId);

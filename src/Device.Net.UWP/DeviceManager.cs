@@ -6,9 +6,11 @@ using wde = Windows.Devices.Enumeration;
 
 namespace Device.Net
 {
-    public static class DeviceManager
+    public class DeviceManager
     {
-        public async static Task<IEnumerable<string>> GetDeviceIds(int? vendorId, int? productId)
+        public static DeviceManager Current = new DeviceManager();
+
+        public async Task<IEnumerable<string>> GetDeviceIds(int? vendorId, int? productId)
         {
             var aqsFilter = $"System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND System.DeviceInterface.Hid.VendorId:={vendorId} AND System.DeviceInterface.Hid.ProductId:={productId} ";
             var deviceInformationCollection = await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask();
