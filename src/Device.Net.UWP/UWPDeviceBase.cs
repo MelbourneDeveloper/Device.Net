@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Windows.Devices.HumanInterfaceDevice;
 
 namespace Device.Net.UWP
 {
     public abstract class UWPDeviceBase : DeviceBase, IDevice
     {
-        #region Protected Properties
-        protected HidDevice _HidDevice;
-        #endregion
-
         #region Public Properties
         public string DeviceId { get; set; }
         #endregion
@@ -37,6 +32,13 @@ namespace Device.Net.UWP
         public abstract Task InitializeAsync();
         public abstract Task<byte[]> ReadAsync();
         public abstract Task WriteAsync(byte[] data);
+        #endregion
+    }
+
+    public abstract class UWPDeviceBase<T> : UWPDeviceBase
+    {
+        #region Protected Properties
+        protected T _ConnectedDevice;
         #endregion
     }
 }

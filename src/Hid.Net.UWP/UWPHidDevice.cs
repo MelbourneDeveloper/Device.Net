@@ -11,7 +11,7 @@ using Windows.Storage;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDevice : UWPDeviceBase
+    public class UWPHidDevice : UWPDeviceBase<HidDevice>
     {
 
         #region Fields
@@ -117,7 +117,7 @@ namespace Hid.Net.UWP
 
                         if (hidDevice != null)
                         {
-                            _HidDevice = hidDevice;
+                            _ConnectedDevice = hidDevice;
                             //Connection was successful
                             DeviceId = deviceInformation.Id;
                             break;
@@ -136,12 +136,12 @@ namespace Hid.Net.UWP
             }
             else
             {
-                _HidDevice = await GetDevice(DeviceId);
+                _ConnectedDevice = await GetDevice(DeviceId);
             }
 
-            if (_HidDevice != null)
+            if (_ConnectedDevice != null)
             {
-                _HidDevice.InputReportReceived += _HidDevice_InputReportReceived;
+                _ConnectedDevice.InputReportReceived += _HidDevice_InputReportReceived;
                 RaiseConnected();
             }
         }
@@ -158,12 +158,12 @@ namespace Hid.Net.UWP
         #region Public Methods
         public override async Task<bool> GetIsConnectedAsync()
         {
-            return _HidDevice != null;
+            return _ConnectedDevice != null;
         }
 
         public override void Dispose()
         {
-            _HidDevice.Dispose();
+            _ConnectedDevice.Dispose();
             _TaskCompletionSource?.Task?.Dispose();
         }
 
@@ -205,13 +205,13 @@ namespace Hid.Net.UWP
             }
 
             var buffer = bytes.AsBuffer();
-            var outReport = _HidDevice.CreateOutputReport();
+            var outReport = _ConnectedDevice.CreateOutputReport();
             outReport.Data = buffer;
             IAsyncOperation<uint> operation = null;
 
             try
             {
-                operation = _HidDevice.SendOutputReportAsync(outReport);
+                operation = _ConnectedDevice.SendOutputReportAsync(outReport);
             }
             catch (ArgumentException ex)
             {
