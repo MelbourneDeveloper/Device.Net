@@ -15,7 +15,7 @@ namespace Usb.Net.UWP
         {
         }
 
-        public UWPUsbDevice(string deviceId) : base()
+        public UWPUsbDevice(string deviceId) : base(deviceId)
         {
         }
         #endregion
