@@ -7,21 +7,17 @@ using wde = Windows.Devices.Enumeration;
 
 namespace Usb.Net.UWP
 {
-    public class UWPUsbDeviceFactory : IDeviceFactory<UWPUsbDevice>
+    public class UWPUsbDeviceFactory : IDeviceFactory
     {
         public static void Register()
         {
             DeviceManager.Current.DeviceFactories.Add(new UWPUsbDeviceFactory());
         }
 
-        public UWPUsbDevice GetDevice(DeviceDefinition deviceDefinition)
+        public IDevice GetDevice(DeviceDefinition deviceDefinition)
         {
+            if (deviceDefinition.DeviceType == DeviceType.Hid) return null;
             return new UWPUsbDevice(deviceDefinition.DeviceId);
-        }
-
-        public IDevice GetDevice(string deviceId)
-        {
-            return new UWPUsbDevice(deviceId);
         }
 
         public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)

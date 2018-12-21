@@ -53,7 +53,7 @@ namespace Device.Net
                     var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitions(filterDeviceDefinition.VendorId, filterDeviceDefinition.ProductId);
                     foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                     {
-                        var device = deviceFactory.GetDevice(connectedDeviceDefinition.DeviceId);
+                        var device = deviceFactory.GetDevice(connectedDeviceDefinition);
                         if (device != null) retVal.Add(device);
 
                     }

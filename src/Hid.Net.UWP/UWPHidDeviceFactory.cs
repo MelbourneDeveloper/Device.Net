@@ -7,20 +7,17 @@ using wde = Windows.Devices.Enumeration;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDeviceFactory : IDeviceFactory<UWPHidDevice>
+    public class UWPHidDeviceFactory : IDeviceFactory
     {
         public static void Register()
         {
             DeviceManager.Current.DeviceFactories.Add(new UWPHidDeviceFactory());
         }
 
-        public UWPHidDevice GetDevice(DeviceDefinition deviceDefinition)
+        public IDevice GetDevice(DeviceDefinition deviceDefinition)
         {
+            if (deviceDefinition.DeviceType == DeviceType.Usb) return null;
             return new UWPHidDevice(deviceDefinition.DeviceId);
-        }
-        public IDevice GetDevice(string deviceId)
-        {
-            return new UWPHidDevice(deviceId);
         }
 
         public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
@@ -34,7 +31,5 @@ namespace Hid.Net.UWP
             var deviceDefinitions = deviceInformationCollection.Select(d => new DeviceDefinition { DeviceId = d.Id, DeviceType = DeviceType.Hid }).ToList();
             return deviceDefinitions;
         }
-
-
     }
 }
