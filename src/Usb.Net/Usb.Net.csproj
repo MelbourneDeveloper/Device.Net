@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Usb.Net</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/MelbourneDeveloper/Usb.Net</PackageProjectUrl>
+    <Description>A cross platform USB library written in C#
+
+</Description>
+    <Version>2.0.0</Version>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
+    <Authors>Christian Findlay</Authors>
+    <Copyright>Copyright (c) 2018 Christian Findlay</Copyright>
+    <RepositoryUrl>https://github.com/MelbourneDeveloper/Usb.Net</RepositoryUrl>
+    <PackageTags>USB Hid Android C#</PackageTags>
+    <PackageReleaseNotes>Split from Hid.Net</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
+  </ItemGroup>
+
+</Project>
