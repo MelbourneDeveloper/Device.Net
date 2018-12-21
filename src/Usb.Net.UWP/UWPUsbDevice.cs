@@ -1,10 +1,8 @@
 ﻿using Device.Net.UWP;
 using System;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-using Windows.Devices.HumanInterfaceDevice;
 using Windows.Devices.Usb;
 using Windows.Foundation;
 
@@ -12,21 +10,6 @@ namespace Usb.Net.UWP
 {
     public class UWPUsbDevice : UWPDeviceBase<UsbDevice>
     {
-        #region Event Handlers
-
-        private byte[] InputReportToBytes(HidInputReportReceivedEventArgs args)
-        {
-            byte[] bytes;
-            using (var stream = args.Report.Data.AsStream())
-            {
-                bytes = new byte[args.Report.Data.Length];
-                stream.Read(bytes, 0, (int)args.Report.Data.Length);
-            }
-
-            return bytes;
-        }
-        #endregion
-
         #region Constructors
         public UWPUsbDevice() : base()
         {
@@ -45,8 +28,8 @@ namespace Usb.Net.UWP
             if (_ConnectedDevice != null)
             {
                 var usbInterface = _ConnectedDevice.Configuration.UsbInterfaces.FirstOrDefault();
-                var fsdfsdf = usbInterface.InterruptInPipes.FirstOrDefault();
-                fsdfsdf.DataReceived += Fsdfsdf_DataReceived;
+                var interruptPipe = usbInterface.InterruptInPipes.FirstOrDefault();
+                interruptPipe.DataReceived += InterruptPipe_DataReceived;
 
                 RaiseConnected();
             }
@@ -56,12 +39,6 @@ namespace Usb.Net.UWP
             }
         }
 
-        private void Fsdfsdf_DataReceived(UsbInterruptInPipe sender, UsbInterruptInEventArgs args)
-        {
-            var asdasd = args.InterruptData.ToArray();
-        }
-
-
         protected override IAsyncOperation<UsbDevice> FromIdAsync(string id)
         {
             return UsbDevice.FromIdAsync(id);
@@ -69,9 +46,14 @@ namespace Usb.Net.UWP
 
         #endregion
 
+        #region Event Handlers
+        private void InterruptPipe_DataReceived(UsbInterruptInPipe sender, UsbInterruptInEventArgs args)
+        {
+            HandleDataReceived(args.InterruptData.ToArray());
+        }
+        #endregion
+
         #region Public Methods
-
-
         public override async Task WriteAsync(byte[] bytes)
         {
             var bufferToSend = bytes.AsBuffer();
@@ -81,8 +63,6 @@ namespace Usb.Net.UWP
 
             Tracer?.Trace(false, bytes);
         }
-
-
         #endregion
     }
 }
