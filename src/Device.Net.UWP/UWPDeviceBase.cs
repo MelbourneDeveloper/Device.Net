@@ -27,7 +27,7 @@ namespace Device.Net.UWP
             Connected?.Invoke(this, new EventArgs());
         }
 
-        protected void RaiseDisonnected()
+        protected void RaiseDisconnected()
         {
             Disconnected?.Invoke(this, new EventArgs());
         }

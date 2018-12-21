@@ -1,7 +1,6 @@
 ﻿using Device.Net;
 using Device.Net.UWP;
 using System;
-using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Devices.HumanInterfaceDevice;
@@ -24,7 +23,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPHidDevice() : base()
+        public UWPHidDevice()
         {
         }
 

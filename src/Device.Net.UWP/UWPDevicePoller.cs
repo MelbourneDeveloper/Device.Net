@@ -6,15 +6,15 @@ namespace Device.Net.UWP
     public class UWPDevicePoller
     {
         #region Fields
-        private Timer _PollTimer = new Timer(3000);
+        private readonly Timer _PollTimer = new Timer(3000);
         private bool _IsPolling;
         #endregion
 
         #region Public Properties
         public uint ProductId { get; }
         public uint VendorId { get; }
-        public UWPDeviceBase UWPDevice { get; private set; }
-        public DeviceType DeviceType { get; private set; }
+        public UWPDeviceBase UWPDevice { get; }
+        public DeviceType DeviceType { get; }
         #endregion
 
         #region Constructor
