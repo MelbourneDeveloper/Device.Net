@@ -15,7 +15,6 @@ namespace Hid.Net.UWP
     {
 
         #region Fields
-        private HidDevice _HidDevice;
         private TaskCompletionSource<byte[]> _TaskCompletionSource = null;
         private readonly Collection<byte[]> _Chunks = new Collection<byte[]>();
         private bool _IsReading;
