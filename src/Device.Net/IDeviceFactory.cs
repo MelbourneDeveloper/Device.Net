@@ -6,6 +6,6 @@
 
     public interface IDeviceFactory<T> : IDeviceFactory where T : IDevice
     {
-        T GetDevice(string deviceId);
+        T GetDevice(DeviceDefinition deviceDefinition);
     }
 }

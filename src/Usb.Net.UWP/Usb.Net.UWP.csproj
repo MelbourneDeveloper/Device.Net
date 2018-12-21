@@ -107,6 +107,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UWPUsbDeviceFactory.cs" />
     <Compile Include="UWPUsbDevice.cs" />
     <EmbeddedResource Include="Properties\Usb.Net.UWP.rd.xml" />
   </ItemGroup>

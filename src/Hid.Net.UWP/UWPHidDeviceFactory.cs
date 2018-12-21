@@ -9,9 +9,9 @@ namespace Hid.Net.UWP
             DeviceMan.Current.DeviceFactories.Add(new UWPHidDeviceFactory());
         }
 
-        public UWPHidDevice GetDevice(string deviceId)
+        public UWPHidDevice GetDevice(DeviceDefinition deviceDefinition)
         {
-            return new UWPHidDevice(deviceId);
+            return new UWPHidDevice(deviceDefinition.DeviceId);
         }
     }
 }
