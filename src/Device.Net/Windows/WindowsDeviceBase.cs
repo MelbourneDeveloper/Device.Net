@@ -75,7 +75,7 @@ namespace Device.Net
 
                 APICalls.SetupDiGetDeviceInterfaceDetail(i, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
 
-                var deviceInformation = new DeviceInformation { DevicePath = spDeviceInterfaceDetailData.DevicePath };
+                var deviceInformation = new DeviceInformation { DeviceId = spDeviceInterfaceDetailData.DevicePath };
 
                 deviceInformations.Add(deviceInformation);
             }
