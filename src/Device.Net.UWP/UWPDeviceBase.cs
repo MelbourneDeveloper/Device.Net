@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Windows.Foundation;
 
 namespace Device.Net.UWP
 {
@@ -73,6 +74,20 @@ namespace Device.Net.UWP
     {
         #region Protected Properties
         protected T _ConnectedDevice;
+        #endregion
+
+        #region Protected Methods
+        protected  async Task<T> GetDevice(string id)
+        {
+            var hidDeviceOperation = FromIdAsync(id);
+            var task = hidDeviceOperation.AsTask();
+            var hidDevice = await task;
+            return hidDevice;
+        }
+        #endregion
+
+        #region Protected Abstract Methods
+        protected abstract IAsyncOperation<T> FromIdAsync(string id);
         #endregion
 
         #region Public Overrides

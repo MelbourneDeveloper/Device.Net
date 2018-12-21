@@ -62,12 +62,9 @@ namespace Hid.Net.UWP
             }
         }
 
-        private static async Task<HidDevice> GetDevice(string id)
+        protected override IAsyncOperation<HidDevice> FromIdAsync(string id)
         {
-            var hidDeviceOperation = HidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
-            var task = hidDeviceOperation.AsTask();
-            var hidDevice = await task;
-            return hidDevice;
+            return HidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
         }
         #endregion
 

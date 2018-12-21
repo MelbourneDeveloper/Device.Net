@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Devices.HumanInterfaceDevice;
 using Windows.Devices.Usb;
+using Windows.Foundation;
 
 namespace Usb.Net.UWP
 {
@@ -60,13 +61,12 @@ namespace Usb.Net.UWP
             var asdasd = args.InterruptData.ToArray();
         }
 
-        private static async Task<UsbDevice> GetDevice(string id)
+
+        protected override IAsyncOperation<UsbDevice> FromIdAsync(string id)
         {
-            var hidDeviceOperation = UsbDevice.FromIdAsync(id);
-            var task = hidDeviceOperation.AsTask();
-            var hidDevice = await task;
-            return hidDevice;
+            return UsbDevice.FromIdAsync(id);
         }
+
         #endregion
 
         #region Public Methods
@@ -81,6 +81,8 @@ namespace Usb.Net.UWP
 
             Tracer?.Trace(false, bytes);
         }
+
+
         #endregion
     }
 }
