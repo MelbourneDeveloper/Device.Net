@@ -66,6 +66,10 @@ namespace Hid.Net.UWP
                 _ConnectedDevice.InputReportReceived += _HidDevice_InputReportReceived;
                 RaiseConnected();
             }
+            else
+            {
+                throw new Exception($"The device {DeviceId} failed to initialize");
+            }
         }
 
         protected override IAsyncOperation<HidDevice> FromIdAsync(string id)

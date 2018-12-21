@@ -26,7 +26,8 @@ namespace Usb.Net.UWP.Sample
 
             UWPUsbDeviceFactory.Register();
             UWPHidDeviceFactory.Register();
-            var devices = await DeviceManager.Current.GetDevices(new List<DeviceDefinition> { new DeviceDefinition { VendorId = 0x1209, ProductId = 0x53C1 } });
+            var deviceDefinitions = new List<DeviceDefinition> { new DeviceDefinition { VendorId = 0x1209, ProductId = 0x53C1, DeviceType = DeviceType.Usb } };
+            var devices = await DeviceManager.Current.GetDevices(deviceDefinitions);
             var trezorDevice = devices.FirstOrDefault();
             await trezorDevice.InitializeAsync();
 
