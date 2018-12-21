@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.Devices.HumanInterfaceDevice;
 using wde = Windows.Devices.Enumeration;
 
 namespace Hid.Net.UWP
@@ -27,6 +28,11 @@ namespace Hid.Net.UWP
             var aqsFilter = $"System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND System.DeviceInterface.Hid.VendorId:={vendorId} AND System.DeviceInterface.Hid.ProductId:={productId} ";
 
             var deviceInformationCollection = await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask();
+
+            //foreach (var deviceInformation in deviceInformationCollection)
+            //{
+            //    System.Diagnostics.Debug.WriteLine($"{deviceInformation.Id} {string.Join(", ", deviceInformation.Properties.Select(p => p.ToString()))}");
+            //}
 
             //TODO: return the vid/pid if we can get it from the properties. Also read/write buffer size
 
