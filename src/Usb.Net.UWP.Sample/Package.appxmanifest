@@ -55,11 +55,6 @@
         <Function Type="classId:ff * *" />
       </Device>
 
-      <!--Trezor Firmware 1.6.x -->
-      <Device Id="vidpid:534c 0001">
-        <Function Type="classId:ff * *" />
-      </Device>
-
     </DeviceCapability>
 
   </Capabilities>

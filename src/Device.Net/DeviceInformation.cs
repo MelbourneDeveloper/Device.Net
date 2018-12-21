@@ -20,7 +20,7 @@
         /// <summary>
         /// Freeform tag to be used as needed
         /// </summary>
-        public string Label { get; }
+        public string Label { get; set; }
 
         /// <summary>
         /// The type of device interface
