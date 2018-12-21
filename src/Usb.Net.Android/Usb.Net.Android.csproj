@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeviceManager.cs" />
     <Compile Include="UsbDeviceAttachedReceiver.cs" />
     <Compile Include="UsbDeviceDetachedReceiver.cs" />
     <Compile Include="UsbPermissionBroadcastReceiver.cs" />
