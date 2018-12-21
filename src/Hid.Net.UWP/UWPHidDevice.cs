@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Device.Net.UWP;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -10,12 +11,8 @@ using Windows.Storage;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDevice : DeviceBase, IDevice
+    public class UWPHidDevice : UWPDeviceBase
     {
-        #region Events
-        public event EventHandler Connected;
-        public event EventHandler Disconnected;
-        #endregion
 
         #region Fields
         private HidDevice _HidDevice;
@@ -28,7 +25,6 @@ namespace Hid.Net.UWP
         public int VendorId { get; set; }
         public int ProductId { get; set; }
 
-        public string DeviceId { get; set; }
         public bool DataHasExtraByte { get; set; } = true;
         #endregion
 
@@ -93,7 +89,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Private Methods
-        public async Task InitializeAsync()
+        public override async Task InitializeAsync()
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
 
@@ -147,7 +143,7 @@ namespace Hid.Net.UWP
             if (_HidDevice != null)
             {
                 _HidDevice.InputReportReceived += _HidDevice_InputReportReceived;
-                Connected?.Invoke(this, new EventArgs());
+                RaiseConnected();
             }
         }
 
@@ -161,18 +157,18 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Methods
-        public async Task<bool> GetIsConnectedAsync()
+        public override async Task<bool> GetIsConnectedAsync()
         {
             return _HidDevice != null;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             _HidDevice.Dispose();
             _TaskCompletionSource?.Task?.Dispose();
         }
 
-        public async Task<byte[]> ReadAsync()
+        public override async Task<byte[]> ReadAsync()
         {
             if (_IsReading)
             {
@@ -195,7 +191,7 @@ namespace Hid.Net.UWP
             return await _TaskCompletionSource.Task;
         }
 
-        public async Task WriteAsync(byte[] data)
+        public override async Task WriteAsync(byte[] data)
         {
             byte[] bytes;
             if (DataHasExtraByte)
