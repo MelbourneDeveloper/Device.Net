@@ -1,4 +1,4 @@
-﻿using Device.Net;
+﻿using Device.Net.UWP;
 using System;
 using System.IO;
 using System.Linq;
@@ -9,7 +9,7 @@ using Windows.Devices.Usb;
 
 namespace Usb.Net.UWP
 {
-    public class UWPUsbDevice : DeviceBase, IDevice
+    public class UWPUsbDevice : UWPDeviceBase
     {
         #region Events
         public event EventHandler Connected;

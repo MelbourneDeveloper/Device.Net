@@ -1,7 +1,6 @@
 ﻿using Device.Net;
 using Device.Net.UWP;
 using System;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
@@ -14,16 +13,9 @@ namespace Hid.Net.UWP
     public class UWPHidDevice : UWPDeviceBase<HidDevice>
     {
 
-        #region Fields
-        private TaskCompletionSource<byte[]> _TaskCompletionSource = null;
-        private readonly Collection<byte[]> _Chunks = new Collection<byte[]>();
-        private bool _IsReading;
-        #endregion
+
 
         #region Public Properties
-        public int VendorId { get; set; }
-        public int ProductId { get; set; }
-
         public bool DataHasExtraByte { get; set; } = true;
         #endregion
 
@@ -31,22 +23,9 @@ namespace Hid.Net.UWP
 
         private void _HidDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args)
         {
-            if (!_IsReading)
-            {
-                lock (_Chunks)
-                {
-                    var bytes = InputReportToBytes(args);
-                    _Chunks.Add(bytes);
-                }
-            }
-            else
-            {
-                var bytes = InputReportToBytes(args);
+            var bytes = InputReportToBytes(args);
 
-                _IsReading = false;
-
-                _TaskCompletionSource.SetResult(bytes);
-            }
+            HandleDataReceived(bytes);
         }
 
         private byte[] InputReportToBytes(HidInputReportReceivedEventArgs args)
@@ -76,15 +55,6 @@ namespace Hid.Net.UWP
         {
             DeviceId = deviceId;
         }
-
-        /// <summary>
-        /// TODO: Further filter by UsagePage. The problem is that this syntax never seems to work: AND System.DeviceInterface.Hid.UsagePage:=?? 
-        /// </summary>
-        public UWPHidDevice(int vendorId, int productId)
-        {
-            VendorId = vendorId;
-            ProductId = productId;
-        }
         #endregion
 
         #region Private Methods
@@ -97,47 +67,7 @@ namespace Hid.Net.UWP
 
             Logger.Log("Initializing Hid device", null, nameof(UWPHidDevice));
 
-            if (string.IsNullOrEmpty(DeviceId))
-            {
-                var foundDevices = await UWPHelpers.GetDevicesByProductAndVendorAsync(VendorId, ProductId);
-
-                if (foundDevices.Count == 0)
-                {
-                    throw new Exception($"There were no enabled devices connected with the ProductId of {ProductId} and VendorId of {VendorId}");
-                }
-
-                foreach (var deviceInformation in foundDevices)
-                {
-                    try
-                    {
-                        //Attempt to connect
-                        Logger.Log($"Attempting to connect to device Id {deviceInformation.Id} ...", null, nameof(UWPHidDevice));
-
-                        var hidDevice = await GetDevice(deviceInformation.Id);
-
-                        if (hidDevice != null)
-                        {
-                            _ConnectedDevice = hidDevice;
-                            //Connection was successful
-                            DeviceId = deviceInformation.Id;
-                            break;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Log($"Error attempting to connect to {deviceInformation.Id}", ex, nameof(UWPHidDevice));
-                    }
-                }
-
-                if (string.IsNullOrEmpty(DeviceId))
-                {
-                    throw new Exception($"Attempted to connect to {foundDevices.Count} devices, but they all failed to connect");
-                }
-            }
-            else
-            {
-                _ConnectedDevice = await GetDevice(DeviceId);
-            }
+            _ConnectedDevice = await GetDevice(DeviceId);
 
             if (_ConnectedDevice != null)
             {
@@ -156,10 +86,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Methods
-        public override async Task<bool> GetIsConnectedAsync()
-        {
-            return _ConnectedDevice != null;
-        }
+
 
         public override void Dispose()
         {
