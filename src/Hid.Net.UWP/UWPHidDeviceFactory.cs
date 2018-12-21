@@ -9,6 +9,8 @@ namespace Hid.Net.UWP
 {
     public class UWPHidDeviceFactory : IDeviceFactory
     {
+        public DeviceType DeviceType => DeviceType.Hid;
+
         public static void Register()
         {
             DeviceManager.Current.DeviceFactories.Add(new UWPHidDeviceFactory());

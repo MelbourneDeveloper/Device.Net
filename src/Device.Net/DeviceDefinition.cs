@@ -25,7 +25,7 @@
         /// <summary>
         /// The type of device interface
         /// </summary>
-        public DeviceType DeviceType { get; set; }
+        public DeviceType? DeviceType { get; set; }
 
         /// <summary>
         /// The maximum size of data to be written to the device

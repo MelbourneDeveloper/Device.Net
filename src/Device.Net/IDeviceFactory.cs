@@ -7,10 +7,6 @@ namespace Device.Net
     {
         Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId);
         IDevice GetDevice(DeviceDefinition deviceDefinition);
+        DeviceType DeviceType { get; }
     }
-
-    //public interface IDeviceFactory<T> : IDeviceFactory where T : IDevice
-    //{
-    //    T GetDevice(DeviceDefinition deviceDefinition);
-    //}
 }

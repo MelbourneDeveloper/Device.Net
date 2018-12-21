@@ -9,6 +9,8 @@ namespace Usb.Net.UWP
 {
     public class UWPUsbDeviceFactory : IDeviceFactory
     {
+        public DeviceType DeviceType => DeviceType.Usb;
+
         public static void Register()
         {
             DeviceManager.Current.DeviceFactories.Add(new UWPUsbDeviceFactory());
