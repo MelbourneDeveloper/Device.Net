@@ -26,7 +26,13 @@ namespace Usb.Net.UWP.Sample
 
             UWPUsbDeviceFactory.Register();
             UWPHidDeviceFactory.Register();
-            var deviceDefinitions = new List<DeviceDefinition> { new DeviceDefinition { VendorId = 0x1209, ProductId = 0x53C1, DeviceType = DeviceType.Usb } };
+            var deviceDefinitions = new List<DeviceDefinition>
+            {
+                new DeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x" },
+                new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, ReadBufferSize=64, WriteBufferSize=64, Label="Trezor One Firmware 1.7.x" },
+                new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C0, ReadBufferSize=64, WriteBufferSize=64, Label="Model T" }
+            };
+
             var devices = await DeviceManager.Current.GetDevices(deviceDefinitions);
             var trezorDevice = devices.FirstOrDefault();
             await trezorDevice.InitializeAsync();
