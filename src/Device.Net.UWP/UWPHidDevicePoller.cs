@@ -2,7 +2,7 @@
 using System.Timers;
 using Device.Net;
 
-namespace Hid.Net.UWP
+namespace Device.Net.UWP
 {
     public class UWPHidDevicePoller
     {
@@ -14,11 +14,11 @@ namespace Hid.Net.UWP
         #region Public Properties
         public int ProductId { get; }
         public int VendorId { get; }
-        public UWPHidDevice UWPHidDevice { get; private set; }
+        public UWPDeviceBase UWPHidDevice { get; private set; }
         #endregion
 
         #region Constructor
-        public UWPHidDevicePoller(int productId, int vendorId, UWPHidDevice uwpHidDevice)
+        public UWPHidDevicePoller(int productId, int vendorId, UWPDeviceBase uwpHidDevice)
         {
             _PollTimer.Elapsed += _PollTimer_Elapsed;
             _PollTimer.Start();
