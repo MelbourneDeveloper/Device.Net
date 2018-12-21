@@ -25,78 +25,19 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Private Properties
-        private ushort OutputReportByteLength => _HidCollectionCapabilities.OutputReportByteLength > 0 ? _HidCollectionCapabilities.OutputReportByteLength : (ushort)DeviceInformation.OutputReportByteLength;
+        private ushort OutputReportByteLength => _HidCollectionCapabilities.OutputReportByteLength > 0 ? _HidCollectionCapabilities.OutputReportByteLength : (ushort)DeviceInformation.WriteBufferSize;
         private string LogSection => nameof(WindowsHidDevice);
         #endregion
 
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
         public WindowsHidDeviceInformation DeviceInformation { get; set; }
-        public string DevicePath => DeviceInformation.DevicePath;
+        public string DevicePath => DeviceInformation.DeviceId;
         public bool IsInitialized { get; private set; }
-        public int ProductId => DeviceInformation.ProductId;
+        public uint? ProductId => DeviceInformation.ProductId;
         public ushort Usage => _HidCollectionCapabilities.Usage;
         public ushort UsagePage => _HidCollectionCapabilities.UsagePage;
-        public int VendorId => DeviceInformation.VendorId;
-        #endregion
-
-        #region Public Static Methods
-        public static Collection<WindowsHidDeviceInformation> GetConnectedDeviceInformations()
-        {
-            var deviceInformations = new Collection<WindowsHidDeviceInformation>();
-            var spDeviceInterfaceData = new SpDeviceInterfaceData();
-            var spDeviceInfoData = new SpDeviceInfoData();
-            var spDeviceInterfaceDetailData = new SpDeviceInterfaceDetailData();
-            spDeviceInterfaceData.CbSize = (uint)Marshal.SizeOf(spDeviceInterfaceData);
-            spDeviceInfoData.CbSize = (uint)Marshal.SizeOf(spDeviceInfoData);
-
-            var hidGuid = new Guid();
-
-            HidAPICalls.HidD_GetHidGuid(ref hidGuid);
-
-            var i = APICalls.SetupDiGetClassDevs(ref hidGuid, IntPtr.Zero, IntPtr.Zero, APICalls.DigcfDeviceinterface | APICalls.DigcfPresent);
-
-            if (IntPtr.Size == 8)
-            {
-                spDeviceInterfaceDetailData.CbSize = 8;
-            }
-            else
-            {
-                spDeviceInterfaceDetailData.CbSize = 4 + Marshal.SystemDefaultCharSize;
-            }
-
-            var x = -1;
-
-            while (true)
-            {
-                x++;
-
-                var setupDiEnumDeviceInterfacesResult = APICalls.SetupDiEnumDeviceInterfaces(i, IntPtr.Zero, ref hidGuid, (uint)x, ref spDeviceInterfaceData);
-                var errorNumber = Marshal.GetLastWin32Error();
-
-                //TODO: deal with error numbers. Give a meaningful error message
-
-                if (setupDiEnumDeviceInterfacesResult == false)
-                {
-                    break;
-                }
-
-                APICalls.SetupDiGetDeviceInterfaceDetail(i, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
-
-                var deviceInformation = GetDeviceInformation(spDeviceInterfaceDetailData.DevicePath);
-                if (deviceInformation == null)
-                {
-                    continue;
-                }
-
-                deviceInformations.Add(deviceInformation);
-            }
-
-            APICalls.SetupDiDestroyDeviceInfoList(i);
-
-            return deviceInformations;
-        }
-
+        public uint? VendorId => DeviceInformation.VendorId;
         #endregion
 
         #region Constructor
@@ -150,8 +91,8 @@ namespace Hid.Net.Windows
             _HidCollectionCapabilities = new HidCollectionCapabilities();
             var pointerToBuffer = Marshal.AllocHGlobal(126);
 
-            _ReadSafeFileHandle = APICalls.CreateFile(DeviceInformation.DevicePath, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
-            _WriteSafeFileHandle = APICalls.CreateFile(DeviceInformation.DevicePath, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+            _ReadSafeFileHandle = APICalls.CreateFile(DeviceInformation.DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+            _WriteSafeFileHandle = APICalls.CreateFile(DeviceInformation.DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
 
             if (!HidAPICalls.HidD_GetPreparsedData(_ReadSafeFileHandle, ref pointerToPreParsedData))
             {
@@ -325,10 +266,11 @@ namespace Hid.Net.Windows
 
                 var deviceInformation = new WindowsHidDeviceInformation
                 {
-                    DevicePath = devicePath,
-                    InputReportByteLength = hidCollectionCapabilities.InputReportByteLength,
+                    DeviceId = devicePath,
+                    //TODO Is this the right way around?
+                    WriteBufferSize = hidCollectionCapabilities.InputReportByteLength,
+                    ReadBufferSize = hidCollectionCapabilities.OutputReportByteLength,
                     Manufacturer = manufacturer,
-                    OutputReportByteLength = hidCollectionCapabilities.OutputReportByteLength,
                     Product = product,
                     ProductId = (ushort)hidAttributes.ProductId,
                     SerialNumber = serialNumber,

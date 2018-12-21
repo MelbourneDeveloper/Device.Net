@@ -10,12 +10,12 @@
         /// <summary>
         /// Vendor ID
         /// </summary>
-        public uint VendorId { get; set; }
+        public uint? VendorId { get; set; }
 
         /// <summary>
         /// Product Id
         /// </summary>
-        public uint ProductId { get; set; }
+        public uint? ProductId { get; set; }
 
         /// <summary>
         /// Freeform tag to be used as needed
@@ -30,11 +30,11 @@
         /// <summary>
         /// The maximum size of data to be written to the device
         /// </summary>
-        public int WriteBufferSize { get; set; }
+        public int? WriteBufferSize { get; set; }
 
         /// <summary>
         /// The maximum size of data to be read from the device
         /// </summary>
-        public int ReadBufferSize { get; set; }
+        public int? ReadBufferSize { get; set; }
     }
 }
