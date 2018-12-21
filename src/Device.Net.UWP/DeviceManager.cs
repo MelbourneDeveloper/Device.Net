@@ -13,7 +13,7 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<string>> GetDeviceIds(uint? vendorId, uint? productId, DeviceType deviceType)
+        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId, DeviceType deviceType)
         {
             string aqsFilter = null;
 
@@ -28,7 +28,10 @@ namespace Device.Net
             }
 
             var deviceInformationCollection = await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask();
-            var deviceIds = deviceInformationCollection.Select(d => d.Id).ToList();
+
+            //TODO: return the vid/pid if we can get it from the properties. Also read/write buffer size
+
+            var deviceIds = deviceInformationCollection.Select(d => new DeviceDefinition { DeviceId = d.Id, DeviceType = deviceType }).ToList();
             return deviceIds;
         }
         #endregion

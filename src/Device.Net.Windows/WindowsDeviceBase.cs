@@ -1,6 +1,5 @@
 ﻿using Microsoft.Win32.SafeHandles;
 using System;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -34,57 +33,6 @@ namespace Device.Net
         public bool IsInitialized { get; private set; }
         public abstract ushort WriteBufferSize { get; }
         public abstract ushort ReadBufferSize { get; }
-        #endregion
-
-        #region Public Static Methods
-        public static Collection<DeviceInformation> GetConnectedDeviceInformations(Guid classGuid)
-        {
-            var deviceInformations = new Collection<DeviceInformation>();
-            var spDeviceInterfaceData = new SpDeviceInterfaceData();
-            var spDeviceInfoData = new SpDeviceInfoData();
-            var spDeviceInterfaceDetailData = new SpDeviceInterfaceDetailData();
-            spDeviceInterfaceData.CbSize = (uint)Marshal.SizeOf(spDeviceInterfaceData);
-            spDeviceInfoData.CbSize = (uint)Marshal.SizeOf(spDeviceInfoData);
-
-            var i = APICalls.SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, APICalls.DigcfDeviceinterface | APICalls.DigcfPresent);
-
-            if (IntPtr.Size == 8)
-            {
-                spDeviceInterfaceDetailData.CbSize = 8;
-            }
-            else
-            {
-                spDeviceInterfaceDetailData.CbSize = 4 + Marshal.SystemDefaultCharSize;
-            }
-
-            var x = -1;
-
-            while (true)
-            {
-                x++;
-
-                var setupDiEnumDeviceInterfacesResult = APICalls.SetupDiEnumDeviceInterfaces(i, IntPtr.Zero, ref classGuid, (uint)x, ref spDeviceInterfaceData);
-                var errorNumber = Marshal.GetLastWin32Error();
-
-                //TODO: deal with error numbers. Give a meaningful error message
-
-                if (setupDiEnumDeviceInterfacesResult == false)
-                {
-                    break;
-                }
-
-                APICalls.SetupDiGetDeviceInterfaceDetail(i, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
-
-                var deviceInformation = new DeviceInformation { DeviceId = spDeviceInterfaceDetailData.DevicePath };
-
-                deviceInformations.Add(deviceInformation);
-            }
-
-            APICalls.SetupDiDestroyDeviceInfoList(i);
-
-            return deviceInformations;
-        }
-
         #endregion
 
         #region Constructor
@@ -127,7 +75,7 @@ namespace Device.Net
 
             if (string.IsNullOrEmpty(DeviceId))
             {
-                throw new WindowsException($"{nameof(DeviceInformation)} must be specified before {nameof(Initialize)} can be called.");
+                throw new WindowsException($"{nameof(DeviceDefinition)} must be specified before {nameof(Initialize)} can be called.");
             }
             var pointerToBuffer = Marshal.AllocHGlobal(126);
 

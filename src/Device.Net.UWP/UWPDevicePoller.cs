@@ -41,14 +41,14 @@ namespace Device.Net.UWP
 
             try
             {
-                var deviceIds = await DeviceManager.Current.GetDeviceIds(VendorId, ProductId, DeviceType);
+                var deviceInformations = await DeviceManager.Current.GetConnectedDeviceDefinitions(VendorId, ProductId, DeviceType);
 
-                foreach (var deviceId in deviceIds)
+                foreach (var deviceInformation in deviceInformations)
                 {
                     try
                     {
                         //Attempt to connect and move to the next one if this one doesn't connect
-                        UWPDevice.DeviceId = deviceId;
+                        UWPDevice.DeviceId = deviceInformation.DeviceId;
                         await UWPDevice.InitializeAsync();
                         if (await UWPDevice.GetIsConnectedAsync())
                         {

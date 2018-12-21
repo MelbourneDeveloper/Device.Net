@@ -1,7 +1,4 @@
-﻿using Device.Net;
-using System;
-
-namespace Device.Net
+﻿namespace Device.Net
 {
     public class WindowsUsbDevice : WindowsDeviceBase
     {

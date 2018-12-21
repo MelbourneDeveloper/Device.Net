@@ -1,6 +1,6 @@
 ﻿namespace Device.Net
 {
-    public class DeviceInformation
+    public class DeviceDefinition
     {
         /// <summary>
         /// Platform specific, unique Id for the device
@@ -26,5 +26,15 @@
         /// The type of device interface
         /// </summary>
         public DeviceType DeviceType { get; set; }
+
+        /// <summary>
+        /// The maximum size of data to be written to the device
+        /// </summary>
+        public int WriteBufferSize { get; set; }
+
+        /// <summary>
+        /// The maximum size of data to be read from the device
+        /// </summary>
+        public int ReadBufferSize { get; set; }
     }
 }
