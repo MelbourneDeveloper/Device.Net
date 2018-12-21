@@ -1,7 +1,6 @@
 ﻿using Device.Net;
 using Microsoft.Win32.SafeHandles;
 using System;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -31,7 +30,7 @@ namespace Hid.Net.Windows
 
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
-        public WindowsHidDeviceInformation DeviceInformation { get; set; }
+        public DeviceDefinition DeviceInformation { get; set; }
         public string DevicePath => DeviceInformation.DeviceId;
         public bool IsInitialized { get; private set; }
         public uint? ProductId => DeviceInformation.ProductId;
@@ -45,7 +44,7 @@ namespace Hid.Net.Windows
         {
         }
 
-        public WindowsHidDevice(WindowsHidDeviceInformation deviceInformation) : this()
+        public WindowsHidDevice(DeviceDefinition deviceInformation) : this()
         {
             DeviceInformation = deviceInformation;
         }
