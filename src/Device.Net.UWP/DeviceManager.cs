@@ -10,7 +10,10 @@ namespace Device.Net
     {
         public async static Task<IEnumerable<string>> GetDeviceIds(int? vendorId, int? productId)
         {
-            return ((IEnumerable<wde.DeviceInformation>)await wde.DeviceInformation.FindAllAsync($"System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND System.DeviceInterface.Hid.VendorId:={vendorId} AND System.DeviceInterface.Hid.ProductId:={productId} ").AsTask()).Select(d=>d.Id).ToList();
+            var aqsFilter = $"System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND System.DeviceInterface.Hid.VendorId:={vendorId} AND System.DeviceInterface.Hid.ProductId:={productId} ";
+            var deviceInformationCollection = await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask();
+            var deviceIds = deviceInformationCollection.Select(d => d.Id).ToList();
+            return deviceIds;
         }
     }
 }
