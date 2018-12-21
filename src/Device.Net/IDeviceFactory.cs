@@ -2,7 +2,6 @@
 {
     public interface IDeviceFactory
     {
-        IDevice GetDevice(string deviceId);
     }
 
     public interface IDeviceFactory<T> : IDeviceFactory where T : IDevice
