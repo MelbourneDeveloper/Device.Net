@@ -9,7 +9,7 @@ using Windows.Storage;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDevice : UWPDeviceBase<HidDevice>
+    public class UWPHidDevice : UWPDeviceBase<HidDevice>, IDevice
     {
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;

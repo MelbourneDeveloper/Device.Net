@@ -1,8 +1,15 @@
-﻿namespace Hid.Net.UWP
+﻿using Device.Net;
+
+namespace Hid.Net.UWP
 {
-    public class UWPHidDeviceFactory : UWPHidDeviceFactoryBase<UWPHidDevice>
+    public class UWPHidDeviceFactory : IDeviceFactory<UWPHidDevice>
     {
-        public override UWPHidDevice GetDevice(string deviceId)
+        public static void Register()
+        {
+            DeviceMan.Current.DeviceFactories.Add(new UWPHidDeviceFactory());
+        }
+
+        public UWPHidDevice GetDevice(string deviceId)
         {
             return new UWPHidDevice(deviceId);
         }

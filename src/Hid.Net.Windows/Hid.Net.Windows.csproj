@@ -38,10 +38,6 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Device.Net" Version="2.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Device.Net.Windows\Device.Net.Windows.csproj" />
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
   </ItemGroup>

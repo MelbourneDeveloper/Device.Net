@@ -122,9 +122,6 @@
     <EmbeddedResource Include="Properties\Hid.Net.UWP.rd.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Device.Net">
-      <Version>2.0.0</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.0.8</Version>
     </PackageReference>
@@ -133,6 +130,10 @@
     <ProjectReference Include="..\Device.Net.UWP\Device.Net.UWP.csproj">
       <Project>{45e6e89a-aedb-457a-9c80-310fa2eeaef1}</Project>
       <Name>Device.Net.UWP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Device.Net\Device.Net.csproj">
+      <Project>{aac55ee8-183b-487f-9e2c-08e14e7e4894}</Project>
+      <Name>Device.Net</Name>
     </ProjectReference>
     <ProjectReference Include="..\Hid.Net.Windows\Hid.Net.Windows.csproj">
       <Project>{ECB44DDD-BBFA-459A-9C60-4F65A1014A48}</Project>
