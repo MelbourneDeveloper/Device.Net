@@ -106,7 +106,6 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="DeviceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UWPDeviceBase - Generic.cs" />
     <Compile Include="UWPDeviceBase.cs" />

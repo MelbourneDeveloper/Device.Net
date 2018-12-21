@@ -41,7 +41,7 @@ namespace Device.Net.UWP
 
             try
             {
-                var deviceInformations = await DeviceManager.Current.GetConnectedDeviceDefinitions(VendorId, ProductId, DeviceType);
+                var deviceInformations = await DeviceManager.Current.GetConnectedDeviceDefinitions(VendorId, ProductId);
 
                 foreach (var deviceInformation in deviceInformations)
                 {
