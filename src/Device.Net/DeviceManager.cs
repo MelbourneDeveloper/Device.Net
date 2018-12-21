@@ -5,7 +5,9 @@ namespace Device.Net
 {
     public class DeviceManager
     {
+        #region Public Properties
         public List<IDeviceFactory> DeviceFactories { get; } = new List<IDeviceFactory>();
+        #endregion
 
         #region Public Static Properties
         public static DeviceManager Current { get; } = new DeviceManager();
@@ -14,7 +16,17 @@ namespace Device.Net
         #region Public Methods
         public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
         {
-            return null;
+            var retVal = new List<DeviceDefinition>();
+            foreach (var deviceFactory in DeviceFactories)
+            {
+                var definitions = await deviceFactory.GetConnectedDeviceDefinitions(vendorId, productId);
+                foreach (var deviceDefinition in definitions)
+                {
+                    retVal.Add(deviceDefinition);
+                }
+            }
+
+            return retVal;
         }
 
         public T GetDevice<T>(DeviceDefinition deviceDefinition)
