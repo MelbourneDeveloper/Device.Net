@@ -44,6 +44,26 @@ namespace Device.Net
             return default(T);
         }
 
+        public async Task<IEnumerable<IDevice>> GetDevices(uint? vendorId, uint? productId)
+        {
+            var retVal = new List<IDevice>();
+
+            var deviceFactory = DeviceFactories.FirstOrDefault(df => df.GetType().GenericTypeArguments.FirstOrDefault() == typeof(T));
+            if (deviceFactory == null)
+            {
+                throw new Exception($"No DeviceFactory has been defined for the type {typeof(T)}. Try calling {typeof(T)}.Register before calling {nameof(GetDevices)}");
+            }
+
+            var definitions = await deviceFactory.GetConnectedDeviceDefinitions(vendorId, productId);
+
+            foreach (var deviceDefinition in definitions)
+            {
+                retVal.Add(GetDevice(deviceDefinition));
+            }
+
+            return retVal;
+        }
+
         public async Task<IEnumerable<T>> GetDevices<T>(uint? vendorId, uint? productId)
         {
             var retVal = new List<T>();

@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Hid.Net.UWP;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -22,20 +23,20 @@ namespace Usb.Net.UWP.Sample
         {
             Loaded -= MainPage_Loaded;
 
-            //Using the new firmware here
-            var deviceInformations = await DeviceManager.Current.GetConnectedDeviceDefinitions(0x1209, 0x53C1);
-            var trezorUsbDeviceInformation = deviceInformations.FirstOrDefault();
-            var trezorUsbDevice = new UWPUsbDevice(trezorUsbDeviceInformation.DeviceId);
-            await trezorUsbDevice.InitializeAsync();
+            UWPUsbDeviceFactory.Register();
+            UWPHidDeviceFactory.Register();
+            var devices = await DeviceManager.Current.GetDevices(0x1209, 0x53C1);
+            var trezorDevice = devices.FirstOrDefault();
+            await trezorDevice.InitializeAsync();
 
             var buffer = new byte[64];
             buffer[0] = 0x3f;
             buffer[1] = 0x23;
             buffer[2] = 0x23;
 
-            await trezorUsbDevice.WriteAsync(buffer);
+            await trezorDevice.WriteAsync(buffer);
 
-            var readBuffer = await trezorUsbDevice.ReadAsync();
+            var readBuffer = await trezorDevice.ReadAsync();
         }
     }
 }

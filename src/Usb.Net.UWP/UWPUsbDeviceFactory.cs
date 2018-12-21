@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Usb.Net.UWP;
 using wde = Windows.Devices.Enumeration;
 
-namespace Hid.Net.UWP
+namespace Usb.Net.UWP
 {
     public class UWPUsbDeviceFactory : IDeviceFactory<UWPUsbDevice>
     {
