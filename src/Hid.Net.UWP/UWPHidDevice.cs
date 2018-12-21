@@ -102,6 +102,8 @@ namespace Hid.Net.UWP
             try
             {
                 operation = _ConnectedDevice.SendOutputReportAsync(outReport);
+                await operation.AsTask();
+                Tracer?.Trace(false, bytes);
             }
             catch (ArgumentException ex)
             {
@@ -110,11 +112,8 @@ namespace Hid.Net.UWP
                 {
                     throw new Exception("It seems that the data being sent to the device does not match the accepted size. Have you checked DataHasExtraByte?", ex);
                 }
+                throw;
             }
-
-            Tracer?.Trace(false, bytes);
-
-            await operation.AsTask();
         }
         #endregion
     }
