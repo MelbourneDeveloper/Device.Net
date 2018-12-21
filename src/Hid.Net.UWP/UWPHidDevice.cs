@@ -43,6 +43,17 @@ namespace Hid.Net.UWP
         }
         #endregion
 
+        #region Constructors
+        public UWPHidDevice() : base()
+        {
+        }
+
+        public UWPHidDevice(string deviceId) : base(deviceId)
+        {
+        }
+        #endregion
+
+
         #region Private Methods
         public override async Task InitializeAsync()
         {
@@ -69,8 +80,6 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Methods
-
-
 
         public override async Task WriteAsync(byte[] data)
         {

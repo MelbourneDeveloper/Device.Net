@@ -10,6 +10,18 @@ namespace Device.Net.UWP
         protected T _ConnectedDevice;
         #endregion
 
+        #region Constructor
+        protected UWPDeviceBase()
+        {
+
+        }
+
+        protected UWPDeviceBase(string deviceId)
+        {
+            DeviceId = deviceId;
+        }
+        #endregion
+
         #region Protected Methods
         protected async Task<T> GetDevice(string id)
         {

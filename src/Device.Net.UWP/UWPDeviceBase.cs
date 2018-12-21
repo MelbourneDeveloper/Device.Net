@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Windows.Foundation;
 
 namespace Device.Net.UWP
 {
@@ -20,18 +19,6 @@ namespace Device.Net.UWP
         #region Events
         public event EventHandler Connected;
         public event EventHandler Disconnected;
-        #endregion
-
-        #region Constructor
-        protected UWPDeviceBase()
-        {
-
-        }
-
-        protected UWPDeviceBase(string deviceId)
-        {
-            DeviceId = deviceId;
-        }
         #endregion
 
         #region Protected Methods
