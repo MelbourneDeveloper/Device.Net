@@ -9,23 +9,8 @@ using Windows.Devices.Usb;
 
 namespace Usb.Net.UWP
 {
-    public class UWPUsbDevice : UWPDeviceBase
+    public class UWPUsbDevice : UWPDeviceBase<UsbDevice>
     {
-        #region Events
-        public event EventHandler Connected;
-        public event EventHandler Disconnected;
-        #endregion
-
-        #region Fields
-        private UsbDevice _UsbDevice;
-        #endregion
-
-        #region Public Properties
-        public int VendorId { get; set; }
-        public int ProductId { get; set; }
-        public string DeviceId { get; set; }
-        #endregion
-
         #region Event Handlers
 
         private byte[] InputReportToBytes(HidInputReportReceivedEventArgs args)
@@ -55,17 +40,17 @@ namespace Usb.Net.UWP
         #region Private Methods
         public async Task InitializeAsync()
         {
-            _UsbDevice = await GetDevice(DeviceId);
+            _ConnectedDevice = await GetDevice(DeviceId);
 
-            if (_UsbDevice != null)
+            if (_ConnectedDevice != null)
             {
-                var usbInterface = _UsbDevice.Configuration.UsbInterfaces.FirstOrDefault();
+                var usbInterface = _ConnectedDevice.Configuration.UsbInterfaces.FirstOrDefault();
                 var fsdfsdf = usbInterface.InterruptInPipes.FirstOrDefault();
                 //var usbBulkOutPipe = usbInterface.BulkOutPipes.FirstOrDefault();
                 fsdfsdf.DataReceived += Fsdfsdf_DataReceived;
 
 
-                Connected?.Invoke(this, new EventArgs());
+                RaiseConnected();
             }
             else
             {
@@ -88,14 +73,10 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Methods
-        public async Task<bool> GetIsConnectedAsync()
-        {
-            return _UsbDevice != null;
-        }
 
         public void Dispose()
         {
-            _UsbDevice.Dispose();
+            _ConnectedDevice.Dispose();
         }
 
         public async Task<byte[]> ReadAsync()
@@ -115,7 +96,7 @@ namespace Usb.Net.UWP
             //    Length = dataPacketLength
             //};
 
-            //var buffer2 = await _UsbDevice.SendControlInTransferAsync(setupPacket, buffer);
+            //var buffer2 = await _ConnectedDevice.SendControlInTransferAsync(setupPacket, buffer);
 
             //var bytes = new byte[64];
             //var stream = buffer2.AsStream();
@@ -123,7 +104,7 @@ namespace Usb.Net.UWP
 
             //var returnValue = buffer2.ToArray();
 
-            //var usbInterface = _UsbDevice.Configuration.UsbInterfaces.FirstOrDefault();
+            //var usbInterface = _ConnectedDevice.Configuration.UsbInterfaces.FirstOrDefault();
             //var fsdfsdf = usbInterface.InterruptInPipes.FirstOrDefault();
             ////var usbBulkOutPipe = usbInterface.BulkOutPipes.FirstOrDefault();
             //await fsdfsdf.DataReceived
@@ -159,11 +140,11 @@ namespace Usb.Net.UWP
                 //    Value = 9,
                 //    Length = bufferToSend.Length
                 //};
-                var usbInterface = _UsbDevice.Configuration.UsbInterfaces.FirstOrDefault();
+                var usbInterface = _ConnectedDevice.Configuration.UsbInterfaces.FirstOrDefault();
                 var fsdfsdf = usbInterface.InterruptOutPipes.FirstOrDefault();
                 //var usbBulkOutPipe = usbInterface.BulkOutPipes.FirstOrDefault();
                 await fsdfsdf.OutputStream.WriteAsync(bufferToSend);
-                //await _UsbDevice.SendControlOutTransferAsync(setupPacket, bufferToSend);
+                //await _ConnectedDevice.SendControlOutTransferAsync(setupPacket, bufferToSend);
             }
             catch (ArgumentException ex)
             {
