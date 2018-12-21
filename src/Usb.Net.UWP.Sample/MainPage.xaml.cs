@@ -22,10 +22,8 @@ namespace Usb.Net.UWP.Sample
         {
             Loaded -= MainPage_Loaded;
 
-            DeviceManager.Current.DeviceType = DeviceManager.DeviceTypeEnum.Usb;
-
             //Using the new firmware here
-            var deviceIds = await DeviceManager.Current.GetDeviceIds(0x1209, 0x53C1);
+            var deviceIds = await DeviceManager.Current.GetDeviceIds(0x1209, 0x53C1, DeviceType.Usb);
             var trezorUsbDeviceId = deviceIds.FirstOrDefault();
             var trezorUsbDevice = new UWPUsbDevice(trezorUsbDeviceId);
             await trezorUsbDevice.InitializeAsync();

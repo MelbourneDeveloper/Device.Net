@@ -14,16 +14,18 @@ namespace Device.Net.UWP
         public uint ProductId { get; }
         public uint VendorId { get; }
         public UWPDeviceBase UWPDevice { get; private set; }
+        public DeviceType DeviceType { get; private set; }
         #endregion
 
         #region Constructor
-        public UWPDevicePoller(uint productId, uint vendorId, UWPDeviceBase uwpHidDevice)
+        public UWPDevicePoller(uint productId, uint vendorId, DeviceType deviceType, UWPDeviceBase uwpHidDevice)
         {
             _PollTimer.Elapsed += _PollTimer_Elapsed;
             _PollTimer.Start();
             ProductId = productId;
             VendorId = vendorId;
             UWPDevice = uwpHidDevice;
+            DeviceType = deviceType;
         }
         #endregion
 
@@ -39,7 +41,7 @@ namespace Device.Net.UWP
 
             try
             {
-                var deviceIds = await DeviceManager.Current.GetDeviceIds(VendorId, ProductId);
+                var deviceIds = await DeviceManager.Current.GetDeviceIds(VendorId, ProductId, DeviceType);
 
                 foreach (var deviceId in deviceIds)
                 {
