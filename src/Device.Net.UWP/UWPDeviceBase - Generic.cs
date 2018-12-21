@@ -23,12 +23,11 @@ namespace Device.Net.UWP
         #endregion
 
         #region Protected Methods
-        protected async Task<T> GetDevice(string id)
+        protected async Task GetDevice(string id)
         {
-            var hidDeviceOperation = FromIdAsync(id);
-            var task = hidDeviceOperation.AsTask();
-            var hidDevice = await task;
-            return hidDevice;
+            var asyncOperation = FromIdAsync(id);
+            var task = asyncOperation.AsTask();
+            _ConnectedDevice = await task;
         }
         #endregion
 

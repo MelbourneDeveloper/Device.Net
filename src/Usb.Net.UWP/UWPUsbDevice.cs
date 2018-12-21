@@ -23,7 +23,7 @@ namespace Usb.Net.UWP
         #region Private Methods
         public override async Task InitializeAsync()
         {
-            _ConnectedDevice = await GetDevice(DeviceId);
+            await GetDevice(DeviceId);
 
             if (_ConnectedDevice != null)
             {

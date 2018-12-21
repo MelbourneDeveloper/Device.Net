@@ -17,14 +17,23 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Event Handlers
-
         private void _HidDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args)
         {
-            var bytes = InputReportToBytes(args);
+            HandleDataReceived(InputReportToBytes(args));
+        }
+        #endregion
 
-            HandleDataReceived(bytes);
+        #region Constructors
+        public UWPHidDevice() : base()
+        {
         }
 
+        public UWPHidDevice(string deviceId) : base(deviceId)
+        {
+        }
+        #endregion
+
+        #region Private Methods
         private byte[] InputReportToBytes(HidInputReportReceivedEventArgs args)
         {
             byte[] bytes;
@@ -41,20 +50,7 @@ namespace Hid.Net.UWP
 
             return bytes;
         }
-        #endregion
 
-        #region Constructors
-        public UWPHidDevice() : base()
-        {
-        }
-
-        public UWPHidDevice(string deviceId) : base(deviceId)
-        {
-        }
-        #endregion
-
-
-        #region Private Methods
         public override async Task InitializeAsync()
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
@@ -64,7 +60,7 @@ namespace Hid.Net.UWP
 
             Logger.Log("Initializing Hid device", null, nameof(UWPHidDevice));
 
-            _ConnectedDevice = await GetDevice(DeviceId);
+            await GetDevice(DeviceId);
 
             if (_ConnectedDevice != null)
             {
