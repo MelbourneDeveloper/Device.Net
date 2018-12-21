@@ -38,7 +38,7 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Private Methods
-        public async Task InitializeAsync()
+        public override async Task InitializeAsync()
         {
             _ConnectedDevice = await GetDevice(DeviceId);
 
@@ -115,7 +115,7 @@ namespace Usb.Net.UWP
             return null;
         }
 
-        public async Task WriteAsync(byte[] bytes)
+        public override async Task WriteAsync(byte[] bytes)
         {
 
             //var writer = new DataWriter();

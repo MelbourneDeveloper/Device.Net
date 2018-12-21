@@ -12,9 +12,6 @@ namespace Hid.Net.UWP
 {
     public class UWPHidDevice : UWPDeviceBase<HidDevice>
     {
-
-
-
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
         #endregion
@@ -43,17 +40,6 @@ namespace Hid.Net.UWP
             }
 
             return bytes;
-        }
-        #endregion
-
-        #region Constructors
-        public UWPHidDevice()
-        {
-        }
-
-        public UWPHidDevice(string deviceId)
-        {
-            DeviceId = deviceId;
         }
         #endregion
 
@@ -86,13 +72,6 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Methods
-
-
-        public override void Dispose()
-        {
-            _ConnectedDevice.Dispose();
-            _TaskCompletionSource?.Task?.Dispose();
-        }
 
         public override async Task<byte[]> ReadAsync()
         {

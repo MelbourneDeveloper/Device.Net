@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Device.Net.UWP
 {
-    public abstract class UWPDeviceBase : DeviceBase, IDevice
+    public abstract class UWPDeviceBase : DeviceBase
     {
         #region Fields
         protected TaskCompletionSource<byte[]> _TaskCompletionSource = null;
@@ -21,6 +21,18 @@ namespace Device.Net.UWP
         public event EventHandler Disconnected;
         #endregion
 
+        #region Constructor
+        protected UWPDeviceBase()
+        {
+
+        }
+
+        protected UWPDeviceBase(string deviceId)
+        {
+            DeviceId = deviceId;
+        }
+        #endregion
+
         #region Protected Methods
         protected void RaiseConnected()
         {
@@ -32,7 +44,7 @@ namespace Device.Net.UWP
             Disconnected?.Invoke(this, new EventArgs());
         }
 
-        protected  void HandleDataReceived(byte[] bytes)
+        protected void HandleDataReceived(byte[] bytes)
         {
             if (!_IsReading)
             {
@@ -50,7 +62,6 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Abstract Methods
-        public abstract void Dispose();
         public abstract Task<bool> GetIsConnectedAsync();
         public abstract Task InitializeAsync();
         public abstract Task<byte[]> ReadAsync();
@@ -58,7 +69,7 @@ namespace Device.Net.UWP
         #endregion
     }
 
-    public abstract class UWPDeviceBase<T> : UWPDeviceBase
+    public abstract class UWPDeviceBase<T> : UWPDeviceBase, IDevice
     {
         #region Protected Properties
         protected T _ConnectedDevice;
@@ -68,6 +79,14 @@ namespace Device.Net.UWP
         public override async Task<bool> GetIsConnectedAsync()
         {
             return _ConnectedDevice != null;
+        }
+        #endregion
+
+        #region Public Virtual Methods
+        public virtual void Dispose()
+        {
+            if (_ConnectedDevice is IDisposable disposable) disposable?.Dispose();
+            _TaskCompletionSource?.Task?.Dispose();
         }
         #endregion
     }
