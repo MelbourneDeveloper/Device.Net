@@ -1,5 +1,6 @@
 ﻿using Device.Net;
 using Hid.Net.UWP;
+using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -25,7 +26,7 @@ namespace Usb.Net.UWP.Sample
 
             UWPUsbDeviceFactory.Register();
             UWPHidDeviceFactory.Register();
-            var devices = await DeviceManager.Current.GetDevices(0x1209, 0x53C1);
+            var devices = await DeviceManager.Current.GetDevices(new List<DeviceDefinition> { new DeviceDefinition { VendorId = 0x1209, ProductId = 0x53C1 } });
             var trezorDevice = devices.FirstOrDefault();
             await trezorDevice.InitializeAsync();
 

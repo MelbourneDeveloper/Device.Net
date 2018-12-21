@@ -18,6 +18,10 @@ namespace Hid.Net.UWP
         {
             return new UWPHidDevice(deviceDefinition.DeviceId);
         }
+        public IDevice GetDevice(string deviceId)
+        {
+            return new UWPHidDevice(deviceId);
+        }
 
         public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
         {
@@ -30,5 +34,7 @@ namespace Hid.Net.UWP
             var deviceDefinitions = deviceInformationCollection.Select(d => new DeviceDefinition { DeviceId = d.Id, DeviceType = DeviceType.Hid }).ToList();
             return deviceDefinitions;
         }
+
+
     }
 }

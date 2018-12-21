@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Usb.Net.UWP;
 using wde = Windows.Devices.Enumeration;
 
 namespace Usb.Net.UWP
@@ -18,6 +17,11 @@ namespace Usb.Net.UWP
         public UWPUsbDevice GetDevice(DeviceDefinition deviceDefinition)
         {
             return new UWPUsbDevice(deviceDefinition.DeviceId);
+        }
+
+        public IDevice GetDevice(string deviceId)
+        {
+            return new UWPUsbDevice(deviceId);
         }
 
         public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)

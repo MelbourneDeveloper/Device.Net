@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Device.Net
@@ -31,58 +29,59 @@ namespace Device.Net
             return retVal;
         }
 
-        public T GetDevice<T>(DeviceDefinition deviceDefinition)
-        {
-            foreach (dynamic deviceFactory in DeviceFactories)
-            {
-                if (deviceFactory.GetType().GenericTypeArguments.FirstOrDefault() == typeof(T))
-                {
-                    return (T)deviceFactory.GetDevice(deviceDefinition);
-                }
-            }
+        //public T GetDevice<T>(DeviceDefinition deviceDefinition)
+        //{
+        //    foreach (dynamic deviceFactory in DeviceFactories)
+        //    {
+        //        if (deviceFactory.GetType().GenericTypeArguments.FirstOrDefault() == typeof(T))
+        //        {
+        //            return (T)deviceFactory.GetDevice(deviceDefinition);
+        //        }
+        //    }
 
-            return default(T);
-        }
+        //    return default(T);
+        //}
 
-        public async Task<IEnumerable<IDevice>> GetDevices(uint? vendorId, uint? productId)
+        public async Task<List<IDevice>> GetDevices(IEnumerable<DeviceDefinition> deviceDefinitions)
         {
             var retVal = new List<IDevice>();
 
-            var deviceFactory = DeviceFactories.FirstOrDefault(df => df.GetType().GenericTypeArguments.FirstOrDefault() == typeof(T));
-            if (deviceFactory == null)
+            foreach (var deviceFactory in DeviceFactories)
             {
-                throw new Exception($"No DeviceFactory has been defined for the type {typeof(T)}. Try calling {typeof(T)}.Register before calling {nameof(GetDevices)}");
-            }
+                foreach (var filterDeviceDefinition in deviceDefinitions)
+                {
+                    var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitions(filterDeviceDefinition.VendorId, filterDeviceDefinition.ProductId);
+                    foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
+                    {
+                        var device = deviceFactory.GetDevice(connectedDeviceDefinition.DeviceId);
+                        if (device != null) retVal.Add(device);
 
-            var definitions = await deviceFactory.GetConnectedDeviceDefinitions(vendorId, productId);
-
-            foreach (var deviceDefinition in definitions)
-            {
-                retVal.Add(GetDevice(deviceDefinition));
-            }
-
-            return retVal;
-        }
-
-        public async Task<IEnumerable<T>> GetDevices<T>(uint? vendorId, uint? productId)
-        {
-            var retVal = new List<T>();
-
-            var deviceFactory = DeviceFactories.FirstOrDefault(df => df.GetType().GenericTypeArguments.FirstOrDefault() == typeof(T));
-            if (deviceFactory == null)
-            {
-                throw new Exception($"No DeviceFactory has been defined for the type {typeof(T)}. Try calling {typeof(T)}.Register before calling {nameof(GetDevices)}");
-            }
-
-            var definitions = await deviceFactory.GetConnectedDeviceDefinitions(vendorId, productId);
-
-            foreach (var deviceDefinition in definitions)
-            {
-                retVal.Add(GetDevice<T>(deviceDefinition));
+                    }
+                }
             }
 
             return retVal;
         }
+
+        //public async Task<IEnumerable<T>> GetDevices<T>(uint? vendorId, uint? productId)
+        //{
+        //    var retVal = new List<T>();
+
+        //    var deviceFactory = DeviceFactories.FirstOrDefault(df => df.GetType().GenericTypeArguments.FirstOrDefault() == typeof(T));
+        //    if (deviceFactory == null)
+        //    {
+        //        throw new Exception($"No DeviceFactory has been defined for the type {typeof(T)}. Try calling {typeof(T)}.Register before calling {nameof(GetDevices)}");
+        //    }
+
+        //    var definitions = await deviceFactory.GetConnectedDeviceDefinitions(vendorId, productId);
+
+        //    foreach (var deviceDefinition in definitions)
+        //    {
+        //        retVal.Add(GetDevice<T>(deviceDefinition));
+        //    }
+
+        //    return retVal;
+        //}
 
         #endregion
     }
