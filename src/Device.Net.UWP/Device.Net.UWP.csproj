@@ -107,6 +107,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UWPHelpers.cs" />
+    <Compile Include="UWPHidDevicePoller.cs" />
     <EmbeddedResource Include="Properties\Device.Net.UWP.rd.xml" />
   </ItemGroup>
   <ItemGroup>

@@ -116,8 +116,6 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="UWPHelpers.cs" />
-    <Compile Include="UWPHidDevicePoller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UWPHidDevice.cs" />
     <EmbeddedResource Include="Properties\Hid.Net.UWP.rd.xml" />
@@ -131,6 +129,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Device.Net.UWP\Device.Net.UWP.csproj">
+      <Project>{45e6e89a-aedb-457a-9c80-310fa2eeaef1}</Project>
+      <Name>Device.Net.UWP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Hid.Net.Windows\Hid.Net.Windows.csproj">
       <Project>{ECB44DDD-BBFA-459A-9C60-4F65A1014A48}</Project>
       <Name>Hid.Net.Windows</Name>
