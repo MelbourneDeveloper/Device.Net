@@ -14,6 +14,11 @@ namespace Hid.Net.UWP
 
         public static void Register()
         {
+            foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)
+            {
+                if (deviceFactory is UWPHidDeviceFactory) return;
+            }
+
             DeviceManager.Current.DeviceFactories.Add(new UWPHidDeviceFactory());
         }
 

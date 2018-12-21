@@ -13,6 +13,11 @@ namespace Usb.Net.UWP
 
         public static void Register()
         {
+            foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)
+            {
+                if (deviceFactory is UWPUsbDeviceFactory) return;
+            }
+
             DeviceManager.Current.DeviceFactories.Add(new UWPUsbDeviceFactory());
         }
 

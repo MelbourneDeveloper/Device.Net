@@ -1,19 +1,28 @@
-﻿using System;
+﻿using Device.Net;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace Device.Net
+namespace Hid.Net.Windows
 {
-    public class DeviceManager
+    public class WindowsHidDeviceFactory : IDeviceFactory
     {
-        #region Public Static Properties
-        public static DeviceManager Current { get; } = new DeviceManager();
-        #endregion
+        public DeviceType DeviceType => DeviceType.Hid;
 
-        #region Public Methods
-        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId, DeviceType deviceType)
+        public static void Register()
+        {
+            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory());
+        }
+
+        public IDevice GetDevice(DeviceDefinition deviceDefinition)
+        {
+            if (deviceDefinition.DeviceType == DeviceType.Usb) return null;
+            return new WindowsHidDevice(deviceDefinition);
+        }
+
+        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
         {
             return await Task.Run<IEnumerable<DeviceDefinition>>(() =>
             {
@@ -24,7 +33,9 @@ namespace Device.Net
                 spDeviceInterfaceData.CbSize = (uint)Marshal.SizeOf(spDeviceInterfaceData);
                 spDeviceInfoData.CbSize = (uint)Marshal.SizeOf(spDeviceInfoData);
 
-                var classGuid = deviceType == DeviceType.Hid ? WindowsDeviceConstants.GUID_DEVINTERFACE_HID : WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE;
+                var classGuid = WindowsDeviceConstants.GUID_DEVINTERFACE_HID;
+                //Split this method up for Usb devices and move this down a library
+                //var classGuid = deviceType == DeviceType.Hid ? WindowsDeviceConstants.GUID_DEVINTERFACE_HID : WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE;
 
                 var i = APICalls.SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, APICalls.DigcfDeviceinterface | APICalls.DigcfPresent);
 
@@ -65,7 +76,5 @@ namespace Device.Net
                 return deviceInformations;
             });
         }
-
-        #endregion
     }
 }
