@@ -132,8 +132,8 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Device.Net\Device.Net\Device.Net\Device.Net.csproj">
-      <Project>{55588c7b-5897-4fb3-8078-9a749fb61d36}</Project>
+    <ProjectReference Include="..\Device.Net\Device.Net.csproj">
+      <Project>{aac55ee8-183b-487f-9e2c-08e14e7e4894}</Project>
       <Name>Device.Net</Name>
     </ProjectReference>
     <ProjectReference Include="..\Usb.Net.UWP\Usb.Net.UWP.csproj">
