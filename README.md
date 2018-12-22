@@ -16,10 +16,10 @@ https://christianfindlay.wordpress.com
 For Hid devices on Windows and UWP, see [Hid.Net](https://github.com/MelbourneDeveloper/Hid.Net). For Usb devices (which often overlap with Hid) on Android see [Usb.Net](https://github.com/MelbourneDeveloper/Usb.Net). The same interface IDevice can be used.
 
 Currently supports:
-* .NET Framework
-* .NET Core
+* .NET Framework - [Hid.Net](https://github.com/MelbourneDeveloper/Hid.Net)
+* .NET Core - [Hid.Net](https://github.com/MelbourneDeveloper/Hid.Net)
 * Android - [Usb.Net](https://github.com/MelbourneDeveloper/Usb.Net)
-* UWP 
+* UWP  - [Hid.Net](https://github.com/MelbourneDeveloper/Hid.Net)
 * Linux* (With LibUsbDotNet Provider)
 
 ## Samples & Unit Tests
