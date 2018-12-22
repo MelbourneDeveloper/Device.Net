@@ -48,6 +48,28 @@
 
     <uap:Capability Name="removableStorage" />
 
+    <DeviceCapability Name="humaninterfacedevice">
+
+      <Device Id="vidpid:534C 0001">
+        <Function Type="usage:0005 *" />
+        <Function Type="usage:FF00 0001" />
+        <Function Type="usage:ff00 *" />
+      </Device>
+
+      <Device Id="vidpid:1209 53C0">
+        <Function Type="usage:0005 *" />
+        <Function Type="usage:FF00 0001" />
+        <Function Type="usage:ff00 *" />
+      </Device>
+
+      <Device Id="vidpid:1209 53C1">
+        <Function Type="usage:0005 *" />
+        <Function Type="usage:FF00 0001" />
+        <Function Type="usage:ff00 *" />
+      </Device>
+
+    </DeviceCapability>
+
     <DeviceCapability Name="usb">
 
       <!--Trezor Firmware 1.7.x -->
