@@ -2,7 +2,7 @@
 
 ![diagram](https://github.com/MelbourneDeveloper/Device.Net/blob/master/Diagram.png)
 
-*Cross platform C# library for talking to connected devices such as Usb, and Hid devices.*
+**Cross platform C# library for talking to connected devices such as Usb, and Hid devices.**
 
 This library provides a common Task based Async interface across platforms and device types. This allows for dependency injection so that different types of devices can be used on any platform with the same code. The supported device types are Hid, and USB. Other device types such as Bluetooth and so on may be added in future.
 
@@ -14,7 +14,9 @@ This library provides a common Task based Async interface across platforms and d
 | .NET Core      | Hid, USB  |
 | Android | USB |
 | UWP | Hid, USB   |
-| Linux | USB (Via LibUsbDotNet)  |
+| Linux* | USB (Via LibUsbDotNet)  |
+
+See the Trez
 
 ## Contact
 
@@ -82,7 +84,7 @@ Litecoin: MVAbLaNPq7meGXvZMU4TwypUsDEuU6stpY
 
 This repos have implementations of Hid.Net and Usb.Net. These should help you to understand how the libraries can be used to connect to various devices.
 
-https://github.com/MelbourneDeveloper/Trezor.Net (UWP, Android, Console - .NET Framework)
+[Trezor Hardwarewallet](https://github.com/MelbourneDeveloper/Trezor.Net) (UWP, Android, Console - .NET Framework)
 
 https://github.com/MelbourneDeveloper/Ledger.Net (UWP, Console - .NET Core)
 
@@ -100,15 +102,15 @@ https://www.microsoft.com/en-au/p/hardfolio/9p8xx70n5d2j (UWP)
 
 For Hid Devices:
 
-*Install-Package Hid.Net*
+**Install-Package Hid.Net**
 
 For Usb Devices:
 
-*Install-Package Usb.Net*
+**Install-Package Usb.Net**
 
 Device.Net only provides the base interface. This would allow you to create a provider for a new device type like Bluetooth for example.
 
-*Install-Package Device.Net*
+**Install-Package Device.Net**
 
 ## Contribution
 
