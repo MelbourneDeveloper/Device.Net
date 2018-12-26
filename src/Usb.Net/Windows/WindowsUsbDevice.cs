@@ -42,7 +42,7 @@ namespace Usb.Net.Windows
 
             if (errorCode > 0) throw new Exception($"Write handle no good. Error code: {errorCode}");
 
-            var interfaceHandle = IntPtr.Zero;
+            var interfaceHandle = new IntPtr();
 
             var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, ref interfaceHandle);
 
