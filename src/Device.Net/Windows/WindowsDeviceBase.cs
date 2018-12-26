@@ -1,7 +1,4 @@
-﻿using Device.Net.Windows;
-using System;
-using System.IO;
-using System.Runtime.InteropServices;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace Device.Net
@@ -17,17 +14,13 @@ namespace Device.Net
         public event EventHandler Disconnected;
         #endregion
 
-        #region Fields
-        private IntPtr _DeviceHandle;
-        #endregion
-
         #region Private Properties
         private string LogSection => nameof(WindowsDeviceBase);
         #endregion
 
         #region Public Properties
         public string DeviceId { get; }
-        public bool IsInitialized { get; private set; }
+        public bool IsInitialized { get; protected set; }
         public abstract ushort WriteBufferSize { get; }
         public abstract ushort ReadBufferSize { get; }
         #endregion
@@ -53,70 +46,10 @@ namespace Device.Net
             return IsInitialized;
         }
 
-        public bool Initialize()
-        {
-            Dispose();
+        public abstract Task<byte[]> ReadAsync();
+        public abstract Task WriteAsync(byte[] data);
+        public abstract Task InitializeAsync();
 
-            if (string.IsNullOrEmpty(DeviceId))
-            {
-                throw new WindowsException($"{nameof(DeviceDefinition)} must be specified before {nameof(Initialize)} can be called.");
-            }
-
-            _DeviceHandle = APICalls.CreateFile(DeviceId, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.OpenOrCreate, 0, IntPtr.Zero);
-
-            var readerrorCode = Marshal.GetLastWin32Error();
-
-            if (readerrorCode > 0) throw new Exception($"Write handle no good. Error code: {readerrorCode}");
-
-
-            //WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, )
-
-            IsInitialized = true;
-
-            Connected?.Invoke(this, new EventArgs());
-
-            return true;
-        }
-
-        public async Task InitializeAsync()
-        {
-            await Task.Run(() => Initialize());
-        }
-
-        public async Task<byte[]> ReadAsync()
-        {
-            var bytes = new byte[ReadBufferSize];
-
-            var isSuccess = APICalls.ReadFile(_DeviceHandle, bytes, ReadBufferSize, out var asdds, 0);
-
-            var errorCode = Marshal.GetLastWin32Error();
-
-            if (!isSuccess)
-            {
-                throw new Exception($"Error code {errorCode}");
-            }
-
-            Tracer?.Trace(false, bytes);
-
-            return bytes;
-        }
-
-        public async Task WriteAsync(byte[] data)
-        {
-            if (data.Length > WriteBufferSize)
-            {
-                throw new Exception($"Data is longer than {WriteBufferSize} bytes which is the device's OutputReportByteLength.");
-            }
-
-            var isSuccess = APICalls.WriteFile(_DeviceHandle, data, (uint)data.Length, out var bytesWritten, 0);
-
-            var errorCode = Marshal.GetLastWin32Error();
-
-            if (!isSuccess)
-            {
-                throw new Exception($"Error code {errorCode}");
-            }
-        }
         #endregion
     }
 }
