@@ -45,15 +45,15 @@ https://www.microsoft.com/en-au/p/hardfolio/9p8xx70n5d2j (UWP)
 
 For Hid Devices:
 
-Install-Package Hid.Net
+_Install-Package Hid.Net_
 
 For Usb Devices:
 
-Install-Package Usb.Net
+_Install-Package Usb.Net_
 
 Device.Net only provides the base interface. This would allow you to create a provider for a new device type like Bluetooth for example.
 
-Install-Package Device.Net
+_Install-Package Device.Net_
 
 ## Contribution
 
