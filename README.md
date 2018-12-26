@@ -13,7 +13,7 @@ https://twitter.com/HardfolioApp
 Blog:
 https://christianfindlay.wordpress.com
 
-This library provides a common interface across platforms and device types. The supportd device types are Hid, and USB. 
+This library provides a common interface across platforms and device types. The supportd device types are Hid, and USB. Other device types such as Bluetooth and so on may be added in future.
 
 ### Currently supports:
 
@@ -44,12 +44,15 @@ https://www.microsoft.com/en-au/p/hardfolio/9p8xx70n5d2j (UWP)
 ## NuGet
 
 For Hid Devices:
+
 Install-Package Hid.Net
 
 For Usb Devices:
+
 Install-Package Usb.Net
 
 Device.Net only provides the base interface. This would allow you to create a provider for a new device type like Bluetooth for example.
+
 Install-Package Device.Net
 
 ## Contribution
