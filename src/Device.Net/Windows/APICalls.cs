@@ -16,13 +16,15 @@ namespace Device.Net
         public const uint GenericRead = 2147483648;
         public const uint GenericWrite = 1073741824;
         public const uint OpenExisting = 3;
+        public const int FileAttributeNormal = 128;
+        public const int FileFlagOverlapped = 1073741824;
         #endregion
 
         #region Methods
 
         #region Kernel32
-        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern SafeFileHandle CreateFile(string fileName, [MarshalAs(UnmanagedType.U4)] FileAccess fileAccess, [MarshalAs(UnmanagedType.U4)] FileShare fileShare, IntPtr securityAttributes, [MarshalAs(UnmanagedType.U4)] FileMode creationDisposition, int flags, IntPtr template);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern SafeFileHandle CreateFile(string lpFileName, uint dwDesiredAccess, uint dwShareMode, IntPtr lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);
 
         // Used to read bytes from the serial connection. 
         [DllImport("kernel32.dll", SetLastError = true)]
