@@ -91,8 +91,8 @@ namespace Hid.Net.Windows
             _HidCollectionCapabilities = new HidCollectionCapabilities();
             var pointerToBuffer = Marshal.AllocHGlobal(126);
 
-            _ReadSafeFileHandle = APICalls.CreateFile(DeviceInformation.DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
-            _WriteSafeFileHandle = APICalls.CreateFile(DeviceInformation.DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+            _ReadSafeFileHandle = HidAPICalls.CreateFile(DeviceInformation.DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+            _WriteSafeFileHandle = HidAPICalls.CreateFile(DeviceInformation.DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
 
             if (!HidAPICalls.HidD_GetPreparsedData(_ReadSafeFileHandle, ref pointerToPreParsedData))
             {

@@ -84,7 +84,7 @@ namespace Hid.Net.Windows
 
         private static WindowsHidDeviceInformation GetDeviceInformation(string devicePath)
         {
-            using (var safeFileHandle = APICalls.CreateFile(devicePath, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero))
+            using (var safeFileHandle = HidAPICalls.CreateFile(devicePath, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero))
             {
                 var hidCollectionCapabilities = new HidCollectionCapabilities();
                 var hidAttributes = new HidAttributes();

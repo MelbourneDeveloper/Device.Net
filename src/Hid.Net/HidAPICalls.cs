@@ -6,6 +6,12 @@ namespace Hid.Net.Windows
 {
     public static class HidAPICalls 
     {
+        //TODO: Remove/Merge this with APICalls
+        #region Kernel32
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern SafeFileHandle CreateFile(string lpFileName, uint dwDesiredAccess, uint dwShareMode, IntPtr lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);
+        #endregion
+
         #region Constants
         public const int DigcfDeviceinterface = 16;
         public const int DigcfPresent = 2;
