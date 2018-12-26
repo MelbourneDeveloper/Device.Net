@@ -4,7 +4,7 @@
 
 **Cross platform C# library for talking to connected devices such as Usb, and Hid devices.**
 
-This library provides a common Task based Async interface across platforms and device types. This allows for dependency injection so that different types of devices can be used on any platform with the same code. The supported device types are Hid, and USB. Other device types such as Bluetooth and so on may be added in future. Hid.Net is specifically for Hid devices that may be Usb devices. Usb.Net is specifically for Usb devices that don't have a Hid interface'
+This library provides a common Task based Async interface across platforms and device types. This allows for dependency injection so that different types of devices can be used on any platform with the same code. The supported device types are Hid, and USB. Other device types such as Bluetooth and so on may be added in future. Hid.Net is specifically for Hid devices that may be Usb devices. Usb.Net is specifically for Usb devices that don't have a Hid interface.
 
 ### Currently supports:
 
@@ -83,9 +83,11 @@ This repos have implementations of Hid.Net and Usb.Net. These should help you to
 
 ## Store App Production Usage
 
-https://play.google.com/store/apps/details?id=com.Hardfolio (Android)
+**Hardfolio** - Cryptocurrency portfolio app for hardware wallets
 
-https://www.microsoft.com/en-au/p/hardfolio/9p8xx70n5d2j (UWP)
+[Google Play](https://play.google.com/store/apps/details?id=com.Hardfolio)
+
+[Windows Store](https://www.microsoft.com/en-au/p/hardfolio/9p8xx70n5d2j)
 
 ## NuGet
 
