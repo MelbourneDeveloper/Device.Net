@@ -135,9 +135,9 @@
       <Project>{aac55ee8-183b-487f-9e2c-08e14e7e4894}</Project>
       <Name>Device.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Hid.Net.Windows\Hid.Net.Windows.csproj">
+    <ProjectReference Include="..\Hid.Net\Hid.Net.csproj">
       <Project>{ECB44DDD-BBFA-459A-9C60-4F65A1014A48}</Project>
-      <Name>Hid.Net.Windows</Name>
+      <Name>Hid.Net</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
