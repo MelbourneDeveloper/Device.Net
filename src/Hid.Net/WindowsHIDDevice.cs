@@ -10,12 +10,6 @@ namespace Hid.Net.Windows
 {
     public class WindowsHidDevice : DeviceBase, IDevice
     {
-        //TODO: Implement
-        #region Events
-        public event EventHandler Connected;
-        public event EventHandler Disconnected;
-        #endregion
-
         #region Fields
         private HidCollectionCapabilities _HidCollectionCapabilities;
         private FileStream _ReadFileStream;
@@ -67,7 +61,7 @@ namespace Hid.Net.Windows
                 _WriteSafeFileHandle.Dispose();
             }
 
-            Disconnected?.Invoke(this, new EventArgs());
+            RaiseDisconnected();
         }
 
         //TODO
@@ -119,7 +113,7 @@ namespace Hid.Net.Windows
 
             IsInitialized = true;
 
-            Connected?.Invoke(this, new EventArgs());
+            RaiseConnected();
 
             return true;
         }

@@ -16,22 +16,7 @@ namespace Device.Net.UWP
         public string DeviceId { get; set; }
         #endregion
 
-        #region Events
-        public event EventHandler Connected;
-        public event EventHandler Disconnected;
-        #endregion
-
         #region Protected Methods
-        protected void RaiseConnected()
-        {
-            Connected?.Invoke(this, new EventArgs());
-        }
-
-        protected void RaiseDisconnected()
-        {
-            Disconnected?.Invoke(this, new EventArgs());
-        }
-
         protected void HandleDataReceived(byte[] bytes)
         {
             if (!_IsReading)
