@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Device.Net;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Usb.Net.Windows;
 
 namespace Usb.Net.WindowsSample
 {
@@ -14,10 +18,7 @@ namespace Usb.Net.WindowsSample
         private async static Task Go()
         {
             //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPUsbDeviceFactory.Register();
-
-            //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPHidDeviceFactory.Register();
+            WindowsUsbDeviceFactory.Register();
 
             //Note: other custom device types could be added here
 
