@@ -15,7 +15,7 @@ https://christianfindlay.wordpress.com
 
 This library provides a common interface across platforms and device types. The supportd device types are Hid, and USB. 
 
-###Currently supports:
+### Currently supports:
 
 | Platform | Device Types |
 | ------------- |:-------------:|
@@ -23,7 +23,7 @@ This library provides a common interface across platforms and device types. The 
 | .NET Core      | Hid, USB  |
 | Android | USB |
 | UWP | Hid, USB   |
-| UWP | USB (Via LibUsbDotNet)  |
+| Linux | USB (Via LibUsbDotNet)  |
 
 ## Samples & Unit Tests
 
@@ -42,6 +42,14 @@ https://play.google.com/store/apps/details?id=com.Hardfolio (Android)
 https://www.microsoft.com/en-au/p/hardfolio/9p8xx70n5d2j (UWP)
 
 ## NuGet
+
+For Hid Devices:
+Install-Package Hid.Net
+
+For Usb Devices:
+Install-Package Usb.Net
+
+Device.Net only provides the base interface. This would allow you to create a provider for a new device type like Bluetooth for example.
 Install-Package Device.Net
 
 ## Contribution
