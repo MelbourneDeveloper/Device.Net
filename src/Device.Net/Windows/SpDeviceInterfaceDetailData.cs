@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Device.Net
+namespace Device.Net.Windows
 {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     public struct SpDeviceInterfaceDetailData

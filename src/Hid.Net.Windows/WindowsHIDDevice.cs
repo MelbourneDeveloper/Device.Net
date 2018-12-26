@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;

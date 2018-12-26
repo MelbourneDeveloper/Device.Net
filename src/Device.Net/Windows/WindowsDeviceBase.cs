@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace Device.Net
+namespace Device.Net.Windows
 {
     /// <summary>
     /// This class remains untested

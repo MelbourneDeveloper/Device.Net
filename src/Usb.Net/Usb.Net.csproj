@@ -20,7 +20,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Device.Net.Windows\Device.Net.Windows.csproj" />
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
   </ItemGroup>
 

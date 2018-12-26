@@ -1,4 +1,6 @@
-﻿namespace Device.Net
+﻿using Device.Net.Windows;
+
+namespace Usb.Net.Windows
 {
     public class WindowsUsbDevice : WindowsDeviceBase
     {

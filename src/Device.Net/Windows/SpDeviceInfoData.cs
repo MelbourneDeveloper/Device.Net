@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Device.Net
+namespace Device.Net.Windows
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct SpDeviceInfoData

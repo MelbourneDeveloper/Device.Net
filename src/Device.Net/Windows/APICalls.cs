@@ -2,7 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Device.Net
+namespace Device.Net.Windows
 {
     public static class APICalls
     {
