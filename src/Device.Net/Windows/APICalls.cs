@@ -24,13 +24,11 @@ namespace Device.Net
         public static extern IntPtr CreateFile(string fileName, [MarshalAs(UnmanagedType.U4)] FileAccess fileAccess, [MarshalAs(UnmanagedType.U4)] FileShare fileShare, IntPtr securityAttributes, [MarshalAs(UnmanagedType.U4)] FileMode creationDisposition, int flags, IntPtr template);
 
         // Used to read bytes from the serial connection. 
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool ReadFile(IntPtr hFile, byte[] lpBuffer, int nNumberOfBytesToRead, out int lpNumberOfBytesRead, int lpOverlapped);
 
-        [DllImport("kernel32.dll")]
-        public static extern bool WriteFile(IntPtr hFile, byte[] lpBuffer,
-           uint nNumberOfBytesToWrite, out uint lpNumberOfBytesWritten,
-           int lpOverlapped);
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool WriteFile(IntPtr hFile, byte[] lpBuffer, uint nNumberOfBytesToWrite, out uint lpNumberOfBytesWritten, int lpOverlapped);
         #endregion
 
         #region SetupAPI

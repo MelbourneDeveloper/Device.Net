@@ -1,6 +1,5 @@
 ﻿using Device.Net.Windows;
 using System;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -19,7 +18,7 @@ namespace Device.Net
         #endregion
 
         #region Fields
-        private IntPtr _WriteHandle;
+        private IntPtr _DeviceHandle;
         #endregion
 
         #region Private Properties
@@ -63,15 +62,14 @@ namespace Device.Net
                 throw new WindowsException($"{nameof(DeviceDefinition)} must be specified before {nameof(Initialize)} can be called.");
             }
 
-            _WriteHandle = APICalls.CreateFile(DeviceId, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.OpenOrCreate, 0, IntPtr.Zero);
+            _DeviceHandle = APICalls.CreateFile(DeviceId, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.OpenOrCreate, 0, IntPtr.Zero);
 
-            //if (_WriteHandle.IsInvalid)
-            //{
             var readerrorCode = Marshal.GetLastWin32Error();
 
-            if (readerrorCode > 0)
-                throw new Exception($"Write handle no good. Error code: {readerrorCode}");
-            //}
+            if (readerrorCode > 0) throw new Exception($"Write handle no good. Error code: {readerrorCode}");
+
+
+            //WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, )
 
             IsInitialized = true;
 
@@ -89,7 +87,7 @@ namespace Device.Net
         {
             var bytes = new byte[ReadBufferSize];
 
-            var isSuccess = APICalls.ReadFile(_WriteHandle, bytes, ReadBufferSize, out var asdds, 0);
+            var isSuccess = APICalls.ReadFile(_DeviceHandle, bytes, ReadBufferSize, out var asdds, 0);
 
             var errorCode = Marshal.GetLastWin32Error();
 
@@ -110,15 +108,14 @@ namespace Device.Net
                 throw new Exception($"Data is longer than {WriteBufferSize} bytes which is the device's OutputReportByteLength.");
             }
 
-
-            var isSuccess = APICalls.WriteFile(_WriteHandle, data, (uint)data.Length, out var asdds, 0);
+            var isSuccess = APICalls.WriteFile(_DeviceHandle, data, (uint)data.Length, out var bytesWritten, 0);
 
             var errorCode = Marshal.GetLastWin32Error();
 
-            //if (!isSuccess)
-            //{
-            //    throw new Exception($"Error code {errorCode}");
-            //}
+            if (!isSuccess)
+            {
+                throw new Exception($"Error code {errorCode}");
+            }
         }
         #endregion
     }

@@ -1,5 +1,4 @@
 ﻿using Device.Net;
-using Device.Net.Windows;
 
 namespace Usb.Net.Windows
 {
