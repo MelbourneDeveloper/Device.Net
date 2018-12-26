@@ -16,7 +16,7 @@ namespace Usb.Net.Windows
 
         #region Public Methods
         public override ushort WriteBufferSize { get; }
-        public override ushort ReadBufferSize { get; }   
+        public override ushort ReadBufferSize { get; }
         #endregion
 
         #region Constructor
@@ -27,7 +27,7 @@ namespace Usb.Net.Windows
         }
         #endregion
 
-        public async override Task InitializeAsync()
+        public override async Task InitializeAsync()
         {
             Dispose();
 
@@ -38,12 +38,17 @@ namespace Usb.Net.Windows
 
             _DeviceHandle = APICalls.CreateFile(DeviceId, FileAccess.ReadWrite, FileShare.ReadWrite, IntPtr.Zero, FileMode.OpenOrCreate, 0, IntPtr.Zero);
 
-            var readerrorCode = Marshal.GetLastWin32Error();
+            var errorCode = Marshal.GetLastWin32Error();
 
-            if (readerrorCode > 0) throw new Exception($"Write handle no good. Error code: {readerrorCode}");
+            if (errorCode > 0) throw new Exception($"Write handle no good. Error code: {errorCode}");
 
-            IntPtr interfaceHandle = IntPtr.Zero;
+            var interfaceHandle = IntPtr.Zero;
+
             var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, ref interfaceHandle);
+
+            errorCode = Marshal.GetLastWin32Error();
+
+            if (!isSuccess) throw new Exception($"Initialization failed. Error code: {errorCode}");
 
             IsInitialized = true;
 
