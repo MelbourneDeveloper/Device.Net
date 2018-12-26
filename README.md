@@ -20,14 +20,11 @@ See the Trez
 
 ## Contact
 
-Join us on Slack:
-https://hardwarewallets.slack.com
+Join us on [Slack](https://hardwarewallets.slack.com)
 
-Twitter:
-https://twitter.com/HardfolioApp
+Follow me on [Twitter](https://twitter.com/HardfolioApp)
 
-Blog:
-https://christianfindlay.wordpress.com
+Read my [blog](https://christianfindlay.wordpress.com)
 
 ## Quick Start
 
@@ -82,15 +79,15 @@ Litecoin: MVAbLaNPq7meGXvZMU4TwypUsDEuU6stpY
 
 ## Samples & Unit Tests
 
-This repos have implementations of Hid.Net and Usb.Net. These should help you to understand how the libraries can be used to connect to various devices.
+This repos have implementations of Hid.Net and Usb.Net. These should help you to understand how the libraries can be used to connect to various devices. The libraries are for cryptocurrency hardwarewallets
 
-[Trezor Hardwarewallet](https://github.com/MelbourneDeveloper/Trezor.Net) (UWP, Android, Console - .NET Framework)
+[Trezor.Net](https://github.com/MelbourneDeveloper/Trezor.Net) (UWP, Android, Console - .NET Framework)
 
-https://github.com/MelbourneDeveloper/Ledger.Net (UWP, Console - .NET Core)
+[Ledger.Net](https://github.com/MelbourneDeveloper/Ledger.Net) (UWP, Console - .NET Core)
 
-https://github.com/LedgerHQ/ledger-dotnet-api (Console - .NET Core)
+[Ledger .NET API](https://github.com/LedgerHQ/ledger-dotnet-api) (Console - .NET Core)
 
-https://github.com/MelbourneDeveloper/KeepKey.Net (UWP, .NET Framework)
+[KeepKey.Net](https://github.com/MelbourneDeveloper/KeepKey.Net) (UWP, .NET Framework)
 
 ## Store App Production Usage
 
