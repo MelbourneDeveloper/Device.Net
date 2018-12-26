@@ -16,6 +16,7 @@ https://christianfindlay.wordpress.com
 This library provides a common interface across platforms and device types. The supportd device types are Hid, and USB. 
 
 ###Currently supports:
+
 | Platform | Device Types |
 | ------------- |:-------------:|
 | .NET Framework     | Hid, USB |
