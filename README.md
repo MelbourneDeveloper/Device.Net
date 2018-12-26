@@ -20,7 +20,7 @@ This library provides a common Task based Async interface across platforms and d
 
 ## Quick Start
 
-Please download one of the samples, or add the NuGet packages you need. This is UWP code. The only difference for Windows is that you would call WindowsHidDeviceFactory.Register().
+Please download one of the samples in 'Samples & Unit Tests', or add the NuGet packages you need to a fresh project. This is UWP code. The only difference for Windows is that you would call WindowsHidDeviceFactory.Register().
 
 ```cs
         private static async Task InitializeTrezor()
@@ -83,7 +83,7 @@ This repos have implementations of Hid.Net and Usb.Net. These should help you to
 
 ## Store App Production Usage
 
-**Hardfolio** - Cryptocurrency portfolio app for hardware wallets
+**Hardfolio** - Cryptocurrency portfolio app for hardwarewallets
 
 [Google Play](https://play.google.com/store/apps/details?id=com.Hardfolio)
 
