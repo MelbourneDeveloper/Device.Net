@@ -8,12 +8,6 @@ namespace Device.Net
     /// </summary>
     public abstract class WindowsDeviceBase : DeviceBase, IDevice
     {
-        //TODO: Implement
-        #region Events
-        public event EventHandler Connected;
-        public event EventHandler Disconnected;
-        #endregion
-
         #region Private Properties
         private string LogSection => nameof(WindowsDeviceBase);
         #endregion
@@ -35,7 +29,7 @@ namespace Device.Net
         #region Public Methods
         public void Dispose()
         {
-            Disconnected?.Invoke(this, new EventArgs());
+            RaiseDisconnected();
         }
 
         //TODO

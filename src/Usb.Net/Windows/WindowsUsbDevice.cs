@@ -27,7 +27,7 @@ namespace Usb.Net.Windows
         }
         #endregion
 
-        public override Task InitializeAsync()
+        public async override Task InitializeAsync()
         {
             Dispose();
 
@@ -42,14 +42,12 @@ namespace Usb.Net.Windows
 
             if (readerrorCode > 0) throw new Exception($"Write handle no good. Error code: {readerrorCode}");
 
-            IntPtr interfaceHandle = null;
+            IntPtr interfaceHandle = IntPtr.Zero;
             var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, ref interfaceHandle);
 
             IsInitialized = true;
 
-            Connected?.Invoke(this, new EventArgs());
-
-            return true;
+            RaiseConnected();
         }
 
         public override async Task<byte[]> ReadAsync()
