@@ -1,4 +1,4 @@
-# Device.Net
+# Hid.Net, Usb.Net (Device.Net)
 
 ![diagram](https://github.com/MelbourneDeveloper/Device.Net/blob/master/Diagram.png)
 
@@ -13,14 +13,16 @@ https://twitter.com/HardfolioApp
 Blog:
 https://christianfindlay.wordpress.com
 
-For Hid devices on Windows and UWP, see [Hid.Net](https://github.com/MelbourneDeveloper/Hid.Net). For Usb devices (which often overlap with Hid) on Android see [Usb.Net](https://github.com/MelbourneDeveloper/Usb.Net). The same interface IDevice can be used.
+This library provides a common interface across platforms and device types. The supportd device types are Hid, and USB. 
 
-Currently supports:
-* .NET Framework - [Hid.Net](https://github.com/MelbourneDeveloper/Hid.Net)
-* .NET Core - [Hid.Net](https://github.com/MelbourneDeveloper/Hid.Net)
-* Android - [Usb.Net](https://github.com/MelbourneDeveloper/Usb.Net)
-* UWP  - [Hid.Net](https://github.com/MelbourneDeveloper/Hid.Net)
-* Linux* (With LibUsbDotNet Provider)
+###Currently supports:
+| Platform    | Device Types  |
+| ------------- |:-------------:| -----:|
+| .NET Framework     | Hid, USB |
+| .NET Core      | Hid, USB  |
+| Android | USB |
+| UWP | Hid, USB   |
+| UWP | USB (Via LibUsbDotNet)  |
 
 ## Samples & Unit Tests
 
