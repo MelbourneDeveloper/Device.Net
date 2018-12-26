@@ -1,8 +1,9 @@
-﻿using Microsoft.Win32.SafeHandles;
+﻿using Device.Net.Windows;
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 
-namespace Device.Net.Windows
+namespace Device.Net
 {
     public static class APICalls
     {
@@ -19,8 +20,17 @@ namespace Device.Net.Windows
         #region Methods
 
         #region Kernel32
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern SafeFileHandle CreateFile(string lpFileName, uint dwDesiredAccess, uint dwShareMode, IntPtr lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr CreateFile(string fileName, [MarshalAs(UnmanagedType.U4)] FileAccess fileAccess, [MarshalAs(UnmanagedType.U4)] FileShare fileShare, IntPtr securityAttributes, [MarshalAs(UnmanagedType.U4)] FileMode creationDisposition, int flags, IntPtr template);
+
+        // Used to read bytes from the serial connection. 
+        [DllImport("kernel32.dll")]
+        public static extern bool ReadFile(IntPtr hFile, byte[] lpBuffer, int nNumberOfBytesToRead, out int lpNumberOfBytesRead, int lpOverlapped);
+
+        [DllImport("kernel32.dll")]
+        public static extern bool WriteFile(IntPtr hFile, byte[] lpBuffer,
+           uint nNumberOfBytesToWrite, out uint lpNumberOfBytesWritten,
+           int lpOverlapped);
         #endregion
 
         #region SetupAPI
