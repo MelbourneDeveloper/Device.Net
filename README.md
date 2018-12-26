@@ -4,7 +4,7 @@
 
 **Cross platform C# library for talking to connected devices such as Usb, and Hid devices.**
 
-This library provides a common Task based Async interface across platforms and device types. This allows for dependency injection so that different types of devices can be used on any platform with the same code. The supported device types are Hid, and USB. Other device types such as Bluetooth and so on may be added in future.
+This library provides a common Task based Async interface across platforms and device types. This allows for dependency injection so that different types of devices can be used on any platform with the same code. The supported device types are Hid, and USB. Other device types such as Bluetooth and so on may be added in future. Hid.Net is specifically for Hid devices that may be Usb devices. Usb.Net is specifically for Usb devices that don't have a Hid interface'
 
 ### Currently supports:
 
@@ -16,15 +16,7 @@ This library provides a common Task based Async interface across platforms and d
 | UWP | Hid, USB   |
 | Linux* | USB (Via LibUsbDotNet)  |
 
-See the Trez
-
-## Contact
-
-Join us on [Slack](https://hardwarewallets.slack.com)
-
-Follow me on [Twitter](https://twitter.com/HardfolioApp)
-
-Read my [blog](https://christianfindlay.wordpress.com)
+*See the Trezor repo for the LibUsbDotNet example
 
 ## Quick Start
 
@@ -108,6 +100,14 @@ For Usb Devices:
 Device.Net only provides the base interface. This would allow you to create a provider for a new device type like Bluetooth for example.
 
 **Install-Package Device.Net**
+
+## Contact
+
+Join us on [Slack](https://hardwarewallets.slack.com)
+
+Follow me on [Twitter](https://twitter.com/HardfolioApp)
+
+Read my [blog](https://christianfindlay.wordpress.com)
 
 ## Contribution
 
