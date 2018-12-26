@@ -27,7 +27,7 @@ namespace Usb.Net.Windows
         {
             return await Task.Run<IEnumerable<DeviceDefinition>>(() =>
             {
-                var deviceInformations = new Collection<DeviceDefinition>();
+                var DeviceDefinitions = new Collection<DeviceDefinition>();
                 var spDeviceInterfaceData = new SpDeviceInterfaceData();
                 var spDeviceInfoData = new SpDeviceInfoData();
                 var spDeviceInterfaceDetailData = new SpDeviceInterfaceDetailData();
@@ -35,8 +35,6 @@ namespace Usb.Net.Windows
                 spDeviceInfoData.CbSize = (uint)Marshal.SizeOf(spDeviceInfoData);
 
                 var classGuid = WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE;
-                //Split this method up for Usb devices and move this down a library
-                //var classGuid = deviceType == DeviceType.Hid ? WindowsDeviceConstants.GUID_DEVINTERFACE_HID : WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE;
 
                 var i = APICalls.SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, APICalls.DigcfDeviceinterface | APICalls.DigcfPresent);
 
@@ -67,18 +65,14 @@ namespace Usb.Net.Windows
 
                     APICalls.SetupDiGetDeviceInterfaceDetail(i, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
 
-                    //Note this is a bit nast but we can filter Vid and Pid this way I think...
-                    var vendorHex = vendorId?.ToString("X").ToLower().PadLeft(4, '0');
-                    var productIdHex = productId?.ToString("X").ToLower().PadLeft(4, '0');
-                    if (vendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(vendorHex)) continue;
-                    if (productId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(productIdHex)) continue;
+                    var DeviceDefinition = new DeviceDefinition { DeviceId = spDeviceInterfaceDetailData.DevicePath };
 
-                    deviceInformations.Add(new DeviceDefinition { DeviceId = spDeviceInterfaceDetailData.DevicePath });
+                    DeviceDefinitions.Add(DeviceDefinition);
                 }
 
                 APICalls.SetupDiDestroyDeviceInfoList(i);
 
-                return deviceInformations;
+                return DeviceDefinitions;
             });
         }
     }
