@@ -2,16 +2,7 @@
 
 ![diagram](https://github.com/MelbourneDeveloper/Device.Net/blob/master/Diagram.png)
 
-Cross platform C# library for talking to connected devices such as Usb, and Hid devices.
-
-Join us on Slack:
-https://hardwarewallets.slack.com
-
-Twitter:
-https://twitter.com/HardfolioApp
-
-Blog:
-https://christianfindlay.wordpress.com
+_Cross platform C# library for talking to connected devices such as Usb, and Hid devices._
 
 This library provides a common Task based Async interface across platforms and device types. This allows for dependency injection so that different types of devices can be used on any platform with the same code. The supported device types are Hid, and USB. Other device types such as Bluetooth and so on may be added in future.
 
@@ -25,9 +16,20 @@ This library provides a common Task based Async interface across platforms and d
 | UWP | Hid, USB   |
 | Linux | USB (Via LibUsbDotNet)  |
 
+## Contact
+
+Join us on Slack:
+https://hardwarewallets.slack.com
+
+Twitter:
+https://twitter.com/HardfolioApp
+
+Blog:
+https://christianfindlay.wordpress.com
+
 ## Quick Start
 
-Please download one of the samples, or add the NuGet packages you need. This is a UWP sample. The only difference for Windows is that you would call WindowsHidDeviceFactory.Register().
+Please download one of the samples, or add the NuGet packages you need. This is UWP code. The only difference for Windows is that you would call WindowsHidDeviceFactory.Register().
 
 ```cs
         private static async Task InitializeTrezor()
