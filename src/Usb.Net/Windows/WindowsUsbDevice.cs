@@ -67,23 +67,14 @@ namespace Usb.Net.Windows
 
             byte i = 0;
 
-            //Add the first pointer in as the default
-            var defaultInterface = new Interface { Handle = defaultInterfaceHandle };
-            var interfacePointers = new List<Interface> { defaultInterface };
+            //Get the first (default) interface
+            var defaultInterface = GetInterface(defaultInterfaceHandle);
 
-            isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(defaultInterfaceHandle, 0, out var interfaceDescriptor);
-            if (!isSuccess)
-            {
-                errorCode = Marshal.GetLastWin32Error();
-                throw new Exception($"Couldn't query default interface. Error code: {errorCode}");
-            }
-
-            defaultInterface.USB_INTERFACE_DESCRIPTOR = interfaceDescriptor;
+            var interfaces = new List<Interface> { defaultInterface };
 
             while (true)
             {
-                var interfacePointer = IntPtr.Zero;
-                isSuccess = WinUsbApiCalls.WinUsb_GetAssociatedInterface(defaultInterfaceHandle, i, out interfacePointer);
+                isSuccess = WinUsbApiCalls.WinUsb_GetAssociatedInterface(defaultInterfaceHandle, i, out var interfacePointer);
                 if (!isSuccess)
                 {
                     errorCode = Marshal.GetLastWin32Error();
@@ -92,15 +83,29 @@ namespace Usb.Net.Windows
                     throw new Exception($"Could not enumerate interfaces for device {DeviceId}. Error code: { errorCode}");
                 }
 
-                WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfacePointer, 0, out  interfaceDescriptor);
+                var associatedInterface = GetInterface(interfacePointer); ;
 
-                interfacePointers.Add(new Interface { Handle = interfacePointer, USB_INTERFACE_DESCRIPTOR = interfaceDescriptor });
+                interfaces.Add(associatedInterface);
+
                 i++;
             }
 
             IsInitialized = true;
 
             RaiseConnected();
+        }
+
+        private static Interface GetInterface(IntPtr interfaceHandle)
+        {
+            var retVal = new Interface { Handle = interfaceHandle };
+            var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
+            if (!isSuccess)
+            {
+                var errorCode = Marshal.GetLastWin32Error();
+                throw new Exception($"Couldn't query interface. Error code: {errorCode}");
+            }
+            retVal.USB_INTERFACE_DESCRIPTOR = interfaceDescriptor;
+            return retVal;
         }
 
         private class Interface
