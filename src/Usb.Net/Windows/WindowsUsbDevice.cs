@@ -133,12 +133,13 @@ namespace Usb.Net.Windows
         {
             var bytes = new byte[ReadBufferSize];
 
-            var isSuccess = APICalls.ReadFile(_DeviceHandle, bytes, ReadBufferSize, out var asdds, 0);
+            var @interface = _Interfaces[0];
 
-            var errorCode = Marshal.GetLastWin32Error();
+            var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(@interface.Handle, @interface.Pipes[0].WINUSB_PIPE_INFORMATION.PipeId, bytes, (uint)ReadBufferSize, out var bytesRead, IntPtr.Zero);
 
             if (!isSuccess)
             {
+                var errorCode = Marshal.GetLastWin32Error();
                 throw new Exception($"Error code {errorCode}");
             }
 
