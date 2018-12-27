@@ -32,6 +32,8 @@ namespace Usb.Net.Windows
         {
             Dispose();
 
+            int errorCode;
+
             if (string.IsNullOrEmpty(DeviceId))
             {
                 throw new WindowsException($"{nameof(DeviceDefinition)} must be specified before {nameof(InitializeAsync)} can be called.");
@@ -39,15 +41,21 @@ namespace Usb.Net.Windows
 
             _DeviceHandle = APICalls.CreateFile(DeviceId, (APICalls.GenericWrite | APICalls.GenericRead), APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
 
-            var errorCode = Marshal.GetLastWin32Error();
-
-            if (errorCode > 0) throw new Exception($"Device handle no good. Error code: {errorCode}");
+            if (_DeviceHandle.IsInvalid)
+            {
+                //TODO: is error code useful here?
+                errorCode = Marshal.GetLastWin32Error();
+                if (errorCode > 0) throw new Exception($"Device handle no good. Error code: {errorCode}");
+            }
 
             var interfaceHandle = new IntPtr();
 
             var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, ref interfaceHandle);
-
-            errorCode = Marshal.GetLastWin32Error();
+            if (!isSuccess)
+            {
+                errorCode = Marshal.GetLastWin32Error();
+                throw new Exception($"Couldn't initialize device. Error code: {errorCode}");
+            }
 
             byte i = 0;
 
@@ -68,8 +76,6 @@ namespace Usb.Net.Windows
                 interfacePointers.Add(interfacePointer);
                 i++;
             }
-
-            if (!isSuccess) throw new Exception($"Initialization failed. Error code: {errorCode}");
 
             IsInitialized = true;
 
