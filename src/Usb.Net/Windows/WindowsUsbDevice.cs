@@ -12,6 +12,7 @@ namespace Usb.Net.Windows
     {
         #region Fields
         private SafeFileHandle _DeviceHandle;
+        private List<Interface>  _Interfaces = new List<Interface> {  };
         #endregion
 
         #region Public Overrride Properties
@@ -70,7 +71,7 @@ namespace Usb.Net.Windows
             //Get the first (default) interface
             var defaultInterface = GetInterface(defaultInterfaceHandle);
 
-            var interfaces = new List<Interface> { defaultInterface };
+            _Interfaces.Add(defaultInterface);
 
             while (true)
             {
@@ -85,7 +86,7 @@ namespace Usb.Net.Windows
 
                 var associatedInterface = GetInterface(interfacePointer);
 
-                interfaces.Add(associatedInterface);
+                _Interfaces.Add(associatedInterface);
 
                 i++;
             }
