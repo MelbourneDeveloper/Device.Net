@@ -13,7 +13,7 @@ namespace Usb.Net.Windows
         private SafeFileHandle _DeviceHandle;
         #endregion
 
-        #region Public Methods
+        #region Public Overrride Properties
         public override ushort WriteBufferSize { get; }
         public override ushort ReadBufferSize { get; }
         #endregion
@@ -26,6 +26,7 @@ namespace Usb.Net.Windows
         }
         #endregion
 
+        #region Public Methods
         public override async Task InitializeAsync()
         {
             Dispose();
@@ -53,44 +54,6 @@ namespace Usb.Net.Windows
 
             RaiseConnected();
         }
-
-        //For posterity
-        //public override async Task InitializeAsync()
-        //{
-        //    Dispose();
-
-        //    if (string.IsNullOrEmpty(DeviceId))
-        //    {
-        //        throw new WindowsException($"{nameof(DeviceDefinition)} must be specified before {nameof(InitializeAsync)} can be called.");
-        //    }
-
-        //    _DeviceHandle = APICalls.CreateFile(DeviceId, (APICalls.GenericWrite | APICalls.GenericRead), APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
-
-        //    var errorCode = Marshal.GetLastWin32Error();
-
-        //    if (errorCode > 0) throw new Exception($"Write handle no good. Error code: {errorCode}");
-
-        //    var interfaceHandle = new IntPtr();
-
-        //    var pDll = NativeMethods.LoadLibrary(@"C:\GitRepos\Device.Net\src\Usb.Net.WindowsSample\bin\Debug\net452\winusb.dll");
-
-        //    var pAddressOfFunctionToCall = NativeMethods.GetProcAddress(pDll, "WinUsb_Initialize");
-
-        //    var initialize = (WinUsb_Initialize)Marshal.GetDelegateForFunctionPointer(pAddressOfFunctionToCall, typeof(WinUsb_Initialize));
-
-        //    var isSuccess = initialize(_DeviceHandle, ref interfaceHandle);
-
-        //    errorCode = Marshal.GetLastWin32Error();
-
-        //    if (!isSuccess) throw new Exception($"Initialization failed. Error code: {errorCode}");
-
-        //    IsInitialized = true;
-
-        //    RaiseConnected();
-        //}
-
-        //[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        //private delegate bool WinUsb_Initialize(SafeFileHandle DeviceHandle, ref IntPtr InterfaceHandle);
 
         public override async Task<byte[]> ReadAsync()
         {
@@ -126,5 +89,6 @@ namespace Usb.Net.Windows
                 throw new Exception($"Error code {errorCode}");
             }
         }
+        #endregion
     }
 }
