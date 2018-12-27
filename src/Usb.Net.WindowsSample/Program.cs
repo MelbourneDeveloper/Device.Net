@@ -20,6 +20,9 @@ namespace Usb.Net.WindowsSample
             //Register the factory for creating Usb devices. This only needs to be done once.
             WindowsUsbDeviceFactory.Register();
 
+            //Set the factory to the Trezor Win USB guid
+            ((WindowsUsbDeviceFactory)DeviceManager.Current.DeviceFactories.First(f => f is WindowsUsbDeviceFactory)).ClassGuid = new Guid("0263b512-88cb-4136-9613-5c8e109d8ef5");
+
             //Note: other custom device types could be added here
 
             //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
