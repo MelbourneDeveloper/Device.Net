@@ -83,7 +83,7 @@ namespace Usb.Net.Windows
                     throw new Exception($"Could not enumerate interfaces for device {DeviceId}. Error code: { errorCode}");
                 }
 
-                var associatedInterface = GetInterface(interfacePointer); ;
+                var associatedInterface = GetInterface(interfacePointer);
 
                 interfaces.Add(associatedInterface);
 
@@ -104,7 +104,15 @@ namespace Usb.Net.Windows
                 var errorCode = Marshal.GetLastWin32Error();
                 throw new Exception($"Couldn't query interface. Error code: {errorCode}");
             }
+
             retVal.USB_INTERFACE_DESCRIPTOR = interfaceDescriptor;
+
+            for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)
+            {
+                isSuccess = WinUsbApiCalls.WinUsb_QueryPipe(interfaceHandle, 0, i, out var pipeInfo);
+                retVal.Pipes.Add(new Pipe { WINUSB_PIPE_INFORMATION = pipeInfo });
+            }
+
             return retVal;
         }
 
@@ -112,6 +120,12 @@ namespace Usb.Net.Windows
         {
             public IntPtr Handle { get; set; }
             public WinUsbApiCalls.USB_INTERFACE_DESCRIPTOR USB_INTERFACE_DESCRIPTOR { get; set; }
+            public List<Pipe> Pipes { get; } = new List<Pipe>();
+        }
+
+        private class Pipe
+        {
+            public WinUsbApiCalls.WINUSB_PIPE_INFORMATION WINUSB_PIPE_INFORMATION { get; set; }
         }
 
         public override async Task<byte[]> ReadAsync()
