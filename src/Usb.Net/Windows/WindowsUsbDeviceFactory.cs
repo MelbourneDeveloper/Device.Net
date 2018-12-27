@@ -10,7 +10,7 @@ namespace Usb.Net.Windows
 {
     public class WindowsUsbDeviceFactory : IDeviceFactory
     {
-        public DeviceType DeviceType => DeviceType.Hid;
+        public DeviceType DeviceType => DeviceType.Usb;
 
         public static void Register()
         {
@@ -19,7 +19,7 @@ namespace Usb.Net.Windows
 
         public IDevice GetDevice(DeviceDefinition deviceDefinition)
         {
-            if (deviceDefinition.DeviceType == DeviceType.Usb) return null;
+            if (deviceDefinition.DeviceType != DeviceType.Usb) return null;
             return new WindowsUsbDevice(deviceDefinition.DeviceId, 64, 64);
         }
 
@@ -65,7 +65,13 @@ namespace Usb.Net.Windows
 
                     APICalls.SetupDiGetDeviceInterfaceDetail(i, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
 
-                    var DeviceDefinition = new DeviceDefinition { DeviceId = spDeviceInterfaceDetailData.DevicePath };
+                    //TODO: Super duplication here. Merge!!!
+                    var vendorHex = vendorId?.ToString("X").ToLower().PadLeft(4, '0');
+                    var productIdHex = productId?.ToString("X").ToLower().PadLeft(4, '0');
+                    if (vendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(vendorHex)) continue;
+                    if (productId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(productIdHex)) continue;
+
+                    var DeviceDefinition = new DeviceDefinition { DeviceId = spDeviceInterfaceDetailData.DevicePath, DeviceType = DeviceType.Usb };
 
                     DeviceDefinitions.Add(DeviceDefinition);
                 }
