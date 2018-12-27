@@ -3,6 +3,7 @@ using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -12,7 +13,8 @@ namespace Usb.Net.Windows
     {
         #region Fields
         private SafeFileHandle _DeviceHandle;
-        private List<Interface>  _Interfaces = new List<Interface> {  };
+        private List<Interface> _Interfaces = new List<Interface> { };
+        private Interface DefaultInterface => _Interfaces.FirstOrDefault();
         #endregion
 
         #region Public Overrride Properties
@@ -122,20 +124,23 @@ namespace Usb.Net.Windows
             public IntPtr Handle { get; set; }
             public WinUsbApiCalls.USB_INTERFACE_DESCRIPTOR USB_INTERFACE_DESCRIPTOR { get; set; }
             public List<Pipe> Pipes { get; } = new List<Pipe>();
+            public Pipe ReadPipe => Pipes.FirstOrDefault(p => p.IsRead);
+            public Pipe WritePipe => Pipes.FirstOrDefault(p => p.IsWrite);
         }
 
         private class Pipe
         {
             public WinUsbApiCalls.WINUSB_PIPE_INFORMATION WINUSB_PIPE_INFORMATION { get; set; }
+            public bool IsRead => (WINUSB_PIPE_INFORMATION.PipeId & 0x80) != 0;
+            public bool IsWrite => (WINUSB_PIPE_INFORMATION.PipeId & 0x80) == 0;
         }
 
         public override async Task<byte[]> ReadAsync()
         {
             var bytes = new byte[ReadBufferSize];
 
-            var @interface = _Interfaces[0];
-
-            var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(@interface.Handle, @interface.Pipes[0].WINUSB_PIPE_INFORMATION.PipeId, bytes, (uint)ReadBufferSize, out var bytesRead, IntPtr.Zero);
+            //TODO: Allow for different interfaces and pipes...
+            var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(DefaultInterface.Handle, DefaultInterface.ReadPipe.WINUSB_PIPE_INFORMATION.PipeId, bytes, ReadBufferSize, out var bytesRead, IntPtr.Zero);
 
             if (!isSuccess)
             {
@@ -156,8 +161,7 @@ namespace Usb.Net.Windows
             }
 
             //TODO: Allow for different interfaces and pipes...
-            var @interface = _Interfaces[0];
-            var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(@interface.Handle, @interface.Pipes[1].WINUSB_PIPE_INFORMATION.PipeId, data,(uint) data.Length, out var bytesWritten, IntPtr.Zero);
+            var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(DefaultInterface.Handle, DefaultInterface.WritePipe.WINUSB_PIPE_INFORMATION.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
 
             if (!isSuccess)
             {
