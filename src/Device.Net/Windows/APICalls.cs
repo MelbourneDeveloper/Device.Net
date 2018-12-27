@@ -18,6 +18,8 @@ namespace Device.Net
         public const uint OpenExisting = 3;
         public const int FileAttributeNormal = 128;
         public const int FileFlagOverlapped = 1073741824;
+
+        public const int ERROR_NO_MORE_ITEMS = 259;
         #endregion
 
         #region Methods

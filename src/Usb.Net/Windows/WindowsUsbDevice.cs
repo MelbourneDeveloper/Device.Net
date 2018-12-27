@@ -2,6 +2,7 @@
 using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -40,13 +41,33 @@ namespace Usb.Net.Windows
 
             var errorCode = Marshal.GetLastWin32Error();
 
-            if (errorCode > 0) throw new Exception($"Write handle no good. Error code: {errorCode}");
+            if (errorCode > 0) throw new Exception($"Device handle no good. Error code: {errorCode}");
 
             var interfaceHandle = new IntPtr();
 
             var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, ref interfaceHandle);
 
             errorCode = Marshal.GetLastWin32Error();
+
+            byte i = 0;
+
+            var interfacePointers = new List<IntPtr>();
+
+            while (true)
+            {
+                var interfacePointer = IntPtr.Zero;
+                isSuccess = WinUsbApiCalls.WinUsb_GetAssociatedInterface(interfaceHandle, i, out interfacePointer);
+                if (!isSuccess)
+                {
+                    errorCode = Marshal.GetLastWin32Error();
+                    if (errorCode == APICalls.ERROR_NO_MORE_ITEMS) break;
+
+                    throw new Exception($"Could not enumerate interfaces for device {DeviceId}. Error code: { errorCode}");
+                }
+
+                interfacePointers.Add(interfacePointer);
+                i++;
+            }
 
             if (!isSuccess) throw new Exception($"Initialization failed. Error code: {errorCode}");
 

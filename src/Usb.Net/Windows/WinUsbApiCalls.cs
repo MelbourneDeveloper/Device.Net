@@ -12,6 +12,9 @@ namespace Usb.Net.Windows
         [DllImport("winusb.dll", SetLastError = true)]
         public static extern bool WinUsb_ControlTransfer(IntPtr InterfaceHandle, WINUSB_SETUP_PACKET SetupPacket, byte[] Buffer, uint BufferLength, ref uint LengthTransferred, IntPtr Overlapped);
 
+        [DllImport("winusb.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        public static extern bool WinUsb_GetAssociatedInterface(IntPtr InterfaceHandle, byte AssociatedInterfaceIndex, out IntPtr AssociatedInterfaceHandle);
+
         [DllImport("winusb.dll", SetLastError = true)]
         public static extern bool WinUsb_Free(IntPtr InterfaceHandle);
 
