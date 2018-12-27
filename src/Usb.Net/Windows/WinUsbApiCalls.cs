@@ -9,11 +9,19 @@ namespace Usb.Net.Windows
         public const uint DEVICE_SPEED = 1;
         public const byte USB_ENDPOINT_DIRECTION_MASK = 0X80;
 
+        /// <summary>
+        /// Not sure where this constant is defined...
+        /// </summary>
+        public const int DEFAULT_DESCRIPTOR_TYPE = 0x01;
+
         [DllImport("winusb.dll", SetLastError = true)]
         public static extern bool WinUsb_ControlTransfer(IntPtr InterfaceHandle, WINUSB_SETUP_PACKET SetupPacket, byte[] Buffer, uint BufferLength, ref uint LengthTransferred, IntPtr Overlapped);
 
         [DllImport("winusb.dll", SetLastError = true, CharSet = CharSet.Auto)]
         public static extern bool WinUsb_GetAssociatedInterface(IntPtr InterfaceHandle, byte AssociatedInterfaceIndex, out IntPtr AssociatedInterfaceHandle);
+
+        [DllImport("winusb.dll", SetLastError = true)]
+        public static extern bool WinUsb_GetDescriptor(IntPtr InterfaceHandle, byte DescriptorType, byte Index, ushort LanguageID, out USB_DEVICE_DESCRIPTOR deviceDesc, uint BufferLength, out uint LengthTransfered);
 
         [DllImport("winusb.dll", SetLastError = true)]
         public static extern bool WinUsb_Free(IntPtr InterfaceHandle);

@@ -77,6 +77,14 @@ namespace Usb.Net.Windows
                 i++;
             }
 
+            var bufferLength = (uint)Marshal.SizeOf(typeof(USB_DEVICE_DESCRIPTOR));
+            isSuccess = WinUsbApiCalls.WinUsb_GetDescriptor(interfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE , 0, 0, out var deviceDesc, bufferLength, out var lengthTransfered);
+            if (!isSuccess)
+            {
+                errorCode = Marshal.GetLastWin32Error();
+                throw new Exception($"Couldn't get device descriptor. Error code: {errorCode}");
+            }
+
             IsInitialized = true;
 
             RaiseConnected();
