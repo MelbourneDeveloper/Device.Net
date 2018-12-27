@@ -154,12 +154,14 @@ namespace Usb.Net.Windows
                 throw new Exception($"Data is longer than {WriteBufferSize} bytes which is the device's OutputReportByteLength.");
             }
 
-            var isSuccess = APICalls.WriteFile(_DeviceHandle, data, (uint)data.Length, out var bytesWritten, 0);
-
-            var errorCode = Marshal.GetLastWin32Error();
+            //TODO: Allow for different interfaces and pipes...
+            var @interface = _Interfaces[0];
+            var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(@interface.Handle, @interface.Pipes[1].WINUSB_PIPE_INFORMATION.PipeId, data,(uint) data.Length, out var bytesWritten, IntPtr.Zero);
 
             if (!isSuccess)
             {
+                var errorCode = Marshal.GetLastWin32Error();
+
                 throw new Exception($"Error code {errorCode}");
             }
         }
