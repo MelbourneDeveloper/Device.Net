@@ -15,18 +15,17 @@ namespace Usb.Net.Windows
         private SafeFileHandle _DeviceHandle;
         private List<UsbInterface> _UsbInterfaces = new List<UsbInterface> { };
         private UsbInterface _DefaultUsbInterface => _UsbInterfaces.FirstOrDefault();
+        private USB_DEVICE_DESCRIPTOR _UsbDeviceDescriptor;
         #endregion
 
         #region Public Overrride Properties
-        public override ushort WriteBufferSize { get; }
-        public override ushort ReadBufferSize { get; }
+        public override ushort WriteBufferSize => IsInitialized ? _UsbDeviceDescriptor.bMaxPacketSize0 : throw new Exception("Device has not been initialized");
+        public override ushort ReadBufferSize => IsInitialized ? _UsbDeviceDescriptor.bMaxPacketSize0 : throw new Exception("Device has not been initialized");
         #endregion
 
         #region Constructor
-        public WindowsUsbDevice(string deviceId, ushort writeBufferSzie, ushort readBufferSize) : base(deviceId)
+        public WindowsUsbDevice(string deviceId) : base(deviceId)
         {
-            WriteBufferSize = writeBufferSzie;
-            ReadBufferSize = readBufferSize;
         }
         #endregion
 
@@ -59,7 +58,7 @@ namespace Usb.Net.Windows
             }
 
             var bufferLength = (uint)Marshal.SizeOf(typeof(USB_DEVICE_DESCRIPTOR));
-            isSuccess = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, 0, out var deviceDesc, bufferLength, out var lengthTransfered);
+            isSuccess = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, 0, out _UsbDeviceDescriptor, bufferLength, out var lengthTransfered);
             if (!isSuccess)
             {
                 errorCode = Marshal.GetLastWin32Error();
@@ -98,7 +97,7 @@ namespace Usb.Net.Windows
 
         public override async Task<byte[]> ReadAsync()
         {
-            return await Task.Run(() =>  
+            return await Task.Run(() =>
             {
                 var bytes = new byte[ReadBufferSize];
 
@@ -140,6 +139,8 @@ namespace Usb.Net.Windows
 
         public override void Dispose()
         {
+            IsInitialized = false;
+
             foreach (var usbInterface in _UsbInterfaces)
             {
                 usbInterface.Dispose();

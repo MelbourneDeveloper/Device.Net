@@ -23,7 +23,7 @@ namespace Usb.Net.Windows
         public IDevice GetDevice(DeviceDefinition deviceDefinition)
         {
             if (deviceDefinition.DeviceType != DeviceType.Usb) return null;
-            return new WindowsUsbDevice(deviceDefinition.DeviceId, 64, 64);
+            return new WindowsUsbDevice(deviceDefinition.DeviceId);
         }
 
         public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
