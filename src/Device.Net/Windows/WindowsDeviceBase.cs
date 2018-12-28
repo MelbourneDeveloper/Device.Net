@@ -14,7 +14,7 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Properties
-        public abstract WindowsHidDeviceDefinition DeviceInformation { get; }
+        public WindowsHidDeviceDefinition DeviceInformation { get; private set; }
         public string DeviceId { get; }
         public bool IsInitialized { get; protected set; }
         public abstract ushort WriteBufferSize { get; }

@@ -10,7 +10,6 @@ namespace Hid.Net.Windows
     public class WindowsHidDevice : WindowsDeviceBase, IDevice
     {
         #region Fields
-        private HidCollectionCapabilities _HidCollectionCapabilities;
         private FileStream _ReadFileStream;
         private FileStream _WriteFileStream;
         private SafeFileHandle _ReadSafeFileHandle;
@@ -25,15 +24,12 @@ namespace Hid.Net.Windows
         #region Public Overrides
         public override ushort WriteBufferSize => DeviceInformation == null ? throw new Exception("Device has not been initialized") : (ushort)DeviceInformation.WriteBufferSize.Value;
         public override ushort ReadBufferSize => DeviceInformation == null ? throw new Exception("Device has not been initialized") : (ushort)DeviceInformation.ReadBufferSize.Value;
-        public override WindowsHidDeviceDefinition DeviceInformation => _DeviceDefinition;
         #endregion
 
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
         public string DevicePath => DeviceInformation.DeviceId;
         public uint? ProductId => DeviceInformation.ProductId;
-        public ushort Usage => _HidCollectionCapabilities.Usage;
-        public ushort UsagePage => _HidCollectionCapabilities.UsagePage;
         public uint? VendorId => DeviceInformation.VendorId;
         #endregion
 
@@ -88,8 +84,8 @@ namespace Hid.Net.Windows
 
             _DeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
 
-            _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, _HidCollectionCapabilities.OutputReportByteLength, false);
-            _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, _HidCollectionCapabilities.InputReportByteLength, false);
+            _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, ReadBufferSize, false);
+            _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, WriteBufferSize, false);
 
             IsInitialized = true;
 
@@ -110,7 +106,7 @@ namespace Hid.Net.Windows
                 throw new Exception("The device has not been initialized");
             }
 
-            var bytes = new byte[_HidCollectionCapabilities.InputReportByteLength];
+            var bytes = new byte[ReadBufferSize];
 
             try
             {
@@ -146,7 +142,7 @@ namespace Hid.Net.Windows
 
             if (data.Length > WriteBufferSize)
             {
-                throw new Exception($"Data is longer than {_HidCollectionCapabilities.OutputReportByteLength - 1} bytes which is the device's OutputReportByteLength.");
+                throw new Exception($"Data is longer than {WriteBufferSize - 1} bytes which is the device's OutputReportByteLength.");
             }
 
             byte[] bytes;
