@@ -71,9 +71,7 @@ namespace Device.Net.Windows
                     if (vendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(vendorHex)) continue;
                     if (productId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(productIdHex)) continue;
 
-                    var deviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
-
-                    deviceDefinitions.Add(deviceDefinition);
+                    deviceDefinitions.Add(GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath));
                 }
 
                 APICalls.SetupDiDestroyDeviceInfoList(i);
@@ -81,7 +79,9 @@ namespace Device.Net.Windows
                 return deviceDefinitions;
             });
         }
+        #endregion
 
+        #region Private Static Methods
         private static string GetHex(uint? id)
         {
             return id?.ToString("X").ToLower().PadLeft(4, '0');
