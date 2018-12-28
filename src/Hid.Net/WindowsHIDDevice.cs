@@ -1,5 +1,4 @@
 ﻿using Device.Net;
-using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
@@ -123,7 +122,7 @@ namespace Hid.Net.Windows
             await Task.Run(() => Initialize());
         }
 
-        public async Task<byte[]> ReadAsync()
+        public override async Task<byte[]> ReadAsync()
         {
             if (_ReadFileStream == null)
             {
@@ -157,7 +156,7 @@ namespace Hid.Net.Windows
             return retVal;
         }
 
-        public async Task WriteAsync(byte[] data)
+        public override async Task WriteAsync(byte[] data)
         {
             if (_WriteFileStream == null)
             {

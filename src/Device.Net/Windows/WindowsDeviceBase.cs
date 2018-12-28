@@ -40,8 +40,6 @@ namespace Device.Net
             return IsInitialized;
         }
 
-        public abstract Task<byte[]> ReadAsync();
-        public abstract Task WriteAsync(byte[] data);
         public abstract Task InitializeAsync();
 
         #endregion

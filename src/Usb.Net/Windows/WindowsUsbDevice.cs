@@ -137,38 +137,44 @@ namespace Usb.Net.Windows
 
         public override async Task<byte[]> ReadAsync()
         {
-            var bytes = new byte[ReadBufferSize];
-
-            //TODO: Allow for different interfaces and pipes...
-            var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(DefaultInterface.Handle, DefaultInterface.ReadPipe.WINUSB_PIPE_INFORMATION.PipeId, bytes, ReadBufferSize, out var bytesRead, IntPtr.Zero);
-
-            if (!isSuccess)
+            return await Task.Run(() =>  
             {
-                var errorCode = Marshal.GetLastWin32Error();
-                throw new Exception($"Error code {errorCode}");
-            }
+                var bytes = new byte[ReadBufferSize];
 
-            Tracer?.Trace(false, bytes);
+                //TODO: Allow for different interfaces and pipes...
+                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(DefaultInterface.Handle, DefaultInterface.ReadPipe.WINUSB_PIPE_INFORMATION.PipeId, bytes, ReadBufferSize, out var bytesRead, IntPtr.Zero);
 
-            return bytes;
+                if (!isSuccess)
+                {
+                    var errorCode = Marshal.GetLastWin32Error();
+                    throw new Exception($"Error code {errorCode}");
+                }
+
+                Tracer?.Trace(false, bytes);
+
+                return bytes;
+            });
         }
 
         public override async Task WriteAsync(byte[] data)
         {
-            if (data.Length > WriteBufferSize)
+            await Task.Run(() =>
             {
-                throw new Exception($"Data is longer than {WriteBufferSize} bytes which is the device's OutputReportByteLength.");
-            }
+                if (data.Length > WriteBufferSize)
+                {
+                    throw new Exception($"Data is longer than {WriteBufferSize} bytes which is the device's OutputReportByteLength.");
+                }
 
-            //TODO: Allow for different interfaces and pipes...
-            var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(DefaultInterface.Handle, DefaultInterface.WritePipe.WINUSB_PIPE_INFORMATION.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
+                //TODO: Allow for different interfaces and pipes...
+                var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(DefaultInterface.Handle, DefaultInterface.WritePipe.WINUSB_PIPE_INFORMATION.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
 
-            if (!isSuccess)
-            {
-                var errorCode = Marshal.GetLastWin32Error();
+                if (!isSuccess)
+                {
+                    var errorCode = Marshal.GetLastWin32Error();
 
-                throw new Exception($"Error code {errorCode}");
-            }
+                    throw new Exception($"Error code {errorCode}");
+                }
+            });
         }
         #endregion
     }

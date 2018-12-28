@@ -100,7 +100,7 @@ namespace Usb.Net.Android
         }
 
         //TODO: Make async properly
-        public async Task<byte[]> ReadAsync()
+        public override async Task<byte[]> ReadAsync()
         {
             try
             {
@@ -131,7 +131,7 @@ namespace Usb.Net.Android
         }
 
         //TODO: Perhaps we should implement Batch Begin/Complete so that the UsbRequest is not created again and again. This will be expensive
-        public async Task WriteAsync(byte[] data)
+        public  override async Task WriteAsync(byte[] data)
         {
             try
             {

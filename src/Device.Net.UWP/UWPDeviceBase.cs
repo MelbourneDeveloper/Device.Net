@@ -37,8 +37,6 @@ namespace Device.Net.UWP
         #region Public Abstract Methods
         public abstract Task<bool> GetIsConnectedAsync();
         public abstract Task InitializeAsync();
-        public abstract Task<byte[]> ReadAsync();
-        public abstract Task WriteAsync(byte[] data);
         #endregion
     }
 }
