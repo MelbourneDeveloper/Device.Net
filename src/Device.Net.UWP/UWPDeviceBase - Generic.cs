@@ -68,7 +68,7 @@ namespace Device.Net.UWP
         #region Public Virtual Methods
         public virtual void Dispose()
         {
-            if (_ConnectedDevice is IDisposable disposable) disposable?.Dispose();
+            if (_ConnectedDevice is IDisposable disposable) disposable.Dispose();
             _TaskCompletionSource?.Task?.Dispose();
         }
         #endregion

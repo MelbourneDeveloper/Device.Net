@@ -46,10 +46,6 @@ namespace Device.Net
                 await WriteAsync(writeBuffer);
                 return await ReadAsync();
             }
-            catch
-            {
-                throw;
-            }
             finally
             {
                 _WriteAndReadLock.Release();

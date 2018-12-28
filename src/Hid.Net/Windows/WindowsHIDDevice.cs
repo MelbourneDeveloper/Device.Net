@@ -173,7 +173,7 @@ namespace Hid.Net.Windows
             {
                 if (OutputReportByteLength == data.Length)
                 {
-                    throw new DeviceException($"The data sent to the device was a the same length as the HidCollectionCapabilities.OutputReportByteLength. This probably indicates that DataHasExtraByte should be set to false.");
+                    throw new DeviceException("The data sent to the device was a the same length as the HidCollectionCapabilities.OutputReportByteLength. This probably indicates that DataHasExtraByte should be set to false.");
                 }
 
                 bytes = new byte[OutputReportByteLength];

@@ -57,10 +57,8 @@ namespace Device.Net.Windows
                         {
                             break;
                         }
-                        else
-                        {
-                            throw new Exception($"Could not enumerate devices. Error code: {errorCode}");
-                        }
+
+                        throw new Exception($"Could not enumerate devices. Error code: {errorCode}");
                     }
 
                     isSuccess = APICalls.SetupDiGetDeviceInterfaceDetail(i, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
