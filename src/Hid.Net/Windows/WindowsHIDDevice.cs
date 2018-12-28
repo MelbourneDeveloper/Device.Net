@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
@@ -6,83 +7,46 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
-    public class WindowsHidDevice : DeviceBase, IDevice
+    public class WindowsHidDevice : WindowsDeviceBase
     {
         #region Fields
-        private HidCollectionCapabilities _HidCollectionCapabilities;
         private FileStream _ReadFileStream;
         private FileStream _WriteFileStream;
         private SafeFileHandle _ReadSafeFileHandle;
         private SafeFileHandle _WriteSafeFileHandle;
         #endregion
 
-        #region Private Properties
-        private ushort OutputReportByteLength => _HidCollectionCapabilities.OutputReportByteLength > 0 ? _HidCollectionCapabilities.OutputReportByteLength : (ushort)DeviceInformation.WriteBufferSize;
-        private string LogSection => nameof(WindowsHidDevice);
+        #region Protected Properties
+        protected override string LogSection => nameof(WindowsHidDevice);
+        #endregion
+
+        #region Public Overrides
+        public override ushort WriteBufferSize => DeviceDefinition == null ? throw new Exception("Device has not been initialized") : (ushort)DeviceDefinition.WriteBufferSize.Value;
+        public override ushort ReadBufferSize => DeviceDefinition == null ? throw new Exception("Device has not been initialized") : (ushort)DeviceDefinition.ReadBufferSize.Value;
         #endregion
 
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
-        public DeviceDefinition DeviceInformation { get; set; }
-        public string DevicePath => DeviceInformation.DeviceId;
-        public bool IsInitialized { get; private set; }
-        public uint? ProductId => DeviceInformation.ProductId;
-        public ushort Usage => _HidCollectionCapabilities.Usage;
-        public ushort UsagePage => _HidCollectionCapabilities.UsagePage;
-        public uint? VendorId => DeviceInformation.VendorId;
         #endregion
 
         #region Constructor
-        public WindowsHidDevice()
+        public WindowsHidDevice(string deviceId) : base(deviceId)
         {
-        }
-
-        public WindowsHidDevice(DeviceDefinition deviceInformation) : this()
-        {
-            DeviceInformation = deviceInformation;
         }
         #endregion
 
-        #region Public Methods
-        public void Dispose()
-        {
-            IsInitialized = false;
-
-            _ReadFileStream?.Dispose();
-            _WriteFileStream?.Dispose();
-
-            if (_ReadSafeFileHandle != null && !(_ReadSafeFileHandle.IsInvalid))
-            {
-                _ReadSafeFileHandle.Dispose();
-            }
-
-            if (_WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid)
-            {
-                _WriteSafeFileHandle.Dispose();
-            }
-
-            RaiseDisconnected();
-        }
-
-        //TODO
-#pragma warning disable CS1998
-        public async Task<bool> GetIsConnectedAsync()
-#pragma warning restore CS1998
-        {
-            return IsInitialized;
-        }
-
-        public bool Initialize()
+        #region Private Methods
+        private bool Initialize()
         {
             Dispose();
 
-            if (DeviceInformation == null)
+            if (string.IsNullOrEmpty(DeviceId))
             {
-                throw new WindowsHidException($"{nameof(DeviceInformation)} must be specified before {nameof(Initialize)} can be called.");
+                throw new WindowsHidException($"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
             }
 
-            _ReadSafeFileHandle = APICalls.CreateFile(DeviceInformation.DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
-            _WriteSafeFileHandle = APICalls.CreateFile(DeviceInformation.DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+            _ReadSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+            _WriteSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
 
             if (_ReadSafeFileHandle.IsInvalid)
             {
@@ -94,10 +58,10 @@ namespace Hid.Net.Windows
                 throw new Exception("Could not open connection for writing");
             }
 
-            _HidCollectionCapabilities = HidAPICalls.GetHidCapabilities(_ReadSafeFileHandle);
+            DeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
 
-            _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, _HidCollectionCapabilities.OutputReportByteLength, false);
-            _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, _HidCollectionCapabilities.InputReportByteLength, false);
+            _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, ReadBufferSize, false);
+            _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, WriteBufferSize, false);
 
             IsInitialized = true;
 
@@ -105,8 +69,30 @@ namespace Hid.Net.Windows
 
             return true;
         }
+        #endregion
 
-        public async Task InitializeAsync()
+        #region Public Methods
+        public override void Dispose()
+        {
+            IsInitialized = false;
+
+            _ReadFileStream?.Dispose();
+            _WriteFileStream?.Dispose();
+
+            if (_ReadSafeFileHandle != null && !_ReadSafeFileHandle.IsInvalid)
+            {
+                _ReadSafeFileHandle.Dispose();
+            }
+
+            if (_WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid)
+            {
+                _WriteSafeFileHandle.Dispose();
+            }
+
+            base.Dispose();
+        }
+
+        public override async Task InitializeAsync()
         {
             await Task.Run(() => Initialize());
         }
@@ -118,7 +104,7 @@ namespace Hid.Net.Windows
                 throw new Exception("The device has not been initialized");
             }
 
-            var bytes = new byte[_HidCollectionCapabilities.InputReportByteLength];
+            var bytes = new byte[ReadBufferSize];
 
             try
             {
@@ -130,15 +116,7 @@ namespace Hid.Net.Windows
                 throw new IOException(Helpers.ReadErrorMessage, ex);
             }
 
-            byte[] retVal;
-            if (DataHasExtraByte)
-            {
-                retVal = Helpers.RemoveFirstByte(bytes);
-            }
-            else
-            {
-                retVal = bytes;
-            }
+            var retVal = DataHasExtraByte ? Helpers.RemoveFirstByte(bytes) : bytes;
 
             Tracer?.Trace(false, retVal);
 
@@ -152,20 +130,20 @@ namespace Hid.Net.Windows
                 throw new Exception("The device has not been initialized");
             }
 
-            if (data.Length > OutputReportByteLength)
+            if (data.Length > WriteBufferSize)
             {
-                throw new Exception($"Data is longer than {_HidCollectionCapabilities.OutputReportByteLength - 1} bytes which is the device's OutputReportByteLength.");
+                throw new Exception($"Data is longer than {WriteBufferSize - 1} bytes which is the device's OutputReportByteLength.");
             }
 
             byte[] bytes;
             if (DataHasExtraByte)
             {
-                if (OutputReportByteLength == data.Length)
+                if (WriteBufferSize == data.Length)
                 {
                     throw new DeviceException("The data sent to the device was a the same length as the HidCollectionCapabilities.OutputReportByteLength. This probably indicates that DataHasExtraByte should be set to false.");
                 }
 
-                bytes = new byte[OutputReportByteLength];
+                bytes = new byte[WriteBufferSize];
                 Array.Copy(data, 0, bytes, 1, data.Length);
                 bytes[0] = 0;
             }

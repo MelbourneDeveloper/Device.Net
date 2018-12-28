@@ -2,18 +2,22 @@
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace Device.Net
+namespace Device.Net.Windows
 {
     /// <summary>
     /// This class remains untested
     /// </summary>
     public abstract class WindowsDeviceBase : DeviceBase, IDevice
     {
-        #region Private Properties
-        private string LogSection => nameof(WindowsDeviceBase);
+        #region Protected Properties
+        protected virtual string LogSection => nameof(WindowsDeviceBase);
         #endregion
 
         #region Public Properties
+        /// <summary>
+        /// TODO: Move this down to the DeviceBase
+        /// </summary>
+        public WindowsDeviceDefinition DeviceDefinition { get; protected set; }
         public string DeviceId { get; }
         public bool IsInitialized { get; protected set; }
         public abstract ushort WriteBufferSize { get; }
@@ -33,12 +37,9 @@ namespace Device.Net
             RaiseDisconnected();
         }
 
-        //TODO
-#pragma warning disable CS1998
-        public async Task<bool> GetIsConnectedAsync()
-#pragma warning restore CS1998
+        public Task<bool> GetIsConnectedAsync()
         {
-            return IsInitialized;
+            return Task.FromResult(IsInitialized);
         }
 
         public abstract Task InitializeAsync();

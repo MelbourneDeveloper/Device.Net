@@ -1,8 +1,8 @@
 ﻿using Device.Net;
 
-namespace Hid.Net.Windows
+namespace Device.Net.Windows
 {
-    public class WindowsHidDeviceDefinition : DeviceDefinition
+    public class WindowsDeviceDefinition : DeviceDefinition
     {
         public string Manufacturer { get; set; }
         public string Product { get; set; }
