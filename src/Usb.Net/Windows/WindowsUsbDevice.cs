@@ -122,7 +122,7 @@ namespace Usb.Net.Windows
             {
                 if (data.Length > WriteBufferSize)
                 {
-                    throw new Exception($"Data is longer than {WriteBufferSize} bytes which is the device's OutputReportByteLength.");
+                    throw new Exception($"Data is longer than {WriteBufferSize} bytes which is the device's max buffer size.");
                 }
 
                 //TODO: Allow for different interfaces and pipes...
