@@ -96,27 +96,6 @@ namespace Usb.Net.Windows
             RaiseConnected();
         }
 
-        private static UsbInterface GetInterface(SafeFileHandle interfaceHandle)
-        {
-            var retVal = new UsbInterface { Handle = interfaceHandle };
-            var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
-            if (!isSuccess)
-            {
-                var errorCode = Marshal.GetLastWin32Error();
-                throw new Exception($"Couldn't query interface. Error code: {errorCode}");
-            }
-
-            retVal.USB_INTERFACE_DESCRIPTOR = interfaceDescriptor;
-
-            for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)
-            {
-                isSuccess = WinUsbApiCalls.WinUsb_QueryPipe(interfaceHandle, 0, i, out var pipeInfo);
-                retVal.UsbInterfacePipes.Add(new UsbInterfacePipe { WINUSB_PIPE_INFORMATION = pipeInfo });
-            }
-
-            return retVal;
-        }
-
         public override async Task<byte[]> ReadAsync()
         {
             return await Task.Run(() =>  
@@ -170,6 +149,29 @@ namespace Usb.Net.Windows
             _DeviceHandle?.Dispose();
 
             base.Dispose();
+        }
+        #endregion
+
+        #region Private Static Methods
+        private static UsbInterface GetInterface(SafeFileHandle interfaceHandle)
+        {
+            var retVal = new UsbInterface { Handle = interfaceHandle };
+            var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
+            if (!isSuccess)
+            {
+                var errorCode = Marshal.GetLastWin32Error();
+                throw new Exception($"Couldn't query interface. Error code: {errorCode}");
+            }
+
+            retVal.USB_INTERFACE_DESCRIPTOR = interfaceDescriptor;
+
+            for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)
+            {
+                isSuccess = WinUsbApiCalls.WinUsb_QueryPipe(interfaceHandle, 0, i, out var pipeInfo);
+                retVal.UsbInterfacePipes.Add(new UsbInterfacePipe { WINUSB_PIPE_INFORMATION = pipeInfo });
+            }
+
+            return retVal;
         }
         #endregion
     }
