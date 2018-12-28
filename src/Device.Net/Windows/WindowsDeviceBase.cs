@@ -34,12 +34,9 @@ namespace Device.Net.Windows
             RaiseDisconnected();
         }
 
-        //TODO
-#pragma warning disable CS1998
-        public async Task<bool> GetIsConnectedAsync()
-#pragma warning restore CS1998
+        public Task<bool> GetIsConnectedAsync()
         {
-            return IsInitialized;
+            return Task.FromResult(IsInitialized);
         }
 
         public abstract Task InitializeAsync();
