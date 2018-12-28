@@ -13,8 +13,8 @@ namespace Usb.Net.Windows
     {
         #region Fields
         private SafeFileHandle _DeviceHandle;
-        private List<Interface> _Interfaces = new List<Interface> { };
-        private Interface DefaultInterface => _Interfaces.FirstOrDefault();
+        private List<UsbInterface> _Interfaces = new List<UsbInterface> { };
+        private UsbInterface DefaultInterface => _Interfaces.FirstOrDefault();
         #endregion
 
         #region Public Overrride Properties
@@ -98,9 +98,9 @@ namespace Usb.Net.Windows
             RaiseConnected();
         }
 
-        private static Interface GetInterface(IntPtr interfaceHandle)
+        private static UsbInterface GetInterface(IntPtr interfaceHandle)
         {
-            var retVal = new Interface { Handle = interfaceHandle };
+            var retVal = new UsbInterface { Handle = interfaceHandle };
             var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
             if (!isSuccess)
             {
@@ -113,26 +113,10 @@ namespace Usb.Net.Windows
             for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)
             {
                 isSuccess = WinUsbApiCalls.WinUsb_QueryPipe(interfaceHandle, 0, i, out var pipeInfo);
-                retVal.Pipes.Add(new Pipe { WINUSB_PIPE_INFORMATION = pipeInfo });
+                retVal.Pipes.Add(new UsbInterfacePipe { WINUSB_PIPE_INFORMATION = pipeInfo });
             }
 
             return retVal;
-        }
-
-        private class Interface
-        {
-            public IntPtr Handle { get; set; }
-            public WinUsbApiCalls.USB_INTERFACE_DESCRIPTOR USB_INTERFACE_DESCRIPTOR { get; set; }
-            public List<Pipe> Pipes { get; } = new List<Pipe>();
-            public Pipe ReadPipe => Pipes.FirstOrDefault(p => p.IsRead);
-            public Pipe WritePipe => Pipes.FirstOrDefault(p => p.IsWrite);
-        }
-
-        private class Pipe
-        {
-            public WinUsbApiCalls.WINUSB_PIPE_INFORMATION WINUSB_PIPE_INFORMATION { get; set; }
-            public bool IsRead => (WINUSB_PIPE_INFORMATION.PipeId & WinUsbApiCalls.WritePipeId) != 0;
-            public bool IsWrite => (WINUSB_PIPE_INFORMATION.PipeId & WinUsbApiCalls.WritePipeId) == 0;
         }
 
         public override async Task<byte[]> ReadAsync()
