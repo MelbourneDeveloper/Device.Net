@@ -14,6 +14,7 @@ namespace Usb.Net.Windows
         /// Not sure where this constant is defined...
         /// </summary>
         public const int DEFAULT_DESCRIPTOR_TYPE = 0x01;
+        public const int USB_STRING_DESCRIPTOR_TYPE = 0x03;
 
         [DllImport("winusb.dll", SetLastError = true)]
         public static extern bool WinUsb_ControlTransfer(IntPtr InterfaceHandle, WINUSB_SETUP_PACKET SetupPacket, byte[] Buffer, uint BufferLength, ref uint LengthTransferred, IntPtr Overlapped);
@@ -23,6 +24,9 @@ namespace Usb.Net.Windows
 
         [DllImport("winusb.dll", SetLastError = true)]
         public static extern bool WinUsb_GetDescriptor(SafeFileHandle InterfaceHandle, byte DescriptorType, byte Index, ushort LanguageID, out USB_DEVICE_DESCRIPTOR deviceDesc, uint BufferLength, out uint LengthTransfered);
+
+        [DllImport("winusb.dll", SetLastError = true)]
+        public static extern bool WinUsb_GetDescriptor(SafeFileHandle InterfaceHandle, byte DescriptorType, byte Index, UInt16 LanguageID, byte[] Buffer, UInt32 BufferLength, out UInt32 LengthTransfered);
 
         [DllImport("winusb.dll", SetLastError = true)]
         public static extern bool WinUsb_Free(SafeFileHandle InterfaceHandle);
