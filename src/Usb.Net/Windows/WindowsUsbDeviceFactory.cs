@@ -8,28 +8,25 @@ using System.Threading.Tasks;
 
 namespace Usb.Net.Windows
 {
-    public class WindowsUsbDeviceFactory : IDeviceFactory
+    public class WindowsUsbDeviceFactory : WindowsDeviceFactoryBase, IDeviceFactory
     {
-        #region Public Properties
-        public DeviceType DeviceType => DeviceType.Usb;
-        public Guid ClassGuid { get; set; } = WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE;
+        #region Public Override Properties
+        public override DeviceType DeviceType => DeviceType.Usb;
+        //TODO: This is not right
+        public override Guid ClassGuid { get; set; } = WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE;
         #endregion
 
-        public static void Register()
-        {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory());
-        }
-
+        #region Public Methods
         public IDevice GetDevice(DeviceDefinition deviceDefinition)
         {
-            return deviceDefinition.DeviceType != DeviceType.Usb ? null : new WindowsUsbDevice(deviceDefinition.DeviceId);
+            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsUsbDevice(deviceDefinition.DeviceId);
         }
 
         public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
         {
             return await Task.Run<IEnumerable<DeviceDefinition>>(() =>
             {
-                var DeviceDefinitions = new Collection<DeviceDefinition>();
+                var deviceDefinitions = new Collection<DeviceDefinition>();
                 var spDeviceInterfaceData = new SpDeviceInterfaceData();
                 var spDeviceInfoData = new SpDeviceInfoData();
                 var spDeviceInterfaceDetailData = new SpDeviceInterfaceDetailData();
@@ -80,13 +77,21 @@ namespace Usb.Net.Windows
 
                     var DeviceDefinition = new DeviceDefinition { DeviceId = spDeviceInterfaceDetailData.DevicePath, DeviceType = DeviceType.Usb };
 
-                    DeviceDefinitions.Add(DeviceDefinition);
+                    deviceDefinitions.Add(DeviceDefinition);
                 }
 
                 APICalls.SetupDiDestroyDeviceInfoList(i);
 
-                return DeviceDefinitions;
+                return deviceDefinitions;
             });
         }
+        #endregion
+
+        #region Public Static Methods
+        public static void Register()
+        {
+            DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory());
+        }
+        #endregion
     }
 }

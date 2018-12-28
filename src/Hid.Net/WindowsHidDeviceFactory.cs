@@ -8,26 +8,24 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
-    public class WindowsHidDeviceFactory : IDeviceFactory
+    public class WindowsHidDeviceFactory : WindowsDeviceFactoryBase, IDeviceFactory
     {
-        public DeviceType DeviceType => DeviceType.Hid;
+        #region Public Override Properties
+        public override DeviceType DeviceType => DeviceType.Hid;
+        public override Guid ClassGuid { get; set; } = WindowsDeviceConstants.GUID_DEVINTERFACE_HID;
+        #endregion
 
-        public static void Register()
-        {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory());
-        }
-
+        #region Public Methods
         public IDevice GetDevice(DeviceDefinition deviceDefinition)
         {
-            if (deviceDefinition.DeviceType == DeviceType.Usb) return null;
-            return new WindowsHidDevice(deviceDefinition);
+            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition);
         }
 
         public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
         {
             return await Task.Run<IEnumerable<DeviceDefinition>>(() =>
             {
-                var deviceInformations = new Collection<DeviceDefinition>();
+                var deviceDefinitions = new Collection<DeviceDefinition>();
                 var spDeviceInterfaceData = new SpDeviceInterfaceData();
                 var spDeviceInfoData = new SpDeviceInfoData();
                 var spDeviceInterfaceDetailData = new SpDeviceInterfaceDetailData();
@@ -35,8 +33,6 @@ namespace Hid.Net.Windows
                 spDeviceInfoData.CbSize = (uint)Marshal.SizeOf(spDeviceInfoData);
 
                 var classGuid = WindowsDeviceConstants.GUID_DEVINTERFACE_HID;
-                //Split this method up for Usb devices and move this down a library
-                //var classGuid = deviceType == DeviceType.Hid ? WindowsDeviceConstants.GUID_DEVINTERFACE_HID : WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE;
 
                 var i = APICalls.SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, APICalls.DigcfDeviceinterface | APICalls.DigcfPresent);
 
@@ -73,16 +69,18 @@ namespace Hid.Net.Windows
                     if (vendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(vendorHex)) continue;
                     if (productId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(productIdHex)) continue;
 
-                    deviceInformations.Add(GetDeviceInformation(spDeviceInterfaceDetailData.DevicePath));
+                    deviceDefinitions.Add(GetDeviceInformation(spDeviceInterfaceDetailData.DevicePath));
                 }
 
                 APICalls.SetupDiDestroyDeviceInfoList(i);
 
-                return deviceInformations;
+                return deviceDefinitions;
             });
         }
+        #endregion
 
-        private static WindowsHidDeviceInformation GetDeviceInformation(string devicePath)
+        #region Private Static Methods
+        private static WindowsHidDeviceDefinition GetDeviceInformation(string devicePath)
         {
             using (var safeFileHandle = APICalls.CreateFile(devicePath, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero))
             {
@@ -132,7 +130,7 @@ namespace Hid.Net.Windows
 
                 //TODO: Deal with issues here
 
-                var deviceInformation = new WindowsHidDeviceInformation
+                var deviceInformation = new WindowsHidDeviceDefinition
                 {
                     DeviceId = devicePath,
                     //TODO Is this the right way around?
@@ -151,5 +149,13 @@ namespace Hid.Net.Windows
                 return deviceInformation;
             }
         }
+        #endregion
+
+        #region Public Static Methods
+        public static void Register()
+        {
+            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory());
+        }
+        #endregion
     }
 }
