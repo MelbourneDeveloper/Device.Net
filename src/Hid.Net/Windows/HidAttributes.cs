@@ -3,7 +3,7 @@
 namespace Hid.Net.Windows
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal struct HidAttributes
+    public struct HidAttributes
     {
         public int Size;
         public short VendorId;

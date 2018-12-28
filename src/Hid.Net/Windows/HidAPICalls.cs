@@ -47,7 +47,7 @@ namespace Hid.Net.Windows
         internal static extern bool HidD_FreePreparsedData(ref IntPtr pointerToPreparsedData);
 
         [DllImport("hid.dll", SetLastError = true)]
-        internal static extern bool HidD_GetAttributes(SafeFileHandle hidDeviceObject, ref HidAttributes attributes);
+        internal static extern bool HidD_GetAttributes(SafeFileHandle hidDeviceObject, out HidAttributes attributes);
 
         [DllImport("hid.dll", SetLastError = true)]
         internal static extern void HidD_GetHidGuid(ref Guid hidGuid);
@@ -59,6 +59,13 @@ namespace Hid.Net.Windows
         #region Helper Methods
 
         #region Public Methods
+        public static HidAttributes GetHidAttributes(SafeFileHandle safeFileHandle)
+        {
+            var isSuccess = HidD_GetAttributes(safeFileHandle, out var hidAttribues);
+            WindowsDeviceBase.HandleError(isSuccess, "Could not get Hid Attributes");
+            return hidAttribues;
+        }
+
         public static HidCollectionCapabilities GetHidCapabilities(SafeFileHandle readSafeFileHandle)
         {
             var isSuccess = HidD_GetPreparsedData(readSafeFileHandle, out var pointerToPreParsedData);
