@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Device.Net
@@ -42,6 +43,15 @@ namespace Device.Net
 
         public abstract Task InitializeAsync();
 
+        #endregion
+
+        #region Public Static Methods
+        public static void HandleError(bool isSuccess, string message)
+        {
+            if (isSuccess) return;
+            var errorCode = Marshal.GetLastWin32Error();
+            throw new Exception($"{message}. Error code: {errorCode}");
+        }
         #endregion
     }
 }

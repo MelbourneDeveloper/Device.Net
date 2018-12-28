@@ -64,11 +64,7 @@ namespace Device.Net.Windows
                     }
 
                     isSuccess = APICalls.SetupDiGetDeviceInterfaceDetail(i, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
-                    if (!isSuccess)
-                    {
-                        var errorCode = Marshal.GetLastWin32Error();
-                        throw new Exception($"Could not get device interface detail. Error code: {errorCode}");
-                    }
+                    WindowsDeviceBase.HandleError(isSuccess, "Could not get device interface detail");
 
                     //Note this is a bit nasty but we can filter Vid and Pid this way I think...
                     var vendorHex = vendorId?.ToString("X").ToLower().PadLeft(4, '0');

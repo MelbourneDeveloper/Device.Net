@@ -32,9 +32,11 @@ namespace Hid.Net.Windows
                 var manufacturer = string.Empty;
                 var pointerToBuffer = Marshal.AllocHGlobal(126);
 
-                var preparsedDataResult = HidAPICalls.HidD_GetPreparsedData(safeFileHandle, ref pointerToPreParsedData);
-                if (!preparsedDataResult)
+                var isSuccess = HidAPICalls.HidD_GetPreparsedData(safeFileHandle, ref pointerToPreParsedData);
+                if (!isSuccess)
                 {
+
+
                     return null;
                 }
 
