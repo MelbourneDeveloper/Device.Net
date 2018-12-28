@@ -2,7 +2,6 @@
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
@@ -12,8 +11,8 @@ namespace Hid.Net.Windows
         #region Fields
         private HidCollectionCapabilities _HidCollectionCapabilities;
         private FileStream _ReadFileStream;
-        private SafeFileHandle _ReadSafeFileHandle;
         private FileStream _WriteFileStream;
+        private SafeFileHandle _ReadSafeFileHandle;
         private SafeFileHandle _WriteSafeFileHandle;
         #endregion
 
@@ -47,6 +46,8 @@ namespace Hid.Net.Windows
         #region Public Methods
         public void Dispose()
         {
+            IsInitialized = false;
+
             _ReadFileStream?.Dispose();
             _WriteFileStream?.Dispose();
 
@@ -80,32 +81,20 @@ namespace Hid.Net.Windows
                 throw new WindowsHidException($"{nameof(DeviceInformation)} must be specified before {nameof(Initialize)} can be called.");
             }
 
-            var pointerToPreParsedData = new IntPtr();
-            _HidCollectionCapabilities = new HidCollectionCapabilities();
-            var pointerToBuffer = Marshal.AllocHGlobal(126);
-
             _ReadSafeFileHandle = APICalls.CreateFile(DeviceInformation.DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
             _WriteSafeFileHandle = APICalls.CreateFile(DeviceInformation.DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
 
-            if (!HidAPICalls.HidD_GetPreparsedData(_ReadSafeFileHandle, ref pointerToPreParsedData))
-            {
-                throw new Exception("Could not get pre parsed data");
-            }
-
-            var getCapsResult = HidAPICalls.HidP_GetCaps(pointerToPreParsedData, ref _HidCollectionCapabilities);
-
-            //TODO: Deal with issues here
-
-            Marshal.FreeHGlobal(pointerToBuffer);
-
-            var preparsedDataResult = HidAPICalls.HidD_FreePreparsedData(ref pointerToPreParsedData);
-
-            //TODO: Deal with issues here
-
             if (_ReadSafeFileHandle.IsInvalid)
             {
-                return false;
+                throw new Exception("Could not open connection for reading");
             }
+
+            if (_WriteSafeFileHandle.IsInvalid)
+            {
+                throw new Exception("Could not open connection for writing");
+            }
+
+            _HidCollectionCapabilities = HidAPICalls.GetHidCapabilities(_ReadSafeFileHandle);
 
             _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, _HidCollectionCapabilities.OutputReportByteLength, false);
             _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, _HidCollectionCapabilities.InputReportByteLength, false);
