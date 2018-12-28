@@ -27,7 +27,7 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public void Dispose()
+        public virtual void Dispose()
         {
             RaiseDisconnected();
         }

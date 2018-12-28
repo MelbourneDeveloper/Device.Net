@@ -35,17 +35,19 @@ namespace Usb.Net.WindowsSample
 
             //Get the first available device and connect to it
             var devices = await DeviceManager.Current.GetDevices(deviceDefinitions);
-            var trezorDevice = devices.FirstOrDefault();
-            await trezorDevice.InitializeAsync();
+            using (var trezorDevice = devices.FirstOrDefault())
+            {
+                await trezorDevice.InitializeAsync();
 
-            //Create a buffer with 3 bytes (initialize)
-            var buffer = new byte[64];
-            buffer[0] = 0x3f;
-            buffer[1] = 0x23;
-            buffer[2] = 0x23;
+                //Create a buffer with 3 bytes (initialize)
+                var buffer = new byte[64];
+                buffer[0] = 0x3f;
+                buffer[1] = 0x23;
+                buffer[2] = 0x23;
 
-            //Write the data to the device and get the response
-            var readBuffer = await trezorDevice.WriteAndReadAsync(buffer);
+                //Write the data to the device and get the response
+                var readBuffer = await trezorDevice.WriteAndReadAsync(buffer);
+            }
         }
     }
 }

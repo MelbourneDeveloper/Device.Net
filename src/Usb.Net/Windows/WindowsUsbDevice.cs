@@ -158,6 +158,20 @@ namespace Usb.Net.Windows
                 }
             });
         }
+
+        public override void Dispose()
+        {
+            _DeviceHandle?.Dispose();
+
+            foreach(var usbInterface in _UsbInterfaces)
+            {
+                //TODO: Dispose of interface
+                //usbInterface.Handle.Dispose();
+            }
+            _UsbInterfaces.Clear();
+
+            base.Dispose();
+        }
         #endregion
     }
 }
