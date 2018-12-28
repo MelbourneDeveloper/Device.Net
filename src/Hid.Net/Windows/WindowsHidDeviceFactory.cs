@@ -31,7 +31,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Private Static Methods
-        public static WindowsHidDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)
+        public static WindowsDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)
         {
             var hidAttributes = GetHidAttributes(safeFileHandle);
             var hidCollectionCapabilities = GetHidCapabilities(safeFileHandle);
@@ -39,7 +39,7 @@ namespace Hid.Net.Windows
             var serialNumber = GetSerialNumber(safeFileHandle);
             var product = GetProduct(safeFileHandle);
 
-            var deviceInformation = new WindowsHidDeviceDefinition
+            var deviceInformation = new WindowsDeviceDefinition
             {
                 DeviceId = deviceId,
                 //TODO Is this the right way around?

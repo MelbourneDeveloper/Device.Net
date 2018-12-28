@@ -14,7 +14,7 @@ namespace Hid.Net.Windows
         private FileStream _WriteFileStream;
         private SafeFileHandle _ReadSafeFileHandle;
         private SafeFileHandle _WriteSafeFileHandle;
-        private WindowsHidDeviceDefinition _DeviceDefinition;
+        private WindowsDeviceDefinition _DeviceDefinition;
         #endregion
 
         #region Private Properties
