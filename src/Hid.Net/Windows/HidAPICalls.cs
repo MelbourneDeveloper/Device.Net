@@ -14,7 +14,9 @@ namespace Hid.Net.Windows
         public const uint GenericRead = 2147483648;
         public const uint GenericWrite = 1073741824;
         public const uint OpenExisting = 3;
-        #endregion
+        public const int HIDP_STATUS_SUCCESS = 0x110000;
+        public const int HIDP_STATUS_INVALID_PREPARSED_DATA = -0x3FEF0000;
+        #endregion        
 
         #region Methods
 
@@ -32,7 +34,7 @@ namespace Hid.Net.Windows
         internal static extern bool HidD_GetManufacturerString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
 
         [DllImport("hid.dll", SetLastError = true)]
-        internal static extern bool HidD_GetPreparsedData(SafeFileHandle hidDeviceObject, ref IntPtr pointerToPreparsedData);
+        internal static extern bool HidD_GetPreparsedData(SafeFileHandle hidDeviceObject, out IntPtr pointerToPreparsedData);
 
         [DllImport("hid.dll", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
         internal static extern bool HidD_GetProductString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
@@ -41,7 +43,7 @@ namespace Hid.Net.Windows
         internal static extern bool HidD_GetSerialNumberString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
 
         [DllImport("hid.dll", SetLastError = true)]
-        internal static extern int HidP_GetCaps(IntPtr pointerToPreparsedData, ref HidCollectionCapabilities hidCollectionCapabilities);
+        internal static extern int HidP_GetCaps(IntPtr pointerToPreparsedData, out HidCollectionCapabilities hidCollectionCapabilities);
         #endregion
 
         #endregion

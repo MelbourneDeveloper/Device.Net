@@ -24,15 +24,13 @@ namespace Hid.Net.Windows
         {
             using (var safeFileHandle = APICalls.CreateFile(deviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero))
             {
-                var hidCollectionCapabilities = new HidCollectionCapabilities();
                 var hidAttributes = new HidAttributes();
-                var pointerToPreParsedData = new IntPtr();
                 var product = string.Empty;
                 var serialNumber = string.Empty;
                 var manufacturer = string.Empty;
                 var pointerToBuffer = Marshal.AllocHGlobal(126);
 
-                var isSuccess = HidAPICalls.HidD_GetPreparsedData(safeFileHandle, ref pointerToPreParsedData);
+                var isSuccess = HidAPICalls.HidD_GetPreparsedData(safeFileHandle, out var pointerToPreParsedData);
                 if (!isSuccess)
                 {
 
@@ -42,7 +40,7 @@ namespace Hid.Net.Windows
 
                 //TODO: Deal with issues here
 
-                var getCapsResult = HidAPICalls.HidP_GetCaps(pointerToPreParsedData, ref hidCollectionCapabilities);
+                var getCapsResult = HidAPICalls.HidP_GetCaps(pointerToPreParsedData, out var hidCollectionCapabilities);
 
                 //TODO: Deal with issues here
 
