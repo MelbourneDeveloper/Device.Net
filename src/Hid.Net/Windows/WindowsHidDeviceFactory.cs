@@ -30,12 +30,6 @@ namespace Hid.Net.Windows
                 var manufacturer = string.Empty;
                 var pointerToBuffer = Marshal.AllocHGlobal(126);
 
-                var isSuccess = HidAPICalls.HidD_GetPreparsedData(safeFileHandle, out var pointerToPreParsedData);
-                if (!isSuccess)
-                {
-                    return null;
-                }
-
                 var hidCollectionCapabilities = HidAPICalls.GetHidCapabilities(safeFileHandle);
 
                 if (HidAPICalls.HidD_GetManufacturerString(safeFileHandle, pointerToBuffer, 126))
@@ -54,8 +48,6 @@ namespace Hid.Net.Windows
                 }
 
                 Marshal.FreeHGlobal(pointerToBuffer);
-
-                var getPreparsedDataResult = HidAPICalls.HidD_FreePreparsedData(ref pointerToPreParsedData);
 
                 //TODO: Deal with issues here
 

@@ -17,11 +17,18 @@ namespace Hid.Net.Windows
         public const uint OpenExisting = 3;
         public const int HIDP_STATUS_SUCCESS = 0x110000;
         public const int HIDP_STATUS_INVALID_PREPARSED_DATA = -0x3FEF0000;
-        #endregion        
+        #endregion
 
         #region API Calls
 
         #region Hid
+
+        #region Private (Has a Helper Method)
+        [DllImport("hid.dll", SetLastError = true)]
+        private static extern bool HidD_GetPreparsedData(SafeFileHandle hidDeviceObject, out IntPtr pointerToPreparsedData);
+        #endregion
+
+        #region Internal
         [DllImport("hid.dll", SetLastError = true)]
         internal static extern bool HidD_FreePreparsedData(ref IntPtr pointerToPreparsedData);
 
@@ -34,9 +41,6 @@ namespace Hid.Net.Windows
         [DllImport("hid.dll", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
         internal static extern bool HidD_GetManufacturerString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
 
-        [DllImport("hid.dll", SetLastError = true)]
-        internal static extern bool HidD_GetPreparsedData(SafeFileHandle hidDeviceObject, out IntPtr pointerToPreparsedData);
-
         [DllImport("hid.dll", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
         internal static extern bool HidD_GetProductString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
 
@@ -45,6 +49,7 @@ namespace Hid.Net.Windows
 
         [DllImport("hid.dll", SetLastError = true)]
         internal static extern int HidP_GetCaps(IntPtr pointerToPreparsedData, out HidCollectionCapabilities hidCollectionCapabilities);
+        #endregion
         #endregion
 
         #endregion
@@ -60,6 +65,9 @@ namespace Hid.Net.Windows
             {
                 throw new Exception($"Could not get Hid capabilities. Return code: {result}");
             }
+
+            isSuccess = HidD_FreePreparsedData(ref pointerToPreParsedData);
+            WindowsDeviceBase.HandleError(isSuccess, "Could not release handle for getting Hid capabilities");
 
             return hidCollectionCapabilities;
         }
