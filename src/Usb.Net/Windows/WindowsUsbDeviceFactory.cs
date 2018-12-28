@@ -75,7 +75,7 @@ namespace Usb.Net.Windows
                     if (vendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(vendorHex)) continue;
                     if (productId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(productIdHex)) continue;
 
-                    var DeviceDefinition = new DeviceDefinition { DeviceId = spDeviceInterfaceDetailData.DevicePath, DeviceType = DeviceType.Usb };
+                    var DeviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
 
                     deviceDefinitions.Add(DeviceDefinition);
                 }
@@ -84,6 +84,13 @@ namespace Usb.Net.Windows
 
                 return deviceDefinitions;
             });
+        }
+        #endregion
+
+        #region Private Static Methods
+        protected override DeviceDefinition GetDeviceDefinition(string deviceId)
+        {
+            return new DeviceDefinition { DeviceId = deviceId, DeviceType = DeviceType.Usb };
         }
         #endregion
 

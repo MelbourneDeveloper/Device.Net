@@ -74,7 +74,9 @@ namespace Hid.Net.Windows
                     if (vendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(vendorHex)) continue;
                     if (productId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(productIdHex)) continue;
 
-                    deviceDefinitions.Add(GetDeviceInformation(spDeviceInterfaceDetailData.DevicePath));
+                    var deviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
+
+                    deviceDefinitions.Add(deviceDefinition);
                 }
 
                 APICalls.SetupDiDestroyDeviceInfoList(i);
@@ -85,9 +87,9 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Private Static Methods
-        private static WindowsHidDeviceDefinition GetDeviceInformation(string devicePath)
+        protected override DeviceDefinition GetDeviceDefinition(string deviceId)
         {
-            using (var safeFileHandle = APICalls.CreateFile(devicePath, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero))
+            using (var safeFileHandle = APICalls.CreateFile(deviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero))
             {
                 var hidCollectionCapabilities = new HidCollectionCapabilities();
                 var hidAttributes = new HidAttributes();
@@ -137,7 +139,7 @@ namespace Hid.Net.Windows
 
                 var deviceInformation = new WindowsHidDeviceDefinition
                 {
-                    DeviceId = devicePath,
+                    DeviceId = deviceId,
                     //TODO Is this the right way around?
                     WriteBufferSize = hidCollectionCapabilities.InputReportByteLength,
                     ReadBufferSize = hidCollectionCapabilities.OutputReportByteLength,
