@@ -32,9 +32,10 @@ namespace Hid.Net.Windows
                 spDeviceInterfaceData.CbSize = (uint)Marshal.SizeOf(spDeviceInterfaceData);
                 spDeviceInfoData.CbSize = (uint)Marshal.SizeOf(spDeviceInfoData);
 
-                var classGuid = WindowsDeviceConstants.GUID_DEVINTERFACE_HID;
+                var guidString = ClassGuid.ToString();
+                var copyOfClassGuid = new Guid(guidString);
 
-                var i = APICalls.SetupDiGetClassDevs(ref classGuid, IntPtr.Zero, IntPtr.Zero, APICalls.DigcfDeviceinterface | APICalls.DigcfPresent);
+                var i = APICalls.SetupDiGetClassDevs(ref copyOfClassGuid, IntPtr.Zero, IntPtr.Zero, APICalls.DigcfDeviceinterface | APICalls.DigcfPresent);
 
                 if (IntPtr.Size == 8)
                 {
@@ -51,14 +52,18 @@ namespace Hid.Net.Windows
                 {
                     x++;
 
-                    var setupDiEnumDeviceInterfacesResult = APICalls.SetupDiEnumDeviceInterfaces(i, IntPtr.Zero, ref classGuid, (uint)x, ref spDeviceInterfaceData);
-                    var errorNumber = Marshal.GetLastWin32Error();
-
-                    //TODO: deal with error numbers. Give a meaningful error message
-
-                    if (setupDiEnumDeviceInterfacesResult == false)
+                    var isSuccess = APICalls.SetupDiEnumDeviceInterfaces(i, IntPtr.Zero, ref copyOfClassGuid, (uint)x, ref spDeviceInterfaceData);
+                    if (!isSuccess)
                     {
-                        break;
+                        var errorCode = Marshal.GetLastWin32Error();
+                        if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            throw new Exception($"Could not enumerate devices. Error code: {errorCode}");
+                        }
                     }
 
                     APICalls.SetupDiGetDeviceInterfaceDetail(i, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
@@ -143,7 +148,8 @@ namespace Hid.Net.Windows
                     Usage = hidCollectionCapabilities.Usage,
                     UsagePage = hidCollectionCapabilities.UsagePage,
                     VendorId = (ushort)hidAttributes.VendorId,
-                    VersionNumber = (ushort)hidAttributes.VersionNumber
+                    VersionNumber = (ushort)hidAttributes.VersionNumber,
+                    DeviceType = DeviceType.Hid
                 };
 
                 return deviceInformation;
