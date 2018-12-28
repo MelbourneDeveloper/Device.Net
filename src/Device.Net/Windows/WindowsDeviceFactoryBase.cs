@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Device.Net.Windows
@@ -64,7 +63,12 @@ namespace Device.Net.Windows
                         }
                     }
 
-                    APICalls.SetupDiGetDeviceInterfaceDetail(i, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
+                    isSuccess = APICalls.SetupDiGetDeviceInterfaceDetail(i, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
+                    if (!isSuccess)
+                    {
+                        var errorCode = Marshal.GetLastWin32Error();
+                        throw new Exception($"Could not get device interface detail. Error code: {errorCode}");
+                    }
 
                     //Note this is a bit nasty but we can filter Vid and Pid this way I think...
                     var vendorHex = vendorId?.ToString("X").ToLower().PadLeft(4, '0');
