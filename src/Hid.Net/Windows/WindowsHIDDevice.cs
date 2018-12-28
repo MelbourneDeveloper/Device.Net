@@ -14,7 +14,6 @@ namespace Hid.Net.Windows
         private FileStream _WriteFileStream;
         private SafeFileHandle _ReadSafeFileHandle;
         private SafeFileHandle _WriteSafeFileHandle;
-        private WindowsDeviceDefinition _DeviceDefinition;
         #endregion
 
         #region Private Properties
@@ -22,15 +21,15 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Overrides
-        public override ushort WriteBufferSize => DeviceInformation == null ? throw new Exception("Device has not been initialized") : (ushort)DeviceInformation.WriteBufferSize.Value;
-        public override ushort ReadBufferSize => DeviceInformation == null ? throw new Exception("Device has not been initialized") : (ushort)DeviceInformation.ReadBufferSize.Value;
+        public override ushort WriteBufferSize => DeviceDefinition == null ? throw new Exception("Device has not been initialized") : (ushort)DeviceDefinition.WriteBufferSize.Value;
+        public override ushort ReadBufferSize => DeviceDefinition == null ? throw new Exception("Device has not been initialized") : (ushort)DeviceDefinition.ReadBufferSize.Value;
         #endregion
 
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
-        public string DevicePath => DeviceInformation.DeviceId;
-        public uint? ProductId => DeviceInformation.ProductId;
-        public uint? VendorId => DeviceInformation.VendorId;
+        public string DevicePath => DeviceDefinition.DeviceId;
+        public uint? ProductId => DeviceDefinition.ProductId;
+        public uint? VendorId => DeviceDefinition.VendorId;
         #endregion
 
         #region Constructor
@@ -82,7 +81,7 @@ namespace Hid.Net.Windows
                 throw new Exception("Could not open connection for writing");
             }
 
-            _DeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
+            DeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
 
             _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, ReadBufferSize, false);
             _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, WriteBufferSize, false);

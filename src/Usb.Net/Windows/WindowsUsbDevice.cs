@@ -44,7 +44,7 @@ namespace Usb.Net.Windows
 
             if (string.IsNullOrEmpty(DeviceId))
             {
-                throw new WindowsException($"{nameof(DeviceDefinition)} must be specified before {nameof(InitializeAsync)} can be called.");
+                throw new WindowsException($"{nameof(Device.Net.DeviceDefinition)} must be specified before {nameof(InitializeAsync)} can be called.");
             }
 
             _DeviceHandle = APICalls.CreateFile(DeviceId, (APICalls.GenericWrite | APICalls.GenericRead), APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);

@@ -14,7 +14,10 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Properties
-        public WindowsDeviceDefinition DeviceInformation { get; private set; }
+        /// <summary>
+        /// TODO: Move this down to the DeviceBase
+        /// </summary>
+        public WindowsDeviceDefinition DeviceDefinition { get; protected set; }
         public string DeviceId { get; }
         public bool IsInitialized { get; protected set; }
         public abstract ushort WriteBufferSize { get; }
