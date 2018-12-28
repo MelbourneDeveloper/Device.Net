@@ -8,8 +8,8 @@ namespace Usb.Net.Windows
     {
         public IntPtr Handle { get; set; }
         public WinUsbApiCalls.USB_INTERFACE_DESCRIPTOR USB_INTERFACE_DESCRIPTOR { get; set; }
-        public List<UsbInterfacePipe> Pipes { get; } = new List<UsbInterfacePipe>();
-        public UsbInterfacePipe ReadPipe => Pipes.FirstOrDefault(p => p.IsRead);
-        public UsbInterfacePipe WritePipe => Pipes.FirstOrDefault(p => p.IsWrite);
+        public List<UsbInterfacePipe> UsbInterfacePipes { get; } = new List<UsbInterfacePipe>();
+        public UsbInterfacePipe ReadPipe => UsbInterfacePipes.FirstOrDefault(p => p.IsRead);
+        public UsbInterfacePipe WritePipe => UsbInterfacePipes.FirstOrDefault(p => p.IsWrite);
     }
 }
