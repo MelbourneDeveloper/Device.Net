@@ -1,6 +1,6 @@
 ﻿using Device.Net;
 
-namespace Hid.Net.Windows
+namespace Device.Net.Windows
 {
     public class WindowsHidDeviceDefinition : DeviceDefinition
     {

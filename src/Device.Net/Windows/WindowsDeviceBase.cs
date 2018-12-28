@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
-namespace Device.Net
+namespace Device.Net.Windows
 {
     /// <summary>
     /// This class remains untested
@@ -14,6 +14,7 @@ namespace Device.Net
         #endregion
 
         #region Public Properties
+        public abstract WindowsHidDeviceDefinition DeviceInformation { get; }
         public string DeviceId { get; }
         public bool IsInitialized { get; protected set; }
         public abstract ushort WriteBufferSize { get; }
