@@ -26,6 +26,20 @@ namespace Hid.Net.Windows
         #region Private (Has a Helper Method)
         [DllImport("hid.dll", SetLastError = true)]
         private static extern bool HidD_GetPreparsedData(SafeFileHandle hidDeviceObject, out IntPtr pointerToPreparsedData);
+
+        [DllImport("hid.dll", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern bool HidD_GetManufacturerString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
+
+        [DllImport("hid.dll", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern bool HidD_GetProductString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
+
+        [DllImport("hid.dll", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
+        private static extern bool HidD_GetSerialNumberString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
+
+        [DllImport("hid.dll", SetLastError = true)]
+        private static extern int HidP_GetCaps(IntPtr pointerToPreparsedData, out HidCollectionCapabilities hidCollectionCapabilities);
+
+        private delegate bool GetString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
         #endregion
 
         #region Internal
@@ -37,26 +51,14 @@ namespace Hid.Net.Windows
 
         [DllImport("hid.dll", SetLastError = true)]
         internal static extern void HidD_GetHidGuid(ref Guid hidGuid);
-
-        public delegate bool GetString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
-
-        [DllImport("hid.dll", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
-        internal static extern bool HidD_GetManufacturerString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
-
-        [DllImport("hid.dll", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
-        internal static extern bool HidD_GetProductString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
-
-        [DllImport("hid.dll", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
-        internal static extern bool HidD_GetSerialNumberString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
-
-        [DllImport("hid.dll", SetLastError = true)]
-        internal static extern int HidP_GetCaps(IntPtr pointerToPreparsedData, out HidCollectionCapabilities hidCollectionCapabilities);
         #endregion
         #endregion
 
         #endregion
 
         #region Helper Methods
+
+        #region Public Methods
         public static HidCollectionCapabilities GetHidCapabilities(SafeFileHandle readSafeFileHandle)
         {
             var isSuccess = HidD_GetPreparsedData(readSafeFileHandle, out var pointerToPreParsedData);
@@ -74,19 +76,33 @@ namespace Hid.Net.Windows
             return hidCollectionCapabilities;
         }
 
-        public static string GetManufacturerString(SafeFileHandle safeFileHandle)
+        public static string GetManufacturer(SafeFileHandle safeFileHandle)
         {
             return GetHidString(safeFileHandle, HidD_GetManufacturerString);
         }
 
+        public static string GetProduct(SafeFileHandle safeFileHandle)
+        {
+            return GetHidString(safeFileHandle, HidD_GetProductString);
+        }
+
+        public static string GetSerialNumber(SafeFileHandle safeFileHandle)
+        {
+            return GetHidString(safeFileHandle, HidD_GetSerialNumberString);
+        }
+        #endregion
+
+        #region Private Static Methods
         private static string GetHidString(SafeFileHandle safeFileHandle, GetString getString)
         {
             var pointerToBuffer = Marshal.AllocHGlobal(126);
             var manufacturer = string.Empty;
             var isSuccess = getString(safeFileHandle, pointerToBuffer, 126);
+            Marshal.FreeHGlobal(pointerToBuffer);
             WindowsDeviceBase.HandleError(isSuccess, "Could not get Hid string");
             return Marshal.PtrToStringUni(pointerToBuffer);     
         }
+        #endregion
         #endregion
     }
 }

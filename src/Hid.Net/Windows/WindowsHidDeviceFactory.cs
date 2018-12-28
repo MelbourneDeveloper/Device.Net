@@ -27,26 +27,14 @@ namespace Hid.Net.Windows
             using (var safeFileHandle = APICalls.CreateFile(deviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero))
             {
                 var hidAttributes = new HidAttributes();
-                var product = string.Empty;
-                var serialNumber = string.Empty;
 
                 var hidCollectionCapabilities = GetHidCapabilities(safeFileHandle);
 
                 var pointerToBuffer = Marshal.AllocHGlobal(126);
 
-                var manufacturer = GetManufacturerString(safeFileHandle);
-
-                if (HidD_GetSerialNumberString(safeFileHandle, pointerToBuffer, 126))
-                {
-                    serialNumber = Marshal.PtrToStringUni(pointerToBuffer);
-                }
-
-                if (HidD_GetProductString(safeFileHandle, pointerToBuffer, 126))
-                {
-                    product = Marshal.PtrToStringUni(pointerToBuffer);
-                }
-
-                Marshal.FreeHGlobal(pointerToBuffer);
+                var manufacturer = GetManufacturer(safeFileHandle);
+                var serialNumber = GetSerialNumber(safeFileHandle);
+                var product = GetProduct(safeFileHandle);
 
                 //TODO: Deal with issues here
 
