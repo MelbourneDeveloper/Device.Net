@@ -13,7 +13,7 @@ namespace Usb.Net.Windows
     {
         #region Fields
         private SafeFileHandle _DeviceHandle;
-        private List<UsbInterface> _UsbInterfaces = new List<UsbInterface> { };
+        private readonly List<UsbInterface> _UsbInterfaces = new List<UsbInterface>();
         private UsbInterface _DefaultUsbInterface => _UsbInterfaces.FirstOrDefault();
         private USB_DEVICE_DESCRIPTOR _UsbDeviceDescriptor;
         #endregion
@@ -30,7 +30,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Methods
-        public override async Task InitializeAsync()
+        public override  Task InitializeAsync()
         {
             Dispose();
 
@@ -93,6 +93,8 @@ namespace Usb.Net.Windows
             IsInitialized = true;
 
             RaiseConnected();
+
+            return Task.CompletedTask;
         }
 
         public override async Task<byte[]> ReadAsync()
@@ -128,12 +130,11 @@ namespace Usb.Net.Windows
                 //TODO: Allow for different interfaces and pipes...
                 var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.WritePipe.WINUSB_PIPE_INFORMATION.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
 
-                if (!isSuccess)
-                {
-                    var errorCode = Marshal.GetLastWin32Error();
+                if (isSuccess) return;
 
-                    throw new Exception($"Error code {errorCode}");
-                }
+                var errorCode = Marshal.GetLastWin32Error();
+
+                throw new Exception($"Error code {errorCode}");
             });
         }
 
@@ -169,6 +170,13 @@ namespace Usb.Net.Windows
             for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)
             {
                 isSuccess = WinUsbApiCalls.WinUsb_QueryPipe(interfaceHandle, 0, i, out var pipeInfo);
+
+                if (!isSuccess)
+                {
+                    var errorCode = Marshal.GetLastWin32Error();
+                    throw new Exception($"Couldn't query pipe. Error code: {errorCode}");
+                }
+
                 retVal.UsbInterfacePipes.Add(new UsbInterfacePipe { WINUSB_PIPE_INFORMATION = pipeInfo });
             }
 

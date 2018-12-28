@@ -17,11 +17,11 @@ namespace Usb.Net.Windows
         public void Dispose()
         {
             var isSuccess = WinUsbApiCalls.WinUsb_Free(Handle);
-            if(!isSuccess)
-            {
-                var errorCode = Marshal.GetLastWin32Error();
-                throw new Exception($"Interface could not be disposed. Error code {errorCode}.");
-            }
+
+            if (isSuccess) return;
+
+            var errorCode = Marshal.GetLastWin32Error();
+            throw new Exception($"Interface could not be disposed. Error code {errorCode}.");
         }
     }
 }

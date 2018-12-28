@@ -10,7 +10,7 @@
             IGNORE_SHORT_PACKETS,
             ALLOW_PARTIAL_READS,
             AUTO_FLUSH,
-            RAW_IO,
+            RAW_IO
         }
     }
 }

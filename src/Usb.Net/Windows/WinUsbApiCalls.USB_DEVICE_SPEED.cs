@@ -6,7 +6,7 @@
         {
             UsbLowSpeed = 1,
             UsbFullSpeed,
-            UsbHighSpeed,
+            UsbHighSpeed
         }
     }
 }

@@ -7,7 +7,7 @@
             UsbdPipeTypeControl,
             UsbdPipeTypeIsochronous,
             UsbdPipeTypeBulk,
-            UsbdPipeTypeInterrupt,
+            UsbdPipeTypeInterrupt
         }
     }
 }
