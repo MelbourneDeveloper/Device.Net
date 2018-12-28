@@ -84,10 +84,6 @@ namespace Hid.Net.Windows
             _ReadSafeFileHandle = APICalls.CreateFile(DeviceInformation.DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
             _WriteSafeFileHandle = APICalls.CreateFile(DeviceInformation.DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
 
-            var isSuccess = HidAPICalls.HidD_GetPreparsedData(_ReadSafeFileHandle, out var pointerToPreParsedData);
-
-            WindowsDeviceBase.HandleError(isSuccess, "Could not get pre parsed data");
-
             if (_ReadSafeFileHandle.IsInvalid)
             {
                 throw new Exception("Could not open connection for reading");
@@ -97,6 +93,9 @@ namespace Hid.Net.Windows
             {
                 throw new Exception("Could not open connection for writing");
             }
+
+            var isSuccess = HidAPICalls.HidD_GetPreparsedData(_ReadSafeFileHandle, out var pointerToPreParsedData);
+            WindowsDeviceBase.HandleError(isSuccess, "Could not get pre parsed data");
 
             var result = HidAPICalls.HidP_GetCaps(pointerToPreParsedData, out _HidCollectionCapabilities);
             if (result != HidAPICalls.HIDP_STATUS_SUCCESS)
