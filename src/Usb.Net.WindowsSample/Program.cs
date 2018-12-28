@@ -44,12 +44,8 @@ namespace Usb.Net.WindowsSample
             buffer[1] = 0x23;
             buffer[2] = 0x23;
 
-            //Write the data to the device
-            await trezorDevice.WriteAsync(buffer);
-
-            //Read the response
-            var readBuffer = await trezorDevice.ReadAsync();
-
+            //Write the data to the device and get the response
+            var readBuffer = await trezorDevice.WriteAndReadAsync(buffer);
         }
     }
 }
