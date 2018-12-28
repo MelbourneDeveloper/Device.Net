@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Device.Net
@@ -40,11 +41,17 @@ namespace Device.Net
                     if (filterDeviceDefinition.DeviceType.HasValue && (deviceFactory.DeviceType != filterDeviceDefinition.DeviceType)) continue;
 
                     var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitions(filterDeviceDefinition.VendorId, filterDeviceDefinition.ProductId);
-                    foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
-                    {
-                        var device = deviceFactory.GetDevice(connectedDeviceDefinition);
-                        if (device != null) retVal.Add(device);
-                    }
+                    retVal.AddRange
+                    (
+                        connectedDeviceDefinitions.Select
+                        (
+                            connectedDeviceDefinition => deviceFactory.GetDevice(connectedDeviceDefinition)
+                        ).
+                        Where
+                        (
+                            device => device != null
+                        )
+                    );
                 }
             }
 
