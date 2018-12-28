@@ -33,21 +33,10 @@ namespace Hid.Net.Windows
                 var isSuccess = HidAPICalls.HidD_GetPreparsedData(safeFileHandle, out var pointerToPreParsedData);
                 if (!isSuccess)
                 {
-
-
                     return null;
                 }
 
-                //TODO: Deal with issues here
-
-                var getCapsResult = HidAPICalls.HidP_GetCaps(pointerToPreParsedData, out var hidCollectionCapabilities);
-
-                //TODO: Deal with issues here
-
-                if (!HidAPICalls.HidD_GetAttributes(safeFileHandle, ref hidAttributes))
-                {
-                    throw new Exception("Could not obtain attributes");
-                }
+                var hidCollectionCapabilities = HidAPICalls.GetHidCapabilities(safeFileHandle);
 
                 if (HidAPICalls.HidD_GetManufacturerString(safeFileHandle, pointerToBuffer, 126))
                 {

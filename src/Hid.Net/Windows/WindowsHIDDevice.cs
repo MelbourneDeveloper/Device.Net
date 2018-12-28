@@ -94,14 +94,7 @@ namespace Hid.Net.Windows
                 throw new Exception("Could not open connection for writing");
             }
 
-            var isSuccess = HidAPICalls.HidD_GetPreparsedData(_ReadSafeFileHandle, out var pointerToPreParsedData);
-            WindowsDeviceBase.HandleError(isSuccess, "Could not get pre parsed data");
-
-            var result = HidAPICalls.HidP_GetCaps(pointerToPreParsedData, out _HidCollectionCapabilities);
-            if (result != HidAPICalls.HIDP_STATUS_SUCCESS)
-            {
-                throw new Exception($"Could not get Hid capabilities. Return code: {result}");
-            }
+            _HidCollectionCapabilities = HidAPICalls.GetHidCapabilities(_ReadSafeFileHandle);
 
             _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, _HidCollectionCapabilities.OutputReportByteLength, false);
             _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, _HidCollectionCapabilities.InputReportByteLength, false);

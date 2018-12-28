@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32.SafeHandles;
+﻿using Device.Net;
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
 
@@ -18,7 +19,7 @@ namespace Hid.Net.Windows
         public const int HIDP_STATUS_INVALID_PREPARSED_DATA = -0x3FEF0000;
         #endregion        
 
-        #region Methods
+        #region API Calls
 
         #region Hid
         [DllImport("hid.dll", SetLastError = true)]
@@ -46,6 +47,22 @@ namespace Hid.Net.Windows
         internal static extern int HidP_GetCaps(IntPtr pointerToPreparsedData, out HidCollectionCapabilities hidCollectionCapabilities);
         #endregion
 
+        #endregion
+
+        #region Helper Methods
+        public static HidCollectionCapabilities GetHidCapabilities(SafeFileHandle readSafeFileHandle)
+        {
+            var isSuccess = HidD_GetPreparsedData(readSafeFileHandle, out var pointerToPreParsedData);
+            WindowsDeviceBase.HandleError(isSuccess, "Could not get pre parsed data");
+
+            var result = HidP_GetCaps(pointerToPreParsedData, out var hidCollectionCapabilities);
+            if (result != HIDP_STATUS_SUCCESS)
+            {
+                throw new Exception($"Could not get Hid capabilities. Return code: {result}");
+            }
+
+            return hidCollectionCapabilities;
+        }
         #endregion
     }
 }

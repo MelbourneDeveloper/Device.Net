@@ -3,7 +3,7 @@
 namespace Hid.Net.Windows
 {
     [StructLayout(LayoutKind.Sequential)]
-    internal struct HidCollectionCapabilities
+    public struct HidCollectionCapabilities
     {
         public ushort Usage;
         public ushort UsagePage;
