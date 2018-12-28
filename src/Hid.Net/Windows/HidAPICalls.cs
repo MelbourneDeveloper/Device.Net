@@ -1,5 +1,4 @@
-﻿using Device.Net;
-using Device.Net.Windows;
+﻿using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
@@ -55,9 +54,9 @@ namespace Hid.Net.Windows
         #region Public Methods
         public static HidAttributes GetHidAttributes(SafeFileHandle safeFileHandle)
         {
-            var isSuccess = HidD_GetAttributes(safeFileHandle, out var hidAttribues);
+            var isSuccess = HidD_GetAttributes(safeFileHandle, out var hidAttributes);
             WindowsDeviceBase.HandleError(isSuccess, "Could not get Hid Attributes");
-            return hidAttribues;
+            return hidAttributes;
         }
 
         public static HidCollectionCapabilities GetHidCapabilities(SafeFileHandle readSafeFileHandle)
@@ -97,7 +96,6 @@ namespace Hid.Net.Windows
         private static string GetHidString(SafeFileHandle safeFileHandle, GetString getString)
         {
             var pointerToBuffer = Marshal.AllocHGlobal(126);
-            var manufacturer = string.Empty;
             var isSuccess = getString(safeFileHandle, pointerToBuffer, 126);
             Marshal.FreeHGlobal(pointerToBuffer);
             WindowsDeviceBase.HandleError(isSuccess, "Could not get Hid string");

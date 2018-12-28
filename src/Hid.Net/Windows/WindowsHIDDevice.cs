@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
-    public class WindowsHidDevice : WindowsDeviceBase, IDevice
+    public class WindowsHidDevice : WindowsDeviceBase
     {
         #region Fields
         private FileStream _ReadFileStream;
@@ -35,28 +35,8 @@ namespace Hid.Net.Windows
         }
         #endregion
 
-        #region Public Methods
-        public void Dispose()
-        {
-            IsInitialized = false;
-
-            _ReadFileStream?.Dispose();
-            _WriteFileStream?.Dispose();
-
-            if (_ReadSafeFileHandle != null && !(_ReadSafeFileHandle.IsInvalid))
-            {
-                _ReadSafeFileHandle.Dispose();
-            }
-
-            if (_WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid)
-            {
-                _WriteSafeFileHandle.Dispose();
-            }
-
-            RaiseDisconnected();
-        }
-
-        public bool Initialize()
+        #region Private Methods
+        private bool Initialize()
         {
             Dispose();
 
@@ -89,6 +69,28 @@ namespace Hid.Net.Windows
 
             return true;
         }
+        #endregion
+
+        #region Public Methods
+        public override void Dispose()
+        {
+            IsInitialized = false;
+
+            _ReadFileStream?.Dispose();
+            _WriteFileStream?.Dispose();
+
+            if (_ReadSafeFileHandle != null && !_ReadSafeFileHandle.IsInvalid)
+            {
+                _ReadSafeFileHandle.Dispose();
+            }
+
+            if (_WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid)
+            {
+                _WriteSafeFileHandle.Dispose();
+            }
+
+            base.Dispose();
+        }
 
         public override async Task InitializeAsync()
         {
@@ -114,15 +116,7 @@ namespace Hid.Net.Windows
                 throw new IOException(Helpers.ReadErrorMessage, ex);
             }
 
-            byte[] retVal;
-            if (DataHasExtraByte)
-            {
-                retVal = Helpers.RemoveFirstByte(bytes);
-            }
-            else
-            {
-                retVal = bytes;
-            }
+            var retVal = DataHasExtraByte ? Helpers.RemoveFirstByte(bytes) : bytes;
 
             Tracer?.Trace(false, retVal);
 
