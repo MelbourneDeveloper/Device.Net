@@ -30,7 +30,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Methods
-        public override  Task InitializeAsync()
+        public override Task InitializeAsync()
         {
             Dispose();
 
@@ -51,19 +51,11 @@ namespace Usb.Net.Windows
             }
 
             var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
-            if (!isSuccess)
-            {
-                errorCode = Marshal.GetLastWin32Error();
-                throw new Exception($"Couldn't initialize device. Error code: {errorCode}");
-            }
+            HandleError(isSuccess, "Couldn't initialize device");
 
             var bufferLength = (uint)Marshal.SizeOf(typeof(USB_DEVICE_DESCRIPTOR));
             isSuccess = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, 0, out _UsbDeviceDescriptor, bufferLength, out var lengthTransfered);
-            if (!isSuccess)
-            {
-                errorCode = Marshal.GetLastWin32Error();
-                throw new Exception($"Couldn't get device descriptor. Error code: {errorCode}");
-            }
+            HandleError(isSuccess, "Couldn't get device descriptor");
 
             byte i = 0;
 
@@ -102,18 +94,10 @@ namespace Usb.Net.Windows
             return await Task.Run(() =>
             {
                 var bytes = new byte[ReadBufferSize];
-
                 //TODO: Allow for different interfaces and pipes...
                 var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.ReadPipe.WINUSB_PIPE_INFORMATION.PipeId, bytes, ReadBufferSize, out var bytesRead, IntPtr.Zero);
-
-                if (!isSuccess)
-                {
-                    var errorCode = Marshal.GetLastWin32Error();
-                    throw new Exception($"Error code {errorCode}");
-                }
-
+                HandleError(isSuccess, "Couldn't read data");
                 Tracer?.Trace(false, bytes);
-
                 return bytes;
             });
         }
@@ -129,16 +113,8 @@ namespace Usb.Net.Windows
 
                 //TODO: Allow for different interfaces and pipes...
                 var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.WritePipe.WINUSB_PIPE_INFORMATION.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
-
-                if (isSuccess)
-                {
-                    Tracer?.Trace(true, data);
-                    return;
-                }
-
-                var errorCode = Marshal.GetLastWin32Error();
-
-                throw new Exception($"Error code {errorCode}");
+                HandleError(isSuccess, "Couldn't write data");
+                Tracer?.Trace(true, data);
             });
         }
 
@@ -163,24 +139,14 @@ namespace Usb.Net.Windows
         {
             var retVal = new UsbInterface { Handle = interfaceHandle };
             var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
-            if (!isSuccess)
-            {
-                var errorCode = Marshal.GetLastWin32Error();
-                throw new Exception($"Couldn't query interface. Error code: {errorCode}");
-            }
+            HandleError(isSuccess, "Couldn't query interface");
 
             retVal.USB_INTERFACE_DESCRIPTOR = interfaceDescriptor;
 
             for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)
             {
                 isSuccess = WinUsbApiCalls.WinUsb_QueryPipe(interfaceHandle, 0, i, out var pipeInfo);
-
-                if (!isSuccess)
-                {
-                    var errorCode = Marshal.GetLastWin32Error();
-                    throw new Exception($"Couldn't query pipe. Error code: {errorCode}");
-                }
-
+                HandleError(isSuccess, "Couldn't query pipe");
                 retVal.UsbInterfacePipes.Add(new UsbInterfacePipe { WINUSB_PIPE_INFORMATION = pipeInfo });
             }
 
