@@ -68,7 +68,7 @@ namespace Hid.Net.Windows
 
                     APICalls.SetupDiGetDeviceInterfaceDetail(i, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
 
-                    //Note this is a bit nast but we can filter Vid and Pid this way I think...
+                    //Note this is a bit nasty but we can filter Vid and Pid this way I think...
                     var vendorHex = vendorId?.ToString("X").ToLower().PadLeft(4, '0');
                     var productIdHex = productId?.ToString("X").ToLower().PadLeft(4, '0');
                     if (vendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(vendorHex)) continue;
