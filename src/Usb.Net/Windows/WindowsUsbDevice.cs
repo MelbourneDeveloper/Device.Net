@@ -51,9 +51,7 @@ namespace Usb.Net.Windows
                 if (errorCode > 0) throw new Exception($"Device handle no good. Error code: {errorCode}");
             }
 
-            var defaultInterfaceHandle = new IntPtr();
-
-            var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, ref defaultInterfaceHandle);
+            var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
             if (!isSuccess)
             {
                 errorCode = Marshal.GetLastWin32Error();
@@ -98,7 +96,7 @@ namespace Usb.Net.Windows
             RaiseConnected();
         }
 
-        private static UsbInterface GetInterface(IntPtr interfaceHandle)
+        private static UsbInterface GetInterface(SafeFileHandle interfaceHandle)
         {
             var retVal = new UsbInterface { Handle = interfaceHandle };
             var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
