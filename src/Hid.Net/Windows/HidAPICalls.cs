@@ -38,6 +38,8 @@ namespace Hid.Net.Windows
         [DllImport("hid.dll", SetLastError = true)]
         internal static extern void HidD_GetHidGuid(ref Guid hidGuid);
 
+        public delegate bool GetString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
+
         [DllImport("hid.dll", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
         internal static extern bool HidD_GetManufacturerString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
 
@@ -70,6 +72,20 @@ namespace Hid.Net.Windows
             WindowsDeviceBase.HandleError(isSuccess, "Could not release handle for getting Hid capabilities");
 
             return hidCollectionCapabilities;
+        }
+
+        public static string GetManufacturerString(SafeFileHandle safeFileHandle)
+        {
+            return GetHidString(safeFileHandle, HidD_GetManufacturerString);
+        }
+
+        private static string GetHidString(SafeFileHandle safeFileHandle, GetString getString)
+        {
+            var pointerToBuffer = Marshal.AllocHGlobal(126);
+            var manufacturer = string.Empty;
+            var isSuccess = getString(safeFileHandle, pointerToBuffer, 126);
+            WindowsDeviceBase.HandleError(isSuccess, "Could not get Hid string");
+            return Marshal.PtrToStringUni(pointerToBuffer);     
         }
         #endregion
     }

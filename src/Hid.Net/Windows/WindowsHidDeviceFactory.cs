@@ -1,7 +1,9 @@
 ﻿using Device.Net;
 using Device.Net.Windows;
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
+using static Hid.Net.Windows.HidAPICalls;
 
 namespace Hid.Net.Windows
 {
@@ -27,22 +29,19 @@ namespace Hid.Net.Windows
                 var hidAttributes = new HidAttributes();
                 var product = string.Empty;
                 var serialNumber = string.Empty;
-                var manufacturer = string.Empty;
+
+                var hidCollectionCapabilities = GetHidCapabilities(safeFileHandle);
+
                 var pointerToBuffer = Marshal.AllocHGlobal(126);
 
-                var hidCollectionCapabilities = HidAPICalls.GetHidCapabilities(safeFileHandle);
+                var manufacturer = GetManufacturerString(safeFileHandle);
 
-                if (HidAPICalls.HidD_GetManufacturerString(safeFileHandle, pointerToBuffer, 126))
-                {
-                    manufacturer = Marshal.PtrToStringUni(pointerToBuffer);
-                }
-
-                if (HidAPICalls.HidD_GetSerialNumberString(safeFileHandle, pointerToBuffer, 126))
+                if (HidD_GetSerialNumberString(safeFileHandle, pointerToBuffer, 126))
                 {
                     serialNumber = Marshal.PtrToStringUni(pointerToBuffer);
                 }
 
-                if (HidAPICalls.HidD_GetProductString(safeFileHandle, pointerToBuffer, 126))
+                if (HidD_GetProductString(safeFileHandle, pointerToBuffer, 126))
                 {
                     product = Marshal.PtrToStringUni(pointerToBuffer);
                 }
