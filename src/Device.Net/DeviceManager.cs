@@ -20,11 +20,7 @@ namespace Device.Net
             var retVal = new List<DeviceDefinition>();
             foreach (var deviceFactory in DeviceFactories)
             {
-                var definitions = await deviceFactory.GetConnectedDeviceDefinitions(vendorId, productId);
-                foreach (var deviceDefinition in definitions)
-                {
-                    retVal.Add(deviceDefinition);
-                }
+                retVal.AddRange(await deviceFactory.GetConnectedDeviceDefinitions(vendorId, productId));
             }
 
             return retVal;
