@@ -54,7 +54,7 @@ namespace Usb.Net.Windows
             HandleError(isSuccess, "Couldn't initialize device");
 
             var bufferLength = (uint)Marshal.SizeOf(typeof(USB_DEVICE_DESCRIPTOR));
-            isSuccess = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, 0, out _UsbDeviceDescriptor, bufferLength, out var lengthTransfered);
+            isSuccess = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, 0, out _UsbDeviceDescriptor, bufferLength, out var lengthTransferred);
             HandleError(isSuccess, "Couldn't get device descriptor");
 
             byte i = 0;

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Devices.HumanInterfaceDevice;
 using wde = Windows.Devices.Enumeration;
 
 namespace Hid.Net.UWP

@@ -1,6 +1,5 @@
 ﻿using Device.Net.Windows;
 using System;
-using System.IO;
 using Microsoft.Win32.SafeHandles;
 using System.Runtime.InteropServices;
 
