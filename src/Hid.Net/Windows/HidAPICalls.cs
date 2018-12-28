@@ -8,22 +8,19 @@ namespace Hid.Net.Windows
     public static class HidAPICalls 
     {
         #region Constants
-        public const int DigcfDeviceinterface = 16;
-        public const int DigcfPresent = 2;
-        public const uint FileShareRead = 1;
-        public const uint FileShareWrite = 2;
-        public const uint GenericRead = 2147483648;
-        public const uint GenericWrite = 1073741824;
-        public const uint OpenExisting = 3;
-        public const int HIDP_STATUS_SUCCESS = 0x110000;
-        public const int HIDP_STATUS_INVALID_PREPARSED_DATA = -0x3FEF0000;
+        private const int DigcfDeviceinterface = 16;
+        private const int DigcfPresent = 2;
+        private const uint FileShareRead = 1;
+        private const uint FileShareWrite = 2;
+        private const uint GenericRead = 2147483648;
+        private const uint GenericWrite = 1073741824;
+        private const uint OpenExisting = 3;
+        private const int HIDP_STATUS_SUCCESS = 0x110000;
+        private const int HIDP_STATUS_INVALID_PREPARSED_DATA = -0x3FEF0000;
         #endregion
 
         #region API Calls
 
-        #region Hid
-
-        #region Private (Has a Helper Method)
         [DllImport("hid.dll", SetLastError = true)]
         private static extern bool HidD_GetPreparsedData(SafeFileHandle hidDeviceObject, out IntPtr pointerToPreparsedData);
 
@@ -39,20 +36,16 @@ namespace Hid.Net.Windows
         [DllImport("hid.dll", SetLastError = true)]
         private static extern int HidP_GetCaps(IntPtr pointerToPreparsedData, out HidCollectionCapabilities hidCollectionCapabilities);
 
+        [DllImport("hid.dll", SetLastError = true)]
+        private static extern bool HidD_GetAttributes(SafeFileHandle hidDeviceObject, out HidAttributes attributes);
+
+        [DllImport("hid.dll", SetLastError = true)]
+        private static extern bool HidD_FreePreparsedData(ref IntPtr pointerToPreparsedData);
+
+        [DllImport("hid.dll", SetLastError = true)]
+        private static extern void HidD_GetHidGuid(ref Guid hidGuid);
+
         private delegate bool GetString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
-        #endregion
-
-        #region Internal
-        [DllImport("hid.dll", SetLastError = true)]
-        internal static extern bool HidD_FreePreparsedData(ref IntPtr pointerToPreparsedData);
-
-        [DllImport("hid.dll", SetLastError = true)]
-        internal static extern bool HidD_GetAttributes(SafeFileHandle hidDeviceObject, out HidAttributes attributes);
-
-        [DllImport("hid.dll", SetLastError = true)]
-        internal static extern void HidD_GetHidGuid(ref Guid hidGuid);
-        #endregion
-        #endregion
 
         #endregion
 
@@ -110,6 +103,7 @@ namespace Hid.Net.Windows
             return Marshal.PtrToStringUni(pointerToBuffer);     
         }
         #endregion
+
         #endregion
     }
 }
