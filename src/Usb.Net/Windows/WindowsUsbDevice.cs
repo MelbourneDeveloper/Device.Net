@@ -130,7 +130,11 @@ namespace Usb.Net.Windows
                 //TODO: Allow for different interfaces and pipes...
                 var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.WritePipe.WINUSB_PIPE_INFORMATION.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
 
-                if (isSuccess) return;
+                if (isSuccess)
+                {
+                    Tracer?.Trace(true, data);
+                    return;
+                }
 
                 var errorCode = Marshal.GetLastWin32Error();
 
