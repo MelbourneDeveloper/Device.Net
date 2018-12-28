@@ -51,6 +51,19 @@ namespace Device.Net
                 _WriteAndReadLock.Release();
             }
         }
+
+        /// <summary> 
+        /// Many Hid devices on Windows have a buffer size that is one byte larger than the logical buffer size. For compatibility with other platforms etc. we need to remove the first byte. See DataHasExtraByte
+        /// </summary> 
+        public static byte[] RemoveFirstByte(byte[] bytes)
+        {
+            var length = bytes.Length - 1;
+            var retVal = new byte[length];
+
+            Array.Copy(bytes, 1, retVal, 0, length);
+
+            return retVal;
+        }
         #endregion
     }
 }

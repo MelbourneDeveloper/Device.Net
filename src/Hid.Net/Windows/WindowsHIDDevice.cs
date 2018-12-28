@@ -26,6 +26,9 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Properties
+        /// <summary> 
+        /// Many Hid devices on Windows have a buffer size that is one byte larger than the logical buffer size. For compatibility with other platforms etc. we need to remove the first byte. See RemoveFirstByte
+        /// </summary> 
         public bool DataHasExtraByte { get; set; } = true;
         #endregion
 
@@ -116,7 +119,7 @@ namespace Hid.Net.Windows
                 throw new IOException(Helpers.ReadErrorMessage, ex);
             }
 
-            var retVal = DataHasExtraByte ? Helpers.RemoveFirstByte(bytes) : bytes;
+            var retVal = DataHasExtraByte ? RemoveFirstByte(bytes) : bytes;
 
             Tracer?.Trace(false, retVal);
 
