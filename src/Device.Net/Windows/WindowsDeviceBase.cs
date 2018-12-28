@@ -9,8 +9,8 @@ namespace Device.Net.Windows
     /// </summary>
     public abstract class WindowsDeviceBase : DeviceBase, IDevice
     {
-        #region Private Properties
-        private string LogSection => nameof(WindowsDeviceBase);
+        #region Protected Properties
+        protected virtual string LogSection => nameof(WindowsDeviceBase);
         #endregion
 
         #region Public Properties

@@ -16,8 +16,8 @@ namespace Hid.Net.Windows
         private SafeFileHandle _WriteSafeFileHandle;
         #endregion
 
-        #region Private Properties
-        private string LogSection => nameof(WindowsHidDevice);
+        #region Protected Properties
+        protected override string LogSection => nameof(WindowsHidDevice);
         #endregion
 
         #region Public Overrides
@@ -27,9 +27,6 @@ namespace Hid.Net.Windows
 
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
-        public string DevicePath => DeviceDefinition.DeviceId;
-        public uint? ProductId => DeviceDefinition.ProductId;
-        public uint? VendorId => DeviceDefinition.VendorId;
         #endregion
 
         #region Constructor
