@@ -11,8 +11,8 @@ namespace Hid.Net.Windows
         #region Fields
         private HidCollectionCapabilities _HidCollectionCapabilities;
         private FileStream _ReadFileStream;
-        private SafeFileHandle _ReadSafeFileHandle;
         private FileStream _WriteFileStream;
+        private SafeFileHandle _ReadSafeFileHandle;
         private SafeFileHandle _WriteSafeFileHandle;
         #endregion
 
@@ -46,6 +46,8 @@ namespace Hid.Net.Windows
         #region Public Methods
         public void Dispose()
         {
+            IsInitialized = false;
+
             _ReadFileStream?.Dispose();
             _WriteFileStream?.Dispose();
 
