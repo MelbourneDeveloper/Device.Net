@@ -30,7 +30,7 @@ namespace Device.Net
             return retVal;
         }
 
-        public async Task<List<IDevice>> GetDevices(IEnumerable<DeviceDefinition> deviceDefinitions)
+        public async Task<List<IDevice>> GetDevices(IList<DeviceDefinition> deviceDefinitions)
         {
             var retVal = new List<IDevice>();
 
