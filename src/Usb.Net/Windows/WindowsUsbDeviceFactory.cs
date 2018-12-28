@@ -8,8 +8,11 @@ namespace Usb.Net.Windows
     {
         #region Public Override Properties
         public override DeviceType DeviceType => DeviceType.Usb;
-        //TODO: This is not right
-        public override Guid ClassGuid { get; set; } = WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE;
+        
+        /// <summary>
+        /// The parent Guid to enumerate through devices at. This probably shouldn't be changed. It defaults to the WinUSB Guid. 
+        /// </summary>
+        public override Guid ClassGuid { get; set; } = WindowsDeviceConstants.WinUSBGuid;
         #endregion
 
         #region Public Methods
