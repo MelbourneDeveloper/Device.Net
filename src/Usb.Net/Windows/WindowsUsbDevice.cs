@@ -161,14 +161,13 @@ namespace Usb.Net.Windows
 
         public override void Dispose()
         {
-            _DeviceHandle?.Dispose();
-
-            foreach(var usbInterface in _UsbInterfaces)
+            foreach (var usbInterface in _UsbInterfaces)
             {
-                //TODO: Dispose of interface
-                //usbInterface.Handle.Dispose();
+                usbInterface.Dispose();
             }
             _UsbInterfaces.Clear();
+
+            _DeviceHandle?.Dispose();
 
             base.Dispose();
         }
