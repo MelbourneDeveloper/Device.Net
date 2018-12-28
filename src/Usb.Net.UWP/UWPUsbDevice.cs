@@ -28,7 +28,20 @@ namespace Usb.Net.UWP
             if (_ConnectedDevice != null)
             {
                 var usbInterface = _ConnectedDevice.Configuration.UsbInterfaces.FirstOrDefault();
+
+                if (usbInterface == null)
+                {
+                    _ConnectedDevice.Dispose();
+                    throw new Exception("There was no Usb Interface found for the device.");
+                }
+
                 var interruptPipe = usbInterface.InterruptInPipes.FirstOrDefault();
+
+                if (interruptPipe == null)
+                {
+                    throw new Exception("There was no interrupt pipe found on the interface");
+                }
+
                 interruptPipe.DataReceived += InterruptPipe_DataReceived;
 
                 RaiseConnected();

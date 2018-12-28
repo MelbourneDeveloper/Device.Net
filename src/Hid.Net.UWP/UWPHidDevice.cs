@@ -9,7 +9,7 @@ using Windows.Storage;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDevice : UWPDeviceBase<HidDevice>, IDevice
+    public class UWPHidDevice : UWPDeviceBase<HidDevice>
     {
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
@@ -97,11 +97,10 @@ namespace Hid.Net.UWP
             var buffer = bytes.AsBuffer();
             var outReport = _ConnectedDevice.CreateOutputReport();
             outReport.Data = buffer;
-            IAsyncOperation<uint> operation = null;
 
             try
             {
-                operation = _ConnectedDevice.SendOutputReportAsync(outReport);
+                var operation = _ConnectedDevice.SendOutputReportAsync(outReport);
                 await operation.AsTask();
                 Tracer?.Trace(false, bytes);
             }

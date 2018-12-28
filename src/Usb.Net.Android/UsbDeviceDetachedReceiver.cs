@@ -7,7 +7,7 @@ namespace Usb.Net.Android
     public class UsbDeviceDetachedReceiver : BroadcastReceiver
     {
         #region Fields
-        readonly AndroidUsbDevice _AndroidHidDevice;
+        private readonly AndroidUsbDevice _AndroidHidDevice;
         #endregion
 
         #region Constructor

@@ -2,7 +2,7 @@
 
 namespace Hid.Net.Windows
 {
-    public class WindowsHidDeviceInformation : DeviceDefinition
+    public class WindowsHidDeviceDefinition : DeviceDefinition
     {
         public string Manufacturer { get; set; }
         public string Product { get; set; }

@@ -33,11 +33,6 @@ namespace Usb.Net.Android
         public bool IsInitialized { get; private set; }
         #endregion
 
-        #region Events
-        public event EventHandler Connected;
-        public event EventHandler Disconnected;
-        #endregion
-
         #region Constructor
         public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int timeoutMilliseconds, int readBufferLength, int vendorId, int productId)
         {
@@ -100,7 +95,7 @@ namespace Usb.Net.Android
         }
 
         //TODO: Make async properly
-        public async Task<byte[]> ReadAsync()
+        public override async Task<byte[]> ReadAsync()
         {
             try
             {
@@ -131,7 +126,7 @@ namespace Usb.Net.Android
         }
 
         //TODO: Perhaps we should implement Batch Begin/Complete so that the UsbRequest is not created again and again. This will be expensive
-        public async Task WriteAsync(byte[] data)
+        public  override async Task WriteAsync(byte[] data)
         {
             try
             {
@@ -179,7 +174,7 @@ namespace Usb.Net.Android
                 _UsbDeviceConnection = null;
                 if (wasConnected)
                 {
-                    Disconnected?.Invoke(this, new EventArgs());
+                    RaiseDisconnected();;
                 }
             }
         }
@@ -282,7 +277,7 @@ namespace Usb.Net.Android
 
                 IsInitialized = true;
 
-                Connected?.Invoke(this, new EventArgs());
+                RaiseConnected();
 
                 return;
             }

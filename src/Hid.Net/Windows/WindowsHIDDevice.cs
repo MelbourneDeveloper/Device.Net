@@ -1,5 +1,4 @@
 ﻿using Device.Net;
-using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
@@ -10,12 +9,6 @@ namespace Hid.Net.Windows
 {
     public class WindowsHidDevice : DeviceBase, IDevice
     {
-        //TODO: Implement
-        #region Events
-        public event EventHandler Connected;
-        public event EventHandler Disconnected;
-        #endregion
-
         #region Fields
         private HidCollectionCapabilities _HidCollectionCapabilities;
         private FileStream _ReadFileStream;
@@ -67,7 +60,7 @@ namespace Hid.Net.Windows
                 _WriteSafeFileHandle.Dispose();
             }
 
-            Disconnected?.Invoke(this, new EventArgs());
+            RaiseDisconnected();
         }
 
         //TODO
@@ -119,7 +112,7 @@ namespace Hid.Net.Windows
 
             IsInitialized = true;
 
-            Connected?.Invoke(this, new EventArgs());
+            RaiseConnected();
 
             return true;
         }
@@ -129,7 +122,7 @@ namespace Hid.Net.Windows
             await Task.Run(() => Initialize());
         }
 
-        public async Task<byte[]> ReadAsync()
+        public override async Task<byte[]> ReadAsync()
         {
             if (_ReadFileStream == null)
             {
@@ -163,7 +156,7 @@ namespace Hid.Net.Windows
             return retVal;
         }
 
-        public async Task WriteAsync(byte[] data)
+        public override async Task WriteAsync(byte[] data)
         {
             if (_WriteFileStream == null)
             {
@@ -180,7 +173,7 @@ namespace Hid.Net.Windows
             {
                 if (OutputReportByteLength == data.Length)
                 {
-                    throw new DeviceException($"The data sent to the device was a the same length as the HidCollectionCapabilities.OutputReportByteLength. This probably indicates that DataHasExtraByte should be set to false.");
+                    throw new DeviceException("The data sent to the device was a the same length as the HidCollectionCapabilities.OutputReportByteLength. This probably indicates that DataHasExtraByte should be set to false.");
                 }
 
                 bytes = new byte[OutputReportByteLength];
