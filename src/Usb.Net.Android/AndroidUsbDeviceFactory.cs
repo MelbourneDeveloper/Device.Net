@@ -8,7 +8,7 @@ using Usb.Net.Android;
 
 namespace Device.Net
 {
-    public class AndroidDeviceFactoryBase : IDeviceFactory
+    public class AndroidUsbDeviceFactory : IDeviceFactory
     {
         #region Public Properties
         public UsbManager UsbManager { get; }
@@ -20,7 +20,7 @@ namespace Device.Net
         #endregion
 
         #region Constructor
-        public AndroidDeviceFactoryBase(UsbManager usbManager, Context context)
+        public AndroidUsbDeviceFactory(UsbManager usbManager, Context context)
         {
             UsbManager = usbManager;
             Context = context;
@@ -44,7 +44,7 @@ namespace Device.Net
         #region Public Static Methods
         public static void Register(UsbManager usbManager, Context context)
         {
-            DeviceManager.Current.DeviceFactories.Add(new AndroidDeviceFactoryBase(usbManager, context));
+            DeviceManager.Current.DeviceFactories.Add(new AndroidUsbDeviceFactory(usbManager, context));
         }
         #endregion
     }
