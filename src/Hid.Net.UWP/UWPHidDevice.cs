@@ -44,7 +44,7 @@ namespace Hid.Net.UWP
 
             if (DataHasExtraByte)
             {
-                bytes = Helpers.RemoveFirstByte(bytes);
+                bytes = RemoveFirstByte(bytes);
             }
 
             return bytes;

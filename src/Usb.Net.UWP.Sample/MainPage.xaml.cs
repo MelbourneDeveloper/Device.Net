@@ -52,16 +52,13 @@ namespace Usb.Net.UWP.Sample
             await trezorDevice.InitializeAsync();
 
             //Create a buffer with 3 bytes (initialize)
-            var buffer = new byte[64];
-            buffer[0] = 0x3f;
-            buffer[1] = 0x23;
-            buffer[2] = 0x23;
+            var writeBuffer = new byte[64];
+            writeBuffer[0] = 0x3f;
+            writeBuffer[1] = 0x23;
+            writeBuffer[2] = 0x23;
 
             //Write the data to the device
-            await trezorDevice.WriteAsync(buffer);
-
-            //Read the response
-            var readBuffer = await trezorDevice.ReadAsync();
+            var readBuffer = await trezorDevice.WriteAndReadAsync(writeBuffer);
         }
     }
 }

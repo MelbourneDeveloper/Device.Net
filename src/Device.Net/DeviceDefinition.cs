@@ -3,6 +3,21 @@
     public class DeviceDefinition
     {
         /// <summary>
+        /// The name of the device product according to the Manufacturer
+        /// </summary>
+        public string Product { get; set; }
+
+        /// <summary>
+        /// Name of the device's manufacturer
+        /// </summary>
+        public string Manufacturer { get; set; }
+
+        /// <summary>
+        /// Unique serial number of the physical device
+        /// </summary>
+        public string SerialNumber { get; set; }
+
+        /// <summary>
         /// Platform specific, unique Id for the device
         /// </summary>
         public string DeviceId { get; set; }

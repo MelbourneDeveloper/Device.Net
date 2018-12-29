@@ -15,8 +15,14 @@ namespace Device.Net
         public event EventHandler Disconnected;
         #endregion
 
+        #region Public Abstract Properties
+        public abstract ushort WriteBufferSize { get; }
+        public abstract ushort ReadBufferSize { get; }
+        #endregion
+
         #region Public Properties
         public ITracer Tracer { get; set; }
+        public DeviceDefinition DeviceDefinition { get; protected set; }
         #endregion
 
         #region Protected Methods
@@ -50,6 +56,19 @@ namespace Device.Net
             {
                 _WriteAndReadLock.Release();
             }
+        }
+
+        /// <summary> 
+        /// Many Hid devices on Windows have a buffer size that is one byte larger than the logical buffer size. For compatibility with other platforms etc. we need to remove the first byte. See DataHasExtraByte
+        /// </summary> 
+        public static byte[] RemoveFirstByte(byte[] bytes)
+        {
+            var length = bytes.Length - 1;
+            var retVal = new byte[length];
+
+            Array.Copy(bytes, 1, retVal, 0, length);
+
+            return retVal;
         }
         #endregion
     }

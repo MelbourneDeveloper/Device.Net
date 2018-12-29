@@ -27,19 +27,20 @@ namespace Usb.Net.Android
         public UsbManager UsbManager { get; }
         public Context AndroidContext { get; private set; }
         public int TimeoutMilliseconds { get; }
-        public int ReadBufferLength { get; }
+        public override ushort ReadBufferSize { get; }
+        public override ushort WriteBufferSize { get; }
         public int VendorId { get; }
         public int ProductId { get; }
         public bool IsInitialized { get; private set; }
         #endregion
 
         #region Constructor
-        public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int timeoutMilliseconds, int readBufferLength, int vendorId, int productId)
+        public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int timeoutMilliseconds, ushort readBufferSize, int vendorId, int productId)
         {
             UsbManager = usbManager;
             AndroidContext = androidContext;
             TimeoutMilliseconds = timeoutMilliseconds;
-            ReadBufferLength = readBufferLength;
+            ReadBufferSize = readBufferSize;
             VendorId = vendorId;
             ProductId = productId;
 
@@ -99,15 +100,15 @@ namespace Usb.Net.Android
         {
             try
             {
-                var byteBuffer = ByteBuffer.Allocate(ReadBufferLength);
+                var byteBuffer = ByteBuffer.Allocate(ReadBufferSize);
                 var request = new UsbRequest();
                 request.Initialize(_UsbDeviceConnection, _ReadEndpoint);
-                request.Queue(byteBuffer, ReadBufferLength);
+                request.Queue(byteBuffer, ReadBufferSize);
                 await _UsbDeviceConnection.RequestWaitAsync();
-                var buffers = new byte[ReadBufferLength];
+                var buffers = new byte[ReadBufferSize];
 
                 byteBuffer.Rewind();
-                for (var i = 0; i < ReadBufferLength; i++)
+                for (var i = 0; i < ReadBufferSize; i++)
                 {
                     buffers[i] = (byte)byteBuffer.Get();
                 }
@@ -251,12 +252,12 @@ namespace Usb.Net.Android
                     _WriteEndpoint = usbInterface.GetEndpoint(1);
                 }
 
-                if (_ReadEndpoint.MaxPacketSize != ReadBufferLength)
+                if (_ReadEndpoint.MaxPacketSize != ReadBufferSize)
                 {
                     throw new Exception("Wrong packet size for read endpoint");
                 }
 
-                if (_WriteEndpoint.MaxPacketSize != ReadBufferLength)
+                if (_WriteEndpoint.MaxPacketSize != ReadBufferSize)
                 {
                     throw new Exception("Wrong packet size for write endpoint");
                 }

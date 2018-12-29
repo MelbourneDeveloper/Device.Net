@@ -45,6 +45,9 @@ namespace Device.Net.Windows
 
                 var x = -1;
 
+                var productIdHex = GetHex(productId);
+                var vendorHex = GetHex(vendorId);
+
                 while (true)
                 {
                     x++;
@@ -65,20 +68,23 @@ namespace Device.Net.Windows
                     WindowsDeviceBase.HandleError(isSuccess, "Could not get device interface detail");
 
                     //Note this is a bit nasty but we can filter Vid and Pid this way I think...
-                    var vendorHex = vendorId?.ToString("X").ToLower().PadLeft(4, '0');
-                    var productIdHex = productId?.ToString("X").ToLower().PadLeft(4, '0');
                     if (vendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(vendorHex)) continue;
                     if (productId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(productIdHex)) continue;
 
-                    var deviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
-
-                    deviceDefinitions.Add(deviceDefinition);
+                    deviceDefinitions.Add(GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath));
                 }
 
                 APICalls.SetupDiDestroyDeviceInfoList(i);
 
                 return deviceDefinitions;
             });
+        }
+        #endregion
+
+        #region Private Static Methods
+        private static string GetHex(uint? id)
+        {
+            return id?.ToString("X").ToLower().PadLeft(4, '0');
         }
         #endregion
     }
