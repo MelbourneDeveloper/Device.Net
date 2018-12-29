@@ -33,12 +33,6 @@ namespace Usb.Net.Android
         public int DeviceId { get; private set; }
         #endregion
 
-        #region Public Override Properties
-        //TODO: Get from device definition
-        public override ushort WriteBufferSize => throw new NotImplementedException();
-        public override ushort ReadBufferSize => throw new NotImplementedException();
-        #endregion
-
         #region Constructor
         public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int deviceId, int timeoutMilliseconds)
         {
