@@ -49,40 +49,9 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Methods 
-
-        public async Task<bool> GetIsConnectedAsync()
+        public Task<bool> GetIsConnectedAsync()
         {
-            try
-            {
-                if (_UsbDeviceConnection == null)
-                {
-                    Logger.Log($"{nameof(_UsbDeviceConnection)} is null", null, LogSection);
-
-                    await CheckForDeviceAsync();
-
-                    return _UsbDeviceConnection != null;
-                }
-
-                Logger.Log("Android Hid device is connected", null, LogSection);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Error getting IsConnected on Android device", ex, LogSection);
-                throw;
-            }
-        }
-
-        public async Task UsbDeviceAttached()
-        {
-            Logger.Log("Device attached", null, LogSection);
-            await CheckForDeviceAsync();
-        }
-
-        public async Task UsbDeviceDetached()
-        {
-            Logger.Log("Device detached", null, LogSection);
-            await CheckForDeviceAsync();
+            return Task.FromResult(_UsbDeviceConnection != null);
         }
 
         public void Dispose()
