@@ -1,39 +1,43 @@
-﻿//using Android.Hardware.Usb;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Threading.Tasks;
+﻿using Android.Content;
+using Android.Hardware.Usb;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Usb.Net.Android;
 
-//namespace Device.Net
-//{
-//    public class DeviceManager
-//    {
-//        public UsbManager UsbManager { get; }
+namespace Device.Net
+{
+    public class AndroidDeviceFactoryBase : IDeviceFactory
+    {
+        public UsbManager UsbManager { get; }
+        public Context Context { get; }
 
-//        #region Public Static Properties
-//        public static DeviceManager Current { get; set; }
-//        #endregion
+        #region Public Static Properties
+        public static DeviceManager Current { get; set; }
 
-//        #region Constructor
-//        public DeviceManager(UsbManager usbManager)
-//        {
-//            UsbManager = usbManager;
-//        }
-//        #endregion
+        public DeviceType DeviceType => throw new NotImplementedException();
+        #endregion
 
-//        #region Public Methods
-//        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId, DeviceType deviceType)
-//        {
-//            if (deviceType == DeviceType.Hid) throw new Exception("Android does not support Hid");
+        #region Constructor
+        public AndroidDeviceFactoryBase(UsbManager usbManager, Context context)
+        {
+            UsbManager = usbManager;
+            Context = context;
+        }
+        #endregion
 
-//            var devices = UsbManager.DeviceList.Select(kvp => kvp.Value).ToList();
+        #region Public Methods
+        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
+        {
+            //TODO: Get the values necessary to construct the device.
+            return UsbManager.DeviceList.Select(kvp => kvp.Value).Select(d => new DeviceDefinition { DeviceId = d.DeviceId.ToString(), ProductId = (uint)d.ProductId, VendorId = (uint)d.VendorId, DeviceType = DeviceType.Usb }).ToList();
+        }
 
-//            //TODO: return the vid/pid if we can get it from the properties. Also read/write buffer size
-
-//            var deviceIds = devices.Select(d => new DeviceDefinition { DeviceId = d.DeviceId.ToString(), ProductId = (uint)d.ProductId, VendorId = (uint)d.VendorId, DeviceType = deviceType }).ToList();
-
-//            return deviceIds;
-//        }
-//        #endregion
-//    }
-//}
+        public IDevice GetDevice(DeviceDefinition deviceDefinition)
+        {
+            return new AndroidUsbDevice(UsbManager, Context, 3000, deviceDefinition.ReadBufferSize.Value, (int)deviceDefinition.VendorId.Value, (int)deviceDefinition.ProductId.Value);
+        }
+        #endregion
+    }
+}
