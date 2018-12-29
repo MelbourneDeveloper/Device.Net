@@ -37,7 +37,12 @@ namespace Device.Net
 
         public IDevice GetDevice(DeviceDefinition deviceDefinition)
         {
-            return new AndroidUsbDevice(UsbManager, Context, 3000, deviceDefinition.ReadBufferSize.Value, (int)deviceDefinition.VendorId.Value, (int)deviceDefinition.ProductId.Value);
+            if (!int.TryParse(deviceDefinition.DeviceId, out var deviceId))
+            {
+                throw new Exception($"The device Id {deviceDefinition.DeviceId} is not a valid integer");
+            }
+
+            return new AndroidUsbDevice(UsbManager, Context, deviceId, 3000);
         }
         #endregion
 

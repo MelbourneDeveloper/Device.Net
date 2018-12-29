@@ -22,7 +22,7 @@ namespace Usb.Net.Android
         {
             var device = intent.GetParcelableExtra(UsbManager.ExtraDevice) as UsbDevice;
 
-            if (_AndroidHidDevice == null || device == null || device.VendorId != _AndroidHidDevice.VendorId || device.ProductId != _AndroidHidDevice.ProductId) return;
+            if (_AndroidHidDevice == null || device == null || device.VendorId != _AndroidHidDevice.DeviceDefinition.VendorId || device.ProductId != _AndroidHidDevice.DeviceDefinition.ProductId) return;
 
             await _AndroidHidDevice.UsbDeviceDetached();
             Logger.Log("Device detached", null, AndroidUsbDevice.LogSection);

@@ -28,9 +28,8 @@ namespace Usb.Net.Android
         public Context AndroidContext { get; private set; }
         public int TimeoutMilliseconds { get; }
         public int ReadBufferLength { get; }
-        public int VendorId { get; }
-        public int ProductId { get; }
         public bool IsInitialized { get; private set; }
+        public int DeviceId { get; private set; }
         #endregion
 
         #region Public Override Properties
@@ -45,13 +44,7 @@ namespace Usb.Net.Android
             UsbManager = usbManager;
             AndroidContext = androidContext;
             TimeoutMilliseconds = timeoutMilliseconds;
-            ReadBufferLength = readBufferLength;
-            VendorId = vendorId;
-            ProductId = productId;
-
-            //TODO: Remove this. The device needs to be initialized properly
-            //Check to see if the device is connected asynchronously.
-            CheckForDeviceAsync();
+            DeviceId = deviceId;
         }
         #endregion
 
@@ -98,6 +91,11 @@ namespace Usb.Net.Android
             _UsbDevice?.Dispose();
             _ReadEndpoint?.Dispose();
             _WriteEndpoint?.Dispose();
+
+            _UsbDeviceConnection = null;
+            _UsbDevice = null;
+            _ReadEndpoint = null;
+            _WriteEndpoint = null;
         }
 
         //TODO: Make async properly
@@ -155,36 +153,6 @@ namespace Usb.Net.Android
         #endregion
 
         #region Private  Methods
-
-        private async Task CheckForDeviceAsync()
-        {
-            var devices = UsbManager.DeviceList.Select(kvp => kvp.Value).ToList();
-
-            Logger.Log($"Connected devices: {string.Join(",", devices.Select(d => d.VendorId))}.", null, LogSection);
-
-            _UsbDevice?.Dispose();
-            _UsbDevice = devices.FirstOrDefault(d => d.VendorId == VendorId && d.ProductId == ProductId);
-
-            if (_UsbDevice != null)
-            {
-                if (_UsbDeviceConnection == null)
-                {
-                    Logger.Log("Initializing Android Hid device", null, LogSection);
-                    await InitializeAsync();
-                }
-            }
-            else
-            {
-                var wasConnected = _UsbDeviceConnection != null;
-                _UsbDeviceConnection?.Dispose();
-                _UsbDeviceConnection = null;
-                if (wasConnected)
-                {
-                    RaiseDisconnected(); ;
-                }
-            }
-        }
-
         private Task<bool?> RequestPermissionAsync()
         {
             Logger.Log("Requesting USB permission", null, LogSection);
@@ -214,8 +182,14 @@ namespace Usb.Net.Android
 
             try
             {
-                //TODO:
-                //Dispose();
+                Dispose();
+
+                _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceId);
+
+                if (_UsbDevice == null)
+                {
+                    throw new Exception($"The device {DeviceId} is not connected to the system");
+                }
 
                 var isPermissionGranted = await RequestPermissionAsync();
                 if (!isPermissionGranted.HasValue)
