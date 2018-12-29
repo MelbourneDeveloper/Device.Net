@@ -44,6 +44,8 @@ namespace Usb.Net.UWP
 
                 interruptPipe.DataReceived += InterruptPipe_DataReceived;
 
+                //TODO: Fill in the DeviceDefinition...
+
                 RaiseConnected();
             }
             else

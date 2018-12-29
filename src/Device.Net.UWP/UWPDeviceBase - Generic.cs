@@ -10,6 +10,12 @@ namespace Device.Net.UWP
         protected T _ConnectedDevice;
         #endregion
 
+        #region Public Override Properties
+        //TODO: Get from device definition
+        public override ushort WriteBufferSize => throw new NotImplementedException();
+        public override ushort ReadBufferSize => throw new NotImplementedException();
+        #endregion
+
         #region Constructor
         protected UWPDeviceBase()
         {

@@ -33,8 +33,14 @@ namespace Usb.Net.Android
         public bool IsInitialized { get; private set; }
         #endregion
 
+        #region Public Override Properties
+        //TODO: Get from device definition
+        public override ushort WriteBufferSize => throw new NotImplementedException();
+        public override ushort ReadBufferSize => throw new NotImplementedException();
+        #endregion
+
         #region Constructor
-        public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int timeoutMilliseconds, int readBufferLength, int vendorId, int productId)
+        public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int deviceId, int timeoutMilliseconds)
         {
             UsbManager = usbManager;
             AndroidContext = androidContext;
@@ -126,7 +132,7 @@ namespace Usb.Net.Android
         }
 
         //TODO: Perhaps we should implement Batch Begin/Complete so that the UsbRequest is not created again and again. This will be expensive
-        public  override async Task WriteAsync(byte[] data)
+        public override async Task WriteAsync(byte[] data)
         {
             try
             {
@@ -174,7 +180,7 @@ namespace Usb.Net.Android
                 _UsbDeviceConnection = null;
                 if (wasConnected)
                 {
-                    RaiseDisconnected();;
+                    RaiseDisconnected(); ;
                 }
             }
         }

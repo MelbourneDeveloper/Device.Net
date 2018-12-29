@@ -15,8 +15,14 @@ namespace Device.Net
         public event EventHandler Disconnected;
         #endregion
 
+        #region Public Abstract Properties
+        public abstract ushort WriteBufferSize { get; }
+        public abstract ushort ReadBufferSize { get; }
+        #endregion
+
         #region Public Properties
         public ITracer Tracer { get; set; }
+        public DeviceDefinition DeviceDefinition { get; protected set; }
         #endregion
 
         #region Protected Methods
