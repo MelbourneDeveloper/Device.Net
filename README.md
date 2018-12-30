@@ -74,7 +74,7 @@ Litecoin: MVAbLaNPq7meGXvZMU4TwypUsDEuU6stpY
 
 ## Store App Production Usage
 
-**Hardfolio** - Cryptocurrency portfolio app for hardwarewallets
+**Hardfolio** - Cryptocurrency portfolio app for hardwarewallets. Hid.Net started its life as a project inside the Hardfolio app codebase. The original aim of this app was to support multiple hardwarewallets across multiple platforms. It turned out that Hid.Net and Usb.Net were warranted as libraries in their own right because there really is not other library on the internet that supports all the platforms that were needed for Hardfolio.
 
 [Google Play](https://play.google.com/store/apps/details?id=com.Hardfolio)
 
