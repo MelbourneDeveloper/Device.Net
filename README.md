@@ -123,6 +123,8 @@ Please break pull requests up in to their smallest possible parts. If you have a
 
 [Human Interface Device Wikipedia Page](https://en.wikipedia.org/wiki/Human_interface_device) - Good for understanding the difference between the meaning of the two terms: USB and Hid.
 
-[USB human interface device class](https://en.wikipedia.org/wiki/USB_human_interface_device_class) - as above
+[USB human interface device class Wikipedia Page](https://en.wikipedia.org/wiki/USB_human_interface_device_class) - as above
+
+[USB Wikipedia Page](https://en.wikipedia.org/wiki/USB) - as above
 
 Jax Axelson's [USB Page](http://janaxelson.com/usb.htm) - General C# USB Programming
