@@ -10,6 +10,20 @@ namespace Usb.Net.UWP
 {
     public class UWPUsbDevice : UWPDeviceBase<UsbDevice>
     {
+        #region Fields
+        /// <summary>
+        /// TODO: It should be possible to select a different configuration/interface
+        /// </summary>
+        private UsbInterface _DefaultConfigurationInterface;
+        private UsbInterruptOutPipe _DefaultOutPipe;
+        private UsbInterruptInPipe _DefaultInPipe;
+        #endregion
+
+        #region Public Override Properties
+        public override ushort WriteBufferSize => (ushort)_DefaultOutPipe.EndpointDescriptor.MaxPacketSize;
+        public override ushort ReadBufferSize => (ushort)_DefaultInPipe.EndpointDescriptor.MaxPacketSize;
+        #endregion
+
         #region Constructors
         public UWPUsbDevice() : base()
         {
@@ -46,6 +60,22 @@ namespace Usb.Net.UWP
 
                 //TODO: Fill in the DeviceDefinition...
 
+                // TODO: It should be possible to select a different configurations, interface, and pipes
+
+                _DefaultConfigurationInterface = _ConnectedDevice.Configuration.UsbInterfaces.FirstOrDefault();
+
+                //TODO: Clean up this messaging and move down to a base class across platforms
+                if (_DefaultConfigurationInterface == null) throw new Exception("Could not get the default interface configuration for the USB device");
+
+                _DefaultOutPipe = _DefaultConfigurationInterface.InterruptOutPipes.FirstOrDefault();
+
+                if (_DefaultOutPipe == null) throw new Exception("Could not get the default out pipe for the default USB interface");
+
+                _DefaultInPipe = _DefaultConfigurationInterface.InterruptInPipes.FirstOrDefault();
+
+                if (_DefaultOutPipe == null) throw new Exception("Could not get the default in pipe for the default USB interface");
+
+
                 RaiseConnected();
             }
             else
@@ -71,10 +101,10 @@ namespace Usb.Net.UWP
         #region Public Methods
         public override async Task WriteAsync(byte[] bytes)
         {
-            var bufferToSend = bytes.AsBuffer();
-            var usbInterface = _ConnectedDevice.Configuration.UsbInterfaces.FirstOrDefault();
-            var outPipe = usbInterface.InterruptOutPipes.FirstOrDefault();
-            await outPipe.OutputStream.WriteAsync(bufferToSend);
+            if (_DefaultOutPipe == null) throw new Exception("The device has not been initialized.");
+
+            if (bytes.Length > WriteBufferSize) throw new Exception("The buffer size is too large");
+            await _DefaultOutPipe.OutputStream.WriteAsync(bytes.AsBuffer());
 
             Tracer?.Trace(false, bytes);
         }

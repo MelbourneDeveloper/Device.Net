@@ -15,6 +15,17 @@ namespace Hid.Net.UWP
         public bool DataHasExtraByte { get; set; } = true;
         #endregion
 
+        #region Public Override Properties
+        /// <summary>
+        /// TODO: These vales are completely wrong and not being used anyway...
+        /// </summary>
+        public override ushort WriteBufferSize => 64;
+        /// <summary>
+        /// TODO: These vales are completely wrong and not being used anyway...
+        /// </summary>
+        public override ushort ReadBufferSize => 64;
+        #endregion
+
         #region Event Handlers
         private void _HidDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args)
         {
