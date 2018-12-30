@@ -72,17 +72,9 @@ Ethereum: 0x7ba0ea9975ac0efb5319886a287dcf5eecd3038e
 
 Litecoin: MVAbLaNPq7meGXvZMU4TwypUsDEuU6stpY
 
-## Samples & Unit Tests
+## [Samples & Unit Tests](https://github.com/MelbourneDeveloper/Device.Net/wiki/Samples-and-Unit-Tests)
 
-This repos have implementations of Hid.Net and Usb.Net. These should help you to understand how the libraries can be used to connect to various devices. The libraries are for cryptocurrency hardwarewallets
-
-[Trezor.Net](https://github.com/MelbourneDeveloper/Trezor.Net) (UWP, Android, Console - .NET Framework)
-
-[Ledger.Net](https://github.com/MelbourneDeveloper/Ledger.Net) (UWP, Console - .NET Core)
-
-[Ledger .NET API](https://github.com/LedgerHQ/ledger-dotnet-api) (Console - .NET Core)
-
-[KeepKey.Net](https://github.com/MelbourneDeveloper/KeepKey.Net) (UWP, .NET Framework)
+Please click on this link for Samples and Unit Tests.
 
 ## Store App Production Usage
 
