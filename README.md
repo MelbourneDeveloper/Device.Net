@@ -18,7 +18,7 @@ Please visit the [documentation page](https://github.com/MelbourneDeveloper/Devi
 | UWP | Hid, USB   |
 | Linux* | USB (Via LibUsbDotNet)  |
 
-*See the Trezor repo for the LibUsbDotNet example
+*See [Linux and MacOS Support]https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support
 
 ## [Quick Start](https://github.com/MelbourneDeveloper/Device.Net/wiki/Quick-Start)
 
