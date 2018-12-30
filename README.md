@@ -18,7 +18,7 @@ Please visit the [documentation page](https://github.com/MelbourneDeveloper/Devi
 | UWP | Hid, USB   |
 | Linux* | USB (Via LibUsbDotNet)  |
 
-*See [Linux and MacOS Support]https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support
+*See [Linux and MacOS Support](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support)
 
 ## [Quick Start](https://github.com/MelbourneDeveloper/Device.Net/wiki/Quick-Start)
 
