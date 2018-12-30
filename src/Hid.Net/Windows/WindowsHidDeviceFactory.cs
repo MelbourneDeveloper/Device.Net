@@ -42,9 +42,8 @@ namespace Hid.Net.Windows
             var deviceInformation = new WindowsDeviceDefinition
             {
                 DeviceId = deviceId,
-                //TODO Is this the right way around?
-                WriteBufferSize = hidCollectionCapabilities.InputReportByteLength,
-                ReadBufferSize = hidCollectionCapabilities.OutputReportByteLength,
+                WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
+                ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,
                 Manufacturer = manufacturer,
                 Product = product,
                 ProductId = (ushort)hidAttributes.ProductId,
