@@ -18,10 +18,11 @@ This library provides a common Task based Async interface across platforms and d
 
 *See the Trezor repo for the LibUsbDotNet example
 
-## Quick Start
+## [Quick Start](https://github.com/MelbourneDeveloper/Device.Net/wiki/Quick-Start)
 
-Please download one of the samples in 'Samples & Unit Tests', or add the NuGet packages you need to a fresh project. This is UWP code. The only difference for Windows is that you would call WindowsHidDeviceFactory.Register().
+Please click on this link to see the Quick Start documentation
 
+Example Code:
 ```cs
         private static async Task InitializeTrezor()
         {
