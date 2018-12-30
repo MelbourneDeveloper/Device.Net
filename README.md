@@ -22,8 +22,6 @@ Please visit the [documentation page](https://github.com/MelbourneDeveloper/Devi
 
 ## [Quick Start](https://github.com/MelbourneDeveloper/Device.Net/wiki/Quick-Start)
 
-Please click on this link to see the Quick Start documentation
-
 Example Code:
 ```cs
         private static async Task InitializeTrezor()
@@ -73,8 +71,6 @@ Ethereum: 0x7ba0ea9975ac0efb5319886a287dcf5eecd3038e
 Litecoin: MVAbLaNPq7meGXvZMU4TwypUsDEuU6stpY
 
 ## [Samples & Unit Tests](https://github.com/MelbourneDeveloper/Device.Net/wiki/Samples-and-Unit-Tests)
-
-Please click on this link for Samples and Unit Tests.
 
 ## Store App Production Usage
 
