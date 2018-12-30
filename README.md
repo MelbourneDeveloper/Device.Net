@@ -84,19 +84,7 @@ Please click on this link for Samples and Unit Tests.
 
 [Windows Store](https://www.microsoft.com/en-au/p/hardfolio/9p8xx70n5d2j)
 
-## NuGet
-
-For Hid Devices:
-
-**Install-Package Hid.Net**
-
-For Usb Devices:
-
-**Install-Package Usb.Net**
-
-Device.Net only provides the base interface. This would allow you to create a provider for a new device type like Bluetooth for example.
-
-**Install-Package Device.Net**
+## [NuGet](https://github.com/MelbourneDeveloper/Device.Net/wiki/NuGet)
 
 ## Contact
 
