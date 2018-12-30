@@ -18,10 +18,6 @@ namespace Usb.Net.Windows
         private USB_DEVICE_DESCRIPTOR _UsbDeviceDescriptor;
         #endregion
 
-        #region Public Properties
-        public string Product { get; private set; }
-        #endregion
-
         #region Public Overrride Properties
         public override ushort WriteBufferSize => IsInitialized ? _UsbDeviceDescriptor.bMaxPacketSize0 : throw new Exception("Device has not been initialized");
         public override ushort ReadBufferSize => IsInitialized ? _UsbDeviceDescriptor.bMaxPacketSize0 : throw new Exception("Device has not been initialized");
@@ -47,6 +43,8 @@ namespace Usb.Net.Windows
 
             _DeviceHandle = APICalls.CreateFile(DeviceId, (APICalls.GenericWrite | APICalls.GenericRead), APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
 
+            DeviceDefinition = new WindowsDeviceDefinition { DeviceType = DeviceType.Usb, DeviceId = DeviceId };
+
             if (_DeviceHandle.IsInvalid)
             {
                 //TODO: is error code useful here?
@@ -63,14 +61,23 @@ namespace Usb.Net.Windows
 
             if (_UsbDeviceDescriptor.iProduct > 0)
             {
-                //Get the product name
-                var index = _UsbDeviceDescriptor.iProduct;
-                const string errorMessage = "Couldn't get product name";
-
-                var product = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle, index, errorMessage);
-
-                Product = product;
+                DeviceDefinition.Product = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle, _UsbDeviceDescriptor.iProduct, "Couldn't get product name");
             }
+
+            if (_UsbDeviceDescriptor.iSerialNumber > 0)
+            {
+                DeviceDefinition.SerialNumber = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle, _UsbDeviceDescriptor.iSerialNumber, "Couldn't get serial number");
+            }
+
+            if (_UsbDeviceDescriptor.iManufacturer > 0)
+            {
+                DeviceDefinition.Manufacturer = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle, _UsbDeviceDescriptor.iManufacturer, "Couldn't get manufacturer");
+            }
+
+            DeviceDefinition.VendorId = _UsbDeviceDescriptor.idVendor;
+            DeviceDefinition.ProductId = _UsbDeviceDescriptor.idProduct;
+            DeviceDefinition.WriteBufferSize = _UsbDeviceDescriptor.bMaxPacketSize0;
+            DeviceDefinition.ReadBufferSize = _UsbDeviceDescriptor.bMaxPacketSize0;
 
             byte i = 0;
 
