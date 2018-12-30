@@ -8,8 +8,8 @@
     <DelaySign>false</DelaySign>
     <AssemblyOriginatorKeyFile>Key.pfx</AssemblyOriginatorKeyFile>
     <Version>2.2.0</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Hid.Net/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>Christian Findlay</Copyright>
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Hid.Net</PackageProjectUrl>
