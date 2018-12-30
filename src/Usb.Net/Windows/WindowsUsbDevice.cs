@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Usb.Net.Windows
@@ -13,7 +12,6 @@ namespace Usb.Net.Windows
     public class WindowsUsbDevice : WindowsDeviceBase
     {
         #region Fields
-        private const int EnglishLanguageID = 1033;
         private SafeFileHandle _DeviceHandle;
         private readonly List<UsbInterface> _UsbInterfaces = new List<UsbInterface>();
         private UsbInterface _DefaultUsbInterface => _UsbInterfaces.FirstOrDefault();
@@ -60,18 +58,18 @@ namespace Usb.Net.Windows
             HandleError(isSuccess, "Couldn't initialize device");
 
             var bufferLength = (uint)Marshal.SizeOf(typeof(USB_DEVICE_DESCRIPTOR));
-            isSuccess = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, EnglishLanguageID, out _UsbDeviceDescriptor, bufferLength, out var lengthTransferred);
+            isSuccess = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, WinUsbApiCalls.EnglishLanguageID, out _UsbDeviceDescriptor, bufferLength, out var lengthTransferred);
             HandleError(isSuccess, "Couldn't get device descriptor");
 
             if (_UsbDeviceDescriptor.iProduct > 0)
             {
                 //Get the product name
-                var buffer = new byte[256];
-                isSuccess = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.USB_STRING_DESCRIPTOR_TYPE, _UsbDeviceDescriptor.iProduct, 1033, buffer, (uint)buffer.Length, out var transfered);
-                HandleError(isSuccess, "Couldn't get product name");
+                var index = _UsbDeviceDescriptor.iProduct;
+                const string errorMessage = "Couldn't get product name";
 
-                Product = new string(Encoding.Unicode.GetChars(buffer, 2, (int)transfered));
-                Product = Product.Substring(0, Product.Length - 1);
+                var product = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle, index, errorMessage);
+
+                Product = product;
             }
 
             byte i = 0;
