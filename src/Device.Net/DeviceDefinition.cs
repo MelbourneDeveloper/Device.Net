@@ -5,7 +5,7 @@
         /// <summary>
         /// The name of the device product according to the Manufacturer
         /// </summary>
-        public string Product { get; set; }
+        public string ProductName { get; set; }
 
         /// <summary>
         /// Name of the device's manufacturer

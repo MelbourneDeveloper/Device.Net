@@ -45,7 +45,7 @@ namespace Hid.Net.Windows
                 WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
                 ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,
                 Manufacturer = manufacturer,
-                Product = product,
+                ProductName = product,
                 ProductId = (ushort)hidAttributes.ProductId,
                 SerialNumber = serialNumber,
                 Usage = hidCollectionCapabilities.Usage,
