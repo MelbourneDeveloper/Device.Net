@@ -35,8 +35,8 @@ namespace Usb.Net.Windows
         }
         #endregion
 
-        #region Public Methods
-        public override Task InitializeAsync()
+        #region Private Methods
+        private void Initialize()
         {
             Dispose();
 
@@ -63,16 +63,6 @@ namespace Usb.Net.Windows
             isSuccess = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, EnglishLanguageID, out _UsbDeviceDescriptor, bufferLength, out var lengthTransferred);
             HandleError(isSuccess, "Couldn't get device descriptor");
 
-            if (_UsbDeviceDescriptor.iProduct > 0)
-            {
-                //Get the product name
-                var buffer = new byte[256];
-                isSuccess = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.USB_STRING_DESCRIPTOR_TYPE, _UsbDeviceDescriptor.iProduct, 1033, buffer, (uint)buffer.Length, out var transfered);
-                HandleError(isSuccess, "Couldn't get product name");
-
-                Product = new string(Encoding.Unicode.GetChars(buffer, 2, (int)transfered));
-                Product = Product.Substring(0, Product.Length - 1);
-            }
 
             byte i = 0;
 
@@ -100,10 +90,14 @@ namespace Usb.Net.Windows
             }
 
             IsInitialized = true;
+        }
+        #endregion
 
+        #region Public Methods
+        public override async Task InitializeAsync()
+        {
+            await Task.Run(Initialize);
             RaiseConnected();
-
-            return Task.CompletedTask;
         }
 
         public override async Task<byte[]> ReadAsync()
