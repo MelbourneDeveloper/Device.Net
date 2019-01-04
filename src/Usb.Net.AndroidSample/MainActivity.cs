@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Android.App;
 using Android.OS;
 using Android.Support.Design.Widget;
@@ -41,11 +42,18 @@ namespace Usb.Net.AndroidSample
             return base.OnOptionsItemSelected(item);
         }
 
-        private void FabOnClick(object sender, EventArgs eventArgs)
+        private async void FabOnClick(object sender, EventArgs eventArgs)
         {
             var view = (View) sender;
-            Snackbar.Make(view, "Replace with your own action", Snackbar.LengthLong).SetAction("Action", (View.IOnClickListener)null).Show();
+
+            await Go(view);
+
         }
-	}
+
+        private async Task Go(View view)
+        {
+            //Snackbar.Make(view, "Replace with your own action", Snackbar.LengthLong).SetAction("Action", (View.IOnClickListener)null).Show();
+        }
+    }
 }
 
