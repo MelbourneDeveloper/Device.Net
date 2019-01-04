@@ -166,6 +166,7 @@ namespace Usb.Net.Android
                     throw new Exception("The user did not give the permission to access the device");
                 }
 
+                //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
                 var usbInterface = _UsbDevice.GetInterface(0);
 
                 //TODO: This selection stuff needs to be moved up higher. The constructor should take these arguments

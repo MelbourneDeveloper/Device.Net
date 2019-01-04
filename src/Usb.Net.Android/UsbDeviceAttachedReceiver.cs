@@ -1,6 +1,5 @@
 ﻿using Android.Content;
-using Android.Hardware.Usb;
-using Device.Net;
+using System;
 
 namespace Usb.Net.Android
 {
@@ -20,12 +19,13 @@ namespace Usb.Net.Android
         #region Overrides
         public override async void OnReceive(Context context, Intent intent)
         {
-            var device = intent.GetParcelableExtra(UsbManager.ExtraDevice) as UsbDevice;
+            throw new NotImplementedException();
+            //var device = intent.GetParcelableExtra(UsbManager.ExtraDevice) as UsbDevice;
 
-            if (_AndroidHidDevice == null || device == null || device.VendorId != _AndroidHidDevice.DeviceDefinition.VendorId || device.ProductId != _AndroidHidDevice.DeviceDefinition.ProductId) return;
+            //if (_AndroidHidDevice == null || device == null || device.VendorId != _AndroidHidDevice.DeviceDefinition.VendorId || device.ProductId != _AndroidHidDevice.DeviceDefinition.ProductId) return;
 
-            await _AndroidHidDevice.UsbDeviceAttached();
-            Logger.Log("Device connected", null, AndroidUsbDevice.LogSection);
+            //await _AndroidHidDevice.UsbDeviceAttached();
+            //Logger.Log("Device connected", null, AndroidUsbDevice.LogSection);
         }
         #endregion
     }

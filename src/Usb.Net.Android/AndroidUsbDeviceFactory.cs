@@ -31,7 +31,7 @@ namespace Device.Net
         public Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
         {
             //TODO: Get the values necessary to construct the device.
-            var deviceDefinitions = UsbManager.DeviceList.Select(kvp => kvp.Value).Select(d => new DeviceDefinition { Product = d.ProductName, Manufacturer = d.ManufacturerName, SerialNumber = d.SerialNumber, DeviceId = d.DeviceId.ToString(), ProductId = (uint)d.ProductId, VendorId = (uint)d.VendorId, DeviceType = DeviceType.Usb }).ToList();
+            var deviceDefinitions = UsbManager.DeviceList.Select(kvp => kvp.Value).Select(d => new DeviceDefinition { ProductName = d.ProductName, Manufacturer = d.ManufacturerName, SerialNumber = d.SerialNumber, DeviceId = d.DeviceId.ToString(), ProductId = (uint)d.ProductId, VendorId = (uint)d.VendorId, DeviceType = DeviceType.Usb }).ToList();
             return Task.FromResult<IEnumerable<DeviceDefinition>>(deviceDefinitions);
         }
 
