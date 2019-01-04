@@ -145,6 +145,8 @@ namespace Usb.Net.Android
 
                 _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceId);
 
+                DeviceDefinition = AndroidUsbDeviceFactory.GetAndroidDeviceDefinition(_UsbDevice);
+
                 if (_UsbDevice == null)
                 {
                     throw new Exception($"The device {DeviceId} is not connected to the system");

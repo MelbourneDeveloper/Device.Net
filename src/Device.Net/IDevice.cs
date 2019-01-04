@@ -39,5 +39,10 @@ namespace Device.Net
         /// Write a page of data and then wait for the device to return a page. If the implementation derives from DeviceBase, this method is thread safe.
         /// </summary>
         Task<byte[]> WriteAndReadAsync(byte[] writeBuffer);
+
+        /// <summary>
+        /// The unique identifier for the physical device. 
+        /// </summary>
+        string SerialNumber { get; }
     }
 }

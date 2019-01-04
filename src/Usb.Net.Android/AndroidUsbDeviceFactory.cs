@@ -33,7 +33,7 @@ namespace Device.Net
             return Task.Run<IEnumerable<DeviceDefinition>>(() =>
             {
                 //TODO: Get more details about the device.
-                return UsbManager.DeviceList.Select(kvp => kvp.Value).Select(d => new DeviceDefinition { ProductName = d.ProductName, Manufacturer = d.ManufacturerName, SerialNumber = d.SerialNumber, DeviceId = d.DeviceId.ToString(), ProductId = (uint)d.ProductId, VendorId = (uint)d.VendorId, DeviceType = DeviceType.Usb }).ToList();
+                return UsbManager.DeviceList.Select(kvp => kvp.Value).Select(GetAndroidDeviceDefinition).ToList();
             });
         }
 
@@ -49,6 +49,20 @@ namespace Device.Net
         #endregion
 
         #region Public Static Methods
+        public static DeviceDefinition GetAndroidDeviceDefinition(UsbDevice usbDevice)
+        {
+            return new DeviceDefinition
+            {
+                ProductName = usbDevice.ProductName,
+                Manufacturer = usbDevice.ManufacturerName,
+                SerialNumber = usbDevice.SerialNumber,
+                DeviceId = usbDevice.DeviceId.ToString(),
+                ProductId = (uint)usbDevice.ProductId,
+                VendorId = (uint)usbDevice.VendorId,
+                DeviceType = DeviceType.Usb
+            };
+        }
+
         public static void Register(UsbManager usbManager, Context context)
         {
             DeviceManager.Current.DeviceFactories.Add(new AndroidUsbDeviceFactory(usbManager, context));

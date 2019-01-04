@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Timers;
 using timer = System.Timers.Timer;
@@ -9,8 +10,8 @@ namespace Device.Net.UWP
     public class DevicePoller
     {
         #region Fields
-        private readonly timer _PollTimer = new timer(3000);
-        private readonly SemaphoreSlim _PollingSemaphoreSlim = new SemaphoreSlim(1,1);
+        private readonly timer _PollTimer;
+        private readonly SemaphoreSlim _PollingSemaphoreSlim = new SemaphoreSlim(1, 1);
         #endregion
 
         #region Public Properties
@@ -21,8 +22,9 @@ namespace Device.Net.UWP
         #endregion
 
         #region Constructor
-        public DevicePoller(uint? productId, uint? vendorId, DeviceType? deviceType)
+        public DevicePoller(uint? productId, uint? vendorId, DeviceType? deviceType, int pollMilliseconds)
         {
+            _PollTimer = new timer(pollMilliseconds);
             _PollTimer.Elapsed += _PollTimer_Elapsed;
             _PollTimer.Start();
             ProductId = productId;
@@ -42,26 +44,12 @@ namespace Device.Net.UWP
 
                 foreach (var deviceInformation in deviceInformations)
                 {
-                    try
-                    {
-                        //Attempt to connect and move to the next one if this one doesn't connect
-                        UWPDevice.DeviceId = deviceInformation.DeviceId;
-                        await UWPDevice.InitializeAsync();
-                        if (await UWPDevice.GetIsConnectedAsync())
-                        {
-                            //Connection was successful
-                            break;
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Log("Error connecting to device", ex, nameof(UWPDevicePoller));
-                    }
+                    //var asdasd = RegisteredDevices.FirstOrDefault(d=>d.de)
                 }
             }
             catch (Exception ex)
             {
-                Logger.Log("Hid polling error", ex, nameof(UWPDevicePoller));
+                Logger.Log("Hid polling error", ex, nameof(DevicePoller));
 
                 //Throw?
             }
@@ -76,11 +64,6 @@ namespace Device.Net.UWP
         public void Stop()
         {
             _PollTimer.Stop();
-        }
-
-        public void RegisterDevice(IDevice device)
-        {
-
         }
         #endregion
     }

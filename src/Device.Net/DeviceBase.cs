@@ -23,6 +23,7 @@ namespace Device.Net
         #region Public Properties
         public ITracer Tracer { get; set; }
         public DeviceDefinition DeviceDefinition { get; protected set; }
+        public string SerialNumber => string.IsNullOrEmpty(DeviceDefinition?.SerialNumber) ? throw new Exception("Device Definition does not exist or Serial Number was not obtained") : DeviceDefinition?.SerialNumber;
         #endregion
 
         #region Protected Methods
