@@ -71,7 +71,11 @@ namespace Device.Net.Windows
                     if (vendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(vendorHex)) continue;
                     if (productId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(productIdHex)) continue;
 
-                    deviceDefinitions.Add(GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath));
+                    var deviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
+
+                    if (deviceDefinition == null) continue;
+
+                    deviceDefinitions.Add(deviceDefinition);
                 }
 
                 APICalls.SetupDiDestroyDeviceInfoList(i);

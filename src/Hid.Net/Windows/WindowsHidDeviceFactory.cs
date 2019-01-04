@@ -33,29 +33,34 @@ namespace Hid.Net.Windows
         #region Private Static Methods
         public static WindowsDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)
         {
-            var hidAttributes = GetHidAttributes(safeFileHandle);
-            var hidCollectionCapabilities = GetHidCapabilities(safeFileHandle);
-            var manufacturer = GetManufacturer(safeFileHandle);
-            var serialNumber = GetSerialNumber(safeFileHandle);
-            var product = GetProduct(safeFileHandle);
-
-            var deviceInformation = new WindowsDeviceDefinition
+            try
             {
-                DeviceId = deviceId,
-                WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
-                ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,
-                Manufacturer = manufacturer,
-                Product = product,
-                ProductId = (ushort)hidAttributes.ProductId,
-                SerialNumber = serialNumber,
-                Usage = hidCollectionCapabilities.Usage,
-                UsagePage = hidCollectionCapabilities.UsagePage,
-                VendorId = (ushort)hidAttributes.VendorId,
-                VersionNumber = (ushort)hidAttributes.VersionNumber,
-                DeviceType = DeviceType.Hid
-            };
+                var hidAttributes = GetHidAttributes(safeFileHandle);
+                var hidCollectionCapabilities = GetHidCapabilities(safeFileHandle);
+                var manufacturer = GetManufacturer(safeFileHandle);
+                var serialNumber = GetSerialNumber(safeFileHandle);
+                var product = GetProduct(safeFileHandle);
 
-            return deviceInformation;
+                return new WindowsDeviceDefinition
+                {
+                    DeviceId = deviceId,
+                    WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
+                    ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,
+                    Manufacturer = manufacturer,
+                    Product = product,
+                    ProductId = (ushort)hidAttributes.ProductId,
+                    SerialNumber = serialNumber,
+                    Usage = hidCollectionCapabilities.Usage,
+                    UsagePage = hidCollectionCapabilities.UsagePage,
+                    VendorId = (ushort)hidAttributes.VendorId,
+                    VersionNumber = (ushort)hidAttributes.VersionNumber,
+                    DeviceType = DeviceType.Hid
+                };
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
         #endregion
 
