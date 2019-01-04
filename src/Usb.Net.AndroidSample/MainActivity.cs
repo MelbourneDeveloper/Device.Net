@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Hardware.Usb;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V7.App;
@@ -58,7 +59,7 @@ namespace Usb.Net.AndroidSample
             try
             {
                 //Register the factory for creating Usb devices. This only needs to be done once.
-                AndroidUsbDeviceFactory.Register();
+                AndroidUsbDeviceFactory.Register(GetSystemService(UsbService) as UsbManager, ApplicationContext);
 
                 //Note: other custom device types could be added here
 
