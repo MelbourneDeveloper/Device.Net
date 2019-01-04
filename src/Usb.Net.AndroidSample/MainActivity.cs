@@ -58,8 +58,12 @@ namespace Usb.Net.AndroidSample
         {
             try
             {
+                var usbManager = GetSystemService(UsbService) as UsbManager;
+
+                if (usbManager == null) throw new Exception("UsbManager is null");
+
                 //Register the factory for creating Usb devices. This only needs to be done once.
-                AndroidUsbDeviceFactory.Register(GetSystemService(UsbService) as UsbManager, ApplicationContext);
+                AndroidUsbDeviceFactory.Register(usbManager, base.ApplicationContext);
 
                 //Note: other custom device types could be added here
 
@@ -73,7 +77,10 @@ namespace Usb.Net.AndroidSample
 
                 //Get the first available device and connect to it
                 var devices = await DeviceManager.Current.GetDevices(deviceDefinitions);
-                using (var trezorDevice = devices.FirstOrDefault())
+
+                if (devices.Count == 0) throw new Exception("No Trezor was found.");
+
+                using (var trezorDevice = devices.First())
                 {
                     await trezorDevice.InitializeAsync();
 

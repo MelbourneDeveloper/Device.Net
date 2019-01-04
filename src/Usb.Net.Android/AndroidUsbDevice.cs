@@ -5,6 +5,7 @@ using Java.Nio;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Usb.Net.Android
@@ -16,7 +17,7 @@ namespace Usb.Net.Android
         private UsbDevice _UsbDevice;
         private UsbEndpoint _WriteEndpoint;
         private UsbEndpoint _ReadEndpoint;
-        private bool _IsInitializing;
+        private SemaphoreSlim _InitializingSemaphoreSlim = new SemaphoreSlim(1, 1);
         #endregion
 
         #region Public Constants
@@ -136,16 +137,10 @@ namespace Usb.Net.Android
 
         public async Task InitializeAsync()
         {
-            //TODO: Use a semaphore lock here
-            if (_IsInitializing)
-            {
-                return;
-            }
-
-            _IsInitializing = true;
-
             try
             {
+                await _InitializingSemaphoreSlim.WaitAsync();
+
                 Dispose();
 
                 _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceId);
@@ -229,9 +224,12 @@ namespace Usb.Net.Android
             catch (Exception ex)
             {
                 Logger.Log("Error initializing Hid Device", ex, LogSection);
+                throw;
             }
-
-            _IsInitializing = false;
+            finally
+            {
+                _InitializingSemaphoreSlim.Release();
+            }
         }
         #endregion
     }
