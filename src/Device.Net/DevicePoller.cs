@@ -1,30 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Timers;
+using timer = System.Timers.Timer;
 
 namespace Device.Net.UWP
 {
-    public class UWPDevicePoller
+    public class DevicePoller
     {
         #region Fields
-        private readonly Timer _PollTimer = new Timer(3000);
-        private bool _IsPolling;
+        private readonly timer _PollTimer = new timer(3000);
+        private readonly SemaphoreSlim _PollingSemaphoreSlim = new SemaphoreSlim(1,1);
         #endregion
 
         #region Public Properties
-        public uint ProductId { get; }
-        public uint VendorId { get; }
-        public UWPDeviceBase UWPDevice { get; }
-        public DeviceType DeviceType { get; }
+        public uint? ProductId { get; }
+        public uint? VendorId { get; }
+        public DeviceType? DeviceType { get; }
+        public List<IDevice> RegisteredDevices { get; } = new List<IDevice>();
         #endregion
 
         #region Constructor
-        public UWPDevicePoller(uint productId, uint vendorId, DeviceType deviceType, UWPDeviceBase uwpHidDevice)
+        public DevicePoller(uint? productId, uint? vendorId, DeviceType? deviceType)
         {
             _PollTimer.Elapsed += _PollTimer_Elapsed;
             _PollTimer.Start();
             ProductId = productId;
             VendorId = vendorId;
-            UWPDevice = uwpHidDevice;
             DeviceType = deviceType;
         }
         #endregion
@@ -32,15 +34,10 @@ namespace Device.Net.UWP
         #region Event Handlers
         private async void _PollTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (_IsPolling)
-            {
-                return;
-            }
-
-            _IsPolling = true;
-
             try
             {
+                await _PollingSemaphoreSlim.WaitAsync();
+
                 var deviceInformations = await DeviceManager.Current.GetConnectedDeviceDefinitions(VendorId, ProductId);
 
                 foreach (var deviceInformation in deviceInformations)
@@ -65,9 +62,13 @@ namespace Device.Net.UWP
             catch (Exception ex)
             {
                 Logger.Log("Hid polling error", ex, nameof(UWPDevicePoller));
-            }
 
-            _IsPolling = false;
+                //Throw?
+            }
+            finally
+            {
+                _PollingSemaphoreSlim.Release();
+            }
         }
         #endregion
 
@@ -75,6 +76,11 @@ namespace Device.Net.UWP
         public void Stop()
         {
             _PollTimer.Stop();
+        }
+
+        public void RegisterDevice(IDevice device)
+        {
+
         }
         #endregion
     }

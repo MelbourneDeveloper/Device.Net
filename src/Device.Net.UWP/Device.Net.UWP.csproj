@@ -109,7 +109,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UWPDeviceBase - Generic.cs" />
     <Compile Include="UWPDeviceBase.cs" />
-    <Compile Include="UWPDevicePoller.cs" />
     <EmbeddedResource Include="Properties\Device.Net.UWP.rd.xml" />
   </ItemGroup>
   <ItemGroup>
