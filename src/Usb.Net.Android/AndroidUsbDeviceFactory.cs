@@ -16,7 +16,7 @@ namespace Device.Net
         #endregion
 
         #region Public Static Properties
-        public DeviceType DeviceType => throw new NotImplementedException();
+        public DeviceType DeviceType => DeviceType.Usb;
         #endregion
 
         #region Constructor
@@ -30,7 +30,7 @@ namespace Device.Net
         #region Public Methods
         public Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
         {
-            return Task.Run<IEnumerable<DeviceDefinition>>(() => 
+            return Task.Run<IEnumerable<DeviceDefinition>>(() =>
             {
                 //TODO: Get more details about the device.
                 return UsbManager.DeviceList.Select(kvp => kvp.Value).Select(d => new DeviceDefinition { ProductName = d.ProductName, Manufacturer = d.ManufacturerName, SerialNumber = d.SerialNumber, DeviceId = d.DeviceId.ToString(), ProductId = (uint)d.ProductId, VendorId = (uint)d.VendorId, DeviceType = DeviceType.Usb }).ToList();
