@@ -25,8 +25,11 @@ namespace Usb.Net.Android
         public const string LogSection = "AndroidHidDevice";
         #endregion
 
+        #region Public Override Properties
+        public override bool IsInitialized => _UsbDeviceConnection != null;
+        #endregion
+
         #region Public Properties
-        public bool IsInitialized => _UsbDeviceConnection != null;
         public UsbManager UsbManager { get; }
         public Context AndroidContext { get; private set; }
         public int TimeoutMilliseconds { get; }

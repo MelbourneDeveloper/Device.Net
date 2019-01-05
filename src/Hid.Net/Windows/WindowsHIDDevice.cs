@@ -21,6 +21,10 @@ namespace Hid.Net.Windows
         protected override string LogSection => nameof(WindowsHidDevice);
         #endregion
 
+        #region Protected Overrides
+        public override bool IsInitialized => _WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid;
+        #endregion
+
         #region Public Overrides
         public override ushort WriteBufferSize => DeviceDefinition == null ? throw new Exception("Device has not been initialized") : (ushort)DeviceDefinition.WriteBufferSize.Value;
         public override ushort ReadBufferSize => DeviceDefinition == null ? throw new Exception("Device has not been initialized") : (ushort)DeviceDefinition.ReadBufferSize.Value;
@@ -67,8 +71,6 @@ namespace Hid.Net.Windows
             _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, ReadBufferSize, false);
             _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, WriteBufferSize, false);
 
-            IsInitialized = true;
-
             RaiseConnected();
 
             return true;
@@ -83,8 +85,6 @@ namespace Hid.Net.Windows
 
             try
             {
-                IsInitialized = false;
-
                 _ReadFileStream?.Dispose();
                 _WriteFileStream?.Dispose();
 

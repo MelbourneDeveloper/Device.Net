@@ -19,6 +19,7 @@ namespace Device.Net
         #region Public Abstract Properties
         public abstract ushort WriteBufferSize { get; }
         public abstract ushort ReadBufferSize { get; }
+        public abstract bool IsInitialized { get; }
         #endregion
 
         #region Public Properties
@@ -81,9 +82,9 @@ namespace Device.Net
 
             try
             {
-                RaiseDisconnected();
+                if (IsInitialized) RaiseDisconnected();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: Logging
             }

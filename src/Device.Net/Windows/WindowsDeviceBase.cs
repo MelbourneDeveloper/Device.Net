@@ -11,11 +11,7 @@ namespace Device.Net.Windows
     {
         #region Protected Properties
         protected virtual string LogSection => nameof(WindowsDeviceBase);
-        #endregion
-
-        #region Public Abstract Properties
-        public bool IsInitialized { get; set; }
-        #endregion
+        #endregion\
 
         #region Public Properties
         /// <summary>
