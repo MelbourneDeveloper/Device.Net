@@ -85,6 +85,7 @@ namespace Device.Net
                         if (device.IsInitialized)
                         {
                             //Let listeners know a registered device was disconnected
+                            //NOTE: let the rest of the app know before disposal so that the app can stop doing whatever it's doing.
                             DeviceDisconnected?.Invoke(this, new DeviceEventArgs(device));
 
                             //The device is no longer connected so disconnect it
