@@ -11,6 +11,7 @@ namespace Device.Net.Windows
     {
         #region Protected Properties
         protected virtual string LogSection => nameof(WindowsDeviceBase);
+        protected bool IsConnected { get; set; }
         #endregion
 
         #region Public Properties
@@ -18,7 +19,6 @@ namespace Device.Net.Windows
         /// TODO: Move this down to the DeviceBase
         /// </summary>
         public string DeviceId { get; }
-        public bool IsInitialized { get; protected set; }
         #endregion
 
         #region Constructor
@@ -31,7 +31,7 @@ namespace Device.Net.Windows
         #region Public Methods
         public Task<bool> GetIsConnectedAsync()
         {
-            return Task.FromResult(IsInitialized);
+            return Task.FromResult(IsConnected);
         }
 
         public abstract Task InitializeAsync();
