@@ -34,5 +34,8 @@ namespace Device.Net
         /// The unique identifier for the physical device. 
         /// </summary>
         string SerialNumber { get; }
+
+        uint? VendorId { get; }
+        uint? ProductId { get; }
     }
 }

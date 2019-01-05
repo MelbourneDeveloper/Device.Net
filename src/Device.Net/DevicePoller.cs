@@ -12,7 +12,7 @@ namespace Device.Net
         #region Fields
         private readonly timer _PollTimer;
         private readonly SemaphoreSlim _PollingSemaphoreSlim = new SemaphoreSlim(1, 1);
-        private Dictionary<VidPid, IDevice> _RegisteredDevices { get; } = new Dictionary<VidPid, IDevice>();
+        private List<IDevice> _RegisteredDevices { get; } = new List<IDevice>();
         #endregion
 
         #region Events
@@ -20,19 +20,13 @@ namespace Device.Net
         public event EventHandler<DeviceEventArgs> DeviceDisconnected;
         #endregion
 
-        #region Public Properties
-        public uint? ProductId { get; }
-        public uint? VendorId { get; }
-        #endregion
-
         #region Constructor
-        public DevicePoller(uint? vendorId, uint? productId, int pollMilliseconds)
+        public DevicePoller(IEnumerable<IDevice> registeredDevices, int pollMilliseconds)
         {
+            _RegisteredDevices.AddRange(registeredDevices);
             _PollTimer = new timer(pollMilliseconds);
             _PollTimer.Elapsed += _PollTimer_Elapsed;
             _PollTimer.Start();
-            ProductId = productId;
-            VendorId = vendorId;
         }
         #endregion
 
@@ -43,45 +37,42 @@ namespace Device.Net
             {
                 await _PollingSemaphoreSlim.WaitAsync();
 
-                var deviceInformations = await DeviceManager.Current.GetConnectedDeviceDefinitions(VendorId, ProductId);
-
-                var connectedVidPids = new List<VidPid>();
+                var connectedDeviceDefinitions = new List<DeviceDefinition>();
+                foreach (var vidPid in _RegisteredDevices)
+                {
+                    connectedDeviceDefinitions.AddRange(await DeviceManager.Current.GetConnectedDeviceDefinitions(vidPid.VendorId, vidPid.ProductId));
+                }
 
                 //Iterate through connected devices
-                foreach (var deviceInformation in deviceInformations)
+                foreach (var deviceInformation in connectedDeviceDefinitions)
                 {
-                    var vidPid = new VidPid { Pid = deviceInformation.ProductId, Vid = deviceInformation.VendorId };
-
-                    connectedVidPids.Add(vidPid);
-
-                    //Don't know why this is necessary but the dictionary is not using the Equals method to look for the item by key
-                    var key = _RegisteredDevices.Keys.FirstOrDefault(k => k.Equals(vidPid));
-
-                    var foundDevice = _RegisteredDevices.TryGetValue(key, out var device);
-                    if (foundDevice)
+                    var connectedRegisteredDevices = _RegisteredDevices.Where(d => d.VendorId == deviceInformation.VendorId && d.ProductId == deviceInformation.ProductId).ToList();
+                    if (connectedRegisteredDevices.Count > 1)
                     {
-                        if (!device.IsInitialized)
-                        {
-                            //The device is not initialized so initialize it
-                            await device.InitializeAsync();
-
-                            //Let listeners know a registered device was initialized
-                            DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
-                        }
+                        //TODO: Log
+                        //More than one device with vid and pid...
+                        break;
                     }
-                    else
+
+                    var device = connectedRegisteredDevices.FirstOrDefault();
+
+                    if (device == null) continue;
+
+                    if (!device.IsInitialized)
                     {
-                        //TODO: Loggging. A device is connected but we're not worried about it...
+                        //The device is not initialized so initialize it
+                        await device.InitializeAsync();
+
+                        //Let listeners know a registered device was initialized
+                        DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
                     }
                 }
 
                 //Iterate through registered devices
-                foreach (var vidPid in _RegisteredDevices.Keys)
+                foreach (var device in _RegisteredDevices)
                 {
-                    if (!connectedVidPids.Contains(vidPid))
+                    if (!connectedDeviceDefinitions.Any(d => d.ProductId == device.ProductId && d.VendorId == device.ProductId))
                     {
-                        var device = _RegisteredDevices[vidPid];
-
                         if (device.IsInitialized)
                         {
                             //Let listeners know a registered device was disconnected
@@ -110,15 +101,11 @@ namespace Device.Net
         #region Public Methods
         public void RegisterDevice(IDevice device)
         {
-            if (!VendorId.HasValue && !ProductId.HasValue) throw new ArgumentNullException();
-
             if (device == null) throw new ArgumentNullException(nameof(device));
 
-            var vidPid = new VidPid { Vid = VendorId, Pid = ProductId };
+            if (_RegisteredDevices.Contains(device)) throw new Exception("Vendor/Product Id combination already registered");
 
-            if (_RegisteredDevices.ContainsKey(vidPid)) throw new Exception("Vendor/Product Id combination already registered");
-
-            _RegisteredDevices.Add(vidPid, device);
+            _RegisteredDevices.Add(device);
         }
 
         public void Stop()

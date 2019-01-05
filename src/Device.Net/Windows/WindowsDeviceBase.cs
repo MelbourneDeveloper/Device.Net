@@ -26,6 +26,12 @@ namespace Device.Net.Windows
         {
             DeviceId = deviceId;
         }
+
+        protected WindowsDeviceBase(uint? vendorId, uint? productId)
+        {
+            VendorId = vendorId;
+            ProductId = productId;
+        }
         #endregion
 
         #region Public Methods

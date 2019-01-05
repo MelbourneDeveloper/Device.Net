@@ -28,6 +28,10 @@ namespace Usb.Net.Windows
         public WindowsUsbDevice(string deviceId) : base(deviceId)
         {
         }
+
+        public WindowsUsbDevice(uint? vendorId, uint productId) : base(vendorId, productId)
+        {
+        }
         #endregion
 
         #region Private Methods

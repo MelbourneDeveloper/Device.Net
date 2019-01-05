@@ -8,7 +8,7 @@ namespace Device.Net
     {
         #region Fields
         protected SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
-        private bool _IsDisposing;
+        private readonly bool _IsDisposing;
         #endregion
 
         #region Public Abstract Properties
@@ -21,6 +21,8 @@ namespace Device.Net
         public ITracer Tracer { get; set; }
         public DeviceDefinition DeviceDefinition { get; protected set; }
         public string SerialNumber => string.IsNullOrEmpty(DeviceDefinition?.SerialNumber) ? throw new Exception("Device Definition does not exist or Serial Number was not obtained") : DeviceDefinition?.SerialNumber;
+        public uint? VendorId { get; set; }
+        public uint? ProductId { get; set; }
         #endregion
 
         #region Public Abstract Methods

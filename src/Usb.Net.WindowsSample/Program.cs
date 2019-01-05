@@ -23,8 +23,8 @@ namespace Usb.Net.WindowsSample
 
         private static async Task Poll()
         {
-            var windowsDevice = new WindowsUsbDevice(@"\\?\usb#vid_1209&pid_53c1&mi_00#6&280e0b6e&0&0000#{dee824ef-729b-4a0e-9c14-b7117d33a817}");
-            var devicePoller = new DevicePoller(0x1209, 0x53c1, 3000);
+            var windowsDevice = new WindowsUsbDevice(0x1209, 0x53c1);
+            var devicePoller = new DevicePoller(new List<IDevice> { windowsDevice } , 3000);
             devicePoller.DeviceInitialized += DevicePoller_DeviceInitialized;
             devicePoller.DeviceDisconnected += DevicePoller_DeviceDisconnected;
             devicePoller.RegisterDevice(windowsDevice);
