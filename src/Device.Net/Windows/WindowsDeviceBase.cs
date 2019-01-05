@@ -7,7 +7,7 @@ namespace Device.Net.Windows
     /// <summary>
     /// This class remains untested
     /// </summary>
-    public abstract class WindowsDeviceBase : DeviceBase, IDevice
+    public abstract class WindowsDeviceBase : DeviceBase
     {
         #region Protected Properties
         protected virtual string LogSection => nameof(WindowsDeviceBase);

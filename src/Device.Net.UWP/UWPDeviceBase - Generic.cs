@@ -69,7 +69,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Virtual Methods
-        public override void Dispose()
+        public void Dispose()
         {
             if (_IsDisposing) return;
 
@@ -77,12 +77,13 @@ namespace Device.Net.UWP
 
             try
             {
+                var isInitialized = IsInitialized;
 
                 if (_ConnectedDevice is IDisposable disposable) disposable.Dispose();
                 _ConnectedDevice = default(T);
                 _TaskCompletionSource?.Task?.Dispose();
 
-                base.Dispose();
+                if (isInitialized) RaiseDisconnected();
             }
             catch (Exception)
             {

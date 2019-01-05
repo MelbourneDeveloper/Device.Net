@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 
 namespace Usb.Net.Windows
 {
-    public class WindowsUsbDevice : WindowsDeviceBase
+    public class WindowsUsbDevice : WindowsDeviceBase, IDevice
     {
         #region Fields
         private SafeFileHandle _DeviceHandle;
         private readonly List<UsbInterface> _UsbInterfaces = new List<UsbInterface>();
         private UsbInterface _DefaultUsbInterface => _UsbInterfaces.FirstOrDefault();
+        private bool _IsDisposing;
         #endregion
 
         #region Public Overrride Properties
@@ -119,19 +120,33 @@ namespace Usb.Net.Windows
             });
         }
 
-        public override void Dispose()
+        public void Dispose()
         {
-            foreach (var usbInterface in _UsbInterfaces)
+            if (_IsDisposing) return;
+            _IsDisposing = true;
+
+            try
             {
-                usbInterface.Dispose();
+                var isInitialized = IsInitialized;
+
+                foreach (var usbInterface in _UsbInterfaces)
+                {
+                    usbInterface.Dispose();
+                }
+
+                _UsbInterfaces.Clear();
+
+                _DeviceHandle?.Dispose();
+                _DeviceHandle = null;
+
+                if (isInitialized) RaiseDisconnected();
+            }
+            catch (Exception)
+            {
+                //TODO: Logging
             }
 
-            _UsbInterfaces.Clear();
-
-            _DeviceHandle?.Dispose();
-            _DeviceHandle = null;
-
-            base.Dispose();
+            _IsDisposing = false;
         }
         #endregion
 

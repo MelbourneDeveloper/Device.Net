@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
-    public class WindowsHidDevice : WindowsDeviceBase
+    public class WindowsHidDevice : WindowsDeviceBase, IDevice
     {
         #region Fields
         private FileStream _ReadFileStream;
@@ -78,13 +78,15 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Methods
-        public override void Dispose()
+        public void Dispose()
         {
             if (_IsDisposing) return;
             _IsDisposing = true;
 
             try
             {
+                var isInitialized = IsInitialized;
+
                 _ReadFileStream?.Dispose();
                 _WriteFileStream?.Dispose();
 
@@ -103,7 +105,7 @@ namespace Hid.Net.Windows
                     _WriteSafeFileHandle = null;
                 }
 
-                base.Dispose();
+                if (isInitialized) RaiseDisconnected();
             }
             catch (Exception)
             {

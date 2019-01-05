@@ -73,24 +73,6 @@ namespace Device.Net
 
             return retVal;
         }
-
-        public virtual void Dispose()
-        {
-            if (_IsDisposing) return;
-
-            _IsDisposing = true;
-
-            try
-            {
-                if (IsInitialized) RaiseDisconnected();
-            }
-            catch (Exception)
-            {
-                //TODO: Logging
-            }
-
-            _IsDisposing = false;
-        }
         #endregion
     }
 }
