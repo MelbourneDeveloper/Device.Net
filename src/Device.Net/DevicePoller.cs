@@ -127,39 +127,4 @@ namespace Device.Net
         }
         #endregion
     }
-
-    public class DeviceEventArgs : EventArgs
-    {
-        public IDevice Device { get; }
-
-        public DeviceEventArgs(IDevice device)
-        {
-            Device = device;
-        }
-    }
-
-
-
-    internal class VidPid
-    {
-        public uint? Vid { get; set; }
-        public uint? Pid { get; set; }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is VidPid vidPid)
-            {
-                if (!vidPid.Pid.HasValue && !vidPid.Vid.HasValue)
-                {
-                    return false;
-                }
-
-                var isEqual = vidPid.Vid == Vid && vidPid.Pid == Pid;
-
-                return isEqual;
-            }
-
-            return false;
-        }
-    }
 }
