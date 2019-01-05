@@ -8,22 +8,47 @@ using Usb.Net.Windows;
 
 namespace Usb.Net.WindowsSample
 {
-    class Program
+    internal class Program
     {
         private static void Main(string[] args)
         {
-            Go();
+            //Register the factory for creating Usb devices. This only needs to be done once.
+            WindowsUsbDeviceFactory.Register();
+            WindowsHidDeviceFactory.Register();
+
+            //Go();
+            Poll();
             Console.ReadLine();
         }
 
-        private async static Task Go()
+        private static async Task Poll()
+        {
+            var windowsDevice = new WindowsUsbDevice(@"\\?\usb#vid_1209&pid_53c1&mi_00#6&280e0b6e&0&0000#{dee824ef-729b-4a0e-9c14-b7117d33a817}");
+            windowsDevice.Connected += WindowsDevice_Connected;
+            windowsDevice.Disconnected += WindowsDevice_Disconnected;
+            var devicePoller = new DevicePoller(0x1209, 0x53c1, 3000);
+            devicePoller.RegisterDevice(windowsDevice);
+
+            while (true)
+            {
+                await Task.Delay(1000);
+            }
+        }
+
+        private static void WindowsDevice_Disconnected(object sender, EventArgs e)
+        {
+            Console.WriteLine("Disconnected");
+        }
+
+        private static void WindowsDevice_Connected(object sender, EventArgs e)
+        {
+            Console.WriteLine("Connected");
+        }
+
+        private static async Task Go()
         {
             try
             {
-                //Register the factory for creating Usb devices. This only needs to be done once.
-                WindowsUsbDeviceFactory.Register();
-                WindowsHidDeviceFactory.Register();
-
                 //Note: other custom device types could be added here
 
                 //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
@@ -52,7 +77,7 @@ namespace Usb.Net.WindowsSample
                     Console.WriteLine("All good");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }

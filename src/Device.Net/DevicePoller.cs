@@ -4,7 +4,7 @@ using System.Threading;
 using System.Timers;
 using timer = System.Timers.Timer;
 
-namespace Device.Net.UWP
+namespace Device.Net
 {
     public class DevicePoller
     {
@@ -93,13 +93,13 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Methods
-        public void RegisterDevice(uint? vendorId, uint? productId, IDevice device)
+        public void RegisterDevice( IDevice device)
         {
-            if (!vendorId.HasValue && !productId.HasValue) throw new ArgumentNullException();
+            if (!VendorId.HasValue && !ProductId.HasValue) throw new ArgumentNullException();
 
             if (device == null) throw new ArgumentNullException(nameof(device));
 
-            var vidPid = new VidPid { Vid = vendorId, Pid = productId };
+            var vidPid = new VidPid { Vid = VendorId, Pid = ProductId };
 
             if (_RegisteredDevices.ContainsKey(vidPid)) throw new Exception("Vendor/Product Id combination already registered");
 
