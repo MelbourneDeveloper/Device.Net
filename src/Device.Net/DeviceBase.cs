@@ -23,6 +23,7 @@ namespace Device.Net
         public string SerialNumber => string.IsNullOrEmpty(DeviceDefinition?.SerialNumber) ? throw new Exception("Device Definition does not exist or Serial Number was not obtained") : DeviceDefinition?.SerialNumber;
         public uint? VendorId { get; set; }
         public uint? ProductId { get; set; }
+        public string DeviceId { get; set; }
         #endregion
 
         #region Public Abstract Methods

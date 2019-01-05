@@ -13,14 +13,6 @@ namespace Device.Net.Windows
         protected virtual string LogSection => nameof(WindowsDeviceBase);
         #endregion
 
-        #region Public Properties
-        /// <summary>
-        /// TODO: Move this down to the DeviceBase
-        /// </summary>
-        public string DeviceId { get; }
-
-        #endregion
-
         #region Constructor
         protected WindowsDeviceBase(string deviceId)
         {

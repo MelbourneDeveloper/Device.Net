@@ -35,21 +35,26 @@ namespace Usb.Net.Android
         public int TimeoutMilliseconds { get; }
         public override ushort ReadBufferSize => (ushort)_ReadEndpoint.MaxPacketSize;
         public override ushort WriteBufferSize => (ushort)_WriteEndpoint.MaxPacketSize;
-        public int DeviceId { get; private set; }
+        public int DeviceNumberId
+        {
+            //TODO: this is a bit nasty
+            get => int.Parse(DeviceId);
+            set => DeviceId = DeviceNumberId.ToString();
+        }
         #endregion
 
         #region Constructor
-        public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int deviceId, int timeoutMilliseconds)
+        public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int deviceNumberId, int timeoutMilliseconds)
         {
             UsbManager = usbManager;
             AndroidContext = androidContext;
             TimeoutMilliseconds = timeoutMilliseconds;
-            DeviceId = deviceId;
+            DeviceNumberId = deviceNumberId;
         }
         #endregion
 
         #region Public Methods 
-        public  void Dispose()
+        public void Dispose()
         {
             if (_IsDisposing) return;
             _IsDisposing = true;
@@ -66,7 +71,7 @@ namespace Usb.Net.Android
                 _ReadEndpoint = null;
                 _WriteEndpoint = null;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: Logging
             }
@@ -154,7 +159,7 @@ namespace Usb.Net.Android
 
                 Dispose();
 
-                _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceId);
+                _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceNumberId);
 
                 DeviceDefinition = AndroidUsbDeviceFactory.GetAndroidDeviceDefinition(_UsbDevice);
 

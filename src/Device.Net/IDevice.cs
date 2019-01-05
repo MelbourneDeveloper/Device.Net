@@ -37,5 +37,6 @@ namespace Device.Net
 
         uint? VendorId { get; }
         uint? ProductId { get; }
+        string DeviceId { get; set; }
     }
 }

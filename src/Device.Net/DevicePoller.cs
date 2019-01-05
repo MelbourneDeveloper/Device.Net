@@ -60,6 +60,8 @@ namespace Device.Net
 
                     if (!device.IsInitialized)
                     {
+                        device.DeviceId = deviceInformation.DeviceId;
+
                         //The device is not initialized so initialize it
                         await device.InitializeAsync();
 
@@ -71,7 +73,7 @@ namespace Device.Net
                 //Iterate through registered devices
                 foreach (var device in _RegisteredDevices)
                 {
-                    if (!connectedDeviceDefinitions.Any(d => d.ProductId == device.ProductId && d.VendorId == device.ProductId))
+                    if (!connectedDeviceDefinitions.Any(d => d.ProductId == device.ProductId && d.VendorId == device.VendorId))
                     {
                         if (device.IsInitialized)
                         {
