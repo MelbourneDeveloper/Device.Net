@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Timers;
 using timer = System.Timers.Timer;
@@ -48,9 +49,11 @@ namespace Device.Net
 
                     connectedVidPids.Add(vidPid);
 
-                    _RegisteredDevices.TryGetValue(vidPid, out var device);
+                    //Don't know why this is necessary but the dictionary is not using the Equals method to look for the item by key
+                    var key = _RegisteredDevices.Keys.FirstOrDefault(k => k.Equals(vidPid));
 
-                    if (device != null)
+                    var foundDevice = _RegisteredDevices.TryGetValue(key, out var device);
+                    if (foundDevice)
                     {
                         if (!await device.GetIsConnectedAsync())
                         {
@@ -127,7 +130,9 @@ namespace Device.Net
                     return false;
                 }
 
-                return vidPid.Vid == Vid && vidPid.Pid == Pid;
+                var isEqual = vidPid.Vid == Vid && vidPid.Pid == Pid;
+
+                return isEqual;
             }
 
             return false;
