@@ -14,6 +14,7 @@ namespace Hid.Net.Windows
         private FileStream _WriteFileStream;
         private SafeFileHandle _ReadSafeFileHandle;
         private SafeFileHandle _WriteSafeFileHandle;
+        private bool _IsDisposing;
         #endregion
 
         #region Protected Properties
@@ -66,7 +67,7 @@ namespace Hid.Net.Windows
             _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, ReadBufferSize, false);
             _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, WriteBufferSize, false);
 
-            _IsConnected = true;
+            IsConnected = true;
 
             RaiseConnected();
 
@@ -77,22 +78,34 @@ namespace Hid.Net.Windows
         #region Public Methods
         public override void Dispose()
         {
-            _IsConnected = false;
+            if (_IsDisposing) return;        
+            _IsDisposing = true;
 
-            _ReadFileStream?.Dispose();
-            _WriteFileStream?.Dispose();
-
-            if (_ReadSafeFileHandle != null && !_ReadSafeFileHandle.IsInvalid)
+            try
             {
-                _ReadSafeFileHandle.Dispose();
+                IsConnected = false;
+
+                _ReadFileStream?.Dispose();
+                _WriteFileStream?.Dispose();
+
+                if (_ReadSafeFileHandle != null && !_ReadSafeFileHandle.IsInvalid)
+                {
+                    _ReadSafeFileHandle.Dispose();
+                }
+
+                if (_WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid)
+                {
+                    _WriteSafeFileHandle.Dispose();
+                }
+
+                base.Dispose();
+            }
+            catch(Exception ex)
+            {
+                //TODO: Logging
             }
 
-            if (_WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid)
-            {
-                _WriteSafeFileHandle.Dispose();
-            }
-
-            base.Dispose();
+            _IsDisposing = false;
         }
 
         public override async Task InitializeAsync()

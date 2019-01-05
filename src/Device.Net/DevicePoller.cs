@@ -55,7 +55,7 @@ namespace Device.Net
                     var foundDevice = _RegisteredDevices.TryGetValue(key, out var device);
                     if (foundDevice)
                     {
-                        if (!await device.GetIsConnectedAsync())
+                        if (!device.IsConnected)
                         {
                             //The device is not initialized so initialize it
                             await device.InitializeAsync();
@@ -74,7 +74,7 @@ namespace Device.Net
                     {
                         var device = _RegisteredDevices[vidPid];
 
-                        if (await device.GetIsConnectedAsync())
+                        if (device.IsConnected)
                         {
                             //The device is no longer connected so disconnect it
                             device.Dispose();
@@ -96,7 +96,7 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public void RegisterDevice( IDevice device)
+        public void RegisterDevice(IDevice device)
         {
             if (!VendorId.HasValue && !ProductId.HasValue) throw new ArgumentNullException();
 

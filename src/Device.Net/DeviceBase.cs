@@ -42,7 +42,6 @@ namespace Device.Net
         #region Public Abstract Methods
         public abstract Task<byte[]> ReadAsync();
         public abstract Task WriteAsync(byte[] data);
-        public abstract Task<bool> GetIsConnectedAsync();
         #endregion
 
         #region Public Methods

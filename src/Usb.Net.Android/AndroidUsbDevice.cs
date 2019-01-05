@@ -26,6 +26,7 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Properties
+        public bool IsConnected => _UsbDeviceConnection != null;
         public UsbManager UsbManager { get; }
         public Context AndroidContext { get; private set; }
         public int TimeoutMilliseconds { get; }
@@ -46,11 +47,6 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Methods 
-        public override Task<bool> GetIsConnectedAsync()
-        {
-            return Task.FromResult(_UsbDeviceConnection != null);
-        }
-
         public override void Dispose()
         {
             if (_IsDisposing) return;

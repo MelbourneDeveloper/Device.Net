@@ -18,7 +18,7 @@ namespace Device.Net
         /// <summary>
         /// Checks to see if the device has been successfully connected. Note: check the implementation to see if this method is actually asking the device whether it is still connected or not
         /// </summary>
-        Task<bool> GetIsConnectedAsync();
+        bool IsConnected { get; }
 
         /// <summary>
         /// Read a page of data. Warning: this is not thread safe. WriteAndReadAsync() should be preferred.

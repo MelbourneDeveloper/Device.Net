@@ -40,11 +40,6 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Overrides
-        public override Task<bool> GetIsConnectedAsync()
-        {
-            return Task.FromResult(_ConnectedDevice != null);
-        }
-
         public override async Task<byte[]> ReadAsync()
         {
             if (_IsReading)
@@ -67,6 +62,10 @@ namespace Device.Net.UWP
             _TaskCompletionSource = new TaskCompletionSource<byte[]>();
             return await _TaskCompletionSource.Task;
         }
+        #endregion
+
+        #region Public Override Properties
+        public bool IsConnected => _ConnectedDevice != null;
         #endregion
 
         #region Public Virtual Methods
