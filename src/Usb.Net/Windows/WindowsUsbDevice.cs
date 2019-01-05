@@ -129,6 +129,7 @@ namespace Usb.Net.Windows
             _UsbInterfaces.Clear();
 
             _DeviceHandle?.Dispose();
+            _DeviceHandle = null;
 
             base.Dispose();
         }

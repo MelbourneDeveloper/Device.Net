@@ -21,7 +21,7 @@ namespace Hid.Net.Windows
         protected override string LogSection => nameof(WindowsHidDevice);
         #endregion
 
-        #region Protected Overrides
+        #region Public Overrides
         public override bool IsInitialized => _WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid;
         #endregion
 
@@ -80,7 +80,7 @@ namespace Hid.Net.Windows
         #region Public Methods
         public override void Dispose()
         {
-            if (_IsDisposing) return;        
+            if (_IsDisposing) return;
             _IsDisposing = true;
 
             try
@@ -88,19 +88,24 @@ namespace Hid.Net.Windows
                 _ReadFileStream?.Dispose();
                 _WriteFileStream?.Dispose();
 
-                if (_ReadSafeFileHandle != null && !_ReadSafeFileHandle.IsInvalid)
+                _ReadFileStream = null;
+                _WriteFileStream = null;
+
+                if (_ReadSafeFileHandle != null)
                 {
                     _ReadSafeFileHandle.Dispose();
+                    _ReadSafeFileHandle = null;
                 }
 
-                if (_WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid)
+                if (_WriteSafeFileHandle != null)
                 {
                     _WriteSafeFileHandle.Dispose();
+                    _WriteSafeFileHandle = null;
                 }
 
                 base.Dispose();
             }
-            catch(Exception ex)
+            catch (Exception)
             {
                 //TODO: Logging
             }

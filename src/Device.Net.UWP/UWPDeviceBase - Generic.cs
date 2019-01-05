@@ -79,6 +79,7 @@ namespace Device.Net.UWP
             {
 
                 if (_ConnectedDevice is IDisposable disposable) disposable.Dispose();
+                _ConnectedDevice = default(T);
                 _TaskCompletionSource?.Task?.Dispose();
 
                 base.Dispose();
