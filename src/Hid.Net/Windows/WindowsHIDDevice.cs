@@ -67,7 +67,7 @@ namespace Hid.Net.Windows
             _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, ReadBufferSize, false);
             _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, WriteBufferSize, false);
 
-            IsConnected = true;
+            IsInitialized = true;
 
             RaiseConnected();
 
@@ -83,7 +83,7 @@ namespace Hid.Net.Windows
 
             try
             {
-                IsConnected = false;
+                IsInitialized = false;
 
                 _ReadFileStream?.Dispose();
                 _WriteFileStream?.Dispose();

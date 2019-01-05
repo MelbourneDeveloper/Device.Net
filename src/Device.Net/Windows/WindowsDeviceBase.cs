@@ -14,7 +14,7 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Abstract Properties
-        public bool IsConnected { get; set; }
+        public bool IsInitialized { get; set; }
         #endregion
 
         #region Public Properties

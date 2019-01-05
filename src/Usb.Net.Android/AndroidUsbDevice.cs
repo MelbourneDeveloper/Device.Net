@@ -26,13 +26,12 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Properties
-        public bool IsConnected => _UsbDeviceConnection != null;
+        public bool IsInitialized => _UsbDeviceConnection != null;
         public UsbManager UsbManager { get; }
         public Context AndroidContext { get; private set; }
         public int TimeoutMilliseconds { get; }
         public override ushort ReadBufferSize => (ushort)_ReadEndpoint.MaxPacketSize;
         public override ushort WriteBufferSize => (ushort)_WriteEndpoint.MaxPacketSize;
-        public bool IsInitialized { get; private set; }
         public int DeviceId { get; private set; }
         #endregion
 
@@ -228,8 +227,6 @@ namespace Usb.Net.Android
                 }
 
                 Logger.Log("Hid device initialized. About to tell everyone.", null, LogSection);
-
-                IsInitialized = true;
 
                 RaiseConnected();
 

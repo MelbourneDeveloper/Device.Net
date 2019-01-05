@@ -16,9 +16,9 @@ namespace Device.Net
         event EventHandler Disconnected;
 
         /// <summary>
-        /// Checks to see if the device has been successfully connected. Note: check the implementation to see if this method is actually asking the device whether it is still connected or not
+        /// Whether or not the device has been successfully initialized
         /// </summary>
-        bool IsConnected { get; }
+        bool IsInitialized { get; }
 
         /// <summary>
         /// Read a page of data. Warning: this is not thread safe. WriteAndReadAsync() should be preferred.

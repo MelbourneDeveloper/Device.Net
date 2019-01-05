@@ -18,8 +18,8 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Overrride Properties
-        public override ushort WriteBufferSize => IsConnected ? (ushort)DeviceDefinition.WriteBufferSize : throw new Exception("Device has not been initialized");
-        public override ushort ReadBufferSize => IsConnected ? (ushort)DeviceDefinition.ReadBufferSize : throw new Exception("Device has not been initialized");
+        public override ushort WriteBufferSize => IsInitialized ? (ushort)DeviceDefinition.WriteBufferSize : throw new Exception("Device has not been initialized");
+        public override ushort ReadBufferSize => IsInitialized ? (ushort)DeviceDefinition.ReadBufferSize : throw new Exception("Device has not been initialized");
         #endregion
 
         #region Constructor
@@ -80,7 +80,7 @@ namespace Usb.Net.Windows
                 i++;
             }
 
-            IsConnected = true;
+            IsInitialized = true;
         }
         #endregion
 
@@ -122,7 +122,7 @@ namespace Usb.Net.Windows
 
         public override void Dispose()
         {
-            IsConnected = false;
+            IsInitialized = false;
 
             foreach (var usbInterface in _UsbInterfaces)
             {

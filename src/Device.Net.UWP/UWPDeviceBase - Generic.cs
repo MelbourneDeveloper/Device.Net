@@ -65,7 +65,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Override Properties
-        public bool IsConnected => _ConnectedDevice != null;
+        public bool IsInitialized => _ConnectedDevice != null;
         #endregion
 
         #region Public Virtual Methods

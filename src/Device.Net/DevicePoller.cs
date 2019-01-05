@@ -55,7 +55,7 @@ namespace Device.Net
                     var foundDevice = _RegisteredDevices.TryGetValue(key, out var device);
                     if (foundDevice)
                     {
-                        if (!device.IsConnected)
+                        if (!device.IsInitialized)
                         {
                             //The device is not initialized so initialize it
                             await device.InitializeAsync();
@@ -74,7 +74,7 @@ namespace Device.Net
                     {
                         var device = _RegisteredDevices[vidPid];
 
-                        if (device.IsConnected)
+                        if (device.IsInitialized)
                         {
                             //The device is no longer connected so disconnect it
                             device.Dispose();
