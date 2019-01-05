@@ -41,7 +41,7 @@ namespace Device.Net.UWP
 
                 foreach (var deviceInformation in deviceInformations)
                 {
-                    //foreach (var )
+                    _RegisteredDevices.TryGetValue(new VidPid { Pid = deviceInformation.ProductId, Vid = deviceInformation.VendorId }, out var device);
                 }
             }
             catch (Exception ex)
@@ -58,9 +58,9 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Methods
-        public void RegisterDevice(string vendorId, string productId, IDevice device)
+        public void RegisterDevice(uint? vendorId, uint? productId, IDevice device)
         {
-            if (string.IsNullOrEmpty(vendorId) && string.IsNullOrEmpty(productId)) throw new ArgumentNullException();
+            if (!vendorId.HasValue && !productId.HasValue) throw new ArgumentNullException();
 
             if (device == null) throw new ArgumentNullException(nameof(device));
 
@@ -80,14 +80,14 @@ namespace Device.Net.UWP
 
     internal class VidPid
     {
-        public string Vid { get; set; }
-        public string Pid { get; set; }
+        public uint? Vid { get; set; }
+        public uint? Pid { get; set; }
 
         public override bool Equals(object obj)
         {
             if (obj is VidPid vidPid)
             {
-                if (string.IsNullOrEmpty(vidPid.Pid) && string.IsNullOrEmpty(vidPid.Vid))
+                if (!vidPid.Pid.HasValue && !vidPid.Vid.HasValue)
                 {
                     return false;
                 }
