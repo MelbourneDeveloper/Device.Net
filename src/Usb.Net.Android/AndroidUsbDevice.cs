@@ -46,7 +46,7 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Methods 
-        public Task<bool> GetIsConnectedAsync()
+        public override Task<bool> GetIsConnectedAsync()
         {
             return Task.FromResult(_UsbDeviceConnection != null);
         }

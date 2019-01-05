@@ -66,7 +66,7 @@ namespace Hid.Net.Windows
             _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, ReadBufferSize, false);
             _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, WriteBufferSize, false);
 
-            IsConnected = true;
+            _IsConnected = true;
 
             RaiseConnected();
 
@@ -77,7 +77,7 @@ namespace Hid.Net.Windows
         #region Public Methods
         public override void Dispose()
         {
-            IsConnected = false;
+            _IsConnected = false;
 
             _ReadFileStream?.Dispose();
             _WriteFileStream?.Dispose();

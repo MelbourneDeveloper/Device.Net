@@ -9,9 +9,12 @@ namespace Device.Net.Windows
     /// </summary>
     public abstract class WindowsDeviceBase : DeviceBase, IDevice
     {
+        #region Protected Fields
+        protected bool _IsConnected;
+        #endregion
+
         #region Protected Properties
         protected virtual string LogSection => nameof(WindowsDeviceBase);
-        protected bool IsConnected { get; set; }
         #endregion
 
         #region Public Properties
@@ -29,13 +32,12 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Methods
-        public Task<bool> GetIsConnectedAsync()
+        public override Task<bool> GetIsConnectedAsync()
         {
-            return Task.FromResult(IsConnected);
+            return Task.FromResult(_IsConnected);
         }
 
         public abstract Task InitializeAsync();
-
         #endregion
 
         #region Public Static Methods

@@ -40,9 +40,9 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Overrides
-        public override async Task<bool> GetIsConnectedAsync()
+        public override Task<bool> GetIsConnectedAsync()
         {
-            return _ConnectedDevice != null;
+            return Task.FromResult(_ConnectedDevice != null);
         }
 
         public override async Task<byte[]> ReadAsync()
@@ -84,7 +84,7 @@ namespace Device.Net.UWP
 
                 base.Dispose();
             }
-            catch(Exception ex)
+            catch (Exception)
             {
                 //TODO: Logging
             }
