@@ -71,8 +71,6 @@ namespace Hid.Net.Windows
             _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, ReadBufferSize, false);
             _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, WriteBufferSize, false);
 
-            RaiseConnected();
-
             return true;
         }
         #endregion
@@ -85,8 +83,6 @@ namespace Hid.Net.Windows
 
             try
             {
-                var isInitialized = IsInitialized;
-
                 _ReadFileStream?.Dispose();
                 _WriteFileStream?.Dispose();
 
@@ -104,8 +100,6 @@ namespace Hid.Net.Windows
                     _WriteSafeFileHandle.Dispose();
                     _WriteSafeFileHandle = null;
                 }
-
-                if (isInitialized) RaiseDisconnected();
             }
             catch (Exception)
             {

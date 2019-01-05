@@ -88,7 +88,6 @@ namespace Usb.Net.Windows
         public override async Task InitializeAsync()
         {
             await Task.Run(Initialize);
-            RaiseConnected();
         }
 
         public override async Task<byte[]> ReadAsync()
@@ -127,8 +126,6 @@ namespace Usb.Net.Windows
 
             try
             {
-                var isInitialized = IsInitialized;
-
                 foreach (var usbInterface in _UsbInterfaces)
                 {
                     usbInterface.Dispose();
@@ -138,8 +135,6 @@ namespace Usb.Net.Windows
 
                 _DeviceHandle?.Dispose();
                 _DeviceHandle = null;
-
-                if (isInitialized) RaiseDisconnected();
             }
             catch (Exception)
             {

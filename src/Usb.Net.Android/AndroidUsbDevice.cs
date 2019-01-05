@@ -56,8 +56,6 @@ namespace Usb.Net.Android
 
             try
             {
-                var isInitialized = IsInitialized;
-
                 _UsbDeviceConnection?.Dispose();
                 _UsbDevice?.Dispose();
                 _ReadEndpoint?.Dispose();
@@ -67,8 +65,6 @@ namespace Usb.Net.Android
                 _UsbDevice = null;
                 _ReadEndpoint = null;
                 _WriteEndpoint = null;
-
-                if (isInitialized) RaiseDisconnected();
             }
             catch (Exception ex)
             {
@@ -231,8 +227,6 @@ namespace Usb.Net.Android
                 }
 
                 Logger.Log("Hid device initialized. About to tell everyone.", null, LogSection);
-
-                RaiseConnected();
 
                 return;
             }

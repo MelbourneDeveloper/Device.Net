@@ -75,7 +75,6 @@ namespace Hid.Net.UWP
             if (_ConnectedDevice != null)
             {
                 _ConnectedDevice.InputReportReceived += _HidDevice_InputReportReceived;
-                RaiseConnected();
             }
             else
             {

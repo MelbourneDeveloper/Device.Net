@@ -6,16 +6,6 @@ namespace Device.Net
     public interface IDevice : IDisposable
     {
         /// <summary>
-        /// Occurs after the device has successfully connected. Note: this can be called multiple times and will occurr every time  InitializeAsync is called successfull. 
-        /// </summary>
-        event EventHandler Connected;
-
-        /// <summary>
-        /// Placeholder. This is not currently being used. Please do not rely on this at the moment.
-        /// </summary>
-        event EventHandler Disconnected;
-
-        /// <summary>
         /// Whether or not the device has been successfully initialized
         /// </summary>
         bool IsInitialized { get; }

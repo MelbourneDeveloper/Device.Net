@@ -15,6 +15,11 @@ namespace Device.Net
         private Dictionary<VidPid, IDevice> _RegisteredDevices { get; } = new Dictionary<VidPid, IDevice>();
         #endregion
 
+        #region Events
+        public event EventHandler<DeviceEventArgs> DeviceInitialized;
+        public event EventHandler<DeviceEventArgs> DeviceDisconnected;
+        #endregion
+
         #region Public Properties
         public uint? ProductId { get; }
         public uint? VendorId { get; }
@@ -59,6 +64,9 @@ namespace Device.Net
                         {
                             //The device is not initialized so initialize it
                             await device.InitializeAsync();
+
+                            //Let listeners know a registered device was initialized
+                            DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
                         }
                     }
                     else
@@ -78,6 +86,9 @@ namespace Device.Net
                         {
                             //The device is no longer connected so disconnect it
                             device.Dispose();
+
+                            //Let listeners know a registered device was disconnected
+                            DeviceDisconnected?.Invoke(this, new DeviceEventArgs(device));
                         }
                     }
                 }
@@ -115,6 +126,18 @@ namespace Device.Net
         }
         #endregion
     }
+
+    public class DeviceEventArgs : EventArgs
+    {
+        public IDevice Device { get; }
+
+        public DeviceEventArgs(IDevice device)
+        {
+            Device = device;
+        }
+    }
+
+
 
     internal class VidPid
     {

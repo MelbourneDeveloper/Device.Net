@@ -74,9 +74,6 @@ namespace Usb.Net.UWP
                 _DefaultInPipe = _DefaultConfigurationInterface.InterruptInPipes.FirstOrDefault();
 
                 if (_DefaultOutPipe == null) throw new Exception("Could not get the default in pipe for the default USB interface");
-
-
-                RaiseConnected();
             }
             else
             {

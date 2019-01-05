@@ -24,9 +24,9 @@ namespace Usb.Net.WindowsSample
         private static async Task Poll()
         {
             var windowsDevice = new WindowsUsbDevice(@"\\?\usb#vid_1209&pid_53c1&mi_00#6&280e0b6e&0&0000#{dee824ef-729b-4a0e-9c14-b7117d33a817}");
-            windowsDevice.Connected += WindowsDevice_Connected;
-            windowsDevice.Disconnected += WindowsDevice_Disconnected;
             var devicePoller = new DevicePoller(0x1209, 0x53c1, 3000);
+            devicePoller.DeviceInitialized += DevicePoller_DeviceInitialized;
+            devicePoller.DeviceDisconnected += DevicePoller_DeviceDisconnected;
             devicePoller.RegisterDevice(windowsDevice);
 
             while (true)
@@ -35,14 +35,14 @@ namespace Usb.Net.WindowsSample
             }
         }
 
-        private static void WindowsDevice_Disconnected(object sender, EventArgs e)
+        private static void DevicePoller_DeviceDisconnected(object sender, DeviceEventArgs e)
         {
             Console.WriteLine("Disconnected");
         }
 
-        private static void WindowsDevice_Connected(object sender, EventArgs e)
+        private static void DevicePoller_DeviceInitialized(object sender, DeviceEventArgs e)
         {
-            Console.WriteLine("Connected");
+            Console.WriteLine("Initialized");
         }
 
         private static async Task Go()
