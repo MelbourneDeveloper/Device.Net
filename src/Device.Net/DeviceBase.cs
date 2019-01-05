@@ -79,7 +79,16 @@ namespace Device.Net
 
             _IsDisposing = true;
 
-            RaiseDisconnected();
+            try
+            {
+                RaiseDisconnected();
+            }
+            catch (Exception ex)
+            {
+                //TODO: Logging
+            }
+
+            _IsDisposing = false;
         }
         #endregion
     }

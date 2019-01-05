@@ -76,10 +76,20 @@ namespace Device.Net.UWP
 
             _IsDisposing = true;
 
-            if (_ConnectedDevice is IDisposable disposable) disposable.Dispose();
-            _TaskCompletionSource?.Task?.Dispose();
+            try
+            {
 
-            base.Dispose();
+                if (_ConnectedDevice is IDisposable disposable) disposable.Dispose();
+                _TaskCompletionSource?.Task?.Dispose();
+
+                base.Dispose();
+            }
+            catch(Exception ex)
+            {
+                //TODO: Logging
+            }
+
+            _IsDisposing = false;
         }
         #endregion
     }

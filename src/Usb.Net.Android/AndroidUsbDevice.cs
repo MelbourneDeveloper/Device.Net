@@ -18,6 +18,7 @@ namespace Usb.Net.Android
         private UsbEndpoint _WriteEndpoint;
         private UsbEndpoint _ReadEndpoint;
         private SemaphoreSlim _InitializingSemaphoreSlim = new SemaphoreSlim(1, 1);
+        private bool _IsDisposing;
         #endregion
 
         #region Public Constants
@@ -50,17 +51,32 @@ namespace Usb.Net.Android
             return Task.FromResult(_UsbDeviceConnection != null);
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
-            _UsbDeviceConnection?.Dispose();
-            _UsbDevice?.Dispose();
-            _ReadEndpoint?.Dispose();
-            _WriteEndpoint?.Dispose();
+            if (_IsDisposing) return;
+            _IsDisposing = true;
 
-            _UsbDeviceConnection = null;
-            _UsbDevice = null;
-            _ReadEndpoint = null;
-            _WriteEndpoint = null;
+            try
+            {
+
+                _UsbDeviceConnection?.Dispose();
+                _UsbDevice?.Dispose();
+                _ReadEndpoint?.Dispose();
+                _WriteEndpoint?.Dispose();
+
+                _UsbDeviceConnection = null;
+                _UsbDevice = null;
+                _ReadEndpoint = null;
+                _WriteEndpoint = null;
+
+                base.Dispose();
+            }
+            catch (Exception ex)
+            {
+                //TODO: Logging
+            }
+
+            _IsDisposing = false;
         }
 
         //TODO: Make async properly
