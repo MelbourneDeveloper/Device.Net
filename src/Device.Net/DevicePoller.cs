@@ -20,7 +20,7 @@ namespace Device.Net
         #endregion
 
         #region Constructor
-        public DevicePoller(uint? productId, uint? vendorId, int pollMilliseconds)
+        public DevicePoller(uint? vendorId, uint? productId, int pollMilliseconds)
         {
             _PollTimer = new timer(pollMilliseconds);
             _PollTimer.Elapsed += _PollTimer_Elapsed;
