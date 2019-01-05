@@ -29,11 +29,6 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Methods
-        public virtual void Dispose()
-        {
-            RaiseDisconnected();
-        }
-
         public Task<bool> GetIsConnectedAsync()
         {
             return Task.FromResult(IsInitialized);

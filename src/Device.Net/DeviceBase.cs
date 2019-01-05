@@ -8,6 +8,7 @@ namespace Device.Net
     {
         #region Fields
         protected SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        private bool _IsDisposing;
         #endregion
 
         #region Events
@@ -70,6 +71,15 @@ namespace Device.Net
             Array.Copy(bytes, 1, retVal, 0, length);
 
             return retVal;
+        }
+
+        public virtual void Dispose()
+        {
+            if (_IsDisposing) return;
+
+            _IsDisposing = true;
+
+            RaiseDisconnected();
         }
         #endregion
     }

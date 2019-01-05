@@ -6,6 +6,10 @@ namespace Device.Net.UWP
 {
     public abstract class UWPDeviceBase<T> : UWPDeviceBase, IDevice
     {
+        #region Fields
+        private bool _IsDisposing;
+        #endregion
+
         #region Protected Properties
         protected T _ConnectedDevice;
         #endregion
@@ -66,10 +70,16 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Virtual Methods
-        public virtual void Dispose()
+        public override void Dispose()
         {
+            if (_IsDisposing) return;
+
+            _IsDisposing = true;
+
             if (_ConnectedDevice is IDisposable disposable) disposable.Dispose();
             _TaskCompletionSource?.Task?.Dispose();
+
+            base.Dispose();
         }
         #endregion
     }
