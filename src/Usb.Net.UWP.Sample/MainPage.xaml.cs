@@ -25,40 +25,31 @@ namespace Usb.Net.UWP.Sample
         {
             Loaded -= MainPage_Loaded;
 
+
+            UWPUsbDeviceFactory.Register();
+            UWPHidDeviceFactory.Register();
+
+
             await InitializeTrezor();
         }
 
         private static async Task InitializeTrezor()
         {
-            //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPUsbDeviceFactory.Register();
+            var windowsDevice = new UWPUsbDevice(null) { VendorId = 0x1209, ProductId = 0x53c1 };
+            var devicePoller = new DevicePoller(new List<IDevice> { windowsDevice }, 3000);
+            devicePoller.DeviceDisconnected += DevicePoller_DeviceDisconnected;
+            devicePoller.DeviceInitialized += DevicePoller_DeviceInitialized;
 
-            //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPHidDeviceFactory.Register();
+        }
 
-            //Note: other custom device types could be added here
+        private static void DevicePoller_DeviceInitialized(object sender, DeviceEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("disconnected");
+        }
 
-            //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
-            var deviceDefinitions = new List<DeviceDefinition>
-            {
-                new DeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x" },
-                new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, ReadBufferSize=64, WriteBufferSize=64, Label="Trezor One Firmware 1.7.x" },
-                new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C0, ReadBufferSize=64, WriteBufferSize=64, Label="Model T" }
-            };
-
-            //Get the first available device and connect to it
-            var devices = await DeviceManager.Current.GetDevices(deviceDefinitions);
-            var trezorDevice = devices.FirstOrDefault();
-            await trezorDevice.InitializeAsync();
-
-            //Create a buffer with 3 bytes (initialize)
-            var writeBuffer = new byte[64];
-            writeBuffer[0] = 0x3f;
-            writeBuffer[1] = 0x23;
-            writeBuffer[2] = 0x23;
-
-            //Write the data to the device
-            var readBuffer = await trezorDevice.WriteAndReadAsync(writeBuffer);
+        private static void DevicePoller_DeviceDisconnected(object sender, DeviceEventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("init");
         }
     }
 }
