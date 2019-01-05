@@ -84,11 +84,11 @@ namespace Device.Net
 
                         if (device.IsInitialized)
                         {
-                            //The device is no longer connected so disconnect it
-                            device.Dispose();
-
                             //Let listeners know a registered device was disconnected
                             DeviceDisconnected?.Invoke(this, new DeviceEventArgs(device));
+
+                            //The device is no longer connected so disconnect it
+                            device.Dispose();
                         }
                     }
                 }
