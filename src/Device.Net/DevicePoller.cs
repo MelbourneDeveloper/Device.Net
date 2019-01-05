@@ -39,16 +39,51 @@ namespace Device.Net.UWP
 
                 var deviceInformations = await DeviceManager.Current.GetConnectedDeviceDefinitions(VendorId, ProductId);
 
+                var connectedVidPids = new List<VidPid>();
+
+                //Iterate through connected devices
                 foreach (var deviceInformation in deviceInformations)
                 {
-                    _RegisteredDevices.TryGetValue(new VidPid { Pid = deviceInformation.ProductId, Vid = deviceInformation.VendorId }, out var device);
+                    var vidPid = new VidPid { Pid = deviceInformation.ProductId, Vid = deviceInformation.VendorId };
+
+                    connectedVidPids.Add(vidPid);
+
+                    _RegisteredDevices.TryGetValue(vidPid, out var device);
+
+                    if (device != null)
+                    {
+                        if (!await device.GetIsConnectedAsync())
+                        {
+                            //The device is not initialized so initialize it
+                            await device.InitializeAsync();
+                        }
+                    }
+                    else
+                    {
+                        //TODO: Loggging. A device is connected but we're not worried about it...
+                    }
+                }
+
+                //Iterate through registered devices
+                foreach (var vidPid in _RegisteredDevices.Keys)
+                {
+                    if (!connectedVidPids.Contains(vidPid))
+                    {
+                        var device = _RegisteredDevices[vidPid];
+
+                        if (await device.GetIsConnectedAsync())
+                        {
+                            //The device is no longer connected so disconnect it
+                            device.Dispose();
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
                 Logger.Log("Hid polling error", ex, nameof(DevicePoller));
 
-                //Throw?
+                //TODO: What else to do here?
             }
             finally
             {
