@@ -27,7 +27,6 @@ namespace Usb.Net.WindowsSample
             var devicePoller = new DevicePoller(new List<IDevice> { windowsDevice } , 3000);
             devicePoller.DeviceInitialized += DevicePoller_DeviceInitialized;
             devicePoller.DeviceDisconnected += DevicePoller_DeviceDisconnected;
-            devicePoller.RegisterDevice(windowsDevice);
 
             while (true)
             {
