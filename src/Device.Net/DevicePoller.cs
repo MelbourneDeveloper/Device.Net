@@ -12,8 +12,11 @@ namespace Device.Net
         #region Fields
         private readonly timer _PollTimer;
         private readonly SemaphoreSlim _PollingSemaphoreSlim = new SemaphoreSlim(1, 1);
-        private List<IDevice> _RegisteredDevices { get; } = new List<IDevice>();
+        private Dictionary<DeviceDefinition, IDevice> _CreatedDevices { get; } = new Dictionary<DeviceDefinition, IDevice>();
         #endregion
+
+        public List<DeviceDefinition> DeviceDefinitions { get; } = new List<DeviceDefinition>();
+
 
         #region Events
         public event EventHandler<DeviceEventArgs> DeviceInitialized;
@@ -21,9 +24,9 @@ namespace Device.Net
         #endregion
 
         #region Constructor
-        public DevicePoller(IEnumerable<IDevice> registeredDevices, int pollMilliseconds)
+        public DevicePoller(IEnumerable<DeviceDefinition> registeredDevices, int pollMilliseconds)
         {
-            _RegisteredDevices.AddRange(registeredDevices);
+            DeviceDefinitions.AddRange(registeredDevices);
             _PollTimer = new timer(pollMilliseconds);
             _PollTimer.Elapsed += _PollTimer_Elapsed;
             _PollTimer.Start();
@@ -38,29 +41,33 @@ namespace Device.Net
                 await _PollingSemaphoreSlim.WaitAsync();
 
                 var connectedDeviceDefinitions = new List<DeviceDefinition>();
-                foreach (var vidPid in _RegisteredDevices)
+                foreach (var vidPid in DeviceDefinitions)
                 {
                     connectedDeviceDefinitions.AddRange(await DeviceManager.Current.GetConnectedDeviceDefinitions(vidPid.VendorId, vidPid.ProductId));
                 }
 
                 //Iterate through connected devices
-                foreach (var deviceInformation in connectedDeviceDefinitions)
+                foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                 {
-                    var connectedRegisteredDevices = _RegisteredDevices.Where(d => d.VendorId == deviceInformation.VendorId && d.ProductId == deviceInformation.ProductId).ToList();
-                    if (connectedRegisteredDevices.Count > 1)
+                    var deviceDefinition = DeviceDefinitions.FirstOrDefault(def => def.VendorId == connectedDeviceDefinition.VendorId && def.ProductId == connectedDeviceDefinition.ProductId && def.DeviceType == connectedDeviceDefinition.DeviceType);
+
+                    if (deviceDefinition == null) continue;
+
+                    IDevice device = null;
+                    if (_CreatedDevices.ContainsKey(deviceDefinition))
                     {
-                        //TODO: Log
-                        //More than one device with vid and pid...
-                        break;
+                        device = _CreatedDevices[deviceDefinition];
                     }
 
-                    var device = connectedRegisteredDevices.FirstOrDefault();
-
-                    if (device == null) continue;
+                    if (device == null)
+                    {
+                        device = DeviceManager.Current.GetDevice(deviceDefinition);
+                        _CreatedDevices.Add(deviceDefinition, device);
+                    }
 
                     if (!device.IsInitialized)
                     {
-                        device.DeviceId = deviceInformation.DeviceId;
+                        device.DeviceId = connectedDeviceDefinition.DeviceId;
 
                         //The device is not initialized so initialize it
                         await device.InitializeAsync();
@@ -68,12 +75,17 @@ namespace Device.Net
                         //Let listeners know a registered device was initialized
                         DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
                     }
+
                 }
 
+                var removeDefs = new List<DeviceDefinition>();
+
                 //Iterate through registered devices
-                foreach (var device in _RegisteredDevices)
+                foreach (var key in _CreatedDevices.Keys)
                 {
-                    if (!connectedDeviceDefinitions.Any(d => d.ProductId == device.ProductId && d.VendorId == device.VendorId))
+                    var device = _CreatedDevices[key];
+
+                    if (!connectedDeviceDefinitions.Any(d => d.ProductId == key.ProductId && d.VendorId == key.VendorId))
                     {
                         if (device.IsInitialized)
                         {
@@ -83,8 +95,15 @@ namespace Device.Net
 
                             //The device is no longer connected so disconnect it
                             device.Dispose();
+
+                            removeDefs.Add(key);
                         }
                     }
+                }
+
+                foreach(var removeDef in removeDefs)
+                {
+                    _CreatedDevices.Remove(removeDef);
                 }
             }
             catch (Exception ex)
@@ -101,15 +120,6 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public void RegisterDevice(IDevice device)
-        {
-            if (device == null) throw new ArgumentNullException(nameof(device));
-
-            if (_RegisteredDevices.Contains(device)) throw new Exception("Vendor/Product Id combination already registered");
-
-            _RegisteredDevices.Add(device);
-        }
-
         public void Stop()
         {
             _PollTimer.Stop();

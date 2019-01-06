@@ -85,8 +85,8 @@ namespace Usb.Net.UWP.Sample
             _TrezorDevice?.Dispose();
 
             //Nasty
-            var windowsDevice = new UWPUsbDevice(new DeviceDefinition { VendorId = 0x1209, ProductId = 0x53c1 }) { VendorId = 0x1209, ProductId = 0x53c1 };
-            var devicePoller = new DevicePoller(new List<IDevice> { windowsDevice }, 3000);
+            //TODO: Remove creating the device... There no need to create the device. It will get created anyway.
+            var devicePoller = new DevicePoller(_DeviceDefinitions, 3000);
             devicePoller.DeviceDisconnected += DevicePoller_DeviceDisconnected;
             devicePoller.DeviceInitialized += DevicePoller_DeviceInitialized;
         }

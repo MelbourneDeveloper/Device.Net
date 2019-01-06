@@ -26,6 +26,18 @@ namespace Device.Net
             return retVal;
         }
 
+        //TODO: Duplicate code here...
+        public  IDevice GetDevice(DeviceDefinition filterDeviceDefinition)
+        {
+            foreach (var deviceFactory in DeviceFactories)
+            {
+                if (filterDeviceDefinition.DeviceType.HasValue && (deviceFactory.DeviceType != filterDeviceDefinition.DeviceType)) continue;
+                return deviceFactory.GetDevice(filterDeviceDefinition);
+            }
+
+            throw new System.Exception("Couldn't get a device");
+        }
+
         public async Task<List<IDevice>> GetDevices(IList<DeviceDefinition> deviceDefinitions)
         {
             var retVal = new List<IDevice>();
