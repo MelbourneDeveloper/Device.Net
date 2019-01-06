@@ -9,5 +9,18 @@
 
     <Grid>
 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".5*"/>
+            <ColumnDefinition Width=".5*"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Content="Run On Connected Device" HorizontalAlignment="Center" Name="RunButton" Click="RunButton_Click" />
+        <Button Content="Poll For Device" Grid.Column="1" HorizontalAlignment="Center" Name="PollButton" Click="PollButton_Click" />
+
     </Grid>
 </Page>
