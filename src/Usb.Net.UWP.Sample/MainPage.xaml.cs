@@ -82,6 +82,8 @@ namespace Usb.Net.UWP.Sample
         {
             SetButtonColor(Colors.Red);
 
+            _TrezorDevice?.Dispose();
+
             //Nasty
             var windowsDevice = new UWPUsbDevice(new DeviceDefinition { VendorId = 0x1209, ProductId = 0x53c1 }) { VendorId = 0x1209, ProductId = 0x53c1 };
             var devicePoller = new DevicePoller(new List<IDevice> { windowsDevice }, 3000);
