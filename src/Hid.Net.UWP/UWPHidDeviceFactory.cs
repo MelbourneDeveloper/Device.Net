@@ -7,12 +7,14 @@ namespace Hid.Net.UWP
     {
         #region Public Override Properties
         public override DeviceType DeviceType => DeviceType.Hid;
+        protected override string VendorFilterName => "System.DeviceInterface.Hid.VendorId";
+        protected override string ProductFilterName => "System.DeviceInterface.Hid.ProductId";
         #endregion
 
         #region Protected Override Methods
         protected override string GetAqsFilter(uint? vendorId, uint? productId)
         {
-            return $"System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND System.DeviceInterface.Hid.VendorId:={vendorId} AND System.DeviceInterface.Hid.ProductId:={productId} ";
+            return $"{InterfaceEnabledPart} {GetVendorPart(vendorId)} {GetProductPart(productId)}";
         }
         #endregion
 

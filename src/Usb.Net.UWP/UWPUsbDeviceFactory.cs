@@ -6,8 +6,10 @@ namespace Usb.Net.UWP
 {
     public class UWPUsbDeviceFactory : UWPDeviceFactoryBase, IDeviceFactory
     {
-        #region Public Override Methods
+        #region Public Override Properties
         public override DeviceType DeviceType => DeviceType.Usb;
+        protected override string VendorFilterName => "System.DeviceInterface.WinUsb.UsbVendorId";
+        protected override string ProductFilterName => "System.DeviceInterface.WinUsb.UsbProductId";
         #endregion
 
         #region Protected Methods
@@ -15,15 +17,7 @@ namespace Usb.Net.UWP
         {
             //TODO: This is hard coded for WinUSB devices. Can we use other types of devices? GPS devices for example?
             var interfaceClassGuid = "System.Devices.InterfaceClassGuid:=\"{" + WindowsDeviceConstants.WinUSBGuid + "}\"";
-
-
-            string vendorPart = null;
-            if (vendorId.HasValue) vendorPart = $"AND System.DeviceInterface.WinUsb.UsbVendorId:={vendorId.Value}";
-
-            string productPart = null;
-            if (productId.HasValue) productPart = $"AND System.DeviceInterface.WinUsb.UsbProductId:={productId.Value}";
-
-            return $"{interfaceClassGuid} {InterfaceEnabledPart} {vendorPart} {productPart}";
+            return $"{interfaceClassGuid} {InterfaceEnabledPart} {GetVendorPart(vendorId)} {GetProductPart(productId)}";
         }
         #endregion
 

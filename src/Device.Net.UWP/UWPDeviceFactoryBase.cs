@@ -14,12 +14,33 @@ namespace Device.Net.UWP
         protected const string InterfaceEnabledPart = "AND System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True";
         #endregion
 
+        #region Protected Abstraction Properties
+        protected abstract string VendorFilterName { get; }
+        protected abstract string ProductFilterName { get; }
+        #endregion
+
         #region Public Abstract Properties
         public abstract DeviceType DeviceType { get; }
         #endregion
 
         #region Protected Abstract Methods
         protected abstract string GetAqsFilter(uint? vendorId, uint? productId);
+        #endregion
+
+        #region Abstraction Methods
+        protected string GetVendorPart(uint? vendorId)
+        {
+            string vendorPart = null;
+            if (vendorId.HasValue) vendorPart = $"AND {VendorFilterName}:={vendorId.Value}";
+            return vendorPart;
+        }
+
+        protected string GetProductPart(uint? productId)
+        {
+            string productPart = null;
+            if (productId.HasValue) productPart = $"AND {ProductFilterName}:={productId.Value}";
+            return productPart;
+        }
         #endregion
 
         #region Public Methods
