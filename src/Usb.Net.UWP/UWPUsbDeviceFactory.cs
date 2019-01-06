@@ -16,8 +16,6 @@ namespace Usb.Net.UWP
             //TODO: This is hard coded for WinUSB devices. Can we use other types of devices? GPS devices for example?
             var interfaceClassGuid = "System.Devices.InterfaceClassGuid:=\"{" + WindowsDeviceConstants.WinUSBGuid + "}\"";
 
-            //TODO: Should we allow enumerating devices that are defined but not connected? This is very good for situations where we need the Id of the device before it is physically connected.
-            var interfaceEnabledPart = "AND System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True";
 
             string vendorPart = null;
             if (vendorId.HasValue) vendorPart = $"AND System.DeviceInterface.WinUsb.UsbVendorId:={vendorId.Value}";
@@ -25,7 +23,7 @@ namespace Usb.Net.UWP
             string productPart = null;
             if (productId.HasValue) productPart = $"AND System.DeviceInterface.WinUsb.UsbProductId:={productId.Value}";
 
-            return $"{interfaceClassGuid} {interfaceEnabledPart} {vendorPart} {productPart}";
+            return $"{interfaceClassGuid} {InterfaceEnabledPart} {vendorPart} {productPart}";
         }
         #endregion
 

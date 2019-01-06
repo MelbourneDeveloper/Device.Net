@@ -9,10 +9,20 @@ namespace Device.Net.UWP
 {
     public abstract class UWPDeviceFactoryBase
     {
+        #region Fields
+        //TODO: Should we allow enumerating devices that are defined but not connected? This is very good for situations where we need the Id of the device before it is physically connected.
+        protected const string InterfaceEnabledPart = "AND System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True";
+        #endregion
+
+        #region Public Abstract Properties
         public abstract DeviceType DeviceType { get; }
+        #endregion
 
+        #region Protected Abstract Methods
         protected abstract string GetAqsFilter(uint? vendorId, uint? productId);
+        #endregion
 
+        #region Public Methods
         public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
         {
             var aqsFilter = GetAqsFilter(vendorId, productId);
@@ -27,5 +37,6 @@ namespace Device.Net.UWP
 
             return deviceInformationCollection.Select(d => WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(d.Id, DeviceType)).ToList();
         }
+        #endregion
     }
 }
