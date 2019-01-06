@@ -21,7 +21,7 @@
             <ColumnDefinition Width=".5*"/>
         </Grid.ColumnDefinitions>
 
-        <ProgressRing Name="TheProgressRing" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Grid.ColumnSpan="2" Grid.RowSpan="2" />
+        <ProgressRing Name="TheProgressRing" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Grid.ColumnSpan="2" Grid.RowSpan="4" />
 
         <Button Content="Run On Connected Device" HorizontalAlignment="Center" Name="RunButton" Click="RunButton_Click" />
         <Button Content="Poll For Device" Grid.Column="1" HorizontalAlignment="Center" Name="PollButton" Click="PollButton_Click" />
