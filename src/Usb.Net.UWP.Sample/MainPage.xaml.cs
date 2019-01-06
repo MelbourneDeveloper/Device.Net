@@ -3,9 +3,11 @@ using Hid.Net.UWP;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -51,15 +53,21 @@ namespace Usb.Net.UWP.Sample
         private async void DevicePoller_DeviceInitialized(object sender, DeviceEventArgs e)
         {
             _TrezorDevice = e.Device;
-             Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-              {
-                  WriteAndReadFromDevice();
-              });
+            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+             {
+                 SetButtonColor(Colors.Green);
+                 WriteAndReadFromDevice();
+             });
         }
 
         private void DevicePoller_DeviceDisconnected(object sender, DeviceEventArgs e)
         {
-            OutputBox.Text = string.Empty;
+            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                SetButtonColor(Colors.Red);
+                OutputBox.Text = string.Empty;
+            });
+
         }
 
         private async void RunButton_Click(object sender, RoutedEventArgs e)
@@ -69,11 +77,18 @@ namespace Usb.Net.UWP.Sample
 
         private void PollButton_Click(object sender, RoutedEventArgs e)
         {
+            SetButtonColor(Colors.Red);
+
             //Nasty
             var windowsDevice = new UWPUsbDevice(new DeviceDefinition { VendorId = 0x1209, ProductId = 0x53c1 }) { VendorId = 0x1209, ProductId = 0x53c1 };
             var devicePoller = new DevicePoller(new List<IDevice> { windowsDevice }, 3000);
             devicePoller.DeviceDisconnected += DevicePoller_DeviceDisconnected;
             devicePoller.DeviceInitialized += DevicePoller_DeviceInitialized;
+        }
+
+        private void SetButtonColor(Color backGroundColor)
+        {
+            PollButton.Background = new SolidColorBrush(backGroundColor);
         }
         #endregion
 
