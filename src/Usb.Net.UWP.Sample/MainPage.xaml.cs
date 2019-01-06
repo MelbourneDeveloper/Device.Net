@@ -63,37 +63,42 @@ namespace Usb.Net.UWP.Sample
         #region Private Static Methods
         private async Task InitializeTrezor()
         {
-            //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPUsbDeviceFactory.Register();
+            TheProgressRing.IsActive = true;
 
-            //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPHidDeviceFactory.Register();
-
-            //Note: other custom device types could be added here
-
-            //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
-            var deviceDefinitions = new List<DeviceDefinition>
+            try
             {
-                new DeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x" },
-                new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, ReadBufferSize=64, WriteBufferSize=64, Label="Trezor One Firmware 1.7.x" },
-                new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C0, ReadBufferSize=64, WriteBufferSize=64, Label="Model T" }
-            };
 
-            //Get the first available device and connect to it
-            var devices = await DeviceManager.Current.GetDevices(deviceDefinitions);
-            var trezorDevice = devices.FirstOrDefault();
-            await trezorDevice.InitializeAsync();
+                //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
+                var deviceDefinitions = new List<DeviceDefinition>
+                {
+                    new DeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x" },
+                    new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, ReadBufferSize=64, WriteBufferSize=64, Label="Trezor One Firmware 1.7.x" },
+                    new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C0, ReadBufferSize=64, WriteBufferSize=64, Label="Model T" }
+                };
 
-            //Create a buffer with 3 bytes (initialize)
-            var writeBuffer = new byte[64];
-            writeBuffer[0] = 0x3f;
-            writeBuffer[1] = 0x23;
-            writeBuffer[2] = 0x23;
+                //Get the first available device and connect to it
+                var devices = await DeviceManager.Current.GetDevices(deviceDefinitions);
+                var trezorDevice = devices.FirstOrDefault();
+                await trezorDevice.InitializeAsync();
 
-            //Write the data to the device
-            var readBuffer = await trezorDevice.WriteAndReadAsync(writeBuffer);
+                //Create a buffer with 3 bytes (initialize)
+                var writeBuffer = new byte[64];
+                writeBuffer[0] = 0x3f;
+                writeBuffer[1] = 0x23;
+                writeBuffer[2] = 0x23;
 
-            OutputBox.Text = string.Join(' ', readBuffer);
+                //Write the data to the device
+                var readBuffer = await trezorDevice.WriteAndReadAsync(writeBuffer);
+
+                OutputBox.Text = string.Join(' ', readBuffer);
+            }
+            catch 
+            {
+
+            }
+
+            TheProgressRing.IsActive = false;
+
         }
         #endregion
     }
