@@ -1,5 +1,6 @@
 ﻿using Device.Net;
 using Device.Net.UWP;
+using Device.Net.Windows;
 
 namespace Usb.Net.UWP
 {
@@ -12,7 +13,19 @@ namespace Usb.Net.UWP
         #region Protected Methods
         protected override string GetAqsFilter(uint? vendorId, uint? productId)
         {
-            return "System.Devices.InterfaceClassGuid:=\"{DEE824EF-729B-4A0E-9C14-B7117D33A817}\" AND System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND " + $" System.DeviceInterface.WinUsb.UsbVendorId:={vendorId.Value} AND System.DeviceInterface.WinUsb.UsbProductId:={productId.Value}";
+            //TODO: This is hard coded for WinUSB devices. Can we use other types of devices? GPS devices for example?
+            var interfaceClassGuid = "System.Devices.InterfaceClassGuid:=\"{" + WindowsDeviceConstants.WinUSBGuid + "}\"";
+
+            //TODO: Should we allow enumerating devices that are defined but not connected? This is very good for situations where we need the Id of the device before it is physically connected.
+            var interfaceEnabledPart = "AND System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True";
+
+            string vendorPart = null;
+            if (vendorId.HasValue) vendorPart = $"AND System.DeviceInterface.WinUsb.UsbVendorId:={vendorId.Value}";
+
+            string productPart = null;
+            if (productId.HasValue) productPart = $"AND System.DeviceInterface.WinUsb.UsbProductId:={productId.Value}";
+
+            return $"{interfaceClassGuid} {interfaceEnabledPart} {vendorPart} {productPart}";
         }
         #endregion
 
