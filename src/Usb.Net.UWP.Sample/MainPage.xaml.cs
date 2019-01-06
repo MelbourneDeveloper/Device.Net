@@ -62,10 +62,13 @@ namespace Usb.Net.UWP.Sample
 
         private void DevicePoller_DeviceDisconnected(object sender, DeviceEventArgs e)
         {
+            _TrezorDevice = null;
+
             Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 SetButtonColor(Colors.Red);
                 OutputBox.Text = string.Empty;
+                DevicePanel.DataContext = null;
             });
 
         }
