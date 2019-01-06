@@ -1,9 +1,9 @@
 ﻿using Device.Net;
 using Hid.Net.UWP;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -48,14 +48,18 @@ namespace Usb.Net.UWP.Sample
             UWPHidDeviceFactory.Register();
         }
 
-        private static void DevicePoller_DeviceInitialized(object sender, DeviceEventArgs e)
+        private async void DevicePoller_DeviceInitialized(object sender, DeviceEventArgs e)
         {
-            Debug.WriteLine("init");
+            _TrezorDevice = e.Device;
+             Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+              {
+                  WriteAndReadFromDevice();
+              });
         }
 
-        private static void DevicePoller_DeviceDisconnected(object sender, DeviceEventArgs e)
+        private void DevicePoller_DeviceDisconnected(object sender, DeviceEventArgs e)
         {
-            Debug.WriteLine("disconnected");
+            OutputBox.Text = string.Empty;
         }
 
         private async void RunButton_Click(object sender, RoutedEventArgs e)
@@ -65,7 +69,8 @@ namespace Usb.Net.UWP.Sample
 
         private void PollButton_Click(object sender, RoutedEventArgs e)
         {
-            var windowsDevice = new UWPUsbDevice(null) { VendorId = 0x1209, ProductId = 0x53c1 };
+            //Nasty
+            var windowsDevice = new UWPUsbDevice(new DeviceDefinition { VendorId = 0x1209, ProductId = 0x53c1 }) { VendorId = 0x1209, ProductId = 0x53c1 };
             var devicePoller = new DevicePoller(new List<IDevice> { windowsDevice }, 3000);
             devicePoller.DeviceDisconnected += DevicePoller_DeviceDisconnected;
             devicePoller.DeviceInitialized += DevicePoller_DeviceInitialized;
@@ -75,15 +80,28 @@ namespace Usb.Net.UWP.Sample
         #region Private Methods
         private async Task WriteAndReadFromDevice()
         {
-            //Create a buffer with 3 bytes (initialize)
-            var writeBuffer = new byte[64];
-            writeBuffer[0] = 0x3f;
-            writeBuffer[1] = 0x23;
-            writeBuffer[2] = 0x23;
+            TheProgressRing.IsActive = true;
 
-            //Write the data to the device
-            var readBuffer = await _TrezorDevice.WriteAndReadAsync(writeBuffer);
-            OutputBox.Text = string.Join(' ', readBuffer);
+            try
+            {
+                DevicePanel.DataContext = _TrezorDevice.DeviceDefinition;
+
+                //Create a buffer with 3 bytes (initialize)
+                var writeBuffer = new byte[64];
+                writeBuffer[0] = 0x3f;
+                writeBuffer[1] = 0x23;
+                writeBuffer[2] = 0x23;
+
+                //Write the data to the device
+                var readBuffer = await _TrezorDevice.WriteAndReadAsync(writeBuffer);
+                OutputBox.Text = string.Join(' ', readBuffer);
+            }
+            catch
+            {
+
+            }
+
+            TheProgressRing.IsActive = false;
         }
         #endregion
 
@@ -98,7 +116,6 @@ namespace Usb.Net.UWP.Sample
                 var devices = await DeviceManager.Current.GetDevices(_DeviceDefinitions);
                 _TrezorDevice = devices.FirstOrDefault();
                 await _TrezorDevice.InitializeAsync();
-                DevicePanel.DataContext = _TrezorDevice.DeviceDefinition;
                 await WriteAndReadFromDevice();
             }
             catch
