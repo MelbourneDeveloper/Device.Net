@@ -12,11 +12,12 @@ namespace Device.Net
         #region Fields
         private readonly timer _PollTimer;
         private readonly SemaphoreSlim _PollingSemaphoreSlim = new SemaphoreSlim(1, 1);
-        private Dictionary<DeviceDefinition, IDevice> _CreatedDevices { get; } = new Dictionary<DeviceDefinition, IDevice>();
+        private Dictionary<DeviceDefinition, IDevice> _CreatedDevicesByDefinition { get; } = new Dictionary<DeviceDefinition, IDevice>();
         #endregion
 
+        #region Public Properties
         public List<DeviceDefinition> DeviceDefinitions { get; } = new List<DeviceDefinition>();
-
+        #endregion
 
         #region Events
         public event EventHandler<DeviceEventArgs> DeviceInitialized;
@@ -54,15 +55,15 @@ namespace Device.Net
                     if (deviceDefinition == null) continue;
 
                     IDevice device = null;
-                    if (_CreatedDevices.ContainsKey(deviceDefinition))
+                    if (_CreatedDevicesByDefinition.ContainsKey(deviceDefinition))
                     {
-                        device = _CreatedDevices[deviceDefinition];
+                        device = _CreatedDevicesByDefinition[deviceDefinition];
                     }
 
                     if (device == null)
                     {
                         device = DeviceManager.Current.GetDevice(deviceDefinition);
-                        _CreatedDevices.Add(deviceDefinition, device);
+                        _CreatedDevicesByDefinition.Add(deviceDefinition, device);
                     }
 
                     if (!device.IsInitialized)
@@ -81,9 +82,9 @@ namespace Device.Net
                 var removeDefs = new List<DeviceDefinition>();
 
                 //Iterate through registered devices
-                foreach (var key in _CreatedDevices.Keys)
+                foreach (var key in _CreatedDevicesByDefinition.Keys)
                 {
-                    var device = _CreatedDevices[key];
+                    var device = _CreatedDevicesByDefinition[key];
 
                     if (!connectedDeviceDefinitions.Any(d => d.ProductId == key.ProductId && d.VendorId == key.VendorId))
                     {
@@ -103,7 +104,7 @@ namespace Device.Net
 
                 foreach(var removeDef in removeDefs)
                 {
-                    _CreatedDevices.Remove(removeDef);
+                    _CreatedDevicesByDefinition.Remove(removeDef);
                 }
             }
             catch (Exception ex)

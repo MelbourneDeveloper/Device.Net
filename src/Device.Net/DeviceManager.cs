@@ -27,7 +27,7 @@ namespace Device.Net
         }
 
         //TODO: Duplicate code here...
-        public  IDevice GetDevice(DeviceDefinition filterDeviceDefinition)
+        public IDevice GetDevice(DeviceDefinition filterDeviceDefinition)
         {
             foreach (var deviceFactory in DeviceFactories)
             {
@@ -64,6 +64,16 @@ namespace Device.Net
             }
 
             return retVal;
+        }
+        #endregion
+
+        #region Public Static Methods
+        public static bool DeviceDefinitionMatches(DeviceDefinition filterDevice, DeviceDefinition actualDevice)
+        {
+            return
+                (!filterDevice.VendorId.HasValue || filterDevice.VendorId == actualDevice.VendorId) &&
+                (!filterDevice.ProductId.HasValue || filterDevice.ProductId == actualDevice.ProductId) &&
+                (!filterDevice.DeviceType.HasValue || filterDevice.DeviceType == actualDevice.DeviceType);
         }
         #endregion
     }
