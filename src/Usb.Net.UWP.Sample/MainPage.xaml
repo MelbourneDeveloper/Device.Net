@@ -13,7 +13,7 @@
             <RowDefinition Height="100" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width=".5*"/>
             <ColumnDefinition Width=".5*"/>
@@ -21,6 +21,8 @@
 
         <Button Content="Run On Connected Device" HorizontalAlignment="Center" Name="RunButton" Click="RunButton_Click" />
         <Button Content="Poll For Device" Grid.Column="1" HorizontalAlignment="Center" Name="PollButton" Click="PollButton_Click" />
+
+        <TextBox IsReadOnly="True" Grid.Row="1" Grid.ColumnSpan="2" Margin="4" Name="OutputBox" />
 
     </Grid>
 </Page>

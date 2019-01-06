@@ -61,7 +61,7 @@ namespace Usb.Net.UWP.Sample
         #endregion
 
         #region Private Static Methods
-        private static async Task InitializeTrezor()
+        private async Task InitializeTrezor()
         {
             //Register the factory for creating Usb devices. This only needs to be done once.
             UWPUsbDeviceFactory.Register();
@@ -92,6 +92,8 @@ namespace Usb.Net.UWP.Sample
 
             //Write the data to the device
             var readBuffer = await trezorDevice.WriteAndReadAsync(writeBuffer);
+
+            OutputBox.Text = string.Join(' ', readBuffer);
         }
         #endregion
     }
