@@ -52,16 +52,17 @@ namespace Device.Net.UWP
 
             var deviceInformationCollection = await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask();
 
-            return deviceInformationCollection.Select(d => GetDeviceInformation(d)).ToList();
+            return deviceInformationCollection.Select(d => GetDeviceInformation(d, DeviceType)).ToList();
         }
+        #endregion
 
-        private DeviceDefinition GetDeviceInformation(wde.DeviceInformation deviceInformation)
+        #region Public Static Methods
+        public static DeviceDefinition GetDeviceInformation(wde.DeviceInformation deviceInformation, DeviceType deviceType)
         {
-            var retVal = WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(deviceInformation.Id, DeviceType);
+            var retVal = WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(deviceInformation.Id, deviceType);
 
             //foreach (var keyValuePair in deviceInformation.Properties)
             //{
-
             //    if (keyValuePair.Key == ProductNamePropertyName) retVal.ProductName = (string)keyValuePair.Value;
             //    System.Diagnostics.Debug.WriteLine($"{keyValuePair.Key} {keyValuePair.Value}");
             //}

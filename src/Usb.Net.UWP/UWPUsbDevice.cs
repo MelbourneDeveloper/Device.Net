@@ -1,4 +1,5 @@
-﻿using Device.Net.UWP;
+﻿using Device.Net;
+using Device.Net.UWP;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -29,8 +30,9 @@ namespace Usb.Net.UWP
         {
         }
 
-        public UWPUsbDevice(string deviceId) : base(deviceId)
+        public UWPUsbDevice(DeviceDefinition deviceDefinition) : base(deviceDefinition.DeviceId)
         {
+            DeviceDefinition = deviceDefinition;
         }
         #endregion
 
