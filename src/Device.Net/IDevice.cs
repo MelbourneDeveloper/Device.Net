@@ -30,13 +30,15 @@ namespace Device.Net
         /// </summary>
         Task<byte[]> WriteAndReadAsync(byte[] writeBuffer);
 
+        //TODO: All these need to go in the bin
         /// <summary>
         /// The unique identifier for the physical device. 
         /// </summary>
         string SerialNumber { get; }
-
         uint? VendorId { get; }
         uint? ProductId { get; }
         string DeviceId { get; set; }
+
+        DeviceDefinition DeviceDefinition { get; set; }
     }
 }
