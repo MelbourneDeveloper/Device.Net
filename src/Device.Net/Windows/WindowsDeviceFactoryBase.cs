@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -90,6 +91,38 @@ namespace Device.Net.Windows
         {
             return id?.ToString("X").ToLower().PadLeft(4, '0');
         }
+        private static uint GetNumberFromDeviceId(string deviceId, string searchString)
+        {
+            var indexOfSearchString = deviceId.ToLower().IndexOf(searchString);
+            string hexString = null;
+            if (indexOfSearchString > -1)
+            {
+                hexString = deviceId.Substring(indexOfSearchString + searchString.Length, 4);
+            }
+            var numberAsInteger = uint.Parse(hexString, NumberStyles.HexNumber);
+            return numberAsInteger;
+        }
         #endregion
+
+        #region Public Static Methods
+        public static DeviceDefinition GetDeviceDefinitionFromWindowsDeviceId(string deviceId, DeviceType deviceType)
+        {
+            uint? vid = null;
+            uint? pid = null;
+            try
+            {
+                vid = GetNumberFromDeviceId(deviceId, "vid_");
+                pid = GetNumberFromDeviceId(deviceId, "pid_");
+            }
+            catch (Exception)
+            {
+                //TODO: Logging
+                //We really need the Vid/Pid here for polling etc. so not sure if swallowing errors it the way to go
+            }
+
+            return new DeviceDefinition { DeviceId = deviceId, DeviceType = deviceType, VendorId = vid, ProductId = pid };
+        }
+        #endregion
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Device.Net.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,17 +36,8 @@ namespace Usb.Net.UWP
 
             //TODO: return the vid/pid if we can get it from the properties. Also read/write buffer size
 
-            var deviceIds = deviceInformationCollection.Select(GetDeviceDefinition).ToList();
+            var deviceIds = deviceInformationCollection.Select(d => WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(d.Id, DeviceType.Usb)).ToList();
             return deviceIds;
-        }
-
-        private static DeviceDefinition GetDeviceDefinition(wde.DeviceInformation d)
-        {
-            return new DeviceDefinition
-            {
-                DeviceId = d.Id,
-                DeviceType = DeviceType.Usb
-            };
         }
     }
 }
