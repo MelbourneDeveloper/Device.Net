@@ -1,16 +1,30 @@
 ﻿using Device.Net;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using wde = Windows.Devices.Enumeration;
+using Device.Net.UWP;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDeviceFactory : IDeviceFactory
+    public class UWPHidDeviceFactory : UWPDeviceFactoryBase, IDeviceFactory
     {
-        public DeviceType DeviceType => DeviceType.Hid;
+        #region Public Override Properties
+        public override DeviceType DeviceType => DeviceType.Hid;
+        #endregion
 
+        #region Protected Override Methods
+        protected override string GetAqsFilter(uint? vendorId, uint? productId)
+        {
+            return $"System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND System.DeviceInterface.Hid.VendorId:={vendorId} AND System.DeviceInterface.Hid.ProductId:={productId} ";
+        }
+        #endregion
+
+        #region Public Methods
+        public IDevice GetDevice(DeviceDefinition deviceDefinition)
+        {
+            if (deviceDefinition.DeviceType == DeviceType.Usb) return null;
+            return new UWPHidDevice(deviceDefinition.DeviceId);
+        }
+        #endregion
+
+        #region Public Static Methods
         public static void Register()
         {
             foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)
@@ -20,28 +34,6 @@ namespace Hid.Net.UWP
 
             DeviceManager.Current.DeviceFactories.Add(new UWPHidDeviceFactory());
         }
-
-        public IDevice GetDevice(DeviceDefinition deviceDefinition)
-        {
-            if (deviceDefinition.DeviceType == DeviceType.Usb) return null;
-            return new UWPHidDevice(deviceDefinition.DeviceId);
-        }
-
-        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
-        {
-            var aqsFilter = $"System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND System.DeviceInterface.Hid.VendorId:={vendorId} AND System.DeviceInterface.Hid.ProductId:={productId} ";
-
-            var deviceInformationCollection = await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask();
-
-            //foreach (var deviceInformation in deviceInformationCollection)
-            //{
-            //    System.Diagnostics.Debug.WriteLine($"{deviceInformation.Id} {string.Join(", ", deviceInformation.Properties.Select(p => p.ToString()))}");
-            //}
-
-            //TODO: return the vid/pid if we can get it from the properties. Also read/write buffer size
-
-            var deviceDefinitions = deviceInformationCollection.Select(d => new DeviceDefinition { DeviceId = d.Id, DeviceType = DeviceType.Hid }).ToList();
-            return deviceDefinitions;
-        }
+        #endregion
     }
 }
