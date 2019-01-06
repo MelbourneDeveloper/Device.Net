@@ -9,6 +9,8 @@ namespace Device.Net.UWP
 {
     public abstract class UWPDeviceFactoryBase
     {
+        //private const string ProductNamePropertyName = "System.ItemNameDisplay";
+
         #region Fields
         //TODO: Should we allow enumerating devices that are defined but not connected? This is very good for situations where we need the Id of the device before it is physically connected.
         protected const string InterfaceEnabledPart = "AND System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True";
@@ -50,13 +52,23 @@ namespace Device.Net.UWP
 
             var deviceInformationCollection = await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask();
 
-            //TODO: Use the properties to fill in the device definition stuff
-            //foreach (var deviceInformation in deviceInformationCollection)
+            return deviceInformationCollection.Select(d => GetDeviceInformation(d)).ToList();
+        }
+
+        private DeviceDefinition GetDeviceInformation(wde.DeviceInformation deviceInformation)
+        {
+            var retVal = WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(deviceInformation.Id, DeviceType);
+
+            //foreach (var keyValuePair in deviceInformation.Properties)
             //{
-            //    System.Diagnostics.Debug.WriteLine($"{deviceInformation.Id} {string.Join(", ", deviceInformation.Properties.Select(p => p.ToString()))}");
+
+            //    if (keyValuePair.Key == ProductNamePropertyName) retVal.ProductName = (string)keyValuePair.Value;
+            //    System.Diagnostics.Debug.WriteLine($"{keyValuePair.Key} {keyValuePair.Value}");
             //}
 
-            return deviceInformationCollection.Select(d => WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(d.Id, DeviceType)).ToList();
+            retVal.ProductName = deviceInformation.Name;
+
+            return retVal;
         }
         #endregion
     }
