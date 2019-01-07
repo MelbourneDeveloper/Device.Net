@@ -37,6 +37,10 @@ namespace Device.Net.Windows
         {
             if (isSuccess) return;
             var errorCode = Marshal.GetLastWin32Error();
+
+            //TODO: Loggin
+            if (errorCode == 0) return;
+
             throw new Exception($"{message}. Error code: {errorCode}");
         }
         #endregion
