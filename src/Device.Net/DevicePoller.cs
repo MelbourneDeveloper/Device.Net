@@ -50,7 +50,7 @@ namespace Device.Net
                 //Iterate through connected devices
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                 {
-                    var deviceDefinition = DeviceDefinitions.FirstOrDefault(def => def.VendorId == connectedDeviceDefinition.VendorId && def.ProductId == connectedDeviceDefinition.ProductId && def.DeviceType == connectedDeviceDefinition.DeviceType);
+                    var deviceDefinition = DeviceDefinitions.FirstOrDefault(def => DeviceManager );
 
                     if (deviceDefinition == null) continue;
 
