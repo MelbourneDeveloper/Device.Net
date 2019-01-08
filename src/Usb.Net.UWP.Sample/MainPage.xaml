@@ -24,7 +24,7 @@
         <ProgressRing Name="TheProgressRing" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"  Grid.ColumnSpan="2" Grid.RowSpan="4" />
 
         <Button Content="Run On Connected Device" HorizontalAlignment="Center" Name="RunButton" Click="RunButton_Click" />
-        <Button Content="Poll For Device" Grid.Column="1" HorizontalAlignment="Center" Name="PollButton" Click="PollButton_Click" />
+        <Button Content="Listen For Device" Grid.Column="1" HorizontalAlignment="Center" Name="PollButton" Click="StartListeningButton_Click" />
 
         <TextBlock Text="Output" FontWeight="Bold" Grid.Row="1" HorizontalAlignment="Left" Margin="4" />
         <TextBox IsReadOnly="True" Grid.Row="2" Grid.ColumnSpan="2" Margin="4" Name="OutputBox" TextWrapping="Wrap" />

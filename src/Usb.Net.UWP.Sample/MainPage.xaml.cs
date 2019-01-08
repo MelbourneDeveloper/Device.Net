@@ -1,8 +1,4 @@
-﻿using Device.Net;
-using Hid.Net.UWP;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -26,19 +22,51 @@ namespace Usb.Net.UWP.Sample
         public MainPage()
         {
             InitializeComponent();
+            _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
+            _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
         }
         #endregion
 
         #region Event Handlers
+        private void _DeviceConnectionExample_TrezorDisconnected(object sender, System.EventArgs e)
+        {
+            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                SetButtonColor(Colors.Red);
+                OutputBox.Text = string.Empty;
+                DevicePanel.DataContext = null;
+            });
+        }
 
+        private async void _DeviceConnectionExample_TrezorInitialized(object sender, System.EventArgs e)
+        {
+            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                SetButtonColor(Colors.Green);
+                DisplayDataAsync(false);
+            });
+        }
 
         private async void RunButton_Click(object sender, RoutedEventArgs e)
+        {
+            await DisplayDataAsync(true);
+        }
+
+        private void StartListeningButton_Click(object sender, RoutedEventArgs e)
+        {
+            SetButtonColor(Colors.Red);
+            _DeviceConnectionExample.StartListenting();
+        }
+        #endregion
+
+        #region Private Methods
+        private async Task DisplayDataAsync(bool initialize)
         {
             TheProgressRing.IsActive = true;
 
             try
             {
-                await _DeviceConnectionExample.InitializeTrezorAsync();
+                if (initialize) await _DeviceConnectionExample.InitializeTrezorAsync();
                 var readBuffer = _DeviceConnectionExample.WriteAndReadFromDeviceAsync();
                 DevicePanel.DataContext = _DeviceConnectionExample.TrezorDevice.DeviceDefinition;
                 OutputBox.Text = string.Join(' ', readBuffer);
@@ -50,20 +78,10 @@ namespace Usb.Net.UWP.Sample
             TheProgressRing.IsActive = false;
         }
 
-        private void PollButton_Click(object sender, RoutedEventArgs e)
-        {
-            SetButtonColor(Colors.Red);
-
-        }
-
         private void SetButtonColor(Color backGroundColor)
         {
             PollButton.Background = new SolidColorBrush(backGroundColor);
         }
         #endregion
-
-
-
-
     }
 }
