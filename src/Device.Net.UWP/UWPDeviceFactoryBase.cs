@@ -52,7 +52,9 @@ namespace Device.Net.UWP
 
             var deviceInformationCollection = await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask();
 
-            return deviceInformationCollection.Select(d => GetDeviceInformation(d, DeviceType)).ToList();
+            var deviceList = deviceInformationCollection.Select(d => GetDeviceInformation(d, DeviceType)).ToList();
+
+            return deviceList;
         }
         #endregion
 

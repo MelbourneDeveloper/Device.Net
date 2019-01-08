@@ -86,7 +86,7 @@ namespace Usb.Net.UWP.Sample
 
             //Nasty
             //TODO: Remove creating the device... There no need to create the device. It will get created anyway.
-            var devicePoller = new DevicePoller(_DeviceDefinitions, 3000);
+            var devicePoller = new DeviceListener(_DeviceDefinitions, 3000);
             devicePoller.DeviceDisconnected += DevicePoller_DeviceDisconnected;
             devicePoller.DeviceInitialized += DevicePoller_DeviceInitialized;
         }

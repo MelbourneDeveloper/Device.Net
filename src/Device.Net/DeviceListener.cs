@@ -7,7 +7,7 @@ using timer = System.Timers.Timer;
 
 namespace Device.Net
 {
-    public class DevicePoller
+    public class DeviceListener
     {
         #region Fields
         private readonly timer _PollTimer;
@@ -25,7 +25,7 @@ namespace Device.Net
         #endregion
 
         #region Constructor
-        public DevicePoller(IEnumerable<DeviceDefinition> registeredDevices, int pollMilliseconds)
+        public DeviceListener(IEnumerable<DeviceDefinition> registeredDevices, int pollMilliseconds)
         {
             DeviceDefinitions.AddRange(registeredDevices);
             _PollTimer = new timer(pollMilliseconds);
@@ -111,7 +111,7 @@ namespace Device.Net
             }
             catch (Exception ex)
             {
-                Logger.Log("Hid polling error", ex, nameof(DevicePoller));
+                Logger.Log("Hid polling error", ex, nameof(DeviceListener));
 
                 //TODO: What else to do here?
             }

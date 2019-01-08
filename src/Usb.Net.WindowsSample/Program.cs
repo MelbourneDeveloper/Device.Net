@@ -32,7 +32,7 @@ namespace Usb.Net.WindowsSample
         private static async Task Poll()
         {
             var windowsDevice = new WindowsUsbDevice(0x1209, 0x53c1);
-            var devicePoller = new DevicePoller(_DeviceDefinitions, 3000);
+            var devicePoller = new DeviceListener(_DeviceDefinitions, 3000);
             devicePoller.DeviceInitialized += DevicePoller_DeviceInitialized;
             devicePoller.DeviceDisconnected += DevicePoller_DeviceDisconnected;
 
