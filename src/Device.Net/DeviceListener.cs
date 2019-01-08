@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 using timer = System.Timers.Timer;
 
@@ -36,6 +37,13 @@ namespace Device.Net
 
         #region Event Handlers
         private async void _PollTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            await CheckForDevicesAsync();
+        }
+        #endregion
+
+        #region Private Methods
+        private async Task CheckForDevicesAsync()
         {
             try
             {
