@@ -68,7 +68,7 @@ namespace Device.Net
         #endregion
 
         #region Public Static Methods
-        public static bool DeviceDefinitionMatches(DeviceDefinition filterDevice, DeviceDefinition actualDevice)
+        public static bool IsDefinitionMatch(DeviceDefinition filterDevice, DeviceDefinition actualDevice)
         {
             return
                 (!filterDevice.VendorId.HasValue || filterDevice.VendorId == actualDevice.VendorId) &&

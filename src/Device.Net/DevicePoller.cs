@@ -50,9 +50,11 @@ namespace Device.Net
                 //Iterate through connected devices
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                 {
-                    var deviceDefinition = DeviceDefinitions.FirstOrDefault(d => DeviceManager.DeviceDefinitionMatches(d, connectedDeviceDefinition));
+                    var deviceDefinition = DeviceDefinitions.FirstOrDefault(d => DeviceManager.IsDefinitionMatch(d, connectedDeviceDefinition));
 
                     if (deviceDefinition == null) continue;
+
+                    //TODO: What to do if there are multiple?
 
                     IDevice device = null;
                     if (_CreatedDevicesByDefinition.ContainsKey(deviceDefinition))
@@ -86,7 +88,7 @@ namespace Device.Net
                 {
                     var device = _CreatedDevicesByDefinition[key];
 
-                    if (!connectedDeviceDefinitions.Any(d => d.ProductId == key.ProductId && d.VendorId == key.VendorId))
+                    if (!connectedDeviceDefinitions.Any(d => DeviceManager.IsDefinitionMatch(d, key)))
                     {
                         if (device.IsInitialized)
                         {
@@ -102,7 +104,7 @@ namespace Device.Net
                     }
                 }
 
-                foreach(var removeDef in removeDefs)
+                foreach (var removeDef in removeDefs)
                 {
                     _CreatedDevicesByDefinition.Remove(removeDef);
                 }
