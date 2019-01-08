@@ -67,7 +67,7 @@ namespace Usb.Net.UWP.Sample
             try
             {
                 if (initialize) await _DeviceConnectionExample.InitializeTrezorAsync();
-                var readBuffer = _DeviceConnectionExample.WriteAndReadFromDeviceAsync();
+                var readBuffer = await _DeviceConnectionExample.WriteAndReadFromDeviceAsync();
                 DevicePanel.DataContext = _DeviceConnectionExample.TrezorDevice.DeviceDefinition;
                 OutputBox.Text = string.Join(' ', readBuffer);
             }
