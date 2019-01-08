@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Hid.Net.UWP;
+using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -24,6 +25,13 @@ namespace Usb.Net.UWP.Sample
             InitializeComponent();
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
+
+            //Register the factory for creating Usb devices. This only needs to be done once.
+            UWPUsbDeviceFactory.Register();
+
+            //Register the factory for creating Usb devices. This only needs to be done once.
+            UWPHidDeviceFactory.Register();
+
         }
         #endregion
 

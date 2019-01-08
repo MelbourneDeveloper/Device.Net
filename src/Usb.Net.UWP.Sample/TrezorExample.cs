@@ -1,5 +1,4 @@
 ﻿using Device.Net;
-using Hid.Net.UWP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Usb.Net.UWP.Sample
 {
-    internal class TrezorExample
+    internal class TrezorExample : IDisposable
     {
         #region Fields
         //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
@@ -26,17 +25,6 @@ namespace Usb.Net.UWP.Sample
 
         #region Public Properties
         public IDevice TrezorDevice { get; private set; }
-        #endregion
-
-        #region Constructor
-        public TrezorExample()
-        {
-            //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPUsbDeviceFactory.Register();
-
-            //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPHidDeviceFactory.Register();
-        }
         #endregion
 
         #region Event Handlers
@@ -80,6 +68,11 @@ namespace Usb.Net.UWP.Sample
 
             //Write the data to the device
             return await TrezorDevice.WriteAndReadAsync(writeBuffer);
+        }
+
+        public void Dispose()
+        {
+            TrezorDevice?.Dispose();
         }
         #endregion
     }
