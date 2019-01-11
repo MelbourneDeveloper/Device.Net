@@ -12,7 +12,7 @@ namespace Device.Net
     {
         #region Fields
         private readonly timer _PollTimer;
-        private readonly SemaphoreSlim _PollingSemaphoreSlim = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _ListenSemaphoreSlim = new SemaphoreSlim(1, 1);
         private Dictionary<DeviceDefinition, IDevice> _CreatedDevicesByDefinition { get; } = new Dictionary<DeviceDefinition, IDevice>();
         #endregion
 
@@ -42,12 +42,12 @@ namespace Device.Net
         }
         #endregion
 
-        #region Private Methods
-        private async Task CheckForDevicesAsync()
+        #region Public Methods
+        public async Task CheckForDevicesAsync()
         {
             try
             {
-                await _PollingSemaphoreSlim.WaitAsync();
+                await _ListenSemaphoreSlim.WaitAsync();
 
                 var connectedDeviceDefinitions = new List<DeviceDefinition>();
                 foreach (var vidPid in DeviceDefinitions)
@@ -125,12 +125,10 @@ namespace Device.Net
             }
             finally
             {
-                _PollingSemaphoreSlim.Release();
+                _ListenSemaphoreSlim.Release();
             }
         }
-        #endregion
-
-        #region Public Methods
+  
         public void Stop()
         {
             _PollTimer.Stop();
