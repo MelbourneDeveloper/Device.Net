@@ -36,10 +36,11 @@ namespace Usb.Net.WindowsSample
             {
                 case 1:
                     await _DeviceConnectionExample.InitializeTrezorAsync();
-                    var bytes = await _DeviceConnectionExample.WriteAndReadFromDeviceAsync();
-                    DisplayData(bytes);
+                    await DisplayData();
                     break;
                 case 2:
+                    Console.Clear();
+                    DisplayWaitMessage();
                     _DeviceConnectionExample.StartListenting();
                     break;
             }
@@ -49,12 +50,15 @@ namespace Usb.Net.WindowsSample
         #region Event Handlers
         private static void _DeviceConnectionExample_TrezorDisconnected(object sender, EventArgs e)
         {
-            Console.WriteLine("Disconnected");
+            Console.Clear();
+            Console.WriteLine("Disconnnected.");
+            DisplayWaitMessage();
         }
 
         private static void _DeviceConnectionExample_TrezorInitialized(object sender, EventArgs e)
         {
-            Console.WriteLine("Initialized");
+            Console.Clear();
+            DisplayData();
         }
         #endregion
 
@@ -72,10 +76,21 @@ namespace Usb.Net.WindowsSample
             }
         }
 
+        private static async Task DisplayData()
+        {
+            var bytes = await _DeviceConnectionExample.WriteAndReadFromDeviceAsync();
+            DisplayData(bytes);
+        }
+
         private static void DisplayData(byte[] readBuffer)
         {
             Console.WriteLine(string.Join(' ', readBuffer));
             Console.ReadKey();
+        }
+
+        private static void DisplayWaitMessage()
+        {
+            Console.WriteLine("Waiting for device to be plugged in...");
         }
         #endregion
     }
