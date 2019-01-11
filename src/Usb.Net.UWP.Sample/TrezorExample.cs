@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Usb.Net.UWP.Sample
+namespace Usb.Net.Sample
 {
     internal class TrezorExample : IDisposable
     {

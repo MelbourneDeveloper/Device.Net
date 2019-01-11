@@ -1,5 +1,6 @@
 ﻿using Hid.Net.UWP;
 using System.Threading.Tasks;
+using Usb.Net.Sample;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
