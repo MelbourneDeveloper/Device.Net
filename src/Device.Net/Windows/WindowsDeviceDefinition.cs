@@ -1,6 +1,4 @@
-﻿using Device.Net;
-
-namespace Device.Net.Windows
+﻿namespace Device.Net.Windows
 {
     public class WindowsDeviceDefinition : DeviceDefinition
     {

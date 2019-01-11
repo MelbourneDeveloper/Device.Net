@@ -1,6 +1,4 @@
 ﻿using Android.Content;
-using Android.Hardware.Usb;
-using Device.Net;
 using System;
 
 namespace Usb.Net.Android

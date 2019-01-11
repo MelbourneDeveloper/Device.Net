@@ -77,8 +77,6 @@ namespace Device.Net.UWP
 
             try
             {
-                var isInitialized = IsInitialized;
-
                 if (_ConnectedDevice is IDisposable disposable) disposable.Dispose();
                 _ConnectedDevice = default(T);
                 _TaskCompletionSource?.Task?.Dispose();

@@ -232,8 +232,6 @@ namespace Usb.Net.Android
                 }
 
                 Logger.Log("Hid device initialized. About to tell everyone.", null, LogSection);
-
-                return;
             }
             catch (Exception ex)
             {

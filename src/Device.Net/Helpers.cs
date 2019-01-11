@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-namespace Device.Net
+﻿namespace Device.Net
 {
     /// <summary> 
     /// Provides helpers for all platforms. 

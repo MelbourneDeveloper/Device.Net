@@ -11,7 +11,7 @@ namespace Usb.Net.WindowsSample
     internal class Program
     {
         //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
-        private static List<DeviceDefinition> _DeviceDefinitions = new List<DeviceDefinition>
+        private static readonly List<DeviceDefinition> _DeviceDefinitions = new List<DeviceDefinition>
         {
             new DeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x" },
             new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, ReadBufferSize=64, WriteBufferSize=64, Label="Trezor One Firmware 1.7.x" },
@@ -31,7 +31,7 @@ namespace Usb.Net.WindowsSample
 
         private static async Task Poll()
         {
-            var windowsDevice = new WindowsUsbDevice(0x1209, 0x53c1);
+            new WindowsUsbDevice(0x1209, 0x53c1);
             var devicePoller = new DeviceListener(_DeviceDefinitions, 3000);
             devicePoller.DeviceInitialized += DevicePoller_DeviceInitialized;
             devicePoller.DeviceDisconnected += DevicePoller_DeviceDisconnected;
@@ -73,7 +73,7 @@ namespace Usb.Net.WindowsSample
                     //Write the data to the device and get the response
                     var readBuffer = await trezorDevice.WriteAndReadAsync(buffer);
 
-                    Console.WriteLine("All good");
+                    if (readBuffer != null && readBuffer.Length > 0) Console.WriteLine("All good");
                 }
             }
             catch (Exception ex)
