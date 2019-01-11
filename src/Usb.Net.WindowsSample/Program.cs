@@ -23,11 +23,10 @@ namespace Usb.Net.WindowsSample
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
 
-            var wait = new ManualResetEvent(false);
 
             Go(Menu());
 
-            wait.WaitOne();
+            new ManualResetEvent(false).WaitOne();
         }
 
         private static async Task Go(int menuOption)
@@ -35,8 +34,17 @@ namespace Usb.Net.WindowsSample
             switch (menuOption)
             {
                 case 1:
-                    await _DeviceConnectionExample.InitializeTrezorAsync();
-                    await DisplayDataAsync();
+                    try
+                    {
+                        await _DeviceConnectionExample.InitializeTrezorAsync();
+                        await DisplayDataAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Clear();
+                        Console.WriteLine(ex.ToString());
+                    }
+                    Console.ReadKey();
                     break;
                 case 2:
                     Console.Clear();
@@ -55,10 +63,18 @@ namespace Usb.Net.WindowsSample
             DisplayWaitMessage();
         }
 
-        private async static void _DeviceConnectionExample_TrezorInitialized(object sender, EventArgs e)
+        private static async void _DeviceConnectionExample_TrezorInitialized(object sender, EventArgs e)
         {
-            Console.Clear();
-            await DisplayDataAsync();
+            try
+            {
+                Console.Clear();
+                await DisplayDataAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.Clear();
+                Console.WriteLine(ex.ToString());
+            }
         }
         #endregion
 
@@ -68,6 +84,8 @@ namespace Usb.Net.WindowsSample
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine("Console sample. This sample demonstrates either writing to the first found connected device, or listening for a device and then writing to it. If you listen for the device, you will be able to connect and disconnect multiple times. This represents how users may actually use the device.");
+                Console.WriteLine();
                 Console.WriteLine("1. Write To Connected Device");
                 Console.WriteLine("2. Listen For Device");
                 var consoleKey = Console.ReadKey();
