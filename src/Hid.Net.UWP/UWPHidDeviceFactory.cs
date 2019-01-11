@@ -1,12 +1,17 @@
 ﻿using Device.Net;
 using Device.Net.UWP;
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Hid.Net.UWP
 {
     public class UWPHidDeviceFactory : UWPDeviceFactoryBase, IDeviceFactory
     {
+        private SemaphoreSlim _TestConnectionSemaphore = new SemaphoreSlim(1, 1);
+        private Dictionary<string, bool> _ConnectionTestedDeviceIds = new Dictionary<string, bool>();
+
         #region Public Override Properties
         public override DeviceType DeviceType => DeviceType.Hid;
         protected override string VendorFilterName => "System.DeviceInterface.Hid.VendorId";
@@ -21,16 +26,33 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Override Methods
-        //TODO: This is pretty inefficient but, not a lot can be done as far as I can tell...
-        public async override Task<bool> TestConnection(string deviceId)
+        public override async Task<bool> TestConnection(string deviceId)
         {
-            using (var hidDevice = await UWPHidDevice.GetHidDevice(deviceId).AsTask())
+            try
             {
-                var canConnect = hidDevice != null;
+                await _TestConnectionSemaphore.WaitAsync();
 
-                Logger.Log($"Testing device connection. Id: {deviceId}. Can connect: {canConnect}", null, nameof(UWPHidDeviceFactory));
+                if (_ConnectionTestedDeviceIds.TryGetValue(deviceId, out var canConnect)) return canConnect;
 
-                return canConnect;
+                using (var hidDevice = await UWPHidDevice.GetHidDevice(deviceId).AsTask())
+                {
+                    canConnect = hidDevice != null;
+
+                    Logger.Log($"Testing device connection. Id: {deviceId}. Can connect: {canConnect}", null, nameof(UWPHidDeviceFactory));
+
+                    _ConnectionTestedDeviceIds.Add(deviceId, canConnect);
+
+                    return canConnect;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log("", ex, nameof(UWPHidDeviceFactory));
+                return false;
+            }
+            finally
+            {
+                _TestConnectionSemaphore.Release();
             }
         }
         #endregion
