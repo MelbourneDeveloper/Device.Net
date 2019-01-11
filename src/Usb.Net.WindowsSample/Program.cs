@@ -36,7 +36,7 @@ namespace Usb.Net.WindowsSample
             {
                 case 1:
                     await _DeviceConnectionExample.InitializeTrezorAsync();
-                    await DisplayData();
+                    await DisplayDataAsync();
                     break;
                 case 2:
                     Console.Clear();
@@ -55,10 +55,10 @@ namespace Usb.Net.WindowsSample
             DisplayWaitMessage();
         }
 
-        private static void _DeviceConnectionExample_TrezorInitialized(object sender, EventArgs e)
+        private async static void _DeviceConnectionExample_TrezorInitialized(object sender, EventArgs e)
         {
             Console.Clear();
-            DisplayData();
+            await DisplayDataAsync();
         }
         #endregion
 
@@ -76,9 +76,11 @@ namespace Usb.Net.WindowsSample
             }
         }
 
-        private static async Task DisplayData()
+        private static async Task DisplayDataAsync()
         {
             var bytes = await _DeviceConnectionExample.WriteAndReadFromDeviceAsync();
+            Console.Clear();
+            Console.WriteLine("Device connected. Output:");
             DisplayData(bytes);
         }
 
