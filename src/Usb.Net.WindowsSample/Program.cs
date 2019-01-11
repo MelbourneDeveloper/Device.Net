@@ -1,5 +1,6 @@
 ﻿using Hid.Net.Windows;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Usb.Net.Sample;
 using Usb.Net.Windows;
@@ -22,7 +23,11 @@ namespace Usb.Net.WindowsSample
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
 
+            var wait = new ManualResetEvent(false);
+
             Go(Menu());
+
+            wait.WaitOne();
         }
 
         private static async Task Go(int menuOption)
@@ -30,9 +35,11 @@ namespace Usb.Net.WindowsSample
             switch (menuOption)
             {
                 case 1:
-                    var asdasd = await _DeviceConnectionExample.WriteAndReadFromDeviceAsync();
+                    await _DeviceConnectionExample.InitializeTrezorAsync();
+                    var bytes = await _DeviceConnectionExample.WriteAndReadFromDeviceAsync();
                     break;
                 case 2:
+                    _DeviceConnectionExample.StartListenting();
                     break;
             }
         }
@@ -62,6 +69,12 @@ namespace Usb.Net.WindowsSample
                 if (consoleKey.KeyChar == '1') return 1;
                 if (consoleKey.KeyChar == '2') return 2;
             }
+        }
+
+        private void DisplayData(byte[] readBuffer)
+        {
+            Console.WriteLine(string.Join(' ', readBuffer));
+            Console.ReadKey();
         }
         #endregion
     }
