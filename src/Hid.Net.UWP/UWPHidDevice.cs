@@ -84,7 +84,7 @@ namespace Hid.Net.UWP
 
         protected override IAsyncOperation<HidDevice> FromIdAsync(string id)
         {
-            return HidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
+            return GetHidDevice(id);
         }
         #endregion
 
@@ -123,6 +123,13 @@ namespace Hid.Net.UWP
                 }
                 throw;
             }
+        }
+        #endregion
+
+        #region Public Static Methods
+        public static IAsyncOperation<HidDevice> GetHidDevice(string id)
+        {
+            return HidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
         }
         #endregion
     }

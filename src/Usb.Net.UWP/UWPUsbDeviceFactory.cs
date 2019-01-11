@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.UWP;
 using Device.Net.Windows;
+using System.Threading.Tasks;
 
 namespace Usb.Net.UWP
 {
@@ -39,6 +40,10 @@ namespace Usb.Net.UWP
 
             DeviceManager.Current.DeviceFactories.Add(new UWPUsbDeviceFactory());
         }
+        #endregion
+
+        #region Public Overrides
+        public override Task<bool> TestConnection(string Id) => Task.FromResult(true);
         #endregion
     }
 }

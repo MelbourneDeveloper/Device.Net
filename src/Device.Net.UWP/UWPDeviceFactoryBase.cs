@@ -9,8 +9,6 @@ namespace Device.Net.UWP
 {
     public abstract class UWPDeviceFactoryBase
     {
-        //private const string ProductNamePropertyName = "System.ItemNameDisplay";
-
         #region Fields
         //TODO: Should we allow enumerating devices that are defined but not connected? This is very good for situations where we need the Id of the device before it is physically connected.
         protected const string InterfaceEnabledPart = "AND System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True";
@@ -52,10 +50,27 @@ namespace Device.Net.UWP
 
             var deviceInformationCollection = await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask();
 
-            var deviceList = deviceInformationCollection.Select(d => GetDeviceInformation(d, DeviceType)).ToList();
+            var deviceDefinitions = deviceInformationCollection.Select(d => GetDeviceInformation(d, DeviceType));
 
-            return deviceList;
+            var deviceDefinitionList = new List<DeviceDefinition>();
+
+            foreach (var deviceDefinition in deviceDefinitions)
+            {
+                if (await TestConnection(deviceDefinition.DeviceId))
+                {
+                    deviceDefinitionList.Add(deviceDefinition);
+                }
+            }
+
+            return deviceDefinitionList;
         }
+        #endregion
+
+        #region Public Abstract Methods
+        /// <summary>
+        /// Some devices display as being enable but still cannot be connected to, so run a test to make sure they can be connected before returning the definition
+        /// </summary>
+        public abstract Task<bool> TestConnection(string Id);
         #endregion
 
         #region Public Static Methods

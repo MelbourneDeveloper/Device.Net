@@ -1,5 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.UWP;
+using System;
+using System.Threading.Tasks;
 
 namespace Hid.Net.UWP
 {
@@ -15,6 +17,21 @@ namespace Hid.Net.UWP
         protected override string GetAqsFilter(uint? vendorId, uint? productId)
         {
             return $"{InterfaceEnabledPart} {GetVendorPart(vendorId)} {GetProductPart(productId)}";
+        }
+        #endregion
+
+        #region Public Override Methods
+        //TODO: This is pretty inefficient but, not a lot can be done as far as I can tell...
+        public async override Task<bool> TestConnection(string deviceId)
+        {
+            using (var hidDevice = await UWPHidDevice.GetHidDevice(deviceId).AsTask())
+            {
+                var canConnect = hidDevice != null;
+
+                Logger.Log($"Testing device connection. Id: {deviceId}. Can connect: {canConnect}", null, nameof(UWPHidDeviceFactory));
+
+                return canConnect;
+            }
         }
         #endregion
 
