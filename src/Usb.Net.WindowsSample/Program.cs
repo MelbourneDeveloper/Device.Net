@@ -1,85 +1,68 @@
-﻿using Device.Net;
-using Hid.Net.Windows;
+﻿using Hid.Net.Windows;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Usb.Net.Sample;
 using Usb.Net.Windows;
 
 namespace Usb.Net.WindowsSample
 {
     internal class Program
     {
-        //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
-        private static readonly List<DeviceDefinition> _DeviceDefinitions = new List<DeviceDefinition>
-        {
-            new DeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x" },
-            new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, ReadBufferSize=64, WriteBufferSize=64, Label="Trezor One Firmware 1.7.x" },
-            new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C0, ReadBufferSize=64, WriteBufferSize=64, Label="Model T" }
-        };
+        #region Fields
+        private static TrezorExample _DeviceConnectionExample = new TrezorExample();
+        #endregion
 
+        #region Main
         private static void Main(string[] args)
         {
             //Register the factory for creating Usb devices. This only needs to be done once.
             WindowsUsbDeviceFactory.Register();
             WindowsHidDeviceFactory.Register();
 
-            //Go();
-            Poll();
-            Console.ReadLine();
+            _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
+            _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
+
+            Go(Menu());
         }
 
-        private static async Task Poll()
+        private static async Task Go(int menuOption)
         {
-            new WindowsUsbDevice(0x1209, 0x53c1);
-            var devicePoller = new DeviceListener(_DeviceDefinitions, 3000);
-            devicePoller.DeviceInitialized += DevicePoller_DeviceInitialized;
-            devicePoller.DeviceDisconnected += DevicePoller_DeviceDisconnected;
-
-            while (true)
+            switch (menuOption)
             {
-                await Task.Delay(1000);
+                case 1:
+                    var asdasd = await _DeviceConnectionExample.WriteAndReadFromDeviceAsync();
+                    break;
+                case 2:
+                    break;
             }
         }
+        #endregion
 
-        private static void DevicePoller_DeviceDisconnected(object sender, DeviceEventArgs e)
+        #region Event Handlers
+        private static void _DeviceConnectionExample_TrezorDisconnected(object sender, EventArgs e)
         {
             Console.WriteLine("Disconnected");
         }
 
-        private static void DevicePoller_DeviceInitialized(object sender, DeviceEventArgs e)
+        private static void _DeviceConnectionExample_TrezorInitialized(object sender, EventArgs e)
         {
             Console.WriteLine("Initialized");
         }
+        #endregion
 
-        private static async Task Go()
+        #region Private Methods
+        private static int Menu()
         {
-            try
+            while (true)
             {
-                //Note: other custom device types could be added here
-
-                //Get the first available device and connect to it
-                var devices = await DeviceManager.Current.GetDevices(_DeviceDefinitions);
-                using (var trezorDevice = devices.FirstOrDefault())
-                {
-                    await trezorDevice.InitializeAsync();
-
-                    //Create a buffer with 3 bytes (initialize)
-                    var buffer = new byte[64];
-                    buffer[0] = 0x3f;
-                    buffer[1] = 0x23;
-                    buffer[2] = 0x23;
-
-                    //Write the data to the device and get the response
-                    var readBuffer = await trezorDevice.WriteAndReadAsync(buffer);
-
-                    if (readBuffer != null && readBuffer.Length > 0) Console.WriteLine("All good");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
+                Console.Clear();
+                Console.WriteLine("1. Write To Connected Device");
+                Console.WriteLine("2. Listen For Device");
+                var consoleKey = Console.ReadKey();
+                if (consoleKey.KeyChar == '1') return 1;
+                if (consoleKey.KeyChar == '2') return 2;
             }
         }
+        #endregion
     }
 }
