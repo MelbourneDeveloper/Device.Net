@@ -37,6 +37,7 @@ namespace Usb.Net.WindowsSample
                 case 1:
                     await _DeviceConnectionExample.InitializeTrezorAsync();
                     var bytes = await _DeviceConnectionExample.WriteAndReadFromDeviceAsync();
+                    DisplayData(bytes);
                     break;
                 case 2:
                     _DeviceConnectionExample.StartListenting();
@@ -71,7 +72,7 @@ namespace Usb.Net.WindowsSample
             }
         }
 
-        private void DisplayData(byte[] readBuffer)
+        private static void DisplayData(byte[] readBuffer)
         {
             Console.WriteLine(string.Join(' ', readBuffer));
             Console.ReadKey();
