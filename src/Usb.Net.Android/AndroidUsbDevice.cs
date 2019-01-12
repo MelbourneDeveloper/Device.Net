@@ -38,8 +38,14 @@ namespace Usb.Net.Android
         public int DeviceNumberId
         {
             //TODO: this is a bit nasty
-            get => int.Parse(DeviceId);
-            set => DeviceId = DeviceNumberId.ToString();
+            get
+            {
+                if (string.IsNullOrEmpty(DeviceId)) throw new Exception($"Tried to get {nameof(DeviceNumberId)} but the {nameof(DeviceId)} was empty");
+
+                return int.Parse(DeviceId);
+            }
+
+            set => DeviceId = value.ToString();
         }
         #endregion
 
