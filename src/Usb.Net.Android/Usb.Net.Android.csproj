@@ -45,8 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AndroidUsbDeviceFactory.cs" />
-    <Compile Include="UsbDeviceAttachedReceiver.cs" />
-    <Compile Include="UsbDeviceDetachedReceiver.cs" />
+    <Compile Include="UsbDeviceBroadcastReceiver.cs" />
     <Compile Include="UsbPermissionBroadcastReceiver.cs" />
     <Compile Include="AndroidUsbDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
