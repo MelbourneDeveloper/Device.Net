@@ -44,9 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeviceManager.cs" />
-    <Compile Include="UsbDeviceAttachedReceiver.cs" />
-    <Compile Include="UsbDeviceDetachedReceiver.cs" />
+    <Compile Include="AndroidUsbDeviceFactory.cs" />
+    <Compile Include="UsbDeviceBroadcastReceiver.cs" />
     <Compile Include="UsbPermissionBroadcastReceiver.cs" />
     <Compile Include="AndroidUsbDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

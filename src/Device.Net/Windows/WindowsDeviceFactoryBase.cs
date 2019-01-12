@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
+        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(DeviceDefinition deviceDefinition)
         {
             return await Task.Run<IEnumerable<DeviceDefinition>>(() =>
             {
@@ -45,8 +46,8 @@ namespace Device.Net.Windows
 
                 var i = -1;
 
-                var productIdHex = GetHex(productId);
-                var vendorHex = GetHex(vendorId);
+                var productIdHex = GetHex(deviceDefinition.ProductId);
+                var vendorHex = GetHex(deviceDefinition.VendorId);
 
                 while (true)
                 {
@@ -68,14 +69,16 @@ namespace Device.Net.Windows
                     WindowsDeviceBase.HandleError(isSuccess, "Could not get device interface detail");
 
                     //Note this is a bit nasty but we can filter Vid and Pid this way I think...
-                    if (vendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(vendorHex)) continue;
-                    if (productId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(productIdHex)) continue;
+                    if (deviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(vendorHex)) continue;
+                    if (deviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(productIdHex)) continue;
 
-                    var deviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
+                    var connectedDeviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
 
-                    if (deviceDefinition == null) continue;
+                    if (connectedDeviceDefinition == null) continue;
 
-                    deviceDefinitions.Add(deviceDefinition);
+                    if (!DeviceManager.IsDefinitionMatch(deviceDefinition, connectedDeviceDefinition)) continue;
+
+                    deviceDefinitions.Add(connectedDeviceDefinition);
                 }
 
                 APICalls.SetupDiDestroyDeviceInfoList(devicesHandle);
@@ -90,6 +93,38 @@ namespace Device.Net.Windows
         {
             return id?.ToString("X").ToLower().PadLeft(4, '0');
         }
+        private static uint GetNumberFromDeviceId(string deviceId, string searchString)
+        {
+            var indexOfSearchString = deviceId.ToLower().IndexOf(searchString);
+            string hexString = null;
+            if (indexOfSearchString > -1)
+            {
+                hexString = deviceId.Substring(indexOfSearchString + searchString.Length, 4);
+            }
+            var numberAsInteger = uint.Parse(hexString, NumberStyles.HexNumber);
+            return numberAsInteger;
+        }
         #endregion
+
+        #region Public Static Methods
+        public static DeviceDefinition GetDeviceDefinitionFromWindowsDeviceId(string deviceId, DeviceType deviceType)
+        {
+            uint? vid = null;
+            uint? pid = null;
+            try
+            {
+                vid = GetNumberFromDeviceId(deviceId, "vid_");
+                pid = GetNumberFromDeviceId(deviceId, "pid_");
+            }
+            catch (Exception)
+            {
+                //TODO: Logging
+                //We really need the Vid/Pid here for polling etc. so not sure if swallowing errors it the way to go
+            }
+
+            return new DeviceDefinition(deviceId) { DeviceType = deviceType, VendorId = vid, ProductId = pid };
+        }
+        #endregion
+
     }
 }

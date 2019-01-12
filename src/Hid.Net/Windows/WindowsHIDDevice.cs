@@ -7,17 +7,22 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
-    public class WindowsHidDevice : WindowsDeviceBase
+    public class WindowsHidDevice : WindowsDeviceBase, IDevice
     {
         #region Fields
         private FileStream _ReadFileStream;
         private FileStream _WriteFileStream;
         private SafeFileHandle _ReadSafeFileHandle;
         private SafeFileHandle _WriteSafeFileHandle;
+        private bool _IsDisposing;
         #endregion
 
         #region Protected Properties
         protected override string LogSection => nameof(WindowsHidDevice);
+        #endregion
+
+        #region Public Overrides
+        public override bool IsInitialized => _WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid;
         #endregion
 
         #region Public Overrides
@@ -66,33 +71,42 @@ namespace Hid.Net.Windows
             _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, ReadBufferSize, false);
             _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, WriteBufferSize, false);
 
-            IsInitialized = true;
-
-            RaiseConnected();
-
             return true;
         }
         #endregion
 
         #region Public Methods
-        public override void Dispose()
+        public void Dispose()
         {
-            IsInitialized = false;
+            if (_IsDisposing) return;
+            _IsDisposing = true;
 
-            _ReadFileStream?.Dispose();
-            _WriteFileStream?.Dispose();
-
-            if (_ReadSafeFileHandle != null && !_ReadSafeFileHandle.IsInvalid)
+            try
             {
-                _ReadSafeFileHandle.Dispose();
+                _ReadFileStream?.Dispose();
+                _WriteFileStream?.Dispose();
+
+                _ReadFileStream = null;
+                _WriteFileStream = null;
+
+                if (_ReadSafeFileHandle != null)
+                {
+                    _ReadSafeFileHandle.Dispose();
+                    _ReadSafeFileHandle = null;
+                }
+
+                if (_WriteSafeFileHandle != null)
+                {
+                    _WriteSafeFileHandle.Dispose();
+                    _WriteSafeFileHandle = null;
+                }
+            }
+            catch (Exception)
+            {
+                //TODO: Logging
             }
 
-            if (_WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid)
-            {
-                _WriteSafeFileHandle.Dispose();
-            }
-
-            base.Dispose();
+            _IsDisposing = false;
         }
 
         public override async Task InitializeAsync()

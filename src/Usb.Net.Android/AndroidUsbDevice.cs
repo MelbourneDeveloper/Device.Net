@@ -5,6 +5,7 @@ using Java.Nio;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Usb.Net.Android
@@ -16,11 +17,16 @@ namespace Usb.Net.Android
         private UsbDevice _UsbDevice;
         private UsbEndpoint _WriteEndpoint;
         private UsbEndpoint _ReadEndpoint;
-        private bool _IsInitializing;
+        private SemaphoreSlim _InitializingSemaphoreSlim = new SemaphoreSlim(1, 1);
+        private bool _IsDisposing;
         #endregion
 
         #region Public Constants
         public const string LogSection = "AndroidHidDevice";
+        #endregion
+
+        #region Public Override Properties
+        public override bool IsInitialized => _UsbDeviceConnection != null;
         #endregion
 
         #region Public Properties
@@ -29,69 +35,54 @@ namespace Usb.Net.Android
         public int TimeoutMilliseconds { get; }
         public override ushort ReadBufferSize => (ushort)_ReadEndpoint.MaxPacketSize;
         public override ushort WriteBufferSize => (ushort)_WriteEndpoint.MaxPacketSize;
-        public int VendorId { get; }
-        public int ProductId { get; }
-        public bool IsInitialized { get; private set; }
+        public int DeviceNumberId
+        {
+            //TODO: this is a bit nasty
+            get
+            {
+                if (string.IsNullOrEmpty(DeviceId)) throw new Exception($"Tried to get {nameof(DeviceNumberId)} but the {nameof(DeviceId)} was empty");
+
+                return int.Parse(DeviceId);
+            }
+
+            set => DeviceId = value.ToString();
+        }
         #endregion
 
         #region Constructor
-        public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int timeoutMilliseconds, int vendorId, int productId)
+        public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int deviceNumberId, int timeoutMilliseconds)
         {
             UsbManager = usbManager;
             AndroidContext = androidContext;
             TimeoutMilliseconds = timeoutMilliseconds;
-            VendorId = vendorId;
-            ProductId = productId;
-
-            //TODO: Remove this. The device needs to be initialized properly
-            //Check to see if the device is connected asynchronously.
-            CheckForDeviceAsync();
+            DeviceNumberId = deviceNumberId;
         }
         #endregion
 
         #region Public Methods 
-
-        public async Task<bool> GetIsConnectedAsync()
-        {
-            try
-            {
-                if (_UsbDeviceConnection == null)
-                {
-                    Logger.Log($"{nameof(_UsbDeviceConnection)} is null", null, LogSection);
-
-                    await CheckForDeviceAsync();
-
-                    return _UsbDeviceConnection != null;
-                }
-
-                Logger.Log("Android Hid device is connected", null, LogSection);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Error getting IsConnected on Android device", ex, LogSection);
-                throw;
-            }
-        }
-
-        public async Task UsbDeviceAttached()
-        {
-            Logger.Log("Device attached", null, LogSection);
-            await CheckForDeviceAsync();
-        }
-
-        public async Task UsbDeviceDetached()
-        {
-            Logger.Log("Device detached", null, LogSection);
-            await CheckForDeviceAsync();
-        }
-
         public void Dispose()
         {
-            _UsbDeviceConnection?.Dispose();
-            _UsbDevice?.Dispose();
-            _ReadEndpoint?.Dispose();
-            _WriteEndpoint?.Dispose();
+            if (_IsDisposing) return;
+            _IsDisposing = true;
+
+            try
+            {
+                _UsbDeviceConnection?.Dispose();
+                _UsbDevice?.Dispose();
+                _ReadEndpoint?.Dispose();
+                _WriteEndpoint?.Dispose();
+
+                _UsbDeviceConnection = null;
+                _UsbDevice = null;
+                _ReadEndpoint = null;
+                _WriteEndpoint = null;
+            }
+            catch (Exception)
+            {
+                //TODO: Logging
+            }
+
+            _IsDisposing = false;
         }
 
         //TODO: Make async properly
@@ -126,7 +117,7 @@ namespace Usb.Net.Android
         }
 
         //TODO: Perhaps we should implement Batch Begin/Complete so that the UsbRequest is not created again and again. This will be expensive
-        public  override async Task WriteAsync(byte[] data)
+        public override async Task WriteAsync(byte[] data)
         {
             try
             {
@@ -149,36 +140,6 @@ namespace Usb.Net.Android
         #endregion
 
         #region Private  Methods
-
-        private async Task CheckForDeviceAsync()
-        {
-            var devices = UsbManager.DeviceList.Select(kvp => kvp.Value).ToList();
-
-            Logger.Log($"Connected devices: {string.Join(",", devices.Select(d => d.VendorId))}.", null, LogSection);
-
-            _UsbDevice?.Dispose();
-            _UsbDevice = devices.FirstOrDefault(d => d.VendorId == VendorId && d.ProductId == ProductId);
-
-            if (_UsbDevice != null)
-            {
-                if (_UsbDeviceConnection == null)
-                {
-                    Logger.Log("Initializing Android Hid device", null, LogSection);
-                    await InitializeAsync();
-                }
-            }
-            else
-            {
-                var wasConnected = _UsbDeviceConnection != null;
-                _UsbDeviceConnection?.Dispose();
-                _UsbDeviceConnection = null;
-                if (wasConnected)
-                {
-                    RaiseDisconnected();;
-                }
-            }
-        }
-
         private Task<bool?> RequestPermissionAsync()
         {
             Logger.Log("Requesting USB permission", null, LogSection);
@@ -198,18 +159,20 @@ namespace Usb.Net.Android
 
         public async Task InitializeAsync()
         {
-            //TODO: Use a semaphore lock here
-            if (_IsInitializing)
-            {
-                return;
-            }
-
-            _IsInitializing = true;
-
             try
             {
-                //TODO:
-                //Dispose();
+                await _InitializingSemaphoreSlim.WaitAsync();
+
+                Dispose();
+
+                _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceNumberId);
+
+                DeviceDefinition = AndroidUsbDeviceFactory.GetAndroidDeviceDefinition(_UsbDevice);
+
+                if (_UsbDevice == null)
+                {
+                    throw new Exception($"The device {DeviceId} is not connected to the system");
+                }
 
                 var isPermissionGranted = await RequestPermissionAsync();
                 if (!isPermissionGranted.HasValue)
@@ -222,6 +185,7 @@ namespace Usb.Net.Android
                     throw new Exception("The user did not give the permission to access the device");
                 }
 
+                //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
                 var usbInterface = _UsbDevice.GetInterface(0);
 
                 //TODO: This selection stuff needs to be moved up higher. The constructor should take these arguments
@@ -274,19 +238,16 @@ namespace Usb.Net.Android
                 }
 
                 Logger.Log("Hid device initialized. About to tell everyone.", null, LogSection);
-
-                IsInitialized = true;
-
-                RaiseConnected();
-
-                return;
             }
             catch (Exception ex)
             {
                 Logger.Log("Error initializing Hid Device", ex, LogSection);
+                throw;
             }
-
-            _IsInitializing = false;
+            finally
+            {
+                _InitializingSemaphoreSlim.Release();
+            }
         }
         #endregion
     }

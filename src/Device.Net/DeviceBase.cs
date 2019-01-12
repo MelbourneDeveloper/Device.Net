@@ -8,33 +8,22 @@ namespace Device.Net
     {
         #region Fields
         protected SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
-        #endregion
-
-        #region Events
-        public event EventHandler Connected;
-        public event EventHandler Disconnected;
+        private readonly bool _IsDisposing;
         #endregion
 
         #region Public Abstract Properties
         public abstract ushort WriteBufferSize { get; }
         public abstract ushort ReadBufferSize { get; }
+        public abstract bool IsInitialized { get; }
         #endregion
 
         #region Public Properties
         public ITracer Tracer { get; set; }
-        public DeviceDefinition DeviceDefinition { get; protected set; }
-        #endregion
-
-        #region Protected Methods
-        protected void RaiseConnected()
-        {
-            Connected?.Invoke(this, new EventArgs());
-        }
-
-        protected void RaiseDisconnected()
-        {
-            Disconnected?.Invoke(this, new EventArgs());
-        }
+        public DeviceDefinition DeviceDefinition { get; set; }
+        public string SerialNumber => string.IsNullOrEmpty(DeviceDefinition?.SerialNumber) ? throw new Exception("Device Definition does not exist or Serial Number was not obtained") : DeviceDefinition?.SerialNumber;
+        public uint? VendorId { get; set; }
+        public uint? ProductId { get; set; }
+        public string DeviceId { get; set; }
         #endregion
 
         #region Public Abstract Methods

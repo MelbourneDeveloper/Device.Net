@@ -13,14 +13,13 @@ namespace Usb.Net.Android
         /// Just used as a filter for the UsbPermissionBroadcastReceiver
         /// </summary>
         private const string RequestUsbIntentAction = nameof(RequestUsbIntentAction);
-        private bool? _IsPermissionGranted;
         private UsbManager _Manager;
         private UsbDevice _Device;
         private Context _Context;
         #endregion
 
         #region Public Properties
-        public bool? IsPermissionGranted => _IsPermissionGranted;
+        public bool? IsPermissionGranted { get; private set; }
         #endregion
 
         #region Events
@@ -48,9 +47,9 @@ namespace Usb.Net.Android
         #region Overrides 
         public override void OnReceive(Context context, Intent intent)
         {
-            _IsPermissionGranted = intent.GetBooleanExtra(UsbManager.ExtraPermissionGranted, false);
+            IsPermissionGranted = intent.GetBooleanExtra(UsbManager.ExtraPermissionGranted, false);
 
-            Logger.Log($"USB permission broadcast received. Result: {_IsPermissionGranted}", null, AndroidUsbDevice.LogSection);
+            Logger.Log($"USB permission broadcast received. Result: {IsPermissionGranted}", null, AndroidUsbDevice.LogSection);
 
             context.UnregisterReceiver(this);
             Received?.Invoke(this, new EventArgs());

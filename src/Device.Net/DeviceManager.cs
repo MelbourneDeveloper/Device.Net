@@ -15,15 +15,27 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
+        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(DeviceDefinition deviceDefinition)
         {
             var retVal = new List<DeviceDefinition>();
             foreach (var deviceFactory in DeviceFactories)
             {
-                retVal.AddRange(await deviceFactory.GetConnectedDeviceDefinitions(vendorId, productId));
+                retVal.AddRange(await deviceFactory.GetConnectedDeviceDefinitions(deviceDefinition));
             }
 
             return retVal;
+        }
+
+        //TODO: Duplicate code here...
+        public IDevice GetDevice(DeviceDefinition filterDeviceDefinition)
+        {
+            foreach (var deviceFactory in DeviceFactories)
+            {
+                if (filterDeviceDefinition.DeviceType.HasValue && (deviceFactory.DeviceType != filterDeviceDefinition.DeviceType)) continue;
+                return deviceFactory.GetDevice(filterDeviceDefinition);
+            }
+
+            throw new System.Exception("Couldn't get a device");
         }
 
         public async Task<List<IDevice>> GetDevices(IList<DeviceDefinition> deviceDefinitions)
@@ -36,7 +48,7 @@ namespace Device.Net
                 {
                     if (filterDeviceDefinition.DeviceType.HasValue && (deviceFactory.DeviceType != filterDeviceDefinition.DeviceType)) continue;
 
-                    var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitions(filterDeviceDefinition.VendorId, filterDeviceDefinition.ProductId);
+                    var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitions(filterDeviceDefinition);
                     retVal.AddRange
                     (
                         connectedDeviceDefinitions.Select
@@ -52,6 +64,17 @@ namespace Device.Net
             }
 
             return retVal;
+        }
+        #endregion
+
+        #region Public Static Methods
+        public static bool IsDefinitionMatch(DeviceDefinition filterDevice, DeviceDefinition actualDevice)
+        {
+            return
+                (!filterDevice.VendorId.HasValue || filterDevice.VendorId == actualDevice.VendorId) &&
+                (!filterDevice.ProductId.HasValue || filterDevice.ProductId == actualDevice.ProductId) &&
+                (!filterDevice.DeviceType.HasValue || filterDevice.DeviceType == actualDevice.DeviceType) &&
+                (!filterDevice.UsagePage.HasValue || filterDevice.UsagePage == actualDevice.UsagePage);
         }
         #endregion
     }
