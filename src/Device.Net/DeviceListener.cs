@@ -26,12 +26,20 @@ namespace Device.Net
         #endregion
 
         #region Constructor
-        public DeviceListener(IEnumerable<DeviceDefinition> registeredDevices, int pollMilliseconds)
+        /// <summary>
+        /// Handles connecting to and disconnecting from a set of potential devices by their definition
+        /// </summary>
+        /// <param name="registeredDevices">Device definitions to connect to and disconnect from</param>
+        /// <param name="pollMilliseconds">Poll interval in milliseconds, or null if checking is called externally</param>
+        public DeviceListener(IEnumerable<DeviceDefinition> registeredDevices, int? pollMilliseconds)
         {
             DeviceDefinitions.AddRange(registeredDevices);
-            _PollTimer = new timer(pollMilliseconds);
-            _PollTimer.Elapsed += _PollTimer_Elapsed;
-            _PollTimer.Start();
+            if (pollMilliseconds.HasValue)
+            {
+                _PollTimer = new timer(pollMilliseconds.Value);
+                _PollTimer.Elapsed += _PollTimer_Elapsed;
+                _PollTimer.Start();
+            }
         }
         #endregion
 
