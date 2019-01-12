@@ -31,8 +31,6 @@ namespace Device.Net
         Task<byte[]> WriteAndReadAsync(byte[] writeBuffer);
 
 
-        uint? VendorId { get; }
-        uint? ProductId { get; }
         string DeviceId { get; set; }
 
         DeviceDefinition DeviceDefinition { get; set; }

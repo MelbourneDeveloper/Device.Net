@@ -20,8 +20,6 @@ namespace Device.Net
         #region Public Properties
         public ITracer Tracer { get; set; }
         public DeviceDefinition DeviceDefinition { get; set; }
-        public uint? VendorId { get; set; }
-        public uint? ProductId { get; set; }
         public string DeviceId { get; set; }
         #endregion
 
