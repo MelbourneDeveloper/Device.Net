@@ -120,7 +120,7 @@ namespace Device.Net.Windows
                 //We really need the Vid/Pid here for polling etc. so not sure if swallowing errors it the way to go
             }
 
-            return new DeviceDefinition { DeviceId = deviceId, DeviceType = deviceType, VendorId = vid, ProductId = pid };
+            return new DeviceDefinition(deviceId) { DeviceType = deviceType, VendorId = vid, ProductId = pid };
         }
         #endregion
 

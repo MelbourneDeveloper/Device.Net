@@ -152,7 +152,7 @@ namespace Usb.Net.Windows
         #region Private Static Methods
         private static WindowsDeviceDefinition GetDeviceDefinition(SafeFileHandle defaultInterfaceHandle, string deviceId)
         {
-            var deviceDefinition = new WindowsDeviceDefinition { DeviceType = DeviceType.Usb, DeviceId = deviceId };
+            var deviceDefinition = new WindowsDeviceDefinition(deviceId) { DeviceType = DeviceType.Usb };
 
             var bufferLength = (uint)Marshal.SizeOf(typeof(USB_DEVICE_DESCRIPTOR));
             var isSuccess2 = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, WinUsbApiCalls.EnglishLanguageID, out var _UsbDeviceDescriptor, bufferLength, out var lengthTransferred);

@@ -41,7 +41,7 @@ namespace Device.Net
         {
             if (!int.TryParse(deviceDefinition.DeviceId, out var deviceId))
             {
-                throw new Exception($"The device Id {deviceDefinition.DeviceId} is not a valid integer");
+                throw new Exception($"The device Id '{deviceDefinition.DeviceId}' is not a valid integer");
             }
 
             return new AndroidUsbDevice(UsbManager, Context, deviceId, 3000);
@@ -51,12 +51,14 @@ namespace Device.Net
         #region Public Static Methods
         public static DeviceDefinition GetAndroidDeviceDefinition(UsbDevice usbDevice)
         {
-            return new DeviceDefinition
+            var deviceId = usbDevice.DeviceId.ToString();
+            Logger.Log($"Found device: {usbDevice.ProductName} Id: {deviceId}", null, nameof(AndroidUsbDeviceFactory));
+
+            return new DeviceDefinition(deviceId)
             {
                 ProductName = usbDevice.ProductName,
                 Manufacturer = usbDevice.ManufacturerName,
                 SerialNumber = usbDevice.SerialNumber,
-                DeviceId = usbDevice.DeviceId.ToString(),
                 ProductId = (uint)usbDevice.ProductId,
                 VendorId = (uint)usbDevice.VendorId,
                 DeviceType = DeviceType.Usb

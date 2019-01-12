@@ -41,9 +41,8 @@ namespace Hid.Net.Windows
                 var serialNumber = GetSerialNumber(safeFileHandle);
                 var product = GetProduct(safeFileHandle);
 
-                return new WindowsDeviceDefinition
+                return new WindowsDeviceDefinition(deviceId)
                 {
-                    DeviceId = deviceId,
                     WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
                     ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,
                     Manufacturer = manufacturer,
@@ -57,7 +56,7 @@ namespace Hid.Net.Windows
                     DeviceType = DeviceType.Hid
                 };
             }
-            catch(Exception ex)
+            catch (Exception)
             {
                 return null;
             }
