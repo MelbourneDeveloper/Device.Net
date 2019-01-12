@@ -19,7 +19,7 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
+        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(DeviceDefinition deviceDefinition)
         {
             return await Task.Run<IEnumerable<DeviceDefinition>>(() =>
             {
@@ -46,8 +46,8 @@ namespace Device.Net.Windows
 
                 var i = -1;
 
-                var productIdHex = GetHex(productId);
-                var vendorHex = GetHex(vendorId);
+                var productIdHex = GetHex(deviceDefinition.ProductId);
+                var vendorHex = GetHex(deviceDefinition.VendorId);
 
                 while (true)
                 {
@@ -69,14 +69,16 @@ namespace Device.Net.Windows
                     WindowsDeviceBase.HandleError(isSuccess, "Could not get device interface detail");
 
                     //Note this is a bit nasty but we can filter Vid and Pid this way I think...
-                    if (vendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(vendorHex)) continue;
-                    if (productId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(productIdHex)) continue;
+                    if (deviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(vendorHex)) continue;
+                    if (deviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(productIdHex)) continue;
 
-                    var deviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
+                    var connectedDeviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
 
-                    if (deviceDefinition == null) continue;
+                    if (connectedDeviceDefinition == null) continue;
 
-                    deviceDefinitions.Add(deviceDefinition);
+                    if (!DeviceManager.IsDefinitionMatch(deviceDefinition, connectedDeviceDefinition)) continue;
+
+                    deviceDefinitions.Add(connectedDeviceDefinition);
                 }
 
                 APICalls.SetupDiDestroyDeviceInfoList(devicesHandle);

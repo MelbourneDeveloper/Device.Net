@@ -58,9 +58,9 @@ namespace Device.Net
                 await _ListenSemaphoreSlim.WaitAsync();
 
                 var connectedDeviceDefinitions = new List<DeviceDefinition>();
-                foreach (var vidPid in DeviceDefinitions)
+                foreach (var deviceDefinition in DeviceDefinitions)
                 {
-                    connectedDeviceDefinitions.AddRange(await DeviceManager.Current.GetConnectedDeviceDefinitions(vidPid.VendorId, vidPid.ProductId));
+                    connectedDeviceDefinitions.AddRange(await DeviceManager.Current.GetConnectedDeviceDefinitions(deviceDefinition));
                 }
 
                 //Iterate through connected devices

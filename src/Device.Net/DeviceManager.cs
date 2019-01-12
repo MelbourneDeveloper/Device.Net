@@ -15,12 +15,12 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
+        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(DeviceDefinition deviceDefinition)
         {
             var retVal = new List<DeviceDefinition>();
             foreach (var deviceFactory in DeviceFactories)
             {
-                retVal.AddRange(await deviceFactory.GetConnectedDeviceDefinitions(vendorId, productId));
+                retVal.AddRange(await deviceFactory.GetConnectedDeviceDefinitions(deviceDefinition));
             }
 
             return retVal;
@@ -48,7 +48,7 @@ namespace Device.Net
                 {
                     if (filterDeviceDefinition.DeviceType.HasValue && (deviceFactory.DeviceType != filterDeviceDefinition.DeviceType)) continue;
 
-                    var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitions(filterDeviceDefinition.VendorId, filterDeviceDefinition.ProductId);
+                    var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitions(filterDeviceDefinition);
                     retVal.AddRange
                     (
                         connectedDeviceDefinitions.Select

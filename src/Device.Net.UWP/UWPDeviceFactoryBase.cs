@@ -44,9 +44,9 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(uint? vendorId, uint? productId)
+        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(DeviceDefinition deviceDefinition)
         {
-            var aqsFilter = GetAqsFilter(vendorId, productId);
+            var aqsFilter = GetAqsFilter(deviceDefinition.VendorId, deviceDefinition.ProductId);
 
             var deviceInformationCollection = await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask();
 
@@ -54,11 +54,11 @@ namespace Device.Net.UWP
 
             var deviceDefinitionList = new List<DeviceDefinition>();
 
-            foreach (var deviceDefinition in deviceDefinitions)
+            foreach (var deviceDef in deviceDefinitions)
             {
-                if (await TestConnection(deviceDefinition.DeviceId))
+                if (await TestConnection(deviceDef.DeviceId))
                 {
-                    deviceDefinitionList.Add(deviceDefinition);
+                    deviceDefinitionList.Add(deviceDef);
                 }
             }
 
