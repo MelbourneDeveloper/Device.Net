@@ -93,6 +93,8 @@ namespace Device.Net
 
                         //Let listeners know a registered device was initialized
                         DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
+
+                        Logger.Log("Device connected", null, nameof(DeviceListener));
                     }
 
                 }
@@ -116,6 +118,8 @@ namespace Device.Net
                             device.Dispose();
 
                             removeDefs.Add(key);
+
+                            Logger.Log("Disconnected", null, nameof(DeviceListener));
                         }
                     }
                 }
@@ -124,6 +128,9 @@ namespace Device.Net
                 {
                     _CreatedDevicesByDefinition.Remove(removeDef);
                 }
+
+                Logger.Log("did a poll", null, nameof(DeviceListener));
+
             }
             catch (Exception ex)
             {
@@ -136,7 +143,7 @@ namespace Device.Net
                 _ListenSemaphoreSlim.Release();
             }
         }
-  
+
         public void Stop()
         {
             _PollTimer.Stop();

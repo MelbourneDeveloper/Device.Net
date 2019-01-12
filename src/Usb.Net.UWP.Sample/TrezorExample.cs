@@ -43,10 +43,10 @@ namespace Usb.Net.Sample
         #endregion
 
         #region Public Methods
-        public void StartListening(bool poll)
+        public void StartListening()
         {
             TrezorDevice?.Dispose();
-            DeviceListener = new DeviceListener(_DeviceDefinitions, poll ? 3000 : (int?)null);
+            DeviceListener = new DeviceListener(_DeviceDefinitions, 3000);
             DeviceListener.DeviceDisconnected += DevicePoller_DeviceDisconnected;
             DeviceListener.DeviceInitialized += DevicePoller_DeviceInitialized;
         }

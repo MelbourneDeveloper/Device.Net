@@ -65,19 +65,20 @@ namespace Usb.Net.AndroidSample
         {
             try
             {
-                //Register the factory for creating Usb devices. This only needs to be done once.
                 var usbManager = GetSystemService(UsbService) as UsbManager;
                 if (usbManager == null) throw new Exception("UsbManager is null");
+
+                //Register the factory for creating Usb devices. This only needs to be done once.
                 AndroidUsbDeviceFactory.Register(usbManager, base.ApplicationContext);
 
                 _TrezorExample.TrezorDisconnected += _TrezorExample_TrezorDisconnected;
                 _TrezorExample.TrezorInitialized += _TrezorExample_TrezorInitialized;
-                _TrezorExample.StartListening(false);
+                _TrezorExample.StartListening();
 
-                var attachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
-                var detachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
-                RegisterReceiver(attachedReceiver, new IntentFilter(UsbManager.ActionUsbDeviceAttached));
-                RegisterReceiver(detachedReceiver, new IntentFilter(UsbManager.ActionUsbDeviceDetached));
+                //var attachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
+                //var detachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
+                //RegisterReceiver(attachedReceiver, new IntentFilter(UsbManager.ActionUsbDeviceAttached));
+                //RegisterReceiver(detachedReceiver, new IntentFilter(UsbManager.ActionUsbDeviceDetached));
 
                 DisplayMessage("Waiting for device...");
             }

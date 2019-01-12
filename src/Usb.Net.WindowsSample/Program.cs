@@ -49,7 +49,7 @@ namespace Usb.Net.WindowsSample
                 case 2:
                     Console.Clear();
                     DisplayWaitMessage();
-                    _DeviceConnectionExample.StartListening(true);
+                    _DeviceConnectionExample.StartListening();
                     break;
             }
         }
