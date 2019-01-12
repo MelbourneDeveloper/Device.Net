@@ -25,6 +25,7 @@ namespace Usb.Net.Sample
 
         #region Public Properties
         public IDevice TrezorDevice { get; private set; }
+        public DeviceListener DeviceListener { get; private set; }
         #endregion
 
         #region Event Handlers
@@ -42,12 +43,12 @@ namespace Usb.Net.Sample
         #endregion
 
         #region Public Methods
-        public void StartListenting()
+        public void StartListening(bool poll)
         {
             TrezorDevice?.Dispose();
-            var devicePoller = new DeviceListener(_DeviceDefinitions, 3000);
-            devicePoller.DeviceDisconnected += DevicePoller_DeviceDisconnected;
-            devicePoller.DeviceInitialized += DevicePoller_DeviceInitialized;
+            DeviceListener = new DeviceListener(_DeviceDefinitions, poll ? 3000 : default(int));
+            DeviceListener.DeviceDisconnected += DevicePoller_DeviceDisconnected;
+            DeviceListener.DeviceInitialized += DevicePoller_DeviceInitialized;
         }
 
         public async Task InitializeTrezorAsync()

@@ -64,7 +64,7 @@ namespace Usb.Net.UWP.Sample
         private void StartListeningButton_Click(object sender, RoutedEventArgs e)
         {
             SetButtonColor(Colors.Red);
-            _DeviceConnectionExample.StartListenting();
+            _DeviceConnectionExample.StartListening(true);
         }
         #endregion
 

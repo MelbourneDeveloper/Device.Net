@@ -1,4 +1,5 @@
 ﻿using Android.App;
+using Android.Content;
 using Android.Hardware.Usb;
 using Android.OS;
 using Android.Support.Design.Widget;
@@ -7,6 +8,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Device.Net;
 using System;
+using Usb.Net.Android;
 using Usb.Net.Sample;
 
 namespace Usb.Net.AndroidSample
@@ -37,9 +39,9 @@ namespace Usb.Net.AndroidSample
                 if (usbManager == null) throw new Exception("UsbManager is null");
                 AndroidUsbDeviceFactory.Register(usbManager, base.ApplicationContext);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                DisplayMessage($"Error Starting up: {ex.Message}");
             }
         }
         #endregion
@@ -68,7 +70,12 @@ namespace Usb.Net.AndroidSample
         {
             _TrezorExample.TrezorDisconnected += _TrezorExample_TrezorDisconnected;
             _TrezorExample.TrezorInitialized += _TrezorExample_TrezorInitialized;
-            _TrezorExample.StartListenting();
+            _TrezorExample.StartListening(false);
+
+            var attachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
+            var detachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
+            RegisterReceiver(attachedReceiver, new IntentFilter(UsbManager.ActionUsbDeviceAttached));
+            RegisterReceiver(detachedReceiver, new IntentFilter(UsbManager.ActionUsbDeviceDetached));
 
             DisplayMessage("Waiting for device...");
         }
@@ -88,7 +95,7 @@ namespace Usb.Net.AndroidSample
                     DisplayMessage($"No good. No data returned.");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 DisplayMessage($"No good: {ex.Message}");
             }
