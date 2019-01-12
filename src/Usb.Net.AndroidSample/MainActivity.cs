@@ -7,28 +7,44 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Device.Net;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Usb.Net.Sample;
 
 namespace Usb.Net.AndroidSample
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
+        #region Fields
+        private readonly TrezorExample _TrezorExample = new TrezorExample();
+        #endregion
 
+        #region Protected Override Methods
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(savedInstanceState);
-            SetContentView(Resource.Layout.activity_main);
+            try
+            {
+                base.OnCreate(savedInstanceState);
+                SetContentView(Resource.Layout.activity_main);
 
-            var toolbar = FindViewById<Toolbar>(Resource.Id.toolbar);
-            SetSupportActionBar(toolbar);
+                var toolbar = FindViewById<Toolbar>(Resource.Id.toolbar);
+                SetSupportActionBar(toolbar);
 
-            var fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
-            fab.Click += FabOnClick;
+                var fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
+                fab.Click += FabOnClick;
+
+                //Register the factory for creating Usb devices. This only needs to be done once.
+                var usbManager = GetSystemService(UsbService) as UsbManager;
+                if (usbManager == null) throw new Exception("UsbManager is null");
+                AndroidUsbDeviceFactory.Register(usbManager, base.ApplicationContext);
+            }
+            catch (Exception)
+            {
+
+            }
         }
+        #endregion
 
+        #region Public Override Methods
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             MenuInflater.Inflate(Resource.Menu.menu_main, menu);
@@ -45,75 +61,52 @@ namespace Usb.Net.AndroidSample
 
             return base.OnOptionsItemSelected(item);
         }
+        #endregion
 
-        private async void FabOnClick(object sender, EventArgs eventArgs)
+        #region Event Handlers
+        private void FabOnClick(object sender, EventArgs eventArgs)
         {
-            var view = (View)sender;
+            _TrezorExample.TrezorDisconnected += _TrezorExample_TrezorDisconnected;
+            _TrezorExample.TrezorInitialized += _TrezorExample_TrezorInitialized;
+            _TrezorExample.StartListenting();
 
-            await Go(view);
-
+            DisplayMessage("Waiting for device...");
         }
 
-        private async Task Go(View view)
+        private async void _TrezorExample_TrezorInitialized(object sender, EventArgs e)
         {
             try
             {
-                var usbManager = GetSystemService(UsbService) as UsbManager;
+                var readBuffer = await _TrezorExample.WriteAndReadFromDeviceAsync();
 
-                if (usbManager == null) throw new Exception("UsbManager is null");
-
-                //Register the factory for creating Usb devices. This only needs to be done once.
-                AndroidUsbDeviceFactory.Register(usbManager, base.ApplicationContext);
-
-                //Note: other custom device types could be added here
-
-                //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
-                var deviceDefinitions = new List<DeviceDefinition>
+                if (readBuffer != null && readBuffer.Length > 0)
                 {
-                    new DeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x" },
-                    new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, ReadBufferSize=64, WriteBufferSize=64, Label="Trezor One Firmware 1.7.x" },
-                    new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C0, ReadBufferSize=64, WriteBufferSize=64, Label="Model T" }
-                };
-
-                //Get the first available device and connect to it
-                var devices = await DeviceManager.Current.GetDevices(deviceDefinitions);
-
-                if (devices.Count == 0) throw new Exception("No Trezor was found.");
-
-                using (var trezorDevice = devices.First())
+                    DisplayMessage($"All good. First three bytes {readBuffer[0]}, {readBuffer[1]}, {readBuffer[2]}");
+                }
+                else
                 {
-                    await trezorDevice.InitializeAsync();
-
-                    //Create a buffer with 3 bytes (initialize)
-                    var buffer = new byte[64];
-                    buffer[0] = 0x3f;
-                    buffer[1] = 0x23;
-                    buffer[2] = 0x23;
-
-                    //Write the data to the device and get the response
-                    var readBuffer = await trezorDevice.WriteAndReadAsync(buffer);
-
-                    if (readBuffer != null && readBuffer.Length > 0)
-                    {
-                        DisplayMessage(view, $"All good. First three bytes {readBuffer[0]}, {readBuffer[1]}, {readBuffer[2]}");
-                    }
-                    else
-                    {
-                        DisplayMessage(view, $"No good. No data returned.");
-                    }
-
+                    DisplayMessage($"No good. No data returned.");
                 }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                DisplayMessage(view, $"No good: {ex.Message}");
+                DisplayMessage($"No good: {ex.Message}");
             }
         }
 
-        private static void DisplayMessage(View view, string message)
+        private void _TrezorExample_TrezorDisconnected(object sender, EventArgs e)
         {
-            Snackbar.Make(view, message, Snackbar.LengthLong).SetAction("Action", (View.IOnClickListener)null).Show();
+            DisplayMessage("Device disconnected. Waiting for device...");
         }
+        #endregion
+
+        #region Private Methods
+        private void DisplayMessage(string message)
+        {
+            var fab = FindViewById<FloatingActionButton>(Resource.Id.fab);
+            Snackbar.Make(fab, message, Snackbar.LengthLong).SetAction("Action", (View.IOnClickListener)null).Show();
+        }
+        #endregion
     }
 }
 
