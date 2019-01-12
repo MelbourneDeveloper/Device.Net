@@ -20,10 +20,6 @@ namespace Usb.Net.UWP
             var interfaceClassGuid = "System.Devices.InterfaceClassGuid:=\"{" + WindowsDeviceConstants.WinUSBGuid + "}\"";
             return $"{interfaceClassGuid} {InterfaceEnabledPart} {GetVendorPart(vendorId)} {GetProductPart(productId)}";
         }
-        protected override Task<ushort?> GetUsagePageAsync(string deviceId)
-        {
-            return Task.FromResult((ushort?)null);
-        }
         #endregion
 
         #region Public Methods
@@ -47,7 +43,7 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Overrides
-        public override Task<bool> TestConnection(string Id) => Task.FromResult(true);
+        public override Task<ConnectionInfo> TestConnection(string Id) => Task.FromResult(new ConnectionInfo {CanConnect=true });
         #endregion
     }
 }

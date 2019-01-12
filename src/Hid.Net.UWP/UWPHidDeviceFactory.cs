@@ -10,7 +10,7 @@ namespace Hid.Net.UWP
     public class UWPHidDeviceFactory : UWPDeviceFactoryBase, IDeviceFactory
     {
         private SemaphoreSlim _TestConnectionSemaphore = new SemaphoreSlim(1, 1);
-        private Dictionary<string, bool> _ConnectionTestedDeviceIds = new Dictionary<string, bool>();
+        private Dictionary<string, ConnectionInfo> _ConnectionTestedDeviceIds = new Dictionary<string, ConnectionInfo>();
 
         #region Public Override Properties
         public override DeviceType DeviceType => DeviceType.Hid;
@@ -23,42 +23,36 @@ namespace Hid.Net.UWP
         {
             return $"{InterfaceEnabledPart} {GetVendorPart(vendorId)} {GetProductPart(productId)}";
         }
-
-        protected override async Task<ushort?> GetUsagePageAsync(string deviceId)
-        {
-            using (var hidDevice = await UWPHidDevice.GetHidDevice(deviceId).AsTask())
-            {
-                if (hidDevice != null) return hidDevice.UsagePage;
-            }
-
-            throw new Exception("Could not get UsagePage");
-        }
         #endregion
 
         #region Public Override Methods
-        public override async Task<bool> TestConnection(string deviceId)
+        public override async Task<ConnectionInfo> TestConnection(string deviceId)
         {
             try
             {
                 await _TestConnectionSemaphore.WaitAsync();
 
-                if (_ConnectionTestedDeviceIds.TryGetValue(deviceId, out var canConnect)) return canConnect;
+                if (_ConnectionTestedDeviceIds.TryGetValue(deviceId, out var connectionInfo)) return connectionInfo;
 
                 using (var hidDevice = await UWPHidDevice.GetHidDevice(deviceId).AsTask())
                 {
-                    canConnect = hidDevice != null;
+                    var canConnect = hidDevice != null;
+
+                    if (!canConnect) return new ConnectionInfo { CanConnect = false };
 
                     Logger.Log($"Testing device connection. Id: {deviceId}. Can connect: {canConnect}", null, nameof(UWPHidDeviceFactory));
 
-                    _ConnectionTestedDeviceIds.Add(deviceId, canConnect);
+                    connectionInfo = new ConnectionInfo { CanConnect = canConnect, UsagePage = hidDevice.UsagePage };
 
-                    return canConnect;
+                    _ConnectionTestedDeviceIds.Add(deviceId, connectionInfo);
+
+                    return connectionInfo;
                 }
             }
             catch (Exception ex)
             {
                 Logger.Log("", ex, nameof(UWPHidDeviceFactory));
-                return false;
+                return new ConnectionInfo { CanConnect = false };
             }
             finally
             {

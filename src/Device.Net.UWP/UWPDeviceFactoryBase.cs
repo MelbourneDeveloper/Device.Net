@@ -25,10 +25,6 @@ namespace Device.Net.UWP
 
         #region Protected Abstract Methods
         protected abstract string GetAqsFilter(uint? vendorId, uint? productId);
-        /// <summary>
-        /// TODO: This isn't nice. We're already testing to see if the device exists. We should have gotten the usage page then...
-        /// </summary>
-        protected abstract Task<ushort?> GetUsagePageAsync(string deviceId);
         #endregion
 
         #region Abstraction Methods
@@ -60,9 +56,12 @@ namespace Device.Net.UWP
 
             foreach (var deviceDef in deviceDefinitions)
             {
-                if (await TestConnection(deviceDef.DeviceId))
+                var connectionInformation = await TestConnection(deviceDef.DeviceId);
+                if (connectionInformation.CanConnect)
                 {
-                    deviceDef.UsagePage = await GetUsagePageAsync(deviceDef.DeviceId);
+                    await Task.Delay(1000);
+
+                    deviceDef.UsagePage = connectionInformation.UsagePage;
 
                     deviceDefinitionList.Add(deviceDef);
                 }
@@ -76,7 +75,7 @@ namespace Device.Net.UWP
         /// <summary>
         /// Some devices display as being enable but still cannot be connected to, so run a test to make sure they can be connected before returning the definition
         /// </summary>
-        public abstract Task<bool> TestConnection(string Id);
+        public abstract Task<ConnectionInfo> TestConnection(string Id);
         #endregion
 
         #region Public Static Methods
@@ -95,5 +94,11 @@ namespace Device.Net.UWP
             return retVal;
         }
         #endregion
+
+        public class ConnectionInfo
+        {
+            public bool CanConnect { get; set; }
+            public ushort? UsagePage { get; set; }
+        }
     }
 }
