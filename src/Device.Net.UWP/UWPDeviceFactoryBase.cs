@@ -25,6 +25,10 @@ namespace Device.Net.UWP
 
         #region Protected Abstract Methods
         protected abstract string GetAqsFilter(uint? vendorId, uint? productId);
+        /// <summary>
+        /// TODO: This isn't nice. We're already testing to see if the device exists. We should have gotten the usage page then...
+        /// </summary>
+        protected abstract Task<ushort?> GetUsagePageAsync(string deviceId);
         #endregion
 
         #region Abstraction Methods
@@ -58,6 +62,8 @@ namespace Device.Net.UWP
             {
                 if (await TestConnection(deviceDef.DeviceId))
                 {
+                    deviceDef.UsagePage = await GetUsagePageAsync(deviceDef.DeviceId);
+
                     deviceDefinitionList.Add(deviceDef);
                 }
             }

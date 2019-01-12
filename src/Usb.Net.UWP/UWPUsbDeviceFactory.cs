@@ -13,12 +13,16 @@ namespace Usb.Net.UWP
         protected override string ProductFilterName => "System.DeviceInterface.WinUsb.UsbProductId";
         #endregion
 
-        #region Protected Methods
+        #region Protected Override Methods
         protected override string GetAqsFilter(uint? vendorId, uint? productId)
         {
             //TODO: This is hard coded for WinUSB devices. Can we use other types of devices? GPS devices for example?
             var interfaceClassGuid = "System.Devices.InterfaceClassGuid:=\"{" + WindowsDeviceConstants.WinUSBGuid + "}\"";
             return $"{interfaceClassGuid} {InterfaceEnabledPart} {GetVendorPart(vendorId)} {GetProductPart(productId)}";
+        }
+        protected override Task<ushort?> GetUsagePageAsync(string deviceId)
+        {
+            return Task.FromResult((ushort?)null);
         }
         #endregion
 

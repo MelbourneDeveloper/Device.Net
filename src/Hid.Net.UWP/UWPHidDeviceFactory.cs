@@ -23,6 +23,16 @@ namespace Hid.Net.UWP
         {
             return $"{InterfaceEnabledPart} {GetVendorPart(vendorId)} {GetProductPart(productId)}";
         }
+
+        protected override async Task<ushort?> GetUsagePageAsync(string deviceId)
+        {
+            using (var hidDevice = await UWPHidDevice.GetHidDevice(deviceId).AsTask())
+            {
+                if (hidDevice != null) return hidDevice.UsagePage;
+            }
+
+            throw new Exception("Could not get UsagePage");
+        }
         #endregion
 
         #region Public Override Methods
