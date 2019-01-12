@@ -80,7 +80,8 @@ namespace Device.Net
 
                     if (device == null)
                     {
-                        device = DeviceManager.Current.GetDevice(deviceDefinition);
+                        //Need to use the connected device def here instead of the filter version because the filter version won't have the id or any details
+                        device = DeviceManager.Current.GetDevice(connectedDeviceDefinition);
                         _CreatedDevicesByDefinition.Add(deviceDefinition, device);
                     }
 
