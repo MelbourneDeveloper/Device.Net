@@ -87,9 +87,7 @@ namespace Device.Net
 
                     if (!device.IsInitialized)
                     {
-                        Logger.Log($"Attempting to initialize with DeviceId of {connectedDeviceDefinition.DeviceId}", null, nameof(DeviceListener));
-
-                        device.DeviceId = connectedDeviceDefinition.DeviceId;
+                        Logger.Log($"Attempting to initialize with DeviceId of {device.DeviceId}", null, nameof(DeviceListener));
 
                         //The device is not initialized so initialize it
                         await device.InitializeAsync();
