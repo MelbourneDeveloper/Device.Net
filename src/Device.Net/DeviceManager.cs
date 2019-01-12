@@ -73,7 +73,8 @@ namespace Device.Net
             return
                 (!filterDevice.VendorId.HasValue || filterDevice.VendorId == actualDevice.VendorId) &&
                 (!filterDevice.ProductId.HasValue || filterDevice.ProductId == actualDevice.ProductId) &&
-                (!filterDevice.DeviceType.HasValue || filterDevice.DeviceType == actualDevice.DeviceType);
+                (!filterDevice.DeviceType.HasValue || filterDevice.DeviceType == actualDevice.DeviceType) &&
+                (!filterDevice.UsagePage.HasValue || filterDevice.UsagePage == actualDevice.UsagePage);
         }
         #endregion
     }

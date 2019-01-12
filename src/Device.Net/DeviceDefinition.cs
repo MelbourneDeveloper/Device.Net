@@ -52,6 +52,11 @@
         /// </summary>
         public int? ReadBufferSize { get; set; }
 
+        /// <summary>
+        /// Used to further filter down device definitions on some platforms
+        /// </summary>
+        public ushort? UsagePage { get; set; }
+
         public DeviceDefinition()
         {
         }

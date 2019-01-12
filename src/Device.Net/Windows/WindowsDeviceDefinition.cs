@@ -7,7 +7,6 @@
         }
 
         public ushort? Usage { get; set; }
-        public ushort? UsagePage { get; set; }
         public ushort? VersionNumber { get; set; }
     }
 }
