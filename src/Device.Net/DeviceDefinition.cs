@@ -1,5 +1,10 @@
 ﻿namespace Device.Net
 {
+    //https://docs.microsoft.com/en-us/windows-hardware/drivers/hid/hid-usages#usage-id
+
+    /// <summary>
+    /// A definition for a device.
+    /// </summary>
     public class DeviceDefinition
     {
         /// <summary>
@@ -51,5 +56,15 @@
         /// Used to further filter down device definitions on some platforms
         /// </summary>
         public ushort? UsagePage { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ushort? Usage { get; set; }
+
+        /// <summary>
+        /// Device version number
+        /// </summary>
+        public ushort? VersionNumber { get; set; }
     }
 }

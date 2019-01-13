@@ -31,7 +31,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Private Static Methods
-        public static WindowsDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)
+        public static DeviceDefinitionPlus GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace Hid.Net.Windows
                 var serialNumber = GetSerialNumber(safeFileHandle);
                 var product = GetProduct(safeFileHandle);
 
-                return new WindowsDeviceDefinition(deviceId)
+                return new DeviceDefinitionPlus(deviceId)
                 {
                     WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
                     ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,
