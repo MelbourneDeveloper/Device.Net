@@ -31,7 +31,7 @@ namespace Device.Net
         Task<byte[]> WriteAndReadAsync(byte[] writeBuffer);
 
         /// <summary>
-        /// Device unique OS level Id for the type of device. The device should have been constructed with this Id, but it can be changed. Note, the device should use this DeviceId to connect and not the DeviceId on the DeviceDefinition.  
+        /// Device unique OS level Id for the type of device. The device should have been constructed with this Id. It is used to initialize the device.
         /// </summary>
         string DeviceId { get; }
 
