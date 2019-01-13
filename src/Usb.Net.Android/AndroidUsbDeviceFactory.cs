@@ -28,16 +28,16 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public Task<IEnumerable<DeviceDefinitionPlus>> GetConnectedDeviceDefinitions(DeviceDefinition deviceDefinition)
+        public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitions(DeviceDefinition deviceDefinition)
         {
-            return Task.Run<IEnumerable<DeviceDefinitionPlus>>(() =>
+            return Task.Run<IEnumerable<ConnectedDeviceDefinition>>(() =>
             {
                 //TODO: Get more details about the device.
                 return UsbManager.DeviceList.Select(kvp => kvp.Value).Where(d => deviceDefinition.VendorId == d.VendorId && deviceDefinition.ProductId == d.ProductId).Select(GetAndroidDeviceDefinition).ToList();
             });
         }
 
-        public IDevice GetDevice(DeviceDefinitionPlus deviceDefinition)
+        public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
             if (!int.TryParse(deviceDefinition.DeviceId, out var deviceId))
             {
@@ -49,12 +49,12 @@ namespace Device.Net
         #endregion
 
         #region Public Static Methods
-        public static DeviceDefinitionPlus GetAndroidDeviceDefinition(UsbDevice usbDevice)
+        public static ConnectedDeviceDefinition GetAndroidDeviceDefinition(UsbDevice usbDevice)
         {
             var deviceId = usbDevice.DeviceId.ToString();
             Logger.Log($"Found device: {usbDevice.ProductName} Id: {deviceId}", null, nameof(AndroidUsbDeviceFactory));
 
-            return new DeviceDefinitionPlus(deviceId)
+            return new ConnectedDeviceDefinition(deviceId)
             {
                 ProductName = usbDevice.ProductName,
                 Manufacturer = usbDevice.ManufacturerName,

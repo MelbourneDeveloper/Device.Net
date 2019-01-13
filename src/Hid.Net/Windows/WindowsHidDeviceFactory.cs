@@ -14,7 +14,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Protected Override Methods
-        protected override DeviceDefinitionPlus GetDeviceDefinition(string deviceId)
+        protected override ConnectedDeviceDefinition GetDeviceDefinition(string deviceId)
         {
             using (var safeFileHandle = APICalls.CreateFile(deviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero))
             {
@@ -24,14 +24,14 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Methods
-        public IDevice GetDevice(DeviceDefinitionPlus deviceDefinition)
+        public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
             return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId);
         }
         #endregion
 
         #region Private Static Methods
-        public static DeviceDefinitionPlus GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)
+        public static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace Hid.Net.Windows
                 var serialNumber = GetSerialNumber(safeFileHandle);
                 var product = GetProduct(safeFileHandle);
 
-                return new DeviceDefinitionPlus(deviceId)
+                return new ConnectedDeviceDefinition(deviceId)
                 {
                     WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
                     ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,

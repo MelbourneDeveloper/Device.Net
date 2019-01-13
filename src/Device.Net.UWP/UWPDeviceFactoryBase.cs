@@ -44,7 +44,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<DeviceDefinitionPlus>> GetConnectedDeviceDefinitions(DeviceDefinition deviceDefinition)
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitions(DeviceDefinition deviceDefinition)
         {
             var aqsFilter = GetAqsFilter(deviceDefinition.VendorId, deviceDefinition.ProductId);
 
@@ -52,7 +52,7 @@ namespace Device.Net.UWP
 
             var deviceDefinitions = deviceInformationCollection.Select(d => GetDeviceInformation(d, DeviceType));
 
-            var deviceDefinitionList = new List<DeviceDefinitionPlus>();
+            var deviceDefinitionList = new List<ConnectedDeviceDefinition>();
 
             foreach (var deviceDef in deviceDefinitions)
             {
@@ -79,7 +79,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Static Methods
-        public static DeviceDefinitionPlus GetDeviceInformation(wde.DeviceInformation deviceInformation, DeviceType deviceType)
+        public static ConnectedDeviceDefinition GetDeviceInformation(wde.DeviceInformation deviceInformation, DeviceType deviceType)
         {
             var retVal = WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(deviceInformation.Id, deviceType);
 

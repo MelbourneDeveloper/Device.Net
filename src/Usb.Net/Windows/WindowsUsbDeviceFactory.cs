@@ -16,14 +16,14 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Methods
-        public IDevice GetDevice(DeviceDefinitionPlus deviceDefinition)
+        public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
             return deviceDefinition.DeviceType != DeviceType ? null : new WindowsUsbDevice(deviceDefinition.DeviceId);
         }
         #endregion
 
         #region Private Static Methods
-        protected override DeviceDefinitionPlus GetDeviceDefinition(string deviceId)
+        protected override ConnectedDeviceDefinition GetDeviceDefinition(string deviceId)
         {
             return GetDeviceDefinitionFromWindowsDeviceId(deviceId, DeviceType.Usb);
         }
