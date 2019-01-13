@@ -32,7 +32,6 @@ namespace Usb.Net.Android
         #region Public Properties
         public UsbManager UsbManager { get; }
         public Context AndroidContext { get; private set; }
-        public int TimeoutMilliseconds { get; }
         public override ushort ReadBufferSize => (ushort)_ReadEndpoint.MaxPacketSize;
         public override ushort WriteBufferSize => (ushort)_WriteEndpoint.MaxPacketSize;
         public int DeviceNumberId
@@ -50,11 +49,10 @@ namespace Usb.Net.Android
         #endregion
 
         #region Constructor
-        public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int deviceNumberId, int timeoutMilliseconds)
+        public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int deviceNumberId)
         {
             UsbManager = usbManager;
             AndroidContext = androidContext;
-            TimeoutMilliseconds = timeoutMilliseconds;
             DeviceNumberId = deviceNumberId;
         }
         #endregion

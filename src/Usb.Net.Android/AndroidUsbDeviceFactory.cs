@@ -44,7 +44,7 @@ namespace Device.Net
                 throw new Exception($"The device Id '{deviceDefinition.DeviceId}' is not a valid integer");
             }
 
-            return new AndroidUsbDevice(UsbManager, Context, deviceId, 3000);
+            return new AndroidUsbDevice(UsbManager, Context, deviceId);
         }
         #endregion
 
