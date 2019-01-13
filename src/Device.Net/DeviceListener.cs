@@ -15,13 +15,13 @@ namespace Device.Net
         private readonly SemaphoreSlim _ListenSemaphoreSlim = new SemaphoreSlim(1, 1);
 
         /// <summary>
-        /// This is the list of Devices by their filter definition. Not this is not actually the connected definition.
+        /// This is the list of Devices by their filter definition. Note this is not actually keyed by the connected definition.
         /// </summary>
         private Dictionary<FilterDeviceDefinition, IDevice> _CreatedDevicesByDefinition { get; } = new Dictionary<FilterDeviceDefinition, IDevice>();
         #endregion
 
         #region Public Properties
-        public List<FilterDeviceDefinition> DeviceDefinitions { get; } = new List<FilterDeviceDefinition>();
+        public List<FilterDeviceDefinition> FilterDeviceDefinitions { get; } = new List<FilterDeviceDefinition>();
         #endregion
 
         #region Events
@@ -33,11 +33,11 @@ namespace Device.Net
         /// <summary>
         /// Handles connecting to and disconnecting from a set of potential devices by their definition
         /// </summary>
-        /// <param name="registeredDevices">Device definitions to connect to and disconnect from</param>
+        /// <param name="filterDeviceDefinitions">Device definitions to connect to and disconnect from</param>
         /// <param name="pollMilliseconds">Poll interval in milliseconds, or null if checking is called externally</param>
-        public DeviceListener(IEnumerable<FilterDeviceDefinition> registeredDevices, int? pollMilliseconds)
+        public DeviceListener(IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions, int? pollMilliseconds)
         {
-            DeviceDefinitions.AddRange(registeredDevices);
+            FilterDeviceDefinitions.AddRange(filterDeviceDefinitions);
             if (pollMilliseconds.HasValue)
             {
                 _PollTimer = new timer(pollMilliseconds.Value);
@@ -62,7 +62,7 @@ namespace Device.Net
                 await _ListenSemaphoreSlim.WaitAsync();
 
                 var connectedDeviceDefinitions = new List<ConnectedDeviceDefinition>();
-                foreach (var deviceDefinition in DeviceDefinitions)
+                foreach (var deviceDefinition in FilterDeviceDefinitions)
                 {
                     connectedDeviceDefinitions.AddRange(await DeviceManager.Current.GetConnectedDeviceDefinitions(deviceDefinition));
                 }
@@ -70,7 +70,7 @@ namespace Device.Net
                 //Iterate through connected devices
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                 {
-                    var deviceDefinition = DeviceDefinitions.FirstOrDefault(d => DeviceManager.IsDefinitionMatch(d, connectedDeviceDefinition));
+                    var deviceDefinition = FilterDeviceDefinitions.FirstOrDefault(d => DeviceManager.IsDefinitionMatch(d, connectedDeviceDefinition));
 
                     if (deviceDefinition == null) continue;
 
