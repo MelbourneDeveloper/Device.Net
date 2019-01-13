@@ -62,7 +62,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Methods
-        public IDevice GetDevice(DeviceDefinition deviceDefinition)
+        public IDevice GetDevice(DeviceDefinitionPlus deviceDefinition)
         {
             if (deviceDefinition.DeviceType == DeviceType.Usb) return null;
             return new UWPHidDevice(deviceDefinition.DeviceId);

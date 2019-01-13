@@ -18,11 +18,6 @@
         public string SerialNumber { get; set; }
 
         /// <summary>
-        /// Platform specific, unique Id for the device
-        /// </summary>
-        public string DeviceId { get; set; }
-
-        /// <summary>
         /// Vendor ID
         /// </summary>
         public uint? VendorId { get; set; }
@@ -56,14 +51,5 @@
         /// Used to further filter down device definitions on some platforms
         /// </summary>
         public ushort? UsagePage { get; set; }
-
-        public DeviceDefinition()
-        {
-        }
-
-        public DeviceDefinition(string deviceId)
-        {
-            DeviceId = deviceId;
-        }
     }
 }

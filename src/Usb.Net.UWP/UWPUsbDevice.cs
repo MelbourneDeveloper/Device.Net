@@ -30,7 +30,7 @@ namespace Usb.Net.UWP
         {
         }
 
-        public UWPUsbDevice(DeviceDefinition deviceDefinition) : base(deviceDefinition.DeviceId)
+        public UWPUsbDevice(DeviceDefinitionPlus deviceDefinition) : base(deviceDefinition.DeviceId)
         {
             DeviceDefinition = deviceDefinition;
         }

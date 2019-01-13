@@ -36,8 +36,8 @@ namespace Device.Net
         string DeviceId { get; }
 
         /// <summary>
-        /// Information about the device. Warning: don't pay attention to the DeviceId. This will probably be removed. Pay attention to the DeviceId property on the device.
+        /// Information about the device. This information should be collected from initialization
         /// </summary>
-        DeviceDefinition DeviceDefinition { get; set; }
+        DeviceDefinition DeviceDefinition { get;  }
     }
 }

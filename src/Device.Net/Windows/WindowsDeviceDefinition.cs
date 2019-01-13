@@ -1,6 +1,6 @@
 ﻿namespace Device.Net.Windows
 {
-    public class WindowsDeviceDefinition : DeviceDefinition
+    public class WindowsDeviceDefinition : DeviceDefinitionPlus
     {
         public WindowsDeviceDefinition(string deviceId) : base(deviceId)
         {

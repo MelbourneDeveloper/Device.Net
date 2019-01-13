@@ -15,9 +15,9 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(DeviceDefinition deviceDefinition)
+        public async Task<IEnumerable<DeviceDefinitionPlus>> GetConnectedDeviceDefinitions(DeviceDefinition deviceDefinition)
         {
-            var retVal = new List<DeviceDefinition>();
+            var retVal = new List<DeviceDefinitionPlus>();
             foreach (var deviceFactory in DeviceFactories)
             {
                 retVal.AddRange(await deviceFactory.GetConnectedDeviceDefinitions(deviceDefinition));
@@ -27,7 +27,7 @@ namespace Device.Net
         }
 
         //TODO: Duplicate code here...
-        public IDevice GetDevice(DeviceDefinition filterDeviceDefinition)
+        public IDevice GetDevice(DeviceDefinitionPlus filterDeviceDefinition)
         {
             foreach (var deviceFactory in DeviceFactories)
             {

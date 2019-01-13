@@ -15,15 +15,15 @@ namespace Device.Net.Windows
         #endregion
 
         #region Protected Abstract Methods
-        protected abstract DeviceDefinition GetDeviceDefinition(string deviceId);
+        protected abstract DeviceDefinitionPlus GetDeviceDefinition(string deviceId);
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<DeviceDefinition>> GetConnectedDeviceDefinitions(DeviceDefinition deviceDefinition)
+        public async Task<IEnumerable<DeviceDefinitionPlus>> GetConnectedDeviceDefinitions(DeviceDefinition deviceDefinition)
         {
-            return await Task.Run<IEnumerable<DeviceDefinition>>(() =>
+            return await Task.Run<IEnumerable<DeviceDefinitionPlus>>(() =>
             {
-                var deviceDefinitions = new Collection<DeviceDefinition>();
+                var deviceDefinitions = new Collection<DeviceDefinitionPlus>();
                 var spDeviceInterfaceData = new SpDeviceInterfaceData();
                 var spDeviceInfoData = new SpDeviceInfoData();
                 var spDeviceInterfaceDetailData = new SpDeviceInterfaceDetailData();
@@ -107,7 +107,7 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Static Methods
-        public static DeviceDefinition GetDeviceDefinitionFromWindowsDeviceId(string deviceId, DeviceType deviceType)
+        public static DeviceDefinitionPlus GetDeviceDefinitionFromWindowsDeviceId(string deviceId, DeviceType deviceType)
         {
             uint? vid = null;
             uint? pid = null;
@@ -122,9 +122,11 @@ namespace Device.Net.Windows
                 //We really need the Vid/Pid here for polling etc. so not sure if swallowing errors it the way to go
             }
 
-            return new DeviceDefinition(deviceId) { DeviceType = deviceType, VendorId = vid, ProductId = pid };
+            return new DeviceDefinitionPlus(deviceId) { DeviceType = deviceType, VendorId = vid, ProductId = pid };
         }
         #endregion
+
+
 
     }
 }

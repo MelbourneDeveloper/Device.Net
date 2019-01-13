@@ -14,7 +14,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Protected Override Methods
-        protected override DeviceDefinition GetDeviceDefinition(string deviceId)
+        protected override DeviceDefinitionPlus GetDeviceDefinition(string deviceId)
         {
             using (var safeFileHandle = APICalls.CreateFile(deviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero))
             {
@@ -24,7 +24,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Methods
-        public IDevice GetDevice(DeviceDefinition deviceDefinition)
+        public IDevice GetDevice(DeviceDefinitionPlus deviceDefinition)
         {
             return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId);
         }
