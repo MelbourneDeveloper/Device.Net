@@ -38,6 +38,6 @@ namespace Device.Net
         /// <summary>
         /// Information about the device. This information should be collected from initialization
         /// </summary>
-        DeviceDefinition DeviceDefinition { get;  }
+        DeviceDefinitionBase DeviceDefinition { get;  }
     }
 }

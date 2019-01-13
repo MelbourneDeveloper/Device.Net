@@ -28,7 +28,7 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitions(DeviceDefinition deviceDefinition)
+        public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitions(FilterDeviceDefinition deviceDefinition)
         {
             return Task.Run<IEnumerable<ConnectedDeviceDefinition>>(() =>
             {

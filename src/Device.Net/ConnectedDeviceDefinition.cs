@@ -6,7 +6,7 @@ namespace Device.Net
     /// <summary>
     /// Represents the definition of a device that has been physically connected and has a DeviceId
     /// </summary>
-    public class ConnectedDeviceDefinition : DeviceDefinition
+    public class ConnectedDeviceDefinition : DeviceDefinitionBase
     {
         #region Public Methods
         public string DeviceId { get; set; }

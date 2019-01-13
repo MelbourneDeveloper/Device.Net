@@ -15,7 +15,7 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitions(DeviceDefinition deviceDefinition)
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitions(FilterDeviceDefinition deviceDefinition)
         {
             var retVal = new List<ConnectedDeviceDefinition>();
             foreach (var deviceFactory in DeviceFactories)
@@ -27,18 +27,18 @@ namespace Device.Net
         }
 
         //TODO: Duplicate code here...
-        public IDevice GetDevice(ConnectedDeviceDefinition filterDeviceDefinition)
+        public IDevice GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition)
         {
             foreach (var deviceFactory in DeviceFactories)
             {
-                if (filterDeviceDefinition.DeviceType.HasValue && (deviceFactory.DeviceType != filterDeviceDefinition.DeviceType)) continue;
-                return deviceFactory.GetDevice(filterDeviceDefinition);
+                if (connectedDeviceDefinition.DeviceType.HasValue && (deviceFactory.DeviceType != connectedDeviceDefinition.DeviceType)) continue;
+                return deviceFactory.GetDevice(connectedDeviceDefinition);
             }
 
             throw new System.Exception("Couldn't get a device");
         }
 
-        public async Task<List<IDevice>> GetDevices(IList<DeviceDefinition> deviceDefinitions)
+        public async Task<List<IDevice>> GetDevices(IList<FilterDeviceDefinition> deviceDefinitions)
         {
             var retVal = new List<IDevice>();
 
@@ -68,7 +68,7 @@ namespace Device.Net
         #endregion
 
         #region Public Static Methods
-        public static bool IsDefinitionMatch(DeviceDefinition filterDevice, DeviceDefinition actualDevice)
+        public static bool IsDefinitionMatch(FilterDeviceDefinition filterDevice, ConnectedDeviceDefinition actualDevice)
         {
             return
                 (!filterDevice.VendorId.HasValue || filterDevice.VendorId == actualDevice.VendorId) &&

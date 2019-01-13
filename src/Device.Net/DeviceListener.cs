@@ -13,11 +13,11 @@ namespace Device.Net
         #region Fields
         private readonly timer _PollTimer;
         private readonly SemaphoreSlim _ListenSemaphoreSlim = new SemaphoreSlim(1, 1);
-        private Dictionary<DeviceDefinition, IDevice> _CreatedDevicesByDefinition { get; } = new Dictionary<DeviceDefinition, IDevice>();
+        private Dictionary<ConnectedDeviceDefinition, IDevice> _CreatedDevicesByDefinition { get; } = new Dictionary<ConnectedDeviceDefinition, IDevice>();
         #endregion
 
         #region Public Properties
-        public List<DeviceDefinition> DeviceDefinitions { get; } = new List<DeviceDefinition>();
+        public List<FilterDeviceDefinition> DeviceDefinitions { get; } = new List<FilterDeviceDefinition>();
         #endregion
 
         #region Events
@@ -31,7 +31,7 @@ namespace Device.Net
         /// </summary>
         /// <param name="registeredDevices">Device definitions to connect to and disconnect from</param>
         /// <param name="pollMilliseconds">Poll interval in milliseconds, or null if checking is called externally</param>
-        public DeviceListener(IEnumerable<DeviceDefinition> registeredDevices, int? pollMilliseconds)
+        public DeviceListener(IEnumerable<FilterDeviceDefinition> registeredDevices, int? pollMilliseconds)
         {
             DeviceDefinitions.AddRange(registeredDevices);
             if (pollMilliseconds.HasValue)
@@ -100,7 +100,7 @@ namespace Device.Net
 
                 }
 
-                var removeDefs = new List<DeviceDefinition>();
+                var removeDefs = new List<ConnectedDeviceDefinition>();
 
                 //Iterate through registered devices
                 foreach (var key in _CreatedDevicesByDefinition.Keys)

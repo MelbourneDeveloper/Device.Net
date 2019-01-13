@@ -5,7 +5,7 @@
     /// <summary>
     /// A definition for a device.
     /// </summary>
-    public class DeviceDefinition
+    public abstract class DeviceDefinitionBase
     {
         /// <summary>
         /// The name of the device product according to the Manufacturer
