@@ -32,7 +32,7 @@ namespace Usb.Net.UWP
 
         public UWPUsbDevice(ConnectedDeviceDefinition deviceDefinition) : base(deviceDefinition.DeviceId)
         {
-            DeviceDefinition = deviceDefinition;
+            ConnectedDeviceDefinition = deviceDefinition;
         }
         #endregion
 

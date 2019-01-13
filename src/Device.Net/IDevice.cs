@@ -36,8 +36,8 @@ namespace Device.Net
         string DeviceId { get; }
 
         /// <summary>
-        /// Information about the device. This information should be collected from initialization
+        /// Information about the device. This information should be collected from initialization and will be null when before initialization or after disposal
         /// </summary>
-        ConnectedDeviceDefinitionBase DeviceDefinition { get;  }
+        ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get;  }
     }
 }

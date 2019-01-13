@@ -26,8 +26,8 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Overrides
-        public override ushort WriteBufferSize => DeviceDefinition == null ? throw new Exception("Device has not been initialized") : (ushort)DeviceDefinition.WriteBufferSize.Value;
-        public override ushort ReadBufferSize => DeviceDefinition == null ? throw new Exception("Device has not been initialized") : (ushort)DeviceDefinition.ReadBufferSize.Value;
+        public override ushort WriteBufferSize => ConnectedDeviceDefinition == null ? throw new Exception("Device has not been initialized") : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value;
+        public override ushort ReadBufferSize => ConnectedDeviceDefinition == null ? throw new Exception("Device has not been initialized") : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value;
         #endregion
 
         #region Public Properties
@@ -66,7 +66,7 @@ namespace Hid.Net.Windows
                 throw new Exception("Could not open connection for writing");
             }
 
-            DeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
+            ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
 
             _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, ReadBufferSize, false);
             _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, WriteBufferSize, false);

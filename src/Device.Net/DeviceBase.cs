@@ -19,7 +19,7 @@ namespace Device.Net
 
         #region Public Properties
         public ITracer Tracer { get; set; }
-        public ConnectedDeviceDefinitionBase DeviceDefinition { get; set; }
+        public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; set; }
         public string DeviceId { get; set; }
         #endregion
 
