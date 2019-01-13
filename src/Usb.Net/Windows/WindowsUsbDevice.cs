@@ -119,7 +119,7 @@ namespace Usb.Net.Windows
             });
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (_IsDisposing) return;
             _IsDisposing = true;
@@ -135,6 +135,8 @@ namespace Usb.Net.Windows
 
                 _DeviceHandle?.Dispose();
                 _DeviceHandle = null;
+
+                base.Dispose();
             }
             catch (Exception)
             {

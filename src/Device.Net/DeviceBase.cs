@@ -8,7 +8,6 @@ namespace Device.Net
     {
         #region Fields
         protected SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
-        private readonly bool _IsDisposing;
         #endregion
 
         #region Public Abstract Properties
@@ -55,6 +54,11 @@ namespace Device.Net
             Array.Copy(bytes, 1, retVal, 0, length);
 
             return retVal;
+        }
+
+        public virtual void Dispose()
+        {
+            ConnectedDeviceDefinition = null;
         }
         #endregion
     }

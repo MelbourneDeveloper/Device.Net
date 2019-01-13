@@ -60,7 +60,7 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Methods 
-        public void Dispose()
+        public override void Dispose()
         {
             if (_IsDisposing) return;
             _IsDisposing = true;
@@ -76,6 +76,8 @@ namespace Usb.Net.Android
                 _UsbDevice = null;
                 _ReadEndpoint = null;
                 _WriteEndpoint = null;
+
+                base.Dispose();
             }
             catch (Exception)
             {

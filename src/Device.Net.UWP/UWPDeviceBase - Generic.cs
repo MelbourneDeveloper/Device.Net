@@ -69,7 +69,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Virtual Methods
-        public void Dispose()
+        public override void Dispose()
         {
             if (_IsDisposing) return;
 
@@ -80,10 +80,11 @@ namespace Device.Net.UWP
                 if (_ConnectedDevice is IDisposable disposable) disposable.Dispose();
                 _ConnectedDevice = default(T);
                 _TaskCompletionSource?.Task?.Dispose();
+                base.Dispose();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Logging
+                Logger.Log("Error disposing", ex, nameof(UWPDeviceBase));
             }
 
             _IsDisposing = false;

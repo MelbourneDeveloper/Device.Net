@@ -76,7 +76,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Methods
-        public void Dispose()
+        public override void Dispose()
         {
             if (_IsDisposing) return;
             _IsDisposing = true;
@@ -100,6 +100,8 @@ namespace Hid.Net.Windows
                     _WriteSafeFileHandle.Dispose();
                     _WriteSafeFileHandle = null;
                 }
+
+                base.Dispose();
             }
             catch (Exception)
             {
