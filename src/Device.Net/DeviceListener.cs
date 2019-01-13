@@ -13,7 +13,11 @@ namespace Device.Net
         #region Fields
         private readonly timer _PollTimer;
         private readonly SemaphoreSlim _ListenSemaphoreSlim = new SemaphoreSlim(1, 1);
-        private Dictionary<ConnectedDeviceDefinition, IDevice> _CreatedDevicesByDefinition { get; } = new Dictionary<ConnectedDeviceDefinition, IDevice>();
+
+        /// <summary>
+        /// This is the list of Devices by their filter definition. Not this is not actually the connected definition.
+        /// </summary>
+        private Dictionary<FilterDeviceDefinition, IDevice> _CreatedDevicesByDefinition { get; } = new Dictionary<FilterDeviceDefinition, IDevice>();
         #endregion
 
         #region Public Properties
@@ -100,14 +104,14 @@ namespace Device.Net
 
                 }
 
-                var removeDefs = new List<ConnectedDeviceDefinition>();
+                var removeDefs = new List<FilterDeviceDefinition>();
 
                 //Iterate through registered devices
-                foreach (var key in _CreatedDevicesByDefinition.Keys)
+                foreach (var filteredDeviceDefinitionKey in _CreatedDevicesByDefinition.Keys)
                 {
-                    var device = _CreatedDevicesByDefinition[key];
+                    var device = _CreatedDevicesByDefinition[filteredDeviceDefinitionKey];
 
-                    if (!connectedDeviceDefinitions.Any(d => DeviceManager.IsDefinitionMatch(d, key)))
+                    if (!connectedDeviceDefinitions.Any(cdd => DeviceManager.IsDefinitionMatch(filteredDeviceDefinitionKey, cdd)))
                     {
                         if (device.IsInitialized)
                         {
@@ -118,7 +122,7 @@ namespace Device.Net
                             //The device is no longer connected so disconnect it
                             device.Dispose();
 
-                            removeDefs.Add(key);
+                            removeDefs.Add(filteredDeviceDefinitionKey);
 
                             Logger.Log("Disconnected", null, nameof(DeviceListener));
                         }
