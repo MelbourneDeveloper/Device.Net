@@ -10,31 +10,16 @@ namespace Device.Net
         protected SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         #endregion
 
-        #region Events
-        public event EventHandler Connected;
-        public event EventHandler Disconnected;
-        #endregion
-
         #region Public Abstract Properties
         public abstract ushort WriteBufferSize { get; }
         public abstract ushort ReadBufferSize { get; }
+        public abstract bool IsInitialized { get; }
         #endregion
 
         #region Public Properties
         public ITracer Tracer { get; set; }
-        public DeviceDefinition DeviceDefinition { get; protected set; }
-        #endregion
-
-        #region Protected Methods
-        protected void RaiseConnected()
-        {
-            Connected?.Invoke(this, new EventArgs());
-        }
-
-        protected void RaiseDisconnected()
-        {
-            Disconnected?.Invoke(this, new EventArgs());
-        }
+        public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; set; }
+        public string DeviceId { get; set; }
         #endregion
 
         #region Public Abstract Methods
@@ -69,6 +54,11 @@ namespace Device.Net
             Array.Copy(bytes, 1, retVal, 0, length);
 
             return retVal;
+        }
+
+        public virtual void Dispose()
+        {
+            ConnectedDeviceDefinition = null;
         }
         #endregion
     }

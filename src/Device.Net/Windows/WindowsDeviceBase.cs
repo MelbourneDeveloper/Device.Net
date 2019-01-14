@@ -7,18 +7,10 @@ namespace Device.Net.Windows
     /// <summary>
     /// This class remains untested
     /// </summary>
-    public abstract class WindowsDeviceBase : DeviceBase, IDevice
+    public abstract class WindowsDeviceBase : DeviceBase
     {
         #region Protected Properties
         protected virtual string LogSection => nameof(WindowsDeviceBase);
-        #endregion
-
-        #region Public Properties
-        /// <summary>
-        /// TODO: Move this down to the DeviceBase
-        /// </summary>
-        public string DeviceId { get; }
-        public bool IsInitialized { get; protected set; }
         #endregion
 
         #region Constructor
@@ -29,18 +21,9 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Methods
-        public virtual void Dispose()
-        {
-            RaiseDisconnected();
-        }
 
-        public Task<bool> GetIsConnectedAsync()
-        {
-            return Task.FromResult(IsInitialized);
-        }
 
         public abstract Task InitializeAsync();
-
         #endregion
 
         #region Public Static Methods

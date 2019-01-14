@@ -1,11 +1,15 @@
-﻿using Microsoft.Win32.SafeHandles;
+﻿using Device.Net.Windows;
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Usb.Net.Windows
 {
     public static partial class WinUsbApiCalls
     {
+        #region Constants
+        public const int EnglishLanguageID = 1033;
         public const uint DEVICE_SPEED = 1;
         public const byte USB_ENDPOINT_DIRECTION_MASK = 0X80;
         public const int WritePipeId = 0x80;
@@ -15,7 +19,9 @@ namespace Usb.Net.Windows
         /// </summary>
         public const int DEFAULT_DESCRIPTOR_TYPE = 0x01;
         public const int USB_STRING_DESCRIPTOR_TYPE = 0x03;
+        #endregion
 
+        #region API Calls
         [DllImport("winusb.dll", SetLastError = true)]
         public static extern bool WinUsb_ControlTransfer(IntPtr InterfaceHandle, WINUSB_SETUP_PACKET SetupPacket, byte[] Buffer, uint BufferLength, ref uint LengthTransferred, IntPtr Overlapped);
 
@@ -51,5 +57,17 @@ namespace Usb.Net.Windows
 
         [DllImport("winusb.dll", SetLastError = true)]
         public static extern bool WinUsb_WritePipe(SafeFileHandle InterfaceHandle, byte PipeID, byte[] Buffer, uint BufferLength, out uint LengthTransferred, IntPtr Overlapped);
+        #endregion
+
+        #region Public Methods
+        public static string GetDescriptor(SafeFileHandle defaultInterfaceHandle, byte index, string errorMessage)
+        {
+            var buffer = new byte[256];
+            var isSuccess = WinUsb_GetDescriptor(defaultInterfaceHandle, USB_STRING_DESCRIPTOR_TYPE, index, EnglishLanguageID, buffer, (uint)buffer.Length, out var transfered);
+            WindowsDeviceBase.HandleError(isSuccess, errorMessage);
+            var descriptor = new string(Encoding.Unicode.GetChars(buffer, 2, (int)transfered));
+            return descriptor.Substring(0, descriptor.Length - 1);
+        }
+        #endregion
     }
 }

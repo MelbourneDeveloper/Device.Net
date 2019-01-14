@@ -1,4 +1,5 @@
-﻿using Device.Net.UWP;
+﻿using Device.Net;
+using Device.Net.UWP;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -29,8 +30,9 @@ namespace Usb.Net.UWP
         {
         }
 
-        public UWPUsbDevice(string deviceId) : base(deviceId)
+        public UWPUsbDevice(ConnectedDeviceDefinition deviceDefinition) : base(deviceDefinition.DeviceId)
         {
+            ConnectedDeviceDefinition = deviceDefinition;
         }
         #endregion
 
@@ -74,9 +76,6 @@ namespace Usb.Net.UWP
                 _DefaultInPipe = _DefaultConfigurationInterface.InterruptInPipes.FirstOrDefault();
 
                 if (_DefaultOutPipe == null) throw new Exception("Could not get the default in pipe for the default USB interface");
-
-
-                RaiseConnected();
             }
             else
             {

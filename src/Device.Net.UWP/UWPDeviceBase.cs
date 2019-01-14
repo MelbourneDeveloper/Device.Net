@@ -34,7 +34,6 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Abstract Methods
-        public abstract Task<bool> GetIsConnectedAsync();
         public abstract Task InitializeAsync();
         #endregion
     }

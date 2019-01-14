@@ -5,28 +5,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Usb.Net.Windows
 {
-    public class WindowsUsbDevice : WindowsDeviceBase
+    public class WindowsUsbDevice : WindowsDeviceBase, IDevice
     {
         #region Fields
-        private const int EnglishLanguageID = 1033;
         private SafeFileHandle _DeviceHandle;
         private readonly List<UsbInterface> _UsbInterfaces = new List<UsbInterface>();
         private UsbInterface _DefaultUsbInterface => _UsbInterfaces.FirstOrDefault();
-        private USB_DEVICE_DESCRIPTOR _UsbDeviceDescriptor;
-        #endregion
-
-        #region Public Properties
-        public string Product { get; private set; }
+        private bool _IsDisposing;
         #endregion
 
         #region Public Overrride Properties
-        public override ushort WriteBufferSize => IsInitialized ? _UsbDeviceDescriptor.bMaxPacketSize0 : throw new Exception("Device has not been initialized");
-        public override ushort ReadBufferSize => IsInitialized ? _UsbDeviceDescriptor.bMaxPacketSize0 : throw new Exception("Device has not been initialized");
+        public override ushort WriteBufferSize => IsInitialized ? (ushort)ConnectedDeviceDefinition.WriteBufferSize : throw new Exception("Device has not been initialized");
+        public override ushort ReadBufferSize => IsInitialized ? (ushort)ConnectedDeviceDefinition.ReadBufferSize : throw new Exception("Device has not been initialized");
+        public override bool IsInitialized => _DeviceHandle != null && !_DeviceHandle.IsInvalid;
         #endregion
 
         #region Constructor
@@ -44,10 +39,11 @@ namespace Usb.Net.Windows
 
             if (string.IsNullOrEmpty(DeviceId))
             {
-                throw new WindowsException($"{nameof(Device.Net.DeviceDefinition)} must be specified before {nameof(InitializeAsync)} can be called.");
+                throw new WindowsException($"{nameof(DeviceDefinitionBase)} must be specified before {nameof(InitializeAsync)} can be called.");
             }
 
             _DeviceHandle = APICalls.CreateFile(DeviceId, (APICalls.GenericWrite | APICalls.GenericRead), APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
+
 
             if (_DeviceHandle.IsInvalid)
             {
@@ -59,10 +55,7 @@ namespace Usb.Net.Windows
             var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
             HandleError(isSuccess, "Couldn't initialize device");
 
-            var bufferLength = (uint)Marshal.SizeOf(typeof(USB_DEVICE_DESCRIPTOR));
-            isSuccess = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, EnglishLanguageID, out _UsbDeviceDescriptor, bufferLength, out var lengthTransferred);
-            HandleError(isSuccess, "Couldn't get device descriptor");
-
+            ConnectedDeviceDefinition = GetDeviceDefinition(defaultInterfaceHandle, DeviceId);
 
             byte i = 0;
 
@@ -88,8 +81,6 @@ namespace Usb.Net.Windows
 
                 i++;
             }
-
-            IsInitialized = true;
         }
         #endregion
 
@@ -97,7 +88,6 @@ namespace Usb.Net.Windows
         public override async Task InitializeAsync()
         {
             await Task.Run(Initialize);
-            RaiseConnected();
         }
 
         public override async Task<byte[]> ReadAsync()
@@ -131,21 +121,64 @@ namespace Usb.Net.Windows
 
         public override void Dispose()
         {
-            IsInitialized = false;
+            if (_IsDisposing) return;
+            _IsDisposing = true;
 
-            foreach (var usbInterface in _UsbInterfaces)
+            try
             {
-                usbInterface.Dispose();
+                foreach (var usbInterface in _UsbInterfaces)
+                {
+                    usbInterface.Dispose();
+                }
+
+                _UsbInterfaces.Clear();
+
+                _DeviceHandle?.Dispose();
+                _DeviceHandle = null;
+
+                base.Dispose();
             }
-            _UsbInterfaces.Clear();
+            catch (Exception)
+            {
+                //TODO: Logging
+            }
 
-            _DeviceHandle?.Dispose();
-
-            base.Dispose();
+            _IsDisposing = false;
         }
         #endregion
 
         #region Private Static Methods
+        private static ConnectedDeviceDefinition GetDeviceDefinition(SafeFileHandle defaultInterfaceHandle, string deviceId)
+        {
+            var deviceDefinition = new ConnectedDeviceDefinition(deviceId) { DeviceType = DeviceType.Usb };
+
+            var bufferLength = (uint)Marshal.SizeOf(typeof(USB_DEVICE_DESCRIPTOR));
+            var isSuccess2 = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, WinUsbApiCalls.EnglishLanguageID, out var _UsbDeviceDescriptor, bufferLength, out var lengthTransferred);
+            HandleError(isSuccess2, "Couldn't get device descriptor");
+
+            if (_UsbDeviceDescriptor.iProduct > 0)
+            {
+                deviceDefinition.ProductName = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle, _UsbDeviceDescriptor.iProduct, "Couldn't get product name");
+            }
+
+            if (_UsbDeviceDescriptor.iSerialNumber > 0)
+            {
+                deviceDefinition.SerialNumber = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle, _UsbDeviceDescriptor.iSerialNumber, "Couldn't get serial number");
+            }
+
+            if (_UsbDeviceDescriptor.iManufacturer > 0)
+            {
+                deviceDefinition.Manufacturer = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle, _UsbDeviceDescriptor.iManufacturer, "Couldn't get manufacturer");
+            }
+
+            deviceDefinition.VendorId = _UsbDeviceDescriptor.idVendor;
+            deviceDefinition.ProductId = _UsbDeviceDescriptor.idProduct;
+            deviceDefinition.WriteBufferSize = _UsbDeviceDescriptor.bMaxPacketSize0;
+            deviceDefinition.ReadBufferSize = _UsbDeviceDescriptor.bMaxPacketSize0;
+
+            return deviceDefinition;
+        }
+
         private static UsbInterface GetInterface(SafeFileHandle interfaceHandle)
         {
             var retVal = new UsbInterface { Handle = interfaceHandle };

@@ -1,27 +1,12 @@
 ﻿namespace Device.Net
 {
-    public class DeviceDefinition
+    //https://docs.microsoft.com/en-us/windows-hardware/drivers/hid/hid-usages#usage-id
+
+    /// <summary>
+    /// A definition for a device.
+    /// </summary>
+    public abstract class DeviceDefinitionBase
     {
-        /// <summary>
-        /// The name of the device product according to the Manufacturer
-        /// </summary>
-        public string Product { get; set; }
-
-        /// <summary>
-        /// Name of the device's manufacturer
-        /// </summary>
-        public string Manufacturer { get; set; }
-
-        /// <summary>
-        /// Unique serial number of the physical device
-        /// </summary>
-        public string SerialNumber { get; set; }
-
-        /// <summary>
-        /// Platform specific, unique Id for the device
-        /// </summary>
-        public string DeviceId { get; set; }
-
         /// <summary>
         /// Vendor ID
         /// </summary>
@@ -43,13 +28,8 @@
         public DeviceType? DeviceType { get; set; }
 
         /// <summary>
-        /// The maximum size of data to be written to the device
+        /// Used to further filter down device definitions on some platforms
         /// </summary>
-        public int? WriteBufferSize { get; set; }
-
-        /// <summary>
-        /// The maximum size of data to be read from the device
-        /// </summary>
-        public int? ReadBufferSize { get; set; }
+        public ushort? UsagePage { get; set; }
     }
 }

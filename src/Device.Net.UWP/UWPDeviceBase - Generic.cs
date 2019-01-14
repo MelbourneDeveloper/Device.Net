@@ -6,6 +6,10 @@ namespace Device.Net.UWP
 {
     public abstract class UWPDeviceBase<T> : UWPDeviceBase, IDevice
     {
+        #region Fields
+        private bool _IsDisposing;
+        #endregion
+
         #region Protected Properties
         protected T _ConnectedDevice;
         #endregion
@@ -36,11 +40,6 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Overrides
-        public override async Task<bool> GetIsConnectedAsync()
-        {
-            return _ConnectedDevice != null;
-        }
-
         public override async Task<byte[]> ReadAsync()
         {
             if (_IsReading)
@@ -65,11 +64,30 @@ namespace Device.Net.UWP
         }
         #endregion
 
+        #region Public Override Properties
+        public override bool IsInitialized => _ConnectedDevice != null;
+        #endregion
+
         #region Public Virtual Methods
-        public virtual void Dispose()
+        public override void Dispose()
         {
-            if (_ConnectedDevice is IDisposable disposable) disposable.Dispose();
-            _TaskCompletionSource?.Task?.Dispose();
+            if (_IsDisposing) return;
+
+            _IsDisposing = true;
+
+            try
+            {
+                if (_ConnectedDevice is IDisposable disposable) disposable.Dispose();
+                _ConnectedDevice = default(T);
+                _TaskCompletionSource?.Task?.Dispose();
+                base.Dispose();
+            }
+            catch (Exception ex)
+            {
+                Logger.Log("Error disposing", ex, nameof(UWPDeviceBase));
+            }
+
+            _IsDisposing = false;
         }
         #endregion
     }

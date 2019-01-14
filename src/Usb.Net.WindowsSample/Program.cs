@@ -1,61 +1,118 @@
-﻿using Device.Net;
-using Hid.Net.Windows;
+﻿using Hid.Net.Windows;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Usb.Net.Sample;
 using Usb.Net.Windows;
 
 namespace Usb.Net.WindowsSample
 {
-    class Program
+    internal class Program
     {
+        #region Fields
+        private static TrezorExample _DeviceConnectionExample = new TrezorExample();
+        #endregion
+
+        #region Main
         private static void Main(string[] args)
         {
-            Go();
-            Console.ReadLine();
+            //Register the factory for creating Usb devices. This only needs to be done once.
+            WindowsUsbDeviceFactory.Register();
+            WindowsHidDeviceFactory.Register();
+
+            _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
+            _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
+
+
+            Go(Menu());
+
+            new ManualResetEvent(false).WaitOne();
         }
 
-        private async static Task Go()
+        private static async Task Go(int menuOption)
+        {
+            switch (menuOption)
+            {
+                case 1:
+                    try
+                    {
+                        await _DeviceConnectionExample.InitializeTrezorAsync();
+                        await DisplayDataAsync();
+                        _DeviceConnectionExample.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Clear();
+                        Console.WriteLine(ex.ToString());
+                    }
+                    Console.ReadKey();
+                    break;
+                case 2:
+                    Console.Clear();
+                    DisplayWaitMessage();
+                    _DeviceConnectionExample.StartListening();
+                    break;
+            }
+        }
+        #endregion
+
+        #region Event Handlers
+        private static void _DeviceConnectionExample_TrezorDisconnected(object sender, EventArgs e)
+        {
+            Console.Clear();
+            Console.WriteLine("Disconnnected.");
+            DisplayWaitMessage();
+        }
+
+        private static async void _DeviceConnectionExample_TrezorInitialized(object sender, EventArgs e)
         {
             try
             {
-                //Register the factory for creating Usb devices. This only needs to be done once.
-                WindowsUsbDeviceFactory.Register();
-                WindowsHidDeviceFactory.Register();
-
-                //Note: other custom device types could be added here
-
-                //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
-                var deviceDefinitions = new List<DeviceDefinition>
-                {
-                    new DeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x" },
-                    new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, ReadBufferSize=64, WriteBufferSize=64, Label="Trezor One Firmware 1.7.x" },
-                    new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C0, ReadBufferSize=64, WriteBufferSize=64, Label="Model T" }
-                };
-
-                //Get the first available device and connect to it
-                var devices = await DeviceManager.Current.GetDevices(deviceDefinitions);
-                using (var trezorDevice = devices.FirstOrDefault())
-                {
-                    await trezorDevice.InitializeAsync();
-
-                    //Create a buffer with 3 bytes (initialize)
-                    var buffer = new byte[64];
-                    buffer[0] = 0x3f;
-                    buffer[1] = 0x23;
-                    buffer[2] = 0x23;
-
-                    //Write the data to the device and get the response
-                    var readBuffer = await trezorDevice.WriteAndReadAsync(buffer);
-
-                    Console.WriteLine("All good");
-                }
+                Console.Clear();
+                await DisplayDataAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
+                Console.Clear();
                 Console.WriteLine(ex.ToString());
             }
         }
+        #endregion
+
+        #region Private Methods
+        private static int Menu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Console sample. This sample demonstrates either writing to the first found connected device, or listening for a device and then writing to it. If you listen for the device, you will be able to connect and disconnect multiple times. This represents how users may actually use the device.");
+                Console.WriteLine();
+                Console.WriteLine("1. Write To Connected Device");
+                Console.WriteLine("2. Listen For Device");
+                var consoleKey = Console.ReadKey();
+                if (consoleKey.KeyChar == '1') return 1;
+                if (consoleKey.KeyChar == '2') return 2;
+            }
+        }
+
+        private static async Task DisplayDataAsync()
+        {
+            var bytes = await _DeviceConnectionExample.WriteAndReadFromDeviceAsync();
+            Console.Clear();
+            Console.WriteLine("Device connected. Output:");
+            DisplayData(bytes);
+        }
+
+        private static void DisplayData(byte[] readBuffer)
+        {
+            Console.WriteLine(string.Join(' ', readBuffer));
+            Console.ReadKey();
+        }
+
+        private static void DisplayWaitMessage()
+        {
+            Console.WriteLine("Waiting for device to be plugged in...");
+        }
+        #endregion
     }
 }
