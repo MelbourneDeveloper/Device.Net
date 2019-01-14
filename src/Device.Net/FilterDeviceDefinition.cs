@@ -1,6 +1,6 @@
 ﻿namespace Device.Net
 {
-    public class FilterDeviceDefinition : DeviceDefinitionBase
+    public sealed class FilterDeviceDefinition : DeviceDefinitionBase
     {
     }
 }
