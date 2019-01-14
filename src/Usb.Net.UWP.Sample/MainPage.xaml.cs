@@ -58,11 +58,13 @@ namespace Usb.Net.UWP.Sample
 
         private async void RunButton_Click(object sender, RoutedEventArgs e)
         {
+            RunButton.IsEnabled = false;
             await DisplayDataAsync(true);
         }
 
         private void StartListeningButton_Click(object sender, RoutedEventArgs e)
         {
+            PollButton.IsEnabled = false;
             SetButtonColor(Colors.Red);
             _DeviceConnectionExample.StartListening();
         }
