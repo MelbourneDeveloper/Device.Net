@@ -90,7 +90,7 @@ Follow me on [Twitter](https://twitter.com/HardfolioApp)
 
 Read my [blog](https://christianfindlay.wordpress.com)
 
-## Contribution
+## [Contribution](https://github.com/MelbourneDeveloper/Device.Net/blob/master/CONTRIBUTING.md)
 
 I welcome feedback, and pull requests. If there's something that you need to change in the library, please log an issue, and explain the problem. If you have a proposed solution, please write it up and explain why you think it is the answer to the problem. The best way to highlight a bug is to submit a pull request with a unit test that fails so I can clearly see what the problem is in the first place.
 
