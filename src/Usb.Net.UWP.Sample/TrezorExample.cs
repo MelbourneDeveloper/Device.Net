@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Usb.Net.Windows;
 
 namespace Usb.Net.Sample
 {
@@ -58,6 +59,15 @@ namespace Usb.Net.Sample
             var devices = await DeviceManager.Current.GetDevices(_DeviceDefinitions);
             TrezorDevice = devices.FirstOrDefault();
             await TrezorDevice.InitializeAsync();
+
+            var windowsDevice = (WindowsUsbDevice)TrezorDevice;
+            var firstInterface = windowsDevice.UsbInterfaces[0];
+            var writePipe = firstInterface.UsbInterfacePipes.FirstOrDefault(p => p.IsWrite);
+            var readPipe = firstInterface.UsbInterfacePipes.FirstOrDefault(p => p.IsRead);
+            firstInterface.ReadPipe = readPipe;
+            firstInterface.WritePipe = writePipe;
+            windowsDevice.WriteUsbInterface = firstInterface;
+            windowsDevice.ReadUsbInterface = firstInterface;
         }
 
         public async Task<byte[]> WriteAndReadFromDeviceAsync()
