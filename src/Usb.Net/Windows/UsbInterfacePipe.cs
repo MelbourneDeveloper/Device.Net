@@ -1,9 +1,16 @@
 ﻿namespace Usb.Net.Windows
 {
-    internal class UsbInterfacePipe
+    public class UsbInterfacePipe
     {
-        public WinUsbApiCalls.WINUSB_PIPE_INFORMATION WINUSB_PIPE_INFORMATION { get; set; }
-        public bool IsRead => (WINUSB_PIPE_INFORMATION.PipeId & WinUsbApiCalls.WritePipeId) != 0;
-        public bool IsWrite => (WINUSB_PIPE_INFORMATION.PipeId & WinUsbApiCalls.WritePipeId) == 0;
+        private int PipeId { get; }
+
+        internal UsbInterfacePipe(int pipeId)
+        {
+            PipeId = pipeId;
+        }
+
+        //public WinUsbApiCalls.WINUSB_PIPE_INFORMATION WINUSB_PIPE_INFORMATION { get; set; }
+        public bool IsRead => (PipeId & WinUsbApiCalls.WritePipeId) != 0;
+        public bool IsWrite => (PipeId & WinUsbApiCalls.WritePipeId) == 0;
     }
 }
