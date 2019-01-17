@@ -13,8 +13,6 @@ namespace Usb.Net.Windows
     {
         #region Fields
         private SafeFileHandle _DeviceHandle;
-        private readonly List<UsbInterface> _UsbInterfaces = new List<UsbInterface>();
-        //private UsbInterface _DefaultUsbInterface => _UsbInterfaces.FirstOrDefault();
         private bool _IsDisposing;
         #endregion
 
@@ -24,6 +22,10 @@ namespace Usb.Net.Windows
         public override bool IsInitialized => _DeviceHandle != null && !_DeviceHandle.IsInvalid;
         public UsbInterface ReadUsbInterface { get; set; }
         public UsbInterface WriteUsbInterface { get; set; }
+        #endregion
+
+        #region Public Properties
+        public List<UsbInterface> UsbInterfaces { get; } = new List<UsbInterface>();
         #endregion
 
         #region Constructor
@@ -63,7 +65,7 @@ namespace Usb.Net.Windows
             //Get the first (default) interface
             var defaultInterface = GetInterface(defaultInterfaceHandle);
 
-            _UsbInterfaces.Add(defaultInterface);
+            UsbInterfaces.Add(defaultInterface);
 
             ReadUsbInterface = defaultInterface;
             WriteUsbInterface = defaultInterface;
@@ -81,7 +83,7 @@ namespace Usb.Net.Windows
 
                 var associatedInterface = GetInterface(interfacePointer);
 
-                _UsbInterfaces.Add(associatedInterface);
+                UsbInterfaces.Add(associatedInterface);
 
                 i++;
             }
@@ -130,12 +132,12 @@ namespace Usb.Net.Windows
 
             try
             {
-                foreach (var usbInterface in _UsbInterfaces)
+                foreach (var usbInterface in UsbInterfaces)
                 {
                     usbInterface.Dispose();
                 }
 
-                _UsbInterfaces.Clear();
+                UsbInterfaces.Clear();
 
                 _DeviceHandle?.Dispose();
                 _DeviceHandle = null;
