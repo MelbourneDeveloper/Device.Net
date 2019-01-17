@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Usb.Net.Windows;
 
 namespace Usb.Net.Sample
 {
