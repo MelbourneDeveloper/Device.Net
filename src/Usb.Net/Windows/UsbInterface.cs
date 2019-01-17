@@ -8,16 +8,55 @@ namespace Usb.Net.Windows
 {
     public class UsbInterface : IDisposable
     {
-        internal SafeFileHandle Handle { get; set; }
-        //public WinUsbApiCalls.USB_INTERFACE_DESCRIPTOR USB_INTERFACE_DESCRIPTOR { get; set; }
-        public List<UsbInterfacePipe> UsbInterfacePipes { get; } = new List<UsbInterfacePipe>();
-        public UsbInterfacePipe ReadPipe => UsbInterfacePipes.FirstOrDefault(p => p.IsRead);
-        public UsbInterfacePipe WritePipe => UsbInterfacePipes.FirstOrDefault(p => p.IsWrite);
+        #region Fields
+        private UsbInterfacePipe _ReadPipe;
+        private UsbInterfacePipe _WritePipe;
+        #endregion
 
+        #region Internal Properties
+        internal SafeFileHandle Handle { get; set; }
+        #endregion
+
+        #region Public Properties
+        public List<UsbInterfacePipe> UsbInterfacePipes { get; } = new List<UsbInterfacePipe>();
+
+        public UsbInterfacePipe ReadPipe
+        {
+            get
+            {
+                //This is a bit stinky but should work
+                if (_ReadPipe == null)
+                {
+                    _ReadPipe = UsbInterfacePipes.FirstOrDefault(p => p.IsRead);
+                }
+
+                return _ReadPipe;
+            }
+            set => _ReadPipe = value;
+        }
+
+        public UsbInterfacePipe WritePipe
+        {
+            get
+            {
+                //This is a bit stinky but should work
+                if (_WritePipe == null)
+                {
+                    _WritePipe = UsbInterfacePipes.FirstOrDefault(p => p.IsWrite);
+                }
+
+                return _WritePipe;
+            }
+            set => _WritePipe = value;
+        }
+        #endregion
+
+        #region Public Methods
         public void Dispose()
         {
             var isSuccess = WinUsbApiCalls.WinUsb_Free(Handle);
             WindowsDeviceBase.HandleError(isSuccess, "Interface could not be disposed");
         }
+        #endregion
     }
 }
