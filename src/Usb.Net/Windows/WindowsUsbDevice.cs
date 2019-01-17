@@ -96,7 +96,7 @@ namespace Usb.Net.Windows
             {
                 var bytes = new byte[ReadBufferSize];
                 //TODO: Allow for different interfaces and pipes...
-                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.ReadPipe.WINUSB_PIPE_INFORMATION.PipeId, bytes, ReadBufferSize, out var bytesRead, IntPtr.Zero);
+                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.ReadPipe.PipeId, bytes, ReadBufferSize, out var bytesRead, IntPtr.Zero);
                 HandleError(isSuccess, "Couldn't read data");
                 Tracer?.Trace(false, bytes);
                 return bytes;
@@ -113,7 +113,7 @@ namespace Usb.Net.Windows
                 }
 
                 //TODO: Allow for different interfaces and pipes...
-                var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.WritePipe.WINUSB_PIPE_INFORMATION.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
+                var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.WritePipe.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
                 HandleError(isSuccess, "Couldn't write data");
                 Tracer?.Trace(true, data);
             });
@@ -185,13 +185,11 @@ namespace Usb.Net.Windows
             var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
             HandleError(isSuccess, "Couldn't query interface");
 
-            retVal.USB_INTERFACE_DESCRIPTOR = interfaceDescriptor;
-
             for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)
             {
                 isSuccess = WinUsbApiCalls.WinUsb_QueryPipe(interfaceHandle, 0, i, out var pipeInfo);
                 HandleError(isSuccess, "Couldn't query pipe");
-                retVal.UsbInterfacePipes.Add(new UsbInterfacePipe { WINUSB_PIPE_INFORMATION = pipeInfo });
+                retVal.UsbInterfacePipes.Add(new UsbInterfacePipe(pipeInfo.PipeId));
             }
 
             return retVal;

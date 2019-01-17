@@ -2,14 +2,13 @@
 {
     public class UsbInterfacePipe
     {
-        private int PipeId { get; }
+        public byte PipeId { get; }
 
-        internal UsbInterfacePipe(int pipeId)
+        internal UsbInterfacePipe(byte pipeId)
         {
             PipeId = pipeId;
         }
 
-        //public WinUsbApiCalls.WINUSB_PIPE_INFORMATION WINUSB_PIPE_INFORMATION { get; set; }
         public bool IsRead => (PipeId & WinUsbApiCalls.WritePipeId) != 0;
         public bool IsWrite => (PipeId & WinUsbApiCalls.WritePipeId) == 0;
     }
