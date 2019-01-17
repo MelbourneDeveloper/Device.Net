@@ -9,8 +9,8 @@ namespace Usb.Net.Windows
     public class UsbInterface : IDisposable
     {
         #region Fields
-        private UsbInterfacePipe _ReadPipe;
-        private UsbInterfacePipe _WritePipe;
+        private UsbInterfaceEndpoint _ReadEndpoint;
+        private UsbInterfaceEndpoint _WriteEndpoint;
         #endregion
 
         #region Internal Properties
@@ -18,43 +18,43 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Properties
-        public List<UsbInterfacePipe> UsbInterfacePipes { get; } = new List<UsbInterfacePipe>();
+        public List<UsbInterfaceEndpoint> UsbInterfaceEndpoints { get; } = new List<UsbInterfaceEndpoint>();
 
-        public UsbInterfacePipe ReadPipe
+        public UsbInterfaceEndpoint ReadEndpoint
         {
             get
             {
                 //This is a bit stinky but should work
-                if (_ReadPipe == null)
+                if (_ReadEndpoint == null)
                 {
-                    _ReadPipe = UsbInterfacePipes.FirstOrDefault(p => p.IsRead);
+                    _ReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead);
                 }
 
-                return _ReadPipe;
+                return _ReadEndpoint;
             }
             set
             {
-                if (!UsbInterfacePipes.Contains(value)) throw new Exception("This pipe is not contained in the list of valid pipes");
-                _ReadPipe = value;
+                if (!UsbInterfaceEndpoints.Contains(value)) throw new Exception("This endpoint is not contained in the list of valid endpoints");
+                _ReadEndpoint = value;
             }
         }
 
-        public UsbInterfacePipe WritePipe
+        public UsbInterfaceEndpoint WriteEndpoint
         {
             get
             {
                 //This is a bit stinky but should work
-                if (_WritePipe == null)
+                if (_WriteEndpoint == null)
                 {
-                    _WritePipe = UsbInterfacePipes.FirstOrDefault(p => p.IsWrite);
+                    _WriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite);
                 }
 
-                return _WritePipe;
+                return _WriteEndpoint;
             }
             set
             {
-                if (!UsbInterfacePipes.Contains(value)) throw new Exception("This pipe is not contained in the list of valid pipes");
-                _WritePipe = value;
+                if (!UsbInterfaceEndpoints.Contains(value)) throw new Exception("This endpoint is not contained in the list of valid endpoints");
+                _WriteEndpoint = value;
             }
         }
         #endregion
