@@ -32,7 +32,11 @@ namespace Usb.Net.Windows
 
                 return _ReadPipe;
             }
-            set => _ReadPipe = value;
+            set
+            {
+                if (!UsbInterfacePipes.Contains(value)) throw new Exception("This pipe is not contained in the list of valid pipes");
+                _ReadPipe = value;
+            }
         }
 
         public UsbInterfacePipe WritePipe
@@ -47,7 +51,11 @@ namespace Usb.Net.Windows
 
                 return _WritePipe;
             }
-            set => _WritePipe = value;
+            set
+            {
+                if (!UsbInterfacePipes.Contains(value)) throw new Exception("This pipe is not contained in the list of valid pipes");
+                _WritePipe = value;
+            }
         }
         #endregion
 

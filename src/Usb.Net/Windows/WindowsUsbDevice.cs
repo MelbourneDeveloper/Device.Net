@@ -14,7 +14,7 @@ namespace Usb.Net.Windows
         #region Fields
         private SafeFileHandle _DeviceHandle;
         private readonly List<UsbInterface> _UsbInterfaces = new List<UsbInterface>();
-        private UsbInterface _DefaultUsbInterface => _UsbInterfaces.FirstOrDefault();
+        //private UsbInterface _DefaultUsbInterface => _UsbInterfaces.FirstOrDefault();
         private bool _IsDisposing;
         #endregion
 
@@ -22,6 +22,8 @@ namespace Usb.Net.Windows
         public override ushort WriteBufferSize => IsInitialized ? (ushort)ConnectedDeviceDefinition.WriteBufferSize : throw new Exception("Device has not been initialized");
         public override ushort ReadBufferSize => IsInitialized ? (ushort)ConnectedDeviceDefinition.ReadBufferSize : throw new Exception("Device has not been initialized");
         public override bool IsInitialized => _DeviceHandle != null && !_DeviceHandle.IsInvalid;
+        public UsbInterface ReadUsbInterface { get; set; }
+        public UsbInterface WriteUsbInterface { get; set; }
         #endregion
 
         #region Constructor
@@ -44,7 +46,6 @@ namespace Usb.Net.Windows
 
             _DeviceHandle = APICalls.CreateFile(DeviceId, (APICalls.GenericWrite | APICalls.GenericRead), APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
 
-
             if (_DeviceHandle.IsInvalid)
             {
                 //TODO: is error code useful here?
@@ -63,6 +64,9 @@ namespace Usb.Net.Windows
             var defaultInterface = GetInterface(defaultInterfaceHandle);
 
             _UsbInterfaces.Add(defaultInterface);
+
+            ReadUsbInterface = defaultInterface;
+            WriteUsbInterface = defaultInterface;
 
             while (true)
             {
@@ -96,7 +100,7 @@ namespace Usb.Net.Windows
             {
                 var bytes = new byte[ReadBufferSize];
                 //TODO: Allow for different interfaces and pipes...
-                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.ReadPipe.PipeId, bytes, ReadBufferSize, out var bytesRead, IntPtr.Zero);
+                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(ReadUsbInterface.Handle, ReadUsbInterface.ReadPipe.PipeId, bytes, ReadBufferSize, out var bytesRead, IntPtr.Zero);
                 HandleError(isSuccess, "Couldn't read data");
                 Tracer?.Trace(false, bytes);
                 return bytes;
@@ -113,7 +117,7 @@ namespace Usb.Net.Windows
                 }
 
                 //TODO: Allow for different interfaces and pipes...
-                var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.WritePipe.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
+                var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(WriteUsbInterface.Handle, WriteUsbInterface.WritePipe.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
                 HandleError(isSuccess, "Couldn't write data");
                 Tracer?.Trace(true, data);
             });
