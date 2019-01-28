@@ -50,12 +50,13 @@ namespace Usb.Net.Sample
             DeviceListener = new DeviceListener(_DeviceDefinitions, 3000);
             DeviceListener.DeviceDisconnected += DevicePoller_DeviceDisconnected;
             DeviceListener.DeviceInitialized += DevicePoller_DeviceInitialized;
+            DeviceListener.Start();
         }
 
         public async Task InitializeTrezorAsync()
         {
             //Get the first available device and connect to it
-            var devices = await DeviceManager.Current.GetDevices(_DeviceDefinitions);
+            var devices = await DeviceManager.Current.GetDevicesAsync(_DeviceDefinitions);
             TrezorDevice = devices.FirstOrDefault();
             await TrezorDevice.InitializeAsync();
         }

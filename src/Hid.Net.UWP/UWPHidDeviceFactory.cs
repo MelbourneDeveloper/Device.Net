@@ -9,8 +9,10 @@ namespace Hid.Net.UWP
 {
     public class UWPHidDeviceFactory : UWPDeviceFactoryBase, IDeviceFactory
     {
+        #region Fields
         private SemaphoreSlim _TestConnectionSemaphore = new SemaphoreSlim(1, 1);
         private Dictionary<string, ConnectionInfo> _ConnectionTestedDeviceIds = new Dictionary<string, ConnectionInfo>();
+        #endregion
 
         #region Public Override Properties
         public override DeviceType DeviceType => DeviceType.Hid;

@@ -20,7 +20,7 @@ namespace Device.Net
             var retVal = new List<ConnectedDeviceDefinition>();
             foreach (var deviceFactory in DeviceFactories)
             {
-                retVal.AddRange(await deviceFactory.GetConnectedDeviceDefinitions(deviceDefinition));
+                retVal.AddRange(await deviceFactory.GetConnectedDeviceDefinitionsAsync(deviceDefinition));
             }
 
             return retVal;
@@ -38,7 +38,7 @@ namespace Device.Net
             throw new System.Exception("Couldn't get a device");
         }
 
-        public async Task<List<IDevice>> GetDevices(IList<FilterDeviceDefinition> deviceDefinitions)
+        public async Task<List<IDevice>> GetDevicesAsync(IList<FilterDeviceDefinition> deviceDefinitions)
         {
             var retVal = new List<IDevice>();
 
@@ -48,7 +48,7 @@ namespace Device.Net
                 {
                     if (filterDeviceDefinition.DeviceType.HasValue && (deviceFactory.DeviceType != filterDeviceDefinition.DeviceType)) continue;
 
-                    var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitions(filterDeviceDefinition);
+                    var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitionsAsync(filterDeviceDefinition);
                     retVal.AddRange
                     (
                         connectedDeviceDefinitions.Select

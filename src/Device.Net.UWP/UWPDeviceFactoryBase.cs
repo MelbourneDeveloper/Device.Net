@@ -44,7 +44,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitions(FilterDeviceDefinition deviceDefinition)
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
         {
             var aqsFilter = GetAqsFilter(deviceDefinition.VendorId, deviceDefinition.ProductId);
 
@@ -59,8 +59,6 @@ namespace Device.Net.UWP
                 var connectionInformation = await TestConnection(deviceDef.DeviceId);
                 if (connectionInformation.CanConnect)
                 {
-                    await Task.Delay(1000);
-
                     deviceDef.UsagePage = connectionInformation.UsagePage;
 
                     deviceDefinitionList.Add(deviceDef);
@@ -95,10 +93,12 @@ namespace Device.Net.UWP
         }
         #endregion
 
+        #region Inner Classes
         public class ConnectionInfo
         {
             public bool CanConnect { get; set; }
             public ushort? UsagePage { get; set; }
         }
+        #endregion
     }
 }

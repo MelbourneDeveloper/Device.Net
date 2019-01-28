@@ -8,16 +8,17 @@ using timer = System.Timers.Timer;
 
 namespace Device.Net
 {
-    public class DeviceListener
+    public class DeviceListener : IDisposable
     {
         #region Fields
+        private bool _IsDisposed;
         private readonly timer _PollTimer;
         private readonly SemaphoreSlim _ListenSemaphoreSlim = new SemaphoreSlim(1, 1);
 
         /// <summary>
         /// This is the list of Devices by their filter definition. Note this is not actually keyed by the connected definition.
         /// </summary>
-        private Dictionary<FilterDeviceDefinition, IDevice> _CreatedDevicesByDefinition { get; } = new Dictionary<FilterDeviceDefinition, IDevice>();
+        private readonly Dictionary<FilterDeviceDefinition, IDevice> _CreatedDevicesByDefinition = new Dictionary<FilterDeviceDefinition, IDevice>();
         #endregion
 
         #region Public Properties
@@ -42,7 +43,6 @@ namespace Device.Net
             {
                 _PollTimer = new timer(pollMilliseconds.Value);
                 _PollTimer.Elapsed += _PollTimer_Elapsed;
-                _PollTimer.Start();
             }
         }
         #endregion
@@ -55,6 +55,20 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Starts the polling for devices if polling is being used.
+        /// </summary>
+        public void Start()
+        {
+            if (_PollTimer == null)
+            {
+                throw new Exception("Polling is not enabled. Please specify pollMilliseconds in the constructor");
+            }
+
+            _PollTimer.Start();
+        }
+
         public async Task CheckForDevicesAsync()
         {
             try
@@ -152,6 +166,26 @@ namespace Device.Net
         public void Stop()
         {
             _PollTimer.Stop();
+        }
+
+        public void Dispose()
+        {
+            if (_IsDisposed) return;
+            _IsDisposed = true;
+
+            Stop();
+
+            foreach (var key in _CreatedDevicesByDefinition.Keys)
+            {
+                _CreatedDevicesByDefinition[key].Dispose();
+            }
+
+            _CreatedDevicesByDefinition.Clear();
+
+            _ListenSemaphoreSlim.Dispose();
+
+            DeviceInitialized = null;
+            DeviceDisconnected = null;
         }
         #endregion
     }
