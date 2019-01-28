@@ -59,8 +59,6 @@ namespace Device.Net.UWP
                 var connectionInformation = await TestConnection(deviceDef.DeviceId);
                 if (connectionInformation.CanConnect)
                 {
-                    await Task.Delay(1000);
-
                     deviceDef.UsagePage = connectionInformation.UsagePage;
 
                     deviceDefinitionList.Add(deviceDef);
