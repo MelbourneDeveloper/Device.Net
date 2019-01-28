@@ -18,6 +18,8 @@
     <PackageTags>USB Hid Android C#</PackageTags>
     <PackageReleaseNotes>Split from Hid.Net</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Device.Net.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
