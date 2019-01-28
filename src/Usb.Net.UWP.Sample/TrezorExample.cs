@@ -55,7 +55,7 @@ namespace Usb.Net.Sample
         public async Task InitializeTrezorAsync()
         {
             //Get the first available device and connect to it
-            var devices = await DeviceManager.Current.GetDevices(_DeviceDefinitions);
+            var devices = await DeviceManager.Current.GetDevicesAsync(_DeviceDefinitions);
             TrezorDevice = devices.FirstOrDefault();
             await TrezorDevice.InitializeAsync();
         }
