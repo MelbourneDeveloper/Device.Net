@@ -50,6 +50,7 @@ namespace Usb.Net.Sample
             DeviceListener = new DeviceListener(_DeviceDefinitions, 3000);
             DeviceListener.DeviceDisconnected += DevicePoller_DeviceDisconnected;
             DeviceListener.DeviceInitialized += DevicePoller_DeviceInitialized;
+            DeviceListener.Start();
         }
 
         public async Task InitializeTrezorAsync()

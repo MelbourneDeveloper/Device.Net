@@ -43,7 +43,6 @@ namespace Device.Net
             {
                 _PollTimer = new timer(pollMilliseconds.Value);
                 _PollTimer.Elapsed += _PollTimer_Elapsed;
-                _PollTimer.Start();
             }
         }
         #endregion
@@ -56,6 +55,20 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Starts the polling for devices if polling is being used.
+        /// </summary>
+        public void Start()
+        {
+            if (_PollTimer == null)
+            {
+                throw new Exception("Polling is not enabled. Please specify pollMilliseconds in the constructor");
+            }
+
+            _PollTimer.Start();
+        }
+
         public async Task CheckForDevicesAsync()
         {
             try
