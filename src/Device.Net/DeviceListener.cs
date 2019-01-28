@@ -8,16 +8,17 @@ using timer = System.Timers.Timer;
 
 namespace Device.Net
 {
-    public class DeviceListener
+    public class DeviceListener : IDisposable
     {
         #region Fields
+        private bool _IsDisposed;
         private readonly timer _PollTimer;
         private readonly SemaphoreSlim _ListenSemaphoreSlim = new SemaphoreSlim(1, 1);
 
         /// <summary>
         /// This is the list of Devices by their filter definition. Note this is not actually keyed by the connected definition.
         /// </summary>
-        private Dictionary<FilterDeviceDefinition, IDevice> _CreatedDevicesByDefinition { get; } = new Dictionary<FilterDeviceDefinition, IDevice>();
+        private readonly Dictionary<FilterDeviceDefinition, IDevice> _CreatedDevicesByDefinition = new Dictionary<FilterDeviceDefinition, IDevice>();
         #endregion
 
         #region Public Properties
@@ -152,6 +153,24 @@ namespace Device.Net
         public void Stop()
         {
             _PollTimer.Stop();
+        }
+
+        public void Dispose()
+        {
+            if (_IsDisposed) return;
+            _IsDisposed = true;
+
+            foreach (var key in _CreatedDevicesByDefinition.Keys)
+            {
+                _CreatedDevicesByDefinition[key].Dispose();
+            }
+
+            _CreatedDevicesByDefinition.Clear();
+
+            _ListenSemaphoreSlim.Dispose();
+
+            DeviceInitialized = null;
+            DeviceDisconnected = null;
         }
         #endregion
     }
