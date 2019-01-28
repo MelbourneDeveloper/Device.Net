@@ -173,6 +173,8 @@ namespace Device.Net
             if (_IsDisposed) return;
             _IsDisposed = true;
 
+            Stop();
+
             foreach (var key in _CreatedDevicesByDefinition.Keys)
             {
                 _CreatedDevicesByDefinition[key].Dispose();
