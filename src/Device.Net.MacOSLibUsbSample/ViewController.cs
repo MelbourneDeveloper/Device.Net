@@ -27,7 +27,7 @@ namespace Device.Net.MacOSLibUsbSample
 
             var alert = new NSAlert
             {
-                MessageText = $"Got it! {buffer[0]},{buffer[1]},{buffer[2]}",
+                MessageText = $"Got it! {buffer[0]},{buffer[1]},{buffer[2]}.  Warning: Make sure you unplug and replug before trying again.",
                 AlertStyle = NSAlertStyle.Informational
             };
 
