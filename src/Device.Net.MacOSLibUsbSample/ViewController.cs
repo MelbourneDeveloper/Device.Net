@@ -23,7 +23,7 @@ namespace Device.Net.MacOSLibUsbSample
             LibUsbUsbDeviceFactory.Register();
 
             await TrezorExample.InitializeTrezorAsync();
-            var buffer = TrezorExample.WriteAndReadFromDeviceAsync();
+            var buffer = await TrezorExample.WriteAndReadFromDeviceAsync();
         }
 
         public override NSObject RepresentedObject
