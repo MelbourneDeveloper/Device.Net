@@ -16,9 +16,16 @@ namespace Device.Net.LibUsb
             {
                 UsbDeviceFinder usbDeviceFinder = null;
 
-                if (deviceDefinition.VendorId.HasValue && !deviceDefinition.ProductId.HasValue)
+                if (deviceDefinition.VendorId.HasValue)
                 {
-                    usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value);
+                    if (deviceDefinition.ProductId.HasValue)
+                    {
+                        usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value, (int)deviceDefinition.ProductId.Value);
+                    }
+                    else
+                    {
+                        usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value);
+                    }
                 }
 
                 var usbDevice = UsbDevice.OpenUsbDevice(usbDeviceFinder);
