@@ -5,15 +5,17 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;LIBUSB</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\Usb.Net.UWP.Sample\TrezorExample.cs" Link="TrezorExample.cs" />
+    <Compile Include="..\Usb.Net.WindowsSample\Program.cs" Link="Program.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Net.LibUsb\Device.Net.LibUsb.csproj" />
-    <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
-    <ProjectReference Include="..\Hid.Net\Hid.Net.csproj" />
-    <ProjectReference Include="..\Usb.Net\Usb.Net.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,9 +1,13 @@
-﻿using Hid.Net.Windows;
+﻿using Device.Net.LibUsb;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Usb.Net.Sample;
+
+#if (!LIBUSB)
 using Usb.Net.Windows;
+using Hid.Net.Windows;
+#endif
 
 namespace Usb.Net.WindowsSample
 {
@@ -17,12 +21,16 @@ namespace Usb.Net.WindowsSample
         private static void Main(string[] args)
         {
             //Register the factory for creating Usb devices. This only needs to be done once.
+#if (LIBUSB)
+            LibUsbHidDeviceFactory.Register();
+            LibUsbUsbDeviceFactory.Register();
+#else
             WindowsUsbDeviceFactory.Register();
             WindowsHidDeviceFactory.Register();
+#endif
 
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
-
 
             Go(Menu());
 
