@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support</RepositoryUrl>
     <PackageTags>Hid USB MacOS Linux C#</PackageTags>
     <PackageReleaseNotes>First version of the library. Tested on MacOS and Windows.</PackageReleaseNotes>
-    <Description>Device.Net based library for USB access on Linux, MacOS and Windows.</Description>
+    <Description>Device.Net based library for USB access on Linux, MacOS and Windows. Use Usb.Net, and Hid.Net for Windows, UWP, and Android support. The base interfaces are the same so the code is compatible on all platforms.</Description>
   </PropertyGroup>
 
   <Choose>
