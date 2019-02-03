@@ -1,21 +1,29 @@
 ﻿using System;
 
 using AppKit;
+using Device.Net.LibUsb;
 using Foundation;
+using Usb.Net.Sample;
 
 namespace Device.Net.MacOSLibUsbSample
 {
     public partial class ViewController : NSViewController
     {
+        TrezorExample TrezorExample = new TrezorExample();
+
         public ViewController(IntPtr handle) : base(handle)
         {
+
         }
 
-        public override void ViewDidLoad()
+        public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
-            // Do any additional setup after loading the view.
+            LibUsbUsbDeviceFactory.Register();
+
+            await TrezorExample.InitializeTrezorAsync();
+            var buffer = TrezorExample.WriteAndReadFromDeviceAsync();
         }
 
         public override NSObject RepresentedObject

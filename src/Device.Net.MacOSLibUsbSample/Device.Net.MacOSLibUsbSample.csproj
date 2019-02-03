@@ -93,6 +93,10 @@
       <Project>{4D641249-0812-4178-8AE6-CE6DF7F33D4E}</Project>
       <Name>Device.Net.LibUsb</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Device.Net\Device.Net.csproj">
+      <Project>{6E59F8FC-6DE3-4347-9C5F-40EBA1807393}</Project>
+      <Name>Device.Net</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
