@@ -23,7 +23,6 @@ namespace Usb.Net.WindowsSample
         {
             //Register the factory for creating Usb devices. This only needs to be done once.
 #if (LIBUSB)
-            LibUsbHidDeviceFactory.Register();
             LibUsbUsbDeviceFactory.Register();
 #else
             WindowsUsbDeviceFactory.Register();

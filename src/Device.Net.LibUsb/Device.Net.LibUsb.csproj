@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="LibUsbHidDeviceFactory.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="LibUsbDotNet" Version="2.2.29" />
   </ItemGroup>
 

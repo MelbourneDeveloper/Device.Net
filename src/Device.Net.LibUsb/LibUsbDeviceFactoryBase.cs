@@ -1,7 +1,6 @@
 ﻿using Device.Net.LibUsb.MacOS;
 using LibUsbDotNet;
 using LibUsbDotNet.Main;
-using LibUsbDotNet.WinUsb;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -34,8 +33,8 @@ namespace Device.Net.LibUsb
                 var retVal = new List<ConnectedDeviceDefinition>();
 
                 if (usbDevice != null)
-                {
-                    retVal.Add(new ConnectedDeviceDefinition(usbDevice.UsbRegistryInfo.DeviceInterfaceGuids[0].ToString()) { VendorId = (uint)usbDevice.UsbRegistryInfo.Vid, ProductId = (uint)usbDevice.UsbRegistryInfo.Pid });
+                {                    
+                    retVal.Add(new ConnectedDeviceDefinition(usbDevice.DevicePath) { VendorId = (uint)usbDevice.UsbRegistryInfo.Vid, ProductId = (uint)usbDevice.UsbRegistryInfo.Pid });
                     usbDevice.Close();
                     return retVal;
                 }
