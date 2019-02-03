@@ -16,7 +16,7 @@ namespace Device.Net.LibUsb.MacOS
         #endregion
 
         #region Public Properties
-        public IUsbDevice UsbDevice { get; }
+        public UsbDevice UsbDevice { get; }
         public int VendorId => UsbDevice.UsbRegistryInfo.Vid;
         public int ProductId => UsbDevice.UsbRegistryInfo.Pid;
         public int Timeout { get; }
@@ -31,7 +31,7 @@ namespace Device.Net.LibUsb.MacOS
         #endregion
 
         #region Constructor
-        public LibUsbDevice(IUsbDevice usbDevice, int timeout)
+        public LibUsbDevice(UsbDevice usbDevice, int timeout)
         {
             UsbDevice = usbDevice;
             Timeout = timeout;
@@ -54,7 +54,7 @@ namespace Device.Net.LibUsb.MacOS
                 //TODO: Error handling etc.
                 UsbDevice.Open();
                 //TODO: This is not cool.
-                UsbDevice.ClaimInterface(0);
+               // UsbDevice.ClaimInterface(0);
                 _UsbEndpointWriter = UsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
                 _UsbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
                 ReadPacketSize = _UsbEndpointReader.EndpointInfo.Descriptor.MaxPacketSize;

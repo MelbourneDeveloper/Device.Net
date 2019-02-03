@@ -1,6 +1,7 @@
 ﻿using Device.Net.LibUsb.MacOS;
 using LibUsbDotNet;
 using LibUsbDotNet.Main;
+using LibUsbDotNet.WinUsb;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -47,7 +48,7 @@ namespace Device.Net.LibUsb
         {
             var usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value, (int)deviceDefinition.ProductId.Value);
             var usbDevice = UsbDevice.OpenUsbDevice(usbDeviceFinder);
-            return usbDevice != null ? new LibUsbDevice((IUsbDevice)usbDevice, 3000) : null;
+            return usbDevice != null ? new LibUsbDevice(usbDevice, 3000) : null;
         }
     }
 }
