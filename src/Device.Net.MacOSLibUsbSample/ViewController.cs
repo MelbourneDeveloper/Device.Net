@@ -24,6 +24,16 @@ namespace Device.Net.MacOSLibUsbSample
 
             await TrezorExample.InitializeTrezorAsync();
             var buffer = await TrezorExample.WriteAndReadFromDeviceAsync();
+
+            var alert = new NSAlert
+            {
+                MessageText = $"Got it! {buffer[0]},{buffer[1]},{buffer[2]}",
+                AlertStyle = NSAlertStyle.Informational
+            };
+
+            alert.AddButton("OK");
+
+            var returnValue = alert.RunModal();
         }
 
         public override NSObject RepresentedObject
