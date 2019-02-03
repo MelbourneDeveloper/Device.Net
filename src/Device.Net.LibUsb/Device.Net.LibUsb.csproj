@@ -4,9 +4,6 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Device.Net.pfx</AssemblyOriginatorKeyFile>
-    <DelaySign>false</DelaySign>
     <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Device.Net/blob/master/LICENSE</PackageLicenseUrl>
     <Version>2.5.0</Version>
     <Authors>Christian Findlay</Authors>
@@ -18,6 +15,21 @@
     <PackageReleaseNotes>First version of the library. Tested on MacOS and Windows.</PackageReleaseNotes>
     <Description>Device.Net based library for USB access on Linux, MacOS and Windows.</Description>
   </PropertyGroup>
+
+  <Choose>
+    <When Condition=" '$(Configuration)'=='Debug' ">
+      <PropertyGroup>
+        <SignAssembly>false</SignAssembly>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(Configuration)'=='Release' ">
+      <PropertyGroup>
+        <SignAssembly>true</SignAssembly>
+        <DelaySign>false</DelaySign>
+        <AssemblyOriginatorKeyFile>Device.Net.pfx</AssemblyOriginatorKeyFile>
+      </PropertyGroup>
+    </When>
+  </Choose>
 
   <ItemGroup>
     <Compile Remove="LibUsbHidDeviceFactory.cs" />
