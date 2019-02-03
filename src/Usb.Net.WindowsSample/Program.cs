@@ -1,5 +1,4 @@
-﻿using Device.Net.LibUsb;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Usb.Net.Sample;
@@ -7,6 +6,8 @@ using Usb.Net.Sample;
 #if (!LIBUSB)
 using Usb.Net.Windows;
 using Hid.Net.Windows;
+#else
+using Device.Net.LibUsb;
 #endif
 
 namespace Usb.Net.WindowsSample
