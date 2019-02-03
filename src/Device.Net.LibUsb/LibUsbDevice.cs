@@ -1,4 +1,5 @@
 ﻿using LibUsbDotNet;
+using LibUsbDotNet.LudnMonoLibUsb;
 using LibUsbDotNet.Main;
 using System;
 using System.Threading;
@@ -53,8 +54,17 @@ namespace Device.Net.LibUsb.MacOS
 
                 //TODO: Error handling etc.
                 UsbDevice.Open();
-                //TODO: This is not cool.
-               // UsbDevice.ClaimInterface(0);
+
+                //TODO: This is far beyond not cool.
+                if (UsbDevice is MonoUsbDevice monoUsbDevice)
+                {
+                    monoUsbDevice.ClaimInterface(0);
+                }
+                else
+                {
+                    ((IUsbDevice)UsbDevice).ClaimInterface(0);
+                }
+
                 _UsbEndpointWriter = UsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
                 _UsbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
                 ReadPacketSize = _UsbEndpointReader.EndpointInfo.Descriptor.MaxPacketSize;
