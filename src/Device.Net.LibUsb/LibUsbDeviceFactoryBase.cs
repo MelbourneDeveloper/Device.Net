@@ -1,5 +1,4 @@
-﻿using Device.Net.LibUsb.MacOS;
-using LibUsbDotNet;
+﻿using LibUsbDotNet;
 using LibUsbDotNet.LudnMonoLibUsb;
 using LibUsbDotNet.Main;
 using System.Collections.Generic;
