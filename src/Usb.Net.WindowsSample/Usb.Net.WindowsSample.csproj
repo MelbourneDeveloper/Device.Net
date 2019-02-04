@@ -10,7 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Device.Net.LibUsb\Device.Net.LibUsb.csproj" />
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
     <ProjectReference Include="..\Hid.Net\Hid.Net.csproj" />
     <ProjectReference Include="..\Usb.Net\Usb.Net.csproj" />
