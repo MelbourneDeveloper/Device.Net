@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Device.Net/blob/master/LICENSE</PackageLicenseUrl>
+    <Version>2.5.1</Version>
+    <Authors>Christian Findlay</Authors>
+    <Company>Christian Findlay</Company>
+    <Product>Device.Net.LibUsb</Product>
+    <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support</RepositoryUrl>
+    <PackageTags>Hid USB MacOS Linux C#</PackageTags>
+    <PackageReleaseNotes>Fixed stability issues. Tested on MacOS and Windows. Sign the assembly</PackageReleaseNotes>
+    <Description>Device.Net based library for USB access on Linux, MacOS and Windows. Use Usb.Net, and Hid.Net for Windows, UWP, and Android support. The base interfaces are the same so the code is compatible on all platforms.</Description>
+  </PropertyGroup>
+
+  <Choose>
+    <When Condition=" '$(Configuration)'=='Debug' ">
+      <PropertyGroup>
+        <SignAssembly>false</SignAssembly>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(Configuration)'=='Release' ">
+      <PropertyGroup>
+        <SignAssembly>true</SignAssembly>
+        <DelaySign>false</DelaySign>
+        <AssemblyOriginatorKeyFile>Device.Net.pfx</AssemblyOriginatorKeyFile>
+      </PropertyGroup>
+    </When>
+  </Choose>
+
+  <ItemGroup>
+    <Compile Remove="LibUsbHidDeviceFactory.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LibUsbDotNet" Version="2.2.29" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
+  </ItemGroup>
+
+</Project>

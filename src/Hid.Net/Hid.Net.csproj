@@ -4,9 +4,6 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <CodeAnalysisRuleSet>CodeRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <SignAssembly>true</SignAssembly>
-    <DelaySign>false</DelaySign>
-    <AssemblyOriginatorKeyFile>Device.Net.pfx</AssemblyOriginatorKeyFile>
     <Version>2.4.0</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -27,6 +24,21 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
     <PackageReleaseNotes>Split the library in to Device.Net, Hid.Net, and Usb.Net. For Android, please use Usb.Net. Check the Hid.Net repo for details.</PackageReleaseNotes>
     <PackageId>Hid.Net</PackageId>
   </PropertyGroup>
+
+  <Choose>
+    <When Condition=" '$(Configuration)'=='Debug' ">
+      <PropertyGroup>
+        <SignAssembly>false</SignAssembly>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(Configuration)'=='Release' ">
+      <PropertyGroup>
+        <SignAssembly>true</SignAssembly>
+        <DelaySign>false</DelaySign>
+        <AssemblyOriginatorKeyFile>Device.Net.pfx</AssemblyOriginatorKeyFile>
+      </PropertyGroup>
+    </When>
+  </Choose>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE;DEBUG;NETSTANDARD2_0;HIDNET</DefineConstants>
