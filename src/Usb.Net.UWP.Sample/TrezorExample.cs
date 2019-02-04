@@ -9,6 +9,11 @@ namespace Usb.Net.Sample
     internal class TrezorExample : IDisposable
     {
         #region Fields
+#if(LIBUSB)
+        private const int PollMilliseconds = 6000;
+#else
+        private const int PollMilliseconds = 3000;
+#endif
         //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
         private readonly List<FilterDeviceDefinition> _DeviceDefinitions = new List<FilterDeviceDefinition>
         {
@@ -47,7 +52,7 @@ namespace Usb.Net.Sample
         public void StartListening()
         {
             TrezorDevice?.Dispose();
-            DeviceListener = new DeviceListener(_DeviceDefinitions, 3000);
+            DeviceListener = new DeviceListener(_DeviceDefinitions, PollMilliseconds);
             DeviceListener.DeviceDisconnected += DevicePoller_DeviceDisconnected;
             DeviceListener.DeviceInitialized += DevicePoller_DeviceInitialized;
             DeviceListener.Start();
