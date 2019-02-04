@@ -34,12 +34,12 @@ namespace Device.Net.LibUsb
                 {
                     const string classPropertyName = "Class";
 
-                    var usbDeviceClass = DeviceType == DeviceType.Usb ? "USBDevice" : null;
+                    //var usbDeviceClass = DeviceType == DeviceType.Usb ? "USBDevice" : null;
 
-                    if (!usbRegistry.DeviceProperties.ContainsKey(classPropertyName) || (string)usbRegistry.DeviceProperties[classPropertyName] != usbDeviceClass)
-                    {
-                        continue;
-                    }
+                    //if (!usbRegistry.DeviceProperties.ContainsKey(classPropertyName) || (string)usbRegistry.DeviceProperties[classPropertyName] != usbDeviceClass)
+                    //{
+                    //    continue;
+                    //}
 
                     retVal.Add(new ConnectedDeviceDefinition(usbRegistry.DevicePath)
                     {

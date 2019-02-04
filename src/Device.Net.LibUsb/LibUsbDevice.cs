@@ -20,11 +20,11 @@ namespace Device.Net.LibUsb
         #region Public Properties
         public UsbDevice UsbDevice { get; }
         public int VendorId => GetVendorId(UsbDevice);
-        public int ProductId => UsbDevice.UsbRegistryInfo.Pid;
+        public int ProductId => GetProductId(UsbDevice);
         public int Timeout { get; }
-        public bool IsInitialized => true;
+        public bool IsInitialized { get; private set; }
         public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition => throw new NotImplementedException();
-        public string DeviceId => throw new NotImplementedException();
+        public string DeviceId => UsbDevice.DevicePath;
         #endregion
 
         #region Events
@@ -61,7 +61,7 @@ namespace Device.Net.LibUsb
                 {
                     monoUsbDevice.ClaimInterface(0);
                 }
-                else if(UsbDevice is WinUsbDevice winUsbDevice)
+                else if (UsbDevice is WinUsbDevice winUsbDevice)
                 {
                     //Doesn't seem necessary in this case...
                 }
@@ -73,6 +73,8 @@ namespace Device.Net.LibUsb
                 _UsbEndpointWriter = UsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
                 _UsbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
                 ReadPacketSize = _UsbEndpointReader.EndpointInfo.Descriptor.MaxPacketSize;
+
+                IsInitialized = true;
             });
         }
 
@@ -146,6 +148,5 @@ namespace Device.Net.LibUsb
             }
         }
         #endregion
-
     }
 }
