@@ -20,7 +20,11 @@ namespace Device.Net.LibUsb
                 {
                     if (deviceDefinition.ProductId.HasValue)
                     {
-                        devices = UsbDevice.AllDevices.Where(d => d.Vid == deviceDefinition.VendorId.Value && d.Pid == deviceDefinition.ProductId.Value);
+                        devices = UsbDevice.AllDevices.Where((d) => 
+                        {
+                            return d.Vid == deviceDefinition.VendorId.Value && 
+                            d.Pid == deviceDefinition.ProductId.Value;
+                        });
                     }
                     else
                     {
