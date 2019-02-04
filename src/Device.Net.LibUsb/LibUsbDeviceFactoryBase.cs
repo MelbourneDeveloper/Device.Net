@@ -36,7 +36,8 @@ namespace Device.Net.LibUsb
                     retVal.Add(new ConnectedDeviceDefinition(usbDevice.DevicePath)
                     {
                         VendorId = (uint)LibUsbDevice.GetVendorId(usbDevice),
-                        ProductId = (uint)LibUsbDevice.GetProductId(usbDevice)
+                        ProductId = (uint)LibUsbDevice.GetProductId(usbDevice),
+                        DeviceType = DeviceType
                     });
 
                     usbDevice.Close();
