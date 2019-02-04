@@ -1,6 +1,7 @@
 ﻿using LibUsbDotNet;
 using LibUsbDotNet.Main;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Device.Net.LibUsb
@@ -13,36 +14,41 @@ namespace Device.Net.LibUsb
         {
             return await Task.Run(() =>
             {
-                UsbDeviceFinder usbDeviceFinder = null;
+                IEnumerable<UsbRegistry> devices = null;
 
                 if (deviceDefinition.VendorId.HasValue)
                 {
                     if (deviceDefinition.ProductId.HasValue)
                     {
-                        usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value, (int)deviceDefinition.ProductId.Value);
+                        devices = UsbDevice.AllDevices.Where(d => d.Vid == deviceDefinition.VendorId.Value && d.Pid == deviceDefinition.ProductId.Value);
                     }
                     else
                     {
-                        usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value);
+                        devices = UsbDevice.AllDevices.Where(d => d.Vid == deviceDefinition.VendorId.Value);
                     }
                 }
 
-                var usbDevice = UsbDevice.OpenUsbDevice(usbDeviceFinder);
-
                 var retVal = new List<ConnectedDeviceDefinition>();
 
-                if (usbDevice != null)
+                foreach (var usbRegistry in devices)
                 {
-                    retVal.Add(new ConnectedDeviceDefinition(usbDevice.DevicePath)
+                    const string classPropertyName = "Class";
+
+                    var usbDeviceClass = DeviceType == DeviceType.Usb ? "USBDevice" : null;
+
+                    if (!usbRegistry.DeviceProperties.ContainsKey(classPropertyName) || (string)usbRegistry.DeviceProperties[classPropertyName] != usbDeviceClass)
                     {
-                        VendorId = (uint)LibUsbDevice.GetVendorId(usbDevice),
-                        ProductId = (uint)LibUsbDevice.GetProductId(usbDevice),
+                        continue;
+                    }
+
+                    retVal.Add(new ConnectedDeviceDefinition(usbRegistry.DevicePath)
+                    {
+                        VendorId = (uint)usbRegistry.Vid,
+                        ProductId = (uint)usbRegistry.Pid,
                         DeviceType = DeviceType
                     });
-
-                    usbDevice.Close();
-                    return retVal;
                 }
+
 
                 return retVal;
             });
