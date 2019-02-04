@@ -1,5 +1,4 @@
 ﻿using LibUsbDotNet;
-using LibUsbDotNet.LudnMonoLibUsb;
 using LibUsbDotNet.Main;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -34,21 +33,12 @@ namespace Device.Net.LibUsb
 
                 if (usbDevice != null)
                 {
-                    uint vendorId;
-                    uint productId;
-
-                    if (usbDevice is MonoUsbDevice monoUsbDevice)
+                    retVal.Add(new ConnectedDeviceDefinition(usbDevice.DevicePath)
                     {
-                        vendorId = (uint)monoUsbDevice.Profile.DeviceDescriptor.VendorID;
-                        productId = (uint)monoUsbDevice.Profile.DeviceDescriptor.ProductID;
-                    }
-                    else
-                    {
-                        vendorId = (uint)usbDevice.UsbRegistryInfo.Vid;
-                        productId = (uint)usbDevice.UsbRegistryInfo.Pid;
-                    }
+                        VendorId = (uint)LibUsbDevice.GetVendorId(usbDevice),
+                        ProductId = (uint)LibUsbDevice.GetProductId(usbDevice)
+                    });
 
-                    retVal.Add(new ConnectedDeviceDefinition(usbDevice.DevicePath) { VendorId = vendorId, ProductId = productId });
                     usbDevice.Close();
                     return retVal;
                 }

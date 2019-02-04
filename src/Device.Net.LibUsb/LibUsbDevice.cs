@@ -1,6 +1,7 @@
 ﻿using LibUsbDotNet;
 using LibUsbDotNet.LudnMonoLibUsb;
 using LibUsbDotNet.Main;
+using LibUsbDotNet.WinUsb;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace Device.Net.LibUsb
 
         #region Public Properties
         public UsbDevice UsbDevice { get; }
-        public int VendorId => UsbDevice.UsbRegistryInfo.Vid;
+        public int VendorId => GetVendorId(UsbDevice);
         public int ProductId => UsbDevice.UsbRegistryInfo.Pid;
         public int Timeout { get; }
         public bool IsInitialized => true;
@@ -59,6 +60,10 @@ namespace Device.Net.LibUsb
                 if (UsbDevice is MonoUsbDevice monoUsbDevice)
                 {
                     monoUsbDevice.ClaimInterface(0);
+                }
+                else if(UsbDevice is WinUsbDevice winUsbDevice)
+                {
+                    //Doesn't seem necessary in this case...
                 }
                 else
                 {
@@ -115,5 +120,32 @@ namespace Device.Net.LibUsb
             return await ReadAsync();
         }
         #endregion
+
+        #region Public Static Methods
+        public static int GetVendorId(UsbDevice usbDevice)
+        {
+            if (usbDevice is MonoUsbDevice monoUsbDevice)
+            {
+                return monoUsbDevice.Profile.DeviceDescriptor.VendorID;
+            }
+            else
+            {
+                return usbDevice.UsbRegistryInfo.Vid;
+            }
+        }
+
+        public static int GetProductId(UsbDevice usbDevice)
+        {
+            if (usbDevice is MonoUsbDevice monoUsbDevice)
+            {
+                return monoUsbDevice.Profile.DeviceDescriptor.ProductID;
+            }
+            else
+            {
+                return usbDevice.UsbRegistryInfo.Pid;
+            }
+        }
+        #endregion
+
     }
 }
