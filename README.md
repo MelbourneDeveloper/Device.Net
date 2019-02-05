@@ -86,7 +86,9 @@ Litecoin: MVAbLaNPq7meGXvZMU4TwypUsDEuU6stpY
 
 Join us on [Slack](https://hardwarewallets.slack.com)
 
-Follow me on [Twitter](https://twitter.com/HardfolioApp)
+Follow me on [Twitter](https://twitter.com/CFDevelop)
+
+Follow my app Hardfolio on [Twitter](https://twitter.com/HardfolioApp)
 
 Read my [blog](https://christianfindlay.wordpress.com)
 
