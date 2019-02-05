@@ -4,7 +4,7 @@
 
 **Cross platform C# library for talking to connected devices such as Usb, and Hid devices.**
 
-**Linux and MacOS support is here! Check out the [MacOS sample](https://github.com/MelbourneDeveloper/Device.Net/tree/develop/src/Device.Net.MacOSLibUsbSample) in the develop branch. Grab the NuGet for [Device.Net.LibUsb](https://www.nuget.org/packages/Device.Net.LibUsb/).**
+**[Linux and MacOS support](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support) is here! Check out the [MacOS sample](https://github.com/MelbourneDeveloper/Device.Net/tree/develop/src/Device.Net.MacOSLibUsbSample) in the develop branch. Grab the NuGet for [Device.Net.LibUsb](https://www.nuget.org/packages/Device.Net.LibUsb/).**
 
 This library provides a common Task based Async interface across platforms and device types. This allows for dependency injection so that different types of devices can be used on any platform with the same code. The supported device types are Hid, and USB. Other device types such as Bluetooth and so on may be added in future. Hid.Net is specifically for Hid devices that may be Usb devices. Usb.Net is specifically for Usb devices that don't have a Hid interface.
 
