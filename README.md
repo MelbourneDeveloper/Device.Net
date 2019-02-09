@@ -18,7 +18,7 @@ Please visit the [documentation page](https://github.com/MelbourneDeveloper/Devi
 | .NET Core      | Hid, USB  |
 | Android | USB |
 | UWP | Hid, USB   |
-| Linux* | USB (Via LibUsbDotNet)  |
+| Linux, MacOS* | USB (Via LibUsbDotNet)  |
 
 *See [Linux and MacOS Support](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support)
 
