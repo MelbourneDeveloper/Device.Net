@@ -7,7 +7,7 @@ namespace Device.Net
     public abstract class DeviceBase
     {
         #region Fields
-        protected SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         #endregion
 
         #region Public Abstract Properties
