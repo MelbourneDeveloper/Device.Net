@@ -7,7 +7,7 @@ namespace Device.Net
     public abstract class DeviceBase
     {
         #region Fields
-        protected SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         #endregion
 
         #region Public Abstract Properties
@@ -56,9 +56,15 @@ namespace Device.Net
             return retVal;
         }
 
-        public virtual void Dispose()
+        public virtual void Close()
         {
             ConnectedDeviceDefinition = null;
+        }
+
+        public virtual void Dispose()
+        {
+            Close();
+            _WriteAndReadLock.Dispose();
         }
         #endregion
     }
