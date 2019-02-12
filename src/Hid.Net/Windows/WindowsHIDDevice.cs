@@ -14,7 +14,7 @@ namespace Hid.Net.Windows
         private FileStream _WriteFileStream;
         private SafeFileHandle _ReadSafeFileHandle;
         private SafeFileHandle _WriteSafeFileHandle;
-        private bool _IsDisposing;
+        private bool _IsDisposed;
         #endregion
 
         #region Protected Properties
@@ -76,39 +76,43 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Methods
+        public override void Close()
+        {
+            base.Close();
+
+            _ReadFileStream?.Dispose();
+            _WriteFileStream?.Dispose();
+
+            _ReadFileStream = null;
+            _WriteFileStream = null;
+
+            if (_ReadSafeFileHandle != null)
+            {
+                _ReadSafeFileHandle.Dispose();
+                _ReadSafeFileHandle = null;
+            }
+
+            if (_WriteSafeFileHandle != null)
+            {
+                _WriteSafeFileHandle.Dispose();
+                _WriteSafeFileHandle = null;
+            }
+        }
+
         public override void Dispose()
         {
-            if (_IsDisposing) return;
-            _IsDisposing = true;
+            if (_IsDisposed) return;
+            _IsDisposed = true;
 
             try
             {
-                _ReadFileStream?.Dispose();
-                _WriteFileStream?.Dispose();
-
-                _ReadFileStream = null;
-                _WriteFileStream = null;
-
-                if (_ReadSafeFileHandle != null)
-                {
-                    _ReadSafeFileHandle.Dispose();
-                    _ReadSafeFileHandle = null;
-                }
-
-                if (_WriteSafeFileHandle != null)
-                {
-                    _WriteSafeFileHandle.Dispose();
-                    _WriteSafeFileHandle = null;
-                }
-
+                Close();
                 base.Dispose();
             }
             catch (Exception)
             {
                 //TODO: Logging
             }
-
-            _IsDisposing = false;
         }
 
         public override async Task InitializeAsync()
