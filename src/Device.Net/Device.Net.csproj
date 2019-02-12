@@ -19,7 +19,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <NoWarn>CA2007</NoWarn>
+    <NoWarn>CA2007;CA1401;CA1060;CA1707</NoWarn>
   </PropertyGroup>
 
   <Choose>
