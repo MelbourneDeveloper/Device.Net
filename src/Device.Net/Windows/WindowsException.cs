@@ -8,5 +8,13 @@ namespace Device.Net.Windows
         {
 
         }
+
+        public WindowsException()
+        {
+        }
+
+        public WindowsException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 }
