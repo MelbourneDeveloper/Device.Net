@@ -78,24 +78,31 @@ namespace Hid.Net.Windows
         #region Public Methods
         public override void Close()
         {
-            base.Close();
-
-            _ReadFileStream?.Dispose();
-            _WriteFileStream?.Dispose();
-
-            _ReadFileStream = null;
-            _WriteFileStream = null;
-
-            if (_ReadSafeFileHandle != null)
+            try
             {
-                _ReadSafeFileHandle.Dispose();
-                _ReadSafeFileHandle = null;
+                base.Close();
+
+                _ReadFileStream?.Dispose();
+                _WriteFileStream?.Dispose();
+
+                _ReadFileStream = null;
+                _WriteFileStream = null;
+
+                if (_ReadSafeFileHandle != null)
+                {
+                    _ReadSafeFileHandle.Dispose();
+                    _ReadSafeFileHandle = null;
+                }
+
+                if (_WriteSafeFileHandle != null)
+                {
+                    _WriteSafeFileHandle.Dispose();
+                    _WriteSafeFileHandle = null;
+                }
             }
-
-            if (_WriteSafeFileHandle != null)
+            catch (Exception)
             {
-                _WriteSafeFileHandle.Dispose();
-                _WriteSafeFileHandle = null;
+                //TODO: Logging
             }
         }
 
@@ -103,16 +110,8 @@ namespace Hid.Net.Windows
         {
             if (_IsDisposed) return;
             _IsDisposed = true;
-
-            try
-            {
-                Close();
-                base.Dispose();
-            }
-            catch (Exception)
-            {
-                //TODO: Logging
-            }
+            Close();
+            base.Dispose();
         }
 
         public override async Task InitializeAsync()
