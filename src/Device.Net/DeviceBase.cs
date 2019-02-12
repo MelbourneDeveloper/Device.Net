@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Device.Net
 {
-    public abstract class DeviceBase
+    public abstract class DeviceBase : IDisposable
     {
         #region Fields
         private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
@@ -58,6 +58,7 @@ namespace Device.Net
 
         public virtual void Dispose()
         {
+            _WriteAndReadLock.Dispose();
             ConnectedDeviceDefinition = null;
         }
         #endregion
