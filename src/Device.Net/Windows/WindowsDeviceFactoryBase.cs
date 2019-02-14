@@ -69,8 +69,8 @@ namespace Device.Net.Windows
                     WindowsDeviceBase.HandleError(isSuccess, "Could not get device interface detail");
 
                     //Note this is a bit nasty but we can filter Vid and Pid this way I think...
-                    if (deviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(vendorHex)) continue;
-                    if (deviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(productIdHex)) continue;
+                    if (deviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
+                    if (deviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
 
                     var connectedDeviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
 
@@ -95,7 +95,7 @@ namespace Device.Net.Windows
         }
         private static uint GetNumberFromDeviceId(string deviceId, string searchString)
         {
-            var indexOfSearchString = deviceId.ToLower().IndexOf(searchString);
+            var indexOfSearchString = deviceId.IndexOf(searchString, StringComparison.OrdinalIgnoreCase);
             string hexString = null;
             if (indexOfSearchString > -1)
             {
