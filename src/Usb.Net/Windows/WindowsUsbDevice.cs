@@ -16,6 +16,7 @@ namespace Usb.Net.Windows
         private readonly List<UsbInterface> _UsbInterfaces = new List<UsbInterface>();
         private UsbInterface _DefaultUsbInterface => _UsbInterfaces.FirstOrDefault();
         private bool disposed;
+        private bool _IsClosing;
         #endregion
 
         #region Public Overrride Properties
@@ -121,6 +122,9 @@ namespace Usb.Net.Windows
 
         public void Close()
         {
+            if (_IsClosing) return;
+            _IsClosing = true;
+
             try
             {
                 foreach (var usbInterface in _UsbInterfaces)
@@ -137,6 +141,8 @@ namespace Usb.Net.Windows
             {
                 //TODO: Logging
             }
+
+            _IsClosing = false;
         }
 
         public sealed override void Dispose()
