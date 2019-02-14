@@ -76,12 +76,10 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Methods
-        public override void Close()
+        public  void Close()
         {
             try
             {
-                base.Close();
-
                 _ReadFileStream?.Dispose();
                 _WriteFileStream?.Dispose();
 

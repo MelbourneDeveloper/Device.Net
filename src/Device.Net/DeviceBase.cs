@@ -56,14 +56,8 @@ namespace Device.Net
             return retVal;
         }
 
-        public virtual void Close()
-        {
-            ConnectedDeviceDefinition = null;
-        }
-
         public virtual void Dispose()
         {
-            Close();
             _WriteAndReadLock.Dispose();
         }
         #endregion
