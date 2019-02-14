@@ -177,7 +177,7 @@ namespace Usb.Net.Android
 
                 await _InitializingSemaphoreSlim.WaitAsync();
 
-                Dispose();
+                Close();
 
                 _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceNumberId);
 
