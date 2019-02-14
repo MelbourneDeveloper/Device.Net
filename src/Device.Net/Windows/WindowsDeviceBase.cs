@@ -21,8 +21,6 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Methods
-
-
         public abstract Task InitializeAsync();
         #endregion
 

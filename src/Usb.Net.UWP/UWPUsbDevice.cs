@@ -39,6 +39,8 @@ namespace Usb.Net.UWP
         #region Private Methods
         public override async Task InitializeAsync()
         {
+            if (disposed) throw new Exception(DeviceDisposedErrorMessage);
+
             await GetDevice(DeviceId);
 
             if (_ConnectedDevice != null)

@@ -14,6 +14,7 @@
     <PackageTags>Hid USB MacOS Linux C#</PackageTags>
     <PackageReleaseNotes>Fixed stability issues. Tested on MacOS and Windows. Sign the assembly</PackageReleaseNotes>
     <Description>Device.Net based library for USB access on Linux, MacOS and Windows. Use Usb.Net, and Hid.Net for Windows, UWP, and Android support. The base interfaces are the same so the code is compatible on all platforms.</Description>
+    <NoWarn>1701;1702;CA1063</NoWarn>
   </PropertyGroup>
 
   <Choose>

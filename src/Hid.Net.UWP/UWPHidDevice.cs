@@ -63,6 +63,8 @@ namespace Hid.Net.UWP
 
         public override async Task InitializeAsync()
         {
+            if (disposed) throw new Exception(DeviceDisposedErrorMessage);
+
             //TODO: Put a lock here to stop reentrancy of multiple calls
 
             //TODO: Dispose but this seems to cause initialization to never occur

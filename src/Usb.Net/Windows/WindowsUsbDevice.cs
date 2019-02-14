@@ -15,7 +15,8 @@ namespace Usb.Net.Windows
         private SafeFileHandle _DeviceHandle;
         private readonly List<UsbInterface> _UsbInterfaces = new List<UsbInterface>();
         private UsbInterface _DefaultUsbInterface => _UsbInterfaces.FirstOrDefault();
-        private bool _IsDisposing;
+        private bool disposed;
+        private bool _IsClosing;
         #endregion
 
         #region Public Overrride Properties
@@ -33,7 +34,7 @@ namespace Usb.Net.Windows
         #region Private Methods
         private void Initialize()
         {
-            Dispose();
+            Close();
 
             int errorCode;
 
@@ -87,6 +88,8 @@ namespace Usb.Net.Windows
         #region Public Methods
         public override async Task InitializeAsync()
         {
+            if (disposed) throw new Exception(DeviceDisposedErrorMessage);
+
             await Task.Run(Initialize);
         }
 
@@ -119,10 +122,10 @@ namespace Usb.Net.Windows
             });
         }
 
-        public override void Dispose()
+        public void Close()
         {
-            if (_IsDisposing) return;
-            _IsDisposing = true;
+            if (_IsClosing) return;
+            _IsClosing = true;
 
             try
             {
@@ -135,15 +138,23 @@ namespace Usb.Net.Windows
 
                 _DeviceHandle?.Dispose();
                 _DeviceHandle = null;
-
-                base.Dispose();
             }
             catch (Exception)
             {
                 //TODO: Logging
             }
 
-            _IsDisposing = false;
+            _IsClosing = false;
+        }
+
+        public sealed override void Dispose()
+        {
+            if (disposed) return;
+            disposed = true;
+
+            Close();
+
+            base.Dispose();
         }
         #endregion
 

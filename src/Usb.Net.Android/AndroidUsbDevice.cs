@@ -18,7 +18,8 @@ namespace Usb.Net.Android
         private UsbEndpoint _WriteEndpoint;
         private UsbEndpoint _ReadEndpoint;
         private SemaphoreSlim _InitializingSemaphoreSlim = new SemaphoreSlim(1, 1);
-        private bool _IsDisposing;
+        private bool _IsClosing;
+        private bool disposed;
         #endregion
 
         #region Public Constants
@@ -58,10 +59,23 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Methods 
-        public override void Dispose()
+
+        public override sealed void Dispose()
         {
-            if (_IsDisposing) return;
-            _IsDisposing = true;
+            if (disposed) return;
+            disposed = true;
+
+            Close();
+
+            _InitializingSemaphoreSlim.Dispose();
+
+            base.Dispose();
+        }
+
+        public void Close()
+        {
+            if (_IsClosing) return;
+            _IsClosing = true;
 
             try
             {
@@ -74,15 +88,13 @@ namespace Usb.Net.Android
                 _UsbDevice = null;
                 _ReadEndpoint = null;
                 _WriteEndpoint = null;
-
-                base.Dispose();
             }
             catch (Exception)
             {
                 //TODO: Logging
             }
 
-            _IsDisposing = false;
+            _IsClosing = false;
         }
 
         //TODO: Make async properly
@@ -161,9 +173,11 @@ namespace Usb.Net.Android
         {
             try
             {
+                if (disposed) throw new Exception(DeviceDisposedErrorMessage);
+
                 await _InitializingSemaphoreSlim.WaitAsync();
 
-                Dispose();
+                Close();
 
                 _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceNumberId);
 

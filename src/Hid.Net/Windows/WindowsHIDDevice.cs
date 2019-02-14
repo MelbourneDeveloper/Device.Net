@@ -14,7 +14,8 @@ namespace Hid.Net.Windows
         private FileStream _WriteFileStream;
         private SafeFileHandle _ReadSafeFileHandle;
         private SafeFileHandle _WriteSafeFileHandle;
-        private bool _IsDisposing;
+        private bool _IsClosing;
+        private bool disposed = false;
         #endregion
 
         #region Protected Properties
@@ -46,7 +47,7 @@ namespace Hid.Net.Windows
         #region Private Methods
         private bool Initialize()
         {
-            Dispose();
+            Close();
 
             if (string.IsNullOrEmpty(DeviceId))
             {
@@ -76,10 +77,11 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Methods
-        public override void Dispose()
+        public void Close()
         {
-            if (_IsDisposing) return;
-            _IsDisposing = true;
+            if (_IsClosing) return;
+
+            _IsClosing = true;
 
             try
             {
@@ -100,19 +102,30 @@ namespace Hid.Net.Windows
                     _WriteSafeFileHandle.Dispose();
                     _WriteSafeFileHandle = null;
                 }
-
-                base.Dispose();
             }
             catch (Exception)
             {
                 //TODO: Logging
             }
 
-            _IsDisposing = false;
+            _IsClosing = false;
+        }
+
+        public override void Dispose()
+        {
+            if (disposed) return;
+
+            disposed = true;
+
+            Close();
+
+            base.Dispose();
         }
 
         public override async Task InitializeAsync()
         {
+            if (disposed) throw new Exception(DeviceDisposedErrorMessage);
+
             await Task.Run(() => Initialize());
         }
 

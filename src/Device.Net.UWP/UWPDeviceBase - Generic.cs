@@ -7,7 +7,8 @@ namespace Device.Net.UWP
     public abstract class UWPDeviceBase<T> : UWPDeviceBase, IDevice
     {
         #region Fields
-        private bool _IsDisposing;
+        private bool _IsClosing;
+        protected bool disposed;
         #endregion
 
         #region Protected Properties
@@ -69,25 +70,34 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Virtual Methods
-        public override void Dispose()
+        public override sealed void Dispose()
         {
-            if (_IsDisposing) return;
+            if (disposed) return;
+            disposed = true;
 
-            _IsDisposing = true;
+            Close();
+            _TaskCompletionSource?.Task?.Dispose();
+
+            base.Dispose();
+        }
+
+        public void Close()
+        {
+            if (_IsClosing) return;
+
+            _IsClosing = true;
 
             try
             {
                 if (_ConnectedDevice is IDisposable disposable) disposable.Dispose();
                 _ConnectedDevice = default(T);
-                _TaskCompletionSource?.Task?.Dispose();
-                base.Dispose();
             }
             catch (Exception ex)
             {
                 Logger.Log("Error disposing", ex, nameof(UWPDeviceBase));
             }
 
-            _IsDisposing = false;
+            _IsClosing = false;
         }
         #endregion
     }
