@@ -8,6 +8,7 @@ namespace Device.Net.UWP
     {
         #region Fields
         private bool _IsClosing;
+        private bool disposed;
         #endregion
 
         #region Protected Properties
@@ -69,19 +70,16 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Virtual Methods
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                Close();
-                _TaskCompletionSource?.Task?.Dispose();
-            }
-        }
-
         public override sealed void Dispose()
         {
-            Dispose(true);
+            if (disposed) return;
+            disposed = true;
+
+            Close();
+            _TaskCompletionSource?.Task?.Dispose();
+
+            base.Dispose();
+
             GC.SuppressFinalize(this);
         }
 
