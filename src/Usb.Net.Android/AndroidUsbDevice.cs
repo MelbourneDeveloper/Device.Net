@@ -67,6 +67,8 @@ namespace Usb.Net.Android
 
             Close();
 
+            _InitializingSemaphoreSlim.Dispose();
+
             base.Dispose();
         }
 
@@ -171,6 +173,8 @@ namespace Usb.Net.Android
         {
             try
             {
+                if (disposed) throw new Exception(DeviceDisposedErrorMessage);
+
                 await _InitializingSemaphoreSlim.WaitAsync();
 
                 Dispose();

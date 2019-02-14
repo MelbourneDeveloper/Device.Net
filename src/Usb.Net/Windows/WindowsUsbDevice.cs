@@ -88,6 +88,8 @@ namespace Usb.Net.Windows
         #region Public Methods
         public override async Task InitializeAsync()
         {
+            if (disposed) throw new Exception(DeviceDisposedErrorMessage);
+
             await Task.Run(Initialize);
         }
 

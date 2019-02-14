@@ -8,7 +8,7 @@ namespace Device.Net.UWP
     {
         #region Fields
         private bool _IsClosing;
-        private bool disposed;
+        protected bool disposed;
         #endregion
 
         #region Protected Properties
