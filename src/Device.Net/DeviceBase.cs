@@ -8,6 +8,7 @@ namespace Device.Net
     {
         #region Fields
         private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        private. private bool disposed = false;
         #endregion
 
         #region Public Abstract Properties
@@ -56,9 +57,23 @@ namespace Device.Net
             return retVal;
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+                return;
+
+            if (disposing)
+            {
+                _WriteAndReadLock.Dispose();
+            }
+
+            disposed = true;
+        }
+
         public virtual void Dispose()
         {
-            _WriteAndReadLock.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
         #endregion
     }
