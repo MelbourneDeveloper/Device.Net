@@ -15,7 +15,7 @@ namespace Hid.Net.Windows
         private SafeFileHandle _ReadSafeFileHandle;
         private SafeFileHandle _WriteSafeFileHandle;
         private bool _IsClosing;
-        bool disposed = false;
+        private bool disposed = false;
         #endregion
 
         #region Protected Properties
@@ -80,6 +80,7 @@ namespace Hid.Net.Windows
         public void Close()
         {
             if (_IsClosing) return;
+
             _IsClosing = true;
 
             try
@@ -113,26 +114,14 @@ namespace Hid.Net.Windows
         public override void Dispose()
         {
             if (disposed) return;
-            disposed = true;
 
             Close();
 
-            base.Dispose();
-        }
-
-        protected void Dispose(bool disposing)
-        {
-            if (disposed)
-                return;
-
-            if (disposing)
-            {
-                Close();
-            }
-
             disposed = true;
 
-            base.Dispose(disposing);
+            base.Dispose();
+
+            GC.SuppressFinalize(this);
         }
 
         public override async Task InitializeAsync()
