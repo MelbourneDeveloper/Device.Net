@@ -51,7 +51,7 @@ namespace Usb.Net.Sample
         #region Public Methods
         public void StartListening()
         {
-            TrezorDevice?.Dispose();
+            TrezorDevice?.Close();
             DeviceListener = new DeviceListener(_DeviceDefinitions, PollMilliseconds);
             DeviceListener.DeviceDisconnected += DevicePoller_DeviceDisconnected;
             DeviceListener.DeviceInitialized += DevicePoller_DeviceInitialized;
@@ -81,6 +81,7 @@ namespace Usb.Net.Sample
         public void Dispose()
         {
             TrezorDevice?.Dispose();
+            GC.SuppressFinalize(this);
         }
         #endregion
     }
