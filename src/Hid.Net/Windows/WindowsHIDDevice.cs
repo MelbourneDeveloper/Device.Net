@@ -115,13 +115,11 @@ namespace Hid.Net.Windows
         {
             if (disposed) return;
 
-            Close();
-
             disposed = true;
 
-            base.Dispose();
+            Close();
 
-            GC.SuppressFinalize(this);
+            base.Dispose();
         }
 
         public override async Task InitializeAsync()

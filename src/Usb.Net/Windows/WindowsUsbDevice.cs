@@ -149,16 +149,12 @@ namespace Usb.Net.Windows
 
         public sealed override void Dispose()
         {
-            if (disposed)
-                return;
+            if (disposed) return;
+            disposed = true;
 
             Close();
 
-            disposed = true;
-
             base.Dispose();
-
-            GC.SuppressFinalize(this);
         }
         #endregion
 

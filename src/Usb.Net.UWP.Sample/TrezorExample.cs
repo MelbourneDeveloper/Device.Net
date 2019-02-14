@@ -81,7 +81,6 @@ namespace Usb.Net.Sample
         public void Dispose()
         {
             TrezorDevice?.Dispose();
-            GC.SuppressFinalize(this);
         }
         #endregion
     }

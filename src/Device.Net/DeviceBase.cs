@@ -62,10 +62,9 @@ namespace Device.Net
         {
             if (disposed) return;
 
-            _WriteAndReadLock.Dispose();
-
             disposed = true;
-            GC.SuppressFinalize(this);
+
+            _WriteAndReadLock.Dispose();
         }
         #endregion
     }

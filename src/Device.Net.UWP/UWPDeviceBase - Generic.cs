@@ -79,8 +79,6 @@ namespace Device.Net.UWP
             _TaskCompletionSource?.Task?.Dispose();
 
             base.Dispose();
-
-            GC.SuppressFinalize(this);
         }
 
         public void Close()

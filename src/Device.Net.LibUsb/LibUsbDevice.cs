@@ -50,7 +50,6 @@ namespace Device.Net.LibUsb
         public void Dispose()
         {
             if (disposed) return;
-
             disposed = true;
 
             _WriteAndReadLock.Dispose();

@@ -26,6 +26,7 @@ namespace Usb.Net.Windows
             if (_IsDisposed) return;
             _IsDisposed = true;
 
+            //This is a native resource, so the IDisposable pattern should probably be implemented...
             var isSuccess = WinUsbApiCalls.WinUsb_Free(Handle);
             WindowsDeviceBase.HandleError(isSuccess, "Interface could not be disposed");
         }
