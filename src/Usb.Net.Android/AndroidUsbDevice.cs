@@ -60,7 +60,7 @@ namespace Usb.Net.Android
 
         #region Public Methods 
 
-        public override void Dispose()
+        public override sealed void Dispose()
         {
             if (disposed) return;
             disposed = true;
