@@ -34,7 +34,7 @@ namespace Usb.Net.Windows
         #region Private Methods
         private void Initialize()
         {
-            Dispose();
+            Close();
 
             int errorCode;
 

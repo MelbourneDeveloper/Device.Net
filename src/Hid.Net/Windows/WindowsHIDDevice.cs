@@ -47,7 +47,7 @@ namespace Hid.Net.Windows
         #region Private Methods
         private bool Initialize()
         {
-            Dispose();
+            Close();
 
             if (string.IsNullOrEmpty(DeviceId))
             {
