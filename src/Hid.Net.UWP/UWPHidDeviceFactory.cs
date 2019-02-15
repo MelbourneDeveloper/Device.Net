@@ -67,19 +67,24 @@ namespace Hid.Net.UWP
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
             if (deviceDefinition.DeviceType == DeviceType.Usb) return null;
-            return new UWPHidDevice(deviceDefinition.DeviceId);
+            return new UWPHidDevice(deviceDefinition.DeviceId) { Logger = Logger };
         }
         #endregion
 
         #region Public Static Methods
         public static void Register()
         {
+            Register(null);
+        }
+
+        public static void Register(ILogger logger)
+        {
             foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)
             {
                 if (deviceFactory is UWPHidDeviceFactory) return;
             }
 
-            DeviceManager.Current.DeviceFactories.Add(new UWPHidDeviceFactory());
+            DeviceManager.Current.DeviceFactories.Add(new UWPHidDeviceFactory() { Logger = logger });
         }
         #endregion
     }

@@ -54,7 +54,7 @@ namespace Device.Net
                 throw new Exception($"The device Id '{deviceDefinition.DeviceId}' is not a valid integer");
             }
 
-            return new AndroidUsbDevice(UsbManager, Context, deviceId);
+            return new AndroidUsbDevice(UsbManager, Context, deviceId) { Logger = Logger };
         }
         #endregion
 
@@ -76,7 +76,12 @@ namespace Device.Net
 
         public static void Register(UsbManager usbManager, Context context)
         {
-            DeviceManager.Current.DeviceFactories.Add(new AndroidUsbDeviceFactory(usbManager, context));
+            Register(usbManager, context);
+        }
+
+        public static void Register(UsbManager usbManager, Context context, ILogger logger)
+        {
+            DeviceManager.Current.DeviceFactories.Add(new AndroidUsbDeviceFactory(usbManager, context) { Logger = logger });
         }
         #endregion
     }

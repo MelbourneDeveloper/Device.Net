@@ -8,8 +8,15 @@ namespace Device.Net.LibUsb
 {
     public abstract class LibUsbDeviceFactoryBase : IDeviceFactory
     {
-        public abstract DeviceType DeviceType { get; }
+        #region Public Properties
+        public ILogger Logger { get; set; }
+        #endregion
 
+        #region Public Abstraction Properties
+        public abstract DeviceType DeviceType { get; }
+        #endregion
+
+        #region Public Methods
         public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
         {
             return await Task.Run(() =>
@@ -20,9 +27,9 @@ namespace Device.Net.LibUsb
                 {
                     if (deviceDefinition.ProductId.HasValue)
                     {
-                        devices = UsbDevice.AllDevices.Where((d) => 
+                        devices = UsbDevice.AllDevices.Where((d) =>
                         {
-                            return d.Vid == deviceDefinition.VendorId.Value && 
+                            return d.Vid == deviceDefinition.VendorId.Value &&
                             d.Pid == deviceDefinition.ProductId.Value;
                         });
                     }
@@ -36,15 +43,6 @@ namespace Device.Net.LibUsb
 
                 foreach (var usbRegistry in devices)
                 {
-                    const string classPropertyName = "Class";
-
-                    //var usbDeviceClass = DeviceType == DeviceType.Usb ? "USBDevice" : null;
-
-                    //if (!usbRegistry.DeviceProperties.ContainsKey(classPropertyName) || (string)usbRegistry.DeviceProperties[classPropertyName] != usbDeviceClass)
-                    //{
-                    //    continue;
-                    //}
-
                     retVal.Add(new ConnectedDeviceDefinition(usbRegistry.DevicePath)
                     {
                         VendorId = (uint)usbRegistry.Vid,
@@ -62,7 +60,8 @@ namespace Device.Net.LibUsb
         {
             var usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value, (int)deviceDefinition.ProductId.Value);
             var usbDevice = UsbDevice.OpenUsbDevice(usbDeviceFinder);
-            return usbDevice != null ? new LibUsbDevice(usbDevice, 3000) : null;
+            return usbDevice != null ? new LibUsbDevice(usbDevice, 3000) { Logger = Logger } : null;
         }
+        #endregion
     }
 }

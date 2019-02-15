@@ -12,6 +12,10 @@ namespace Device.Net.Windows
     /// </summary>
     public abstract class WindowsDeviceFactoryBase
     {
+        #region Public Properties
+        public ILogger Logger { get; set; }
+        #endregion
+
         #region Public Abstract Properties
         public abstract DeviceType DeviceType { get; }
         public abstract Guid ClassGuid { get; set; }
