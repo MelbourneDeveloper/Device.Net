@@ -7,6 +7,9 @@ using wde = Windows.Devices.Enumeration;
 
 namespace Device.Net.UWP
 {
+    /// <summary>
+    /// TODO: Merge this factory class with other factory classes. I.e. create a DeviceFactoryBase class
+    /// </summary>
     public abstract class UWPDeviceFactoryBase
     {
         #region Fields
@@ -17,6 +20,10 @@ namespace Device.Net.UWP
         #region Protected Abstraction Properties
         protected abstract string VendorFilterName { get; }
         protected abstract string ProductFilterName { get; }
+        #endregion
+
+        #region Public Properties
+        public ILogger Logger { get; set; }
         #endregion
 
         #region Public Abstract Properties
@@ -40,6 +47,14 @@ namespace Device.Net.UWP
             string productPart = null;
             if (productId.HasValue) productPart = $"AND {ProductFilterName}:={productId.Value}";
             return productPart;
+        }
+        #endregion
+
+        #region Protected Methods
+        protected void Log(string message, Exception ex)
+        {
+            var callerMemberName = "";
+            Logger?.Log(message, $"{ nameof(UWPDeviceFactoryBase)} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
         }
         #endregion
 

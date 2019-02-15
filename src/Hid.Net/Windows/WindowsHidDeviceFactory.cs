@@ -26,7 +26,7 @@ namespace Hid.Net.Windows
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId);
+            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId) { Logger = Logger };
         }
         #endregion
 
@@ -66,7 +66,12 @@ namespace Hid.Net.Windows
         #region Public Static Methods
         public static void Register()
         {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory());
+            Register(null);
+        }
+
+        public static void Register(ILogger logger)
+        {
+            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory() { Logger = logger });
         }
         #endregion
     }

@@ -6,7 +6,12 @@
 
         public static void Register()
         {
-            DeviceManager.Current.DeviceFactories.Add(new LibUsbUsbDeviceFactory());
+            Register(null);
+        }
+
+        public static void Register(ILogger logger)
+        {
+            DeviceManager.Current.DeviceFactories.Add(new LibUsbUsbDeviceFactory() { Logger = logger });
         }
     }
 }

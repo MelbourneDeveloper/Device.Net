@@ -1,10 +1,11 @@
 ﻿using Android.Content;
-using Android.Hardware.Usb;
 using Device.Net;
-using System;
 
 namespace Usb.Net.Android
 {
+    /// <summary>
+    /// TODO: Get this going again
+    /// </summary>
     public class UsbDeviceBroadcastReceiver : BroadcastReceiver
     {
         #region Fields
@@ -24,9 +25,7 @@ namespace Usb.Net.Android
             //No need to get the device because we're going to enumerate them anyway...
             //var device = intent.GetParcelableExtra(UsbManager.ExtraDevice) as UsbDevice;
 
-            await _DeviceListener.CheckForDevicesAsync();
-
-            Logger.Log("Device connected", null, AndroidUsbDevice.LogSection);
+            await _DeviceListener.CheckForDevicesAsync();            
         }
         #endregion
     }

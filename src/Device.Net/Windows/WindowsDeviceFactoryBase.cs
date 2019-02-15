@@ -7,8 +7,15 @@ using System.Threading.Tasks;
 
 namespace Device.Net.Windows
 {
+    /// <summary>
+    /// TODO: Merge this factory class with other factory classes. I.e. create a DeviceFactoryBase class
+    /// </summary>
     public abstract class WindowsDeviceFactoryBase
     {
+        #region Public Properties
+        public ILogger Logger { get; set; }
+        #endregion
+
         #region Public Abstract Properties
         public abstract DeviceType DeviceType { get; }
         public abstract Guid ClassGuid { get; set; }
@@ -121,8 +128,5 @@ namespace Device.Net.Windows
             return new ConnectedDeviceDefinition(deviceId) { DeviceType = deviceType, VendorId = vid, ProductId = pid };
         }
         #endregion
-
-
-
     }
 }

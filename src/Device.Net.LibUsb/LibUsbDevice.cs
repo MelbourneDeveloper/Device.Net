@@ -26,6 +26,7 @@ namespace Device.Net.LibUsb
         public bool IsInitialized { get; private set; }
         public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition => throw new NotImplementedException();
         public string DeviceId => UsbDevice.DevicePath;
+        public ILogger Logger { get; set; }
         #endregion
 
         #region Events

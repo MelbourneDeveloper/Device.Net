@@ -18,7 +18,7 @@ namespace Usb.Net.Windows
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsUsbDevice(deviceDefinition.DeviceId);
+            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsUsbDevice(deviceDefinition.DeviceId) { Logger = Logger };
         }
         #endregion
 
@@ -32,7 +32,12 @@ namespace Usb.Net.Windows
         #region Public Static Methods
         public static void Register()
         {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory());
+            Register(null);
+        }
+
+        public static void Register(ILogger logger)
+        {
+            DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory() { Logger = logger });
         }
         #endregion
     }

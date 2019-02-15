@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace Device.Net
         private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         private bool disposed = false;
         public const string DeviceDisposedErrorMessage = "This device has already been disposed";
+        protected string LogRegion;
         #endregion
 
         #region Public Abstract Properties
@@ -22,6 +24,41 @@ namespace Device.Net
         public ITracer Tracer { get; set; }
         public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; set; }
         public string DeviceId { get; set; }
+        public ILogger Logger { get; set; }
+        #endregion
+
+        #region Private Methods
+        private void Log(string message, string region, Exception ex, LogLevel logLevel)
+        {
+            Logger?.Log(message, region, ex, logLevel);
+        }
+
+        private void Log(string message, Exception ex, LogLevel logLevel, [CallerMemberName] string callMemberName = null)
+        {
+            if (LogRegion == null)
+            {
+                LogRegion = GetType().Name;
+            }
+
+            Log(message, $"{LogRegion} - {callMemberName}", ex, logLevel);
+        }
+        #endregion
+
+        #region Protected Methods
+        protected void Log(string message, [CallerMemberName] string callMemberName = null)
+        {
+            Log(message, null, LogLevel.Information, callMemberName);
+        }
+
+        protected void Log(string message, Exception ex, [CallerMemberName] string callMemberName = null)
+        {
+            Log(message, ex, LogLevel.Error, callMemberName);
+        }
+
+        protected void Log(string message, LogLevel logLevel, [CallerMemberName] string callMemberName = null)
+        {
+            Log(message, null, logLevel, callMemberName);
+        }
         #endregion
 
         #region Public Abstract Methods
@@ -37,7 +74,14 @@ namespace Device.Net
             try
             {
                 await WriteAsync(writeBuffer);
-                return await ReadAsync();
+                var retVal = await ReadAsync();
+                Log($"Successfully called {nameof(WriteAndReadAsync)}");
+                return retVal;
+            }
+            catch (Exception ex)
+            {
+                Log("Read/Write Error", ex);
+                throw;
             }
             finally
             {
