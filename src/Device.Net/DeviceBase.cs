@@ -32,6 +32,16 @@ namespace Device.Net
         {
             Logger?.Log(message, region, ex, logLevel);
         }
+
+        private void Log(string message, Exception ex, LogLevel logLevel, [CallerMemberName] string callMemberName = null)
+        {
+            if (LogRegion == null)
+            {
+                LogRegion = GetType().Name;
+            }
+
+            Log(message, $"{LogRegion} - {callMemberName}", ex, logLevel);
+        }
         #endregion
 
         #region Protected Methods
@@ -45,14 +55,9 @@ namespace Device.Net
             Log(message, ex, LogLevel.Error, callMemberName);
         }
 
-        protected void Log(string message, Exception ex, LogLevel logLevel, [CallerMemberName] string callMemberName = null)
+        protected void Log(string message, LogLevel logLevel, [CallerMemberName] string callMemberName = null)
         {
-            if (LogRegion == null)
-            {
-                LogRegion = GetType().Name;
-            }
-
-            Log(message, $"{LogRegion} - {callMemberName}", ex, logLevel);
+            Log(message, null, logLevel, callMemberName);
         }
         #endregion
 
