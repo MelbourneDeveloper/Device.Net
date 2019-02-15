@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -55,6 +56,13 @@ namespace Device.Net
         }
         #endregion
 
+        #region Private Methods
+        private void Log(string message, Exception ex, [CallerMemberName] string callerMemberName = null)
+        {
+            Logger?.Log(message, $"{ nameof(DeviceListener)} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
+        }
+        #endregion
+
         #region Public Methods
 
         /// <summary>
@@ -106,7 +114,7 @@ namespace Device.Net
 
                     if (!device.IsInitialized)
                     {
-                        Logger?.Log($"Attempting to initialize with DeviceId of {device.DeviceId}", null, nameof(DeviceListener), LogLevel.Information);
+                        Log($"Attempting to initialize with DeviceId of {device.DeviceId}", null);
 
                         //The device is not initialized so initialize it
                         await device.InitializeAsync();
@@ -114,7 +122,7 @@ namespace Device.Net
                         //Let listeners know a registered device was initialized
                         DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
 
-                        Logger?.Log("Device connected", null, nameof(DeviceListener));
+                        Log("Device connected", null);
                     }
 
                 }
@@ -139,7 +147,7 @@ namespace Device.Net
 
                             removeDefs.Add(filteredDeviceDefinitionKey);
 
-                            Logger.Log("Disconnected", null, nameof(DeviceListener));
+                            Log("Disconnected", null);
                         }
                     }
                 }
@@ -149,12 +157,12 @@ namespace Device.Net
                     _CreatedDevicesByDefinition.Remove(removeDef);
                 }
 
-                Logger.Log("did a poll", null, nameof(DeviceListener));
+                Log("Poll complete", null);
 
             }
             catch (Exception ex)
             {
-                Logger.Log("Hid polling error", ex, nameof(DeviceListener));
+                Log("Hid polling error", ex);
 
                 //TODO: What else to do here?
             }
