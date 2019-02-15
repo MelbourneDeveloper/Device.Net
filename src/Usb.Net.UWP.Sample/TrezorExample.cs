@@ -52,7 +52,7 @@ namespace Usb.Net.Sample
         public void StartListening()
         {
             TrezorDevice?.Close();
-            DeviceListener = new DeviceListener(_DeviceDefinitions, PollMilliseconds) { Logger = new DebugLogger() { LogToConsole = true } };
+            DeviceListener = new DeviceListener(_DeviceDefinitions, PollMilliseconds) { Logger = new DebugLogger() };
             DeviceListener.DeviceDisconnected += DevicePoller_DeviceDisconnected;
             DeviceListener.DeviceInitialized += DevicePoller_DeviceInitialized;
             DeviceListener.Start();
