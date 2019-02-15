@@ -74,7 +74,14 @@ namespace Device.Net
             try
             {
                 await WriteAsync(writeBuffer);
-                return await ReadAsync();
+                var retVal = await ReadAsync();
+                Log($"Successfully called {nameof(WriteAndReadAsync)}");
+                return retVal;
+            }
+            catch (Exception ex)
+            {
+                Log("Read/Write Error", ex);
+                throw;
             }
             finally
             {

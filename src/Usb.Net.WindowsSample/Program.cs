@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Usb.Net.Sample;
+using Device.Net;
 
 #if (!LIBUSB)
 using Usb.Net.Windows;
@@ -16,6 +17,7 @@ namespace Usb.Net.WindowsSample
     {
         #region Fields
         private static TrezorExample _DeviceConnectionExample = new TrezorExample();
+        private static DebugLogger Logger = new DebugLogger();
         #endregion
 
         #region Main
@@ -23,10 +25,10 @@ namespace Usb.Net.WindowsSample
         {
             //Register the factory for creating Usb devices. This only needs to be done once.
 #if (LIBUSB)
-            LibUsbUsbDeviceFactory.Register();
+            LibUsbUsbDeviceFactory.Register(Logger);
 #else
-            WindowsUsbDeviceFactory.Register();
-            WindowsHidDeviceFactory.Register();
+            WindowsUsbDeviceFactory.Register(Logger);
+            WindowsHidDeviceFactory.Register(Logger);
 #endif
 
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
