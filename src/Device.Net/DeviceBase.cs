@@ -22,6 +22,7 @@ namespace Device.Net
         public ITracer Tracer { get; set; }
         public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; set; }
         public string DeviceId { get; set; }
+        public ILogger Logger { get; set; }
         #endregion
 
         #region Public Abstract Methods

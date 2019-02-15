@@ -23,6 +23,7 @@ namespace Device.Net
 
         #region Public Properties
         public List<FilterDeviceDefinition> FilterDeviceDefinitions { get; } = new List<FilterDeviceDefinition>();
+        public ILogger Logger { get; set; }
         #endregion
 
         #region Events
@@ -105,7 +106,7 @@ namespace Device.Net
 
                     if (!device.IsInitialized)
                     {
-                        Logger.Log($"Attempting to initialize with DeviceId of {device.DeviceId}", null, nameof(DeviceListener));
+                        Logger?.Log($"Attempting to initialize with DeviceId of {device.DeviceId}", null, nameof(DeviceListener), LogLevel.Information);
 
                         //The device is not initialized so initialize it
                         await device.InitializeAsync();
@@ -113,7 +114,7 @@ namespace Device.Net
                         //Let listeners know a registered device was initialized
                         DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
 
-                        Logger.Log("Device connected", null, nameof(DeviceListener));
+                        Logger?.Log("Device connected", null, nameof(DeviceListener));
                     }
 
                 }
