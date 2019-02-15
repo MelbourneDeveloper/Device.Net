@@ -76,7 +76,7 @@ namespace Device.Net
 
         public static void Register(UsbManager usbManager, Context context)
         {
-            Register(usbManager, context);
+            Register(usbManager, context, null);
         }
 
         public static void Register(UsbManager usbManager, Context context, ILogger logger)

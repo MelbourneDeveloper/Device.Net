@@ -66,7 +66,12 @@ namespace Hid.Net.Windows
         #region Public Static Methods
         public static void Register()
         {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory());
+            Register(null);
+        }
+
+        public static void Register(ILogger logger)
+        {
+            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory() { Logger = logger });
         }
         #endregion
     }
