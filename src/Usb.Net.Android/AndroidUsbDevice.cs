@@ -183,6 +183,8 @@ namespace Usb.Net.Android
 
                 ConnectedDeviceDefinition = AndroidUsbDeviceFactory.GetAndroidDeviceDefinition(_UsbDevice);
 
+                Log($"Found device: {ConnectedDeviceDefinition.ProductName} Id: {_UsbDevice.DeviceId}", null);
+
                 if (_UsbDevice == null)
                 {
                     throw new Exception($"The device {DeviceId} is not connected to the system");

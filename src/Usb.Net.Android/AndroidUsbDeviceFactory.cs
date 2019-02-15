@@ -8,11 +8,15 @@ using Usb.Net.Android;
 
 namespace Device.Net
 {
+    /// <summary>
+    /// TODO: Merge this factory class with other factory classes
+    /// </summary>
     public class AndroidUsbDeviceFactory : IDeviceFactory
     {
         #region Public Properties
         public UsbManager UsbManager { get; }
         public Context Context { get; }
+        public ILogger Logger { get; set; }
         #endregion
 
         #region Public Static Properties
@@ -28,6 +32,12 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
+        protected void Log(string message, Exception ex)
+        {
+            var callerMemberName = "";
+            Logger?.Log(message, $"{ nameof(AndroidUsbDeviceFactory)} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
+        }
+
         public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
         {
             return Task.Run<IEnumerable<ConnectedDeviceDefinition>>(() =>
@@ -52,7 +62,6 @@ namespace Device.Net
         public static ConnectedDeviceDefinition GetAndroidDeviceDefinition(UsbDevice usbDevice)
         {
             var deviceId = usbDevice.DeviceId.ToString();
-            Log($"Found device: {usbDevice.ProductName} Id: {deviceId}", null);
 
             return new ConnectedDeviceDefinition(deviceId)
             {

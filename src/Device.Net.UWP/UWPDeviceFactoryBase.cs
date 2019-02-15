@@ -7,6 +7,9 @@ using wde = Windows.Devices.Enumeration;
 
 namespace Device.Net.UWP
 {
+    /// <summary>
+    /// TODO: Merge this factory class with other factory classes. I.e. create a DeviceFactoryBase class
+    /// </summary>
     public abstract class UWPDeviceFactoryBase
     {
         #region Fields
