@@ -15,5 +15,10 @@ namespace Device.Net
             return new CultureInfo("en-US").CompareInfo.IndexOf(paragraph, word, CompareOptions.IgnoreCase) >= 0;
         }
 
+        public static string GetHex(uint? id)
+        {
+            //TODO: Fix code rules here
+            return id?.ToString("X").ToLower().PadLeft(4, '0');
+        }
     }
 }

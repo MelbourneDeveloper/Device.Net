@@ -46,8 +46,8 @@ namespace Device.Net.Windows
 
                 var i = -1;
 
-                var productIdHex = GetHex(deviceDefinition.ProductId);
-                var vendorHex = GetHex(deviceDefinition.VendorId);
+                var productIdHex = Helpers.GetHex(deviceDefinition.ProductId);
+                var vendorHex = Helpers.GetHex(deviceDefinition.VendorId);
 
                 while (true)
                 {
@@ -89,10 +89,6 @@ namespace Device.Net.Windows
         #endregion
 
         #region Private Static Methods
-        private static string GetHex(uint? id)
-        {
-            return id?.ToString("X").ToLower().PadLeft(4, '0');
-        }
         private static uint GetNumberFromDeviceId(string deviceId, string searchString)
         {
             var indexOfSearchString = deviceId.IndexOf(searchString, StringComparison.OrdinalIgnoreCase);
