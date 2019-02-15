@@ -14,7 +14,7 @@
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
     <PackageTags>Hid USB Android UWP Windows C#</PackageTags>
-    <NoWarn>CA2007;CA1401;CA1060;CA1707;CA1063;CA1815</NoWarn>
+    <NoWarn>CA2007;CA1401;CA1060;CA1707;CA1063;CA1815;CA1816</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
 
