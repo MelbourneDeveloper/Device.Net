@@ -27,26 +27,33 @@ namespace Device.Net
         public ILogger Logger { get; set; }
         #endregion
 
+        #region Private Methods
+        private void Log(string message, string region, Exception ex, LogLevel logLevel)
+        {
+            Logger?.Log(message, region, ex, logLevel);
+        }
+        #endregion
+
         #region Protected Methods
-        protected void Log(string message, Exception ex)
+        protected void Log(string message, [CallerMemberName] string callMemberName = null)
+        {
+            Log(message, null, LogLevel.Information, callMemberName);
+        }
+
+        protected void Log(string message, Exception ex, [CallerMemberName] string callMemberName = null)
+        {
+            Log(message, ex, LogLevel.Error, callMemberName);
+        }
+
+        protected void Log(string message, Exception ex, LogLevel logLevel, [CallerMemberName] string callMemberName = null)
         {
             if (LogRegion == null)
             {
                 LogRegion = GetType().Name;
             }
 
-            Logger?.Log(message, $"{ LogRegion} - {1}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
+            Log(message, $"{LogRegion} - {callMemberName}", ex, logLevel);
         }
-
-        //protected void Log(string message, Exception ex, [CallerMemberName] string callerMemberName = null)
-        //{
-        //    if (LogRegion == null)
-        //    {
-        //        LogRegion = GetType().Name;
-        //    }
-
-        //    Logger?.Log(message, $"{ LogRegion} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
-        //}
         #endregion
 
         #region Public Abstract Methods
