@@ -1,4 +1,5 @@
-﻿using Hid.Net.UWP;
+﻿using Device.Net;
+using Hid.Net.UWP;
 using System.Threading.Tasks;
 using Usb.Net.Sample;
 using Windows.UI;
@@ -27,11 +28,13 @@ namespace Usb.Net.UWP.Sample
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
 
-            //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPUsbDeviceFactory.Register();
+            var logger = new DebugLogger();
 
             //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPHidDeviceFactory.Register();
+            UWPUsbDeviceFactory.Register(logger);
+
+            //Register the factory for creating Usb devices. This only needs to be done once.
+            UWPHidDeviceFactory.Register(logger);
 
         }
         #endregion
