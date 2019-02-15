@@ -11,7 +11,7 @@ namespace Device.Net
         private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         private bool disposed = false;
         public const string DeviceDisposedErrorMessage = "This device has already been disposed";
-        protected string LogRegion;
+        private string _LogRegion;
         #endregion
 
         #region Public Abstract Properties
@@ -35,12 +35,12 @@ namespace Device.Net
 
         private void Log(string message, Exception ex, LogLevel logLevel, [CallerMemberName] string callMemberName = null)
         {
-            if (LogRegion == null)
+            if (_LogRegion == null)
             {
-                LogRegion = GetType().Name;
+                _LogRegion = GetType().Name;
             }
 
-            Log(message, $"{LogRegion} - {callMemberName}", ex, logLevel);
+            Log(message, $"{_LogRegion} - {callMemberName}", ex, logLevel);
         }
         #endregion
 
