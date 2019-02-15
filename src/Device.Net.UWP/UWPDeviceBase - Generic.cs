@@ -94,7 +94,7 @@ namespace Device.Net.UWP
             }
             catch (Exception ex)
             {
-                Logger.Log("Error disposing", ex, nameof(UWPDeviceBase));
+                Log("Error disposing", ex);
             }
 
             _IsClosing = false;

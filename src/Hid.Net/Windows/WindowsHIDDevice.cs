@@ -144,7 +144,7 @@ namespace Hid.Net.Windows
             }
             catch (Exception ex)
             {
-                Logger.Log(Helpers.ReadErrorMessage, ex, LogSection);
+                Log(Helpers.ReadErrorMessage, ex);
                 throw new IOException(Helpers.ReadErrorMessage, ex);
             }
 
@@ -192,7 +192,7 @@ namespace Hid.Net.Windows
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log(Helpers.WriteErrorMessage, ex, LogSection);
+                    Log(Helpers.WriteErrorMessage, ex);
                     throw new IOException(Helpers.WriteErrorMessage, ex);
                 }
 

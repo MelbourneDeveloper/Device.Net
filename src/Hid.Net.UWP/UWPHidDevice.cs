@@ -70,7 +70,7 @@ namespace Hid.Net.UWP
             //TODO: Dispose but this seems to cause initialization to never occur
             //Dispose();
 
-            Logger.Log("Initializing Hid device", null, nameof(UWPHidDevice));
+            Log("Initializing Hid device", null, nameof(UWPHidDevice));
 
             await GetDevice(DeviceId);
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace Device.Net
         private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         private bool disposed = false;
         public const string DeviceDisposedErrorMessage = "This device has already been disposed";
+        protected string LogRegion;
         #endregion
 
         #region Public Abstract Properties
@@ -23,6 +25,28 @@ namespace Device.Net
         public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; set; }
         public string DeviceId { get; set; }
         public ILogger Logger { get; set; }
+        #endregion
+
+        #region Protected Methods
+        protected void Log(string message, Exception ex)
+        {
+            if (LogRegion == null)
+            {
+                LogRegion = GetType().Name;
+            }
+
+            Logger?.Log(message, $"{ LogRegion} - {1}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
+        }
+
+        //protected void Log(string message, Exception ex, [CallerMemberName] string callerMemberName = null)
+        //{
+        //    if (LogRegion == null)
+        //    {
+        //        LogRegion = GetType().Name;
+        //    }
+
+        //    Logger?.Log(message, $"{ LogRegion} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
+        //}
         #endregion
 
         #region Public Abstract Methods

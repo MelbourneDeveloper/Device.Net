@@ -19,6 +19,10 @@ namespace Device.Net.UWP
         protected abstract string ProductFilterName { get; }
         #endregion
 
+        #region Public Properties
+        public ILogger Logger { get; set; }
+        #endregion
+
         #region Public Abstract Properties
         public abstract DeviceType DeviceType { get; }
         #endregion
@@ -40,6 +44,14 @@ namespace Device.Net.UWP
             string productPart = null;
             if (productId.HasValue) productPart = $"AND {ProductFilterName}:={productId.Value}";
             return productPart;
+        }
+        #endregion
+
+        #region Protected Methods
+        protected void Log(string message, Exception ex)
+        {
+            var callerMemberName = "";
+            Logger?.Log(message, $"{ nameof(UWPDeviceFactoryBase)} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
         }
         #endregion
 

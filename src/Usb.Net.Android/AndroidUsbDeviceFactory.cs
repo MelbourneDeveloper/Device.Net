@@ -52,7 +52,7 @@ namespace Device.Net
         public static ConnectedDeviceDefinition GetAndroidDeviceDefinition(UsbDevice usbDevice)
         {
             var deviceId = usbDevice.DeviceId.ToString();
-            Logger.Log($"Found device: {usbDevice.ProductName} Id: {deviceId}", null, nameof(AndroidUsbDeviceFactory));
+            Log($"Found device: {usbDevice.ProductName} Id: {deviceId}", null);
 
             return new ConnectedDeviceDefinition(deviceId)
             {

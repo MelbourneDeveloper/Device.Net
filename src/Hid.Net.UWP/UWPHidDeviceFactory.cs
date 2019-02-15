@@ -42,7 +42,7 @@ namespace Hid.Net.UWP
 
                     if (!canConnect) return new ConnectionInfo { CanConnect = false };
 
-                    Logger.Log($"Testing device connection. Id: {deviceId}. Can connect: {canConnect}", null, nameof(UWPHidDeviceFactory));
+                    Log($"Testing device connection. Id: {deviceId}. Can connect: {canConnect}", null);
 
                     connectionInfo = new ConnectionInfo { CanConnect = canConnect, UsagePage = hidDevice.UsagePage };
 
@@ -53,7 +53,7 @@ namespace Hid.Net.UWP
             }
             catch (Exception ex)
             {
-                Logger.Log("", ex, nameof(UWPHidDeviceFactory));
+                Log("Connection failed", ex);
                 return new ConnectionInfo { CanConnect = false };
             }
             finally
