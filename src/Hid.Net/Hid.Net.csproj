@@ -23,6 +23,8 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Hid.Net</RepositoryUrl>
     <PackageReleaseNotes>Split the library in to Device.Net, Hid.Net, and Usb.Net. For Android, please use Usb.Net. Check the Hid.Net repo for details.</PackageReleaseNotes>
     <PackageId>Hid.Net</PackageId>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1701;1702;CA1815;CA1063;CA2007;CA2237;CA1816</NoWarn>
   </PropertyGroup>
 
   <Choose>
@@ -47,11 +49,6 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>TRACE;RELEASE;NETSTANDARD2_0;HIDNET</DefineConstants>
     <OutputPath>bin\Release\</OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
   </PropertyGroup>
 
   <ItemGroup>
