@@ -5,18 +5,14 @@ using System.Runtime.InteropServices;
 
 namespace Hid.Net.Windows
 {
-    public static class HidAPICalls 
+    public static class HidAPICalls
     {
+        #region Private Static Fields
+        private static Guid? _HidGuid;
+        #endregion
+
         #region Constants
-        private const int DigcfDeviceinterface = 16;
-        private const int DigcfPresent = 2;
-        private const uint FileShareRead = 1;
-        private const uint FileShareWrite = 2;
-        private const uint GenericRead = 2147483648;
-        private const uint GenericWrite = 1073741824;
-        private const uint OpenExisting = 3;
         private const int HIDP_STATUS_SUCCESS = 0x110000;
-        private const int HIDP_STATUS_INVALID_PREPARSED_DATA = -0x3FEF0000;
         #endregion
 
         #region API Calls
@@ -40,18 +36,27 @@ namespace Hid.Net.Windows
         private static extern bool HidD_GetAttributes(SafeFileHandle hidDeviceObject, out HidAttributes attributes);
 
         [DllImport("hid.dll", SetLastError = true)]
-        private static extern bool HidD_FreePreparsedData(ref IntPtr pointerToPreparsedData);
+        private static extern void HidD_GetHidGuid(out Guid hidGuid);
 
         [DllImport("hid.dll", SetLastError = true)]
-        private static extern void HidD_GetHidGuid(ref Guid hidGuid);
+        private static extern bool HidD_FreePreparsedData(ref IntPtr pointerToPreparsedData);
 
         private delegate bool GetString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
 
         #endregion
 
-        #region Helper Methods
+        #region Private Static Methods
+        private static string GetHidString(SafeFileHandle safeFileHandle, GetString getString)
+        {
+            var pointerToBuffer = Marshal.AllocHGlobal(126);
+            var isSuccess = getString(safeFileHandle, pointerToBuffer, 126);
+            Marshal.FreeHGlobal(pointerToBuffer);
+            WindowsDeviceBase.HandleError(isSuccess, "Could not get Hid string");
+            return Marshal.PtrToStringUni(pointerToBuffer);
+        }
+        #endregion
 
-        #region Public Methods
+        #region Public Static Methods
         public static HidAttributes GetHidAttributes(SafeFileHandle safeFileHandle)
         {
             var isSuccess = HidD_GetAttributes(safeFileHandle, out var hidAttributes);
@@ -90,19 +95,20 @@ namespace Hid.Net.Windows
         {
             return GetHidString(safeFileHandle, HidD_GetSerialNumberString);
         }
-        #endregion
 
-        #region Private Static Methods
-        private static string GetHidString(SafeFileHandle safeFileHandle, GetString getString)
+        public static Guid GetHidGuid()
         {
-            var pointerToBuffer = Marshal.AllocHGlobal(126);
-            var isSuccess = getString(safeFileHandle, pointerToBuffer, 126);
-            Marshal.FreeHGlobal(pointerToBuffer);
-            WindowsDeviceBase.HandleError(isSuccess, "Could not get Hid string");
-            return Marshal.PtrToStringUni(pointerToBuffer);     
-        }
-        #endregion
+            if (_HidGuid.HasValue)
+            {
+                return _HidGuid.Value;
+            }
 
+            HidD_GetHidGuid(out var hidGuid);
+
+            _HidGuid = hidGuid;
+
+            return hidGuid;
+        }
         #endregion
     }
 }

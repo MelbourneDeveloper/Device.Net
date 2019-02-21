@@ -18,7 +18,8 @@ namespace Usb.Net.Android
         private UsbEndpoint _WriteEndpoint;
         private UsbEndpoint _ReadEndpoint;
         private SemaphoreSlim _InitializingSemaphoreSlim = new SemaphoreSlim(1, 1);
-        private bool _IsDisposing;
+        private bool _IsClosing;
+        private bool disposed;
         #endregion
 
         #region Public Constants
@@ -36,15 +37,14 @@ namespace Usb.Net.Android
         public override ushort WriteBufferSize => (ushort)_WriteEndpoint.MaxPacketSize;
         public int DeviceNumberId
         {
-            //TODO: this is a bit nasty
             get
             {
-                if (string.IsNullOrEmpty(DeviceId)) throw new Exception($"Tried to get {nameof(DeviceNumberId)} but the {nameof(DeviceId)} was empty");
+                if (string.IsNullOrEmpty(DeviceId)) return -1;
 
-                return int.Parse(DeviceId);
+                return int.Parse(DeviceId, Helpers.ParsingCulture);
             }
 
-            set => DeviceId = value.ToString();
+            set => DeviceId = value.ToString(Helpers.ParsingCulture);
         }
         #endregion
 
@@ -58,10 +58,23 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Methods 
-        public override void Dispose()
+
+        public sealed override void Dispose()
         {
-            if (_IsDisposing) return;
-            _IsDisposing = true;
+            if (disposed) return;
+            disposed = true;
+
+            Close();
+
+            _InitializingSemaphoreSlim.Dispose();
+
+            base.Dispose();
+        }
+
+        public void Close()
+        {
+            if (_IsClosing) return;
+            _IsClosing = true;
 
             try
             {
@@ -74,15 +87,13 @@ namespace Usb.Net.Android
                 _UsbDevice = null;
                 _ReadEndpoint = null;
                 _WriteEndpoint = null;
-
-                base.Dispose();
             }
             catch (Exception)
             {
                 //TODO: Logging
             }
 
-            _IsDisposing = false;
+            _IsClosing = false;
         }
 
         //TODO: Make async properly
@@ -93,7 +104,9 @@ namespace Usb.Net.Android
                 var byteBuffer = ByteBuffer.Allocate(ReadBufferSize);
                 var request = new UsbRequest();
                 request.Initialize(_UsbDeviceConnection, _ReadEndpoint);
+#pragma warning disable CS0618 // Type or member is obsolete
                 request.Queue(byteBuffer, ReadBufferSize);
+#pragma warning restore CS0618 // Type or member is obsolete
                 await _UsbDeviceConnection.RequestWaitAsync();
                 var buffers = new byte[ReadBufferSize];
 
@@ -111,7 +124,7 @@ namespace Usb.Net.Android
             }
             catch (Exception ex)
             {
-                Logger.Log(Helpers.ReadErrorMessage, ex, LogSection);
+                Log(Helpers.ReadErrorMessage, ex);
                 throw new IOException(Helpers.ReadErrorMessage, ex);
             }
         }
@@ -127,12 +140,14 @@ namespace Usb.Net.Android
 
                 Tracer?.Trace(true, data);
 
+#pragma warning disable CS0618 // Type or member is obsolete
                 request.Queue(byteBuffer, data.Length);
+#pragma warning restore CS0618 // Type or member is obsolete
                 await _UsbDeviceConnection.RequestWaitAsync();
             }
             catch (Exception ex)
             {
-                Logger.Log(Helpers.WriteErrorMessage, ex, LogSection);
+                Log(Helpers.WriteErrorMessage, ex);
                 throw new IOException(Helpers.WriteErrorMessage, ex);
             }
         }
@@ -142,7 +157,7 @@ namespace Usb.Net.Android
         #region Private  Methods
         private Task<bool?> RequestPermissionAsync()
         {
-            Logger.Log("Requesting USB permission", null, LogSection);
+            Log("Requesting USB permission", null);
 
             var taskCompletionSource = new TaskCompletionSource<bool?>();
 
@@ -161,13 +176,17 @@ namespace Usb.Net.Android
         {
             try
             {
+                if (disposed) throw new Exception(DeviceDisposedErrorMessage);
+
                 await _InitializingSemaphoreSlim.WaitAsync();
 
-                Dispose();
+                Close();
 
                 _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceNumberId);
 
                 ConnectedDeviceDefinition = AndroidUsbDeviceFactory.GetAndroidDeviceDefinition(_UsbDevice);
+
+                Log($"Found device: {ConnectedDeviceDefinition.ProductName} Id: {_UsbDevice.DeviceId}", null);
 
                 if (_UsbDevice == null)
                 {
@@ -237,11 +256,11 @@ namespace Usb.Net.Android
                     throw new Exception("could not claim interface");
                 }
 
-                Logger.Log("Hid device initialized. About to tell everyone.", null, LogSection);
+                Log("Hid device initialized. About to tell everyone.", null);
             }
             catch (Exception ex)
             {
-                Logger.Log("Error initializing Hid Device", ex, LogSection);
+                Log("Error initializing Hid Device", ex);
                 throw;
             }
             finally

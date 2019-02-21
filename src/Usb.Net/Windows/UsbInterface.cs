@@ -14,7 +14,7 @@ namespace Usb.Net.Windows
 
         #region Public Properties
         public SafeFileHandle Handle { get; set; }
-        public WinUsbApiCalls.USB_INTERFACE_DESCRIPTOR USB_INTERFACE_DESCRIPTOR { get; set; }
+        public USB_INTERFACE_DESCRIPTOR USB_INTERFACE_DESCRIPTOR { get; set; }
         public List<UsbInterfacePipe> UsbInterfacePipes { get; } = new List<UsbInterfacePipe>();
         public UsbInterfacePipe ReadPipe => UsbInterfacePipes.FirstOrDefault(p => p.IsRead);
         public UsbInterfacePipe WritePipe => UsbInterfacePipes.FirstOrDefault(p => p.IsWrite);
@@ -26,6 +26,7 @@ namespace Usb.Net.Windows
             if (_IsDisposed) return;
             _IsDisposed = true;
 
+            //This is a native resource, so the IDisposable pattern should probably be implemented...
             var isSuccess = WinUsbApiCalls.WinUsb_Free(Handle);
             WindowsDeviceBase.HandleError(isSuccess, "Interface could not be disposed");
         }

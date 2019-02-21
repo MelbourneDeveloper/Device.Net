@@ -2,9 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <CodeAnalysisRuleSet>CodeRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <Version>2.4.0</Version>
+    <Version>2.5.0</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Hid.Net/blob/master/LICENSE</PackageLicenseUrl>
@@ -16,13 +14,15 @@ Cross platform Hid (USB) library.
 Enumerate Hid (USB) devices and read and write to/from them. 
 Supports .NET, Android, and UWP out of the box. Other platforms can be added</Description>
     <PackageTags>Hid USB Android UWP Ledger Trezor C#</PackageTags>
-    <AssemblyVersion>2.4.0.0</AssemblyVersion>
+    <AssemblyVersion>2.5.0.0</AssemblyVersion>
     <FileVersion>2.2.0.0</FileVersion>
     <Authors>Christian Findlay</Authors>
     <Company>Christian Findlay</Company>
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Hid.Net</RepositoryUrl>
     <PackageReleaseNotes>Split the library in to Device.Net, Hid.Net, and Usb.Net. For Android, please use Usb.Net. Check the Hid.Net repo for details.</PackageReleaseNotes>
     <PackageId>Hid.Net</PackageId>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1701;1702;CA1815;CA1063;CA2007;CA2237;CA1816;CA1060</NoWarn>
   </PropertyGroup>
 
   <Choose>
@@ -48,6 +48,13 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
     <DefineConstants>TRACE;RELEASE;NETSTANDARD2_0;HIDNET</DefineConstants>
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />

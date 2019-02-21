@@ -14,7 +14,8 @@ namespace Hid.Net.Windows
         private FileStream _WriteFileStream;
         private SafeFileHandle _ReadSafeFileHandle;
         private SafeFileHandle _WriteSafeFileHandle;
-        private bool _IsDisposing;
+        private bool _IsClosing;
+        private bool disposed = false;
         #endregion
 
         #region Protected Properties
@@ -26,8 +27,8 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Overrides
-        public override ushort WriteBufferSize => ConnectedDeviceDefinition == null ? throw new Exception("Device has not been initialized") : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value;
-        public override ushort ReadBufferSize => ConnectedDeviceDefinition == null ? throw new Exception("Device has not been initialized") : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value;
+        public override ushort WriteBufferSize => ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value;
+        public override ushort ReadBufferSize => ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value;
         #endregion
 
         #region Public Properties
@@ -46,7 +47,7 @@ namespace Hid.Net.Windows
         #region Private Methods
         private bool Initialize()
         {
-            Dispose();
+            Close();
 
             if (string.IsNullOrEmpty(DeviceId))
             {
@@ -76,10 +77,11 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Methods
-        public override void Dispose()
+        public void Close()
         {
-            if (_IsDisposing) return;
-            _IsDisposing = true;
+            if (_IsClosing) return;
+
+            _IsClosing = true;
 
             try
             {
@@ -100,19 +102,30 @@ namespace Hid.Net.Windows
                     _WriteSafeFileHandle.Dispose();
                     _WriteSafeFileHandle = null;
                 }
-
-                base.Dispose();
             }
             catch (Exception)
             {
                 //TODO: Logging
             }
 
-            _IsDisposing = false;
+            _IsClosing = false;
+        }
+
+        public override void Dispose()
+        {
+            if (disposed) return;
+
+            disposed = true;
+
+            Close();
+
+            base.Dispose();
         }
 
         public override async Task InitializeAsync()
         {
+            if (disposed) throw new Exception(DeviceDisposedErrorMessage);
+
             await Task.Run(() => Initialize());
         }
 
@@ -131,7 +144,7 @@ namespace Hid.Net.Windows
             }
             catch (Exception ex)
             {
-                Logger.Log(Helpers.ReadErrorMessage, ex, LogSection);
+                Log(Helpers.ReadErrorMessage, ex);
                 throw new IOException(Helpers.ReadErrorMessage, ex);
             }
 
@@ -179,7 +192,7 @@ namespace Hid.Net.Windows
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log(Helpers.WriteErrorMessage, ex, LogSection);
+                    Log(Helpers.WriteErrorMessage, ex);
                     throw new IOException(Helpers.WriteErrorMessage, ex);
                 }
 

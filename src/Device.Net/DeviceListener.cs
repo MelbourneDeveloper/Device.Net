@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -23,6 +24,7 @@ namespace Device.Net
 
         #region Public Properties
         public List<FilterDeviceDefinition> FilterDeviceDefinitions { get; } = new List<FilterDeviceDefinition>();
+        public ILogger Logger { get; set; }
         #endregion
 
         #region Events
@@ -54,6 +56,13 @@ namespace Device.Net
         }
         #endregion
 
+        #region Private Methods
+        private void Log(string message, Exception ex, [CallerMemberName] string callerMemberName = null)
+        {
+            Logger?.Log(message, $"{ nameof(DeviceListener)} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
+        }
+        #endregion
+
         #region Public Methods
 
         /// <summary>
@@ -78,7 +87,7 @@ namespace Device.Net
                 var connectedDeviceDefinitions = new List<ConnectedDeviceDefinition>();
                 foreach (var deviceDefinition in FilterDeviceDefinitions)
                 {
-                    connectedDeviceDefinitions.AddRange(await DeviceManager.Current.GetConnectedDeviceDefinitions(deviceDefinition));
+                    connectedDeviceDefinitions.AddRange(await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(deviceDefinition));
                 }
 
                 //Iterate through connected devices
@@ -105,7 +114,7 @@ namespace Device.Net
 
                     if (!device.IsInitialized)
                     {
-                        Logger.Log($"Attempting to initialize with DeviceId of {device.DeviceId}", null, nameof(DeviceListener));
+                        Log($"Attempting to initialize with DeviceId of {device.DeviceId}", null);
 
                         //The device is not initialized so initialize it
                         await device.InitializeAsync();
@@ -113,7 +122,7 @@ namespace Device.Net
                         //Let listeners know a registered device was initialized
                         DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
 
-                        Logger.Log("Device connected", null, nameof(DeviceListener));
+                        Log("Device connected", null);
                     }
 
                 }
@@ -133,12 +142,12 @@ namespace Device.Net
                             //NOTE: let the rest of the app know before disposal so that the app can stop doing whatever it's doing.
                             DeviceDisconnected?.Invoke(this, new DeviceEventArgs(device));
 
-                            //The device is no longer connected so disconnect it
-                            device.Dispose();
+                            //The device is no longer connected so close it
+                            device.Close();
 
                             removeDefs.Add(filteredDeviceDefinitionKey);
 
-                            Logger.Log("Disconnected", null, nameof(DeviceListener));
+                            Log("Disconnected", null);
                         }
                     }
                 }
@@ -148,12 +157,12 @@ namespace Device.Net
                     _CreatedDevicesByDefinition.Remove(removeDef);
                 }
 
-                Logger.Log("did a poll", null, nameof(DeviceListener));
+                Log("Poll complete", null);
 
             }
             catch (Exception ex)
             {
-                Logger.Log("Hid polling error", ex, nameof(DeviceListener));
+                Log("Hid polling error", ex);
 
                 //TODO: What else to do here?
             }

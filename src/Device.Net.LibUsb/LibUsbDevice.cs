@@ -15,6 +15,7 @@ namespace Device.Net.LibUsb
         private UsbEndpointWriter _UsbEndpointWriter;
         private int ReadPacketSize;
         private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        private bool disposed;
         #endregion
 
         #region Public Properties
@@ -25,6 +26,7 @@ namespace Device.Net.LibUsb
         public bool IsInitialized { get; private set; }
         public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition => throw new NotImplementedException();
         public string DeviceId => UsbDevice.DevicePath;
+        public ILogger Logger { get; set; }
         #endregion
 
         #region Events
@@ -41,15 +43,25 @@ namespace Device.Net.LibUsb
         #endregion
 
         #region Implementation
-        public void Dispose()
+        public void Close()
         {
-            //TODO: Release the device...
-            // UsbDevice.Dispose();
+            UsbDevice?.Close();
         }
 
+        public void Dispose()
+        {
+            if (disposed) return;
+            disposed = true;
+
+            _WriteAndReadLock.Dispose();
+
+            Close();
+        }
 
         public async Task InitializeAsync()
         {
+            if (disposed) throw new Exception(DeviceBase.DeviceDisposedErrorMessage);
+
             await Task.Run(() =>
             {
 

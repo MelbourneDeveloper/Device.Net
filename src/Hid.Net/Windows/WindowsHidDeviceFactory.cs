@@ -10,7 +10,6 @@ namespace Hid.Net.Windows
     {
         #region Public Override Properties
         public override DeviceType DeviceType => DeviceType.Hid;
-        public override Guid ClassGuid { get; set; } = WindowsDeviceConstants.GUID_DEVINTERFACE_HID;
         #endregion
 
         #region Protected Override Methods
@@ -21,12 +20,18 @@ namespace Hid.Net.Windows
                 return GetDeviceDefinition(deviceId, safeFileHandle);
             }
         }
+
+        protected override Guid GetClassGuid()
+        {
+            return GetHidGuid();
+        }
+
         #endregion
 
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId);
+            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId) { Logger = Logger };
         }
         #endregion
 
@@ -66,7 +71,12 @@ namespace Hid.Net.Windows
         #region Public Static Methods
         public static void Register()
         {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory());
+            Register(null);
+        }
+
+        public static void Register(ILogger logger)
+        {
+            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory() { Logger = logger });
         }
         #endregion
     }

@@ -7,15 +7,22 @@ using System.Threading.Tasks;
 
 namespace Device.Net.Windows
 {
+    /// <summary>
+    /// TODO: Merge this factory class with other factory classes. I.e. create a DeviceFactoryBase class
+    /// </summary>
     public abstract class WindowsDeviceFactoryBase
     {
+        #region Public Properties
+        public ILogger Logger { get; set; }
+        #endregion
+
         #region Public Abstract Properties
         public abstract DeviceType DeviceType { get; }
-        public abstract Guid ClassGuid { get; set; }
         #endregion
 
         #region Protected Abstract Methods
         protected abstract ConnectedDeviceDefinition GetDeviceDefinition(string deviceId);
+        protected abstract Guid GetClassGuid();
         #endregion
 
         #region Public Methods
@@ -30,7 +37,7 @@ namespace Device.Net.Windows
                 spDeviceInterfaceData.CbSize = (uint)Marshal.SizeOf(spDeviceInterfaceData);
                 spDeviceInfoData.CbSize = (uint)Marshal.SizeOf(spDeviceInfoData);
 
-                var guidString = ClassGuid.ToString();
+                var guidString = GetClassGuid().ToString();
                 var copyOfClassGuid = new Guid(guidString);
 
                 var devicesHandle = APICalls.SetupDiGetClassDevs(ref copyOfClassGuid, IntPtr.Zero, IntPtr.Zero, APICalls.DigcfDeviceinterface | APICalls.DigcfPresent);
@@ -46,8 +53,8 @@ namespace Device.Net.Windows
 
                 var i = -1;
 
-                var productIdHex = GetHex(deviceDefinition.ProductId);
-                var vendorHex = GetHex(deviceDefinition.VendorId);
+                var productIdHex = Helpers.GetHex(deviceDefinition.ProductId);
+                var vendorHex = Helpers.GetHex(deviceDefinition.VendorId);
 
                 while (true)
                 {
@@ -69,8 +76,8 @@ namespace Device.Net.Windows
                     WindowsDeviceBase.HandleError(isSuccess, "Could not get device interface detail");
 
                     //Note this is a bit nasty but we can filter Vid and Pid this way I think...
-                    if (deviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(vendorHex)) continue;
-                    if (deviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ToLower().Contains(productIdHex)) continue;
+                    if (deviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
+                    if (deviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
 
                     var connectedDeviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
 
@@ -89,13 +96,9 @@ namespace Device.Net.Windows
         #endregion
 
         #region Private Static Methods
-        private static string GetHex(uint? id)
-        {
-            return id?.ToString("X").ToLower().PadLeft(4, '0');
-        }
         private static uint GetNumberFromDeviceId(string deviceId, string searchString)
         {
-            var indexOfSearchString = deviceId.ToLower().IndexOf(searchString);
+            var indexOfSearchString = deviceId.IndexOf(searchString, StringComparison.OrdinalIgnoreCase);
             string hexString = null;
             if (indexOfSearchString > -1)
             {
@@ -125,8 +128,5 @@ namespace Device.Net.Windows
             return new ConnectedDeviceDefinition(deviceId) { DeviceType = deviceType, VendorId = vid, ProductId = pid };
         }
         #endregion
-
-
-
     }
 }

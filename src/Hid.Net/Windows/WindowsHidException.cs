@@ -8,5 +8,13 @@ namespace Hid.Net.Windows
         {
 
         }
+
+        public WindowsHidException()
+        {
+        }
+
+        public WindowsHidException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 }

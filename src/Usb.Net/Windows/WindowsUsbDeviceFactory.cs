@@ -8,17 +8,20 @@ namespace Usb.Net.Windows
     {
         #region Public Override Properties
         public override DeviceType DeviceType => DeviceType.Usb;
+        #endregion
+
+        #region Protected Override Methods
 
         /// <summary>
         /// The parent Guid to enumerate through devices at. This probably shouldn't be changed. It defaults to the WinUSB Guid. 
         /// </summary>
-        public override Guid ClassGuid { get; set; } = WindowsDeviceConstants.WinUSBGuid;
+        protected override Guid GetClassGuid() => WindowsDeviceConstants.WinUSBGuid;
         #endregion
 
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsUsbDevice(deviceDefinition.DeviceId);
+            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsUsbDevice(deviceDefinition.DeviceId) { Logger = Logger };
         }
         #endregion
 
@@ -32,7 +35,12 @@ namespace Usb.Net.Windows
         #region Public Static Methods
         public static void Register()
         {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory());
+            Register(null);
+        }
+
+        public static void Register(ILogger logger)
+        {
+            DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory() { Logger = logger });
         }
         #endregion
     }

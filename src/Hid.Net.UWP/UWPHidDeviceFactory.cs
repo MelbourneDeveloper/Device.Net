@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDeviceFactory : UWPDeviceFactoryBase, IDeviceFactory
+    public class UWPHidDeviceFactory : UWPDeviceFactoryBase, IDeviceFactory, IDisposable
     {
         #region Fields
-        private SemaphoreSlim _TestConnectionSemaphore = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _TestConnectionSemaphore = new SemaphoreSlim(1, 1);
         private Dictionary<string, ConnectionInfo> _ConnectionTestedDeviceIds = new Dictionary<string, ConnectionInfo>();
+        private bool disposed;
         #endregion
 
         #region Public Override Properties
@@ -42,7 +43,7 @@ namespace Hid.Net.UWP
 
                     if (!canConnect) return new ConnectionInfo { CanConnect = false };
 
-                    Logger.Log($"Testing device connection. Id: {deviceId}. Can connect: {canConnect}", null, nameof(UWPHidDeviceFactory));
+                    Log($"Testing device connection. Id: {deviceId}. Can connect: {canConnect}", null);
 
                     connectionInfo = new ConnectionInfo { CanConnect = canConnect, UsagePage = hidDevice.UsagePage };
 
@@ -53,7 +54,7 @@ namespace Hid.Net.UWP
             }
             catch (Exception ex)
             {
-                Logger.Log("", ex, nameof(UWPHidDeviceFactory));
+                Log("Connection failed", ex);
                 return new ConnectionInfo { CanConnect = false };
             }
             finally
@@ -67,19 +68,32 @@ namespace Hid.Net.UWP
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
             if (deviceDefinition.DeviceType == DeviceType.Usb) return null;
-            return new UWPHidDevice(deviceDefinition.DeviceId);
+            return new UWPHidDevice(deviceDefinition.DeviceId) { Logger = Logger };
+        }
+
+        public void Dispose()
+        {
+            if (disposed) return;
+            disposed = true;
+
+            _TestConnectionSemaphore.Dispose();
         }
         #endregion
 
         #region Public Static Methods
         public static void Register()
         {
+            Register(null);
+        }
+
+        public static void Register(ILogger logger)
+        {
             foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)
             {
                 if (deviceFactory is UWPHidDeviceFactory) return;
             }
 
-            DeviceManager.Current.DeviceFactories.Add(new UWPHidDeviceFactory());
+            DeviceManager.Current.DeviceFactories.Add(new UWPHidDeviceFactory() { Logger = logger });
         }
         #endregion
     }
