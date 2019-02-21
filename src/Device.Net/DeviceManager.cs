@@ -15,7 +15,7 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitions(FilterDeviceDefinition deviceDefinition)
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
         {
             var retVal = new List<ConnectedDeviceDefinition>();
             foreach (var deviceFactory in DeviceFactories)

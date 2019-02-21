@@ -87,7 +87,7 @@ namespace Device.Net
                 var connectedDeviceDefinitions = new List<ConnectedDeviceDefinition>();
                 foreach (var deviceDefinition in FilterDeviceDefinitions)
                 {
-                    connectedDeviceDefinitions.AddRange(await DeviceManager.Current.GetConnectedDeviceDefinitions(deviceDefinition));
+                    connectedDeviceDefinitions.AddRange(await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(deviceDefinition));
                 }
 
                 //Iterate through connected devices
