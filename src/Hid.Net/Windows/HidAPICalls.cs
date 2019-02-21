@@ -8,7 +8,6 @@ namespace Hid.Net.Windows
     public static class HidAPICalls 
     {
         #region Constants
-        private const uint OpenExisting = 3;
         private const int HIDP_STATUS_SUCCESS = 0x110000;
         #endregion
 
