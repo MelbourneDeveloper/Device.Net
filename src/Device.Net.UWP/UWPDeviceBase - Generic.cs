@@ -13,6 +13,7 @@ namespace Device.Net.UWP
 
         #region Protected Properties
         protected T ConnectedDevice { get; private set; }
+        protected bool Disposed => disposed;
         #endregion
 
         #region Constructor
@@ -70,7 +71,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Virtual Methods
-        public override sealed void Dispose()
+        public override void Dispose()
         {
             if (disposed) return;
             disposed = true;

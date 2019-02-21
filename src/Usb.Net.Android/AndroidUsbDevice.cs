@@ -105,7 +105,9 @@ namespace Usb.Net.Android
                 var byteBuffer = ByteBuffer.Allocate(ReadBufferSize);
                 var request = new UsbRequest();
                 request.Initialize(_UsbDeviceConnection, _ReadEndpoint);
+#pragma warning disable CS0618 // Type or member is obsolete
                 request.Queue(byteBuffer, ReadBufferSize);
+#pragma warning restore CS0618 // Type or member is obsolete
                 await _UsbDeviceConnection.RequestWaitAsync();
                 var buffers = new byte[ReadBufferSize];
 

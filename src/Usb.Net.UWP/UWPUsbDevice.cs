@@ -18,7 +18,6 @@ namespace Usb.Net.UWP
         private UsbInterface _DefaultConfigurationInterface;
         private UsbInterruptOutPipe _DefaultOutPipe;
         private UsbInterruptInPipe _DefaultInPipe;
-        private bool disposed;
         #endregion
 
         #region Public Override Properties
@@ -40,7 +39,7 @@ namespace Usb.Net.UWP
         #region Private Methods
         public override async Task InitializeAsync()
         {
-            if (disposed) throw new Exception(DeviceDisposedErrorMessage);
+            if (Disposed) throw new Exception(DeviceDisposedErrorMessage);
 
             await GetDeviceAsync(DeviceId);
 
