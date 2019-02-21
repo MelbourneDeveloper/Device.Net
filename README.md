@@ -4,7 +4,7 @@
 
 **Cross platform C# library for talking to connected devices such as Usb, and Hid devices.**
 
-**Linux and MacOS support is here! Check out the [MacOS sample](https://github.com/MelbourneDeveloper/Device.Net/tree/develop/src/Device.Net.MacOSLibUsbSample) in the develop branch. Grab the NuGet for [Device.Net.LibUsb](https://www.nuget.org/packages/Device.Net.LibUsb/).**
+**[Linux and MacOS support](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support) is here! Check out the [MacOS sample](https://github.com/MelbourneDeveloper/Device.Net/tree/master/src/Device.Net.MacOSLibUsbSample) and the [Terminal/Console Linux/MacOS Sample](https://github.com/MelbourneDeveloper/Device.Net/tree/develop/src/Device.Net.LibUsbSample). Grab the NuGet for [Device.Net.LibUsb](https://www.nuget.org/packages/Device.Net.LibUsb/).**
 
 This library provides a common Task based Async interface across platforms and device types. This allows for dependency injection so that different types of devices can be used on any platform with the same code. The supported device types are Hid, and USB. Other device types such as Bluetooth and so on may be added in future. Hid.Net is specifically for Hid devices that may be Usb devices. Usb.Net is specifically for Usb devices that don't have a Hid interface.
 
@@ -18,7 +18,7 @@ Please visit the [documentation page](https://github.com/MelbourneDeveloper/Devi
 | .NET Core      | Hid, USB  |
 | Android | USB |
 | UWP | Hid, USB   |
-| Linux* | USB (Via LibUsbDotNet)  |
+| Linux, MacOS* | USB (Via LibUsbDotNet)  |
 
 *See [Linux and MacOS Support](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support)
 
@@ -86,17 +86,15 @@ Litecoin: MVAbLaNPq7meGXvZMU4TwypUsDEuU6stpY
 
 Join us on [Slack](https://hardwarewallets.slack.com)
 
-Follow me on [Twitter](https://twitter.com/HardfolioApp)
+Follow me on [Twitter](https://twitter.com/CFDevelop)
+
+Follow my app Hardfolio on [Twitter](https://twitter.com/HardfolioApp)
 
 Read my [blog](https://christianfindlay.wordpress.com)
 
 ## [Contribution](https://github.com/MelbourneDeveloper/Device.Net/blob/master/CONTRIBUTING.md)
 
-I welcome feedback, and pull requests. If there's something that you need to change in the library, please log an issue, and explain the problem. If you have a proposed solution, please write it up and explain why you think it is the answer to the problem. The best way to highlight a bug is to submit a pull request with a unit test that fails so I can clearly see what the problem is in the first place.
 
-### Pull Requests
-
-Please break pull requests up in to their smallest possible parts. If you have a small feature of refactor that other code depends on, try submitting that first. Please try to reference an issue so that I understand the context of the pull request. If there is no issue, I don't know what the code is about. If you need help, please jump on Slack here: https://hardwarewallets.slack.com
 
 ### See Also
 
