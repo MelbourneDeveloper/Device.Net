@@ -29,6 +29,7 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet />
     <NoWarn>;2008;CA2007;CA1063;CA1816;CS8002</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
