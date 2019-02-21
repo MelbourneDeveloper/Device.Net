@@ -8,11 +8,11 @@ namespace Device.Net.UWP
     {
         #region Fields
         private bool _IsClosing;
-        protected bool disposed;
+        private bool disposed = false;
         #endregion
 
         #region Protected Properties
-        protected T _ConnectedDevice;
+        protected T ConnectedDevice { get; private set; }
         #endregion
 
         #region Constructor
@@ -28,11 +28,11 @@ namespace Device.Net.UWP
         #endregion
 
         #region Protected Methods
-        protected async Task GetDevice(string id)
+        protected async Task GetDeviceAsync(string id)
         {
             var asyncOperation = FromIdAsync(id);
             var task = asyncOperation.AsTask();
-            _ConnectedDevice = await task;
+            ConnectedDevice = await task;
         }
         #endregion
 
@@ -48,25 +48,25 @@ namespace Device.Net.UWP
                 throw new Exception("Reentry");
             }
 
-            lock (_Chunks)
+            lock (Chunks)
             {
-                if (_Chunks.Count > 0)
+                if (Chunks.Count > 0)
                 {
-                    var retVal = _Chunks[0];
+                    var retVal = Chunks[0];
                     Tracer?.Trace(false, retVal);
-                    _Chunks.RemoveAt(0);
+                    Chunks.RemoveAt(0);
                     return retVal;
                 }
             }
 
             _IsReading = true;
-            _TaskCompletionSource = new TaskCompletionSource<byte[]>();
-            return await _TaskCompletionSource.Task;
+            ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
+            return await ReadChunkTaskCompletionSource.Task;
         }
         #endregion
 
         #region Public Override Properties
-        public override bool IsInitialized => _ConnectedDevice != null;
+        public override bool IsInitialized => ConnectedDevice != null;
         #endregion
 
         #region Public Virtual Methods
@@ -76,7 +76,7 @@ namespace Device.Net.UWP
             disposed = true;
 
             Close();
-            _TaskCompletionSource?.Task?.Dispose();
+            ReadChunkTaskCompletionSource?.Task?.Dispose();
 
             base.Dispose();
         }
@@ -89,8 +89,8 @@ namespace Device.Net.UWP
 
             try
             {
-                if (_ConnectedDevice is IDisposable disposable) disposable.Dispose();
-                _ConnectedDevice = default(T);
+                if (ConnectedDevice is IDisposable disposable) disposable.Dispose();
+                ConnectedDevice = default(T);
             }
             catch (Exception ex)
             {

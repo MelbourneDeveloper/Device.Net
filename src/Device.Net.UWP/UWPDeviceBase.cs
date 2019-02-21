@@ -6,13 +6,12 @@ namespace Device.Net.UWP
     public abstract class UWPDeviceBase : DeviceBase
     {
         #region Fields
-        protected TaskCompletionSource<byte[]> _TaskCompletionSource = null;
-        protected readonly Collection<byte[]> _Chunks = new Collection<byte[]>();
-        protected bool _IsReading;
+        protected bool _IsReading { get; set; }
         #endregion
 
-        #region Public Properties
-        public string DeviceId { get; set; }
+        #region Protected Properties
+        protected TaskCompletionSource<byte[]> ReadChunkTaskCompletionSource { get; set; }
+        protected Collection<byte[]> Chunks { get; } = new Collection<byte[]>();
         #endregion
 
         #region Protected Methods
@@ -20,15 +19,15 @@ namespace Device.Net.UWP
         {
             if (!_IsReading)
             {
-                lock (_Chunks)
+                lock (Chunks)
                 {
-                    _Chunks.Add(bytes);
+                    Chunks.Add(bytes);
                 }
             }
             else
             {
                 _IsReading = false;
-                _TaskCompletionSource.SetResult(bytes);
+                ReadChunkTaskCompletionSource.SetResult(bytes);
             }
         }
         #endregion

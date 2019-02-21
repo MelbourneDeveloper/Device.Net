@@ -18,6 +18,7 @@ namespace Usb.Net.UWP
         private UsbInterface _DefaultConfigurationInterface;
         private UsbInterruptOutPipe _DefaultOutPipe;
         private UsbInterruptInPipe _DefaultInPipe;
+        private bool disposed;
         #endregion
 
         #region Public Override Properties
@@ -41,15 +42,15 @@ namespace Usb.Net.UWP
         {
             if (disposed) throw new Exception(DeviceDisposedErrorMessage);
 
-            await GetDevice(DeviceId);
+            await GetDeviceAsync(DeviceId);
 
-            if (_ConnectedDevice != null)
+            if (ConnectedDevice != null)
             {
-                var usbInterface = _ConnectedDevice.Configuration.UsbInterfaces.FirstOrDefault();
+                var usbInterface = ConnectedDevice.Configuration.UsbInterfaces.FirstOrDefault();
 
                 if (usbInterface == null)
                 {
-                    _ConnectedDevice.Dispose();
+                    ConnectedDevice.Dispose();
                     throw new Exception("There was no Usb Interface found for the device.");
                 }
 
@@ -66,7 +67,7 @@ namespace Usb.Net.UWP
 
                 // TODO: It should be possible to select a different configurations, interface, and pipes
 
-                _DefaultConfigurationInterface = _ConnectedDevice.Configuration.UsbInterfaces.FirstOrDefault();
+                _DefaultConfigurationInterface = ConnectedDevice.Configuration.UsbInterfaces.FirstOrDefault();
 
                 //TODO: Clean up this messaging and move down to a base class across platforms
                 if (_DefaultConfigurationInterface == null) throw new Exception("Could not get the default interface configuration for the USB device");

@@ -88,7 +88,7 @@ namespace Device.Net.UWP
         /// <summary>
         /// Some devices display as being enable but still cannot be connected to, so run a test to make sure they can be connected before returning the definition
         /// </summary>
-        public abstract Task<ConnectionInfo> TestConnection(string Id);
+        internal abstract Task<ConnectionInfo> TestConnection(string Id);
         #endregion
 
         #region Public Static Methods
@@ -105,14 +105,6 @@ namespace Device.Net.UWP
             retVal.ProductName = deviceInformation.Name;
 
             return retVal;
-        }
-        #endregion
-
-        #region Inner Classes
-        public class ConnectionInfo
-        {
-            public bool CanConnect { get; set; }
-            public ushort? UsagePage { get; set; }
         }
         #endregion
     }

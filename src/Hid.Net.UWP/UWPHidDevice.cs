@@ -69,11 +69,11 @@ namespace Hid.Net.UWP
 
             Log("Initializing Hid device", null);
 
-            await GetDevice(DeviceId);
+            await GetDeviceAsync(DeviceId);
 
-            if (_ConnectedDevice != null)
+            if (ConnectedDevice != null)
             {
-                _ConnectedDevice.InputReportReceived += _HidDevice_InputReportReceived;
+                ConnectedDevice.InputReportReceived += _HidDevice_InputReportReceived;
             }
             else
             {
@@ -104,12 +104,12 @@ namespace Hid.Net.UWP
             }
 
             var buffer = bytes.AsBuffer();
-            var outReport = _ConnectedDevice.CreateOutputReport();
+            var outReport = ConnectedDevice.CreateOutputReport();
             outReport.Data = buffer;
 
             try
             {
-                var operation = _ConnectedDevice.SendOutputReportAsync(outReport);
+                var operation = ConnectedDevice.SendOutputReportAsync(outReport);
                 await operation.AsTask();
                 Tracer?.Trace(false, bytes);
             }
