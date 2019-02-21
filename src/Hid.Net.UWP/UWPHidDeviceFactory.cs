@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDeviceFactory : UWPDeviceFactoryBase, IDeviceFactory
+    public class UWPHidDeviceFactory : UWPDeviceFactoryBase, IDeviceFactory, IDisposable
     {
         #region Fields
-        private SemaphoreSlim _TestConnectionSemaphore = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _TestConnectionSemaphore = new SemaphoreSlim(1, 1);
         private Dictionary<string, ConnectionInfo> _ConnectionTestedDeviceIds = new Dictionary<string, ConnectionInfo>();
+        private bool disposed;
         #endregion
 
         #region Public Override Properties
@@ -68,6 +69,14 @@ namespace Hid.Net.UWP
         {
             if (deviceDefinition.DeviceType == DeviceType.Usb) return null;
             return new UWPHidDevice(deviceDefinition.DeviceId) { Logger = Logger };
+        }
+
+        public void Dispose()
+        {
+            if (disposed) return;
+            disposed = true;
+
+            _TestConnectionSemaphore.Dispose();
         }
         #endregion
 

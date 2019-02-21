@@ -43,7 +43,7 @@ namespace Device.Net.UWP
         #region Public Overrides
         public override async Task<byte[]> ReadAsync()
         {
-            if (_IsReading)
+            if (IsReading)
             {
                 throw new Exception("Reentry");
             }
@@ -59,7 +59,7 @@ namespace Device.Net.UWP
                 }
             }
 
-            _IsReading = true;
+            IsReading = true;
             ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
             return await ReadChunkTaskCompletionSource.Task;
         }

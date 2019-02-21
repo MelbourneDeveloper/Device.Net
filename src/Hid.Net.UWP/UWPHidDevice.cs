@@ -63,8 +63,6 @@ namespace Hid.Net.UWP
 
         public override async Task InitializeAsync()
         {
-            if (disposed) throw new Exception(DeviceDisposedErrorMessage);
-
             //TODO: Put a lock here to stop reentrancy of multiple calls
 
             Log("Initializing Hid device", null);

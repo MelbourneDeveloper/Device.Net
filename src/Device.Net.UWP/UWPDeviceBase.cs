@@ -6,7 +6,7 @@ namespace Device.Net.UWP
     public abstract class UWPDeviceBase : DeviceBase
     {
         #region Fields
-        protected bool _IsReading { get; set; }
+        protected bool IsReading { get; set; }
         #endregion
 
         #region Protected Properties
@@ -17,7 +17,7 @@ namespace Device.Net.UWP
         #region Protected Methods
         protected void HandleDataReceived(byte[] bytes)
         {
-            if (!_IsReading)
+            if (!IsReading)
             {
                 lock (Chunks)
                 {
@@ -26,7 +26,7 @@ namespace Device.Net.UWP
             }
             else
             {
-                _IsReading = false;
+                IsReading = false;
                 ReadChunkTaskCompletionSource.SetResult(bytes);
             }
         }
