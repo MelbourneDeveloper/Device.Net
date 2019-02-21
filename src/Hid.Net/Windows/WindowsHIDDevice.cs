@@ -27,8 +27,8 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Overrides
-        public override ushort WriteBufferSize => ConnectedDeviceDefinition == null ? throw new WindowsHidException("Device has not been initialized") : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value;
-        public override ushort ReadBufferSize => ConnectedDeviceDefinition == null ? throw new WindowsHidException("Device has not been initialized") : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value;
+        public override ushort WriteBufferSize => ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value;
+        public override ushort ReadBufferSize => ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value;
         #endregion
 
         #region Public Properties
