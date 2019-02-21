@@ -61,7 +61,7 @@ namespace Device.Net
         #region Public Static Methods
         public static ConnectedDeviceDefinition GetAndroidDeviceDefinition(UsbDevice usbDevice)
         {
-            var deviceId = usbDevice.DeviceId.ToString();
+            var deviceId = usbDevice.DeviceId.ToString(Helpers.ParsingCulture);
 
             return new ConnectedDeviceDefinition(deviceId)
             {
