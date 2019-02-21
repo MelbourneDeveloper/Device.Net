@@ -45,9 +45,18 @@ namespace Hid.Net.Windows
 
         #endregion
 
-        #region Helper Methods
+        #region Private Static Methods
+        private static string GetHidString(SafeFileHandle safeFileHandle, GetString getString)
+        {
+            var pointerToBuffer = Marshal.AllocHGlobal(126);
+            var isSuccess = getString(safeFileHandle, pointerToBuffer, 126);
+            Marshal.FreeHGlobal(pointerToBuffer);
+            WindowsDeviceBase.HandleError(isSuccess, "Could not get Hid string");
+            return Marshal.PtrToStringUni(pointerToBuffer);
+        }
+        #endregion
 
-        #region Public Methods
+        #region Public Static Methods
         public static HidAttributes GetHidAttributes(SafeFileHandle safeFileHandle)
         {
             var isSuccess = HidD_GetAttributes(safeFileHandle, out var hidAttributes);
@@ -85,16 +94,6 @@ namespace Hid.Net.Windows
         public static string GetSerialNumber(SafeFileHandle safeFileHandle)
         {
             return GetHidString(safeFileHandle, HidD_GetSerialNumberString);
-        }
-        #endregion
-
-        private static string GetHidString(SafeFileHandle safeFileHandle, GetString getString)
-        {
-            var pointerToBuffer = Marshal.AllocHGlobal(126);
-            var isSuccess = getString(safeFileHandle, pointerToBuffer, 126);
-            Marshal.FreeHGlobal(pointerToBuffer);
-            WindowsDeviceBase.HandleError(isSuccess, "Could not get Hid string");
-            return Marshal.PtrToStringUni(pointerToBuffer);
         }
 
         public static Guid GetHidGuid()
