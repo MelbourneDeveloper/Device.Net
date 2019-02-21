@@ -42,7 +42,7 @@ namespace Usb.Net.Android
             {
                 if (string.IsNullOrEmpty(DeviceId)) throw new Exception($"Tried to get {nameof(DeviceNumberId)} but the {nameof(DeviceId)} was empty");
 
-                return int.Parse(DeviceId);
+                return int.Parse(DeviceId, Helpers.ParsingCulture);
             }
 
             set => DeviceId = value.ToString();
@@ -60,7 +60,7 @@ namespace Usb.Net.Android
 
         #region Public Methods 
 
-        public override sealed void Dispose()
+        public sealed override void Dispose()
         {
             if (disposed) return;
             disposed = true;
