@@ -65,6 +65,8 @@ namespace Hid.Net.UWP
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
 
+            if (Disposed) throw new Exception(DeviceDisposedErrorMessage);
+
             Log("Initializing Hid device", null);
 
             await GetDeviceAsync(DeviceId);
