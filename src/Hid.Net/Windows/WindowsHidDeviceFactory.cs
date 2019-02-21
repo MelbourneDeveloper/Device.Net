@@ -10,7 +10,6 @@ namespace Hid.Net.Windows
     {
         #region Public Override Properties
         public override DeviceType DeviceType => DeviceType.Hid;
-        public override Guid ClassGuid { get; set; } = WindowsDeviceConstants.GUID_DEVINTERFACE_HID;
         #endregion
 
         #region Protected Override Methods
@@ -21,6 +20,12 @@ namespace Hid.Net.Windows
                 return GetDeviceDefinition(deviceId, safeFileHandle);
             }
         }
+
+        protected override Guid GetClassGuid()
+        {
+            return GetHidGuid();
+        }
+
         #endregion
 
         #region Public Methods

@@ -5,8 +5,12 @@ using System.Runtime.InteropServices;
 
 namespace Hid.Net.Windows
 {
-    public static class HidAPICalls 
+    public static class HidAPICalls
     {
+        #region Private Static Fields
+        private static Guid? _HidGuid;
+        #endregion
+
         #region Constants
         private const int HIDP_STATUS_SUCCESS = 0x110000;
         #endregion
@@ -32,10 +36,10 @@ namespace Hid.Net.Windows
         private static extern bool HidD_GetAttributes(SafeFileHandle hidDeviceObject, out HidAttributes attributes);
 
         [DllImport("hid.dll", SetLastError = true)]
-        private static extern bool HidD_FreePreparsedData(ref IntPtr pointerToPreparsedData);
+        private static extern void HidD_GetHidGuid(out Guid hidGuid);
 
         [DllImport("hid.dll", SetLastError = true)]
-        private static extern void HidD_GetHidGuid(ref Guid hidGuid);
+        private static extern bool HidD_FreePreparsedData(ref IntPtr pointerToPreparsedData);
 
         private delegate bool GetString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
 
@@ -84,17 +88,28 @@ namespace Hid.Net.Windows
         }
         #endregion
 
-        #region Private Static Methods
         private static string GetHidString(SafeFileHandle safeFileHandle, GetString getString)
         {
             var pointerToBuffer = Marshal.AllocHGlobal(126);
             var isSuccess = getString(safeFileHandle, pointerToBuffer, 126);
             Marshal.FreeHGlobal(pointerToBuffer);
             WindowsDeviceBase.HandleError(isSuccess, "Could not get Hid string");
-            return Marshal.PtrToStringUni(pointerToBuffer);     
+            return Marshal.PtrToStringUni(pointerToBuffer);
         }
-        #endregion
 
+        public static Guid GetHidGuid()
+        {
+            if (_HidGuid.HasValue)
+            {
+                return _HidGuid.Value;
+            }
+
+            HidD_GetHidGuid(out var hidGuid);
+
+            _HidGuid = hidGuid;
+
+            return hidGuid;
+        }
         #endregion
     }
 }

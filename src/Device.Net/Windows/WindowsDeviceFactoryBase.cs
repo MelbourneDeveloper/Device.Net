@@ -18,11 +18,11 @@ namespace Device.Net.Windows
 
         #region Public Abstract Properties
         public abstract DeviceType DeviceType { get; }
-        public abstract Guid ClassGuid { get; set; }
         #endregion
 
         #region Protected Abstract Methods
         protected abstract ConnectedDeviceDefinition GetDeviceDefinition(string deviceId);
+        protected abstract Guid GetClassGuid();
         #endregion
 
         #region Public Methods
@@ -37,7 +37,7 @@ namespace Device.Net.Windows
                 spDeviceInterfaceData.CbSize = (uint)Marshal.SizeOf(spDeviceInterfaceData);
                 spDeviceInfoData.CbSize = (uint)Marshal.SizeOf(spDeviceInfoData);
 
-                var guidString = ClassGuid.ToString();
+                var guidString = GetClassGuid().ToString();
                 var copyOfClassGuid = new Guid(guidString);
 
                 var devicesHandle = APICalls.SetupDiGetClassDevs(ref copyOfClassGuid, IntPtr.Zero, IntPtr.Zero, APICalls.DigcfDeviceinterface | APICalls.DigcfPresent);
