@@ -8,15 +8,8 @@ namespace Hid.Net.Windows
     public static class HidAPICalls 
     {
         #region Constants
-        private const int DigcfDeviceinterface = 16;
-        private const int DigcfPresent = 2;
-        private const uint FileShareRead = 1;
-        private const uint FileShareWrite = 2;
-        private const uint GenericRead = 2147483648;
-        private const uint GenericWrite = 1073741824;
         private const uint OpenExisting = 3;
         private const int HIDP_STATUS_SUCCESS = 0x110000;
-        private const int HIDP_STATUS_INVALID_PREPARSED_DATA = -0x3FEF0000;
         #endregion
 
         #region API Calls

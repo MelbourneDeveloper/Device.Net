@@ -16,7 +16,12 @@
     <PackageTags>USB Hid Android C#</PackageTags>
     <PackageReleaseNotes>Split from Hid.Net</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
-    <NoWarn>1701;1702;CA1063</NoWarn>
+    <NoWarn>1701;1702;CA1063;CA1815;CA1707;CA1401;CA2007;CA1816</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
   </PropertyGroup>
 
   <Choose>

@@ -139,7 +139,9 @@ namespace Usb.Net.Android
 
                 Tracer?.Trace(true, data);
 
+#pragma warning disable CS0618 // Type or member is obsolete
                 request.Queue(byteBuffer, data.Length);
+#pragma warning restore CS0618 // Type or member is obsolete
                 await _UsbDeviceConnection.RequestWaitAsync();
             }
             catch (Exception ex)

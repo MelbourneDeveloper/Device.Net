@@ -20,8 +20,8 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Overrride Properties
-        public override ushort WriteBufferSize => IsInitialized ? (ushort)ConnectedDeviceDefinition.WriteBufferSize : throw new Exception("Device has not been initialized");
-        public override ushort ReadBufferSize => IsInitialized ? (ushort)ConnectedDeviceDefinition.ReadBufferSize : throw new Exception("Device has not been initialized");
+        public override ushort WriteBufferSize => IsInitialized ? (ushort)ConnectedDeviceDefinition.WriteBufferSize : (ushort)0;
+        public override ushort ReadBufferSize => IsInitialized ? (ushort)ConnectedDeviceDefinition.ReadBufferSize : (ushort)0;
         public override bool IsInitialized => _DeviceHandle != null && !_DeviceHandle.IsInvalid;
         #endregion
 
