@@ -37,13 +37,7 @@ namespace Usb.Net.Android
         public override ushort WriteBufferSize => (ushort)_WriteEndpoint.MaxPacketSize;
         public int DeviceNumberId
         {
-            get
-            {
-                if (string.IsNullOrEmpty(DeviceId)) return -1;
-
-                return int.Parse(DeviceId, Helpers.ParsingCulture);
-            }
-
+            get => string.IsNullOrEmpty(DeviceId) ? -1 : int.Parse(DeviceId, Helpers.ParsingCulture);
             set => DeviceId = value.ToString(Helpers.ParsingCulture);
         }
         #endregion
