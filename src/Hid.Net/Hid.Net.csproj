@@ -58,6 +58,7 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
+    <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />
   </ItemGroup>
 
 </Project>

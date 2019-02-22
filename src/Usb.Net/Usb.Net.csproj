@@ -16,12 +16,8 @@
     <PackageTags>USB Hid Android C#</PackageTags>
     <PackageReleaseNotes>Split from Hid.Net</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
-    <NoWarn>1701;1702;CA1063;CA1815;CA1707;CA1401;CA2007;CA1816;CA1060</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
+    <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>      
   </PropertyGroup>
 
   <Choose>
@@ -39,7 +35,7 @@
     </When>
   </Choose>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -48,6 +44,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
+    <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />    
   </ItemGroup>
 
 </Project>
