@@ -100,14 +100,14 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Methods
-        public override async Task WriteAsync(byte[] bytes)
+        public override async Task WriteAsync(byte[] data)
         {
             if (_DefaultOutPipe == null) throw new Exception("The device has not been initialized.");
 
-            if (bytes.Length > WriteBufferSize) throw new Exception("The buffer size is too large");
-            await _DefaultOutPipe.OutputStream.WriteAsync(bytes.AsBuffer());
+            if (data.Length > WriteBufferSize) throw new Exception("The buffer size is too large");
+            await _DefaultOutPipe.OutputStream.WriteAsync(data.AsBuffer());
 
-            Tracer?.Trace(false, bytes);
+            Tracer?.Trace(false, data);
         }
         #endregion
     }
