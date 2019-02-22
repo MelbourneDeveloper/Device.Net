@@ -90,7 +90,7 @@ namespace Usb.Net.Windows
         {
             if (disposed) throw new Exception(DeviceDisposedErrorMessage);
 
-            await Task.Run(Initialize);
+            await Task.Run(() => Initialize());
         }
 
         public override async Task<byte[]> ReadAsync()
