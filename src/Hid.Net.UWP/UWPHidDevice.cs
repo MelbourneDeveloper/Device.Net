@@ -1,5 +1,4 @@
-﻿using Device.Net;
-using Device.Net.UWP;
+﻿using Device.Net.UWP;
 using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
@@ -116,7 +115,7 @@ namespace Hid.Net.UWP
             catch (ArgumentException ex)
             {
                 //TODO: Check the string is nasty. Validation on the size of the array being sent should be done earlier anyway
-                if (ex.Message == "Value does not fall within the expected range.")
+                if (string.Equals(ex.Message, "Value does not fall within the expected range.", StringComparison.Ordinal))
                 {
                     throw new Exception("It seems that the data being sent to the device does not match the accepted size. Have you checked DataHasExtraByte?", ex);
                 }
