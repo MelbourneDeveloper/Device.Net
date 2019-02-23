@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
-    public class WindowsHidDevice : WindowsDeviceBase, IDevice
+    public class WindowsHidDevice : WindowsDeviceBase, IHidDevice
     {
         #region Fields
         private FileStream _ReadFileStream;
@@ -155,7 +155,12 @@ namespace Hid.Net.Windows
             return retVal;
         }
 
-        public override async Task WriteAsync(byte[] data)
+        public override Task WriteAsync(byte[] data)
+        {
+            return WriteAsync(data, 0);
+        }
+
+        public  async Task WriteAsync(byte[] data, byte reportId)
         {
             if (_WriteFileStream == null)
             {
@@ -177,7 +182,7 @@ namespace Hid.Net.Windows
 
                 bytes = new byte[WriteBufferSize];
                 Array.Copy(data, 0, bytes, 1, data.Length);
-                bytes[0] = 0;
+                bytes[0] = reportId;
             }
             else
             {

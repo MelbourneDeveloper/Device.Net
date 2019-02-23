@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 using Windows.Devices.HumanInterfaceDevice;
 using Windows.Foundation;
 using Windows.Storage;
+using h = Hid.Net;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDevice : UWPDeviceBase<HidDevice>
+    public class UWPHidDevice : UWPDeviceBase<HidDevice>, h.IHidDevice
     {
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
@@ -72,8 +73,6 @@ namespace Hid.Net.UWP
 
             if (ConnectedDevice != null)
             {
-                var asdasd = ConnectedDevice.GetFeatureReportAsync();
-
                 ConnectedDevice.InputReportReceived += _HidDevice_InputReportReceived;
             }
             else
