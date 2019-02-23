@@ -36,6 +36,7 @@ namespace Hid.Net.Windows
         /// Many Hid devices on Windows have a buffer size that is one byte larger than the logical buffer size. For compatibility with other platforms etc. we need to remove the first byte. See RemoveFirstByte
         /// </summary> 
         public bool DataHasExtraByte => WriteBufferSize == 65;
+        public byte DefaultReportId { get; set; }
         #endregion
 
         #region Constructor
@@ -160,7 +161,7 @@ namespace Hid.Net.Windows
             return WriteAsync(data, 0);
         }
 
-        public  async Task WriteAsync(byte[] data, byte reportId)
+        public  async Task WriteAsync(byte[] data, byte? reportId)
         {
             if (_WriteFileStream == null)
             {
@@ -182,7 +183,7 @@ namespace Hid.Net.Windows
 
                 bytes = new byte[WriteBufferSize];
                 Array.Copy(data, 0, bytes, 1, data.Length);
-                bytes[0] = reportId;
+                bytes[0] = reportId ?? DefaultReportId;
             }
             else
             {

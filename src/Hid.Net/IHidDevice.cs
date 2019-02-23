@@ -5,6 +5,7 @@ namespace Hid.Net
 {
     public interface IHidDevice : IDevice
     {
-        Task WriteAsync(byte[] data, byte reportId);
+        Task WriteAsync(byte[] data, byte? reportId);
+        byte DefaultReportId { get; }
     }
 }

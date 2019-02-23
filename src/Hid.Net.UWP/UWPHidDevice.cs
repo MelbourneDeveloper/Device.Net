@@ -13,6 +13,7 @@ namespace Hid.Net.UWP
     {
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
+        public byte DefaultReportId { get; set; }
         #endregion
 
         #region Public Override Properties
@@ -93,14 +94,14 @@ namespace Hid.Net.UWP
             return WriteAsync(data, 0);
         }
 
-        public async Task WriteAsync(byte[] data, byte reportId)
+        public async Task WriteAsync(byte[] data, byte? reportId)
         {
             byte[] bytes;
             if (DataHasExtraByte)
             {
                 bytes = new byte[data.Length + 1];
                 Array.Copy(data, 0, bytes, 1, data.Length);
-                bytes[0] = reportId;
+                bytes[0] = reportId.HasValue ? reportId.Value : DefaultReportId;
             }
             else
             {
