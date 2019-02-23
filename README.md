@@ -88,7 +88,8 @@ Litecoin: MVAbLaNPq7meGXvZMU4TwypUsDEuU6stpY
 
 ## Contact
 
-Join us on [Slack](https://hardwarewallets.slack.com)
+Join us on [Slack]
+(https://join.slack.com/t/hardwarewallets/shared_invite/enQtNTYwMjI4NTk3Mjg3LWU0ZDU5ZmE3OTNiOWNjNDVkNjU3ZmVmYmZmMjAzYTY4ZWMzMzk3NjdjZTBmMDU1ZTlhMTg2MGRhZDBmODBlNGY)
 
 Follow me on [Twitter](https://twitter.com/CFDevelop)
 
