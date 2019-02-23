@@ -35,7 +35,7 @@ namespace Hid.Net.Windows
         /// <summary> 
         /// Many Hid devices on Windows have a buffer size that is one byte larger than the logical buffer size. For compatibility with other platforms etc. we need to remove the first byte. See RemoveFirstByte
         /// </summary> 
-        public bool DataHasExtraByte { get; set; } = true;
+        public bool DataHasExtraByte => WriteBufferSize == 65;
         #endregion
 
         #region Constructor
