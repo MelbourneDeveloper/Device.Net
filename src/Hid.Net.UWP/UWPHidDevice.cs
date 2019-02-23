@@ -1,5 +1,4 @@
-﻿using Device.Net;
-using Device.Net.UWP;
+﻿using Device.Net.UWP;
 using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
@@ -73,6 +72,8 @@ namespace Hid.Net.UWP
 
             if (ConnectedDevice != null)
             {
+                var asdasd = ConnectedDevice.GetFeatureReportAsync();
+
                 ConnectedDevice.InputReportReceived += _HidDevice_InputReportReceived;
             }
             else
@@ -88,15 +89,19 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Methods
+        public override Task WriteAsync(byte[] data)
+        {
+            return WriteAsync(data, 0);
+        }
 
-        public override async Task WriteAsync(byte[] data)
+        public async Task WriteAsync(byte[] data, byte reportId)
         {
             byte[] bytes;
             if (DataHasExtraByte)
             {
                 bytes = new byte[data.Length + 1];
                 Array.Copy(data, 0, bytes, 1, data.Length);
-                bytes[0] = 0;
+                bytes[0] = reportId;
             }
             else
             {
