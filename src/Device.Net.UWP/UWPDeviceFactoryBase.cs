@@ -88,7 +88,7 @@ namespace Device.Net.UWP
         /// <summary>
         /// Some devices display as being enable but still cannot be connected to, so run a test to make sure they can be connected before returning the definition
         /// </summary>
-        public abstract Task<ConnectionInfo> TestConnection(string Id);
+        public abstract Task<ConnectionInfo> TestConnection(string deviceId);
         #endregion
 
         #region Public Static Methods
