@@ -90,10 +90,10 @@ namespace Hid.Net.UWP
         #region Public Methods
         public override Task WriteAsync(byte[] data)
         {
-            return WriteAsync(data, 0);
+            return WriteReportAsync(data, 0);
         }
 
-        public async Task WriteAsync(byte[] data, byte? reportId)
+        public async Task WriteReportAsync(byte[] data, byte? reportId)
         {
             byte[] bytes;
             if (DataHasExtraByte)
