@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 using Windows.Devices.HumanInterfaceDevice;
 using Windows.Foundation;
 using Windows.Storage;
-using h = Hid.Net;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDevice : UWPDeviceBase<HidDevice>, h.IHidDevice
+    public class UWPHidDevice : UWPDeviceBase<HidDevice>, IHidDevice
     {
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
@@ -101,7 +100,7 @@ namespace Hid.Net.UWP
             {
                 bytes = new byte[data.Length + 1];
                 Array.Copy(data, 0, bytes, 1, data.Length);
-                bytes[0] = reportId.HasValue ? reportId.Value : DefaultReportId;
+                bytes[0] = reportId ?? DefaultReportId;
             }
             else
             {
