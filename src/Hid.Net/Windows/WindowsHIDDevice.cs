@@ -3,6 +3,7 @@ using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
@@ -132,6 +133,13 @@ namespace Hid.Net.Windows
 
         public override async Task<byte[]> ReadAsync()
         {
+            return (await ReadReportAsync()).Data;
+        }
+
+        public async Task<ReadResult> ReadReportAsync()
+        {
+            byte? reportId = null;
+
             if (_ReadFileStream == null)
             {
                 throw new Exception("The device has not been initialized");
@@ -149,19 +157,21 @@ namespace Hid.Net.Windows
                 throw new IOException(Helpers.ReadErrorMessage, ex);
             }
 
+            if (DataHasExtraByte) reportId = bytes.First();
+
             var retVal = DataHasExtraByte ? RemoveFirstByte(bytes) : bytes;
 
             Tracer?.Trace(false, retVal);
 
-            return retVal;
+            return new ReadResult(reportId, retVal);
         }
 
         public override Task WriteAsync(byte[] data)
         {
-            return WriteAsync(data, 0);
+            return WriteReportAsync(data, 0);
         }
 
-        public  async Task WriteAsync(byte[] data, byte? reportId)
+        public async Task WriteReportAsync(byte[] data, byte? reportId)
         {
             if (_WriteFileStream == null)
             {
