@@ -14,12 +14,9 @@
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
     <PackageTags>Hid USB Android UWP Windows C#</PackageTags>
-    <NoWarn>CA2007;CA1401;CA1060;CA1707;CA1063;CA1815;CA1816;CA2237</NoWarn>
+    <NoWarn></NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-    <WarningsAsErrors />
+    <CodeAnalysisRuleSet>CodeRules.ruleset</CodeAnalysisRuleSet>      
   </PropertyGroup>
 
   <Choose>
@@ -41,7 +38,7 @@
     <None Include="..\..\README.md" Link="README.md" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>

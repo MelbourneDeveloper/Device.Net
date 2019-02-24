@@ -1,12 +1,11 @@
 ﻿namespace Usb.Net.Windows
 {
-    public static partial class WinUsbApiCalls
+#pragma warning disable CA1008 // Enums should have zero value
+    public enum USB_DEVICE_SPEED
+#pragma warning restore CA1008 // Enums should have zero value
     {
-        public enum USB_DEVICE_SPEED
-        {
-            UsbLowSpeed = 1,
-            UsbFullSpeed,
-            UsbHighSpeed
-        }
+        UsbLowSpeed = 1,
+        UsbFullSpeed,
+        UsbHighSpeed
     }
 }

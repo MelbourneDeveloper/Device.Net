@@ -67,8 +67,7 @@ namespace Hid.Net.UWP
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            if (deviceDefinition.DeviceType == DeviceType.Usb) return null;
-            return new UWPHidDevice(deviceDefinition.DeviceId) { Logger = Logger };
+            return deviceDefinition.DeviceType == DeviceType.Usb ? null : new UWPHidDevice(deviceDefinition.DeviceId) { Logger = Logger };
         }
 
         public void Dispose()

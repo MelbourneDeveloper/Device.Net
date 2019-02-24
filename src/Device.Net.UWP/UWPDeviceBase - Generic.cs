@@ -8,12 +8,11 @@ namespace Device.Net.UWP
     {
         #region Fields
         private bool _IsClosing;
-        private bool disposed = false;
         #endregion
 
         #region Protected Properties
         protected T ConnectedDevice { get; private set; }
-        protected bool Disposed => disposed;
+        protected bool Disposed { get; private set; } = false;
         #endregion
 
         #region Constructor
@@ -49,6 +48,7 @@ namespace Device.Net.UWP
                 throw new Exception("Reentry");
             }
 
+            //TODO: this should be a semaphore not a lock
             lock (Chunks)
             {
                 if (Chunks.Count > 0)
@@ -73,8 +73,8 @@ namespace Device.Net.UWP
         #region Public Virtual Methods
         public override void Dispose()
         {
-            if (disposed) return;
-            disposed = true;
+            if (Disposed) return;
+            Disposed = true;
 
             Close();
             ReadChunkTaskCompletionSource?.Task?.Dispose();

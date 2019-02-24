@@ -63,6 +63,9 @@ namespace Usb.Net.Sample
             //Get the first available device and connect to it
             var devices = await DeviceManager.Current.GetDevicesAsync(_DeviceDefinitions);
             TrezorDevice = devices.FirstOrDefault();
+
+            if (TrezorDevice == null) throw new Exception("There were no devices found");
+
             await TrezorDevice.InitializeAsync();
         }
 

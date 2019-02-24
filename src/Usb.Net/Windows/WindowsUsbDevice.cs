@@ -43,7 +43,7 @@ namespace Usb.Net.Windows
                 throw new WindowsException($"{nameof(DeviceDefinitionBase)} must be specified before {nameof(InitializeAsync)} can be called.");
             }
 
-            _DeviceHandle = APICalls.CreateFile(DeviceId, (APICalls.GenericWrite | APICalls.GenericRead), APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
+            _DeviceHandle = APICalls.CreateFile(DeviceId, APICalls.GenericWrite | APICalls.GenericRead, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
 
 
             if (_DeviceHandle.IsInvalid)
@@ -89,8 +89,7 @@ namespace Usb.Net.Windows
         public override async Task InitializeAsync()
         {
             if (disposed) throw new Exception(DeviceDisposedErrorMessage);
-
-            await Task.Run(Initialize);
+            await Task.Run(() => Initialize());
         }
 
         public override async Task<byte[]> ReadAsync()

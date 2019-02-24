@@ -22,7 +22,7 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
     <PackageReleaseNotes>Split the library in to Device.Net, Hid.Net, and Usb.Net. For Android, please use Usb.Net. Check the Hid.Net repo for details.</PackageReleaseNotes>
     <PackageId>Hid.Net</PackageId>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>1701;1702;CA1815;CA1063;CA2007;CA2237;CA1816;CA1060</NoWarn>
+    <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>      
   </PropertyGroup>
 
   <Choose>
@@ -49,7 +49,7 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -58,6 +58,7 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
+    <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />
   </ItemGroup>
 
 </Project>
