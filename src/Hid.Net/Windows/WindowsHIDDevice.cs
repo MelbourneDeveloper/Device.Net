@@ -20,7 +20,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Private Properties
-        private bool ReadBufferHasExtraByte => ReadBufferSize == 65;
+        private bool ReadBufferHasReportId => ReadBufferSize == 65;
         #endregion
 
         #region Protected Properties
@@ -154,9 +154,9 @@ namespace Hid.Net.Windows
                 throw new IOException(Helpers.ReadErrorMessage, ex);
             }
 
-            if (ReadBufferHasExtraByte) reportId = bytes.First();
+            if (ReadBufferHasReportId) reportId = bytes.First();
 
-            var retVal = ReadBufferHasExtraByte ? RemoveFirstByte(bytes) : bytes;
+            var retVal = ReadBufferHasReportId ? RemoveFirstByte(bytes) : bytes;
 
             Tracer?.Trace(false, retVal);
 
