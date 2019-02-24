@@ -19,24 +19,21 @@ namespace Hid.Net.Windows
         private bool disposed = false;
         #endregion
 
+        #region Private Properties
+        private bool DataHasExtraByte => WriteBufferSize == 65;
+        #endregion
+
         #region Protected Properties
         protected override string LogSection => nameof(WindowsHidDevice);
         #endregion
 
         #region Public Overrides
         public override bool IsInitialized => _WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid;
-        #endregion
-
-        #region Public Overrides
         public override ushort WriteBufferSize => ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value;
         public override ushort ReadBufferSize => ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value;
         #endregion
 
         #region Public Properties
-        /// <summary> 
-        /// Many Hid devices on Windows have a buffer size that is one byte larger than the logical buffer size. For compatibility with other platforms etc. we need to remove the first byte. See RemoveFirstByte
-        /// </summary> 
-        public bool DataHasExtraByte => WriteBufferSize == 65;
         public byte DefaultReportId { get; set; }
         #endregion
 
