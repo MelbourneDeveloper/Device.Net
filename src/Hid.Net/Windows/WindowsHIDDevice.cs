@@ -3,11 +3,12 @@ using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
-    public class WindowsHidDevice : WindowsDeviceBase, IDevice
+    public class WindowsHidDevice : WindowsDeviceBase, IHidDevice
     {
         #region Fields
         private FileStream _ReadFileStream;
@@ -18,24 +19,22 @@ namespace Hid.Net.Windows
         private bool disposed = false;
         #endregion
 
+        #region Private Properties
+        private bool ReadBufferHasReportId => ReadBufferSize == 65;
+        #endregion
+
         #region Protected Properties
         protected override string LogSection => nameof(WindowsHidDevice);
         #endregion
 
         #region Public Overrides
         public override bool IsInitialized => _WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid;
-        #endregion
-
-        #region Public Overrides
         public override ushort WriteBufferSize => ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value;
         public override ushort ReadBufferSize => ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value;
         #endregion
 
         #region Public Properties
-        /// <summary> 
-        /// Many Hid devices on Windows have a buffer size that is one byte larger than the logical buffer size. For compatibility with other platforms etc. we need to remove the first byte. See RemoveFirstByte
-        /// </summary> 
-        public bool DataHasExtraByte { get; set; } = true;
+        public byte DefaultReportId { get; set; }
         #endregion
 
         #region Constructor
@@ -131,6 +130,13 @@ namespace Hid.Net.Windows
 
         public override async Task<byte[]> ReadAsync()
         {
+            return (await ReadReportAsync()).Data;
+        }
+
+        public async Task<ReadReport> ReadReportAsync()
+        {
+            byte? reportId = null;
+
             if (_ReadFileStream == null)
             {
                 throw new Exception("The device has not been initialized");
@@ -148,14 +154,21 @@ namespace Hid.Net.Windows
                 throw new IOException(Helpers.ReadErrorMessage, ex);
             }
 
-            var retVal = DataHasExtraByte ? RemoveFirstByte(bytes) : bytes;
+            if (ReadBufferHasReportId) reportId = bytes.First();
+
+            var retVal = ReadBufferHasReportId ? RemoveFirstByte(bytes) : bytes;
 
             Tracer?.Trace(false, retVal);
 
-            return retVal;
+            return new ReadReport(reportId, retVal);
         }
 
-        public override async Task WriteAsync(byte[] data)
+        public override Task WriteAsync(byte[] data)
+        {
+            return WriteReportAsync(data, 0);
+        }
+
+        public async Task WriteReportAsync(byte[] data, byte? reportId)
         {
             if (_WriteFileStream == null)
             {
@@ -168,7 +181,7 @@ namespace Hid.Net.Windows
             }
 
             byte[] bytes;
-            if (DataHasExtraByte)
+            if (WriteBufferSize == 65)
             {
                 if (WriteBufferSize == data.Length)
                 {
@@ -177,7 +190,7 @@ namespace Hid.Net.Windows
 
                 bytes = new byte[WriteBufferSize];
                 Array.Copy(data, 0, bytes, 1, data.Length);
-                bytes[0] = 0;
+                bytes[0] = reportId ?? DefaultReportId;
             }
             else
             {

@@ -48,6 +48,7 @@ namespace Device.Net.UWP
                 throw new Exception("Reentry");
             }
 
+            //TODO: this should be a semaphore not a lock
             lock (Chunks)
             {
                 if (Chunks.Count > 0)
