@@ -44,23 +44,6 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Private Methods
-        private byte[] InputReportToBytes(HidInputReportReceivedEventArgs args)
-        {
-            byte[] bytes;
-            using (var stream = args.Report.Data.AsStream())
-            {
-                bytes = new byte[args.Report.Data.Length];
-                stream.Read(bytes, 0, (int)args.Report.Data.Length);
-            }
-
-            if (DataHasExtraByte)
-            {
-                bytes = RemoveFirstByte(bytes);
-            }
-
-            return bytes;
-        }
-
         public override async Task InitializeAsync()
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
@@ -84,6 +67,20 @@ namespace Hid.Net.UWP
         protected override IAsyncOperation<HidDevice> FromIdAsync(string id)
         {
             return GetHidDevice(id);
+        }
+        #endregion
+
+        #region Private Static Methods
+        private static byte[] InputReportToBytes(HidInputReportReceivedEventArgs args)
+        {
+            byte[] bytes;
+            using (var stream = args.Report.Data.AsStream())
+            {
+                bytes = new byte[args.Report.Data.Length];
+                stream.Read(bytes, 0, (int)args.Report.Data.Length);
+            }
+
+            return bytes;
         }
         #endregion
 
@@ -126,6 +123,27 @@ namespace Hid.Net.UWP
                 }
                 throw;
             }
+        }
+        #endregion
+
+        #region Public Overrides
+        public async Task<ReadResult> ReadReportAsync()
+        {
+            byte? reportId = null;
+            var bytes = await base.ReadAsync();
+
+            if (DataHasExtraByte)
+            {
+                reportId = bytes[0];
+                bytes = RemoveFirstByte(bytes);
+            }
+
+            return new ReadResult(reportId, bytes);
+        }
+
+        public override async Task<byte[]> ReadAsync()
+        {
+            return (await ReadReportAsync()).Data;
         }
         #endregion
 
