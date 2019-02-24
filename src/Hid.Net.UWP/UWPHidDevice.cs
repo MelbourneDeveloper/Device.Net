@@ -127,7 +127,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Overrides
-        public async Task<ReadResult> ReadReportAsync()
+        public async Task<ReadReport> ReadReportAsync()
         {
             byte? reportId = null;
             var bytes = await base.ReadAsync();
@@ -138,7 +138,7 @@ namespace Hid.Net.UWP
                 bytes = RemoveFirstByte(bytes);
             }
 
-            return new ReadResult(reportId, bytes);
+            return new ReadReport(reportId, bytes);
         }
 
         public override async Task<byte[]> ReadAsync()

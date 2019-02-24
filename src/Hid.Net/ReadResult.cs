@@ -1,11 +1,11 @@
 ﻿namespace Hid.Net
 {
-    public class ReadResult
+    public class ReadReport
     {
         public byte[] Data { get; }
         public byte? ReportId { get; }
 
-        public ReadResult(byte? reportId, byte[] data)
+        public ReadReport(byte? reportId, byte[] data)
         {
             Data = data;
             ReportId = reportId;

@@ -136,7 +136,7 @@ namespace Hid.Net.Windows
             return (await ReadReportAsync()).Data;
         }
 
-        public async Task<ReadResult> ReadReportAsync()
+        public async Task<ReadReport> ReadReportAsync()
         {
             byte? reportId = null;
 
@@ -163,7 +163,7 @@ namespace Hid.Net.Windows
 
             Tracer?.Trace(false, retVal);
 
-            return new ReadResult(reportId, retVal);
+            return new ReadReport(reportId, retVal);
         }
 
         public override Task WriteAsync(byte[] data)
