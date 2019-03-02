@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -65,7 +66,10 @@ namespace Device.Net.Windows
                                 break;
                             }
 
-                            if (errorCode > 0) continue;
+                            if (errorCode > 0)
+                            {
+                                Log($"{nameof(APICalls.SetupDiEnumDeviceInterfaces)} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {i}. The error code was {errorCode}.", null, LogLevel.Warning);
+                            }
                         }
 
                         isSuccess = APICalls.SetupDiGetDeviceInterfaceDetail(devicesHandle, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
@@ -75,10 +79,14 @@ namespace Device.Net.Windows
 
                             if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
                             {
+                                //TODO: This probably can't happen but leaving this here because there was some strange behaviour
                                 break;
                             }
 
-                            if (errorCode > 0) continue;
+                            if (errorCode > 0)
+                            {
+                                Log($"{nameof(APICalls.SetupDiGetDeviceInterfaceDetail)} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {i}. The error code was {errorCode}.", null, LogLevel.Warning);
+                            }
                         }
 
                         //Note this is a bit nasty but we can filter Vid and Pid this way I think...
@@ -95,7 +103,7 @@ namespace Device.Net.Windows
                     }
                     catch (Exception ex)
                     {
-                        Logger?.Log("Error", nameof(WindowsDeviceFactoryBase), ex, LogLevel.Error);
+                        Log(ex);
                     }
                 }
 
@@ -103,6 +111,23 @@ namespace Device.Net.Windows
 
                 return deviceDefinitions;
             });
+        }
+        #endregion
+
+        #region Protected Methods
+        protected void Log(Exception ex, [CallerMemberName] string callMemberName = null)
+        {
+            Log(null, $"{GetType().Name} - {callMemberName}", ex, LogLevel.Error);
+        }
+
+        protected void Log(string message, Exception ex, LogLevel logLevel, [CallerMemberName] string callMemberName = null)
+        {
+            Log(message, $"{GetType().Name} - {callMemberName}", ex, logLevel);
+        }
+
+        protected void Log(string message, string region, Exception ex, LogLevel logLevel)
+        {
+            Logger?.Log(message, region, ex, logLevel);
         }
         #endregion
 
