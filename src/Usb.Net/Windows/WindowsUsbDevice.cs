@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Usb.Net.Windows
 {
-    public class WindowsUsbDevice : WindowsDeviceBase, IDevice
+    public sealed class WindowsUsbDevice : WindowsDeviceBase, IDevice
     {
         #region Fields
         private SafeFileHandle _DeviceHandle;
@@ -154,6 +154,8 @@ namespace Usb.Net.Windows
             Close();
 
             base.Dispose();
+
+            GC.SuppressFinalize(this);
         }
         #endregion
 
@@ -205,6 +207,13 @@ namespace Usb.Net.Windows
             }
 
             return retVal;
+        }
+        #endregion
+
+        #region Finalizer
+        ~WindowsUsbDevice()
+        {
+            Dispose();
         }
         #endregion
     }

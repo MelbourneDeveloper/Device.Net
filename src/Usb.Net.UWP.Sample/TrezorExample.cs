@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Usb.Net.Sample
 {
-    internal class TrezorExample : IDisposable
+    internal sealed class TrezorExample : IDisposable
     {
         #region Fields
 #if(LIBUSB)
@@ -31,7 +31,14 @@ namespace Usb.Net.Sample
 
         #region Public Properties
         public IDevice TrezorDevice { get; private set; }
-        public DeviceListener DeviceListener { get; private set; }
+        public  DeviceListener DeviceListener { get;  }
+        #endregion
+
+        #region Constructor
+        public TrezorExample()
+        {
+            DeviceListener = new DeviceListener(_DeviceDefinitions, PollMilliseconds) { Logger = new DebugLogger() };
+        }
         #endregion
 
         #region Event Handlers
@@ -52,7 +59,6 @@ namespace Usb.Net.Sample
         public void StartListening()
         {
             TrezorDevice?.Close();
-            DeviceListener = new DeviceListener(_DeviceDefinitions, PollMilliseconds) { Logger = new DebugLogger() };
             DeviceListener.DeviceDisconnected += DevicePoller_DeviceDisconnected;
             DeviceListener.DeviceInitialized += DevicePoller_DeviceInitialized;
             DeviceListener.Start();
@@ -83,6 +89,9 @@ namespace Usb.Net.Sample
 
         public void Dispose()
         {
+            DeviceListener.DeviceDisconnected -= DevicePoller_DeviceDisconnected;
+            DeviceListener.DeviceInitialized -= DevicePoller_DeviceInitialized;
+            DeviceListener.Dispose();
             TrezorDevice?.Dispose();
         }
         #endregion

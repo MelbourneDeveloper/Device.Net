@@ -9,7 +9,7 @@ using timer = System.Timers.Timer;
 
 namespace Device.Net
 {
-    public class DeviceListener : IDisposable
+    public sealed class DeviceListener : IDisposable
     {
         #region Fields
         private bool _IsDisposed;
@@ -195,6 +195,15 @@ namespace Device.Net
 
             DeviceInitialized = null;
             DeviceDisconnected = null;
+
+            GC.SuppressFinalize(this);
+        }
+        #endregion
+
+        #region Finalizer
+        ~DeviceListener()
+        {
+            Dispose();
         }
         #endregion
     }

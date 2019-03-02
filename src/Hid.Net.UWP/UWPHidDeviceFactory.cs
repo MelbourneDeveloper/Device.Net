@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDeviceFactory : UWPDeviceFactoryBase, IDeviceFactory, IDisposable
+    public sealed class UWPHidDeviceFactory : UWPDeviceFactoryBase, IDeviceFactory, IDisposable
     {
         #region Fields
         private readonly SemaphoreSlim _TestConnectionSemaphore = new SemaphoreSlim(1, 1);
@@ -76,6 +76,8 @@ namespace Hid.Net.UWP
             disposed = true;
 
             _TestConnectionSemaphore.Dispose();
+
+            GC.SuppressFinalize(this);
         }
         #endregion
 
@@ -93,6 +95,13 @@ namespace Hid.Net.UWP
             }
 
             DeviceManager.Current.DeviceFactories.Add(new UWPHidDeviceFactory() { Logger = logger });
+        }
+        #endregion
+
+        #region Finalizer
+        ~UWPHidDeviceFactory()
+        {
+            Dispose();
         }
         #endregion
     }
