@@ -26,7 +26,7 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition filterDeviceDefinition)
         {
             return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(() =>
             {
@@ -42,50 +42,61 @@ namespace Device.Net.Windows
 
                 var devicesHandle = APICalls.SetupDiGetClassDevs(ref copyOfClassGuid, IntPtr.Zero, IntPtr.Zero, APICalls.DigcfDeviceinterface | APICalls.DigcfPresent);
 
-                if (IntPtr.Size == 8)
-                {
-                    spDeviceInterfaceDetailData.CbSize = 8;
-                }
-                else
-                {
-                    spDeviceInterfaceDetailData.CbSize = 4 + Marshal.SystemDefaultCharSize;
-                }
+                spDeviceInterfaceDetailData.CbSize = IntPtr.Size == 8 ? 8 : 4 + Marshal.SystemDefaultCharSize;
 
                 var i = -1;
 
-                var productIdHex = Helpers.GetHex(deviceDefinition.ProductId);
-                var vendorHex = Helpers.GetHex(deviceDefinition.VendorId);
+                var productIdHex = Helpers.GetHex(filterDeviceDefinition.ProductId);
+                var vendorHex = Helpers.GetHex(filterDeviceDefinition.VendorId);
 
                 while (true)
                 {
-                    i++;
-
-                    var isSuccess = APICalls.SetupDiEnumDeviceInterfaces(devicesHandle, IntPtr.Zero, ref copyOfClassGuid, (uint)i, ref spDeviceInterfaceData);
-                    if (!isSuccess)
+                    try
                     {
-                        var errorCode = Marshal.GetLastWin32Error();
-                        if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
+                        i++;
+
+                        var isSuccess = APICalls.SetupDiEnumDeviceInterfaces(devicesHandle, IntPtr.Zero, ref copyOfClassGuid, (uint)i, ref spDeviceInterfaceData);
+                        if (!isSuccess)
                         {
-                            break;
+                            var errorCode = Marshal.GetLastWin32Error();
+
+                            if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
+                            {
+                                break;
+                            }
+
+                            if (errorCode > 0) continue;
                         }
 
-                        throw new Exception($"Could not enumerate devices. Error code: {errorCode}");
+                        isSuccess = APICalls.SetupDiGetDeviceInterfaceDetail(devicesHandle, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
+                        if (!isSuccess)
+                        {
+                            var errorCode = Marshal.GetLastWin32Error();
+
+                            if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
+                            {
+                                break;
+                            }
+
+                            if (errorCode > 0) continue;
+                        }
+
+                        //Note this is a bit nasty but we can filter Vid and Pid this way I think...
+                        if (filterDeviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
+                        if (filterDeviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
+
+                        var connectedDeviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
+
+                        if (connectedDeviceDefinition == null) continue;
+
+                        if (!DeviceManager.IsDefinitionMatch(filterDeviceDefinition, connectedDeviceDefinition)) continue;
+
+                        deviceDefinitions.Add(connectedDeviceDefinition);
                     }
-
-                    isSuccess = APICalls.SetupDiGetDeviceInterfaceDetail(devicesHandle, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
-                    WindowsDeviceBase.HandleError(isSuccess, "Could not get device interface detail");
-
-                    //Note this is a bit nasty but we can filter Vid and Pid this way I think...
-                    if (deviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
-                    if (deviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
-
-                    var connectedDeviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
-
-                    if (connectedDeviceDefinition == null) continue;
-
-                    if (!DeviceManager.IsDefinitionMatch(deviceDefinition, connectedDeviceDefinition)) continue;
-
-                    deviceDefinitions.Add(connectedDeviceDefinition);
+                    catch (Exception ex)
+                    {
+                        Logger?.Log("Error", nameof(WindowsDeviceFactoryBase), ex, LogLevel.Error);
+                    }
                 }
 
                 APICalls.SetupDiDestroyDeviceInfoList(devicesHandle);
