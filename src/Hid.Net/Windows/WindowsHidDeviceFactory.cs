@@ -12,6 +12,13 @@ namespace Hid.Net.Windows
         public override DeviceType DeviceType => DeviceType.Hid;
         #endregion
 
+        public bool AutoFillReportId { get; }
+
+        public WindowsHidDeviceFactory(bool autoFillReportId)
+        {
+            AutoFillReportId = autoFillReportId;
+        }
+
         #region Protected Override Methods
         protected override ConnectedDeviceDefinition GetDeviceDefinition(string deviceId)
         {
@@ -31,7 +38,7 @@ namespace Hid.Net.Windows
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId) { Logger = Logger };
+            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId, AutoFillReportId) { Logger = Logger };
         }
         #endregion
 
@@ -69,14 +76,14 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Static Methods
-        public static void Register()
+        public static void Register(bool autoFillReportId)
         {
-            Register(null);
+            Register(null, autoFillReportId);
         }
 
-        public static void Register(ILogger logger)
+        public static void Register(ILogger logger, bool autoFillReportId)
         {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory() { Logger = logger });
+            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory(autoFillReportId) { Logger = logger });
         }
         #endregion
     }

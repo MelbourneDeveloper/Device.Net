@@ -19,10 +19,6 @@ namespace Hid.Net.Windows
         private bool disposed = false;
         #endregion
 
-        #region Private Properties
-        private bool ReadBufferHasReportId => ReadBufferSize == 65;
-        #endregion
-
         #region Protected Properties
         protected override string LogSection => nameof(WindowsHidDevice);
         #endregion
@@ -34,12 +30,19 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Properties
+        public bool AutoFillReportId { get; }
         public byte DefaultReportId { get; set; }
         #endregion
 
         #region Constructor
-        public WindowsHidDevice(string deviceId) : base(deviceId)
+        /// <summary>
+        /// Creates a Windows Hid Device
+        /// </summary>
+        /// <param name="deviceId">The Windows device path of the Hid device</param>
+        /// <param name="autoFillReportId">Whether or not to automatically put an extra byte (DefaultReportId) in read and write reports. Some devices accept the Report Id at the index 0 of the write buffer, and send one at index 0 in the read buffer. Usually, after initialization, if WriteBufferSize is 65 instead of 64, this means that the device expects the Report Id at index 0. Please see https://github.com/MelbourneDeveloper/Device.Net/wiki/AutoFillReportId </param>
+        public WindowsHidDevice(string deviceId, bool autoFillReportId) : base(deviceId)
         {
+            AutoFillReportId = autoFillReportId;
         }
         #endregion
 
@@ -156,9 +159,9 @@ namespace Hid.Net.Windows
                 throw new IOException(Helpers.ReadErrorMessage, ex);
             }
 
-            if (ReadBufferHasReportId) reportId = bytes.First();
+            if (AutoFillReportId) reportId = bytes.First();
 
-            var retVal = ReadBufferHasReportId ? RemoveFirstByte(bytes) : bytes;
+            var retVal = AutoFillReportId ? RemoveFirstByte(bytes) : bytes;
 
             Tracer?.Trace(false, retVal);
 

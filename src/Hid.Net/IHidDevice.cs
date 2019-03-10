@@ -8,5 +8,6 @@ namespace Hid.Net
         Task<ReadReport> ReadReportAsync();
         Task WriteReportAsync(byte[] data, byte? reportId);
         byte DefaultReportId { get; }
+        bool AutoFillReportId { get; }
     }
 }
