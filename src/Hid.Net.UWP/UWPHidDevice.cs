@@ -11,8 +11,7 @@ namespace Hid.Net.UWP
     public class UWPHidDevice : UWPDeviceBase<HidDevice>, IHidDevice
     {
         #region Public Properties
-        public bool DataHasExtraByte { get; set; } = true;
-        public byte DefaultReportId { get; set; }
+        public byte? DefaultReportId { get; }
         #endregion
 
         #region Public Override Properties
@@ -93,11 +92,11 @@ namespace Hid.Net.UWP
         public async Task WriteReportAsync(byte[] data, byte? reportId)
         {
             byte[] bytes;
-            if (DataHasExtraByte)
+            if (reportId.HasValue || DefaultReportId.HasValue)
             {
                 bytes = new byte[data.Length + 1];
                 Array.Copy(data, 0, bytes, 1, data.Length);
-                bytes[0] = reportId ?? DefaultReportId;
+                bytes[0] = reportId ?? DefaultReportId.Value;
             }
             else
             {
@@ -132,7 +131,7 @@ namespace Hid.Net.UWP
             byte? reportId = null;
             var bytes = await base.ReadAsync();
 
-            if (DataHasExtraByte)
+            if (DefaultReportId.HasValue)
             {
                 reportId = bytes[0];
                 bytes = RemoveFirstByte(bytes);
