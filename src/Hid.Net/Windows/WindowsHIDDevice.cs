@@ -30,8 +30,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Properties
-        public bool AutoFillReportId { get; }
-        public byte DefaultReportId { get; set; }
+        public byte? DefaultReportId { get; }
         #endregion
 
         #region Constructor
@@ -39,10 +38,10 @@ namespace Hid.Net.Windows
         /// Creates a Windows Hid Device
         /// </summary>
         /// <param name="deviceId">The Windows device path of the Hid device</param>
-        /// <param name="autoFillReportId">Whether or not to automatically put an extra byte (DefaultReportId) in read and write reports. Some devices accept the Report Id at the index 0 of the write buffer, and send one at index 0 in the read buffer. Usually, after initialization, if WriteBufferSize is 65 instead of 64, this means that the device expects the Report Id at index 0. Please see https://github.com/MelbourneDeveloper/Device.Net/wiki/AutoFillReportId </param>
-        public WindowsHidDevice(string deviceId, bool autoFillReportId) : base(deviceId)
+        /// <param name="defaultReportId">Whether or not to automatically put an extra byte (DefaultReportId) in read and write reports. Some devices accept the Report Id at the index 0 of the write buffer, and send one at index 0 in the read buffer. Usually, after initialization, if WriteBufferSize is 65 instead of 64, this means that the device expects the Report Id at index 0. Note: if a value is specified, it will be expected that the read buffer will contain a Report Id at index 0. Please see https://github.com/MelbourneDeveloper/Device.Net/wiki/DefaultReportId </param>
+        public WindowsHidDevice(string deviceId, byte? defaultReportId) : base(deviceId)
         {
-            AutoFillReportId = autoFillReportId;
+            DefaultReportId = defaultReportId;
         }
         #endregion
 
@@ -159,9 +158,9 @@ namespace Hid.Net.Windows
                 throw new IOException(Helpers.ReadErrorMessage, ex);
             }
 
-            if (AutoFillReportId) reportId = bytes.First();
+            if (DefaultReportId.HasValue) reportId = bytes.First();
 
-            var retVal = AutoFillReportId ? RemoveFirstByte(bytes) : bytes;
+            var retVal = DefaultReportId.HasValue ? RemoveFirstByte(bytes) : bytes;
 
             Tracer?.Trace(false, retVal);
 
@@ -186,7 +185,7 @@ namespace Hid.Net.Windows
             }
 
             byte[] bytes;
-            if (WriteBufferSize == 65)
+            if (reportId.HasValue || DefaultReportId.HasValue)
             {
                 if (WriteBufferSize == data.Length)
                 {
@@ -195,7 +194,7 @@ namespace Hid.Net.Windows
 
                 bytes = new byte[WriteBufferSize];
                 Array.Copy(data, 0, bytes, 1, data.Length);
-                bytes[0] = reportId ?? DefaultReportId;
+                bytes[0] = reportId ?? DefaultReportId.Value;
             }
             else
             {
