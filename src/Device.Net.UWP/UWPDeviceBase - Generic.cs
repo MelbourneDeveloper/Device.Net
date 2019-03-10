@@ -80,6 +80,8 @@ namespace Device.Net.UWP
             ReadChunkTaskCompletionSource?.Task?.Dispose();
 
             base.Dispose();
+
+            GC.SuppressFinalize(this);
         }
 
         public void Close()
@@ -101,5 +103,13 @@ namespace Device.Net.UWP
             _IsClosing = false;
         }
         #endregion
+
+        #region Finaliser
+        ~UWPDeviceBase()
+        {
+            Dispose();
+        }
+        #endregion
+
     }
 }

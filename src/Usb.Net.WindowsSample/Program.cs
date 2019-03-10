@@ -49,6 +49,10 @@ namespace Usb.Net.WindowsSample
                         await _DeviceConnectionExample.InitializeTrezorAsync();
                         await DisplayDataAsync();
                         _DeviceConnectionExample.Dispose();
+
+                        GC.Collect();
+
+                        await Task.Delay(10000);
                     }
                     catch (Exception ex)
                     {

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
-    public class WindowsHidDevice : WindowsDeviceBase, IHidDevice
+    public sealed class WindowsHidDevice : WindowsDeviceBase, IHidDevice
     {
         #region Fields
         private FileStream _ReadFileStream;
@@ -114,6 +114,8 @@ namespace Hid.Net.Windows
         {
             if (disposed) return;
 
+            GC.SuppressFinalize(this);
+
             disposed = true;
 
             Close();
@@ -215,6 +217,13 @@ namespace Hid.Net.Windows
             {
                 throw new IOException("The file stream cannot be written to");
             }
+        }
+        #endregion
+
+        #region Finalizer
+        ~WindowsHidDevice()
+        {
+            Dispose();
         }
         #endregion
     }

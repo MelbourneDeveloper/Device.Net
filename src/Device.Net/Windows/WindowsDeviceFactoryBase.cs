@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -26,7 +27,7 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition filterDeviceDefinition)
         {
             return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(() =>
             {
@@ -42,56 +43,91 @@ namespace Device.Net.Windows
 
                 var devicesHandle = APICalls.SetupDiGetClassDevs(ref copyOfClassGuid, IntPtr.Zero, IntPtr.Zero, APICalls.DigcfDeviceinterface | APICalls.DigcfPresent);
 
-                if (IntPtr.Size == 8)
-                {
-                    spDeviceInterfaceDetailData.CbSize = 8;
-                }
-                else
-                {
-                    spDeviceInterfaceDetailData.CbSize = 4 + Marshal.SystemDefaultCharSize;
-                }
+                spDeviceInterfaceDetailData.CbSize = IntPtr.Size == 8 ? 8 : 4 + Marshal.SystemDefaultCharSize;
 
                 var i = -1;
 
-                var productIdHex = Helpers.GetHex(deviceDefinition.ProductId);
-                var vendorHex = Helpers.GetHex(deviceDefinition.VendorId);
+                var productIdHex = Helpers.GetHex(filterDeviceDefinition.ProductId);
+                var vendorHex = Helpers.GetHex(filterDeviceDefinition.VendorId);
 
                 while (true)
                 {
-                    i++;
-
-                    var isSuccess = APICalls.SetupDiEnumDeviceInterfaces(devicesHandle, IntPtr.Zero, ref copyOfClassGuid, (uint)i, ref spDeviceInterfaceData);
-                    if (!isSuccess)
+                    try
                     {
-                        var errorCode = Marshal.GetLastWin32Error();
-                        if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
+                        i++;
+
+                        var isSuccess = APICalls.SetupDiEnumDeviceInterfaces(devicesHandle, IntPtr.Zero, ref copyOfClassGuid, (uint)i, ref spDeviceInterfaceData);
+                        if (!isSuccess)
                         {
-                            break;
+                            var errorCode = Marshal.GetLastWin32Error();
+
+                            if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
+                            {
+                                break;
+                            }
+
+                            if (errorCode > 0)
+                            {
+                                Log($"{nameof(APICalls.SetupDiEnumDeviceInterfaces)} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {i}. The error code was {errorCode}.", null, LogLevel.Warning);
+                            }
                         }
 
-                        throw new Exception($"Could not enumerate devices. Error code: {errorCode}");
+                        isSuccess = APICalls.SetupDiGetDeviceInterfaceDetail(devicesHandle, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
+                        if (!isSuccess)
+                        {
+                            var errorCode = Marshal.GetLastWin32Error();
+
+                            if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
+                            {
+                                //TODO: This probably can't happen but leaving this here because there was some strange behaviour
+                                break;
+                            }
+
+                            if (errorCode > 0)
+                            {
+                                Log($"{nameof(APICalls.SetupDiGetDeviceInterfaceDetail)} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {i}. The error code was {errorCode}.", null, LogLevel.Warning);
+                            }
+                        }
+
+                        //Note this is a bit nasty but we can filter Vid and Pid this way I think...
+                        if (filterDeviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
+                        if (filterDeviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
+
+                        var connectedDeviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
+
+                        if (connectedDeviceDefinition == null) continue;
+
+                        if (!DeviceManager.IsDefinitionMatch(filterDeviceDefinition, connectedDeviceDefinition)) continue;
+
+                        deviceDefinitions.Add(connectedDeviceDefinition);
                     }
-
-                    isSuccess = APICalls.SetupDiGetDeviceInterfaceDetail(devicesHandle, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
-                    WindowsDeviceBase.HandleError(isSuccess, "Could not get device interface detail");
-
-                    //Note this is a bit nasty but we can filter Vid and Pid this way I think...
-                    if (deviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
-                    if (deviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
-
-                    var connectedDeviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
-
-                    if (connectedDeviceDefinition == null) continue;
-
-                    if (!DeviceManager.IsDefinitionMatch(deviceDefinition, connectedDeviceDefinition)) continue;
-
-                    deviceDefinitions.Add(connectedDeviceDefinition);
+                    catch (Exception ex)
+                    {
+                        Log(ex);
+                    }
                 }
 
                 APICalls.SetupDiDestroyDeviceInfoList(devicesHandle);
 
                 return deviceDefinitions;
             });
+        }
+        #endregion
+
+        #region Protected Methods
+        protected void Log(Exception ex, [CallerMemberName] string callMemberName = null)
+        {
+            Log(null, $"{GetType().Name} - {callMemberName}", ex, LogLevel.Error);
+        }
+
+        protected void Log(string message, Exception ex, LogLevel logLevel, [CallerMemberName] string callMemberName = null)
+        {
+            Log(message, $"{GetType().Name} - {callMemberName}", ex, logLevel);
+        }
+
+        protected void Log(string message, string region, Exception ex, LogLevel logLevel)
+        {
+            Logger?.Log(message, region, ex, logLevel);
         }
         #endregion
 

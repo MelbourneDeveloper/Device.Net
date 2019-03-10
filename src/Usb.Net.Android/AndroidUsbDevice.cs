@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Usb.Net.Android
 {
-    public class AndroidUsbDevice : DeviceBase, IDevice
+    public sealed class AndroidUsbDevice : DeviceBase, IDevice
     {
         #region Fields
         private UsbDeviceConnection _UsbDeviceConnection;
@@ -63,6 +63,8 @@ namespace Usb.Net.Android
             _InitializingSemaphoreSlim.Dispose();
 
             base.Dispose();
+
+            GC.SuppressFinalize(this);
         }
 
         public void Close()
@@ -261,6 +263,13 @@ namespace Usb.Net.Android
             {
                 _InitializingSemaphoreSlim.Release();
             }
+        }
+        #endregion
+
+        #region Finalizer
+        ~AndroidUsbDevice()
+        {
+            Dispose();
         }
         #endregion
     }

@@ -130,6 +130,7 @@
     <Rule Id="CA1812" Action="Error" />
     <Rule Id="CA1813" Action="Error" />
     <Rule Id="CA1814" Action="Error" />
+    <Rule Id="CA1816" Action="Error" />
     <Rule Id="CA1819" Action="Error" />
     <Rule Id="CA1820" Action="Error" />
     <Rule Id="CA1821" Action="Error" />
@@ -1235,7 +1236,7 @@
     <Rule Id="CA1308" Action="Error" />
     <Rule Id="CA1401" Action="None" />
     <Rule Id="CA1813" Action="Error" />
-    <Rule Id="CA1816" Action="None" />
+    <Rule Id="CA1816" Action="Error" />
     <Rule Id="CA1820" Action="Error" />
     <Rule Id="CA1826" Action="None" />
     <Rule Id="CA2002" Action="Error" />

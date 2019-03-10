@@ -109,6 +109,15 @@ namespace Device.Net
             disposed = true;
 
             _WriteAndReadLock.Dispose();
+
+            GC.SuppressFinalize(this);
+        }
+        #endregion
+
+        #region Finalizer
+        ~DeviceBase()
+        {
+            Dispose();
         }
         #endregion
     }
