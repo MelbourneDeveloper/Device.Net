@@ -7,9 +7,9 @@
     <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Usb.Net</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Usb.Net</PackageProjectUrl>
     <Description>A cross platform USB library written in C#</Description>
-    <Version>2.6.0</Version>
-    <AssemblyVersion>2.6.0.0</AssemblyVersion>
-    <FileVersion>2.6.0.0</FileVersion>
+    <Version>2.6.1</Version>
+    <AssemblyVersion>2.6.1.0</AssemblyVersion>
+    <FileVersion>2.6.1.0</FileVersion>
     <Authors>Christian Findlay</Authors>
     <Copyright>Copyright (c) 2018 Christian Findlay</Copyright>
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Usb.Net</RepositoryUrl>
