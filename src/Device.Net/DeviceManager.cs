@@ -70,8 +70,9 @@ namespace Device.Net
         #region Public Static Methods
         public static bool IsDefinitionMatch(FilterDeviceDefinition filterDevice, ConnectedDeviceDefinition actualDevice)
         {
-            return
-                (!filterDevice.VendorId.HasValue || filterDevice.VendorId == actualDevice.VendorId) &&
+            return filterDevice == null
+                ? true
+                : (!filterDevice.VendorId.HasValue || filterDevice.VendorId == actualDevice.VendorId) &&
                 (!filterDevice.ProductId.HasValue || filterDevice.ProductId == actualDevice.ProductId) &&
                 (!filterDevice.DeviceType.HasValue || filterDevice.DeviceType == actualDevice.DeviceType) &&
                 (!filterDevice.UsagePage.HasValue || filterDevice.UsagePage == actualDevice.UsagePage);
