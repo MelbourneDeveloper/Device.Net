@@ -34,13 +34,15 @@ namespace Usb.Net.WindowsSample
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
 
-            Go(Menu());
+            Go();
 
             new ManualResetEvent(false).WaitOne();
         }
 
-        private static async Task Go(int menuOption)
+        private static async Task Go()
         {
+            var menuOption = await Menu();
+
             switch (menuOption)
             {
                 case 1:
@@ -94,11 +96,20 @@ namespace Usb.Net.WindowsSample
         #endregion
 
         #region Private Methods
-        private static int Menu()
+        private async static Task<int> Menu()
         {
             while (true)
             {
                 Console.Clear();
+
+                var devices = await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null);
+                Console.WriteLine("Currently connected devices: ");
+                foreach (var device in devices)
+                {
+                    Console.WriteLine(device.DeviceId);
+                }
+                Console.WriteLine();
+
                 Console.WriteLine("Console sample. This sample demonstrates either writing to the first found connected device, or listening for a device and then writing to it. If you listen for the device, you will be able to connect and disconnect multiple times. This represents how users may actually use the device.");
                 Console.WriteLine();
                 Console.WriteLine("1. Write To Connected Device");
