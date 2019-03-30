@@ -20,7 +20,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestGetDevicesDisconnectedWithMatchedFilterAsync()
         {
-            MockHidFactory.IsConnected = true;
+            MockHidFactory.IsConnectedStatic = true;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = MockHidDevice.ProductId, VendorId = MockHidDevice.VendorId })).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
             Assert.AreEqual(1, connectedDeviceDefinitions.Count);
@@ -29,7 +29,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestGetDevicesDisconnectedWithUnmatchedFilterAsync()
         {
-            MockHidFactory.IsConnected = false;
+            MockHidFactory.IsConnectedStatic = false;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = 0, VendorId = 0 })).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
             Assert.AreEqual(0, connectedDeviceDefinitions.Count);
@@ -38,7 +38,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestGetDevicesDisconnectedNullFilterAsync()
         {
-            MockHidFactory.IsConnected = false;
+            MockHidFactory.IsConnectedStatic = false;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null)).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
             Assert.AreEqual(0, connectedDeviceDefinitions.Count);
@@ -47,7 +47,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestGetDevicesConnectedNullFilterAsync()
         {
-            MockHidFactory.IsConnected = true;
+            MockHidFactory.IsConnectedStatic = true;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null)).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
             Assert.AreEqual(1, connectedDeviceDefinitions.Count);
@@ -56,7 +56,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestDeviceListenerAsync()
         {
-            MockHidFactory.IsConnected = true;
+            MockHidFactory.IsConnectedStatic = true;
             var isTimeout = await ListenForDeviceAsync();
             Assert.IsTrue(!isTimeout, "Timeout");
         }
@@ -64,7 +64,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestDeviceListenerTimeoutAsync()
         {
-            MockHidFactory.IsConnected = false;
+            MockHidFactory.IsConnectedStatic = false;
             var isTimeout = await ListenForDeviceAsync();
             Assert.IsTrue(isTimeout, "Device is connected");
         }
