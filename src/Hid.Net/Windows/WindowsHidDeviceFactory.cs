@@ -63,6 +63,10 @@ namespace Hid.Net.Windows
             }
             catch (Exception)
             {
+                //TODO: Logging...
+
+                //This probably needs a big refactor. Because this is a static method, it either needs to have the logger passed in, or it should be a non-static method
+
                 return null;
             }
         }

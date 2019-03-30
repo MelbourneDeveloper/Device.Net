@@ -37,6 +37,8 @@ namespace Device.Net.Windows
                 var spDeviceInterfaceDetailData = new SpDeviceInterfaceDetailData();
                 spDeviceInterfaceData.CbSize = (uint)Marshal.SizeOf(spDeviceInterfaceData);
                 spDeviceInfoData.CbSize = (uint)Marshal.SizeOf(spDeviceInfoData);
+                string productIdHex = null;
+                string vendorHex = null;
 
                 var guidString = GetClassGuid().ToString();
                 var copyOfClassGuid = new Guid(guidString);
@@ -47,8 +49,11 @@ namespace Device.Net.Windows
 
                 var i = -1;
 
-                var productIdHex = Helpers.GetHex(filterDeviceDefinition.ProductId);
-                var vendorHex = Helpers.GetHex(filterDeviceDefinition.VendorId);
+                if (filterDeviceDefinition != null)
+                {
+                    if (filterDeviceDefinition.ProductId.HasValue) productIdHex = Helpers.GetHex(filterDeviceDefinition.ProductId);
+                    if (filterDeviceDefinition.VendorId.HasValue) vendorHex = Helpers.GetHex(filterDeviceDefinition.VendorId);
+                }
 
                 while (true)
                 {
@@ -90,8 +95,11 @@ namespace Device.Net.Windows
                         }
 
                         //Note this is a bit nasty but we can filter Vid and Pid this way I think...
-                        if (filterDeviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
-                        if (filterDeviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
+                        if (filterDeviceDefinition != null)
+                        {
+                            if (filterDeviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
+                            if (filterDeviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
+                        }
 
                         var connectedDeviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
 

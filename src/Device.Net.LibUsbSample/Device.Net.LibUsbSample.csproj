@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Net.LibUsb\Device.Net.LibUsb.csproj" />
+    <ProjectReference Include="..\Hid.Net\Hid.Net.csproj" />
   </ItemGroup>
 
 </Project>

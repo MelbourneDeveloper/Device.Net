@@ -21,21 +21,18 @@ namespace Device.Net.LibUsb
         {
             return await Task.Run(() =>
             {
-                IEnumerable<UsbRegistry> devices = null;
+                IEnumerable<UsbRegistry> devices = UsbDevice.AllDevices;
 
-                if (deviceDefinition.VendorId.HasValue)
+                if (deviceDefinition != null)
                 {
-                    if (deviceDefinition.ProductId.HasValue)
+                    if (deviceDefinition.VendorId.HasValue)
                     {
-                        devices = UsbDevice.AllDevices.Where((d) =>
-                        {
-                            return d.Vid == deviceDefinition.VendorId.Value &&
-                            d.Pid == deviceDefinition.ProductId.Value;
-                        });
+                        devices = devices.Where(d => d.Vid == deviceDefinition.VendorId.Value);
                     }
-                    else
+
+                    if (deviceDefinition.VendorId.HasValue)
                     {
-                        devices = UsbDevice.AllDevices.Where(d => d.Vid == deviceDefinition.VendorId.Value);
+                        devices = devices.Where(d => d.Pid == deviceDefinition.ProductId.Value);
                     }
                 }
 
@@ -50,7 +47,6 @@ namespace Device.Net.LibUsb
                         DeviceType = DeviceType
                     });
                 }
-
 
                 return retVal;
             });
