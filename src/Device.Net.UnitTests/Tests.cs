@@ -95,6 +95,7 @@ namespace Device.Net.UnitTests
             {
                 if (stopWatch.Elapsed > new TimeSpan(0, 0, seconds))
                 {
+                    Console.WriteLine("Timeout occurred");
                     throw new Exception("Timed out");
                 }
 
