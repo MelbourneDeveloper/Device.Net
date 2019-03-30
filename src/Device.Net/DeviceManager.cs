@@ -17,6 +17,8 @@ namespace Device.Net
         #region Public Methods
         public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
         {
+            if (DeviceFactories.Count == 0) throw new DeviceFactoriesNotRegisteredException("No device factories have been registered");
+
             var retVal = new List<ConnectedDeviceDefinition>();
             foreach (var deviceFactory in DeviceFactories)
             {

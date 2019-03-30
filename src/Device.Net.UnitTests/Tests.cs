@@ -15,6 +15,7 @@ namespace Device.Net.UnitTests
         public void Startup()
         {
             MockHidFactory.Register(null);
+            MockUsbFactory.Register(null);
         }
 
         [TestMethod]
@@ -67,6 +68,28 @@ namespace Device.Net.UnitTests
             MockHidFactory.IsConnectedStatic = false;
             var isTimeout = await ListenForDeviceAsync();
             Assert.IsTrue(isTimeout, "Device is connected");
+        }
+
+
+        [TestMethod]
+        public async Task TestDeviceFactoriesNotRegisteredException()
+        {
+            DeviceManager.Current.DeviceFactories.Clear();
+
+            try
+            {
+                var connectedDevices = await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null);
+            }
+            catch (DeviceFactoriesNotRegisteredException dex)
+            {
+                return;
+            }
+            finally
+            {
+                Startup();
+            }
+
+            throw new Exception("The call was not stopped");
         }
         #endregion
 
