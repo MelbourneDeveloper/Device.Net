@@ -2,9 +2,9 @@
 using System;
 using System.Threading.Tasks;
 
-namespace UnitTestProject1
+namespace Device.Net.UnitTests
 {
-    public class MockDevice : DeviceBase, IDevice
+    public class MockHidDevice : DeviceBase, IDevice
     {
         private bool _IsInitialized;
 
