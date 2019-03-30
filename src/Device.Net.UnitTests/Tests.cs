@@ -63,20 +63,27 @@ namespace Device.Net.UnitTests
             deviceListener.DeviceInitialized += (a, b) => { listenTaskCompletionSource.SetResult(true); };
             deviceListener.Start();
 
+            var listenTask = listenTaskCompletionSource.Task;
+
+            await SimulateTimeoutAsync(listenTask, 5);
+
+            await listenTask;
+        }
+
+        private static async Task SimulateTimeoutAsync(Task<bool> task, int seconds)
+        {
             var sw = new Stopwatch();
             sw.Start();
 
-            while (listenTaskCompletionSource.Task.Status != TaskStatus.RanToCompletion)
+            while (task.Status != TaskStatus.RanToCompletion)
             {
-                await Task.Delay(1000);
-                if (sw.Elapsed > new TimeSpan(0, 0, 5))
+                if (sw.Elapsed > new TimeSpan(0, 0, seconds))
                 {
                     throw new Exception("Timed out");
                 }
+
+                await Task.Delay(1000);
             }
-
-            await listenTaskCompletionSource.Task;
         }
-
     }
 }
