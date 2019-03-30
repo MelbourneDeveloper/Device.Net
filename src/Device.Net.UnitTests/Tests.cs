@@ -14,6 +14,24 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
+        public async Task GetDevicesDisconnectedWithMatchedFilter()
+        {
+            MockHidFactory.IsConnected = true;
+            var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = MockHidDevice.ProductId, VendorId = MockHidDevice.VendorId })).ToList();
+            Assert.IsNotNull(connectedDeviceDefinitions);
+            Assert.AreEqual(1, connectedDeviceDefinitions.Count);
+        }
+
+        [TestMethod]
+        public async Task GetDevicesDisconnectedWithUnmatchedFilter()
+        {
+            MockHidFactory.IsConnected = false;
+            var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = 0, VendorId = 0 })).ToList();
+            Assert.IsNotNull(connectedDeviceDefinitions);
+            Assert.AreEqual(0, connectedDeviceDefinitions.Count);
+        }
+
+        [TestMethod]
         public async Task GetDevicesDisconnectedNullFilter()
         {
             MockHidFactory.IsConnected = false;

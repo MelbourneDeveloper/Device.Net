@@ -6,6 +6,15 @@ namespace Device.Net.UnitTests
 {
     public class MockHidDevice : DeviceBase, IDevice
     {
+        public const uint ProductId = 1;
+        public const uint VendorId = 1;
+
+        public MockHidDevice()
+        {
+            ConnectedDeviceDefinition.ProductId = ProductId;
+            ConnectedDeviceDefinition.VendorId = VendorId;
+        }
+
         private bool _IsInitialized;
 
         public override ushort WriteBufferSize => 64;
