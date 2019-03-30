@@ -20,7 +20,16 @@ namespace Device.Net
             var retVal = new List<ConnectedDeviceDefinition>();
             foreach (var deviceFactory in DeviceFactories)
             {
-                retVal.AddRange(await deviceFactory.GetConnectedDeviceDefinitionsAsync(deviceDefinition));
+                var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitionsAsync(deviceDefinition);
+
+                foreach(var connectedDeviceDefinition in connectedDeviceDefinitions)
+                {
+                    //Don't add the same device twice
+                    //Note: this probably won't cause issues where there is no DeviceId, but funny behaviour is probably going on when there isn't anyway...
+                    if (retVal.Select(d => d.DeviceId).Contains(connectedDeviceDefinition.DeviceId)) continue;
+
+                    retVal.Add(connectedDeviceDefinition);
+                }
             }
 
             return retVal;
