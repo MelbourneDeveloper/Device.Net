@@ -57,10 +57,16 @@ namespace Device.Net.UnitTests
         public async Task TestDeviceListenerAsync()
         {
             MockHidFactory.IsConnected = true;
-
             var isTimeout = await ListenForDeviceAsync();
-
             Assert.IsTrue(!isTimeout, "Timeout");
+        }
+
+        [TestMethod]
+        public async Task TestDeviceListenerTimeoutAsync()
+        {
+            MockHidFactory.IsConnected = false;
+            var isTimeout = await ListenForDeviceAsync();
+            Assert.IsTrue(isTimeout, "Device is connected");
         }
         #endregion
 
