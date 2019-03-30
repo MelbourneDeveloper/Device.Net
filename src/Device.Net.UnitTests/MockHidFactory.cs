@@ -9,7 +9,7 @@ namespace Device.Net.UnitTests
         private const string DeviceId = "123";
 
         //private bool IsConnected => DateTime.Now.Minute % 2 == 0;
-        private bool IsConnected { get; set; }
+        public static bool IsConnected { get; set; }
 
         public DeviceType DeviceType => DeviceType.Hid;
 
