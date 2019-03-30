@@ -17,7 +17,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task GetDevicesDisconnectedWithMatchedFilter()
+        public async Task TestGetDevicesDisconnectedWithMatchedFilter()
         {
             MockHidFactory.IsConnected = true;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = MockHidDevice.ProductId, VendorId = MockHidDevice.VendorId })).ToList();
@@ -26,7 +26,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task GetDevicesDisconnectedWithUnmatchedFilter()
+        public async Task TestGetDevicesDisconnectedWithUnmatchedFilter()
         {
             MockHidFactory.IsConnected = false;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = 0, VendorId = 0 })).ToList();
@@ -35,7 +35,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task GetDevicesDisconnectedNullFilter()
+        public async Task TestGetDevicesDisconnectedNullFilter()
         {
             MockHidFactory.IsConnected = false;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null)).ToList();
@@ -44,7 +44,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task GetDevicesConnectedNullFilter()
+        public async Task TestGetDevicesConnectedNullFilter()
         {
             MockHidFactory.IsConnected = true;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null)).ToList();
@@ -53,7 +53,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task DeviceListen()
+        public async Task TestDeviceListener()
         {
             MockHidFactory.IsConnected = true;
 
@@ -61,7 +61,6 @@ namespace Device.Net.UnitTests
 
             var deviceListener = new DeviceListener(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = MockHidDevice.VendorId, ProductId = MockHidDevice.ProductId } }, 1000);
             deviceListener.DeviceInitialized += (a, b) => { listenTaskCompletionSource.SetResult(true); };
-
             deviceListener.Start();
 
             var sw = new Stopwatch();

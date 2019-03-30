@@ -6,7 +6,7 @@ namespace Device.Net.UnitTests
 {
     public class MockHidFactory : IDeviceFactory
     {
-        private const string DeviceId = "123";
+        private string DeviceId => MockHidDevice.MockedDeviceId;
 
         //private bool IsConnected => DateTime.Now.Minute % 2 == 0;
         public static bool IsConnected { get; set; }
@@ -23,7 +23,7 @@ namespace Device.Net.UnitTests
             {
                 Console.WriteLine("I'm saying the device is connected...");
 
-                result.Add(new ConnectedDeviceDefinition(DeviceId));
+                result.Add(new ConnectedDeviceDefinition(DeviceId) { ProductId = MockHidDevice.ProductId, VendorId = MockHidDevice.VendorId });
             }
             else
             {
@@ -37,7 +37,7 @@ namespace Device.Net.UnitTests
         {
             if (deviceDefinition.DeviceId == DeviceId)
             {
-                return new MockHidDevice() { DeviceId = DeviceId };
+                return new MockHidDevice();
             }
 
             throw new Exception("Couldn't get a device");
