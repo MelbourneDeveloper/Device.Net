@@ -80,7 +80,7 @@ namespace Device.Net.UnitTests
             deviceListener.Start();
 
             var listenTask = listenTaskCompletionSource.Task;
-            var timeoutTask = SimulateTimeoutAsync(listenTask, 5);
+            var timeoutTask = SimulateTimeoutAsync(listenTask, 3);
 
             var completedTask = await Task.WhenAny(new List<Task> { listenTask, timeoutTask });
             return ReferenceEquals(completedTask, timeoutTask);
@@ -99,7 +99,7 @@ namespace Device.Net.UnitTests
                     throw new Exception("Timed out");
                 }
 
-                await Task.Delay(1000);
+                await Task.Delay(500);
             }
         }
         #endregion
