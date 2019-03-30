@@ -10,6 +10,7 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class Tests
     {
+        #region Tests
         [TestInitialize]
         public void Startup()
         {
@@ -17,7 +18,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestGetDevicesDisconnectedWithMatchedFilter()
+        public async Task TestGetDevicesDisconnectedWithMatchedFilterAsync()
         {
             MockHidFactory.IsConnected = true;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = MockHidDevice.ProductId, VendorId = MockHidDevice.VendorId })).ToList();
@@ -26,7 +27,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestGetDevicesDisconnectedWithUnmatchedFilter()
+        public async Task TestGetDevicesDisconnectedWithUnmatchedFilterAsync()
         {
             MockHidFactory.IsConnected = false;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = 0, VendorId = 0 })).ToList();
@@ -35,7 +36,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestGetDevicesDisconnectedNullFilter()
+        public async Task TestGetDevicesDisconnectedNullFilterAsync()
         {
             MockHidFactory.IsConnected = false;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null)).ToList();
@@ -44,7 +45,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestGetDevicesConnectedNullFilter()
+        public async Task TestGetDevicesConnectedNullFilterAsync()
         {
             MockHidFactory.IsConnected = true;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null)).ToList();
@@ -53,10 +54,19 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestDeviceListener()
+        public async Task TestDeviceListenerAsync()
         {
             MockHidFactory.IsConnected = true;
 
+            var isTimeout = await ListenForDeviceAsync();
+
+            Assert.IsTrue(!isTimeout, "Timeout");
+        }
+        #endregion
+
+        #region Helpers
+        private async Task<bool> ListenForDeviceAsync()
+        {
             var listenTaskCompletionSource = new TaskCompletionSource<bool>();
 
             var deviceListener = new DeviceListener(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = MockHidDevice.VendorId, ProductId = MockHidDevice.ProductId } }, 1000);
@@ -64,20 +74,20 @@ namespace Device.Net.UnitTests
             deviceListener.Start();
 
             var listenTask = listenTaskCompletionSource.Task;
+            var timeoutTask = SimulateTimeoutAsync(listenTask, 5);
 
-            await SimulateTimeoutAsync(listenTask, 5);
-
-            await listenTask;
+            var completedTask = await Task.WhenAny(new List<Task> { listenTask, timeoutTask });
+            return ReferenceEquals(completedTask, timeoutTask);
         }
 
         private static async Task SimulateTimeoutAsync(Task<bool> task, int seconds)
         {
-            var sw = new Stopwatch();
-            sw.Start();
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
 
             while (task.Status != TaskStatus.RanToCompletion)
             {
-                if (sw.Elapsed > new TimeSpan(0, 0, seconds))
+                if (stopWatch.Elapsed > new TimeSpan(0, 0, seconds))
                 {
                     throw new Exception("Timed out");
                 }
@@ -85,5 +95,6 @@ namespace Device.Net.UnitTests
                 await Task.Delay(1000);
             }
         }
+        #endregion
     }
 }
