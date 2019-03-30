@@ -80,7 +80,7 @@ namespace Device.Net.UnitTests
             {
                 var connectedDevices = await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null);
             }
-            catch (DeviceFactoriesNotRegisteredException dex)
+            catch (DeviceFactoriesNotRegisteredException)
             {
                 return;
             }
@@ -91,6 +91,29 @@ namespace Device.Net.UnitTests
 
             throw new Exception("The call was not stopped");
         }
+
+        [TestMethod]
+        public void TestListenerDeviceFactoriesNotRegisteredException()
+        {
+            DeviceManager.Current.DeviceFactories.Clear();
+
+            try
+            {
+                var deviceListner = new DeviceListener(new List<FilterDeviceDefinition>(), 1000);
+                deviceListner.Start();
+            }
+            catch (DeviceFactoriesNotRegisteredException)
+            {
+                return;
+            }
+            finally
+            {
+                Startup();
+            }
+
+            throw new Exception("The call was not stopped");
+        }
+
         #endregion
 
         #region Helpers

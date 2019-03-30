@@ -1,24 +1,14 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Device.Net
 {
-    [Serializable]
+#pragma warning disable CA2229 
+#pragma warning disable CA1032 
     public class DeviceFactoriesNotRegisteredException : Exception
+#pragma warning restore CA1032 
+#pragma warning restore CA2229 
     {
-        public DeviceFactoriesNotRegisteredException()
-        {
-        }
-
-        public DeviceFactoriesNotRegisteredException(string message) : base(message)
-        {
-        }
-
-        public DeviceFactoriesNotRegisteredException(string message, Exception innerException) : base(message, innerException)
-        {
-        }
-
-        protected DeviceFactoriesNotRegisteredException(SerializationInfo info, StreamingContext context) : base(info, context)
+        public DeviceFactoriesNotRegisteredException() : base("No device factories have been registered")
         {
         }
     }
