@@ -1,5 +1,4 @@
-﻿using Device.Net;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests

@@ -1,4 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -49,8 +52,32 @@ namespace Device.Net.UnitTests
             Assert.AreEqual(1, connectedDeviceDefinitions.Count);
         }
 
-        //var asdasd = new DeviceListener(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = 1, ProductId = 1 } }, 1000);
-        // await asdasd.CheckForDevicesAsync();
-        //var asdas = asdasd.
+        [TestMethod]
+        public async Task DeviceListen()
+        {
+            MockHidFactory.IsConnected = true;
+
+            var listenTaskCompletionSource = new TaskCompletionSource<bool>();
+
+            var deviceListener = new DeviceListener(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = MockHidDevice.VendorId, ProductId = MockHidDevice.ProductId } }, 1000);
+            deviceListener.DeviceInitialized += (a, b) => { listenTaskCompletionSource.SetResult(true); };
+
+            deviceListener.Start();
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            while (listenTaskCompletionSource.Task.Status != TaskStatus.RanToCompletion)
+            {
+                await Task.Delay(1000);
+                if (sw.Elapsed > new TimeSpan(0, 0, 5))
+                {
+                    throw new Exception("Timed out");
+                }
+            }
+
+            await listenTaskCompletionSource.Task;
+        }
+
     }
 }
