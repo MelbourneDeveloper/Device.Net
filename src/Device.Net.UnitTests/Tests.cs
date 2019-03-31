@@ -19,53 +19,60 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestGetDevicesDisconnectedWithMatchedFilterAsync()
+        [DataRow(true, true, 2)]
+        [DataRow(true, false, 1)]
+        [DataRow(false, false, 0)]
+        public async Task TestWithMatchedFilterAsync(bool isHidConnected, bool isUsbConnected, int expectedCount)
         {
-            MockHidFactory.IsConnectedStatic = true;
+            MockHidFactory.IsConnectedStatic = isHidConnected;
+            MockUsbFactory.IsConnectedStatic = isUsbConnected;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = MockHidDevice.ProductId, VendorId = MockHidDevice.VendorId })).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
-            Assert.AreEqual(1, connectedDeviceDefinitions.Count);
+            Assert.AreEqual(expectedCount, connectedDeviceDefinitions.Count);
         }
 
+        //Turned up a bug?
         [TestMethod]
-        public async Task TestGetDevicesDisconnectedWithUnmatchedFilterAsync()
+        [DataRow(true, true, 0)]
+        [DataRow(true, false, 0)]
+        [DataRow(false, false, 0)]
+        public async Task TestWithUnmatchedFilterAsync(bool isHidConnected, bool isUsbConnected, int expectedCount)
         {
-            MockHidFactory.IsConnectedStatic = false;
+            MockHidFactory.IsConnectedStatic = isHidConnected;
+            MockUsbFactory.IsConnectedStatic = isUsbConnected;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = 0, VendorId = 0 })).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
-            Assert.AreEqual(0, connectedDeviceDefinitions.Count);
+            Assert.AreEqual(expectedCount, connectedDeviceDefinitions.Count);
         }
 
         [TestMethod]
-        public async Task TestGetDevicesDisconnectedNullFilterAsync()
+        [DataRow(true, true, 2)]
+        [DataRow(true, false, 1)]
+        [DataRow(false, false, 0)]
+        public async Task TestNullFilterAsync(bool isHidConnected, bool isUsbConnected, int expectedCount)
         {
-            MockHidFactory.IsConnectedStatic = false;
+            MockHidFactory.IsConnectedStatic = isHidConnected;
+            MockUsbFactory.IsConnectedStatic = isUsbConnected;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null)).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
-            Assert.AreEqual(0, connectedDeviceDefinitions.Count);
-        }
-
-        [TestMethod]
-        public async Task TestGetDevicesConnectedNullFilterAsync()
-        {
-            MockHidFactory.IsConnectedStatic = true;
-            var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null)).ToList();
-            Assert.IsNotNull(connectedDeviceDefinitions);
-            Assert.AreEqual(1, connectedDeviceDefinitions.Count);
+            Assert.AreEqual(expectedCount, connectedDeviceDefinitions.Count);
         }
 
         [TestMethod]
         public async Task TestDeviceListenerAsync()
         {
             MockHidFactory.IsConnectedStatic = true;
+            MockUsbFactory.IsConnectedStatic = false;
             var isTimeout = await ListenForDeviceAsync();
             Assert.IsTrue(!isTimeout, "Timeout");
         }
 
+        //Is this a bug?
         [TestMethod]
         public async Task TestDeviceListenerTimeoutAsync()
         {
-            MockHidFactory.IsConnectedStatic = false;
+            MockHidFactory.IsConnectedStatic = true;
+            MockUsbFactory.IsConnectedStatic = false;
             var isTimeout = await ListenForDeviceAsync();
             Assert.IsTrue(isTimeout, "Device is connected");
         }
