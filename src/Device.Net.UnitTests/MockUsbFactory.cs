@@ -4,6 +4,11 @@ namespace Device.Net.UnitTests
 {
     public class MockUsbFactory : MockFactoryBase, IDeviceFactory
     {
+        public MockUsbFactory()
+        {
+            Logger = new DebugLogger { LogToConsole = true };
+        }
+
         public override string DeviceId => MockUsbDevice.MockedDeviceId;
 
         public static bool IsConnectedStatic { get; set; }
@@ -27,7 +32,7 @@ namespace Device.Net.UnitTests
             {
                 if (deviceDefinition.DeviceId == DeviceId)
                 {
-                    if (!deviceDefinition.DeviceType.HasValue || deviceDefinition.DeviceType == DeviceType.Usb) return new MockUsbDevice();
+                    if (!deviceDefinition.DeviceType.HasValue || deviceDefinition.DeviceType == DeviceType.Usb) return new MockUsbDevice() ;
                 }
             }
 

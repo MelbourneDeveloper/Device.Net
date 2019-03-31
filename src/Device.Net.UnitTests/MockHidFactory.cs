@@ -4,6 +4,11 @@ namespace Device.Net.UnitTests
 {
     public class MockHidFactory : MockFactoryBase, IDeviceFactory
     {
+        public MockHidFactory()
+        {
+            Logger = new DebugLogger { LogToConsole = true };
+        }
+
         public override string DeviceId => MockHidDevice.MockedDeviceId;
 
         public static bool IsConnectedStatic { get; set; }

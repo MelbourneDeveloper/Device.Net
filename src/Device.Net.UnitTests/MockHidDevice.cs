@@ -10,7 +10,7 @@
         {
             DeviceId = MockedDeviceId;
             ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId) { ProductId = ProductId, VendorId = VendorId };
+            Logger = new DebugLogger { LogToConsole = true };
         }
-
     }
 }

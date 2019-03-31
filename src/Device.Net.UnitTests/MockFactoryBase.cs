@@ -25,16 +25,10 @@ namespace Device.Net.UnitTests
 
             if (IsConnected)
             {
-                Console.WriteLine("I'm saying the device is connected...");
-
                 if (DeviceManager.IsDefinitionMatch(deviceDefinition, mockConnectedDeviceDefinition))
                 {
                     result.Add(mockConnectedDeviceDefinition);
                 }
-            }
-            else
-            {
-                Console.WriteLine("I'm saying no device...");
             }
 
             return Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(result);
