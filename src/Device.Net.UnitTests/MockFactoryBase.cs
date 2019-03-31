@@ -21,11 +21,16 @@ namespace Device.Net.UnitTests
         {
             var result = new List<ConnectedDeviceDefinition>();
 
+            var mockConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId) { ProductId = ProductId, VendorId = VendorId };
+
             if (IsConnected)
             {
                 Console.WriteLine("I'm saying the device is connected...");
 
-                result.Add(new ConnectedDeviceDefinition(DeviceId) { ProductId = ProductId, VendorId = VendorId });
+                if (DeviceManager.IsDefinitionMatch(deviceDefinition, mockConnectedDeviceDefinition))
+                {
+                    result.Add(mockConnectedDeviceDefinition);
+                }
             }
             else
             {

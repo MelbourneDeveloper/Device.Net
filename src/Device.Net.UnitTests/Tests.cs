@@ -19,22 +19,28 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        [DataRow(true, true, 2)]
-        [DataRow(true, false, 1)]
-        [DataRow(false, false, 0)]
-        public async Task TestWithMatchedFilterAsync(bool isHidConnected, bool isUsbConnected, int expectedCount)
+        [DataRow(true, true, 1, MockHidDevice.VendorId, MockHidDevice.ProductId)]
+        [DataRow(true, false, 1, MockHidDevice.VendorId, MockHidDevice.ProductId)]
+        [DataRow(false, true, 0, MockHidDevice.VendorId, MockHidDevice.ProductId)]
+        [DataRow(false, false, 0, MockHidDevice.VendorId, MockHidDevice.ProductId)]
+
+        [DataRow(true, true, 1, MockUsbDevice.VendorId, MockUsbDevice.ProductId)]
+        [DataRow(true, false, 0, MockUsbDevice.VendorId, MockUsbDevice.ProductId)]
+        [DataRow(false, true, 1, MockUsbDevice.VendorId, MockUsbDevice.ProductId)]
+        [DataRow(false, false, 0, MockUsbDevice.VendorId, MockUsbDevice.ProductId)]
+        public async Task TestWithMatchedFilterAsync(bool isHidConnected, bool isUsbConnected, int expectedCount, uint vid, uint pid)
         {
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
-            var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = MockHidDevice.ProductId, VendorId = MockHidDevice.VendorId })).ToList();
+            var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
             Assert.AreEqual(expectedCount, connectedDeviceDefinitions.Count);
         }
 
-        //Turned up a bug?
         [TestMethod]
         [DataRow(true, true, 0)]
         [DataRow(true, false, 0)]
+        [DataRow(false, true, 0)]
         [DataRow(false, false, 0)]
         public async Task TestWithUnmatchedFilterAsync(bool isHidConnected, bool isUsbConnected, int expectedCount)
         {
@@ -76,8 +82,7 @@ namespace Device.Net.UnitTests
             var isTimeout = await ListenForDeviceAsync();
             Assert.IsTrue(isTimeout, "Device is connected");
         }
-
-
+    
         [TestMethod]
         public async Task TestDeviceFactoriesNotRegisteredException()
         {

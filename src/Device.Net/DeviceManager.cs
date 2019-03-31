@@ -81,14 +81,14 @@ namespace Device.Net
         #region Public Static Methods
         public static bool IsDefinitionMatch(FilterDeviceDefinition filterDevice, ConnectedDeviceDefinition actualDevice)
         {
+            if (filterDevice == null) return true;
+
             var vendorIdPasses = !filterDevice.VendorId.HasValue || filterDevice.VendorId == actualDevice.VendorId;
             var productIdPasses = !filterDevice.ProductId.HasValue || filterDevice.ProductId == actualDevice.ProductId;
             var deviceTypePasses = !filterDevice.DeviceType.HasValue || filterDevice.DeviceType == actualDevice.DeviceType;
             var usagePagePasses = !filterDevice.UsagePage.HasValue || filterDevice.UsagePage == actualDevice.UsagePage;
 
-            var returnValue = filterDevice == null
-                ? true
-                :
+            var returnValue = 
                 vendorIdPasses &&
                 productIdPasses &&
                 deviceTypePasses &&
