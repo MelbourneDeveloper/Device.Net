@@ -38,6 +38,20 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
+        [DataRow(true, true, MockHidDevice.VendorId, MockHidDevice.ProductId)]
+        [DataRow(true, false, MockHidDevice.VendorId, MockHidDevice.ProductId)]
+        //[DataRow(true, true, MockUsbDevice.VendorId, MockUsbDevice.ProductId)]
+        //[DataRow(false, true, MockUsbDevice.VendorId, MockUsbDevice.ProductId)]
+        public async Task TestWriteAndRead(bool isHidConnected, bool isUsbConnected, uint vid, uint pid)
+        {
+            MockHidFactory.IsConnectedStatic = isHidConnected;
+            MockUsbFactory.IsConnectedStatic = isUsbConnected;
+            var connectedDeviceDefinition = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
+            var mockHidDevice = new MockHidDevice() { DeviceId = connectedDeviceDefinition.DeviceId };
+            var returnValue = await mockHidDevice.WriteAndReadAsync(new byte[64]);
+        }
+
+        [TestMethod]
         [DataRow(true, true, 0)]
         [DataRow(true, false, 0)]
         [DataRow(false, true, 0)]
