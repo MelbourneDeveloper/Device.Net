@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Device.Net.UnitTests
 {
     [TestClass]
-    public class Tests
+    public class UnitTests
     {
         #region Tests
         [TestInitialize]
