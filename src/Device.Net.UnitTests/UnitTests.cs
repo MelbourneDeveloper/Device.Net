@@ -42,13 +42,29 @@ namespace Device.Net.UnitTests
         [DataRow(true, false, MockHidDevice.VendorId, MockHidDevice.ProductId)]
         //[DataRow(true, true, MockUsbDevice.VendorId, MockUsbDevice.ProductId)]
         //[DataRow(false, true, MockUsbDevice.VendorId, MockUsbDevice.ProductId)]
-        public async Task TestWriteAndRead(bool isHidConnected, bool isUsbConnected, uint vid, uint pid)
+        public async Task TestWriteAndReadThreadSafety(bool isHidConnected, bool isUsbConnected, uint vid, uint pid)
         {
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
             var connectedDeviceDefinition = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
             var mockHidDevice = new MockHidDevice() { DeviceId = connectedDeviceDefinition.DeviceId };
-            var returnValue = await mockHidDevice.WriteAndReadAsync(new byte[64]);
+
+            var writeAndReadTasks = new List<Task<byte[]>>();
+
+            //TODO: Does this properly test thread safety?
+
+            for (byte i = 0; i < 10; i++)
+            {
+                writeAndReadTasks.Add(mockHidDevice.WriteAndReadAsync(new byte[64] { i, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }));
+            }
+
+            var results = await Task.WhenAll(writeAndReadTasks);
+
+            for (byte i = 0; i < results.Length; i++)
+            {
+                var result = results[i];
+                Assert.IsTrue(result[0] == i);
+            }
         }
 
         [TestMethod]

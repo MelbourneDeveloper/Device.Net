@@ -21,13 +21,18 @@ namespace Device.Net.UnitTests
             return Task.FromResult(true);
         }
 
-        public override Task<byte[]> ReadAsync()
+        private byte[] LastWrittenBuffer;
+
+        public async override Task<byte[]> ReadAsync()
         {
-            return Task.FromResult(new byte[64] { 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+            if (LastWrittenBuffer != null) return LastWrittenBuffer;
+
+            return await Task.FromResult(new byte[64] { 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
         }
 
         public override Task WriteAsync(byte[] data)
         {
+            LastWrittenBuffer = data;
             return Task.FromResult(true);
         }
     }
