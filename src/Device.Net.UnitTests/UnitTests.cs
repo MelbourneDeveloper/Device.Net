@@ -68,7 +68,7 @@ namespace Device.Net.UnitTests
         public async Task TestDeviceListenerAsync()
         {
             MockHidFactory.IsConnectedStatic = true;
-            MockUsbFactory.IsConnectedStatic = false;
+            MockUsbFactory.IsConnectedStatic = true;
             var isTimeout = await ListenForDeviceAsync();
             Assert.IsTrue(!isTimeout, "Timeout");
         }
@@ -77,12 +77,12 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestDeviceListenerTimeoutAsync()
         {
-            MockHidFactory.IsConnectedStatic = true;
+            MockHidFactory.IsConnectedStatic = false;
             MockUsbFactory.IsConnectedStatic = false;
             var isTimeout = await ListenForDeviceAsync();
             Assert.IsTrue(isTimeout, "Device is connected");
         }
-    
+
         [TestMethod]
         public async Task TestDeviceFactoriesNotRegisteredException()
         {
@@ -134,7 +134,11 @@ namespace Device.Net.UnitTests
             var listenTaskCompletionSource = new TaskCompletionSource<bool>();
 
             var deviceListener = new DeviceListener(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = MockHidDevice.VendorId, ProductId = MockHidDevice.ProductId } }, 1000);
-            deviceListener.DeviceInitialized += (a, b) => { listenTaskCompletionSource.SetResult(true); };
+            deviceListener.DeviceInitialized += (a, deviceEventArgs) =>
+            {
+                Console.WriteLine($"{deviceEventArgs.Device?.DeviceId} connected");
+                listenTaskCompletionSource.SetResult(true);
+            };
             deviceListener.Start();
 
             var listenTask = listenTaskCompletionSource.Task;
