@@ -41,7 +41,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Device.Net.MacOSLibUsbSampl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{ED437AFB-1A20-40F6-BEA0-DF39080D4CAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Device.Net.UnitTests", "Device.Net.UnitTests\Device.Net.UnitTests.csproj", "{C589B0F5-40FA-43DC-A802-6E50A3A3970A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Device.Net.UnitTests", "Device.Net.UnitTests\Device.Net.UnitTests.csproj", "{C589B0F5-40FA-43DC-A802-6E50A3A3970A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
