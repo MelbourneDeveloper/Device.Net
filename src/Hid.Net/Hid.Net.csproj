@@ -23,6 +23,7 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
     <PackageId>Hid.Net</PackageId>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>      
+    <NoWarn>1701;1702;NU5125</NoWarn>    
   </PropertyGroup>
 
   <Choose>
@@ -35,7 +36,7 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
       <PropertyGroup>
         <SignAssembly>true</SignAssembly>
         <DelaySign>false</DelaySign>
-        <AssemblyOriginatorKeyFile>Device.Net.pfx</AssemblyOriginatorKeyFile>
+        <AssemblyOriginatorKeyFile>../Device.Net/Device.Net.pfx</AssemblyOriginatorKeyFile>
       </PropertyGroup>
     </When>
   </Choose>

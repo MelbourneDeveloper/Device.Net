@@ -14,7 +14,7 @@
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
     <PackageTags>Hid USB Android UWP Windows C# MacOS Linux</PackageTags>
-    <NoWarn></NoWarn>
+    <NoWarn>NU5125</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>CodeRules.ruleset</CodeAnalysisRuleSet>      
   </PropertyGroup>

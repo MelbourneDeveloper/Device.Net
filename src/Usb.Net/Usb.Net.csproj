@@ -17,7 +17,8 @@
     <PackageReleaseNotes></PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>      
+    <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>    
+    <NoWarn>1701;1702;NU5125</NoWarn>      
   </PropertyGroup>
 
   <Choose>
@@ -30,7 +31,7 @@
       <PropertyGroup>
         <SignAssembly>true</SignAssembly>
         <DelaySign>false</DelaySign>
-        <AssemblyOriginatorKeyFile>Device.Net.pfx</AssemblyOriginatorKeyFile>
+        <AssemblyOriginatorKeyFile>../Device.Net/Device.Net.pfx</AssemblyOriginatorKeyFile>
       </PropertyGroup>
     </When>
   </Choose>
