@@ -14,6 +14,8 @@ This library provides a common Task based Async interface across platforms and d
 
 Please visit the [documentation page](https://github.com/MelbourneDeveloper/Device.Net/wiki).
 
+[Would you like to contribute?](https://christianfindlay.com/2019/04/28/calling-all-c-crypto-developers/)
+
 ### Currently supports:
 
 | Platform | Device Types |
