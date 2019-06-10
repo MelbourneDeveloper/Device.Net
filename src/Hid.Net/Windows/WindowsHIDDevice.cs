@@ -46,30 +46,39 @@ namespace Hid.Net.Windows
         #region Private Methods
         private bool Initialize()
         {
-            Close();
-
-            if (string.IsNullOrEmpty(DeviceId))
+            try
             {
-                throw new WindowsHidException($"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
+
+                Close();
+
+                if (string.IsNullOrEmpty(DeviceId))
+                {
+                    throw new WindowsHidException($"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
+                }
+
+                _ReadSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+                _WriteSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+
+                if (_ReadSafeFileHandle.IsInvalid)
+                {
+                    throw new Exception("Could not open connection for reading");
+                }
+
+                if (_WriteSafeFileHandle.IsInvalid)
+                {
+                    throw new Exception("Could not open connection for writing");
+                }
+
+
+                ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
+                _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, ReadBufferSize, false);
+                _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, WriteBufferSize, false);
             }
-
-            _ReadSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
-            _WriteSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
-
-            if (_ReadSafeFileHandle.IsInvalid)
+            catch (Exception ex)
             {
-                throw new Exception("Could not open connection for reading");
+                Logger.Log($"{nameof(Initialize)} error.", nameof(WindowsHidDevice), ex, LogLevel.Error);
+                return false;
             }
-
-            if (_WriteSafeFileHandle.IsInvalid)
-            {
-                throw new Exception("Could not open connection for writing");
-            }
-
-            ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
-
-            _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, ReadBufferSize, false);
-            _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, WriteBufferSize, false);
 
             return true;
         }

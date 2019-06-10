@@ -103,7 +103,11 @@ namespace Device.Net.Windows
 
                         var connectedDeviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
 
-                        if (connectedDeviceDefinition == null) continue;
+                        if (connectedDeviceDefinition == null)
+                        {
+                            Logger.Log($"Device with path {spDeviceInterfaceDetailData.DevicePath} was skipped. See previous logs.", GetType().Name, null, LogLevel.Warning);
+                            continue;
+                        }
 
                         if (!DeviceManager.IsDefinitionMatch(filterDeviceDefinition, connectedDeviceDefinition)) continue;
 

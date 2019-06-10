@@ -15,9 +15,17 @@ namespace Hid.Net.Windows
         #region Protected Override Methods
         protected override ConnectedDeviceDefinition GetDeviceDefinition(string deviceId)
         {
-            using (var safeFileHandle = APICalls.CreateFile(deviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero))
+            try
             {
-                return GetDeviceDefinition(deviceId, safeFileHandle);
+                using (var safeFileHandle = APICalls.CreateFile(deviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero))
+                {
+                    return GetDeviceDefinition(deviceId, safeFileHandle);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"{nameof(GetDeviceDefinition)} error. Device Id: {deviceId}", nameof(WindowsHidDeviceFactory), ex, LogLevel.Error);
+                return null;
             }
         }
 
@@ -38,37 +46,26 @@ namespace Hid.Net.Windows
         #region Private Static Methods
         public static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)
         {
-            try
+            var hidAttributes = GetHidAttributes(safeFileHandle);
+            var hidCollectionCapabilities = GetHidCapabilities(safeFileHandle);
+            var manufacturer = GetManufacturer(safeFileHandle);
+            var serialNumber = GetSerialNumber(safeFileHandle);
+            var product = GetProduct(safeFileHandle);
+
+            return new ConnectedDeviceDefinition(deviceId)
             {
-                var hidAttributes = GetHidAttributes(safeFileHandle);
-                var hidCollectionCapabilities = GetHidCapabilities(safeFileHandle);
-                var manufacturer = GetManufacturer(safeFileHandle);
-                var serialNumber = GetSerialNumber(safeFileHandle);
-                var product = GetProduct(safeFileHandle);
-
-                return new ConnectedDeviceDefinition(deviceId)
-                {
-                    WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
-                    ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,
-                    Manufacturer = manufacturer,
-                    ProductName = product,
-                    ProductId = (ushort)hidAttributes.ProductId,
-                    SerialNumber = serialNumber,
-                    Usage = hidCollectionCapabilities.Usage,
-                    UsagePage = hidCollectionCapabilities.UsagePage,
-                    VendorId = (ushort)hidAttributes.VendorId,
-                    VersionNumber = (ushort)hidAttributes.VersionNumber,
-                    DeviceType = DeviceType.Hid
-                };
-            }
-            catch (Exception)
-            {
-                //TODO: Logging...
-
-                //This probably needs a big refactor. Because this is a static method, it either needs to have the logger passed in, or it should be a non-static method
-
-                return null;
-            }
+                WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
+                ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,
+                Manufacturer = manufacturer,
+                ProductName = product,
+                ProductId = (ushort)hidAttributes.ProductId,
+                SerialNumber = serialNumber,
+                Usage = hidCollectionCapabilities.Usage,
+                UsagePage = hidCollectionCapabilities.UsagePage,
+                VendorId = (ushort)hidAttributes.VendorId,
+                VersionNumber = (ushort)hidAttributes.VersionNumber,
+                DeviceType = DeviceType.Hid
+            };
         }
         #endregion
 
