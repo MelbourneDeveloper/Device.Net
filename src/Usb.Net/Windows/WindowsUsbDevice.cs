@@ -34,53 +34,61 @@ namespace Usb.Net.Windows
         #region Private Methods
         private void Initialize()
         {
-            Close();
-
-            int errorCode;
-
-            if (string.IsNullOrEmpty(DeviceId))
+            try
             {
-                throw new WindowsException($"{nameof(DeviceDefinitionBase)} must be specified before {nameof(InitializeAsync)} can be called.");
-            }
+                Close();
 
-            _DeviceHandle = APICalls.CreateFile(DeviceId, APICalls.GenericWrite | APICalls.GenericRead, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
+                int errorCode;
 
-
-            if (_DeviceHandle.IsInvalid)
-            {
-                //TODO: is error code useful here?
-                errorCode = Marshal.GetLastWin32Error();
-                if (errorCode > 0) throw new Exception($"Device handle no good. Error code: {errorCode}");
-            }
-
-            var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
-            HandleError(isSuccess, "Couldn't initialize device");
-
-            ConnectedDeviceDefinition = GetDeviceDefinition(defaultInterfaceHandle, DeviceId);
-
-            byte i = 0;
-
-            //Get the first (default) interface
-            var defaultInterface = GetInterface(defaultInterfaceHandle);
-
-            _UsbInterfaces.Add(defaultInterface);
-
-            while (true)
-            {
-                isSuccess = WinUsbApiCalls.WinUsb_GetAssociatedInterface(defaultInterfaceHandle, i, out var interfacePointer);
-                if (!isSuccess)
+                if (string.IsNullOrEmpty(DeviceId))
                 {
-                    errorCode = Marshal.GetLastWin32Error();
-                    if (errorCode == APICalls.ERROR_NO_MORE_ITEMS) break;
-
-                    throw new Exception($"Could not enumerate interfaces for device {DeviceId}. Error code: { errorCode}");
+                    throw new WindowsException($"{nameof(DeviceDefinitionBase)} must be specified before {nameof(InitializeAsync)} can be called.");
                 }
 
-                var associatedInterface = GetInterface(interfacePointer);
+                _DeviceHandle = APICalls.CreateFile(DeviceId, APICalls.GenericWrite | APICalls.GenericRead, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
 
-                _UsbInterfaces.Add(associatedInterface);
 
-                i++;
+                if (_DeviceHandle.IsInvalid)
+                {
+                    //TODO: is error code useful here?
+                    errorCode = Marshal.GetLastWin32Error();
+                    if (errorCode > 0) throw new Exception($"Device handle no good. Error code: {errorCode}");
+                }
+
+                var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
+                HandleError(isSuccess, "Couldn't initialize device");
+
+                ConnectedDeviceDefinition = GetDeviceDefinition(defaultInterfaceHandle, DeviceId);
+
+                byte i = 0;
+
+                //Get the first (default) interface
+                var defaultInterface = GetInterface(defaultInterfaceHandle);
+
+                _UsbInterfaces.Add(defaultInterface);
+
+                while (true)
+                {
+                    isSuccess = WinUsbApiCalls.WinUsb_GetAssociatedInterface(defaultInterfaceHandle, i, out var interfacePointer);
+                    if (!isSuccess)
+                    {
+                        errorCode = Marshal.GetLastWin32Error();
+                        if (errorCode == APICalls.ERROR_NO_MORE_ITEMS) break;
+
+                        throw new Exception($"Could not enumerate interfaces for device {DeviceId}. Error code: { errorCode}");
+                    }
+
+                    var associatedInterface = GetInterface(interfacePointer);
+
+                    _UsbInterfaces.Add(associatedInterface);
+
+                    i++;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger?.Log($"{nameof(Initialize)} error. DeviceId {DeviceId}", nameof(WindowsUsbDevice), ex, LogLevel.Error);
+                throw;
             }
         }
         #endregion

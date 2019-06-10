@@ -24,7 +24,7 @@ namespace Hid.Net.Windows
             }
             catch (Exception ex)
             {
-                Logger.Log($"{nameof(GetDeviceDefinition)} error. Device Id: {deviceId}", nameof(WindowsHidDeviceFactory), ex, LogLevel.Error);
+                Logger?.Log($"{nameof(GetDeviceDefinition)} error. Device Id: {deviceId}", nameof(WindowsHidDeviceFactory), ex, LogLevel.Error);
                 return null;
             }
         }
