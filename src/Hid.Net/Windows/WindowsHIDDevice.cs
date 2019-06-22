@@ -17,6 +17,9 @@ namespace Hid.Net.Windows
         private SafeFileHandle _WriteSafeFileHandle;
         private bool _IsClosing;
         private bool disposed = false;
+        private readonly ushort? _WriteBufferSize;
+        private readonly ushort? _ReadBufferSize;
+
         #endregion
 
         #region Private Properties
@@ -29,8 +32,8 @@ namespace Hid.Net.Windows
 
         #region Public Overrides
         public override bool IsInitialized => _WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid;
-        public override ushort WriteBufferSize => ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value;
-        public override ushort ReadBufferSize => ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value;
+        public override ushort WriteBufferSize => _WriteBufferSize ?? (ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value);
+        public override ushort ReadBufferSize => _ReadBufferSize ?? (ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value);
         #endregion
 
         #region Public Properties
@@ -38,8 +41,14 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidDevice(string deviceId) : base(deviceId)
+        public WindowsHidDevice(string deviceId) : this(deviceId, null, null)
         {
+        }
+
+        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize) : base(deviceId)
+        {
+            _WriteBufferSize = writeBufferSize;
+            _ReadBufferSize = readBufferSize;
         }
         #endregion
 
