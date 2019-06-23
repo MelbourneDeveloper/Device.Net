@@ -42,7 +42,7 @@ namespace Device.Net.UnitTests
                 }
             }
 
-            throw new Exception("Couldn't get a device");
+            return null;
         }
     }
 }

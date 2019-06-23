@@ -41,9 +41,9 @@ namespace Device.Net.UnitTests
             {
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                 {
-                    DeviceManager.Current.GetDevice(connectedDeviceDefinition);
+                    var device = DeviceManager.Current.GetDevice(connectedDeviceDefinition);
 
-                    if (connectedDeviceDefinition.DeviceType == DeviceType.Hid)
+                    if (device != null && connectedDeviceDefinition.DeviceType == DeviceType.Hid)
                     {
                         Assert.IsTrue(logger.LogText.Contains(string.Format(MockHidFactory.FoundMessage, connectedDeviceDefinition.DeviceId)));
                     }
