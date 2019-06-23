@@ -118,8 +118,6 @@ namespace Usb.Net.UWP
                 Logger?.Log(message, GetType().Name, null, LogLevel.Error);
                 throw new IOException(message);
             }
-
-            Tracer?.Trace(true, data);
         }
         #endregion
     }
