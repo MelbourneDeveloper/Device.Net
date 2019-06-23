@@ -30,7 +30,7 @@ namespace Usb.Net.UWP
         {
         }
 
-        public UWPUsbDevice(ConnectedDeviceDefinition deviceDefinition, ILogger logger, ITracer tracer) : base(deviceDefinition.DeviceId)
+        public UWPUsbDevice(ConnectedDeviceDefinition deviceDefinition, ILogger logger, ITracer tracer) : base(deviceDefinition.DeviceId, logger, tracer)
         {
             ConnectedDeviceDefinition = deviceDefinition;
         }

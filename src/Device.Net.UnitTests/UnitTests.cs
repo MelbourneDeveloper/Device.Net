@@ -40,14 +40,12 @@ namespace Device.Net.UnitTests
         [TestMethod]
         [DataRow(true, true, MockHidDevice.VendorId, MockHidDevice.ProductId)]
         [DataRow(true, false, MockHidDevice.VendorId, MockHidDevice.ProductId)]
-        //[DataRow(true, true, MockUsbDevice.VendorId, MockUsbDevice.ProductId)]
-        //[DataRow(false, true, MockUsbDevice.VendorId, MockUsbDevice.ProductId)]
         public async Task TestWriteAndReadThreadSafety(bool isHidConnected, bool isUsbConnected, uint vid, uint pid)
         {
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
             var connectedDeviceDefinition = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
-            var mockHidDevice = new MockHidDevice() { DeviceId = connectedDeviceDefinition.DeviceId };
+            var mockHidDevice = new MockHidDevice(new DebugLogger(), new DebugTracer()) { DeviceId = connectedDeviceDefinition.DeviceId };
 
             var writeAndReadTasks = new List<Task<byte[]>>();
 

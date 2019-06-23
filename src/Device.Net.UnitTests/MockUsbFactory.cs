@@ -4,9 +4,8 @@ namespace Device.Net.UnitTests
 {
     public class MockUsbFactory : MockFactoryBase, IDeviceFactory
     {
-        public MockUsbFactory()
+        public MockUsbFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
         {
-            Logger = new DebugLogger { LogToConsole = true };
         }
 
         public override string DeviceId => MockUsbDevice.MockedDeviceId;
@@ -21,9 +20,9 @@ namespace Device.Net.UnitTests
 
         public override uint VendorId => MockUsbDevice.VendorId;
 
-        public static void Register(ILogger logger)
+        public static void Register(ILogger logger, ITracer tracer)
         {
-            DeviceManager.Current.DeviceFactories.Add(new MockUsbFactory() { Logger = logger });
+            DeviceManager.Current.DeviceFactories.Add(new MockUsbFactory(logger, tracer));
         }
 
         public override IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
@@ -32,7 +31,7 @@ namespace Device.Net.UnitTests
             {
                 if (deviceDefinition.DeviceId == DeviceId)
                 {
-                    if (!deviceDefinition.DeviceType.HasValue || deviceDefinition.DeviceType == DeviceType.Usb) return new MockUsbDevice() ;
+                    if (!deviceDefinition.DeviceType.HasValue || deviceDefinition.DeviceType == DeviceType.Usb) return new MockUsbDevice(Logger, Tracer);
                 }
             }
 

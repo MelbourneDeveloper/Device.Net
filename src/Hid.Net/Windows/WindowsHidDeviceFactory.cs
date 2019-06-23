@@ -77,14 +77,20 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Static Methods
+        /// <summary>
+        /// Register the factory for enumerating Hid devices on UWP. Warning: no tracing or logging will be used. Please user the other constructor overload for logging and tracing
+        /// </summary>
         public static void Register()
         {
-            Register(null);
+            Register(null, null);
         }
 
-        public static void Register(ILogger logger)
+        /// <summary>
+        /// Register the factory for enumerating Hid devices on UWP. 
+        /// </summary>
+        public static void Register(ILogger logger, ITracer tracer)
         {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory() { Logger = logger });
+            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory(logger, tracer));
         }
         #endregion
     }

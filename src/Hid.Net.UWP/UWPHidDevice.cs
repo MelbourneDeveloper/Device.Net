@@ -1,4 +1,5 @@
-﻿using Device.Net.UWP;
+﻿using Device.Net;
+using Device.Net.UWP;
 using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
@@ -34,11 +35,11 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPHidDevice()
+        public UWPHidDevice(ILogger logger, ITracer tracer) : this(null, logger, tracer)
         {
         }
 
-        public UWPHidDevice(string deviceId) : base(deviceId)
+        public UWPHidDevice(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
         {
         }
         #endregion

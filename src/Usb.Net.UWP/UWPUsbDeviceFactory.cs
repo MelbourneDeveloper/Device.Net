@@ -22,6 +22,12 @@ namespace Usb.Net.UWP
         }
         #endregion
 
+        #region Constructur
+        public UWPUsbDeviceFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
+        {
+        }
+        #endregion
+
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
@@ -32,22 +38,22 @@ namespace Usb.Net.UWP
         #region Public Static Methods
         public static void Register()
         {
-            Register(null);
+            Register(null, null);
         }
 
-        public static void Register(ILogger logger)
+        public static void Register(ILogger logger, ITracer tracer)
         {
             foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)
             {
                 if (deviceFactory is UWPUsbDeviceFactory) return;
             }
 
-            DeviceManager.Current.DeviceFactories.Add(new UWPUsbDeviceFactory() { Logger = logger });
+            DeviceManager.Current.DeviceFactories.Add(new UWPUsbDeviceFactory(logger, tracer));
         }
         #endregion
 
         #region Public Overrides
-        public override Task<ConnectionInfo> TestConnection(string Id) => Task.FromResult(new ConnectionInfo {CanConnect=true });
+        public override Task<ConnectionInfo> TestConnection(string Id) => Task.FromResult(new ConnectionInfo { CanConnect = true });
         #endregion
     }
 }

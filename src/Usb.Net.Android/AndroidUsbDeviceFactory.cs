@@ -16,7 +16,7 @@ namespace Device.Net
         #region Public Properties
         public UsbManager UsbManager { get; }
         public Context Context { get; }
-        public ILogger Logger { get;  }
+        public ILogger Logger { get; }
         public ITracer Tracer { get; }
         #endregion
 
@@ -57,7 +57,7 @@ namespace Device.Net
                 throw new Exception($"The device Id '{deviceDefinition.DeviceId}' is not a valid integer");
             }
 
-            return new AndroidUsbDevice(UsbManager, Context, deviceId, Logger, Tra) { Logger = Logger };
+            return new AndroidUsbDevice(UsbManager, Context, deviceId, Logger, Tracer);
         }
         #endregion
 

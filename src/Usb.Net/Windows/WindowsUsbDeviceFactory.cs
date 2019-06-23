@@ -18,10 +18,16 @@ namespace Usb.Net.Windows
         protected override Guid GetClassGuid() => WindowsDeviceConstants.WinUSBGuid;
         #endregion
 
+        #region Constructor
+        public WindowsUsbDeviceFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
+        {
+        }
+        #endregion
+
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsUsbDevice(deviceDefinition.DeviceId) { Logger = Logger };
+            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsUsbDevice(deviceDefinition.DeviceId, Logger, Tracer);
         }
         #endregion
 
@@ -33,14 +39,20 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Static Methods
+        /// <summary>
+        /// Register the factory for enumerating USB devices on UWP. Warning: no tracing or logging will be used. Please user the other constructor overload for logging and tracing
+        /// </summary>
         public static void Register()
         {
-            Register(null);
+            Register(null, null);
         }
 
-        public static void Register(ILogger logger)
+        /// <summary>
+        /// Register the factory for enumerating USB devices on UWP.
+        /// </summary>
+        public static void Register(ILogger logger, ITracer tracer)
         {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory() { Logger = logger });
+            DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory(logger, tracer));
         }
         #endregion
     }

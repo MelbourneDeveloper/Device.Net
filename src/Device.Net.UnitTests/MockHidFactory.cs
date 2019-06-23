@@ -4,9 +4,8 @@ namespace Device.Net.UnitTests
 {
     public class MockHidFactory : MockFactoryBase, IDeviceFactory
     {
-        public MockHidFactory()
+        public MockHidFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
         {
-            Logger = new DebugLogger { LogToConsole = true };
         }
 
         public override string DeviceId => MockHidDevice.MockedDeviceId;
@@ -21,9 +20,9 @@ namespace Device.Net.UnitTests
 
         public override uint VendorId => MockHidDevice.VendorId;
 
-        public static void Register(ILogger logger)
+        public static void Register(ILogger logger, ITracer trace)
         {
-            DeviceManager.Current.DeviceFactories.Add(new MockHidFactory() { Logger = logger });
+            DeviceManager.Current.DeviceFactories.Add(new MockHidFactory(logger, trace));
         }
 
         public override IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
@@ -32,7 +31,7 @@ namespace Device.Net.UnitTests
             {
                 if (deviceDefinition.DeviceId == DeviceId)
                 {
-                    if (!deviceDefinition.DeviceType.HasValue || deviceDefinition.DeviceType == DeviceType.Hid) return new MockHidDevice();
+                    if (!deviceDefinition.DeviceType.HasValue || deviceDefinition.DeviceType == DeviceType.Hid) return new MockHidDevice(Logger, Tracer);
                 }
             }
 

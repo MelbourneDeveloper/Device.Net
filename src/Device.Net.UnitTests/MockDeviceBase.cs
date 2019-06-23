@@ -11,6 +11,11 @@ namespace Device.Net.UnitTests
 
         public override bool IsInitialized => _IsInitialized;
 
+        protected MockDeviceBase(ILogger logger, ITracer tracer) : base(logger, tracer)
+        {
+
+        }
+
         public void Close()
         {
         }

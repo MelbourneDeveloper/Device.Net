@@ -35,6 +35,14 @@ namespace Device.Net.UWP
         protected abstract string GetAqsFilter(uint? vendorId, uint? productId);
         #endregion
 
+        #region Constructor
+        protected UWPDeviceFactoryBase(ILogger logger, ITracer tracer)
+        {
+            Logger = logger;
+            Tracer = tracer;
+        }
+        #endregion
+
         #region Abstraction Methods
         protected string GetVendorPart(uint? vendorId)
         {
