@@ -9,7 +9,7 @@
         public MockUsbDevice(ILogger logger, ITracer tracer) : base(logger, tracer)
         {
             DeviceId = MockedDeviceId;
-            ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId) { ProductId = ProductId, VendorId = VendorId };
+            ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId) { ProductId = ProductId, VendorId = VendorId, DeviceType = DeviceType.Usb };
         }
     }
 }
