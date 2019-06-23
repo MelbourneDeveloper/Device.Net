@@ -16,7 +16,8 @@
     <PackageTags>Hid USB Android UWP Windows C# MacOS Linux</PackageTags>
     <NoWarn>NU5125</NoWarn>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>CodeRules.ruleset</CodeAnalysisRuleSet>      
+    <CodeAnalysisRuleSet>CodeRules.ruleset</CodeAnalysisRuleSet>
+    <PackageReleaseNotes>See: https://github.com/MelbourneDeveloper/Device.Net/projects/6</PackageReleaseNotes>      
   </PropertyGroup>
 
   <Choose>

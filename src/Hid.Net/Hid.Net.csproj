@@ -19,7 +19,7 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
     <Authors>Christian Findlay</Authors>
     <Company>Christian Findlay</Company>
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>Logging, allow buffer specification. More details: https://github.com/MelbourneDeveloper/Device.Net/projects/6</PackageReleaseNotes>
     <PackageId>Hid.Net</PackageId>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>      
