@@ -60,7 +60,7 @@ namespace Hid.Net.Windows
         public static HidAttributes GetHidAttributes(SafeFileHandle safeFileHandle)
         {
             var isSuccess = HidD_GetAttributes(safeFileHandle, out var hidAttributes);
-            WindowsDeviceBase.HandleError(isSuccess, "Could not get Hid Attributes");
+            WindowsDeviceBase.HandleError(isSuccess, $"Could not get Hid Attributes (Call {nameof(HidD_GetAttributes)})");
             return hidAttributes;
         }
 

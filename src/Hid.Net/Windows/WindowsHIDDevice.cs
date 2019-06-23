@@ -17,6 +17,9 @@ namespace Hid.Net.Windows
         private SafeFileHandle _WriteSafeFileHandle;
         private bool _IsClosing;
         private bool disposed = false;
+        private readonly ushort? _WriteBufferSize;
+        private readonly ushort? _ReadBufferSize;
+
         #endregion
 
         #region Private Properties
@@ -29,8 +32,8 @@ namespace Hid.Net.Windows
 
         #region Public Overrides
         public override bool IsInitialized => _WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid;
-        public override ushort WriteBufferSize => ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value;
-        public override ushort ReadBufferSize => ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value;
+        public override ushort WriteBufferSize => _WriteBufferSize ?? (ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value);
+        public override ushort ReadBufferSize => _ReadBufferSize ?? (ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value);
         #endregion
 
         #region Public Properties
@@ -38,38 +41,65 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidDevice(string deviceId) : base(deviceId)
+        public WindowsHidDevice(string deviceId) : this(deviceId, null, null)
         {
+        }
+
+        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize) : base(deviceId)
+        {
+            _WriteBufferSize = writeBufferSize;
+            _ReadBufferSize = readBufferSize;
         }
         #endregion
 
         #region Private Methods
         private bool Initialize()
         {
-            Close();
-
-            if (string.IsNullOrEmpty(DeviceId))
+            try
             {
-                throw new WindowsHidException($"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
+                Close();
+
+                if (string.IsNullOrEmpty(DeviceId))
+                {
+                    throw new WindowsHidException($"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
+                }
+
+                _ReadSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+                _WriteSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+
+                if (_ReadSafeFileHandle.IsInvalid)
+                {
+                    throw new Exception("Could not open connection for reading");
+                }
+
+                if (_WriteSafeFileHandle.IsInvalid)
+                {
+                    throw new Exception("Could not open connection for writing");
+                }
+
+                ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
+
+                var readBufferSize = ReadBufferSize;
+                var writeBufferSize = WriteBufferSize;
+
+                if (readBufferSize == 0)
+                {
+                    throw new WindowsHidException($"{nameof(ReadBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an InputReportByteLength of 0. Please specify this argument in the constructor");
+                }
+
+                if (writeBufferSize == 0)
+                {
+                    throw new WindowsHidException($"{nameof(WriteBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an OutputReportByteLength of 0. Please specify this argument in the constructor. Note: Hid devices are always opened in write mode. If you need to open in read mode, please log an issue here: https://github.com/MelbourneDeveloper/Device.Net/issues");
+                }
+
+                _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, readBufferSize, false);
+                _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
             }
-
-            _ReadSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
-            _WriteSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
-
-            if (_ReadSafeFileHandle.IsInvalid)
+            catch (Exception ex)
             {
-                throw new Exception("Could not open connection for reading");
+                Logger?.Log($"{nameof(Initialize)} error.", nameof(WindowsHidDevice), ex, LogLevel.Error);
+                throw;
             }
-
-            if (_WriteSafeFileHandle.IsInvalid)
-            {
-                throw new Exception("Could not open connection for writing");
-            }
-
-            ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
-
-            _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, ReadBufferSize, false);
-            _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, WriteBufferSize, false);
 
             return true;
         }
