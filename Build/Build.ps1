@@ -3,7 +3,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass
 
 #TODO: Unhard code these
 $msbuildToolsPath = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin"
-$version = "2.7.0"
+$version = "2.8.0"
 
 $releaseNotes = "See https://github.com/MelbourneDeveloper/Device.Net/projects/7"
 
