@@ -10,13 +10,15 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class UnitTests
     {
+        private static MockLogger logger = new MockLogger();
+        private static MockTracer tracer = new MockTracer();
+
         #region Tests
         [TestInitialize]
         public void Startup()
         {
-            //TODO: Test logging and tracing
-            MockHidFactory.Register(null, null);
-            MockUsbFactory.Register(null, null);
+            MockHidFactory.Register(logger, tracer);
+            MockUsbFactory.Register(logger, tracer);
         }
 
         [TestMethod]
@@ -34,6 +36,20 @@ namespace Device.Net.UnitTests
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList();
+
+            if (connectedDeviceDefinitions.Count > 0)
+            {
+                foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
+                {
+                    DeviceManager.Current.GetDevice(connectedDeviceDefinition);
+
+                    if (connectedDeviceDefinition.DeviceType == DeviceType.Hid)
+                    {
+                        Assert.IsTrue(logger.LogText.Contains(string.Format(MockHidFactory.FoundMessage, connectedDeviceDefinition.DeviceId)));
+                    }
+                }
+            }
+
             Assert.IsNotNull(connectedDeviceDefinitions);
             Assert.AreEqual(expectedCount, connectedDeviceDefinitions.Count);
         }
@@ -43,12 +59,13 @@ namespace Device.Net.UnitTests
         [DataRow(true, false, MockHidDevice.VendorId, MockHidDevice.ProductId)]
         public async Task TestWriteAndReadThreadSafety(bool isHidConnected, bool isUsbConnected, uint vid, uint pid)
         {
+            var readtraceCount = tracer.ReadCount;
+            var writetraceCount = tracer.WriteCount;
+
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
             var connectedDeviceDefinition = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
 
-            var logger = new DebugLogger();
-            var tracer = new MockTracer();
 
             var mockHidDevice = new MockHidDevice(logger, tracer) { DeviceId = connectedDeviceDefinition.DeviceId };
 
@@ -71,8 +88,10 @@ namespace Device.Net.UnitTests
                 Assert.IsTrue(result[0] == i);
             }
 
-            Assert.AreEqual(count, tracer.ReadCount);
-            Assert.AreEqual(count, tracer.WriteCount);
+            Assert.AreEqual(readtraceCount + count, tracer.ReadCount);
+            Assert.AreEqual(writetraceCount + count, tracer.WriteCount);
+
+            Assert.IsTrue(logger.LogText.Contains("Successfully called "));
         }
 
         [TestMethod]

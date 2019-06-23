@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests
@@ -12,8 +11,8 @@ namespace Device.Net.UnitTests
 
         public abstract DeviceType DeviceType { get; }
 
-        public ILogger Logger { get;  }
-        public ITracer Tracer { get;  }
+        public ILogger Logger { get; }
+        public ITracer Tracer { get; }
 
         protected MockFactoryBase(ILogger logger, ITracer tracer)
         {
@@ -28,7 +27,7 @@ namespace Device.Net.UnitTests
         {
             var result = new List<ConnectedDeviceDefinition>();
 
-            var mockConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId) { ProductId = ProductId, VendorId = VendorId };
+            var mockConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId) { ProductId = ProductId, VendorId = VendorId, DeviceType = deviceDefinition.DeviceType };
 
             if (IsConnected)
             {
