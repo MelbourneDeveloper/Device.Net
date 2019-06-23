@@ -20,6 +20,8 @@ namespace Device.Net.UnitTests
 
         public override uint VendorId => MockUsbDevice.VendorId;
 
+        public const string FoundMessage = "Found device {0}";
+
         public static void Register(ILogger logger, ITracer tracer)
         {
             DeviceManager.Current.DeviceFactories.Add(new MockUsbFactory(logger, tracer));
@@ -31,7 +33,12 @@ namespace Device.Net.UnitTests
             {
                 if (deviceDefinition.DeviceId == DeviceId)
                 {
-                    if (!deviceDefinition.DeviceType.HasValue || deviceDefinition.DeviceType == DeviceType.Usb) return new MockUsbDevice(Logger, Tracer);
+                    if (!deviceDefinition.DeviceType.HasValue || deviceDefinition.DeviceType == DeviceType.Usb)
+                    {
+                        Logger?.Log(string.Format(FoundMessage, DeviceId), nameof(MockUsbFactory), null, LogLevel.Information);
+
+                        return new MockUsbDevice(Logger, Tracer);
+                    }
                 }
             }
 

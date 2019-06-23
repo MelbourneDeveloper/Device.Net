@@ -47,6 +47,11 @@ namespace Device.Net.UnitTests
                     {
                         Assert.IsTrue(logger.LogText.Contains(string.Format(MockHidFactory.FoundMessage, connectedDeviceDefinition.DeviceId)));
                     }
+
+                    if (device != null && connectedDeviceDefinition.DeviceType == DeviceType.Usb)
+                    {
+                        Assert.IsTrue(logger.LogText.Contains(string.Format(MockUsbFactory.FoundMessage, connectedDeviceDefinition.DeviceId)));
+                    }
                 }
             }
 
