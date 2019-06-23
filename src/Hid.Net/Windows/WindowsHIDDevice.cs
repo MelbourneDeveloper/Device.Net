@@ -232,6 +232,7 @@ namespace Hid.Net.Windows
                 try
                 {
                     await _WriteFileStream.WriteAsync(bytes, 0, bytes.Length);
+                    Tracer?.Trace(true, bytes);
                 }
                 catch (Exception ex)
                 {

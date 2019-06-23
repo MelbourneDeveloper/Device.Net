@@ -82,7 +82,6 @@ namespace Device.Net
             try
             {
                 await WriteAsync(writeBuffer);
-                Tracer?.Trace(true, writeBuffer);
                 var retVal = await ReadAsync();
                 Tracer?.Trace(false, retVal);
                 Log(Messages.SuccessMessageWriteAndReadCalled);

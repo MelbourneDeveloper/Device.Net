@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.UWP;
 using System;
+using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Devices.HumanInterfaceDevice;
@@ -112,7 +113,17 @@ namespace Hid.Net.UWP
             try
             {
                 var operation = ConnectedDevice.SendOutputReportAsync(outReport);
-                await operation.AsTask();
+                var count = await operation.AsTask();
+                if (count == bytes.Length)
+                {
+                    Tracer?.Trace(true, bytes);
+                }
+                else
+                {
+                    var message = Messages.GetErrorMessageInvalidWriteLength(bytes.Length, count);
+                    Logger?.Log(message, GetType().Name, null, LogLevel.Error);
+                    throw new IOException(message);
+                }
             }
             catch (ArgumentException ex)
             {
@@ -124,6 +135,8 @@ namespace Hid.Net.UWP
                 throw;
             }
         }
+
+
         #endregion
 
         #region Public Overrides
