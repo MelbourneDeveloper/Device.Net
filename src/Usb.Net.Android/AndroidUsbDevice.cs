@@ -43,7 +43,7 @@ namespace Usb.Net.Android
         #endregion
 
         #region Constructor
-        public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int deviceNumberId)
+        public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int deviceNumberId, ILogger logger, ITracer tracer) : base(logger, tracer)
         {
             UsbManager = usbManager;
             AndroidContext = androidContext;

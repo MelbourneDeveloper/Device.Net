@@ -21,10 +21,18 @@ namespace Device.Net
         #endregion
 
         #region Public Properties
-        public ITracer Tracer { get; set; }
         public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; set; }
         public string DeviceId { get; set; }
-        public ILogger Logger { get; set; }
+        public ILogger Logger { get; }
+        public ITracer Tracer { get; }
+        #endregion
+
+        #region Constructor
+        public DeviceBase(ILogger logger, ITracer tracer)
+        {
+            Tracer = tracer;
+            Logger = logger;
+        }
         #endregion
 
         #region Private Methods
@@ -74,7 +82,9 @@ namespace Device.Net
             try
             {
                 await WriteAsync(writeBuffer);
+                Tracer?.Trace(true, writeBuffer);
                 var retVal = await ReadAsync();
+                Tracer?.Trace(false, retVal);
                 Log($"Successfully called {nameof(WriteAndReadAsync)}");
                 return retVal;
             }
