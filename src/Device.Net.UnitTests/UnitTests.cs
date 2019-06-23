@@ -46,14 +46,19 @@ namespace Device.Net.UnitTests
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
             var connectedDeviceDefinition = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
-            //TODO: Test logging and tracing
-            var mockHidDevice = new MockHidDevice(new DebugLogger(), new DebugTracer()) { DeviceId = connectedDeviceDefinition.DeviceId };
+
+            var logger = new DebugLogger();
+            var tracer = new MockTracer();
+
+            var mockHidDevice = new MockHidDevice(logger, tracer) { DeviceId = connectedDeviceDefinition.DeviceId };
 
             var writeAndReadTasks = new List<Task<byte[]>>();
 
             //TODO: Does this properly test thread safety?
 
-            for (byte i = 0; i < 10; i++)
+            const int count = 10;
+
+            for (byte i = 0; i < count; i++)
             {
                 writeAndReadTasks.Add(mockHidDevice.WriteAndReadAsync(new byte[64] { i, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }));
             }
@@ -65,6 +70,9 @@ namespace Device.Net.UnitTests
                 var result = results[i];
                 Assert.IsTrue(result[0] == i);
             }
+
+            Assert.AreEqual(count, tracer.ReadCount);
+            Assert.AreEqual(count, tracer.WriteCount);
         }
 
         [TestMethod]
