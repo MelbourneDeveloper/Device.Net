@@ -113,7 +113,6 @@ namespace Hid.Net.UWP
             {
                 var operation = ConnectedDevice.SendOutputReportAsync(outReport);
                 await operation.AsTask();
-                Tracer?.Trace(false, bytes);
             }
             catch (ArgumentException ex)
             {

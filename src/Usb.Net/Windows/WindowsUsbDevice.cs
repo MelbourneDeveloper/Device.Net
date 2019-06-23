@@ -108,7 +108,6 @@ namespace Usb.Net.Windows
                 //TODO: Allow for different interfaces and pipes...
                 var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.ReadPipe.WINUSB_PIPE_INFORMATION.PipeId, bytes, ReadBufferSize, out var bytesRead, IntPtr.Zero);
                 HandleError(isSuccess, "Couldn't read data");
-                Tracer?.Trace(false, bytes);
                 return bytes;
             });
         }
@@ -125,7 +124,6 @@ namespace Usb.Net.Windows
                 //TODO: Allow for different interfaces and pipes...
                 var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.WritePipe.WINUSB_PIPE_INFORMATION.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
                 HandleError(isSuccess, "Couldn't write data");
-                Tracer?.Trace(true, data);
             });
         }
 

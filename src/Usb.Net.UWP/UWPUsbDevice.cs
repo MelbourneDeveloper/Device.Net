@@ -106,8 +106,6 @@ namespace Usb.Net.UWP
 
             if (data.Length > WriteBufferSize) throw new Exception("The buffer size is too large");
             await _DefaultOutPipe.OutputStream.WriteAsync(data.AsBuffer());
-
-            Tracer?.Trace(false, data);
         }
         #endregion
     }

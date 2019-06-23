@@ -190,8 +190,6 @@ namespace Hid.Net.Windows
 
             var retVal = ReadBufferHasReportId ? RemoveFirstByte(bytes) : bytes;
 
-            Tracer?.Trace(false, retVal);
-
             return new ReadReport(reportId, retVal);
         }
 
@@ -240,8 +238,6 @@ namespace Hid.Net.Windows
                     Log(Helpers.WriteErrorMessage, ex);
                     throw new IOException(Helpers.WriteErrorMessage, ex);
                 }
-
-                Tracer?.Trace(true, bytes);
             }
             else
             {

@@ -49,7 +49,7 @@ namespace Device.Net.UWP
                 if (Chunks.Count > 0)
                 {
                     var retVal = Chunks[0];
-                    Tracer?.Trace(false, retVal);
+                    Logger?.Log("Received data from device", GetType().Name, null, LogLevel.Information);
                     Chunks.RemoveAt(0);
                     return retVal;
                 }

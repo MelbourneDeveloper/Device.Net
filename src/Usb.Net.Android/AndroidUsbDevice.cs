@@ -114,8 +114,6 @@ namespace Usb.Net.Android
 
                 //Marshal.Copy(byteBuffer.GetDirectBufferAddress(), buffers, 0, ReadBufferLength);
 
-                Tracer?.Trace(false, buffers);
-
                 return buffers;
             }
             catch (Exception ex)
@@ -133,8 +131,6 @@ namespace Usb.Net.Android
                 var request = new UsbRequest();
                 request.Initialize(_UsbDeviceConnection, _WriteEndpoint);
                 var byteBuffer = ByteBuffer.Wrap(data);
-
-                Tracer?.Trace(true, data);
 
 #pragma warning disable CS0618 // Type or member is obsolete
                 request.Queue(byteBuffer, data.Length);
