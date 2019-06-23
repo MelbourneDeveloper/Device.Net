@@ -39,7 +39,6 @@ namespace Device.Net.UWP
         #region Constructor
         protected UWPDeviceBase(ILogger logger, ITracer tracer) : base(logger, tracer)
         {
-
         }
         #endregion
     }

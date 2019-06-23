@@ -22,9 +22,9 @@ namespace Device.Net.UnitTests
 
         public override uint VendorId => MockHidDevice.VendorId;
 
-        public static void Register(ILogger logger, ITracer trace)
+        public static void Register(ILogger logger, ITracer tracer)
         {
-            DeviceManager.Current.DeviceFactories.Add(new MockHidFactory(logger, trace));
+            DeviceManager.Current.DeviceFactories.Add(new MockHidFactory(logger, tracer));
         }
 
         public override IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
