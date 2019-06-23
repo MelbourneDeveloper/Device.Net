@@ -26,11 +26,11 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPUsbDevice() : base()
+        public UWPUsbDevice(ILogger logger, ITracer tracer) : this(null, logger, tracer)
         {
         }
 
-        public UWPUsbDevice(ConnectedDeviceDefinition deviceDefinition) : base(deviceDefinition.DeviceId)
+        public UWPUsbDevice(ConnectedDeviceDefinition deviceDefinition, ILogger logger, ITracer tracer) : base(deviceDefinition.DeviceId)
         {
             ConnectedDeviceDefinition = deviceDefinition;
         }

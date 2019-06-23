@@ -41,11 +41,11 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidDevice(string deviceId) : this(deviceId, null, null)
+        public WindowsHidDevice(string deviceId, ILogger logger, ITracer tracer) : this(deviceId, null, null, logger, tracer)
         {
         }
 
-        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize) : base(deviceId)
+        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
         {
             _WriteBufferSize = writeBufferSize;
             _ReadBufferSize = readBufferSize;

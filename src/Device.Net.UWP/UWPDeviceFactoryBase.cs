@@ -23,7 +23,8 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Properties
-        public ILogger Logger { get; set; }
+        public ILogger Logger { get;  }
+        public ITracer Tracer { get; }
         #endregion
 
         #region Public Abstract Properties

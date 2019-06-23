@@ -28,7 +28,7 @@ namespace Device.Net
         #endregion
 
         #region Constructor
-        public DeviceBase(ILogger logger, ITracer tracer)
+        protected DeviceBase(ILogger logger, ITracer tracer)
         {
             Tracer = tracer;
             Logger = logger;

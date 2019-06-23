@@ -36,10 +36,17 @@ namespace Hid.Net.Windows
 
         #endregion
 
+        #region Constructor
+        public WindowsHidDeviceFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
+        {
+
+        }
+        #endregion
+
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId) { Logger = Logger };
+            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId, Logger, Tracer);
         }
         #endregion
 
