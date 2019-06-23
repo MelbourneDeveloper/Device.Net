@@ -29,12 +29,13 @@ namespace Usb.Net.UWP.Sample
             _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
 
             var logger = new DebugLogger();
+            var tracer = new DebugTracer();
 
             //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPUsbDeviceFactory.Register(logger);
+            UWPUsbDeviceFactory.Register(logger, tracer);
 
             //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPHidDeviceFactory.Register(logger);
+            UWPHidDeviceFactory.Register(logger, tracer);
 
         }
         #endregion
