@@ -48,16 +48,19 @@ namespace Device.Net.UWP
             {
                 if (Chunks.Count > 0)
                 {
-                    var retVal = Chunks[0];
+                    var data2 = Chunks[0];
                     Logger?.Log("Received data from device", GetType().Name, null, LogLevel.Information);
                     Chunks.RemoveAt(0);
-                    return retVal;
+                    Tracer?.Trace(false, data2);
+                    return data2;
                 }
             }
 
             IsReading = true;
             ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
-            return await ReadChunkTaskCompletionSource.Task;
+            var data = await ReadChunkTaskCompletionSource.Task;
+            Tracer?.Trace(false, data);
+            return data;
         }
         #endregion
 

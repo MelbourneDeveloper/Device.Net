@@ -104,17 +104,18 @@ namespace Usb.Net.Android
                 request.Queue(byteBuffer, ReadBufferSize);
 #pragma warning restore CS0618 // Type or member is obsolete
                 await _UsbDeviceConnection.RequestWaitAsync();
-                var buffers = new byte[ReadBufferSize];
+                var data = new byte[ReadBufferSize];
 
                 byteBuffer.Rewind();
                 for (var i = 0; i < ReadBufferSize; i++)
                 {
-                    buffers[i] = (byte)byteBuffer.Get();
+                    data[i] = (byte)byteBuffer.Get();
                 }
 
                 //Marshal.Copy(byteBuffer.GetDirectBufferAddress(), buffers, 0, ReadBufferLength);
 
-                return buffers;
+                Tracer?.Trace(false, data);
+                return data;
             }
             catch (Exception ex)
             {

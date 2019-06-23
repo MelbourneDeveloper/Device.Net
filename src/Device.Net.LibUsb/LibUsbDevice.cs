@@ -101,11 +101,13 @@ namespace Device.Net.LibUsb
             {
                 return await Task.Run(() =>
                 {
-                    var buffer = new byte[ReadPacketSize];
+                    var data = new byte[ReadPacketSize];
 
-                    _UsbEndpointReader.Read(buffer, Timeout, out var bytesRead);
+                    _UsbEndpointReader.Read(data, Timeout, out var bytesRead);
 
-                    return buffer;
+                    Tracer?.Trace(false, data);
+
+                    return data;
                 });
             }
             finally

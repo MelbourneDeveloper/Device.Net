@@ -104,11 +104,12 @@ namespace Usb.Net.Windows
         {
             return await Task.Run(() =>
             {
-                var bytes = new byte[ReadBufferSize];
+                var data = new byte[ReadBufferSize];
                 //TODO: Allow for different interfaces and pipes...
-                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.ReadPipe.WINUSB_PIPE_INFORMATION.PipeId, bytes, ReadBufferSize, out var bytesRead, IntPtr.Zero);
+                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.ReadPipe.WINUSB_PIPE_INFORMATION.PipeId, data, ReadBufferSize, out var bytesRead, IntPtr.Zero);
                 HandleError(isSuccess, "Couldn't read data");
-                return bytes;
+                Tracer?.Trace(false, data);
+                return data;
             });
         }
 

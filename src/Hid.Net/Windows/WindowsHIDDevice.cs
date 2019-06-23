@@ -162,7 +162,9 @@ namespace Hid.Net.Windows
 
         public override async Task<byte[]> ReadAsync()
         {
-            return (await ReadReportAsync()).Data;
+            var data = (await ReadReportAsync()).Data;
+            Tracer?.Trace(false, data);
+            return data;
         }
 
         public async Task<ReadReport> ReadReportAsync()
