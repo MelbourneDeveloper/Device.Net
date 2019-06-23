@@ -36,11 +36,9 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Static Methods
-        public static void Register()
-        {
-            Register(null, null);
-        }
-
+        /// <summary>
+        /// Register the factory for enumerating USB devices on UWP.
+        /// </summary>
         public static void Register(ILogger logger, ITracer tracer)
         {
             foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)

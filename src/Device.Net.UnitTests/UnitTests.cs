@@ -14,8 +14,9 @@ namespace Device.Net.UnitTests
         [TestInitialize]
         public void Startup()
         {
-            MockHidFactory.Register(null);
-            MockUsbFactory.Register(null);
+            //TODO: Test logging and tracing
+            MockHidFactory.Register(null, null);
+            MockUsbFactory.Register(null, null);
         }
 
         [TestMethod]
@@ -45,6 +46,7 @@ namespace Device.Net.UnitTests
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
             var connectedDeviceDefinition = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
+            //TODO: Test logging and tracing
             var mockHidDevice = new MockHidDevice(new DebugLogger(), new DebugTracer()) { DeviceId = connectedDeviceDefinition.DeviceId };
 
             var writeAndReadTasks = new List<Task<byte[]>>();
