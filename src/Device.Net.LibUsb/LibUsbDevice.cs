@@ -38,6 +38,10 @@ namespace Device.Net.LibUsb
         #endregion
 
         #region Constructor
+        public LibUsbDevice(UsbDevice usbDevice, int timeout) : this(usbDevice, timeout, null, null)
+        {
+        }
+
         public LibUsbDevice(UsbDevice usbDevice, int timeout, ILogger logger, ITracer tracer) : base(logger, tracer)
         {
             UsbDevice = usbDevice;

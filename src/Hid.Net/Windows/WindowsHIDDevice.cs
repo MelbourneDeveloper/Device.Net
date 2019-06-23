@@ -41,6 +41,10 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
+        public WindowsHidDevice(string deviceId) : this(deviceId, null, null, null, null)
+        {
+        }
+
         public WindowsHidDevice(string deviceId, ILogger logger, ITracer tracer) : this(deviceId, null, null, logger, tracer)
         {
         }

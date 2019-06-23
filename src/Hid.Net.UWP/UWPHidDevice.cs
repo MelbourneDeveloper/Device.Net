@@ -40,6 +40,10 @@ namespace Hid.Net.UWP
         {
         }
 
+        public UWPHidDevice(string deviceId) : this(deviceId, null, null)
+        {
+        }
+
         public UWPHidDevice(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
         {
         }
