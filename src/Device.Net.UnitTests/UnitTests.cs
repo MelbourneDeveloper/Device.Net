@@ -96,7 +96,7 @@ namespace Device.Net.UnitTests
             Assert.AreEqual(readtraceCount + count, tracer.ReadCount);
             Assert.AreEqual(writetraceCount + count, tracer.WriteCount);
 
-            Assert.IsTrue(logger.LogText.Contains("Successfully called "));
+            Assert.IsTrue(logger.LogText.Contains(Messages.SuccessMessageWriteAndReadCalled));
         }
 
         [TestMethod]
