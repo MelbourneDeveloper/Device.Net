@@ -57,7 +57,6 @@ namespace Hid.Net.Windows
         {
             try
             {
-
                 Close();
 
                 if (string.IsNullOrEmpty(DeviceId))
@@ -79,8 +78,22 @@ namespace Hid.Net.Windows
                 }
 
                 ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
-                _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, ReadBufferSize, false);
-                _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, WriteBufferSize, false);
+
+                var readBufferSize = ReadBufferSize;
+                var writeBufferSize = WriteBufferSize;
+
+                if (readBufferSize == 0)
+                {
+                    throw new WindowsHidException($"{nameof(ReadBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an InputReportByteLength of 0. Please specify this argument in the constructor");
+                }
+
+                if (writeBufferSize == 0)
+                {
+                    throw new WindowsHidException($"{nameof(WriteBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an OutputReportByteLength of 0. Please specify this argument in the constructor. Note: Hid devices are always opened in write mode. If you need to open in read mode, please log an issue here: https://github.com/MelbourneDeveloper/Device.Net/issues");
+                }
+
+                _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, readBufferSize, false);
+                _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
             }
             catch (Exception ex)
             {
