@@ -17,17 +17,25 @@ namespace Usb.Net.Windows
         private UsbInterface _DefaultUsbInterface => _UsbInterfaces.FirstOrDefault();
         private bool disposed;
         private bool _IsClosing;
+        private readonly ushort? _WriteBufferSize;
+        private readonly ushort? _ReadBufferSize;
         #endregion
 
         #region Public Overrride Properties
-        public override ushort WriteBufferSize => IsInitialized ? (ushort)ConnectedDeviceDefinition.WriteBufferSize : (ushort)0;
-        public override ushort ReadBufferSize => IsInitialized ? (ushort)ConnectedDeviceDefinition.ReadBufferSize : (ushort)0;
+        public override ushort WriteBufferSize => _WriteBufferSize ?? (IsInitialized ? (ushort)ConnectedDeviceDefinition.WriteBufferSize : (ushort)0);
+        public override ushort ReadBufferSize => _ReadBufferSize ?? (IsInitialized ? (ushort)ConnectedDeviceDefinition.ReadBufferSize : (ushort)0);
         public override bool IsInitialized => _DeviceHandle != null && !_DeviceHandle.IsInvalid;
         #endregion
 
         #region Constructor
-        public WindowsUsbDevice(string deviceId) : base(deviceId)
+        public WindowsUsbDevice(string deviceId) : this(deviceId, null, null)
         {
+        }
+
+        public WindowsUsbDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize) : base(deviceId)
+        {
+            _WriteBufferSize = writeBufferSize;
+            _ReadBufferSize = readBufferSize;
         }
         #endregion
 
