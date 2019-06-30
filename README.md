@@ -32,39 +32,37 @@ Please visit the [documentation page](https://github.com/MelbourneDeveloper/Devi
 
 Example Code:
 ```cs
-    private static async Task InitializeTrezor()
+public async Task InitializeTrezorAsync()
+{
+    //Register the factories for creating Usb devices. This only needs to be done once.
+    WindowsUsbDeviceFactory.Register(Logger, Tracer);
+    WindowsHidDeviceFactory.Register(Logger, Tracer);
+
+    //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
+    var deviceDefinitions = new List<FilterDeviceDefinition>
     {
-        //Register the factory for creating Usb devices. This only needs to be done once.
-        UWPUsbDeviceFactory.Register();
+        new FilterDeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x" },
+        new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, Label="Trezor One Firmware 1.7.x" },
+        new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C0, Label="Model T" }
+    };
 
-        //Register the factory for creating Usb devices. This only needs to be done once.
-        UWPHidDeviceFactory.Register();
+    //Get the first available device and connect to it
+    var devices = await DeviceManager.Current.GetDevicesAsync(deviceDefinitions);
+    var trezorDevice = devices.FirstOrDefault();
+    await trezorDevice.InitializeAsync();
 
-        //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
-        var deviceDefinitions = new List<FilterDeviceDefinition>
-        {
-            new FilterDeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x" },
-            new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, Label="Trezor One Firmware 1.7.x" },
-            new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C0, Label="Model T" }
-        };
+    //Create a buffer with 3 bytes (initialize)
+    var buffer = new byte[64];
+    buffer[0] = 0x3f;
+    buffer[1] = 0x23;
+    buffer[2] = 0x23;
 
-        //Get the first available device and connect to it
-        var devices = await DeviceManager.Current.GetDevices(deviceDefinitions);
-        var trezorDevice = devices.FirstOrDefault();
-        await trezorDevice.InitializeAsync();
+    //Write the data to the device
+    await trezorDevice.WriteAsync(buffer);
 
-        //Create a buffer with 3 bytes (initialize)
-        var buffer = new byte[64];
-        buffer[0] = 0x3f;
-        buffer[1] = 0x23;
-        buffer[2] = 0x23;
-
-        //Write the data to the device
-        await trezorDevice.WriteAsync(buffer);
-
-        //Read the response
-        var readBuffer = await trezorDevice.ReadAsync();
-    }
+    //Read the response
+    var readBuffer = await trezorDevice.ReadAsync();
+}
 ```
 ## Donate
 
