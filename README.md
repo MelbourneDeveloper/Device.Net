@@ -64,6 +64,17 @@ public async Task InitializeTrezorAsync()
     var readBuffer = await trezorDevice.ReadAsync();
 }
 ```
+
+## Donate
+
+All my libraries are open source and free. Your donations will contribute to making sure that these libraries keep up with the latest firmware, functions are implemented, and the quality is maintained.
+
+| Coin           | Address |
+| -------------  |:-------------:|
+| Bitcoin        | [33LrG1p81kdzNUHoCnsYGj6EHRprTKWu3U](https://www.blockchain.com/btc/address/33LrG1p81kdzNUHoCnsYGj6EHRprTKWu3U) |
+| Ethereum       | [0x7ba0ea9975ac0efb5319886a287dcf5eecd3038e](https://etherdonation.com/d?to=0x7ba0ea9975ac0efb5319886a287dcf5eecd3038e) |
+| Litecoin       | MVAbLaNPq7meGXvZMU4TwypUsDEuU6stpY |
+
 ## Donate
 
 All these libraries are open source and free. I am not endorsed, or funded by any of the manufacturers of the devices I develop for. Your donations will contribute to making sure that these libraries keep up with the latest firmware, functions are implemented, and the quality is maintained.
