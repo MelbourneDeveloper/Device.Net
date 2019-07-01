@@ -117,11 +117,6 @@ namespace Usb.Net.Windows
         {
             await Task.Run(() =>
             {
-                if (data.Length > WriteBufferSize)
-                {
-                    throw new Exception($"Data is longer than {WriteBufferSize} bytes which is the device's max buffer size.");
-                }
-
                 //TODO: Allow for different interfaces and pipes...
                 var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.WritePipe.WINUSB_PIPE_INFORMATION.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
                 HandleError(isSuccess, "Couldn't write data");
