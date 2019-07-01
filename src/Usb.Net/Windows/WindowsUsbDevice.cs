@@ -117,7 +117,7 @@ namespace Usb.Net.Windows
         {
             if (buff.Length - offset < len)
             {
-                HandleError(false, "Index out of bounds");
+                throw new Exception("Index out of bounds");
             }
 
             int totalRead = 0;
@@ -166,7 +166,7 @@ namespace Usb.Net.Windows
             // Some checking.
             if (data.Length - offset < len)
             {
-                HandleError(false, "Index out of bounds");
+                throw new Exception("Index out of bounds");
             }
 
             // Determining buffer size.
