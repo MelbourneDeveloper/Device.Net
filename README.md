@@ -4,9 +4,9 @@
 
 **Cross platform C# library for talking to connected devices such as Usb, and Hid devices.**
 
-This library provides a common Task based Async interface across platforms and device types. This allows for dependency injection so that different types of devices can be used on any platform with the same code. The supported device types are Hid, and USB. Other device types such as Bluetooth and so on may be added in future. Hid.Net is specifically for Hid devices that may be Usb devices. Usb.Net is specifically for Usb devices that don't have a Hid interface.
+**[Linux and MacOS support](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support) is here! Check out the [MacOS sample](https://github.com/MelbourneDeveloper/Device.Net/tree/master/src/Device.Net.MacOSLibUsbSample) and the [Terminal/Console Linux/MacOS Sample](https://github.com/MelbourneDeveloper/Device.Net/tree/develop/src/Device.Net.LibUsbSample). Grab the NuGet for [Device.Net.LibUsb](https://www.nuget.org/packages/Device.Net.LibUsb/).**
 
-Please visit the [documentation page](https://github.com/MelbourneDeveloper/Device.Net/wiki).
+This library provides a common Task based Async interface across platforms and device types. This allows for dependency injection so that different types of devices can be used on any platform with the same code. The supported device types are Hid, and USB. Other device types such as Bluetooth and so on may be added in future. Hid.Net is specifically for Hid devices that may be Usb devices. Usb.Net is specifically for Usb devices that don't have a Hid interface. Please visit the [documentation page](https://github.com/MelbourneDeveloper/Device.Net/wiki). Would you you like to [contribute?](https://christianfindlay.com/2019/04/28/calling-all-c-crypto-developers/)
 
 ### Currently supports:
 
@@ -16,65 +16,56 @@ Please visit the [documentation page](https://github.com/MelbourneDeveloper/Devi
 | .NET Core      | Hid, USB  |
 | Android | USB |
 | UWP | Hid, USB   |
-| Linux* | USB (Via LibUsbDotNet)  |
-
-*See [Linux and MacOS Support](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support)
+| Linux, MacOS* | [USB (Via LibUsbDotNet)](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support)  |
 
 ## [Quick Start](https://github.com/MelbourneDeveloper/Device.Net/wiki/Quick-Start)
 
 Example Code:
 ```cs
-        private static async Task InitializeTrezor()
-        {
-            //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPUsbDeviceFactory.Register();
+public async Task InitializeTrezorAsync()
+{
+    //Register the factories for creating Usb devices. This only needs to be done once.
+    WindowsUsbDeviceFactory.Register(Logger, Tracer);
+    WindowsHidDeviceFactory.Register(Logger, Tracer);
 
-            //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPHidDeviceFactory.Register();
+    //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
+    var deviceDefinitions = new List<FilterDeviceDefinition>
+    {
+        new FilterDeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x" },
+        new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, Label="Trezor One Firmware 1.7.x" },
+        new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C0, Label="Model T" }
+    };
 
-            //Note: other custom device types could be added here
+    //Get the first available device and connect to it
+    var devices = await DeviceManager.Current.GetDevicesAsync(deviceDefinitions);
+    var trezorDevice = devices.FirstOrDefault();
+    await trezorDevice.InitializeAsync();
 
-            //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
-            var deviceDefinitions = new List<DeviceDefinition>
-            {
-                new DeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x" },
-                new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, ReadBufferSize=64, WriteBufferSize=64, Label="Trezor One Firmware 1.7.x" },
-                new DeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C0, ReadBufferSize=64, WriteBufferSize=64, Label="Model T" }
-            };
+    //Create a buffer with 3 bytes (initialize)
+    var buffer = new byte[64];
+    buffer[0] = 0x3f;
+    buffer[1] = 0x23;
+    buffer[2] = 0x23;
 
-            //Get the first available device and connect to it
-            var devices = await DeviceManager.Current.GetDevices(deviceDefinitions);
-            var trezorDevice = devices.FirstOrDefault();
-            await trezorDevice.InitializeAsync();
+    //Write the data to the device
+    await trezorDevice.WriteAsync(buffer);
 
-            //Create a buffer with 3 bytes (initialize)
-            var buffer = new byte[64];
-            buffer[0] = 0x3f;
-            buffer[1] = 0x23;
-            buffer[2] = 0x23;
-
-            //Write the data to the device
-            await trezorDevice.WriteAsync(buffer);
-
-            //Read the response
-            var readBuffer = await trezorDevice.ReadAsync();
-        }
+    //Read the response
+    var readBuffer = await trezorDevice.ReadAsync();
+}
 ```
+
 ## Donate
 
-All these libraries are open source and free. I am not endorsed, or funded by any of the manufacturers of the devices I develop for. Your donations will contribute to making sure that these libraries keep up with the latest firmware, functions are implemented, and the quality is maintained.
+All my libraries are open source and free. Your donations will contribute to making sure that these libraries keep up with the latest firmware, functions are implemented, and the quality is maintained.
 
-Bitcoin: 33LrG1p81kdzNUHoCnsYGj6EHRprTKWu3U
-
-Ethereum: 0x7ba0ea9975ac0efb5319886a287dcf5eecd3038e
-
-Litecoin: MVAbLaNPq7meGXvZMU4TwypUsDEuU6stpY
+| Coin           | Address |
+| -------------  |:-------------:|
+| Bitcoin        | [33LrG1p81kdzNUHoCnsYGj6EHRprTKWu3U](https://www.blockchain.com/btc/address/33LrG1p81kdzNUHoCnsYGj6EHRprTKWu3U) |
+| Ethereum       | [0x7ba0ea9975ac0efb5319886a287dcf5eecd3038e](https://etherdonation.com/d?to=0x7ba0ea9975ac0efb5319886a287dcf5eecd3038e) |
+| Litecoin       | MVAbLaNPq7meGXvZMU4TwypUsDEuU6stpY |
 
 ## [Samples & Unit Tests](https://github.com/MelbourneDeveloper/Device.Net/wiki/Samples-and-Unit-Tests)
-
-## Store App Production Usage
-
-**Hardfolio** - Cryptocurrency portfolio app for hardwarewallets. Hid.Net started its life as a project inside the Hardfolio app codebase. The original aim of this app was to support multiple hardwarewallets across multiple platforms. It turned out that Hid.Net and Usb.Net were warranted as libraries in their own right because there really is not other library on the internet that supports all the platforms that were needed for Hardfolio.
 
 [Google Play](https://play.google.com/store/apps/details?id=com.Hardfolio)
 
@@ -84,19 +75,19 @@ Litecoin: MVAbLaNPq7meGXvZMU4TwypUsDEuU6stpY
 
 ## Contact
 
-Join us on [Slack](https://hardwarewallets.slack.com)
+- Join us on [Slack](https://join.slack.com/t/hardwarewallets/shared_invite/enQtNjA5MDgxMzE2Nzg2LWUyODIzY2U0ODE5OTFlMmI3MGYzY2VkZGJjNTc0OTUwNDliMTg2MzRiNTU1MTVjZjI0YWVhNjQzNjUwMjEyNzQ)
 
-Follow me on [Twitter](https://twitter.com/HardfolioApp)
+- Follow, or message me on [Twitter](https://twitter.com/CFDevelop)
 
-Read my [blog](https://christianfindlay.wordpress.com)
+- Follow my app Hardfolio on [Twitter](https://twitter.com/HardfolioApp)
+
+- Read my [blog](https://christianfindlay.wordpress.com)
 
 ## [Contribution](https://github.com/MelbourneDeveloper/Device.Net/blob/master/CONTRIBUTING.md)
 
-I welcome feedback, and pull requests. If there's something that you need to change in the library, please log an issue, and explain the problem. If you have a proposed solution, please write it up and explain why you think it is the answer to the problem. The best way to highlight a bug is to submit a pull request with a unit test that fails so I can clearly see what the problem is in the first place.
+## Store App Production Usage
 
-### Pull Requests
-
-Please break pull requests up in to their smallest possible parts. If you have a small feature of refactor that other code depends on, try submitting that first. Please try to reference an issue so that I understand the context of the pull request. If there is no issue, I don't know what the code is about. If you need help, please jump on Slack here: https://hardwarewallets.slack.com
+**Hardfolio** - Cryptocurrency portfolio app for hardwarewallets. Hid.Net started its life as a project inside the Hardfolio app codebase. The original aim of this app was to support multiple hardwarewallets across multiple platforms. It turned out that Hid.Net and Usb.Net were warranted as libraries in their own right because there really is not other library on the internet that supports all the platforms that were needed for Hardfolio.
 
 ### See Also
 

@@ -1,27 +1,48 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Device.Net/blob/master/LICENSE</PackageLicenseUrl>
-    <AssemblyVersion>2.3.0.0</AssemblyVersion>
-    <FileVersion>2.3.0.0</FileVersion>
-    <Version>2.3.0</Version>
+    <AssemblyVersion>2.9.0.0</AssemblyVersion>
+    <FileVersion>2.9.0.0</FileVersion>
+    <Version>2.9.0</Version>
     <Authors>Christian Findlay</Authors>
     <Description>Cross platform C# library for talking to connected devices in a uniform way through dependency injection.</Description>
-    <Copyright>Copyright (c) 2018 Christian Findlay</Copyright>
+    <Copyright>Copyright (c) 2019 Christian Findlay</Copyright>
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
-    <PackageTags>Hid USB Android UWP Windows C#</PackageTags>
+    <PackageTags>Hid USB Android UWP Windows C# MacOS Linux</PackageTags>
+    <NoWarn>NU5125</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisRuleSet>CodeRules.ruleset</CodeAnalysisRuleSet>   
   </PropertyGroup>
+
+  <Choose>
+    <When Condition=" '$(Configuration)'=='Debug' ">
+      <PropertyGroup>
+        <SignAssembly>false</SignAssembly>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(Configuration)'=='Release' ">
+      <PropertyGroup>
+        <SignAssembly>true</SignAssembly>
+        <DelaySign>false</DelaySign>
+        <AssemblyOriginatorKeyFile>Device.Net.pfx</AssemblyOriginatorKeyFile>
+      </PropertyGroup>
+    </When>
+  </Choose>
 
   <ItemGroup>
     <None Include="..\..\README.md" Link="README.md" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

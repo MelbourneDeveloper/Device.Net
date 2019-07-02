@@ -1,9 +1,15 @@
-﻿using Hid.Net.Windows;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Usb.Net.Sample;
+using Device.Net;
+
+#if (!LIBUSB)
 using Usb.Net.Windows;
+using Hid.Net.Windows;
+#else
+using Device.Net.LibUsb;
+#endif
 
 namespace Usb.Net.WindowsSample
 {
@@ -11,26 +17,32 @@ namespace Usb.Net.WindowsSample
     {
         #region Fields
         private static TrezorExample _DeviceConnectionExample = new TrezorExample();
+        private static DebugLogger Logger = new DebugLogger();
         #endregion
 
         #region Main
         private static void Main(string[] args)
         {
             //Register the factory for creating Usb devices. This only needs to be done once.
-            WindowsUsbDeviceFactory.Register();
-            WindowsHidDeviceFactory.Register();
+#if (LIBUSB)
+            LibUsbUsbDeviceFactory.Register(Logger);
+#else
+            WindowsUsbDeviceFactory.Register(Logger);
+            WindowsHidDeviceFactory.Register(Logger);
+#endif
 
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
 
-
-            Go(Menu());
+            Go();
 
             new ManualResetEvent(false).WaitOne();
         }
 
-        private static async Task Go(int menuOption)
+        private static async Task Go()
         {
+            var menuOption = await Menu();
+
             switch (menuOption)
             {
                 case 1:
@@ -39,6 +51,10 @@ namespace Usb.Net.WindowsSample
                         await _DeviceConnectionExample.InitializeTrezorAsync();
                         await DisplayDataAsync();
                         _DeviceConnectionExample.Dispose();
+
+                        GC.Collect();
+
+                        await Task.Delay(10000);
                     }
                     catch (Exception ex)
                     {
@@ -80,11 +96,20 @@ namespace Usb.Net.WindowsSample
         #endregion
 
         #region Private Methods
-        private static int Menu()
+        private async static Task<int> Menu()
         {
             while (true)
             {
                 Console.Clear();
+
+                var devices = await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null);
+                Console.WriteLine("Currently connected devices: ");
+                foreach (var device in devices)
+                {
+                    Console.WriteLine(device.DeviceId);
+                }
+                Console.WriteLine();
+
                 Console.WriteLine("Console sample. This sample demonstrates either writing to the first found connected device, or listening for a device and then writing to it. If you listen for the device, you will be able to connect and disconnect multiple times. This represents how users may actually use the device.");
                 Console.WriteLine();
                 Console.WriteLine("1. Write To Connected Device");

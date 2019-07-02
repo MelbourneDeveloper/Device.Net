@@ -5,6 +5,7 @@ namespace Hid.Net.Windows
     [StructLayout(LayoutKind.Sequential)]
     public struct HidCollectionCapabilities
     {
+#pragma warning disable CA1051 // Do not declare visible instance fields
         public ushort Usage;
         public ushort UsagePage;
         public ushort InputReportByteLength;
@@ -22,5 +23,6 @@ namespace Hid.Net.Windows
         public ushort NumberFeatureButtonCaps;
         public ushort NumberFeatureValueCaps;
         public ushort NumberFeatureDataIndices;
+#pragma warning restore CA1051 // Do not declare visible instance fields
     }
 }

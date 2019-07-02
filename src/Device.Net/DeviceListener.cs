@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -8,20 +9,22 @@ using timer = System.Timers.Timer;
 
 namespace Device.Net
 {
-    public class DeviceListener
+    public sealed class DeviceListener : IDisposable
     {
         #region Fields
+        private bool _IsDisposed;
         private readonly timer _PollTimer;
         private readonly SemaphoreSlim _ListenSemaphoreSlim = new SemaphoreSlim(1, 1);
 
         /// <summary>
         /// This is the list of Devices by their filter definition. Note this is not actually keyed by the connected definition.
         /// </summary>
-        private Dictionary<FilterDeviceDefinition, IDevice> _CreatedDevicesByDefinition { get; } = new Dictionary<FilterDeviceDefinition, IDevice>();
+        private readonly Dictionary<FilterDeviceDefinition, IDevice> _CreatedDevicesByDefinition = new Dictionary<FilterDeviceDefinition, IDevice>();
         #endregion
 
         #region Public Properties
         public List<FilterDeviceDefinition> FilterDeviceDefinitions { get; } = new List<FilterDeviceDefinition>();
+        public ILogger Logger { get; set; }
         #endregion
 
         #region Events
@@ -42,7 +45,6 @@ namespace Device.Net
             {
                 _PollTimer = new timer(pollMilliseconds.Value);
                 _PollTimer.Elapsed += _PollTimer_Elapsed;
-                _PollTimer.Start();
             }
         }
         #endregion
@@ -54,7 +56,30 @@ namespace Device.Net
         }
         #endregion
 
+        #region Private Methods
+        private void Log(string message, Exception ex, [CallerMemberName] string callerMemberName = null)
+        {
+            Logger?.Log(message, $"{ nameof(DeviceListener)} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
+        }
+        #endregion
+
         #region Public Methods
+
+        /// <summary>
+        /// Starts the polling for devices if polling is being used.
+        /// </summary>
+        public void Start()
+        {
+            if (_PollTimer == null)
+            {
+                throw new Exception("Polling is not enabled. Please specify pollMilliseconds in the constructor");
+            }
+
+            if (DeviceManager.Current.DeviceFactories.Count == 0) throw new DeviceFactoriesNotRegisteredException();
+
+            _PollTimer.Start();
+        }
+
         public async Task CheckForDevicesAsync()
         {
             try
@@ -64,7 +89,7 @@ namespace Device.Net
                 var connectedDeviceDefinitions = new List<ConnectedDeviceDefinition>();
                 foreach (var deviceDefinition in FilterDeviceDefinitions)
                 {
-                    connectedDeviceDefinitions.AddRange(await DeviceManager.Current.GetConnectedDeviceDefinitions(deviceDefinition));
+                    connectedDeviceDefinitions.AddRange(await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(deviceDefinition));
                 }
 
                 //Iterate through connected devices
@@ -91,7 +116,7 @@ namespace Device.Net
 
                     if (!device.IsInitialized)
                     {
-                        Logger.Log($"Attempting to initialize with DeviceId of {device.DeviceId}", null, nameof(DeviceListener));
+                        Log($"Attempting to initialize with DeviceId of {device.DeviceId}", null);
 
                         //The device is not initialized so initialize it
                         await device.InitializeAsync();
@@ -99,7 +124,7 @@ namespace Device.Net
                         //Let listeners know a registered device was initialized
                         DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
 
-                        Logger.Log("Device connected", null, nameof(DeviceListener));
+                        Log("Device connected", null);
                     }
 
                 }
@@ -119,12 +144,12 @@ namespace Device.Net
                             //NOTE: let the rest of the app know before disposal so that the app can stop doing whatever it's doing.
                             DeviceDisconnected?.Invoke(this, new DeviceEventArgs(device));
 
-                            //The device is no longer connected so disconnect it
-                            device.Dispose();
+                            //The device is no longer connected so close it
+                            device.Close();
 
                             removeDefs.Add(filteredDeviceDefinitionKey);
 
-                            Logger.Log("Disconnected", null, nameof(DeviceListener));
+                            Log("Disconnected", null);
                         }
                     }
                 }
@@ -134,12 +159,12 @@ namespace Device.Net
                     _CreatedDevicesByDefinition.Remove(removeDef);
                 }
 
-                Logger.Log("did a poll", null, nameof(DeviceListener));
+                Log("Poll complete", null);
 
             }
             catch (Exception ex)
             {
-                Logger.Log("Hid polling error", ex, nameof(DeviceListener));
+                Log("Hid polling error", ex);
 
                 //TODO: What else to do here?
             }
@@ -152,6 +177,35 @@ namespace Device.Net
         public void Stop()
         {
             _PollTimer.Stop();
+        }
+
+        public void Dispose()
+        {
+            if (_IsDisposed) return;
+            _IsDisposed = true;
+
+            Stop();
+
+            foreach (var key in _CreatedDevicesByDefinition.Keys)
+            {
+                _CreatedDevicesByDefinition[key].Dispose();
+            }
+
+            _CreatedDevicesByDefinition.Clear();
+
+            _ListenSemaphoreSlim.Dispose();
+
+            DeviceInitialized = null;
+            DeviceDisconnected = null;
+
+            GC.SuppressFinalize(this);
+        }
+        #endregion
+
+        #region Finalizer
+        ~DeviceListener()
+        {
+            Dispose();
         }
         #endregion
     }

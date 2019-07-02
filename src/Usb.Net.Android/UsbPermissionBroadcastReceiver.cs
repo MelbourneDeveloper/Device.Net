@@ -6,6 +6,9 @@ using System;
 
 namespace Usb.Net.Android
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class UsbPermissionBroadcastReceiver : BroadcastReceiver
     {
         #region Fields
@@ -14,12 +17,13 @@ namespace Usb.Net.Android
         /// </summary>
         private const string RequestUsbIntentAction = nameof(RequestUsbIntentAction);
         private UsbManager _Manager;
-        private UsbDevice _Device;
+        private readonly UsbDevice _Device;
         private Context _Context;
         #endregion
 
         #region Public Properties
         public bool? IsPermissionGranted { get; private set; }
+        public ILogger Logger { get; set; }
         #endregion
 
         #region Events
@@ -49,7 +53,7 @@ namespace Usb.Net.Android
         {
             IsPermissionGranted = intent.GetBooleanExtra(UsbManager.ExtraPermissionGranted, false);
 
-            Logger.Log($"USB permission broadcast received. Result: {IsPermissionGranted}", null, AndroidUsbDevice.LogSection);
+            Logger?.Log($"USB permission broadcast received. Result: {IsPermissionGranted}", nameof(UsbPermissionBroadcastReceiver), null, LogLevel.Information);
 
             context.UnregisterReceiver(this);
             Received?.Invoke(this, new EventArgs());

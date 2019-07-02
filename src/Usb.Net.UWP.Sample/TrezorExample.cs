@@ -6,9 +6,14 @@ using System.Threading.Tasks;
 
 namespace Usb.Net.Sample
 {
-    internal class TrezorExample : IDisposable
+    internal sealed class TrezorExample : IDisposable
     {
         #region Fields
+#if(LIBUSB)
+        private const int PollMilliseconds = 6000;
+#else
+        private const int PollMilliseconds = 3000;
+#endif
         //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
         private readonly List<FilterDeviceDefinition> _DeviceDefinitions = new List<FilterDeviceDefinition>
         {
@@ -26,7 +31,14 @@ namespace Usb.Net.Sample
 
         #region Public Properties
         public IDevice TrezorDevice { get; private set; }
-        public DeviceListener DeviceListener { get; private set; }
+        public  DeviceListener DeviceListener { get;  }
+        #endregion
+
+        #region Constructor
+        public TrezorExample()
+        {
+            DeviceListener = new DeviceListener(_DeviceDefinitions, PollMilliseconds) { Logger = new DebugLogger() };
+        }
         #endregion
 
         #region Event Handlers
@@ -46,17 +58,20 @@ namespace Usb.Net.Sample
         #region Public Methods
         public void StartListening()
         {
-            TrezorDevice?.Dispose();
-            DeviceListener = new DeviceListener(_DeviceDefinitions, 3000);
+            TrezorDevice?.Close();
             DeviceListener.DeviceDisconnected += DevicePoller_DeviceDisconnected;
             DeviceListener.DeviceInitialized += DevicePoller_DeviceInitialized;
+            DeviceListener.Start();
         }
 
         public async Task InitializeTrezorAsync()
         {
             //Get the first available device and connect to it
-            var devices = await DeviceManager.Current.GetDevices(_DeviceDefinitions);
+            var devices = await DeviceManager.Current.GetDevicesAsync(_DeviceDefinitions);
             TrezorDevice = devices.FirstOrDefault();
+
+            if (TrezorDevice == null) throw new Exception("There were no devices found");
+
             await TrezorDevice.InitializeAsync();
         }
 
@@ -74,6 +89,9 @@ namespace Usb.Net.Sample
 
         public void Dispose()
         {
+            DeviceListener.DeviceDisconnected -= DevicePoller_DeviceDisconnected;
+            DeviceListener.DeviceInitialized -= DevicePoller_DeviceInitialized;
+            DeviceListener.Dispose();
             TrezorDevice?.Dispose();
         }
         #endregion

@@ -7,6 +7,9 @@ using wde = Windows.Devices.Enumeration;
 
 namespace Device.Net.UWP
 {
+    /// <summary>
+    /// TODO: Merge this factory class with other factory classes. I.e. create a DeviceFactoryBase class
+    /// </summary>
     public abstract class UWPDeviceFactoryBase
     {
         #region Fields
@@ -17,6 +20,10 @@ namespace Device.Net.UWP
         #region Protected Abstraction Properties
         protected abstract string VendorFilterName { get; }
         protected abstract string ProductFilterName { get; }
+        #endregion
+
+        #region Public Properties
+        public ILogger Logger { get; set; }
         #endregion
 
         #region Public Abstract Properties
@@ -43,14 +50,29 @@ namespace Device.Net.UWP
         }
         #endregion
 
-        #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitions(FilterDeviceDefinition deviceDefinition)
+        #region Protected Methods
+        protected void Log(string message, Exception ex)
         {
-            var aqsFilter = GetAqsFilter(deviceDefinition.VendorId, deviceDefinition.ProductId);
+            var callerMemberName = "";
+            Logger?.Log(message, $"{ nameof(UWPDeviceFactoryBase)} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
+        }
+        #endregion
 
-            var deviceInformationCollection = await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask();
+        #region Public Methods
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
+        {
+            string aqsFilter = null;
+            if (deviceDefinition != null)
+            {
+                aqsFilter = GetAqsFilter(deviceDefinition.VendorId, deviceDefinition.ProductId);
+            }
 
-            var deviceDefinitions = deviceInformationCollection.Select(d => GetDeviceInformation(d, DeviceType));
+            var deviceInformationCollection = aqsFilter != null
+                ? await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask()
+                : await wde.DeviceInformation.FindAllAsync().AsTask();
+
+            var deviceInformationList = deviceInformationCollection.ToList();
+            var deviceDefinitions = deviceInformationList.Select(d => GetDeviceInformation(d, DeviceType));
 
             var deviceDefinitionList = new List<ConnectedDeviceDefinition>();
 
@@ -59,8 +81,6 @@ namespace Device.Net.UWP
                 var connectionInformation = await TestConnection(deviceDef.DeviceId);
                 if (connectionInformation.CanConnect)
                 {
-                    await Task.Delay(1000);
-
                     deviceDef.UsagePage = connectionInformation.UsagePage;
 
                     deviceDefinitionList.Add(deviceDef);
@@ -75,7 +95,7 @@ namespace Device.Net.UWP
         /// <summary>
         /// Some devices display as being enable but still cannot be connected to, so run a test to make sure they can be connected before returning the definition
         /// </summary>
-        public abstract Task<ConnectionInfo> TestConnection(string Id);
+        public abstract Task<ConnectionInfo> TestConnection(string deviceId);
         #endregion
 
         #region Public Static Methods
@@ -94,11 +114,5 @@ namespace Device.Net.UWP
             return retVal;
         }
         #endregion
-
-        public class ConnectionInfo
-        {
-            public bool CanConnect { get; set; }
-            public ushort? UsagePage { get; set; }
-        }
     }
 }

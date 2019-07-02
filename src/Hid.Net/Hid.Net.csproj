@@ -1,32 +1,44 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
-    <CodeAnalysisRuleSet>CodeRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <SignAssembly>false</SignAssembly>
-    <DelaySign>false</DelaySign>
-    <AssemblyOriginatorKeyFile>Key.pfx</AssemblyOriginatorKeyFile>
-    <Version>2.3.0</Version>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Hid.Net/blob/master/LICENSE</PackageLicenseUrl>
-    <Copyright>Christian Findlay</Copyright>
-    <PackageProjectUrl>https://github.com/MelbourneDeveloper/Hid.Net</PackageProjectUrl>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <Version>2.9.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Device.Net/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Copyright (c) 2019 Christian Findlay</Copyright>
+    <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
     <Description>Hid.Net
 
 Cross platform Hid (USB) library. 
 Enumerate Hid (USB) devices and read and write to/from them. 
 Supports .NET, Android, and UWP out of the box. Other platforms can be added</Description>
-    <PackageTags>Hid USB Android UWP Ledger Trezor C#</PackageTags>
-    <AssemblyVersion>2.3.0.0</AssemblyVersion>
-    <FileVersion>2.2.0.0</FileVersion>
+    <PackageTags>Hid USB Android UWP Ledger Trezor C# MacOS Linux</PackageTags>
+    <AssemblyVersion>2.9.0.0</AssemblyVersion>
+    <FileVersion>2.9.0.0</FileVersion>
     <Authors>Christian Findlay</Authors>
     <Company>Christian Findlay</Company>
-    <RepositoryUrl>https://github.com/MelbourneDeveloper/Hid.Net</RepositoryUrl>
-    <PackageReleaseNotes>Split the library in to Device.Net, Hid.Net, and Usb.Net. For Android, please use Usb.Net. Check the Hid.Net repo for details.</PackageReleaseNotes>
+    <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
     <PackageId>Hid.Net</PackageId>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>      
+    <NoWarn>1701;1702;NU5125</NoWarn>    
   </PropertyGroup>
+
+  <Choose>
+    <When Condition=" '$(Configuration)'=='Debug' ">
+      <PropertyGroup>
+        <SignAssembly>false</SignAssembly>
+      </PropertyGroup>
+    </When>
+    <When Condition=" '$(Configuration)'=='Release' ">
+      <PropertyGroup>
+        <SignAssembly>true</SignAssembly>
+        <DelaySign>false</DelaySign>
+        <AssemblyOriginatorKeyFile>../Device.Net/Device.Net.pfx</AssemblyOriginatorKeyFile>
+      </PropertyGroup>
+    </When>
+  </Choose>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE;DEBUG;NETSTANDARD2_0;HIDNET</DefineConstants>
@@ -37,8 +49,16 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
+    <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />
   </ItemGroup>
 
 </Project>

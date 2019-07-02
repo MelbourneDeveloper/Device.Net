@@ -26,19 +26,24 @@ namespace Usb.Net.UWP
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
             if (deviceDefinition.DeviceType == DeviceType.Hid) return null;
-            return new UWPUsbDevice(deviceDefinition);
+            return new UWPUsbDevice(deviceDefinition) { Logger = Logger };
         }
         #endregion
 
         #region Public Static Methods
         public static void Register()
         {
+            Register(null);
+        }
+
+        public static void Register(ILogger logger)
+        {
             foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)
             {
                 if (deviceFactory is UWPUsbDeviceFactory) return;
             }
 
-            DeviceManager.Current.DeviceFactories.Add(new UWPUsbDeviceFactory());
+            DeviceManager.Current.DeviceFactories.Add(new UWPUsbDeviceFactory() { Logger = logger });
         }
         #endregion
 

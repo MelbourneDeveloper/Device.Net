@@ -7,11 +7,12 @@ namespace Device.Net.UWP
     public abstract class UWPDeviceBase<T> : UWPDeviceBase, IDevice
     {
         #region Fields
-        private bool _IsDisposing;
+        private bool _IsClosing;
         #endregion
 
         #region Protected Properties
-        protected T _ConnectedDevice;
+        protected T ConnectedDevice { get; private set; }
+        protected bool Disposed { get; private set; } = false;
         #endregion
 
         #region Constructor
@@ -27,11 +28,11 @@ namespace Device.Net.UWP
         #endregion
 
         #region Protected Methods
-        protected async Task GetDevice(string id)
+        protected async Task GetDeviceAsync(string id)
         {
             var asyncOperation = FromIdAsync(id);
             var task = asyncOperation.AsTask();
-            _ConnectedDevice = await task;
+            ConnectedDevice = await task;
         }
         #endregion
 
@@ -42,53 +43,73 @@ namespace Device.Net.UWP
         #region Public Overrides
         public override async Task<byte[]> ReadAsync()
         {
-            if (_IsReading)
+            if (IsReading)
             {
                 throw new Exception("Reentry");
             }
 
-            lock (_Chunks)
+            //TODO: this should be a semaphore not a lock
+            lock (Chunks)
             {
-                if (_Chunks.Count > 0)
+                if (Chunks.Count > 0)
                 {
-                    var retVal = _Chunks[0];
+                    var retVal = Chunks[0];
                     Tracer?.Trace(false, retVal);
-                    _Chunks.RemoveAt(0);
+                    Chunks.RemoveAt(0);
                     return retVal;
                 }
             }
 
-            _IsReading = true;
-            _TaskCompletionSource = new TaskCompletionSource<byte[]>();
-            return await _TaskCompletionSource.Task;
+            IsReading = true;
+            ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
+            return await ReadChunkTaskCompletionSource.Task;
         }
         #endregion
 
         #region Public Override Properties
-        public override bool IsInitialized => _ConnectedDevice != null;
+        public override bool IsInitialized => ConnectedDevice != null;
         #endregion
 
         #region Public Virtual Methods
         public override void Dispose()
         {
-            if (_IsDisposing) return;
+            if (Disposed) return;
+            Disposed = true;
 
-            _IsDisposing = true;
+            Close();
+            ReadChunkTaskCompletionSource?.Task?.Dispose();
+
+            base.Dispose();
+
+            GC.SuppressFinalize(this);
+        }
+
+        public void Close()
+        {
+            if (_IsClosing) return;
+
+            _IsClosing = true;
 
             try
             {
-                if (_ConnectedDevice is IDisposable disposable) disposable.Dispose();
-                _ConnectedDevice = default(T);
-                _TaskCompletionSource?.Task?.Dispose();
-                base.Dispose();
+                if (ConnectedDevice is IDisposable disposable) disposable.Dispose();
+                ConnectedDevice = default(T);
             }
             catch (Exception ex)
             {
-                Logger.Log("Error disposing", ex, nameof(UWPDeviceBase));
+                Log("Error disposing", ex);
             }
 
-            _IsDisposing = false;
+            _IsClosing = false;
         }
         #endregion
+
+        #region Finaliser
+        ~UWPDeviceBase()
+        {
+            Dispose();
+        }
+        #endregion
+
     }
 }
