@@ -121,43 +121,7 @@ namespace Usb.Net.Windows
             });
         }
 
-        public async Task<int> ReadAsync(byte[] buff, int offset, int len)
-        {
-            if (buff.Length - offset < len)
-            {
-                throw new Exception("Index out of bounds");
-            }
-
-            int totalRead = 0;
-
-            while (totalRead < len)
-            {
-                // Getting some data.
-                byte[] data = await ReadAsync();
-
-                if (data.Length > len - totalRead)
-                {
-                    // Out of bounds.
-                    // Cut the overflowing result.
-                    data = data.Take(len - totalRead).ToArray();
-                }
-
-                // Copying buffer.
-                for (int i = 0; i < data.Length; ++i)
-                {
-                    buff[totalRead + offset] = data[i];
-                    ++totalRead;
-                }
-
-                if (data.Length < ReadBufferSize)
-                {
-                    // Last buffer.
-                    break;
-                }
-            }
-
-            return totalRead;
-        }
+ 
 
         public override async Task WriteAsync(byte[] data)
         {
@@ -167,35 +131,6 @@ namespace Usb.Net.Windows
                 HandleError(isSuccess, "Couldn't write data");
                 Tracer?.Trace(true, data);
             });
-        }
-
-        public async Task WriteAsync(byte[] data, int offset, int len)
-        {
-            // Some checking.
-            if (data.Length - offset < len)
-            {
-                throw new Exception("Index out of bounds");
-            }
-
-            // Determining buffer size.
-            byte[] writeBuff;
-
-            if (offset == 0 && len == data.Length)
-            {
-                writeBuff = data;
-            }
-            else
-            {
-                writeBuff = new byte[len];
-
-                // Copying buffer.
-                for (int i = 0; i < len; ++i)
-                {
-                    writeBuff[i] = data[offset + i];
-                }
-            }
-
-            await WriteAsync(writeBuff);
         }
 
         public void Close()
