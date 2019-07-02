@@ -1,6 +1,6 @@
 ﻿namespace Usb.Net.Windows
 {
-    public class UsbInterfaceEndpoint
+    public class UsbInterfaceEndpoint : IUsbInterfaceEndpoint
     {
         #region Public Properties
         public byte PipeId { get; }

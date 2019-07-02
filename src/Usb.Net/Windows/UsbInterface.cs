@@ -6,12 +6,13 @@ using System.Linq;
 
 namespace Usb.Net.Windows
 {
-    public class UsbInterface : IDisposable
+    public class UsbInterface : IDisposable, IUsbInterface
     {
         #region Fields
-        private UsbInterfaceEndpoint _ReadEndpoint;
-        private UsbInterfaceEndpoint _WriteEndpoint;
+        private IUsbInterfaceEndpoint _ReadEndpoint;
+        private IUsbInterfaceEndpoint _WriteEndpoint;
         private bool _IsDisposed;
+        private readonly List<UsbInterfaceEndpoint> _UsbInterfaceEndpoints = new List<UsbInterfaceEndpoint>();
         #endregion
 
         #region Internal Properties
@@ -19,9 +20,9 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Properties
-        public List<UsbInterfaceEndpoint> UsbInterfaceEndpoints { get; } = new List<UsbInterfaceEndpoint>();
+        public IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints => (IList<IUsbInterfaceEndpoint>)_UsbInterfaceEndpoints;
 
-        public UsbInterfaceEndpoint ReadEndpoint
+        public IUsbInterfaceEndpoint ReadEndpoint
         {
             get
             {
@@ -40,7 +41,7 @@ namespace Usb.Net.Windows
             }
         }
 
-        public UsbInterfaceEndpoint WriteEndpoint
+        public IUsbInterfaceEndpoint WriteEndpoint
         {
             get
             {

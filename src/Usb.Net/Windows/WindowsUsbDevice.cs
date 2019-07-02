@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Usb.Net.Windows
 {
-    public sealed class WindowsUsbDevice : WindowsDeviceBase, IDevice
+    public sealed class WindowsUsbDevice : WindowsDeviceBase, IUsbDevice
     {
         #region Fields
         private SafeFileHandle _DeviceHandle;
