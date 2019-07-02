@@ -12,9 +12,9 @@ namespace Usb.Net.Windows
     {
         #region Fields
         private SafeFileHandle _DeviceHandle;
-        private readonly List<IUsbInterface> _UsbInterfaces = new List<IUsbInterface>();
-        private WindowsUsbInterface _ReadUsbInterface;
-        private WindowsUsbInterface _WriteUsbInterface;
+        private readonly IList<IUsbInterface> _UsbInterfaces = new List<IUsbInterface>();
+        private IUsbInterface _ReadUsbInterface;
+        private IUsbInterface _WriteUsbInterface;
         private bool disposed;
         private bool _IsClosing;
         private readonly ushort? _WriteBufferSize;
@@ -32,15 +32,7 @@ namespace Usb.Net.Windows
             set
             {
                 if (!UsbInterfaces.Contains(value)) throw new Exception("The interface is not contained the list of valid interfaces.");
-
-                if (value is WindowsUsbInterface usbInterface)
-                {
-                    _ReadUsbInterface = usbInterface;
-                }
-                else
-                {
-                    throw new Exception($"Interface must be a {typeof(WindowsUsbInterface).FullName}");
-                }
+                _ReadUsbInterface = value;
             }
         }
 
@@ -50,15 +42,7 @@ namespace Usb.Net.Windows
             set
             {
                 if (!UsbInterfaces.Contains(value)) throw new Exception("The interface is not contained the list of valid interfaces.");
-
-                if (value is WindowsUsbInterface usbInterface)
-                {
-                    _WriteUsbInterface = usbInterface;
-                }
-                else
-                {
-                    throw new Exception($"Interface must be a {typeof(WindowsUsbInterface).FullName}");
-                }
+                _WriteUsbInterface = value;
             }
         }
         #endregion
