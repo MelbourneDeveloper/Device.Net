@@ -121,20 +121,81 @@ namespace Usb.Net.Windows
             });
         }
 
+        public async Task<int> ReadAsync(byte[] buff, int offset, int len)
+        {
+            if (buff.Length - offset < len)
+            {
+                throw new Exception("Index out of bounds");
+            }
+
+            int totalRead = 0;
+
+            while (totalRead < len)
+            {
+                // Getting some data.
+                byte[] data = await ReadAsync();
+
+                if (data.Length > len - totalRead)
+                {
+                    // Out of bounds.
+                    // Cut the overflowing result.
+                    data = data.Take(len - totalRead).ToArray();
+                }
+
+                // Copying buffer.
+                for (int i = 0; i < data.Length; ++i)
+                {
+                    buff[totalRead + offset] = data[i];
+                    ++totalRead;
+                }
+
+                if (data.Length < ReadBufferSize)
+                {
+                    // Last buffer.
+                    break;
+                }
+            }
+
+            return totalRead;
+        }
+
         public override async Task WriteAsync(byte[] data)
         {
             await Task.Run(() =>
             {
-                if (data.Length > WriteBufferSize)
-                {
-                    throw new Exception($"Data is longer than {WriteBufferSize} bytes which is the device's max buffer size.");
-                }
-
-                //TODO: Allow for different interfaces and pipes...
                 var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.WritePipe.WINUSB_PIPE_INFORMATION.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
                 HandleError(isSuccess, "Couldn't write data");
                 Tracer?.Trace(true, data);
             });
+        }
+
+        public async Task WriteAsync(byte[] data, int offset, int len)
+        {
+            // Some checking.
+            if (data.Length - offset < len)
+            {
+                throw new Exception("Index out of bounds");
+            }
+
+            // Determining buffer size.
+            byte[] writeBuff;
+
+            if (offset == 0 && len == data.Length)
+            {
+                writeBuff = data;
+            }
+            else
+            {
+                writeBuff = new byte[len];
+
+                // Copying buffer.
+                for (int i = 0; i < len; ++i)
+                {
+                    writeBuff[i] = data[offset + i];
+                }
+            }
+
+            await WriteAsync(writeBuff);
         }
 
         public void Close()
