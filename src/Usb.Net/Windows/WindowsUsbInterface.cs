@@ -14,7 +14,6 @@ namespace Usb.Net.Windows
         private IUsbInterfaceEndpoint _ReadEndpoint;
         private IUsbInterfaceEndpoint _WriteEndpoint;
         private bool _IsDisposed;
-        private readonly List<WindowsUsbInterfaceEndpoint> _UsbInterfaceEndpoints = new List<WindowsUsbInterfaceEndpoint>();
         #endregion
 
         public ILogger Logger { get; }
@@ -34,7 +33,7 @@ namespace Usb.Net.Windows
         }
 
         #region Public Properties
-        public IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints => (IList<IUsbInterfaceEndpoint>)_UsbInterfaceEndpoints;
+        public IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints { get; } = new List<IUsbInterfaceEndpoint>();
 
         public IUsbInterfaceEndpoint ReadEndpoint
         {
