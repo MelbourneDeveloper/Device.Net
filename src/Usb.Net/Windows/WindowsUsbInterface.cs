@@ -1,23 +1,37 @@
-﻿using Device.Net.Windows;
+﻿using Device.Net;
+using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Usb.Net.Windows
 {
-    public class UsbInterface : IDisposable, IUsbInterface
+    public class WindowsUsbInterface : IDisposable, IUsbInterface
     {
         #region Fields
         private IUsbInterfaceEndpoint _ReadEndpoint;
         private IUsbInterfaceEndpoint _WriteEndpoint;
         private bool _IsDisposed;
-        private readonly List<UsbInterfaceEndpoint> _UsbInterfaceEndpoints = new List<UsbInterfaceEndpoint>();
+        private readonly List<WindowsUsbInterfaceEndpoint> _UsbInterfaceEndpoints = new List<WindowsUsbInterfaceEndpoint>();
         #endregion
 
+        public ILogger Logger { get; }
+        public ITracer Tracer { get; }
+
         #region Internal Properties
+        /// <summary>
+        /// TODO: Make private?
+        /// </summary>
         internal SafeFileHandle Handle { get; set; }
         #endregion
+
+        public WindowsUsbInterface(ILogger logger, ITracer tracer)
+        {
+            Tracer = tracer;
+            Logger = logger;
+        }
 
         #region Public Properties
         public IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints => (IList<IUsbInterfaceEndpoint>)_UsbInterfaceEndpoints;
@@ -62,6 +76,28 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Methods
+        public async Task<byte[]> ReadAsync(uint bufferLength)
+        {
+            return await Task.Run(() =>
+            {
+                var bytes = new byte[bufferLength];
+                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(Handle, ReadEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
+                WindowsDeviceBase.HandleError(isSuccess, "Couldn't read data");
+                Tracer?.Trace(false, bytes);
+                return bytes;
+            });
+        }
+
+        public async Task WriteAsync(byte[] data)
+        {
+            await Task.Run(() =>
+            {
+                var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(Handle, WriteEndpoint.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
+                WindowsDeviceBase.HandleError(isSuccess, "Couldn't write data");
+                Tracer?.Trace(true, data);
+            });
+        }
+
         public void Dispose()
         {
             if (_IsDisposed) return;
