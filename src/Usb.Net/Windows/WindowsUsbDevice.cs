@@ -3,7 +3,6 @@ using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -13,6 +12,7 @@ namespace Usb.Net.Windows
     {
         #region Fields
         private SafeFileHandle _DeviceHandle;
+		private readonly List<UsbInterface> _UsbInterfaces = new List<UsbInterface>();
         private UsbInterface _ReadUsbInterface;
         private UsbInterface _WriteUsbInterface;
         private bool disposed;
@@ -28,10 +28,7 @@ namespace Usb.Net.Windows
 
         public UsbInterface ReadUsbInterface
         {
-            get
-            {
-                return _ReadUsbInterface;
-            }
+            get => _ReadUsbInterface;
             set
             {
                 if (!UsbInterfaces.Contains(value)) throw new Exception("The interface is not contained the list of valid interfaces.");
@@ -41,10 +38,7 @@ namespace Usb.Net.Windows
 
         public UsbInterface WriteUsbInterface
         {
-            get
-            {
-                return _WriteUsbInterface;
-            }
+            get => _WriteUsbInterface;
             set
             {
                 if (!UsbInterfaces.Contains(value)) throw new Exception("The interface is not contained the list of valid interfaces.");
@@ -103,15 +97,12 @@ namespace Usb.Net.Windows
                 //Get the first (default) interface
                 var defaultInterface = GetInterface(defaultInterfaceHandle);
 
-            UsbInterfaces.Add(defaultInterface);
+                UsbInterfaces.Add(defaultInterface);
 
-            ReadUsbInterface = defaultInterface;
-            WriteUsbInterface = defaultInterface;
+                ReadUsbInterface = defaultInterface;
+                WriteUsbInterface = defaultInterface;
 
-            while (true)
-            {
-                isSuccess = WinUsbApiCalls.WinUsb_GetAssociatedInterface(defaultInterfaceHandle, i, out var interfacePointer);
-                if (!isSuccess)
+                while (true)
                 {
                     isSuccess = WinUsbApiCalls.WinUsb_GetAssociatedInterface(defaultInterfaceHandle, i, out var interfacePointer);
                     if (!isSuccess)
@@ -124,7 +115,7 @@ namespace Usb.Net.Windows
 
                     var associatedInterface = GetInterface(interfacePointer);
 
-                UsbInterfaces.Add(associatedInterface);
+                    _UsbInterfaces.Add(associatedInterface);
 
                     i++;
                 }

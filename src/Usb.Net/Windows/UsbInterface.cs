@@ -11,8 +11,8 @@ namespace Usb.Net.Windows
         #region Fields
         private UsbInterfaceEndpoint _ReadEndpoint;
         private UsbInterfaceEndpoint _WriteEndpoint;
-        #endregion
         private bool _IsDisposed;
+        #endregion
 
         #region Internal Properties
         internal SafeFileHandle Handle { get; set; }
@@ -69,6 +69,8 @@ namespace Usb.Net.Windows
             //This is a native resource, so the IDisposable pattern should probably be implemented...
             var isSuccess = WinUsbApiCalls.WinUsb_Free(Handle);
             WindowsDeviceBase.HandleError(isSuccess, "Interface could not be disposed");
+
+            GC.SuppressFinalize(this);
         }
         #endregion
     }
