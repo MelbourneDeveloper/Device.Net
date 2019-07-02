@@ -1,4 +1,4 @@
-﻿namespace Usb.Net.Windows
+﻿namespace Usb.Net
 {
     public interface IUsbInterfaceEndpoint
     {

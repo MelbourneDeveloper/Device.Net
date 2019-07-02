@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace Usb.Net.Windows
+namespace Usb.Net
 {
-    public interface IUsbInterface
+    public interface IUsbInterface : IDisposable
     {
         IUsbInterfaceEndpoint ReadEndpoint { get; set; }
         IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints { get; }

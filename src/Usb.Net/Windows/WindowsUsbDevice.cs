@@ -12,9 +12,9 @@ namespace Usb.Net.Windows
     {
         #region Fields
         private SafeFileHandle _DeviceHandle;
-		private readonly List<UsbInterface> _UsbInterfaces = new List<UsbInterface>();
-        private UsbInterface _ReadUsbInterface;
-        private UsbInterface _WriteUsbInterface;
+        private readonly List<IUsbInterface> _UsbInterfaces = new List<IUsbInterface>();
+        private IUsbInterface _ReadUsbInterface;
+        private IUsbInterface _WriteUsbInterface;
         private bool disposed;
         private bool _IsClosing;
         private readonly ushort? _WriteBufferSize;
@@ -26,7 +26,7 @@ namespace Usb.Net.Windows
         public override ushort ReadBufferSize => _ReadBufferSize ?? (IsInitialized ? (ushort)ConnectedDeviceDefinition.ReadBufferSize : (ushort)0);
         public override bool IsInitialized => _DeviceHandle != null && !_DeviceHandle.IsInvalid;
 
-        public UsbInterface ReadUsbInterface
+        public IUsbInterface ReadUsbInterface
         {
             get => _ReadUsbInterface;
             set
@@ -36,7 +36,7 @@ namespace Usb.Net.Windows
             }
         }
 
-        public UsbInterface WriteUsbInterface
+        public IUsbInterface WriteUsbInterface
         {
             get => _WriteUsbInterface;
             set
@@ -48,7 +48,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Properties
-        public List<UsbInterface> UsbInterfaces { get; } = new List<UsbInterface>();
+        public IList<IUsbInterface> UsbInterfaces { get; } = (IList<IUsbInterface>)new List<UsbInterface>();
         #endregion
 
         #region Constructor
