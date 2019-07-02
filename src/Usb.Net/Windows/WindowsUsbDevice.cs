@@ -48,7 +48,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Properties
-        public IList<IUsbInterface> UsbInterfaces { get; } = (IList<IUsbInterface>)new List<WindowsUsbInterface>();
+        public IList<IUsbInterface> UsbInterfaces { get; } = new List<IUsbInterface>();
         #endregion
 
         #region Constructor
