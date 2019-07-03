@@ -2,7 +2,6 @@
 using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -12,9 +11,6 @@ namespace Usb.Net.Windows
     {
         #region Fields
         private SafeFileHandle _DeviceHandle;
-        private readonly IList<IUsbInterface> _UsbInterfaces = new List<IUsbInterface>();
-        private IUsbInterface _ReadUsbInterface;
-        private IUsbInterface _WriteUsbInterface;
         private bool disposed;
         private bool _IsClosing;
         private readonly ushort? _WriteBufferSize;
@@ -25,30 +21,7 @@ namespace Usb.Net.Windows
         public override ushort WriteBufferSize => _WriteBufferSize ?? (IsInitialized ? (ushort)ConnectedDeviceDefinition.WriteBufferSize : (ushort)0);
         public override ushort ReadBufferSize => _ReadBufferSize ?? (IsInitialized ? (ushort)ConnectedDeviceDefinition.ReadBufferSize : (ushort)0);
         public override bool IsInitialized => _DeviceHandle != null && !_DeviceHandle.IsInvalid;
-
-        public IUsbInterface ReadUsbInterface
-        {
-            get => _ReadUsbInterface;
-            set
-            {
-                if (!UsbInterfaces.Contains(value)) throw new Exception("The interface is not contained the list of valid interfaces.");
-                _ReadUsbInterface = value;
-            }
-        }
-
-        public IUsbInterface WriteUsbInterface
-        {
-            get => _WriteUsbInterface;
-            set
-            {
-                if (!UsbInterfaces.Contains(value)) throw new Exception("The interface is not contained the list of valid interfaces.");
-                _WriteUsbInterface = value;
-            }
-        }
-        #endregion
-
-        #region Public Properties
-        public IList<IUsbInterface> UsbInterfaces { get; } = new List<IUsbInterface>();
+        public IUsbDeviceHandler UsbDeviceHandler { get; private set; } = new UsbDeviceHandler();
         #endregion
 
         #region Constructor
@@ -95,12 +68,12 @@ namespace Usb.Net.Windows
                 byte i = 0;
 
                 //Get the first (default) interface
+                //TODO: It seems like there isn't a way to get other interfaces here... 😞
                 var defaultInterface = GetInterface(defaultInterfaceHandle);
 
-                UsbInterfaces.Add(defaultInterface);
-
-                ReadUsbInterface = defaultInterface;
-                WriteUsbInterface = defaultInterface;
+                UsbDeviceHandler.UsbInterfaces.Add(defaultInterface);
+                UsbDeviceHandler.ReadUsbInterface = defaultInterface;
+                UsbDeviceHandler.WriteUsbInterface = defaultInterface;
 
                 while (true)
                 {
@@ -115,7 +88,8 @@ namespace Usb.Net.Windows
 
                     var associatedInterface = GetInterface(interfacePointer);
 
-                    _UsbInterfaces.Add(associatedInterface);
+                    //TODO: this is bad design. The handler should be taking care of this
+                    UsbDeviceHandler.UsbInterfaces.Add(associatedInterface);
 
                     i++;
                 }
@@ -137,12 +111,12 @@ namespace Usb.Net.Windows
 
         public override Task<byte[]> ReadAsync()
         {
-            return ReadUsbInterface.ReadAsync(ReadBufferSize);
+            return UsbDeviceHandler.ReadUsbInterface.ReadAsync(ReadBufferSize);
         }
 
         public override Task WriteAsync(byte[] data)
         {
-            return WriteUsbInterface.WriteAsync(data);
+            return UsbDeviceHandler.WriteUsbInterface.WriteAsync(data);
         }
 
         public void Close()
@@ -152,12 +126,15 @@ namespace Usb.Net.Windows
 
             try
             {
-                foreach (var usbInterface in UsbInterfaces)
+                if (UsbDeviceHandler != null)
                 {
-                    usbInterface.Dispose();
-                }
+                    foreach (var usbInterface in UsbDeviceHandler.UsbInterfaces)
+                    {
+                        usbInterface.Dispose();
+                    }
 
-                UsbInterfaces.Clear();
+                    UsbDeviceHandler.UsbInterfaces.Clear();
+                }
 
                 _DeviceHandle?.Dispose();
                 _DeviceHandle = null;

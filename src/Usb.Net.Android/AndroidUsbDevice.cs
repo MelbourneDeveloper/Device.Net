@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Usb.Net.Android
 {
-    public sealed class AndroidUsbDevice : DeviceBase, IDevice
+    public sealed class AndroidUsbDevice : DeviceBase, IUsbDevice
     {
         #region Fields
         private UsbDeviceConnection _UsbDeviceConnection;
