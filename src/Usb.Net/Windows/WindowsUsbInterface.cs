@@ -16,8 +16,10 @@ namespace Usb.Net.Windows
         private bool _IsDisposed;
         #endregion
 
+        #region Public Properties
         public ILogger Logger { get; }
         public ITracer Tracer { get; }
+        #endregion
 
         #region Internal Properties
         /// <summary>

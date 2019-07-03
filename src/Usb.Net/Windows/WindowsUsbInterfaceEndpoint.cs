@@ -14,5 +14,9 @@
             PipeId = pipeId;
         }
         #endregion
+
+#pragma warning disable CA1305 // Specify IFormatProvider
+        public override string ToString() => PipeId.ToString();
+#pragma warning restore CA1305 // Specify IFormatProvider
     }
 }
