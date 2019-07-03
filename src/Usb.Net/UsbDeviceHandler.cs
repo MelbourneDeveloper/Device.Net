@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Usb.Net
 {
-    public class UsbDeviceHandler : IUsbDeviceHandler
+    public abstract class UsbDeviceHandlerBase 
     {
         #region Fields
         private IUsbInterface _ReadUsbInterface;

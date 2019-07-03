@@ -21,7 +21,7 @@ namespace Usb.Net.Windows
         public override ushort WriteBufferSize => _WriteBufferSize ?? (IsInitialized ? (ushort)ConnectedDeviceDefinition.WriteBufferSize : (ushort)0);
         public override ushort ReadBufferSize => _ReadBufferSize ?? (IsInitialized ? (ushort)ConnectedDeviceDefinition.ReadBufferSize : (ushort)0);
         public override bool IsInitialized => _DeviceHandle != null && !_DeviceHandle.IsInvalid;
-        public IUsbDeviceHandler UsbDeviceHandler { get; private set; } = new UsbDeviceHandler();
+        public IUsbDeviceHandler UsbDeviceHandler { get; private set; }
         #endregion
 
         #region Constructor
@@ -37,7 +37,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Private Methods
-        private void Initialize()
+        private SafeFileHandle Initialize()
         {
             try
             {
@@ -65,34 +65,7 @@ namespace Usb.Net.Windows
 
                 ConnectedDeviceDefinition = GetDeviceDefinition(defaultInterfaceHandle, DeviceId);
 
-                byte i = 0;
-
-                //Get the first (default) interface
-                //TODO: It seems like there isn't a way to get other interfaces here... 😞
-                var defaultInterface = GetInterface(defaultInterfaceHandle);
-
-                UsbDeviceHandler.UsbInterfaces.Add(defaultInterface);
-                UsbDeviceHandler.ReadUsbInterface = defaultInterface;
-                UsbDeviceHandler.WriteUsbInterface = defaultInterface;
-
-                while (true)
-                {
-                    isSuccess = WinUsbApiCalls.WinUsb_GetAssociatedInterface(defaultInterfaceHandle, i, out var interfacePointer);
-                    if (!isSuccess)
-                    {
-                        errorCode = Marshal.GetLastWin32Error();
-                        if (errorCode == APICalls.ERROR_NO_MORE_ITEMS) break;
-
-                        throw new Exception($"Could not enumerate interfaces for device {DeviceId}. Error code: { errorCode}");
-                    }
-
-                    var associatedInterface = GetInterface(interfacePointer);
-
-                    //TODO: this is bad design. The handler should be taking care of this
-                    UsbDeviceHandler.UsbInterfaces.Add(associatedInterface);
-
-                    i++;
-                }
+                return defaultInterfaceHandle;
             }
             catch (Exception ex)
             {
@@ -106,7 +79,9 @@ namespace Usb.Net.Windows
         public override async Task InitializeAsync()
         {
             if (disposed) throw new Exception(DeviceDisposedErrorMessage);
-            await Task.Run(() => Initialize());
+            var safeFileHandle = await Task.Run(() => Initialize());
+            UsbDeviceHandler = new WindowsUsbDeviceHandler(safeFileHandle);
+            await UsbDeviceHandler.InitializeAsync();
         }
 
         public override Task<byte[]> ReadAsync()
@@ -192,22 +167,7 @@ namespace Usb.Net.Windows
             return deviceDefinition;
         }
 
-        private static WindowsUsbInterface GetInterface(SafeFileHandle interfaceHandle)
-        {
-            //TODO: Where is the logger/tracer?
-            var retVal = new WindowsUsbInterface(null, null) { Handle = interfaceHandle };
-            var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
-            HandleError(isSuccess, "Couldn't query interface");
 
-            for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)
-            {
-                isSuccess = WinUsbApiCalls.WinUsb_QueryPipe(interfaceHandle, 0, i, out var pipeInfo);
-                HandleError(isSuccess, "Couldn't query endpoint");
-                retVal.UsbInterfaceEndpoints.Add(new WindowsUsbInterfaceEndpoint(pipeInfo.PipeId));
-            }
-
-            return retVal;
-        }
         #endregion
 
         #region Finalizer
