@@ -10,21 +10,53 @@ namespace Usb.Net.Windows
     public class WindowsUsbDeviceHandler : UsbDeviceHandlerBase, IUsbDeviceHandler
     {
         private bool disposed;
-        private readonly SafeFileHandle DefaultInterfaceHandle;
+        public string DeviceId { get; }
+        public ushort WriteBufferSize { get; private set; }
+        public ushort ReadBufferSize { get; private set; }
 
-        internal WindowsUsbDeviceHandler(SafeFileHandle defaultInterfaceHandle)
+        private SafeFileHandle _DeviceHandle;
+        private readonly ILogger _Logger;
+
+        internal WindowsUsbDeviceHandler(string deviceId, ILogger logger)
         {
-            DefaultInterfaceHandle = defaultInterfaceHandle;
+            DeviceId = deviceId;
+            _Logger = logger;
         }
 
-        public async Task InitializeAsync()
+        private void Initialize()
         {
-            await Task.Run(() =>
+            try
             {
+                Close();
+
+                int errorCode;
+
+                if (string.IsNullOrEmpty(DeviceId))
+                {
+                    throw new WindowsException($"{nameof(DeviceDefinitionBase)} must be specified before {nameof(InitializeAsync)} can be called.");
+                }
+
+                _DeviceHandle = APICalls.CreateFile(DeviceId, APICalls.GenericWrite | APICalls.GenericRead, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
+
+
+                if (_DeviceHandle.IsInvalid)
+                {
+                    //TODO: is error code useful here?
+                    errorCode = Marshal.GetLastWin32Error();
+                    if (errorCode > 0) throw new Exception($"Device handle no good. Error code: {errorCode}");
+                }
+
+                var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
+                WindowsDeviceBase.HandleError(isSuccess, "Couldn't initialize device");
+
+                var connectedDeviceDefinition = WindowsUsbDeviceFactory.GetDeviceDefinition(defaultInterfaceHandle, DeviceId);
+
+                WriteBufferSize = (ushort)connectedDeviceDefinition.WriteBufferSize.Value;
+                ReadBufferSize = (ushort)connectedDeviceDefinition.ReadBufferSize.Value;
 
                 //Get the first (default) interface
                 //TODO: It seems like there isn't a way to get other interfaces here... 😞
-                var defaultInterface = GetInterface(DefaultInterfaceHandle);
+                var defaultInterface = GetInterface(defaultInterfaceHandle);
 
                 UsbInterfaces.Add(defaultInterface);
                 ReadUsbInterface = defaultInterface;
@@ -33,10 +65,10 @@ namespace Usb.Net.Windows
                 byte i = 0;
                 while (true)
                 {
-                    var isSuccess = WinUsbApiCalls.WinUsb_GetAssociatedInterface(DefaultInterfaceHandle, i, out var interfacePointer);
+                    isSuccess = WinUsbApiCalls.WinUsb_GetAssociatedInterface(defaultInterfaceHandle, i, out var interfacePointer);
                     if (!isSuccess)
                     {
-                        var errorCode = Marshal.GetLastWin32Error();
+                        errorCode = Marshal.GetLastWin32Error();
                         if (errorCode == APICalls.ERROR_NO_MORE_ITEMS) break;
 
                         throw new Exception($"Could not enumerate interfaces for device. Error code: { errorCode}");
@@ -49,7 +81,16 @@ namespace Usb.Net.Windows
 
                     i++;
                 }
-            });
+            }
+            catch (Exception ex)
+            {
+                _Logger?.Log($"{nameof(Initialize)} error. DeviceId {DeviceId}", nameof(UsbDevice), ex, LogLevel.Error);
+                throw;
+            }
+        }
+
+        private static void Close()
+        {
         }
 
         private static WindowsUsbInterface GetInterface(SafeFileHandle interfaceHandle)
@@ -74,9 +115,13 @@ namespace Usb.Net.Windows
             if (disposed) return;
             disposed = true;
 
-            DefaultInterfaceHandle.Dispose();
 
             GC.SuppressFinalize(this);
+        }
+
+        public async Task InitializeAsync()
+        {
+            await Task.Run(Initialize);
         }
     }
 }
