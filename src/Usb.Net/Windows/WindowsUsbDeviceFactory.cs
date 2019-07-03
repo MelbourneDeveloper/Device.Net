@@ -23,7 +23,7 @@ namespace Usb.Net.Windows
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            return deviceDefinition.DeviceType != DeviceType ? null : new UsbDevice(new WindowsUsbDeviceHandler(deviceDefinition.DeviceId, Logger)) ;
+            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsUsbDevice(deviceDefinition.DeviceId, Logger);
         }
         #endregion
 
