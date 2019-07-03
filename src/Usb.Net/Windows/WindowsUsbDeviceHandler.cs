@@ -9,6 +9,7 @@ namespace Usb.Net.Windows
 {
     public class WindowsUsbDeviceHandler : UsbDeviceHandlerBase, IUsbDeviceHandler
     {
+        private bool disposed;
         private readonly SafeFileHandle DefaultInterfaceHandle;
 
         internal WindowsUsbDeviceHandler(SafeFileHandle defaultInterfaceHandle)
@@ -66,6 +67,16 @@ namespace Usb.Net.Windows
             }
 
             return retVal;
+        }
+
+        public void Dispose()
+        {
+            if (disposed) return;
+            disposed = true;
+
+            DefaultInterfaceHandle.Dispose();
+
+            GC.SuppressFinalize(this);
         }
     }
 }

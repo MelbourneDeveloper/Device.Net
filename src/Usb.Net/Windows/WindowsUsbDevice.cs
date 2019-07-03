@@ -63,7 +63,7 @@ namespace Usb.Net.Windows
                 var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
                 HandleError(isSuccess, "Couldn't initialize device");
 
-                ConnectedDeviceDefinition = GetDeviceDefinition(defaultInterfaceHandle, DeviceId);
+                ConnectedDeviceDefinition = WindowsUsbDeviceFactory.GetDeviceDefinition(defaultInterfaceHandle, DeviceId);
 
                 return defaultInterfaceHandle;
             }
@@ -133,41 +133,6 @@ namespace Usb.Net.Windows
 
             GC.SuppressFinalize(this);
         }
-        #endregion
-
-        #region Private Static Methods
-        private static ConnectedDeviceDefinition GetDeviceDefinition(SafeFileHandle defaultInterfaceHandle, string deviceId)
-        {
-            var deviceDefinition = new ConnectedDeviceDefinition(deviceId) { DeviceType = DeviceType.Usb };
-
-            var bufferLength = (uint)Marshal.SizeOf(typeof(USB_DEVICE_DESCRIPTOR));
-            var isSuccess2 = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, WinUsbApiCalls.EnglishLanguageID, out var _UsbDeviceDescriptor, bufferLength, out var lengthTransferred);
-            HandleError(isSuccess2, "Couldn't get device descriptor");
-
-            if (_UsbDeviceDescriptor.iProduct > 0)
-            {
-                deviceDefinition.ProductName = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle, _UsbDeviceDescriptor.iProduct, "Couldn't get product name");
-            }
-
-            if (_UsbDeviceDescriptor.iSerialNumber > 0)
-            {
-                deviceDefinition.SerialNumber = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle, _UsbDeviceDescriptor.iSerialNumber, "Couldn't get serial number");
-            }
-
-            if (_UsbDeviceDescriptor.iManufacturer > 0)
-            {
-                deviceDefinition.Manufacturer = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle, _UsbDeviceDescriptor.iManufacturer, "Couldn't get manufacturer");
-            }
-
-            deviceDefinition.VendorId = _UsbDeviceDescriptor.idVendor;
-            deviceDefinition.ProductId = _UsbDeviceDescriptor.idProduct;
-            deviceDefinition.WriteBufferSize = _UsbDeviceDescriptor.bMaxPacketSize0;
-            deviceDefinition.ReadBufferSize = _UsbDeviceDescriptor.bMaxPacketSize0;
-
-            return deviceDefinition;
-        }
-
-
         #endregion
 
         #region Finalizer
