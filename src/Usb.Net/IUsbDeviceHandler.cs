@@ -11,7 +11,8 @@ namespace Usb.Net
         IUsbInterface WriteUsbInterface { get; set; }
         ushort WriteBufferSize { get; }
         ushort ReadBufferSize { get; }
-
+        bool IsInitialized { get; }
         Task InitializeAsync();
+        void Close();
     }
 }

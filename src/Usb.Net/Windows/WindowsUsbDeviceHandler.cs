@@ -9,20 +9,28 @@ namespace Usb.Net.Windows
 {
     public class WindowsUsbDeviceHandler : UsbDeviceHandlerBase, IUsbDeviceHandler
     {
+        #region Fields
         private bool disposed;
+        private SafeFileHandle _DeviceHandle;
+        private readonly ILogger _Logger;
+        #endregion
+
+        #region Public Properties
+        public bool IsInitialized => _DeviceHandle != null && !_DeviceHandle.IsInvalid;
         public string DeviceId { get; }
         public ushort WriteBufferSize { get; private set; }
         public ushort ReadBufferSize { get; private set; }
+        #endregion
 
-        private SafeFileHandle _DeviceHandle;
-        private readonly ILogger _Logger;
-
-        internal WindowsUsbDeviceHandler(string deviceId, ILogger logger)
+        #region Constructor
+        public WindowsUsbDeviceHandler(string deviceId, ILogger logger)
         {
             DeviceId = deviceId;
             _Logger = logger;
         }
+        #endregion
 
+        #region Private Methods
         private void Initialize()
         {
             try
@@ -89,10 +97,6 @@ namespace Usb.Net.Windows
             }
         }
 
-        private static void Close()
-        {
-        }
-
         private static WindowsUsbInterface GetInterface(SafeFileHandle interfaceHandle)
         {
             //TODO: Where is the logger/tracer?
@@ -109,12 +113,28 @@ namespace Usb.Net.Windows
 
             return retVal;
         }
+        #endregion
+
+        #region Public Methods
+        public void Close()
+        {
+            foreach (var usbInterface in UsbInterfaces)
+            {
+                usbInterface.Dispose();
+            }
+
+            UsbInterfaces.Clear();
+
+            _DeviceHandle?.Dispose();
+            _DeviceHandle = null;
+        }
 
         public void Dispose()
         {
             if (disposed) return;
             disposed = true;
 
+            Close();
 
             GC.SuppressFinalize(this);
         }
@@ -123,5 +143,6 @@ namespace Usb.Net.Windows
         {
             await Task.Run(Initialize);
         }
+        #endregion
     }
 }

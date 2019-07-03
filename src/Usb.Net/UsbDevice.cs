@@ -1,5 +1,4 @@
 ﻿using Device.Net;
-using Microsoft.Win32.SafeHandles;
 using System;
 using System.Threading.Tasks;
 
@@ -8,13 +7,12 @@ namespace Usb.Net
     public class UsbDevice : DeviceBase, IUsbDevice
     {
         #region Fields
-        private SafeFileHandle _DeviceHandle;
         private bool disposed;
         private bool _IsClosing;
         #endregion
 
         #region Public Overrride Properties
-        public override bool IsInitialized => _DeviceHandle != null && !_DeviceHandle.IsInvalid;
+        public override bool IsInitialized => UsbDeviceHandler.IsInitialized;
         public IUsbDeviceHandler UsbDeviceHandler { get; }
         public override ushort WriteBufferSize => UsbDeviceHandler.WriteBufferSize;
         public override ushort ReadBufferSize => UsbDeviceHandler.ReadBufferSize;
@@ -54,18 +52,7 @@ namespace Usb.Net
 
             try
             {
-                if (UsbDeviceHandler != null)
-                {
-                    foreach (var usbInterface in UsbDeviceHandler.UsbInterfaces)
-                    {
-                        usbInterface.Dispose();
-                    }
-
-                    UsbDeviceHandler.UsbInterfaces.Clear();
-                }
-
-                _DeviceHandle?.Dispose();
-                _DeviceHandle = null;
+                UsbDeviceHandler?.Close();
             }
             catch (Exception)
             {
