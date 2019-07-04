@@ -13,6 +13,7 @@ namespace Usb.Net.Windows
         #region Fields
         private IUsbInterfaceEndpoint _ReadEndpoint;
         private IUsbInterfaceEndpoint _WriteEndpoint;
+        private IUsbInterfaceEndpoint _InterruptEndpoint;
         private bool _IsDisposed;
         #endregion
 
@@ -74,6 +75,26 @@ namespace Usb.Net.Windows
                 _WriteEndpoint = value;
             }
         }
+
+        public IUsbInterfaceEndpoint InterruptEndpoint
+        {
+            get
+            {
+                //This is a bit stinky but should work
+                if (_InterruptEndpoint == null)
+                {
+                    _InterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt);
+                }
+
+                return _InterruptEndpoint;
+            }
+            set
+            {
+                if (!UsbInterfaceEndpoints.Contains(value)) throw new Exception("This endpoint is not contained in the list of valid endpoints");
+                _InterruptEndpoint = value;
+            }
+        }
+
         #endregion
 
         #region Public Methods
@@ -84,6 +105,22 @@ namespace Usb.Net.Windows
                 var bytes = new byte[bufferLength];
                 var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(Handle, ReadEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't read data");
+                Tracer?.Trace(false, bytes);
+                return bytes;
+            });
+        }
+
+        public async Task<byte[]> ReadInterruptAsync(uint bufferLength, uint timeout)
+        {
+            return await Task.Run(() =>
+            {
+                if (!SetTimeout(timeout))
+                    throw new ApplicationException($"Unable to Set timeout.");
+
+                var bytes = new byte[bufferLength];
+                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(Handle, InterruptEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
+                //TODO: Should get Last error here and if it's Timeout, don't handle error?
+                WindowsDeviceBase.HandleError(isSuccess, "Couldn't read data from interrupt pipe"); //TODO: Error code 121 is timeout, I think we should ignore this?
                 Tracer?.Trace(false, bytes);
                 return bytes;
             });
@@ -109,6 +146,16 @@ namespace Usb.Net.Windows
             WindowsDeviceBase.HandleError(isSuccess, "Interface could not be disposed");
 
             GC.SuppressFinalize(this);
+        }
+        #endregion
+
+        #region Private Methods
+        private bool SetTimeout(uint timeout)
+        {
+            if (!WinUsbApiCalls.WinUsb_SetPipePolicy(Handle, InterruptEndpoint.PipeId, 0x03, sizeof(uint), ref timeout))
+                return false;
+
+            return true;
         }
         #endregion
     }

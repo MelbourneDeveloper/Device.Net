@@ -6,12 +6,15 @@
         public byte PipeId { get; }
         public bool IsRead => (PipeId & WinUsbApiCalls.WritePipeId) != 0;
         public bool IsWrite => (PipeId & WinUsbApiCalls.WritePipeId) == 0;
+        public bool IsInterrupt { get; }
+
         #endregion
 
         #region Constructor
-        internal WindowsUsbInterfaceEndpoint(byte pipeId)
+        internal WindowsUsbInterfaceEndpoint(byte pipeId, WinUsbApiCalls.USBD_PIPE_TYPE usbPipeType)
         {
             PipeId = pipeId;
+            IsInterrupt = usbPipeType == WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeInterrupt;
         }
         #endregion
 

@@ -8,6 +8,7 @@ namespace Usb.Net
         #region Fields
         private IUsbInterface _ReadUsbInterface;
         private IUsbInterface _WriteUsbInterface;
+        private IUsbInterface _InterruptUsbInterface;
         #endregion
 
         #region Public Properties
@@ -30,6 +31,16 @@ namespace Usb.Net
             {
                 if (!UsbInterfaces.Contains(value)) throw new Exception("The interface is not contained the list of valid interfaces.");
                 _WriteUsbInterface = value;
+            }
+        }
+
+        public IUsbInterface InterruptUsbInterface
+        {
+            get => _InterruptUsbInterface;
+            set
+            {
+                if (!UsbInterfaces.Contains(value)) throw new Exception("The interface is not contained the list of valid interfaces.");
+                _InterruptUsbInterface = value;
             }
         }
         #endregion

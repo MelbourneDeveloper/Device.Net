@@ -65,10 +65,11 @@ namespace Usb.Net.Windows
                 //Get the first (default) interface
                 //TODO: It seems like there isn't a way to get other interfaces here... 😞
                 var defaultInterface = GetInterface(defaultInterfaceHandle);
-
+                
                 UsbInterfaces.Add(defaultInterface);
                 ReadUsbInterface = defaultInterface;
                 WriteUsbInterface = defaultInterface;
+                InterruptUsbInterface = defaultInterface;
 
                 byte i = 0;
                 while (true)
@@ -108,7 +109,7 @@ namespace Usb.Net.Windows
             {
                 isSuccess = WinUsbApiCalls.WinUsb_QueryPipe(interfaceHandle, 0, i, out var pipeInfo);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't query endpoint");
-                retVal.UsbInterfaceEndpoints.Add(new WindowsUsbInterfaceEndpoint(pipeInfo.PipeId));
+                retVal.UsbInterfaceEndpoints.Add(new WindowsUsbInterfaceEndpoint(pipeInfo.PipeId, pipeInfo.PipeType));
             }
 
             return retVal;
