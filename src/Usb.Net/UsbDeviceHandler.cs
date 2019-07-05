@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Device.Net;
+using System;
 using System.Collections.Generic;
 
 namespace Usb.Net
@@ -10,7 +11,17 @@ namespace Usb.Net
         private IUsbInterface _WriteUsbInterface;
         #endregion
 
-        #region Public Properties
+        #region Constructor
+        protected UsbDeviceHandlerBase(ILogger logger, ITracer tracer)
+        {
+            Tracer = tracer;
+            Logger = logger;
+        }
+        #endregion
+
+        #region Public Properties        
+        public ITracer Tracer { get; }
+        public ILogger Logger { get; }
         public IList<IUsbInterface> UsbInterfaces { get; } = new List<IUsbInterface>();
 
         public IUsbInterface ReadUsbInterface

@@ -12,7 +12,6 @@ namespace Usb.Net.Windows
         #region Fields
         private bool disposed;
         private SafeFileHandle _DeviceHandle;
-        private readonly ILogger _Logger;
         #endregion
 
         #region Public Properties
@@ -23,10 +22,9 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsUsbDeviceHandler(string deviceId, ILogger logger)
+        public WindowsUsbDeviceHandler(string deviceId, ILogger logger, ITracer tracer) : base(logger, tracer)
         {
             DeviceId = deviceId;
-            _Logger = logger;
         }
         #endregion
 
@@ -92,7 +90,7 @@ namespace Usb.Net.Windows
             }
             catch (Exception ex)
             {
-                _Logger?.Log($"{nameof(Initialize)} error. DeviceId {DeviceId}", nameof(UsbDevice), ex, LogLevel.Error);
+                Logger?.Log($"{nameof(Initialize)} error. DeviceId {DeviceId}", nameof(UsbDevice), ex, LogLevel.Error);
                 throw;
             }
         }

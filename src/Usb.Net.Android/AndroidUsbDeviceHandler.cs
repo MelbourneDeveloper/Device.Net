@@ -3,7 +3,6 @@ using Android.Hardware.Usb;
 using Device.Net;
 using Java.Nio;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -13,7 +12,7 @@ using usbDevice = Android.Hardware.Usb.UsbDevice;
 
 namespace Usb.Net.Android
 {
-    public class AndroidUsbDeviceHandler : IUsbDeviceHandler
+    public class AndroidUsbDeviceHandler : UsbDeviceHandlerBase, IUsbDeviceHandler
     {
         #region Fields
         private UsbDeviceConnection _UsbDeviceConnection;
@@ -21,8 +20,6 @@ namespace Usb.Net.Android
         private UsbEndpoint _WriteEndpoint;
         private UsbEndpoint _ReadEndpoint;
         private SemaphoreSlim _InitializingSemaphoreSlim = new SemaphoreSlim(1, 1);
-        public ITracer Tracer { get; }
-        public ILogger Logger { get; }
         private bool _IsClosing;
         private bool disposed;
         #endregion
@@ -37,17 +34,11 @@ namespace Usb.Net.Android
         public ushort ReadBufferSize => (ushort)_ReadEndpoint.MaxPacketSize;
         public ushort WriteBufferSize => (ushort)_WriteEndpoint.MaxPacketSize;
         public int DeviceNumberId { get; }
-
-        public IUsbInterface ReadUsbInterface { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IList<IUsbInterface> UsbInterfaces => throw new NotImplementedException();
-        public IUsbInterface WriteUsbInterface { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         #endregion
 
         #region Constructor
-        public AndroidUsbDeviceHandler(UsbManager usbManager, Context androidContext, int deviceNumberId, ILogger logger, ITracer tracer)
+        public AndroidUsbDeviceHandler(UsbManager usbManager, Context androidContext, int deviceNumberId, ILogger logger, ITracer tracer) : base(logger, tracer)
         {
-            Logger = logger;
-            Tracer = tracer;
             DeviceNumberId = deviceNumberId;
             UsbManager = usbManager;
             AndroidContext = androidContext;
