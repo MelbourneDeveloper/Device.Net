@@ -27,13 +27,13 @@ namespace Usb.Net.Android
         #region Public Properties
         public UsbManager UsbManager { get; }
         public Context AndroidContext { get; private set; }
-        public ushort ReadBufferSize => (ushort)_ReadEndpoint.MaxPacketSize;
-        public ushort WriteBufferSize => (ushort)_WriteEndpoint.MaxPacketSize;
+        public ushort ReadBufferSize => ReadUsbInterface.ReadBufferSize;
+        public ushort WriteBufferSize => ReadUsbInterface.WriteBufferSize;
         public int DeviceNumberId { get; }
         #endregion
 
         #region Constructor
-        public AndroidUsbDeviceHandler(UsbManager usbManager, Context androidContext, int deviceNumberId, ILogger logger, ITracer tracer) : base(logger, tracer)
+        public AndroidUsbDeviceHandler(UsbManager usbManager, Context androidContext, int deviceNumberId, ILogger logger, ITracer tracer, ushort? readBufferLength, ushort? writeBufferLength) : base(logger, tracer, readBufferLength, writeBufferLength)
         {
             DeviceNumberId = deviceNumberId;
             UsbManager = usbManager;
@@ -125,9 +125,7 @@ namespace Usb.Net.Android
 
                 _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceNumberId);
 
-                //ConnectedDeviceDefinition = AndroidUsbDeviceFactory.GetAndroidDeviceDefinition(_UsbDevice);
-
-                //Logger?.Log($"Found device: {ConnectedDeviceDefinition.ProductName} Id: {_UsbDevice.DeviceId}", null);
+                Logger?.Log($"Found device: {_UsbDevice.DeviceName} Id: {_UsbDevice.DeviceId}", nameof(AndroidUsbDeviceHandler), null, LogLevel.Information);
 
                 if (_UsbDevice == null)
                 {
@@ -145,69 +143,75 @@ namespace Usb.Net.Android
                     throw new Exception("The user did not give the permission to access the device");
                 }
 
-                //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
-                var usbInterface = _UsbDevice.GetInterface(0);
-
-                var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, Logger, Tracer);
-                UsbInterfaces.Add(androidUsbInterface);
-
-                for (var i = 0; i < usbInterface.EndpointCount; i++)
+                for (var x = 0; x < _UsbDevice.InterfaceCount; x++)
                 {
-                    var ep = usbInterface.GetEndpoint(i);
-                    if (ep != null)
+                    //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
+                    var usbInterface = _UsbDevice.GetInterface(x);
+
+                    var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, Logger, Tracer);
+                    UsbInterfaces.Add(androidUsbInterface);
+
+                    for (var y = 0; y < usbInterface.EndpointCount; y++)
                     {
-                        //TODO: This is probably all wrong...
-                        var isRead = ep.Type == UsbAddressing.XferInterrupt && (int)ep.Address == 129;
-                        var isWrite = ep.Type == UsbAddressing.XferInterrupt && ((int)ep.Address == 1 || (int)ep.Address == 2);
-                        var androidUsbEndpoint = new AndroidUsbEndpoint(ep, isRead, isWrite, (byte)ep.Address);
-                        androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
+                        var usbEndpoint = usbInterface.GetEndpoint(y);
 
-                        if (androidUsbInterface.ReadEndpoint == null && isRead)
+                        if (usbEndpoint != null)
                         {
-                            androidUsbInterface.ReadEndpoint = androidUsbEndpoint;
-                            ReadUsbInterface = androidUsbInterface;
-                        }
+                            //TODO: This is probably all wrong...
+                            var isRead = usbEndpoint.Type == UsbAddressing.XferInterrupt && (int)usbEndpoint.Address == 129;
+                            var isWrite = usbEndpoint.Type == UsbAddressing.XferInterrupt && ((int)usbEndpoint.Address == 1 || (int)usbEndpoint.Address == 2);
+                            var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, isRead, isWrite, (byte)usbEndpoint.Address);
+                            androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
 
-                        if (androidUsbInterface.WriteEndpoint == null && isWrite)
-                        {
-                            androidUsbInterface.WriteEndpoint = androidUsbEndpoint;
-                            WriteUsbInterface = androidUsbInterface;
+                            if (androidUsbInterface.ReadEndpoint == null && isRead)
+                            {
+                                androidUsbInterface.ReadEndpoint = androidUsbEndpoint;
+                                ReadUsbInterface = androidUsbInterface;
+                            }
+
+                            if (androidUsbInterface.WriteEndpoint == null && isWrite)
+                            {
+                                androidUsbInterface.WriteEndpoint = androidUsbEndpoint;
+                                WriteUsbInterface = androidUsbInterface;
+                            }
                         }
                     }
                 }
 
+
+
                 //TODO: This is a bit of a guess. It only kicks in if the previous code fails. This needs to be reworked for different devices
-                if (_ReadEndpoint == null)
-                {
-                    _ReadEndpoint = usbInterface.GetEndpoint(0);
-                }
+                //if (_ReadEndpoint == null)
+                //{
+                //    _ReadEndpoint = usbInterface.GetEndpoint(0);
+                //}
 
-                if (_WriteEndpoint == null)
-                {
-                    _WriteEndpoint = usbInterface.GetEndpoint(1);
-                }
+                //if (_WriteEndpoint == null)
+                //{
+                //    _WriteEndpoint = usbInterface.GetEndpoint(1);
+                //}
 
-                if (_ReadEndpoint.MaxPacketSize != ReadBufferSize)
-                {
-                    throw new Exception("Wrong packet size for read endpoint");
-                }
+                //if (_ReadEndpoint.MaxPacketSize != ReadBufferSize)
+                //{
+                //    throw new Exception("Wrong packet size for read endpoint");
+                //}
 
-                if (_WriteEndpoint.MaxPacketSize != ReadBufferSize)
-                {
-                    throw new Exception("Wrong packet size for write endpoint");
-                }
+                //if (_WriteEndpoint.MaxPacketSize != ReadBufferSize)
+                //{
+                //    throw new Exception("Wrong packet size for write endpoint");
+                //}
 
-                _UsbDeviceConnection = UsbManager.OpenDevice(_UsbDevice);
+                //_UsbDeviceConnection = UsbManager.OpenDevice(_UsbDevice);
 
-                if (_UsbDeviceConnection == null)
-                {
-                    throw new Exception("could not open connection");
-                }
+                //if (_UsbDeviceConnection == null)
+                //{
+                //    throw new Exception("could not open connection");
+                //}
 
-                if (!_UsbDeviceConnection.ClaimInterface(usbInterface, true))
-                {
-                    throw new Exception("could not claim interface");
-                }
+                //if (!_UsbDeviceConnection.ClaimInterface(usbInterface, true))
+                //{
+                //    throw new Exception("could not claim interface");
+                //}
 
                 Log("Hid device initialized. About to tell everyone.", null);
             }
@@ -225,6 +229,11 @@ namespace Usb.Net.Android
         private void Log(string message, Exception ex, [CallerMemberName]string region = null)
         {
             Logger?.Log(message, region, ex, LogLevel.Error);
+        }
+
+        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync()
+        {
+            return Task.Run<ConnectedDeviceDefinitionBase>(() => { return AndroidUsbDeviceFactory.GetAndroidDeviceDefinition(_UsbDevice); });
         }
         #endregion
 

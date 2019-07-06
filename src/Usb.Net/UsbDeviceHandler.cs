@@ -4,18 +4,23 @@ using System.Collections.Generic;
 
 namespace Usb.Net
 {
-    public abstract class UsbDeviceHandlerBase 
+    public abstract class UsbDeviceHandlerBase
     {
         #region Fields
         private IUsbInterface _ReadUsbInterface;
         private IUsbInterface _WriteUsbInterface;
         #endregion
 
+        protected ushort? _ReadBufferSize { get; set; }
+        protected ushort? _WriteBufferSize { get; set; }
+
         #region Constructor
-        protected UsbDeviceHandlerBase(ILogger logger, ITracer tracer)
+        protected UsbDeviceHandlerBase(ILogger logger, ITracer tracer, ushort? readBufferLength, ushort? writeBufferLength)
         {
             Tracer = tracer;
             Logger = logger;
+            _ReadBufferSize = readBufferLength;
+            _WriteBufferSize = writeBufferLength;
         }
         #endregion
 

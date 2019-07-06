@@ -15,6 +15,8 @@ namespace Usb.Net
         #region Public Properties
         public ILogger Logger { get;  }
         public ITracer Tracer { get; }
+        public ushort ReadBufferSize { get; set; }
+        public ushort WriteBufferSize { get; set; }
 
         public IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints { get; } = new List<IUsbInterfaceEndpoint>();
 
@@ -58,10 +60,12 @@ namespace Usb.Net
         #endregion
 
         #region Constructor
-        protected UsbInterfaceBase(ILogger logger, ITracer tracer)
+        protected UsbInterfaceBase(ILogger logger, ITracer tracer, ushort readBufferSize, ushort writeBufferSize)
         {
             Tracer = tracer;
             Logger = logger;
+            ReadBufferSize = readBufferSize;
+            WriteBufferSize = writeBufferSize;
         }
         #endregion
     }

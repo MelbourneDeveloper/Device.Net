@@ -17,12 +17,14 @@ namespace Usb.Net.Windows
         #region Public Properties
         public bool IsInitialized => _DeviceHandle != null && !_DeviceHandle.IsInvalid;
         public string DeviceId { get; }
-        public ushort WriteBufferSize { get; private set; }
-        public ushort ReadBufferSize { get; private set; }
+
+        //TODO: Null checking here. These will error if the device doesn't have a value or it is not initialized
+        public ushort WriteBufferSize => _WriteBufferSize.Value;
+        public ushort ReadBufferSize => _ReadBufferSize.Value;
         #endregion
 
         #region Constructor
-        public WindowsUsbDeviceHandler(string deviceId, ILogger logger, ITracer tracer) : base(logger, tracer)
+        public WindowsUsbDeviceHandler(string deviceId, ILogger logger, ITracer tracer, ushort? writeBufferLength, ushort? readBufferLength) : base(logger, tracer, writeBufferLength, readBufferLength)
         {
             DeviceId = deviceId;
         }
@@ -57,12 +59,12 @@ namespace Usb.Net.Windows
 
                 var connectedDeviceDefinition = WindowsUsbDeviceFactory.GetDeviceDefinition(defaultInterfaceHandle, DeviceId);
 
-                WriteBufferSize = (ushort)connectedDeviceDefinition.WriteBufferSize.Value;
-                ReadBufferSize = (ushort)connectedDeviceDefinition.ReadBufferSize.Value;
+                if (!_WriteBufferSize.HasValue) _WriteBufferSize = (ushort)connectedDeviceDefinition.WriteBufferSize.Value;
+
+                if (!_ReadBufferSize.HasValue) _ReadBufferSize = (ushort)connectedDeviceDefinition.ReadBufferSize.Value;
 
                 //Get the first (default) interface
-                //TODO: It seems like there isn't a way to get other interfaces here... 😞
-                var defaultInterface = GetInterface(defaultInterfaceHandle);
+                var defaultInterface = GetInterface(defaultInterfaceHandle, _ReadBufferSize.Value, _WriteBufferSize.Value);
 
                 UsbInterfaces.Add(defaultInterface);
                 ReadUsbInterface = defaultInterface;
@@ -80,7 +82,7 @@ namespace Usb.Net.Windows
                         throw new Exception($"Could not enumerate interfaces for device. Error code: { errorCode}");
                     }
 
-                    var associatedInterface = GetInterface(interfacePointer);
+                    var associatedInterface = GetInterface(interfacePointer, _ReadBufferSize.Value, _WriteBufferSize.Value);
 
                     //TODO: this is bad design. The handler should be taking care of this
                     UsbInterfaces.Add(associatedInterface);
@@ -95,11 +97,11 @@ namespace Usb.Net.Windows
             }
         }
 
-        private static WindowsUsbInterface GetInterface(SafeFileHandle interfaceHandle)
+        private WindowsUsbInterface GetInterface(SafeFileHandle interfaceHandle, ushort readBufferLength, ushort writeBufferLength)
         {
             //TODO: Where is the logger/tracer?
-            var retVal = new WindowsUsbInterface(null, null) { Handle = interfaceHandle };
             var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
+            var retVal = new WindowsUsbInterface(interfaceHandle, Logger, Tracer, readBufferLength, writeBufferLength);
             WindowsDeviceBase.HandleError(isSuccess, "Couldn't query interface");
 
             for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)
@@ -140,6 +142,12 @@ namespace Usb.Net.Windows
         public async Task InitializeAsync()
         {
             await Task.Run(Initialize);
+        }
+
+        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync()
+        {
+            //TODO: Is this right?
+            return Task.Run<ConnectedDeviceDefinitionBase>(() => { return WindowsUsbDeviceFactory.GetDeviceDefinition(_DeviceHandle, DeviceId); });
         }
         #endregion
     }
