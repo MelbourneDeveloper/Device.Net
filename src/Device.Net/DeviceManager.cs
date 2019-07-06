@@ -54,6 +54,8 @@ namespace Device.Net
 
         public async Task<List<IDevice>> GetDevicesAsync(IList<FilterDeviceDefinition> deviceDefinitions)
         {
+            if (deviceDefinitions == null) throw new ArgumentNullException(nameof(deviceDefinitions), $"{nameof(GetConnectedDeviceDefinitionsAsync)} can be used to enumerate all devices without specifying definitions.");
+
             var retVal = new List<IDevice>();
 
             foreach (var deviceFactory in DeviceFactories)

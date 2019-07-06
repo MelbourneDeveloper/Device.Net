@@ -23,7 +23,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Properties
-        public ILogger Logger { get;  }
+        public ILogger Logger { get; }
         public ITracer Tracer { get; }
         #endregion
 
@@ -110,6 +110,8 @@ namespace Device.Net.UWP
         #region Public Static Methods
         public static ConnectedDeviceDefinition GetDeviceInformation(wde.DeviceInformation deviceInformation, DeviceType deviceType)
         {
+            if (deviceInformation == null) throw new ArgumentNullException(nameof(deviceInformation));
+
             var retVal = WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(deviceInformation.Id, deviceType);
 
             //foreach (var keyValuePair in deviceInformation.Properties)

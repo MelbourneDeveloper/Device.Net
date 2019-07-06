@@ -72,7 +72,7 @@ namespace Device.Net
         {
             if (_PollTimer == null)
             {
-                throw new Exception("Polling is not enabled. Please specify pollMilliseconds in the constructor");
+                throw new Exception(Messages.ErrorMessagePollingNotEnabled);
             }
 
             if (DeviceManager.Current.DeviceFactories.Count == 0) throw new DeviceFactoriesNotRegisteredException();

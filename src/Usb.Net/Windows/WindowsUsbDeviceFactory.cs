@@ -32,6 +32,8 @@ namespace Usb.Net.Windows
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
+            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
+
             return deviceDefinition.DeviceType != DeviceType ? null : new WindowsUsbDevice(deviceDefinition.DeviceId, Logger, Tracer, ReadBufferSize, WriteBufferSize);
         }
         #endregion

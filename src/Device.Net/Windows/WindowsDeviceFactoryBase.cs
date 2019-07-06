@@ -155,6 +155,8 @@ namespace Device.Net.Windows
         #region Private Static Methods
         private static uint GetNumberFromDeviceId(string deviceId, string searchString)
         {
+            if (deviceId == null) throw new ArgumentNullException(nameof(deviceId));
+
             var indexOfSearchString = deviceId.IndexOf(searchString, StringComparison.OrdinalIgnoreCase);
             string hexString = null;
             if (indexOfSearchString > -1)
