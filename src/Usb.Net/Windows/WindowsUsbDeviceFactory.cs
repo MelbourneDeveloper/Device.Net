@@ -52,11 +52,6 @@ namespace Usb.Net.Windows
             DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory(logger, tracer));
         }
 
-        public static void Register(ILogger logger)
-        {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory() { Logger = logger });
-        }
-
         public static ConnectedDeviceDefinition GetDeviceDefinition(SafeFileHandle defaultInterfaceHandle, string deviceId)
         {
             var deviceDefinition = new ConnectedDeviceDefinition(deviceId) { DeviceType = DeviceType.Usb };
