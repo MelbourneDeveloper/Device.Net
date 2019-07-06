@@ -17,6 +17,9 @@ namespace Device.Net
         public UsbManager UsbManager { get; }
         public Context Context { get; }
         public ILogger Logger { get; set; }
+        public ITracer Tracer { get; set; }
+        public ushort? ReadBufferSize { get; set; }
+        public ushort? WriteBufferSize { get; set; }
         #endregion
 
         #region Public Static Properties
@@ -54,7 +57,7 @@ namespace Device.Net
                 throw new Exception($"The device Id '{deviceDefinition.DeviceId}' is not a valid integer");
             }
 
-            return new AndroidUsbDevice(UsbManager, Context, deviceId) { Logger = Logger };
+            return new AndroidUsbDevice(new AndroidUsbDeviceHandler(UsbManager, Context, deviceId, Logger, Tracer, ReadBufferSize, WriteBufferSize));
         }
         #endregion
 

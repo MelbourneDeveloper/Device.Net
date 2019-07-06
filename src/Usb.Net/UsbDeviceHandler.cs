@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Device.Net;
+using System;
 using System.Collections.Generic;
 
 namespace Usb.Net
 {
-    public abstract class UsbDeviceHandlerBase 
+    public abstract class UsbDeviceHandlerBase
     {
         #region Fields
         private IUsbInterface _ReadUsbInterface;
@@ -11,7 +12,22 @@ namespace Usb.Net
         private IUsbInterface _InterruptUsbInterface;
         #endregion
 
-        #region Public Properties
+        protected ushort? _ReadBufferSize { get;  set; }
+        protected ushort? _WriteBufferSize { get;  set; }
+
+        #region Constructor
+        protected UsbDeviceHandlerBase(ILogger logger, ITracer tracer, ushort? readBufferLength, ushort? writeBufferLength)
+        {
+            Tracer = tracer;
+            Logger = logger;
+            _ReadBufferSize = readBufferLength;
+            _WriteBufferSize = writeBufferLength;
+        }
+        #endregion
+
+        #region Public Properties        
+        public ITracer Tracer { get; }
+        public ILogger Logger { get; }
         public IList<IUsbInterface> UsbInterfaces { get; } = new List<IUsbInterface>();
 
         public IUsbInterface ReadUsbInterface

@@ -9,6 +9,8 @@ namespace Usb.Net
         IUsbInterfaceEndpoint ReadEndpoint { get; set; }
         IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints { get; }
         IUsbInterfaceEndpoint WriteEndpoint { get; set; }
+        ushort ReadBufferSize { get; }
+        ushort WriteBufferSize { get; }
         IUsbInterfaceEndpoint InterruptEndpoint { get; set; }
 
         Task WriteAsync(byte[] data);

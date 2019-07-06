@@ -33,6 +33,7 @@ namespace Usb.Net
         public async Task InitializeAsync()
         {
             await UsbDeviceHandler.InitializeAsync();
+            ConnectedDeviceDefinition = await UsbDeviceHandler.GetConnectedDeviceDefinitionAsync();
         }
 
         public override Task<byte[]> ReadAsync()

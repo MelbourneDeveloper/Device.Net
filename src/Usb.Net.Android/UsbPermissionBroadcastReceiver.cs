@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Hardware.Usb;
 using Device.Net;
 using System;
+using usbDevice = Android.Hardware.Usb.UsbDevice;
 
 namespace Usb.Net.Android
 {
@@ -17,7 +18,7 @@ namespace Usb.Net.Android
         /// </summary>
         private const string RequestUsbIntentAction = nameof(RequestUsbIntentAction);
         private UsbManager _Manager;
-        private readonly UsbDevice _Device;
+        private readonly usbDevice _Device;
         private Context _Context;
         #endregion
 
@@ -31,7 +32,7 @@ namespace Usb.Net.Android
         #endregion
 
         #region Constructor
-        public UsbPermissionBroadcastReceiver(UsbManager manager, UsbDevice device, Context context)
+        public UsbPermissionBroadcastReceiver(UsbManager manager, usbDevice device, Context context)
         {
             _Manager = manager;
             _Device = device;

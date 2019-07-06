@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Device.Net;
 
 namespace Usb.Net
 {
@@ -15,5 +16,6 @@ namespace Usb.Net
         bool IsInitialized { get; }
         Task InitializeAsync();
         void Close();
+        Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync();
     }
 }

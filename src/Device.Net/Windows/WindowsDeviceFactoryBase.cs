@@ -15,6 +15,7 @@ namespace Device.Net.Windows
     {
         #region Public Properties
         public ILogger Logger { get; set; }
+        public ITracer Tracer { get; set; }
         #endregion
 
         #region Public Abstract Properties

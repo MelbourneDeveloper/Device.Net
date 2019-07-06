@@ -8,6 +8,9 @@ namespace Usb.Net.Windows
 {
     public class WindowsUsbDeviceFactory : WindowsDeviceFactoryBase, IDeviceFactory
     {
+        public ushort? ReadBufferSize { get; set; }
+        public ushort? WriteBufferSize { get; set; }
+
         #region Public Override Properties
         public override DeviceType DeviceType => DeviceType.Usb;
         #endregion
@@ -23,7 +26,7 @@ namespace Usb.Net.Windows
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsUsbDevice(deviceDefinition.DeviceId, Logger);
+            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsUsbDevice(deviceDefinition.DeviceId, Logger, Tracer, ReadBufferSize, WriteBufferSize);
         }
         #endregion
 
