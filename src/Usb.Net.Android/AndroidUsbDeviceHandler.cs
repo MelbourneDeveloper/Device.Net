@@ -148,7 +148,8 @@ namespace Usb.Net.Android
                     //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
                     var usbInterface = _UsbDevice.GetInterface(x);
 
-                    AndroidUsbInterface androidUsbInterface = null;
+                    var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, Logger, Tracer, _ReadBufferSize, _WriteBufferSize);
+                    UsbInterfaces.Add(androidUsbInterface);
 
                     for (var y = 0; y < usbInterface.EndpointCount; y++)
                     {
@@ -164,13 +165,6 @@ namespace Usb.Net.Android
 
                             if (androidUsbInterface.ReadEndpoint == null && isRead)
                             {
-                                if (androidUsbInterface == null)
-                                {
-                                    androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, Logger, Tracer, _ReadBufferSize, _WriteBufferSize);
-                                    UsbInterfaces.Add(androidUsbInterface);
-
-                                }
-
                                 androidUsbInterface.ReadEndpoint = androidUsbEndpoint;
                                 ReadUsbInterface = androidUsbInterface;
                             }
@@ -181,43 +175,31 @@ namespace Usb.Net.Android
                                 WriteUsbInterface = androidUsbInterface;
                             }
                         }
+
+                        if (!_UsbDeviceConnection.ClaimInterface(usbInterface, true))
+                        {
+                            throw new Exception("could not claim interface");
+                        }
+                    }
+
+                    //TODO: This is a big guess and a hack. It only kicks in if the previous code fails. This needs to be reworked for different devices
+                    if (androidUsbInterface.ReadEndpoint == null)
+                    {
+                        androidUsbInterface.ReadEndpoint = androidUsbInterface.UsbInterfaceEndpoints[0];
+                    }
+
+                    if (androidUsbInterface.WriteEndpoint == null)
+                    {
+                        androidUsbInterface.WriteEndpoint = androidUsbInterface.UsbInterfaceEndpoints[1];
                     }
                 }
 
+                _UsbDeviceConnection = UsbManager.OpenDevice(_UsbDevice);
 
-
-                //TODO: This is a bit of a guess. It only kicks in if the previous code fails. This needs to be reworked for different devices
-                //if (_ReadEndpoint == null)
-                //{
-                //    _ReadEndpoint = usbInterface.GetEndpoint(0);
-                //}
-
-                //if (_WriteEndpoint == null)
-                //{
-                //    _WriteEndpoint = usbInterface.GetEndpoint(1);
-                //}
-
-                //if (_ReadEndpoint.MaxPacketSize != ReadBufferSize)
-                //{
-                //    throw new Exception("Wrong packet size for read endpoint");
-                //}
-
-                //if (_WriteEndpoint.MaxPacketSize != ReadBufferSize)
-                //{
-                //    throw new Exception("Wrong packet size for write endpoint");
-                //}
-
-                //_UsbDeviceConnection = UsbManager.OpenDevice(_UsbDevice);
-
-                //if (_UsbDeviceConnection == null)
-                //{
-                //    throw new Exception("could not open connection");
-                //}
-
-                //if (!_UsbDeviceConnection.ClaimInterface(usbInterface, true))
-                //{
-                //    throw new Exception("could not claim interface");
-                //}
+                if (_UsbDeviceConnection == null)
+                {
+                    throw new Exception("could not open connection");
+                }
 
                 Log("Hid device initialized. About to tell everyone.", null);
             }
