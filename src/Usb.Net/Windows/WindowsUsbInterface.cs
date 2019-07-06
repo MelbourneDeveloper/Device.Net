@@ -2,79 +2,26 @@
 using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Usb.Net.Windows
 {
-    public class WindowsUsbInterface : IDisposable, IUsbInterface
+    public class WindowsUsbInterface : UsbInterfaceBase, IDisposable, IUsbInterface
     {
-        #region Fields
-        private IUsbInterfaceEndpoint _ReadEndpoint;
-        private IUsbInterfaceEndpoint _WriteEndpoint;
-        private bool _IsDisposed;
-        #endregion
-
-        #region Public Properties
-        public ILogger Logger { get; }
-        public ITracer Tracer { get; }
-        #endregion
-
-        #region Internal Properties
+        #region Private Properties
+        private  bool _IsDisposed;
         /// <summary>
         /// TODO: Make private?
         /// </summary>
         internal SafeFileHandle Handle { get; set; }
         #endregion
 
-        public WindowsUsbInterface(ILogger logger, ITracer tracer)
+        #region Constructor
+        public WindowsUsbInterface(ILogger logger, ITracer tracer) : base(logger, tracer)
         {
-            Tracer = tracer;
-            Logger = logger;
-        }
-
-        #region Public Properties
-        public IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints { get; } = new List<IUsbInterfaceEndpoint>();
-
-        public IUsbInterfaceEndpoint ReadEndpoint
-        {
-            get
-            {
-                //This is a bit stinky but should work
-                if (_ReadEndpoint == null)
-                {
-                    _ReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead);
-                }
-
-                return _ReadEndpoint;
-            }
-            set
-            {
-                if (!UsbInterfaceEndpoints.Contains(value)) throw new Exception("This endpoint is not contained in the list of valid endpoints");
-                _ReadEndpoint = value;
-            }
-        }
-
-        public IUsbInterfaceEndpoint WriteEndpoint
-        {
-            get
-            {
-                //This is a bit stinky but should work
-                if (_WriteEndpoint == null)
-                {
-                    _WriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite);
-                }
-
-                return _WriteEndpoint;
-            }
-            set
-            {
-                if (!UsbInterfaceEndpoints.Contains(value)) throw new Exception("This endpoint is not contained in the list of valid endpoints");
-                _WriteEndpoint = value;
-            }
         }
         #endregion
+
 
         #region Public Methods
         public async Task<byte[]> ReadAsync(uint bufferLength)

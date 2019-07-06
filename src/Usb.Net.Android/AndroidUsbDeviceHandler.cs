@@ -17,8 +17,6 @@ namespace Usb.Net.Android
         #region Fields
         private UsbDeviceConnection _UsbDeviceConnection;
         private usbDevice _UsbDevice;
-        private UsbEndpoint _WriteEndpoint;
-        private UsbEndpoint _ReadEndpoint;
         private SemaphoreSlim _InitializingSemaphoreSlim = new SemaphoreSlim(1, 1);
         private bool _IsClosing;
         private bool disposed;
@@ -196,10 +194,21 @@ namespace Usb.Net.Android
                 //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
                 var usbInterface = _UsbDevice.GetInterface(0);
 
+                var asdasdinterface = new AndroidUsbInterface(usbInterface);
+
                 //TODO: This selection stuff needs to be moved up higher. The constructor should take these arguments
                 for (var i = 0; i < usbInterface.EndpointCount; i++)
                 {
                     var ep = usbInterface.GetEndpoint(i);
+                    if (ep != null)
+                    {
+                        var isRead = ep.Type == UsbAddressing.XferInterrupt && (int)ep.Address == 129;
+                        var isWrite = ep.Type == UsbAddressing.XferInterrupt && ((int)ep.Address == 1 || (int)ep.Address == 2);
+                        var asdasd = new AndroidUsbEndpoint(ep, isRead, isWrite, (byte)ep.Address);
+                        
+                    }
+                            
+
                     if (_ReadEndpoint == null && ep.Type == UsbAddressing.XferInterrupt && (int)ep.Address == 129)
                     {
                         _ReadEndpoint = ep;
