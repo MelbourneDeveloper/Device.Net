@@ -156,6 +156,7 @@ namespace Usb.Net.Android
                     var ep = usbInterface.GetEndpoint(i);
                     if (ep != null)
                     {
+                        //TODO: This is probably all wrong...
                         var isRead = ep.Type == UsbAddressing.XferInterrupt && (int)ep.Address == 129;
                         var isWrite = ep.Type == UsbAddressing.XferInterrupt && ((int)ep.Address == 1 || (int)ep.Address == 2);
                         var androidUsbEndpoint = new AndroidUsbEndpoint(ep, isRead, isWrite, (byte)ep.Address);
