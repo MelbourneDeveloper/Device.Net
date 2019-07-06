@@ -94,6 +94,8 @@ namespace Device.Net
         /// </summary> 
         public static byte[] RemoveFirstByte(byte[] bytes)
         {
+            if (bytes == null) throw new ArgumentNullException(nameof(bytes));
+
             var length = bytes.Length - 1;
             var retVal = new byte[length];
 
