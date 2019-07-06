@@ -41,11 +41,15 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidDevice(string deviceId) : this(deviceId, null, null)
+        public WindowsHidDevice(string deviceId) : this(deviceId, null, null, null, null)
         {
         }
 
-        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize) : base(deviceId)
+        public WindowsHidDevice(string deviceId, ILogger logger, ITracer tracer) : this(deviceId, null, null, logger, tracer)
+        {
+        }
+
+        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
         {
             _WriteBufferSize = writeBufferSize;
             _ReadBufferSize = readBufferSize;
@@ -162,7 +166,9 @@ namespace Hid.Net.Windows
 
         public override async Task<byte[]> ReadAsync()
         {
-            return (await ReadReportAsync()).Data;
+            var data = (await ReadReportAsync()).Data;
+            Tracer?.Trace(false, data);
+            return data;
         }
 
         public async Task<ReadReport> ReadReportAsync()
@@ -189,8 +195,6 @@ namespace Hid.Net.Windows
             if (ReadBufferHasReportId) reportId = bytes.First();
 
             var retVal = ReadBufferHasReportId ? RemoveFirstByte(bytes) : bytes;
-
-            Tracer?.Trace(false, retVal);
 
             return new ReadReport(reportId, retVal);
         }
@@ -234,14 +238,13 @@ namespace Hid.Net.Windows
                 try
                 {
                     await _WriteFileStream.WriteAsync(bytes, 0, bytes.Length);
+                    Tracer?.Trace(true, bytes);
                 }
                 catch (Exception ex)
                 {
                     Log(Helpers.WriteErrorMessage, ex);
                     throw new IOException(Helpers.WriteErrorMessage, ex);
                 }
-
-                Tracer?.Trace(true, bytes);
             }
             else
             {

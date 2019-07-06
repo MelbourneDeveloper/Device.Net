@@ -64,10 +64,17 @@ namespace Hid.Net.UWP
         }
         #endregion
 
+        #region Constructor
+        public UWPHidDeviceFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
+        {
+
+        }
+        #endregion
+
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            return deviceDefinition.DeviceType == DeviceType.Usb ? null : new UWPHidDevice(deviceDefinition.DeviceId) { Logger = Logger };
+            return deviceDefinition.DeviceType == DeviceType.Usb ? null : new UWPHidDevice(deviceDefinition.DeviceId, Logger, Tracer);
         }
 
         public void Dispose()
@@ -82,19 +89,17 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Static Methods
-        public static void Register()
-        {
-            Register(null);
-        }
-
-        public static void Register(ILogger logger)
+        /// <summary>
+        /// Register the factory for enumerating Hid devices on UWP.
+        /// </summary>
+        public static void Register(ILogger logger, ITracer tracer)
         {
             foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)
             {
                 if (deviceFactory is UWPHidDeviceFactory) return;
             }
 
-            DeviceManager.Current.DeviceFactories.Add(new UWPHidDeviceFactory() { Logger = logger });
+            DeviceManager.Current.DeviceFactories.Add(new UWPHidDeviceFactory(logger, tracer));
         }
         #endregion
 
