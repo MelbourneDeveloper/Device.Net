@@ -7,7 +7,9 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Device.Net;
 using System;
+using Android.Content;
 using AndroidSampleCamera;
+using AndroidUsb = Android.Hardware.Usb;
 
 namespace Usb.Net.AndroidSample
 {
@@ -17,6 +19,7 @@ namespace Usb.Net.AndroidSample
         #region Fields
         //private readonly TrezorExample _TrezorExample = new TrezorExample();
         private readonly CameraExample _cameraExample = new CameraExample();
+        private static string ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
         #endregion
 
         #region Protected Override Methods
@@ -76,19 +79,53 @@ namespace Usb.Net.AndroidSample
 
                 _cameraExample.CameraInitialized += CameraExampleOnCameraInitialized;
                 _cameraExample.CameraDisconnected += CameraExampleOnCameraDisconnected;
-                _cameraExample.StartListening();
+                _cameraExample.Error += CameraExampleOnError;
+
+                TestUsbReciever usbReciever = new TestUsbReciever(_cameraExample);
+                usbReciever.OnError += (o, s) => DisplayMessage($"Error in Receiver: {s}");
+                var mPermissionIntent = PendingIntent.GetBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+                var filter = new IntentFilter(ACTION_USB_PERMISSION);
+                RegisterReceiver(usbReciever, filter);
+
+                AndroidUsb.UsbDevice myDevice = null;
+                foreach (var dev in usbManager.DeviceList)
+                {
+                    DisplayMessage($"V: {dev.Value.VendorId}");
+                    if (dev.Value.VendorId == 1200)
+                    {
+                        myDevice = dev.Value;
+                    }
+                }
+
+                usbManager.RequestPermission(myDevice, mPermissionIntent);
+                bool hasPermission = usbManager.HasPermission(myDevice);
+                //DisplayMessage($"Permission Granted: {hasPermission}");
+                //if (hasPermission)
+                //{
+                //    var androidCamera = new AndroidUsbDevice(usbManager, base.ApplicationContext, myDevice.DeviceId, new DebugLogger());
+                //    await _cameraExample.InitializeForDeviceAsync(androidCamera);
+                //}
+
+                //TODO: Why isn't this working?
+                //_cameraExample.StartListening();
 
                 //var attachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
                 //var detachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
                 //RegisterReceiver(attachedReceiver, new IntentFilter(UsbManager.ActionUsbDeviceAttached));
                 //RegisterReceiver(detachedReceiver, new IntentFilter(UsbManager.ActionUsbDeviceDetached));
 
-                DisplayMessage("Waiting for device...");
+
+                //DisplayMessage("Waiting for device...");
             }
             catch(Exception ex)
             {
                 DisplayMessage("Failed to start listener..." + ex.Message);
             }
+        }
+
+        private void CameraExampleOnError(object sender, string e)
+        {
+            DisplayMessage($"Camera Error: {e}");
         }
 
         private void CameraExampleOnCameraDisconnected(object sender, EventArgs e)

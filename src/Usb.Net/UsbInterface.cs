@@ -68,7 +68,7 @@ namespace Usb.Net
                 //This is a bit stinky but should work
                 if (_InterruptEndpoint == null)
                 {
-                    _InterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite);
+                    _InterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt);
                 }
 
                 return _InterruptEndpoint;

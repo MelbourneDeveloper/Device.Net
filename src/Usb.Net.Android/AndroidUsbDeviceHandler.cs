@@ -122,15 +122,14 @@ namespace Usb.Net.Android
                 await _InitializingSemaphoreSlim.WaitAsync();
 
                 Close();
-
+                
                 _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceNumberId);
-
-                Logger?.Log($"Found device: {_UsbDevice.DeviceName} Id: {_UsbDevice.DeviceId}", nameof(AndroidUsbDeviceHandler), null, LogLevel.Information);
-
                 if (_UsbDevice == null)
                 {
                     throw new Exception($"The device {DeviceNumberId} is not connected to the system");
                 }
+                Logger?.Log($"Found device: {_UsbDevice.DeviceName} Id: {_UsbDevice.DeviceId}", nameof(AndroidUsbDeviceHandler), null, LogLevel.Information);
+
 
                 var isPermissionGranted = await RequestPermissionAsync();
                 if (!isPermissionGranted.HasValue)
@@ -141,6 +140,13 @@ namespace Usb.Net.Android
                 if (!isPermissionGranted.Value)
                 {
                     throw new Exception("The user did not give the permission to access the device");
+                }
+
+                _UsbDeviceConnection = UsbManager.OpenDevice(_UsbDevice);
+
+                if (_UsbDeviceConnection == null)
+                {
+                    throw new Exception("could not open connection");
                 }
 
                 for (var x = 0; x < _UsbDevice.InterfaceCount; x++)
@@ -158,25 +164,25 @@ namespace Usb.Net.Android
                         if (usbEndpoint != null)
                         {
                             //TODO: This is probably all wrong...
-                            var isRead = usbEndpoint.Type == UsbAddressing.XferInterrupt && (int)usbEndpoint.Address == 129;
-                            var isWrite = usbEndpoint.Type == UsbAddressing.XferInterrupt && ((int)usbEndpoint.Address == 1 || (int)usbEndpoint.Address == 2);
+                            var isRead = usbEndpoint.Type == UsbAddressing.XferBulk && usbEndpoint.Direction != UsbAddressing.Out;
+                            var isWrite = usbEndpoint.Type == UsbAddressing.XferBulk && usbEndpoint.Direction == UsbAddressing.Out;
                             var isInterrupt = usbEndpoint.Type == UsbAddressing.XferInterrupt && usbEndpoint.Direction != UsbAddressing.Out;
-                            var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, isRead, isWrite, isInterrupt, (byte)usbEndpoint.Address);
+                            var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, isRead, isWrite, false, (byte)usbEndpoint.Address);
                             androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
 
-                            if (androidUsbInterface.ReadEndpoint == null && isRead)
+                            if (ReadUsbInterface == null && isRead)
                             {
                                 androidUsbInterface.ReadEndpoint = androidUsbEndpoint;
                                 ReadUsbInterface = androidUsbInterface;
                             }
 
-                            if (androidUsbInterface.WriteEndpoint == null && isWrite)
+                            if (WriteUsbInterface == null && isWrite)
                             {
                                 androidUsbInterface.WriteEndpoint = androidUsbEndpoint;
                                 WriteUsbInterface = androidUsbInterface;
                             }
 
-                            if (androidUsbInterface.InterruptEndpoint == null && isInterrupt)
+                            if (InterruptUsbInterface == null && isInterrupt)
                             {
                                 androidUsbInterface.InterruptEndpoint = androidUsbEndpoint;
                                 InterruptUsbInterface = androidUsbInterface;
@@ -193,24 +199,20 @@ namespace Usb.Net.Android
                     if (androidUsbInterface.ReadEndpoint == null)
                     {
                         androidUsbInterface.ReadEndpoint = androidUsbInterface.UsbInterfaceEndpoints[0];
+                        ReadUsbInterface = androidUsbInterface;
                     }
 
                     if (androidUsbInterface.WriteEndpoint == null)
                     {
                         androidUsbInterface.WriteEndpoint = androidUsbInterface.UsbInterfaceEndpoints[1];
+                        WriteUsbInterface = androidUsbInterface;
                     }
 
                     if (androidUsbInterface.InterruptEndpoint == null)
                     {
                         androidUsbInterface.InterruptEndpoint = androidUsbInterface.UsbInterfaceEndpoints[2];
+                        InterruptUsbInterface = androidUsbInterface;
                     }
-                }
-
-                _UsbDeviceConnection = UsbManager.OpenDevice(_UsbDevice);
-
-                if (_UsbDeviceConnection == null)
-                {
-                    throw new Exception("could not open connection");
                 }
 
                 Log("Hid device initialized. About to tell everyone.", null);
