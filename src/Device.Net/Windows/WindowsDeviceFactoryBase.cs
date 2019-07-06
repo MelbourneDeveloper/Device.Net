@@ -14,7 +14,8 @@ namespace Device.Net.Windows
     public abstract class WindowsDeviceFactoryBase
     {
         #region Public Properties
-        public ILogger Logger { get; set; }
+        public ILogger Logger { get;  }
+        public ITracer Tracer { get; }
         #endregion
 
         #region Public Abstract Properties
@@ -24,6 +25,14 @@ namespace Device.Net.Windows
         #region Protected Abstract Methods
         protected abstract ConnectedDeviceDefinition GetDeviceDefinition(string deviceId);
         protected abstract Guid GetClassGuid();
+        #endregion
+
+        #region Constructor
+        protected WindowsDeviceFactoryBase(ILogger logger, ITracer tracer)
+        {
+            Logger = logger;
+            Tracer = tracer;
+        }
         #endregion
 
         #region Public Methods

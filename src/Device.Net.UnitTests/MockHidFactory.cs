@@ -4,9 +4,10 @@ namespace Device.Net.UnitTests
 {
     public class MockHidFactory : MockFactoryBase, IDeviceFactory
     {
-        public MockHidFactory()
+        public const string FoundMessage = "Found device {0}";
+
+        public MockHidFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
         {
-            Logger = new DebugLogger { LogToConsole = true };
         }
 
         public override string DeviceId => MockHidDevice.MockedDeviceId;
@@ -21,9 +22,9 @@ namespace Device.Net.UnitTests
 
         public override uint VendorId => MockHidDevice.VendorId;
 
-        public static void Register(ILogger logger)
+        public static void Register(ILogger logger, ITracer tracer)
         {
-            DeviceManager.Current.DeviceFactories.Add(new MockHidFactory() { Logger = logger });
+            DeviceManager.Current.DeviceFactories.Add(new MockHidFactory(logger, tracer));
         }
 
         public override IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
@@ -32,11 +33,16 @@ namespace Device.Net.UnitTests
             {
                 if (deviceDefinition.DeviceId == DeviceId)
                 {
-                    if (!deviceDefinition.DeviceType.HasValue || deviceDefinition.DeviceType == DeviceType.Hid) return new MockHidDevice();
+                    if (!deviceDefinition.DeviceType.HasValue || deviceDefinition.DeviceType == DeviceType.Hid)
+                    {
+                        Logger?.Log(string.Format(FoundMessage, DeviceId), nameof(MockHidFactory), null, LogLevel.Information);
+
+                        return new MockHidDevice(Logger, Tracer);
+                    }
                 }
             }
 
-            throw new Exception("Couldn't get a device");
+            return null;
         }
     }
 }

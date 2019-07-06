@@ -16,7 +16,8 @@ namespace Device.Net
         #region Public Properties
         public UsbManager UsbManager { get; }
         public Context Context { get; }
-        public ILogger Logger { get; set; }
+        public ILogger Logger { get; }
+        public ITracer Tracer { get; }
         #endregion
 
         #region Public Static Properties
@@ -24,10 +25,12 @@ namespace Device.Net
         #endregion
 
         #region Constructor
-        public AndroidUsbDeviceFactory(UsbManager usbManager, Context context)
+        public AndroidUsbDeviceFactory(UsbManager usbManager, Context context, ILogger logger, ITracer tracer)
         {
             UsbManager = usbManager;
             Context = context;
+            Logger = logger;
+            Tracer = tracer;
         }
         #endregion
 
@@ -54,7 +57,7 @@ namespace Device.Net
                 throw new Exception($"The device Id '{deviceDefinition.DeviceId}' is not a valid integer");
             }
 
-            return new AndroidUsbDevice(UsbManager, Context, deviceId) { Logger = Logger };
+            return new AndroidUsbDevice(UsbManager, Context, deviceId, Logger, Tracer);
         }
         #endregion
 
@@ -74,14 +77,12 @@ namespace Device.Net
             };
         }
 
-        public static void Register(UsbManager usbManager, Context context)
+        /// <summary>
+        /// Register the factory for enumerating USB devices on Android.
+        /// </summary>
+        public static void Register(UsbManager usbManager, Context context, ILogger logger, ITracer tracer)
         {
-            Register(usbManager, context, null);
-        }
-
-        public static void Register(UsbManager usbManager, Context context, ILogger logger)
-        {
-            DeviceManager.Current.DeviceFactories.Add(new AndroidUsbDeviceFactory(usbManager, context) { Logger = logger });
+            DeviceManager.Current.DeviceFactories.Add(new AndroidUsbDeviceFactory(usbManager, context, logger, tracer));
         }
         #endregion
     }

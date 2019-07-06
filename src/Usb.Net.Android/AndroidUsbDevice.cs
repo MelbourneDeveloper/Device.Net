@@ -43,7 +43,11 @@ namespace Usb.Net.Android
         #endregion
 
         #region Constructor
-        public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int deviceNumberId)
+        public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int deviceNumberId) : this(usbManager, androidContext, deviceNumberId, null, null)
+        {
+        }
+
+        public AndroidUsbDevice(UsbManager usbManager, Context androidContext, int deviceNumberId, ILogger logger, ITracer tracer) : base(logger, tracer)
         {
             UsbManager = usbManager;
             AndroidContext = androidContext;
@@ -104,19 +108,18 @@ namespace Usb.Net.Android
                 request.Queue(byteBuffer, ReadBufferSize);
 #pragma warning restore CS0618 // Type or member is obsolete
                 await _UsbDeviceConnection.RequestWaitAsync();
-                var buffers = new byte[ReadBufferSize];
+                var data = new byte[ReadBufferSize];
 
                 byteBuffer.Rewind();
                 for (var i = 0; i < ReadBufferSize; i++)
                 {
-                    buffers[i] = (byte)byteBuffer.Get();
+                    data[i] = (byte)byteBuffer.Get();
                 }
 
                 //Marshal.Copy(byteBuffer.GetDirectBufferAddress(), buffers, 0, ReadBufferLength);
 
-                Tracer?.Trace(false, buffers);
-
-                return buffers;
+                Tracer?.Trace(false, data);
+                return data;
             }
             catch (Exception ex)
             {
@@ -134,12 +137,11 @@ namespace Usb.Net.Android
                 request.Initialize(_UsbDeviceConnection, _WriteEndpoint);
                 var byteBuffer = ByteBuffer.Wrap(data);
 
-                Tracer?.Trace(true, data);
-
 #pragma warning disable CS0618 // Type or member is obsolete
                 request.Queue(byteBuffer, data.Length);
 #pragma warning restore CS0618 // Type or member is obsolete
                 await _UsbDeviceConnection.RequestWaitAsync();
+                Tracer?.Trace(true, data);
             }
             catch (Exception ex)
             {

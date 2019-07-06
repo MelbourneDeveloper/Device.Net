@@ -32,7 +32,11 @@ namespace Usb.Net.Windows
         {
         }
 
-        public WindowsUsbDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize) : base(deviceId)
+        public WindowsUsbDevice(string deviceId, ILogger logger, ITracer tracer) : this(deviceId, logger, tracer, null, null)
+        {
+        }
+
+        public WindowsUsbDevice(string deviceId, ILogger logger, ITracer tracer, ushort? writeBufferSize, ushort? readBufferSize) : base(deviceId, logger, tracer)
         {
             _WriteBufferSize = writeBufferSize;
             _ReadBufferSize = readBufferSize;
@@ -112,12 +116,12 @@ namespace Usb.Net.Windows
         {
             return await Task.Run(() =>
             {
-                var bytes = new byte[ReadBufferSize];
+                var data = new byte[ReadBufferSize];
                 //TODO: Allow for different interfaces and pipes...
-                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.ReadPipe.WINUSB_PIPE_INFORMATION.PipeId, bytes, ReadBufferSize, out var bytesRead, IntPtr.Zero);
+                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_DefaultUsbInterface.Handle, _DefaultUsbInterface.ReadPipe.WINUSB_PIPE_INFORMATION.PipeId, data, ReadBufferSize, out var bytesRead, IntPtr.Zero);
                 HandleError(isSuccess, "Couldn't read data");
-                Tracer?.Trace(false, bytes);
-                return bytes;
+                Tracer?.Trace(false, data);
+                return data;
             });
         }
 

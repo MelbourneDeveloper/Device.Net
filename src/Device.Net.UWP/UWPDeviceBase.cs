@@ -35,5 +35,11 @@ namespace Device.Net.UWP
         #region Public Abstract Methods
         public abstract Task InitializeAsync();
         #endregion
+
+        #region Constructor
+        protected UWPDeviceBase(ILogger logger, ITracer tracer) : base(logger, tracer)
+        {
+        }
+        #endregion
     }
 }

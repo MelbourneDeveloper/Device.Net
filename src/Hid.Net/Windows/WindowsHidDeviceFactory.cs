@@ -36,10 +36,17 @@ namespace Hid.Net.Windows
 
         #endregion
 
+        #region Constructor
+        public WindowsHidDeviceFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
+        {
+
+        }
+        #endregion
+
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId) { Logger = Logger };
+            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId, Logger, Tracer);
         }
         #endregion
 
@@ -70,14 +77,12 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Static Methods
-        public static void Register()
+        /// <summary>
+        /// Register the factory for enumerating Hid devices on UWP. 
+        /// </summary>
+        public static void Register(ILogger logger, ITracer tracer)
         {
-            Register(null);
-        }
-
-        public static void Register(ILogger logger)
-        {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory() { Logger = logger });
+            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory(logger, tracer));
         }
         #endregion
     }

@@ -14,7 +14,7 @@ namespace Device.Net.Windows
         #endregion
 
         #region Constructor
-        protected WindowsDeviceBase(string deviceId)
+        protected WindowsDeviceBase(string deviceId, ILogger logger, ITracer tracer) : base(logger, tracer)
         {
             DeviceId = deviceId;
         }
