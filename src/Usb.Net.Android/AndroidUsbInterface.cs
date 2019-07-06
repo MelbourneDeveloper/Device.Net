@@ -61,6 +61,11 @@ namespace Usb.Net.Android
             });
         }
 
+        public Task<byte[]> ReadInterruptAsync(uint bufferLength, uint timeout)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task WriteAsync(byte[] data)
         {
             await Task.Run(async () =>

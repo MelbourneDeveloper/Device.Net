@@ -160,7 +160,8 @@ namespace Usb.Net.Android
                             //TODO: This is probably all wrong...
                             var isRead = usbEndpoint.Type == UsbAddressing.XferInterrupt && (int)usbEndpoint.Address == 129;
                             var isWrite = usbEndpoint.Type == UsbAddressing.XferInterrupt && ((int)usbEndpoint.Address == 1 || (int)usbEndpoint.Address == 2);
-                            var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, isRead, isWrite, (byte)usbEndpoint.Address);
+                            var isInterrupt = usbEndpoint.Type == UsbAddressing.XferInterrupt && usbEndpoint.Direction != UsbAddressing.Out;
+                            var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, isRead, isWrite, isInterrupt, (byte)usbEndpoint.Address);
                             androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
 
                             if (androidUsbInterface.ReadEndpoint == null && isRead)
@@ -173,6 +174,12 @@ namespace Usb.Net.Android
                             {
                                 androidUsbInterface.WriteEndpoint = androidUsbEndpoint;
                                 WriteUsbInterface = androidUsbInterface;
+                            }
+
+                            if (androidUsbInterface.InterruptEndpoint == null && isInterrupt)
+                            {
+                                androidUsbInterface.InterruptEndpoint = androidUsbEndpoint;
+                                InterruptUsbInterface = androidUsbInterface;
                             }
                         }
 
@@ -191,6 +198,11 @@ namespace Usb.Net.Android
                     if (androidUsbInterface.WriteEndpoint == null)
                     {
                         androidUsbInterface.WriteEndpoint = androidUsbInterface.UsbInterfaceEndpoints[1];
+                    }
+
+                    if (androidUsbInterface.InterruptEndpoint == null)
+                    {
+                        androidUsbInterface.InterruptEndpoint = androidUsbInterface.UsbInterfaceEndpoints[2];
                     }
                 }
 

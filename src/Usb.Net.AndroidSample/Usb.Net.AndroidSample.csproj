@@ -111,6 +111,14 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\source\repos\AndroidSampleCamera\AndroidSampleCamera.csproj">
+      <Project>{2bfc058c-6d3d-40ca-8dbf-a5d07712e6a3}</Project>
+      <Name>AndroidSampleCamera</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\source\repos\PtpLib\PtpLib.csproj">
+      <Project>{3ca5e25e-4767-42e3-8882-e2f42f1e0af1}</Project>
+      <Name>PtpLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj">
       <Project>{aac55ee8-183b-487f-9e2c-08e14e7e4894}</Project>
       <Name>Device.Net</Name>

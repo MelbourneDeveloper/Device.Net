@@ -46,7 +46,7 @@ namespace Usb.Net.Windows
                     throw new ApplicationException($"Unable to Set timeout.");
 
                 var bytes = new byte[bufferLength];
-                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(Handle, InterruptEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
+                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_SafeFileHandle, InterruptEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
                 //TODO: Should get Last error here and if it's Timeout, don't handle error?
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't read data from interrupt pipe"); //TODO: Error code 121 is timeout, I think we should ignore this?
                 Tracer?.Trace(false, bytes);
@@ -80,7 +80,7 @@ namespace Usb.Net.Windows
         #region Private Methods
         private bool SetTimeout(uint timeout)
         {
-            if (!WinUsbApiCalls.WinUsb_SetPipePolicy(Handle, InterruptEndpoint.PipeId, 0x03, sizeof(uint), ref timeout))
+            if (!WinUsbApiCalls.WinUsb_SetPipePolicy(_SafeFileHandle, InterruptEndpoint.PipeId, 0x03, sizeof(uint), ref timeout))
                 return false;
 
             return true;

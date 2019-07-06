@@ -1,5 +1,4 @@
 ﻿using Android.App;
-using Android.Content;
 using Android.Hardware.Usb;
 using Android.OS;
 using Android.Support.Design.Widget;
@@ -8,8 +7,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Device.Net;
 using System;
-using Usb.Net.Android;
-using Usb.Net.Sample;
+using AndroidSampleCamera;
 
 namespace Usb.Net.AndroidSample
 {
@@ -17,7 +15,8 @@ namespace Usb.Net.AndroidSample
     public class MainActivity : AppCompatActivity
     {
         #region Fields
-        private readonly TrezorExample _TrezorExample = new TrezorExample();
+        //private readonly TrezorExample _TrezorExample = new TrezorExample();
+        private readonly CameraExample _cameraExample = new CameraExample();
         #endregion
 
         #region Protected Override Methods
@@ -71,9 +70,13 @@ namespace Usb.Net.AndroidSample
                 //Register the factory for creating Usb devices. This only needs to be done once.
                 AndroidUsbDeviceFactory.Register(usbManager, base.ApplicationContext);
 
-                _TrezorExample.TrezorDisconnected += _TrezorExample_TrezorDisconnected;
-                _TrezorExample.TrezorInitialized += _TrezorExample_TrezorInitialized;
-                _TrezorExample.StartListening();
+                //_TrezorExample.TrezorDisconnected += _TrezorExample_TrezorDisconnected;
+                //_TrezorExample.TrezorInitialized += _TrezorExample_TrezorInitialized;
+                //_TrezorExample.StartListening();
+
+                _cameraExample.CameraInitialized += CameraExampleOnCameraInitialized;
+                _cameraExample.CameraDisconnected += CameraExampleOnCameraDisconnected;
+                _cameraExample.StartListening();
 
                 //var attachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
                 //var detachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
@@ -88,25 +91,47 @@ namespace Usb.Net.AndroidSample
             }
         }
 
-        private async void _TrezorExample_TrezorInitialized(object sender, EventArgs e)
+        private void CameraExampleOnCameraDisconnected(object sender, EventArgs e)
+        {
+            DisplayMessage("Device disconnected. Waiting for device..."); 
+        }
+
+        private async void CameraExampleOnCameraInitialized(object sender, EventArgs e)
         {
             try
             {
-                var readBuffer = await _TrezorExample.WriteAndReadFromDeviceAsync();
+                await _cameraExample.OpenSession();
+                var deviceInfo = await _cameraExample.GetDeviceInfo();
+                if(deviceInfo.Manufacturer == null)
+                    throw new ApplicationException($"Unable to get Device Info, it is null.");
 
-                if (readBuffer != null && readBuffer.Length > 0)
-                {
-                    DisplayMessage($"All good. First three bytes {readBuffer[0]}, {readBuffer[1]}, {readBuffer[2]}");
-                }
-                else
-                {
-                    DisplayMessage($"No good. No data returned.");
-                }
+                DisplayMessage($"{deviceInfo.Manufacturer} - {deviceInfo.Model} Connected.");
             }
             catch (Exception ex)
             {
                 DisplayMessage($"No good: {ex.Message}");
             }
+        }
+
+        private async void _TrezorExample_TrezorInitialized(object sender, EventArgs e)
+        {
+            //try
+            //{
+            //    var readBuffer = await _TrezorExample.WriteAndReadFromDeviceAsync();
+
+            //    if (readBuffer != null && readBuffer.Length > 0)
+            //    {
+            //        DisplayMessage($"All good. First three bytes {readBuffer[0]}, {readBuffer[1]}, {readBuffer[2]}");
+            //    }
+            //    else
+            //    {
+            //        DisplayMessage($"No good. No data returned.");
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    DisplayMessage($"No good: {ex.Message}");
+            //}
         }
 
         private void _TrezorExample_TrezorDisconnected(object sender, EventArgs e)

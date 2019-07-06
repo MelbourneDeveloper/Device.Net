@@ -10,6 +10,7 @@ namespace Usb.Net
         #region Fields
         private IUsbInterfaceEndpoint _ReadEndpoint;
         private IUsbInterfaceEndpoint _WriteEndpoint;
+        private IUsbInterfaceEndpoint _InterruptEndpoint;
         private readonly ushort? _ReadBufferSize;
         private readonly ushort? _WriteBufferSize;
         #endregion
@@ -59,6 +60,27 @@ namespace Usb.Net
                 _WriteEndpoint = value;
             }
         }
+
+        public IUsbInterfaceEndpoint InterruptEndpoint
+        {
+            get
+            {
+                //This is a bit stinky but should work
+                if (_InterruptEndpoint == null)
+                {
+                    _InterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite);
+                }
+
+                return _InterruptEndpoint;
+            }
+            set
+            {
+                if (!UsbInterfaceEndpoints.Contains(value)) throw new Exception("This endpoint is not contained in the list of valid endpoints");
+                _InterruptEndpoint = value;
+            }
+        }
+
+
         #endregion
 
         #region Constructor
