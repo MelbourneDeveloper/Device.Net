@@ -148,8 +148,10 @@ namespace Usb.Net.Windows
 
         public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync()
         {
+            if (_DeviceHandle == null) throw new NotInitializedException();
+
             //TODO: Is this right?
-            return Task.Run<ConnectedDeviceDefinitionBase>(() => { return WindowsUsbDeviceFactory.GetDeviceDefinition(_DeviceHandle, DeviceId); });
+            return Task.Run<ConnectedDeviceDefinitionBase>(() => { return WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(DeviceId, DeviceType.Usb); });
         }
         #endregion
     }
