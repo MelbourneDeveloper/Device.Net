@@ -73,12 +73,12 @@ namespace Hid.Net.Windows
 
                 if (_ReadSafeFileHandle.IsInvalid)
                 {
-                    throw new Exception("Could not open connection for reading");
+                    throw new Exception(Messages.ErrorMessageCantOpenRead);
                 }
 
                 if (_WriteSafeFileHandle.IsInvalid)
                 {
-                    throw new Exception("Could not open connection for writing");
+                    throw new Exception(Messages.ErrorMessageCantOpenWrite);
                 }
 
                 ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
@@ -206,6 +206,8 @@ namespace Hid.Net.Windows
 
         public async Task WriteReportAsync(byte[] data, byte? reportId)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
             if (_WriteFileStream == null)
             {
                 throw new Exception("The device has not been initialized");

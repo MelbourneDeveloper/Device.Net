@@ -124,7 +124,7 @@ namespace Device.Net
                         //Let listeners know a registered device was initialized
                         DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
 
-                        Log("Device connected", null);
+                        Log(Messages.InformationMessageDeviceConnected, null);
                     }
 
                 }
@@ -149,7 +149,7 @@ namespace Device.Net
 
                             removeDefs.Add(filteredDeviceDefinitionKey);
 
-                            Log("Disconnected", null);
+                            Log(Messages.InformationMessageDeviceListenerDisconnected, null);
                         }
                     }
                 }
@@ -159,12 +159,12 @@ namespace Device.Net
                     _CreatedDevicesByDefinition.Remove(removeDef);
                 }
 
-                Log("Poll complete", null);
+                Log(Messages.InformationMessageDeviceListenerPollingComplete, null);
 
             }
             catch (Exception ex)
             {
-                Log("Hid polling error", ex);
+                Log(Messages.ErrorMessagePollingError, ex);
 
                 //TODO: What else to do here?
             }
@@ -185,6 +185,8 @@ namespace Device.Net
             _IsDisposed = true;
 
             Stop();
+
+            _PollTimer?.Dispose();
 
             foreach (var key in _CreatedDevicesByDefinition.Keys)
             {

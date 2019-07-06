@@ -49,7 +49,7 @@ namespace Device.Net
                 return deviceFactory.GetDevice(connectedDeviceDefinition);
             }
 
-            throw new Exception("Couldn't get a device");
+            throw new Exception(Messages.ErrorMessageCouldntGetDevice);
         }
 
         public async Task<List<IDevice>> GetDevicesAsync(IList<FilterDeviceDefinition> deviceDefinitions)

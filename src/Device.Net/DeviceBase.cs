@@ -88,7 +88,7 @@ namespace Device.Net
             }
             catch (Exception ex)
             {
-                Log("Read/Write Error", ex);
+                Log(Messages.ErrorMessageReadWrite, ex);
                 throw;
             }
             finally

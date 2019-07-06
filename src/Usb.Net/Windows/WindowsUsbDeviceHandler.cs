@@ -55,7 +55,7 @@ namespace Usb.Net.Windows
                 }
 
                 var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
-                WindowsDeviceBase.HandleError(isSuccess, "Couldn't initialize device");
+                WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorMessageCouldntIntializeDevice);
 
                 var connectedDeviceDefinition = WindowsUsbDeviceFactory.GetDeviceDefinition(defaultInterfaceHandle, DeviceId);
 

@@ -8,7 +8,7 @@ namespace Device.Net
 #pragma warning restore CA1032 
 #pragma warning restore CA2229 
     {
-        public DeviceFactoriesNotRegisteredException() : base("No device factories have been registered")
+        public DeviceFactoriesNotRegisteredException() : base(Messages.ErrorMessageNoDeviceFactoriesRegistered)
         {
         }
     }

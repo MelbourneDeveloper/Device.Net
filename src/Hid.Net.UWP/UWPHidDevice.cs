@@ -98,6 +98,8 @@ namespace Hid.Net.UWP
 
         public async Task WriteReportAsync(byte[] data, byte? reportId)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
             byte[] bytes;
             if (DataHasExtraByte)
             {
