@@ -1,9 +1,7 @@
 ﻿using Android.Content;
 using Android.Hardware.Usb;
 using Device.Net;
-using Java.Nio;
 using System;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -67,13 +65,13 @@ namespace Usb.Net.Android
             {
                 _UsbDeviceConnection?.Dispose();
                 _UsbDevice?.Dispose();
-                _ReadEndpoint?.Dispose();
-                _WriteEndpoint?.Dispose();
+                ReadUsbInterface?.Dispose();
+                WriteUsbInterface?.Dispose();
 
                 _UsbDeviceConnection = null;
                 _UsbDevice = null;
-                _ReadEndpoint = null;
-                _WriteEndpoint = null;
+                ReadUsbInterface = null;
+                WriteUsbInterface = null;
             }
             catch (Exception)
             {
@@ -84,59 +82,15 @@ namespace Usb.Net.Android
         }
 
         //TODO: Make async properly
-        public async Task<byte[]> ReadAsync()
+        public Task<byte[]> ReadAsync()
         {
-            try
-            {
-                var byteBuffer = ByteBuffer.Allocate(ReadBufferSize);
-                var request = new UsbRequest();
-                request.Initialize(_UsbDeviceConnection, _ReadEndpoint);
-#pragma warning disable CS0618 // Type or member is obsolete
-                request.Queue(byteBuffer, ReadBufferSize);
-#pragma warning restore CS0618 // Type or member is obsolete
-                await _UsbDeviceConnection.RequestWaitAsync();
-                var buffers = new byte[ReadBufferSize];
-
-                byteBuffer.Rewind();
-                for (var i = 0; i < ReadBufferSize; i++)
-                {
-                    buffers[i] = (byte)byteBuffer.Get();
-                }
-
-                //Marshal.Copy(byteBuffer.GetDirectBufferAddress(), buffers, 0, ReadBufferLength);
-
-                Tracer?.Trace(false, buffers);
-
-                return buffers;
-            }
-            catch (Exception ex)
-            {
-                Logger?.Log(Helpers.ReadErrorMessage, nameof(AndroidUsbDeviceHandler), ex, LogLevel.Error);
-                throw new IOException(Helpers.ReadErrorMessage, ex);
-            }
+            return ReadUsbInterface.ReadAsync(ReadBufferSize);
         }
 
         //TODO: Perhaps we should implement Batch Begin/Complete so that the UsbRequest is not created again and again. This will be expensive
-        public async Task WriteAsync(byte[] data)
+        public Task WriteAsync(byte[] data)
         {
-            try
-            {
-                var request = new UsbRequest();
-                request.Initialize(_UsbDeviceConnection, _WriteEndpoint);
-                var byteBuffer = ByteBuffer.Wrap(data);
-
-                Tracer?.Trace(true, data);
-
-#pragma warning disable CS0618 // Type or member is obsolete
-                request.Queue(byteBuffer, data.Length);
-#pragma warning restore CS0618 // Type or member is obsolete
-                await _UsbDeviceConnection.RequestWaitAsync();
-            }
-            catch (Exception ex)
-            {
-                Logger?.Log(Helpers.WriteErrorMessage, nameof(AndroidUsbDeviceHandler), ex, LogLevel.Error);
-                throw new IOException(Helpers.WriteErrorMessage, ex);
-            }
+            return WriteUsbInterface.WriteAsync(data);
         }
 
         #endregion
@@ -194,9 +148,9 @@ namespace Usb.Net.Android
                 //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
                 var usbInterface = _UsbDevice.GetInterface(0);
 
-                var asdasdinterface = new AndroidUsbInterface(usbInterface);
+                var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, Logger, Tracer);
+                UsbInterfaces.Add(androidUsbInterface);
 
-                //TODO: This selection stuff needs to be moved up higher. The constructor should take these arguments
                 for (var i = 0; i < usbInterface.EndpointCount; i++)
                 {
                     var ep = usbInterface.GetEndpoint(i);
@@ -204,20 +158,20 @@ namespace Usb.Net.Android
                     {
                         var isRead = ep.Type == UsbAddressing.XferInterrupt && (int)ep.Address == 129;
                         var isWrite = ep.Type == UsbAddressing.XferInterrupt && ((int)ep.Address == 1 || (int)ep.Address == 2);
-                        var asdasd = new AndroidUsbEndpoint(ep, isRead, isWrite, (byte)ep.Address);
-                        
-                    }
-                            
+                        var androidUsbEndpoint = new AndroidUsbEndpoint(ep, isRead, isWrite, (byte)ep.Address);
+                        androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
 
-                    if (_ReadEndpoint == null && ep.Type == UsbAddressing.XferInterrupt && (int)ep.Address == 129)
-                    {
-                        _ReadEndpoint = ep;
-                        continue;
-                    }
+                        if (androidUsbInterface.ReadEndpoint == null && isRead)
+                        {
+                            androidUsbInterface.ReadEndpoint = androidUsbEndpoint;
+                            ReadUsbInterface = androidUsbInterface;
+                        }
 
-                    if (_WriteEndpoint == null && ep.Type == UsbAddressing.XferInterrupt && ((int)ep.Address == 1 || (int)ep.Address == 2))
-                    {
-                        _WriteEndpoint = ep;
+                        if (androidUsbInterface.WriteEndpoint == null && isWrite)
+                        {
+                            androidUsbInterface.WriteEndpoint = androidUsbEndpoint;
+                            WriteUsbInterface = androidUsbInterface;
+                        }
                     }
                 }
 

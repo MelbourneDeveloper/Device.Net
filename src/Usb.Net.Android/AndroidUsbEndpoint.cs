@@ -4,7 +4,7 @@ namespace Usb.Net.Android
 {
     public class AndroidUsbEndpoint : IUsbInterfaceEndpoint
     {
-        private readonly UsbEndpoint UsbEndpoint;
+        public UsbEndpoint UsbEndpoint { get; }
         public bool IsRead { get; }
         public bool IsWrite { get; }
         public byte PipeId { get; }
