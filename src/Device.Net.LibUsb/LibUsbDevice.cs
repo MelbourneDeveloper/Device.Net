@@ -27,7 +27,6 @@ namespace Device.Net.LibUsb
         public int Timeout { get; }
         public override bool IsInitialized => _IsInitialized;
         public string DeviceId => UsbDevice.DevicePath;
-        public ILogger Logger { get; set; }
         public override ushort WriteBufferSize => throw new NotImplementedException();
         public override ushort ReadBufferSize => throw new NotImplementedException();
         #endregion
