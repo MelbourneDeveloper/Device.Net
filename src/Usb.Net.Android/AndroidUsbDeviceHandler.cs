@@ -148,8 +148,7 @@ namespace Usb.Net.Android
                     //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
                     var usbInterface = _UsbDevice.GetInterface(x);
 
-                    var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, Logger, Tracer);
-                    UsbInterfaces.Add(androidUsbInterface);
+                    AndroidUsbInterface androidUsbInterface = null;
 
                     for (var y = 0; y < usbInterface.EndpointCount; y++)
                     {
@@ -165,6 +164,13 @@ namespace Usb.Net.Android
 
                             if (androidUsbInterface.ReadEndpoint == null && isRead)
                             {
+                                if (androidUsbInterface == null)
+                                {
+                                    androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, Logger, Tracer, _ReadBufferSize, _WriteBufferSize);
+                                    UsbInterfaces.Add(androidUsbInterface);
+
+                                }
+
                                 androidUsbInterface.ReadEndpoint = androidUsbEndpoint;
                                 ReadUsbInterface = androidUsbInterface;
                             }

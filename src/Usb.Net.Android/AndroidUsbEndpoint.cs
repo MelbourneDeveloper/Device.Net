@@ -8,6 +8,8 @@ namespace Usb.Net.Android
         public bool IsRead { get; }
         public bool IsWrite { get; }
         public byte PipeId { get; }
+        public ushort WriteBufferSize => (ushort)UsbEndpoint.MaxPacketSize;
+        public ushort ReadBufferSize => (ushort)UsbEndpoint.MaxPacketSize;
 
         public AndroidUsbEndpoint(UsbEndpoint usbEndpoint, bool isRead, bool isWrite, byte pipeId)
         {

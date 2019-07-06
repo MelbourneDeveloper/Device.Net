@@ -11,8 +11,8 @@ namespace Usb.Net
         private IUsbInterface _WriteUsbInterface;
         #endregion
 
-        protected ushort? _ReadBufferSize { get; set; }
-        protected ushort? _WriteBufferSize { get; set; }
+        protected ushort? _ReadBufferSize { get;  set; }
+        protected ushort? _WriteBufferSize { get;  set; }
 
         #region Constructor
         protected UsbDeviceHandlerBase(ILogger logger, ITracer tracer, ushort? readBufferLength, ushort? writeBufferLength)

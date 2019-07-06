@@ -99,6 +99,8 @@ namespace Usb.Net.Windows
 
         private WindowsUsbInterface GetInterface(SafeFileHandle interfaceHandle, ushort readBufferLength, ushort writeBufferLength)
         {
+            //TODO: We need to get the read/write size from a different API call...
+
             //TODO: Where is the logger/tracer?
             var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
             var retVal = new WindowsUsbInterface(interfaceHandle, Logger, Tracer, readBufferLength, writeBufferLength);
@@ -108,7 +110,7 @@ namespace Usb.Net.Windows
             {
                 isSuccess = WinUsbApiCalls.WinUsb_QueryPipe(interfaceHandle, 0, i, out var pipeInfo);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't query endpoint");
-                retVal.UsbInterfaceEndpoints.Add(new WindowsUsbInterfaceEndpoint(pipeInfo.PipeId));
+                retVal.UsbInterfaceEndpoints.Add(new WindowsUsbInterfaceEndpoint(pipeInfo.PipeId, readBufferLength, writeBufferLength));
             }
 
             return retVal;

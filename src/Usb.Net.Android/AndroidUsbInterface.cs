@@ -12,7 +12,7 @@ namespace Usb.Net.Android
         private readonly UsbInterface _UsbInterface;
         private readonly UsbDeviceConnection _UsbDeviceConnection;
 
-        public AndroidUsbInterface(UsbInterface usbInterface, UsbDeviceConnection usbDeviceConnection, ILogger logger, ITracer tracer, ushort readBufferSize, ushort writeBufferSize) : base(logger, tracer,readBufferSize, writeBufferSize )
+        public AndroidUsbInterface(UsbInterface usbInterface, UsbDeviceConnection usbDeviceConnection, ILogger logger, ITracer tracer, ushort? readBufferSize, ushort? writeBufferSize) : base(logger, tracer,readBufferSize, writeBufferSize )
         {
             _UsbInterface = usbInterface;
             _UsbDeviceConnection = usbDeviceConnection;
