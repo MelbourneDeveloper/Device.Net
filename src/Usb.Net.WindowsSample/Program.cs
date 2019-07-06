@@ -17,7 +17,11 @@ namespace Usb.Net.WindowsSample
     {
         #region Fields
         private static TrezorExample _DeviceConnectionExample = new TrezorExample();
+        /// <summary>
+        /// TODO: Test these!
+        /// </summary>
         private static DebugLogger Logger = new DebugLogger();
+        private static DebugTracer Tracer = new DebugTracer();
         #endregion
 
         #region Main
@@ -25,10 +29,10 @@ namespace Usb.Net.WindowsSample
         {
             //Register the factory for creating Usb devices. This only needs to be done once.
 #if (LIBUSB)
-            LibUsbUsbDeviceFactory.Register(Logger);
+            LibUsbUsbDeviceFactory.Register(Logger, Tracer);
 #else
-            WindowsUsbDeviceFactory.Register(Logger);
-            WindowsHidDeviceFactory.Register(Logger);
+            WindowsUsbDeviceFactory.Register(Logger, Tracer);
+            WindowsHidDeviceFactory.Register(Logger, Tracer);
 #endif
 
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;

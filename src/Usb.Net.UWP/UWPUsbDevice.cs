@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.UWP;
 using System;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
@@ -26,11 +27,15 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPUsbDevice() : base()
+        public UWPUsbDevice(ILogger logger, ITracer tracer) : this(null, logger, tracer)
         {
         }
 
-        public UWPUsbDevice(ConnectedDeviceDefinition deviceDefinition) : base(deviceDefinition.DeviceId)
+        public UWPUsbDevice(ConnectedDeviceDefinition deviceDefinition) : this(deviceDefinition, null, null)
+        {
+        }
+
+        public UWPUsbDevice(ConnectedDeviceDefinition deviceDefinition, ILogger logger, ITracer tracer) : base(deviceDefinition.DeviceId, logger, tracer)
         {
             ConnectedDeviceDefinition = deviceDefinition;
         }
@@ -102,12 +107,21 @@ namespace Usb.Net.UWP
         #region Public Methods
         public override async Task WriteAsync(byte[] data)
         {
-            if (_DefaultOutPipe == null) throw new Exception("The device has not been initialized.");
+            if (_DefaultOutPipe == null) throw new Exception(Messages.ErrorMessageNotInitialized);
 
             if (data.Length > WriteBufferSize) throw new Exception("The buffer size is too large");
-            await _DefaultOutPipe.OutputStream.WriteAsync(data.AsBuffer());
+            var count = await _DefaultOutPipe.OutputStream.WriteAsync(data.AsBuffer());
 
-            Tracer?.Trace(false, data);
+            if (count == data.Length)
+            {
+                Tracer?.Trace(true, data);
+            }
+            else
+            {
+                var message = Messages.GetErrorMessageInvalidWriteLength(data.Length, count);
+                Logger?.Log(message, GetType().Name, null, LogLevel.Error);
+                throw new IOException(message);
+            }
         }
         #endregion
     }

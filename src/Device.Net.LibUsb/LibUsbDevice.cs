@@ -3,12 +3,13 @@ using LibUsbDotNet.LudnMonoLibUsb;
 using LibUsbDotNet.Main;
 using LibUsbDotNet.WinUsb;
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net.LibUsb
 {
-    public class LibUsbDevice : IDevice
+    public class LibUsbDevice : DeviceBase, IDevice
     {
         #region Fields
         private UsbEndpointReader _UsbEndpointReader;
@@ -16,6 +17,7 @@ namespace Device.Net.LibUsb
         private int ReadPacketSize;
         private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         private bool disposed;
+        private bool _IsInitialized;
         #endregion
 
         #region Public Properties
@@ -23,10 +25,10 @@ namespace Device.Net.LibUsb
         public int VendorId => GetVendorId(UsbDevice);
         public int ProductId => GetProductId(UsbDevice);
         public int Timeout { get; }
-        public bool IsInitialized { get; private set; }
-        public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition => throw new NotImplementedException();
+        public override bool IsInitialized => _IsInitialized;
         public string DeviceId => UsbDevice.DevicePath;
-        public ILogger Logger { get; set; }
+        public override ushort WriteBufferSize => throw new NotImplementedException();
+        public override ushort ReadBufferSize => throw new NotImplementedException();
         #endregion
 
         #region Events
@@ -35,7 +37,11 @@ namespace Device.Net.LibUsb
         #endregion
 
         #region Constructor
-        public LibUsbDevice(UsbDevice usbDevice, int timeout)
+        public LibUsbDevice(UsbDevice usbDevice, int timeout) : this(usbDevice, timeout, null, null)
+        {
+        }
+
+        public LibUsbDevice(UsbDevice usbDevice, int timeout, ILogger logger, ITracer tracer) : base(logger, tracer)
         {
             UsbDevice = usbDevice;
             Timeout = timeout;
@@ -86,11 +92,11 @@ namespace Device.Net.LibUsb
                 _UsbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
                 ReadPacketSize = _UsbEndpointReader.EndpointInfo.Descriptor.MaxPacketSize;
 
-                IsInitialized = true;
+                _IsInitialized = true;
             });
         }
 
-        public async Task<byte[]> ReadAsync()
+        public override async Task<byte[]> ReadAsync()
         {
             await _WriteAndReadLock.WaitAsync();
 
@@ -98,11 +104,13 @@ namespace Device.Net.LibUsb
             {
                 return await Task.Run(() =>
                 {
-                    var buffer = new byte[ReadPacketSize];
+                    var data = new byte[ReadPacketSize];
 
-                    _UsbEndpointReader.Read(buffer, Timeout, out var bytesRead);
+                    _UsbEndpointReader.Read(data, Timeout, out var bytesRead);
 
-                    return buffer;
+                    Tracer?.Trace(false, data);
+
+                    return data;
                 });
             }
             finally
@@ -111,7 +119,7 @@ namespace Device.Net.LibUsb
             }
         }
 
-        public async Task WriteAsync(byte[] data)
+        public override async Task WriteAsync(byte[] data)
         {
             await _WriteAndReadLock.WaitAsync();
 
@@ -119,7 +127,17 @@ namespace Device.Net.LibUsb
             {
                 await Task.Run(() =>
                 {
-                    _UsbEndpointWriter.Write(data, Timeout, out var bytesWritten);
+                    var errorCode = _UsbEndpointWriter.Write(data, Timeout, out var bytesWritten);
+                    if (errorCode == ErrorCode.Ok || errorCode == ErrorCode.Success)
+                    {
+                        Tracer?.Trace(true, data);
+                    }
+                    else
+                    {
+                        var message = $"Error. Write error code: {errorCode}";
+                        Logger?.Log(message, GetType().Name, null, LogLevel.Error);
+                        throw new IOException(message);
+                    }
                 });
             }
             finally
@@ -128,11 +146,6 @@ namespace Device.Net.LibUsb
             }
         }
 
-        public async Task<byte[]> WriteAndReadAsync(byte[] writeBuffer)
-        {
-            await WriteAsync(writeBuffer);
-            return await ReadAsync();
-        }
         #endregion
 
         #region Public Static Methods

@@ -10,12 +10,15 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class UnitTests
     {
+        private static MockLogger logger = new MockLogger();
+        private static MockTracer tracer = new MockTracer();
+
         #region Tests
         [TestInitialize]
         public void Startup()
         {
-            MockHidFactory.Register(null);
-            MockUsbFactory.Register(null);
+            MockHidFactory.Register(logger, tracer);
+            MockUsbFactory.Register(logger, tracer);
         }
 
         [TestMethod]
@@ -33,6 +36,25 @@ namespace Device.Net.UnitTests
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
             var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList();
+
+            if (connectedDeviceDefinitions.Count > 0)
+            {
+                foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
+                {
+                    var device = DeviceManager.Current.GetDevice(connectedDeviceDefinition);
+
+                    if (device != null && connectedDeviceDefinition.DeviceType == DeviceType.Hid)
+                    {
+                        Assert.IsTrue(logger.LogText.Contains(string.Format(MockHidFactory.FoundMessage, connectedDeviceDefinition.DeviceId)));
+                    }
+
+                    if (device != null && connectedDeviceDefinition.DeviceType == DeviceType.Usb)
+                    {
+                        Assert.IsTrue(logger.LogText.Contains(string.Format(MockUsbFactory.FoundMessage, connectedDeviceDefinition.DeviceId)));
+                    }
+                }
+            }
+
             Assert.IsNotNull(connectedDeviceDefinitions);
             Assert.AreEqual(expectedCount, connectedDeviceDefinitions.Count);
         }
@@ -40,20 +62,25 @@ namespace Device.Net.UnitTests
         [TestMethod]
         [DataRow(true, true, MockHidDevice.VendorId, MockHidDevice.ProductId)]
         [DataRow(true, false, MockHidDevice.VendorId, MockHidDevice.ProductId)]
-        //[DataRow(true, true, MockUsbDevice.VendorId, MockUsbDevice.ProductId)]
-        //[DataRow(false, true, MockUsbDevice.VendorId, MockUsbDevice.ProductId)]
         public async Task TestWriteAndReadThreadSafety(bool isHidConnected, bool isUsbConnected, uint vid, uint pid)
         {
+            var readtraceCount = tracer.ReadCount;
+            var writetraceCount = tracer.WriteCount;
+
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
             var connectedDeviceDefinition = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
-            var mockHidDevice = new MockHidDevice() { DeviceId = connectedDeviceDefinition.DeviceId };
+
+
+            var mockHidDevice = new MockHidDevice(logger, tracer) { DeviceId = connectedDeviceDefinition.DeviceId };
 
             var writeAndReadTasks = new List<Task<byte[]>>();
 
             //TODO: Does this properly test thread safety?
 
-            for (byte i = 0; i < 10; i++)
+            const int count = 10;
+
+            for (byte i = 0; i < count; i++)
             {
                 writeAndReadTasks.Add(mockHidDevice.WriteAndReadAsync(new byte[64] { i, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }));
             }
@@ -65,6 +92,11 @@ namespace Device.Net.UnitTests
                 var result = results[i];
                 Assert.IsTrue(result[0] == i);
             }
+
+            Assert.AreEqual(readtraceCount + count, tracer.ReadCount);
+            Assert.AreEqual(writetraceCount + count, tracer.WriteCount);
+
+            Assert.IsTrue(logger.LogText.Contains(Messages.SuccessMessageWriteAndReadCalled));
         }
 
         [TestMethod]
