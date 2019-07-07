@@ -70,6 +70,7 @@ namespace Usb.Net.Windows
                 UsbInterfaces.Add(defaultInterface);
                 ReadUsbInterface = defaultInterface;
                 WriteUsbInterface = defaultInterface;
+                InterruptUsbInterface = defaultInterface;
 
                 byte i = 0;
                 while (true)
@@ -111,7 +112,7 @@ namespace Usb.Net.Windows
             {
                 isSuccess = WinUsbApiCalls.WinUsb_QueryPipe(interfaceHandle, 0, i, out var pipeInfo);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't query endpoint");
-                retVal.UsbInterfaceEndpoints.Add(new WindowsUsbInterfaceEndpoint(pipeInfo.PipeId, readBufferLength, writeBufferLength));
+                retVal.UsbInterfaceEndpoints.Add(new WindowsUsbInterfaceEndpoint(pipeInfo.PipeId, readBufferLength, writeBufferLength, pipeInfo.PipeType));
             }
 
             return retVal;

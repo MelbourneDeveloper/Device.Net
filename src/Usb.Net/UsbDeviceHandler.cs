@@ -11,6 +11,7 @@ namespace Usb.Net
         private bool disposed;
         private IUsbInterface _ReadUsbInterface;
         private IUsbInterface _WriteUsbInterface;
+        private IUsbInterface _InterruptUsbInterface;
         #endregion
 
         protected ushort? _ReadBufferSize { get;  set; }
@@ -48,6 +49,16 @@ namespace Usb.Net
             {
                 if (!UsbInterfaces.Contains(value)) throw new ValidationException("The interface is not contained the list of valid interfaces.");
                 _WriteUsbInterface = value;
+            }
+        }
+
+        public IUsbInterface InterruptUsbInterface
+        {
+            get => _InterruptUsbInterface;
+            set
+            {
+                if (!UsbInterfaces.Contains(value)) throw new ValidationException("The interface is not contained the list of valid interfaces.");
+                _InterruptUsbInterface = value;
             }
         }
         public virtual void Dispose()

@@ -10,6 +10,7 @@ namespace Usb.Net
         IUsbInterface ReadUsbInterface { get; set; }
         IList<IUsbInterface> UsbInterfaces { get; }
         IUsbInterface WriteUsbInterface { get; set; }
+        IUsbInterface InterruptUsbInterface { get; set; }
         ushort WriteBufferSize { get; }
         ushort ReadBufferSize { get; }
         bool IsInitialized { get; }

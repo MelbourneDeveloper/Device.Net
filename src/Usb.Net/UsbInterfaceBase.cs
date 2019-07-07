@@ -10,6 +10,7 @@ namespace Usb.Net
         #region Fields
         private IUsbInterfaceEndpoint _ReadEndpoint;
         private IUsbInterfaceEndpoint _WriteEndpoint;
+        private IUsbInterfaceEndpoint _InterruptEndpoint;
         #endregion
 
         #region Public Properties
@@ -37,6 +38,25 @@ namespace Usb.Net
             {
                 if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException("This endpoint is not contained in the list of valid endpoints");
                 _WriteEndpoint = value;
+            }
+        }
+
+        public IUsbInterfaceEndpoint InterruptEndpoint
+        {
+            get
+            {
+                //This is a bit stinky but should work
+                if (_InterruptEndpoint == null)
+                {
+                    _InterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt);
+                }
+
+                return _InterruptEndpoint;
+            }
+            set
+            {
+                if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException("This endpoint is not contained in the list of valid endpoints");
+                _InterruptEndpoint = value;
             }
         }
         #endregion

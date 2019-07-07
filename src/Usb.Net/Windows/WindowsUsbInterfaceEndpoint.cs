@@ -8,14 +8,17 @@
         public bool IsWrite => (PipeId & WinUsbApiCalls.WritePipeId) == 0;
         public ushort ReadBufferSize { get; }
         public ushort WriteBufferSize { get; }
+        public bool IsInterrupt { get; }
+
         #endregion
 
         #region Constructor
-        internal WindowsUsbInterfaceEndpoint(byte pipeId, ushort readBufferSize, ushort writeBufferSize)
+        internal WindowsUsbInterfaceEndpoint(byte pipeId, ushort readBufferSize, ushort writeBufferSize, WinUsbApiCalls.USBD_PIPE_TYPE usbPipeType)
         {
             PipeId = pipeId;
             ReadBufferSize = readBufferSize;
             WriteBufferSize = writeBufferSize;
+            IsInterrupt = usbPipeType == WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeInterrupt;
         }
         #endregion
 
