@@ -1,7 +1,6 @@
-﻿using Usb.Net;
-using Usb.Net.Android;
+﻿using Device.Net;
 
-namespace Device.Net
+namespace Usb.Net.Android
 {
     public class AndroidUsbDevice : UsbDevice
     {

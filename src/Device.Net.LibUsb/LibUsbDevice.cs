@@ -26,14 +26,8 @@ namespace Device.Net.LibUsb
         public int ProductId => GetProductId(UsbDevice);
         public int Timeout { get; }
         public override bool IsInitialized => _IsInitialized;
-        public string DeviceId => UsbDevice.DevicePath;
         public override ushort WriteBufferSize => throw new NotImplementedException();
         public override ushort ReadBufferSize => throw new NotImplementedException();
-        #endregion
-
-        #region Events
-        public event EventHandler Connected;
-        public event EventHandler Disconnected;
         #endregion
 
         #region Constructor
@@ -54,7 +48,7 @@ namespace Device.Net.LibUsb
             UsbDevice?.Close();
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (disposed) return;
             disposed = true;
@@ -62,6 +56,10 @@ namespace Device.Net.LibUsb
             _WriteAndReadLock.Dispose();
 
             Close();
+
+            base.Dispose();
+
+            GC.SuppressFinalize(this);
         }
 
         public async Task InitializeAsync()

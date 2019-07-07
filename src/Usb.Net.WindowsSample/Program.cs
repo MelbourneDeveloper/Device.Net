@@ -80,7 +80,7 @@ namespace Usb.Net.WindowsSample
         private static void _DeviceConnectionExample_TrezorDisconnected(object sender, EventArgs e)
         {
             Console.Clear();
-            Console.WriteLine("Disconnnected.");
+            Console.WriteLine("Disconnected.");
             DisplayWaitMessage();
         }
 

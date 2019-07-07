@@ -51,7 +51,7 @@ namespace Usb.Net.UWP.Sample
             });
         }
 
-        private async void _DeviceConnectionExample_TrezorInitialized(object sender, System.EventArgs e)
+        private void _DeviceConnectionExample_TrezorInitialized(object sender, System.EventArgs e)
         {
             Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
