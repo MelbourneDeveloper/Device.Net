@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Device.Net.Exceptions;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -33,7 +33,7 @@ namespace Device.Net.Windows
             //TODO: Loggin
             if (errorCode == 0) return;
 
-            throw new Exception($"{message}. Error code: {errorCode}");
+            throw new ApiException($"{message}. Error code: {errorCode}");
         }
         #endregion
     }

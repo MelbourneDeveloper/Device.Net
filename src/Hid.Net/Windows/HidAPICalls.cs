@@ -1,4 +1,5 @@
-﻿using Device.Net.Windows;
+﻿using Device.Net.Exceptions;
+using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
@@ -72,7 +73,7 @@ namespace Hid.Net.Windows
             var result = HidP_GetCaps(pointerToPreParsedData, out var hidCollectionCapabilities);
             if (result != HIDP_STATUS_SUCCESS)
             {
-                throw new Exception($"Could not get Hid capabilities. Return code: {result}");
+                throw new ApiException($"Could not get Hid capabilities. Return code: {result}");
             }
 
             isSuccess = HidD_FreePreparsedData(ref pointerToPreParsedData);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Device.Net.Exceptions;
+using System;
 using System.Threading.Tasks;
 using Windows.Foundation;
 
@@ -40,7 +41,7 @@ namespace Device.Net.UWP
         {
             if (IsReading)
             {
-                throw new Exception(Messages.ErrorMessageReentry);
+                throw new AsyncException(Messages.ErrorMessageReentry);
             }
 
             //TODO: this should be a semaphore not a lock

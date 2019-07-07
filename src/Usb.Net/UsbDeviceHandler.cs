@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Device.Net.Exceptions;
 using System;
 using System.Collections.Generic;
 
@@ -35,7 +36,7 @@ namespace Usb.Net
             get => _ReadUsbInterface;
             set
             {
-                if (!UsbInterfaces.Contains(value)) throw new Exception("The interface is not contained the list of valid interfaces.");
+                if (!UsbInterfaces.Contains(value)) throw new ValidationException("The interface is not contained the list of valid interfaces.");
                 _ReadUsbInterface = value;
             }
         }
@@ -45,7 +46,7 @@ namespace Usb.Net
             get => _WriteUsbInterface;
             set
             {
-                if (!UsbInterfaces.Contains(value)) throw new Exception("The interface is not contained the list of valid interfaces.");
+                if (!UsbInterfaces.Contains(value)) throw new ValidationException("The interface is not contained the list of valid interfaces.");
                 _WriteUsbInterface = value;
             }
         }

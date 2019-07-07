@@ -197,7 +197,7 @@
     <Rule Id="CA2149" Action="Error" />
     <Rule Id="CA2151" Action="Error" />
     <Rule Id="CA2200" Action="Error" />
-    <Rule Id="CA2201" Action="Warning" />
+    <Rule Id="CA2201" Action="Error" />
     <Rule Id="CA2202" Action="Error" />
     <Rule Id="CA2204" Action="Error" />
     <Rule Id="CA2205" Action="Error" />

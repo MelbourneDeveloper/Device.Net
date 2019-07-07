@@ -1,5 +1,5 @@
 ﻿using Device.Net;
-using System;
+using Device.Net.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,7 +25,7 @@ namespace Usb.Net
             get => _ReadEndpoint ?? (_ReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead));
             set
             {
-                if (!UsbInterfaceEndpoints.Contains(value)) throw new Exception("This endpoint is not contained in the list of valid endpoints");
+                if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException("This endpoint is not contained in the list of valid endpoints");
                 _ReadEndpoint = value;
             }
         }
@@ -35,7 +35,7 @@ namespace Usb.Net
             get => _WriteEndpoint ?? (_WriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite));
             set
             {
-                if (!UsbInterfaceEndpoints.Contains(value)) throw new Exception("This endpoint is not contained in the list of valid endpoints");
+                if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException("This endpoint is not contained in the list of valid endpoints");
                 _WriteEndpoint = value;
             }
         }

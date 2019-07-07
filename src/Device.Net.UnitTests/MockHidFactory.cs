@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Device.Net.UnitTests
+﻿namespace Device.Net.UnitTests
 {
     public class MockHidFactory : MockFactoryBase
     {

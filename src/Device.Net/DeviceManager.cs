@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Device.Net.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -49,7 +50,7 @@ namespace Device.Net
                 return deviceFactory.GetDevice(connectedDeviceDefinition);
             }
 
-            throw new Exception(Messages.ErrorMessageCouldntGetDevice);
+            throw new DeviceException(Messages.ErrorMessageCouldntGetDevice);
         }
 
         public async Task<List<IDevice>> GetDevicesAsync(IList<FilterDeviceDefinition> deviceDefinitions)

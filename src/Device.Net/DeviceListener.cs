@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Device.Net.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -72,7 +73,7 @@ namespace Device.Net
         {
             if (_PollTimer == null)
             {
-                throw new Exception(Messages.ErrorMessagePollingNotEnabled);
+                throw new ValidationException(Messages.ErrorMessagePollingNotEnabled);
             }
 
             if (DeviceManager.Current.DeviceFactories.Count == 0) throw new DeviceFactoriesNotRegisteredException();

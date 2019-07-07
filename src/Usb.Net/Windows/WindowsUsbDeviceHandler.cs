@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
@@ -41,7 +42,7 @@ namespace Usb.Net.Windows
 
                 if (string.IsNullOrEmpty(DeviceId))
                 {
-                    throw new WindowsException($"{nameof(DeviceDefinitionBase)} must be specified before {nameof(InitializeAsync)} can be called.");
+                    throw new ValidationException($"{nameof(DeviceDefinitionBase)} must be specified before {nameof(InitializeAsync)} can be called.");
                 }
 
                 _DeviceHandle = APICalls.CreateFile(DeviceId, APICalls.GenericWrite | APICalls.GenericRead, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
@@ -51,7 +52,7 @@ namespace Usb.Net.Windows
                 {
                     //TODO: is error code useful here?
                     errorCode = Marshal.GetLastWin32Error();
-                    if (errorCode > 0) throw new Exception($"Device handle no good. Error code: {errorCode}");
+                    if (errorCode > 0) throw new ApiException($"Device handle no good. Error code: {errorCode}");
                 }
 
                 var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
@@ -79,7 +80,7 @@ namespace Usb.Net.Windows
                         errorCode = Marshal.GetLastWin32Error();
                         if (errorCode == APICalls.ERROR_NO_MORE_ITEMS) break;
 
-                        throw new Exception($"Could not enumerate interfaces for device. Error code: { errorCode}");
+                        throw new ApiException($"Could not enumerate interfaces for device. Error code: { errorCode}");
                     }
 
                     var associatedInterface = GetInterface(interfacePointer, _ReadBufferSize.Value, _WriteBufferSize.Value);
