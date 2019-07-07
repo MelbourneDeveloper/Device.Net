@@ -15,7 +15,7 @@ namespace Device.Net.LibUsb
         private UsbEndpointReader _UsbEndpointReader;
         private UsbEndpointWriter _UsbEndpointWriter;
         private int ReadPacketSize;
-        private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         private bool disposed;
         private bool _IsInitialized;
         #endregion

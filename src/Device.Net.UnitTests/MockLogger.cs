@@ -5,7 +5,7 @@ namespace Device.Net.UnitTests
 {
     internal class MockLogger : ILogger
     {
-        StringBuilder _stringBuilder = new StringBuilder();
+        readonly StringBuilder _stringBuilder = new StringBuilder();
 
         public string LogText => _stringBuilder.ToString();
 

@@ -8,7 +8,7 @@ namespace Device.Net
     public abstract class DeviceBase : IDisposable
     {
         #region Fields
-        private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         private bool disposed = false;
         public const string DeviceDisposedErrorMessage = "This device has already been disposed";
         private string _LogRegion;

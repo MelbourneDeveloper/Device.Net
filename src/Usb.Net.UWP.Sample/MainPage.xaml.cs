@@ -18,7 +18,7 @@ namespace Usb.Net.UWP.Sample
     public sealed partial class MainPage : Page
     {
         #region Fields
-        private TrezorExample _DeviceConnectionExample = new TrezorExample();
+        private readonly TrezorExample _DeviceConnectionExample = new TrezorExample();
         #endregion
 
         #region Constructor

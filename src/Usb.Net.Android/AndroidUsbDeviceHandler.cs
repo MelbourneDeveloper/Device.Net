@@ -15,7 +15,7 @@ namespace Usb.Net.Android
         #region Fields
         private UsbDeviceConnection _UsbDeviceConnection;
         private usbDevice _UsbDevice;
-        private SemaphoreSlim _InitializingSemaphoreSlim = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _InitializingSemaphoreSlim = new SemaphoreSlim(1, 1);
         private bool _IsClosing;
         private bool disposed;
         #endregion

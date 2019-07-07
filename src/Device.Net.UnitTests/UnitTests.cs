@@ -10,8 +10,8 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class UnitTests
     {
-        private static MockLogger logger = new MockLogger();
-        private static MockTracer tracer = new MockTracer();
+        private static readonly MockLogger logger = new MockLogger();
+        private static readonly MockTracer tracer = new MockTracer();
 
         #region Tests
         [TestInitialize]
