@@ -1,6 +1,6 @@
 ﻿namespace Device.Net.UnitTests
 {
-    public class MockHidDevice : MockDeviceBase, IDevice
+    public class MockHidDevice : MockDeviceBase
     {
         public const uint ProductId = 1;
         public const uint VendorId = 1;

@@ -16,7 +16,7 @@ namespace Hid.Net.Windows
         private SafeFileHandle _ReadSafeFileHandle;
         private SafeFileHandle _WriteSafeFileHandle;
         private bool _IsClosing;
-        private bool disposed = false;
+        private bool disposed;
         private readonly ushort? _WriteBufferSize;
         private readonly ushort? _ReadBufferSize;
 

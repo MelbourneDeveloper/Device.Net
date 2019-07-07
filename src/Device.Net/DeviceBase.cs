@@ -9,7 +9,7 @@ namespace Device.Net
     {
         #region Fields
         private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
-        private bool disposed = false;
+        private bool disposed;
         public const string DeviceDisposedErrorMessage = "This device has already been disposed";
         private string _LogRegion;
         #endregion

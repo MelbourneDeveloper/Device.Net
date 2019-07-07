@@ -152,7 +152,7 @@ namespace Device.Net.UnitTests
 
             try
             {
-                var connectedDevices = await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null);
+                await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null);
             }
             catch (DeviceFactoriesNotRegisteredException)
             {

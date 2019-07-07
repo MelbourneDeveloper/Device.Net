@@ -12,7 +12,7 @@ namespace Device.Net.UWP
 
         #region Protected Properties
         protected T ConnectedDevice { get; private set; }
-        protected bool Disposed { get; private set; } = false;
+        protected bool Disposed { get; private set; }
         #endregion
 
         #region Constructor

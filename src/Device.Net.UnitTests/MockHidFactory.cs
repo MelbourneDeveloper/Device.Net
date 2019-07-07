@@ -2,7 +2,7 @@
 
 namespace Device.Net.UnitTests
 {
-    public class MockHidFactory : MockFactoryBase, IDeviceFactory
+    public class MockHidFactory : MockFactoryBase
     {
         public const string FoundMessage = "Found device {0}";
 

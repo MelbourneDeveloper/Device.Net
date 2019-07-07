@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Usb.Net.Windows
 {
-    public class WindowsUsbInterface : UsbInterfaceBase, IDisposable, IUsbInterface
+    public class WindowsUsbInterface : UsbInterfaceBase, IUsbInterface
     {
         #region Private Properties
         private  bool _IsDisposed;
