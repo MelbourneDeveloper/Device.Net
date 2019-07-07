@@ -20,7 +20,7 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
     <Company>Christian Findlay</Company>
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
     <PackageId>Hid.Net</PackageId>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>      
     <NoWarn>1701;1702;NU5125</NoWarn>    
   </PropertyGroup>
