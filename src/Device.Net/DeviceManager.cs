@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Device.Net.Exceptions;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -40,17 +42,21 @@ namespace Device.Net
         //TODO: Duplicate code here...
         public IDevice GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition)
         {
+            if (connectedDeviceDefinition == null) throw new ArgumentNullException(nameof(connectedDeviceDefinition));
+
             foreach (var deviceFactory in DeviceFactories)
             {
                 if (connectedDeviceDefinition.DeviceType.HasValue && (deviceFactory.DeviceType != connectedDeviceDefinition.DeviceType)) continue;
                 return deviceFactory.GetDevice(connectedDeviceDefinition);
             }
 
-            throw new System.Exception("Couldn't get a device");
+            throw new DeviceException(Messages.ErrorMessageCouldntGetDevice);
         }
 
         public async Task<List<IDevice>> GetDevicesAsync(IList<FilterDeviceDefinition> deviceDefinitions)
         {
+            if (deviceDefinitions == null) throw new ArgumentNullException(nameof(deviceDefinitions), $"{nameof(GetConnectedDeviceDefinitionsAsync)} can be used to enumerate all devices without specifying definitions.");
+
             var retVal = new List<IDevice>();
 
             foreach (var deviceFactory in DeviceFactories)
@@ -81,6 +87,8 @@ namespace Device.Net
         #region Public Static Methods
         public static bool IsDefinitionMatch(FilterDeviceDefinition filterDevice, ConnectedDeviceDefinition actualDevice)
         {
+            if (actualDevice == null) throw new ArgumentNullException(nameof(actualDevice));
+
             if (filterDevice == null) return true;
 
             var vendorIdPasses = !filterDevice.VendorId.HasValue || filterDevice.VendorId == actualDevice.VendorId;

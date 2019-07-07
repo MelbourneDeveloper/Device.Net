@@ -16,12 +16,12 @@ namespace Usb.Net.WindowsSample
     internal class Program
     {
         #region Fields
-        private static TrezorExample _DeviceConnectionExample = new TrezorExample();
+        private static readonly TrezorExample _DeviceConnectionExample = new TrezorExample();
         /// <summary>
         /// TODO: Test these!
         /// </summary>
-        private static DebugLogger Logger = new DebugLogger();
-        private static DebugTracer Tracer = new DebugTracer();
+        private static readonly DebugLogger Logger = new DebugLogger();
+        private static readonly DebugTracer Tracer = new DebugTracer();
         #endregion
 
         #region Main
@@ -80,7 +80,7 @@ namespace Usb.Net.WindowsSample
         private static void _DeviceConnectionExample_TrezorDisconnected(object sender, EventArgs e)
         {
             Console.Clear();
-            Console.WriteLine("Disconnnected.");
+            Console.WriteLine("Disconnected.");
             DisplayWaitMessage();
         }
 

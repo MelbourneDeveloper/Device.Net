@@ -24,32 +24,26 @@ namespace Device.Net.LibUsb
             {
                 IEnumerable<UsbRegistry> devices = UsbDevice.AllDevices;
 
-                if (deviceDefinition != null)
-                {
-                    if (deviceDefinition.VendorId.HasValue)
-                    {
-                        devices = devices.Where(d => d.Vid == deviceDefinition.VendorId.Value);
-                    }
+                if (deviceDefinition == null)
 
-                    if (deviceDefinition.VendorId.HasValue)
+                    return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath)
                     {
-                        devices = devices.Where(d => d.Pid == deviceDefinition.ProductId.Value);
-                    }
-                }
-
-                var retVal = new List<ConnectedDeviceDefinition>();
-
-                foreach (var usbRegistry in devices)
-                {
-                    retVal.Add(new ConnectedDeviceDefinition(usbRegistry.DevicePath)
-                    {
-                        VendorId = (uint)usbRegistry.Vid,
-                        ProductId = (uint)usbRegistry.Pid,
+                        VendorId = (uint) usbRegistry.Vid,
+                        ProductId = (uint) usbRegistry.Pid,
                         DeviceType = DeviceType
-                    });
+                    }).ToList();
+
+                if (deviceDefinition.VendorId.HasValue)
+                {
+                    devices = devices.Where(d => d.Vid == deviceDefinition.VendorId.Value);
                 }
 
-                return retVal;
+                if (deviceDefinition.VendorId.HasValue)
+                {
+                    devices = devices.Where(d => d.Pid == deviceDefinition.ProductId.Value);
+                }
+
+                return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath) {VendorId = (uint) usbRegistry.Vid, ProductId = (uint) usbRegistry.Pid, DeviceType = DeviceType}).ToList();
             });
         }
 

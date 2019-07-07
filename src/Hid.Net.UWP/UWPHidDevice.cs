@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Device.Net.Exceptions;
 using Device.Net.UWP;
 using System;
 using System.IO;
@@ -54,7 +55,7 @@ namespace Hid.Net.UWP
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
 
-            if (Disposed) throw new Exception(DeviceDisposedErrorMessage);
+            if (Disposed) throw new ValidationException(DeviceDisposedErrorMessage);
 
             Log("Initializing Hid device", null);
 
@@ -66,7 +67,7 @@ namespace Hid.Net.UWP
             }
             else
             {
-                throw new Exception($"The device {DeviceId} failed to initialize");
+                throw new DeviceException($"The device {DeviceId} failed to initialize");
             }
         }
 
@@ -98,6 +99,8 @@ namespace Hid.Net.UWP
 
         public async Task WriteReportAsync(byte[] data, byte? reportId)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
             byte[] bytes;
             if (DataHasExtraByte)
             {
@@ -134,7 +137,7 @@ namespace Hid.Net.UWP
                 //TODO: Check the string is nasty. Validation on the size of the array being sent should be done earlier anyway
                 if (string.Equals(ex.Message, "Value does not fall within the expected range.", StringComparison.Ordinal))
                 {
-                    throw new Exception("It seems that the data being sent to the device does not match the accepted size. Have you checked DataHasExtraByte?", ex);
+                    throw new IOException("It seems that the data being sent to the device does not match the accepted size. Have you checked DataHasExtraByte?", ex);
                 }
                 throw;
             }

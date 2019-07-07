@@ -8,8 +8,8 @@ namespace Device.Net
     public abstract class DeviceBase : IDisposable
     {
         #region Fields
-        private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
-        private bool disposed = false;
+        private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        private bool disposed;
         public const string DeviceDisposedErrorMessage = "This device has already been disposed";
         private string _LogRegion;
         #endregion
@@ -88,7 +88,7 @@ namespace Device.Net
             }
             catch (Exception ex)
             {
-                Log("Read/Write Error", ex);
+                Log(Messages.ErrorMessageReadWrite, ex);
                 throw;
             }
             finally
@@ -102,6 +102,8 @@ namespace Device.Net
         /// </summary> 
         public static byte[] RemoveFirstByte(byte[] bytes)
         {
+            if (bytes == null) throw new ArgumentNullException(nameof(bytes));
+
             var length = bytes.Length - 1;
             var retVal = new byte[length];
 

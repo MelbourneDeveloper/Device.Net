@@ -155,6 +155,8 @@ namespace Device.Net.Windows
         #region Private Static Methods
         private static uint GetNumberFromDeviceId(string deviceId, string searchString)
         {
+            if (deviceId == null) throw new ArgumentNullException(nameof(deviceId));
+
             var indexOfSearchString = deviceId.IndexOf(searchString, StringComparison.OrdinalIgnoreCase);
             string hexString = null;
             if (indexOfSearchString > -1)
@@ -176,10 +178,8 @@ namespace Device.Net.Windows
                 vid = GetNumberFromDeviceId(deviceId, "vid_");
                 pid = GetNumberFromDeviceId(deviceId, "pid_");
             }
-            catch (Exception)
+            catch 
             {
-                //TODO: Logging
-                //We really need the Vid/Pid here for polling etc. so not sure if swallowing errors it the way to go
             }
 
             return new ConnectedDeviceDefinition(deviceId) { DeviceType = deviceType, VendorId = vid, ProductId = pid };

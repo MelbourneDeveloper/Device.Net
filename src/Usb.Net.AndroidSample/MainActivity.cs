@@ -7,6 +7,7 @@ using Android.Support.V7.Widget;
 using Android.Views;
 using Device.Net;
 using System;
+using Usb.Net.Android;
 using Usb.Net.Sample;
 
 namespace Usb.Net.AndroidSample

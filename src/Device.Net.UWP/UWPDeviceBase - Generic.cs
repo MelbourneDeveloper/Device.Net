@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Device.Net.Exceptions;
+using System;
 using System.Threading.Tasks;
 using Windows.Foundation;
 
@@ -12,7 +13,7 @@ namespace Device.Net.UWP
 
         #region Protected Properties
         protected T ConnectedDevice { get; private set; }
-        protected bool Disposed { get; private set; } = false;
+        protected bool Disposed { get; private set; }
         #endregion
 
         #region Constructor
@@ -40,7 +41,7 @@ namespace Device.Net.UWP
         {
             if (IsReading)
             {
-                throw new Exception("Reentry");
+                throw new AsyncException(Messages.ErrorMessageReentry);
             }
 
             //TODO: this should be a semaphore not a lock

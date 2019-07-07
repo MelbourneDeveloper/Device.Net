@@ -11,7 +11,7 @@ namespace Hid.Net.UWP
     {
         #region Fields
         private readonly SemaphoreSlim _TestConnectionSemaphore = new SemaphoreSlim(1, 1);
-        private Dictionary<string, ConnectionInfo> _ConnectionTestedDeviceIds = new Dictionary<string, ConnectionInfo>();
+        private readonly Dictionary<string, ConnectionInfo> _ConnectionTestedDeviceIds = new Dictionary<string, ConnectionInfo>();
         private bool disposed;
         #endregion
 
@@ -74,6 +74,8 @@ namespace Hid.Net.UWP
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
+            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
+
             return deviceDefinition.DeviceType == DeviceType.Usb ? null : new UWPHidDevice(deviceDefinition.DeviceId, Logger, Tracer);
         }
 
