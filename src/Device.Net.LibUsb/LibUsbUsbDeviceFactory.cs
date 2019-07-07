@@ -2,16 +2,18 @@
 {
     public class LibUsbUsbDeviceFactory : LibUsbDeviceFactoryBase
     {
-        public override DeviceType DeviceType => DeviceType.Usb;
-
-        public static void Register()
+        public LibUsbUsbDeviceFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
         {
-            Register(null);
         }
 
-        public static void Register(ILogger logger)
+        public override DeviceType DeviceType => DeviceType.Usb;
+
+        /// <summary>
+        /// Register the factory for enumerating USB devices.
+        /// </summary>
+        public static void Register(ILogger logger, ITracer tracer)
         {
-            DeviceManager.Current.DeviceFactories.Add(new LibUsbUsbDeviceFactory() { Logger = logger });
+            DeviceManager.Current.DeviceFactories.Add(new LibUsbUsbDeviceFactory(logger, tracer));
         }
     }
 }

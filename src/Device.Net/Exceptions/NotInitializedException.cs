@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Device.Net
+namespace Device.Net.Windows
 {
     public class NotInitializedException : Exception
     {

@@ -19,7 +19,10 @@ namespace Usb.Net
         #endregion
 
         #region Constructor
-        public UsbDevice(IUsbDeviceHandler usbDeviceHandler) : base()
+        /// <summary>
+        /// TODO: Remove the tracer from the constructor. This will get passed to the handler so there's no need for it on the device itself.
+        /// </summary>
+        public UsbDevice(IUsbDeviceHandler usbDeviceHandler, ILogger logger, ITracer tracer) : base(logger, tracer)
         {
             UsbDeviceHandler = usbDeviceHandler;
         }

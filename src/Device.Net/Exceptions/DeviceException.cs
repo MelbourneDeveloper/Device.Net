@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Device.Net
+namespace Device.Net.Exceptions
 {
     public class DeviceException : Exception
     {

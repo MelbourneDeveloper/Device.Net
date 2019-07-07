@@ -16,8 +16,12 @@ namespace Usb.Net.WindowsSample
     internal class Program
     {
         #region Fields
-        private static TrezorExample _DeviceConnectionExample = new TrezorExample();
-        private static DebugLogger Logger = new DebugLogger();
+        private static readonly TrezorExample _DeviceConnectionExample = new TrezorExample();
+        /// <summary>
+        /// TODO: Test these!
+        /// </summary>
+        private static readonly DebugLogger Logger = new DebugLogger();
+        private static readonly DebugTracer Tracer = new DebugTracer();
         #endregion
 
         #region Main
@@ -25,10 +29,10 @@ namespace Usb.Net.WindowsSample
         {
             //Register the factory for creating Usb devices. This only needs to be done once.
 #if (LIBUSB)
-            LibUsbUsbDeviceFactory.Register(Logger);
+            LibUsbUsbDeviceFactory.Register(Logger, Tracer);
 #else
-            WindowsUsbDeviceFactory.Register(Logger);
-            WindowsHidDeviceFactory.Register(Logger);
+            WindowsUsbDeviceFactory.Register(Logger, Tracer);
+            WindowsHidDeviceFactory.Register(Logger, Tracer);
 #endif
 
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
@@ -76,7 +80,7 @@ namespace Usb.Net.WindowsSample
         private static void _DeviceConnectionExample_TrezorDisconnected(object sender, EventArgs e)
         {
             Console.Clear();
-            Console.WriteLine("Disconnnected.");
+            Console.WriteLine("Disconnected.");
             DisplayWaitMessage();
         }
 

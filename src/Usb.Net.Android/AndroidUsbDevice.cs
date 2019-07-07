@@ -1,11 +1,10 @@
-﻿using Usb.Net;
-using Usb.Net.Android;
+﻿using Device.Net;
 
-namespace Device.Net
+namespace Usb.Net.Android
 {
-    public class AndroidUsbDevice : UsbDevice, IUsbDevice
+    public class AndroidUsbDevice : UsbDevice
     {
-        public AndroidUsbDevice(AndroidUsbDeviceHandler androidUsbDeviceHandler) : base(androidUsbDeviceHandler)
+        public AndroidUsbDevice(AndroidUsbDeviceHandler androidUsbDeviceHandler, ILogger logger, ITracer tracer) : base(androidUsbDeviceHandler, logger, tracer)
         {
         }
     }

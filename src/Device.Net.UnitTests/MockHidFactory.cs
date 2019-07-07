@@ -1,12 +1,11 @@
-﻿using System;
-
-namespace Device.Net.UnitTests
+﻿namespace Device.Net.UnitTests
 {
-    public class MockHidFactory : MockFactoryBase, IDeviceFactory
+    public class MockHidFactory : MockFactoryBase
     {
-        public MockHidFactory()
+        public const string FoundMessage = "Found device {0}";
+
+        public MockHidFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
         {
-            Logger = new DebugLogger { LogToConsole = true };
         }
 
         public override string DeviceId => MockHidDevice.MockedDeviceId;
@@ -21,22 +20,22 @@ namespace Device.Net.UnitTests
 
         public override uint VendorId => MockHidDevice.VendorId;
 
-        public static void Register(ILogger logger)
+        public static void Register(ILogger logger, ITracer tracer)
         {
-            DeviceManager.Current.DeviceFactories.Add(new MockHidFactory() { Logger = logger });
+            DeviceManager.Current.DeviceFactories.Add(new MockHidFactory(logger, tracer));
         }
 
         public override IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            if (deviceDefinition != null)
-            {
-                if (deviceDefinition.DeviceId == DeviceId)
-                {
-                    if (!deviceDefinition.DeviceType.HasValue || deviceDefinition.DeviceType == DeviceType.Hid) return new MockHidDevice();
-                }
-            }
+            if (deviceDefinition == null) return null;
 
-            throw new Exception("Couldn't get a device");
+            if (deviceDefinition.DeviceId != DeviceId) return null;
+
+            if (deviceDefinition.DeviceType.HasValue && deviceDefinition.DeviceType != DeviceType.Hid) return null;
+
+            Logger?.Log(string.Format(FoundMessage, DeviceId), nameof(MockHidFactory), null, LogLevel.Information);
+
+            return new MockHidDevice(Logger, Tracer);
         }
     }
 }

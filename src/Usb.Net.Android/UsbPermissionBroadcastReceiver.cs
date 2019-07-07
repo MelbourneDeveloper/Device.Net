@@ -17,9 +17,9 @@ namespace Usb.Net.Android
         /// Just used as a filter for the UsbPermissionBroadcastReceiver
         /// </summary>
         private const string RequestUsbIntentAction = nameof(RequestUsbIntentAction);
-        private UsbManager _Manager;
+        private readonly UsbManager _Manager;
         private readonly usbDevice _Device;
-        private Context _Context;
+        private readonly Context _Context;
         #endregion
 
         #region Public Properties

@@ -23,9 +23,17 @@ namespace Usb.Net.Windows
         protected override Guid GetClassGuid() => WindowsDeviceConstants.WinUSBGuid;
         #endregion
 
+        #region Constructor
+        public WindowsUsbDeviceFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
+        {
+        }
+        #endregion
+
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
+            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
+
             return deviceDefinition.DeviceType != DeviceType ? null : new WindowsUsbDevice(deviceDefinition.DeviceId, Logger, Tracer, ReadBufferSize, WriteBufferSize);
         }
         #endregion
@@ -38,14 +46,12 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Static Methods
-        public static void Register()
+        /// <summary>
+        /// Register the factory for enumerating USB devices in Windows.
+        /// </summary>
+        public static void Register(ILogger logger, ITracer tracer)
         {
-            Register(null);
-        }
-
-        public static void Register(ILogger logger)
-        {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory() { Logger = logger });
+            DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory(logger, tracer));
         }
 
         public static ConnectedDeviceDefinition GetDeviceDefinition(SafeFileHandle defaultInterfaceHandle, string deviceId)
