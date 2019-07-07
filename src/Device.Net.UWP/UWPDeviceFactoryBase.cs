@@ -23,7 +23,8 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Properties
-        public ILogger Logger { get; set; }
+        public ILogger Logger { get; }
+        public ITracer Tracer { get; }
         #endregion
 
         #region Public Abstract Properties
@@ -32,6 +33,14 @@ namespace Device.Net.UWP
 
         #region Protected Abstract Methods
         protected abstract string GetAqsFilter(uint? vendorId, uint? productId);
+        #endregion
+
+        #region Constructor
+        protected UWPDeviceFactoryBase(ILogger logger, ITracer tracer)
+        {
+            Logger = logger;
+            Tracer = tracer;
+        }
         #endregion
 
         #region Abstraction Methods
@@ -101,6 +110,8 @@ namespace Device.Net.UWP
         #region Public Static Methods
         public static ConnectedDeviceDefinition GetDeviceInformation(wde.DeviceInformation deviceInformation, DeviceType deviceType)
         {
+            if (deviceInformation == null) throw new ArgumentNullException(nameof(deviceInformation));
+
             var retVal = WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(deviceInformation.Id, deviceType);
 
             //foreach (var keyValuePair in deviceInformation.Properties)

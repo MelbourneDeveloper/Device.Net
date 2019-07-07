@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests
@@ -12,7 +11,14 @@ namespace Device.Net.UnitTests
 
         public abstract DeviceType DeviceType { get; }
 
-        public ILogger Logger { get; protected set; }
+        public ILogger Logger { get; }
+        public ITracer Tracer { get; }
+
+        protected MockFactoryBase(ILogger logger, ITracer tracer)
+        {
+            Logger = logger;
+            Tracer = tracer;
+        }
 
         public abstract uint ProductId { get; }
         public abstract uint VendorId { get; }
@@ -21,14 +27,19 @@ namespace Device.Net.UnitTests
         {
             var result = new List<ConnectedDeviceDefinition>();
 
-            var mockConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId) { ProductId = ProductId, VendorId = VendorId };
-
-            if (IsConnected)
+            var mockConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId)
             {
-                if (DeviceManager.IsDefinitionMatch(deviceDefinition, mockConnectedDeviceDefinition))
-                {
-                    result.Add(mockConnectedDeviceDefinition);
-                }
+                ProductId = ProductId,
+                VendorId = VendorId,
+                DeviceType = this is MockHidFactory ? DeviceType.Hid : DeviceType.Usb
+            };
+
+
+            if (!IsConnected) return Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(result);
+
+            if (DeviceManager.IsDefinitionMatch(deviceDefinition, mockConnectedDeviceDefinition))
+            {
+                result.Add(mockConnectedDeviceDefinition);
             }
 
             return Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(result);

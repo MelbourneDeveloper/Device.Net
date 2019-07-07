@@ -12,7 +12,7 @@ namespace Usb.Net.Windows
         public const int EnglishLanguageID = 1033;
         public const uint DEVICE_SPEED = 1;
         public const byte USB_ENDPOINT_DIRECTION_MASK = 0X80;
-        public const int WritePipeId = 0x80;
+        public const byte WritePipeId = 0x80;
 
         /// <summary>
         /// Not sure where this constant is defined...

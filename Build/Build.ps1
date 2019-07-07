@@ -3,9 +3,9 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass
 
 #TODO: Unhard code these
 $msbuildToolsPath = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin"
-$version = "2.8.0"
+$version = "2.9.0"
 
-$releaseNotes = "See https://github.com/MelbourneDeveloper/Device.Net/projects/7"
+$releaseNotes = "See https://github.com/MelbourneDeveloper/Device.Net/projects/9"
 
 $deviceNetTitle = "Device.Net"
 $deviceNetSummary = "Cross platform C# library for talking to connected devices in a uniform way through dependency injection."
