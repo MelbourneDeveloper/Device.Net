@@ -10,8 +10,6 @@ namespace Usb.Net
         #region Fields
         private IUsbInterfaceEndpoint _ReadEndpoint;
         private IUsbInterfaceEndpoint _WriteEndpoint;
-        private readonly ushort? _ReadBufferSize;
-        private readonly ushort? _WriteBufferSize;
         #endregion
 
         #region Public Properties
@@ -24,16 +22,7 @@ namespace Usb.Net
 
         public IUsbInterfaceEndpoint ReadEndpoint
         {
-            get
-            {
-                //This is a bit stinky but should work
-                if (_ReadEndpoint == null)
-                {
-                    _ReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead);
-                }
-
-                return _ReadEndpoint;
-            }
+            get => _ReadEndpoint ?? (_ReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead));
             set
             {
                 if (!UsbInterfaceEndpoints.Contains(value)) throw new Exception("This endpoint is not contained in the list of valid endpoints");
@@ -43,16 +32,7 @@ namespace Usb.Net
 
         public IUsbInterfaceEndpoint WriteEndpoint
         {
-            get
-            {
-                //This is a bit stinky but should work
-                if (_WriteEndpoint == null)
-                {
-                    _WriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite);
-                }
-
-                return _WriteEndpoint;
-            }
+            get => _WriteEndpoint ?? (_WriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite));
             set
             {
                 if (!UsbInterfaceEndpoints.Contains(value)) throw new Exception("This endpoint is not contained in the list of valid endpoints");
@@ -62,12 +42,10 @@ namespace Usb.Net
         #endregion
 
         #region Constructor
-        protected UsbInterfaceBase(ILogger logger, ITracer tracer, ushort? readBufferSize, ushort? writeBufferSize)
+        protected UsbInterfaceBase(ILogger logger, ITracer tracer)
         {
             Tracer = tracer;
             Logger = logger;
-            _ReadBufferSize = readBufferSize;
-            _WriteBufferSize = writeBufferSize;
         }
         #endregion
     }

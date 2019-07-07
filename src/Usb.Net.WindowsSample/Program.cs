@@ -145,6 +145,3 @@ namespace Usb.Net.WindowsSample
         #endregion
     }
 }
-     #endregion
-    }
-}

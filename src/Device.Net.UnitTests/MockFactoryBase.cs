@@ -27,23 +27,19 @@ namespace Device.Net.UnitTests
         {
             var result = new List<ConnectedDeviceDefinition>();
 
-            var mockConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId) { ProductId = ProductId, VendorId = VendorId };
+            var mockConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId)
+            {
+                ProductId = ProductId,
+                VendorId = VendorId,
+                DeviceType = this is MockHidFactory ? DeviceType.Hid : DeviceType.Usb
+            };
 
-            if (this is MockHidFactory mockHidFactory)
-            {
-                mockConnectedDeviceDefinition.DeviceType = DeviceType.Hid;
-            }
-            else
-            {
-                mockConnectedDeviceDefinition.DeviceType = DeviceType.Usb;
-            }
 
-            if (IsConnected)
+            if (!IsConnected) return Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(result);
+
+            if (DeviceManager.IsDefinitionMatch(deviceDefinition, mockConnectedDeviceDefinition))
             {
-                if (DeviceManager.IsDefinitionMatch(deviceDefinition, mockConnectedDeviceDefinition))
-                {
-                    result.Add(mockConnectedDeviceDefinition);
-                }
+                result.Add(mockConnectedDeviceDefinition);
             }
 
             return Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(result);

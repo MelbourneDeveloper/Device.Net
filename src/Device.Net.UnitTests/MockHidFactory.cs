@@ -29,20 +29,15 @@ namespace Device.Net.UnitTests
 
         public override IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            if (deviceDefinition != null)
-            {
-                if (deviceDefinition.DeviceId == DeviceId)
-                {
-                    if (!deviceDefinition.DeviceType.HasValue || deviceDefinition.DeviceType == DeviceType.Hid)
-                    {
-                        Logger?.Log(string.Format(FoundMessage, DeviceId), nameof(MockHidFactory), null, LogLevel.Information);
+            if (deviceDefinition == null) return null;
 
-                        return new MockHidDevice(Logger, Tracer);
-                    }
-                }
-            }
+            if (deviceDefinition.DeviceId != DeviceId) return null;
 
-            return null;
+            if (deviceDefinition.DeviceType.HasValue && deviceDefinition.DeviceType != DeviceType.Hid) return null;
+
+            Logger?.Log(string.Format(FoundMessage, DeviceId), nameof(MockHidFactory), null, LogLevel.Information);
+
+            return new MockHidDevice(Logger, Tracer);
         }
     }
 }

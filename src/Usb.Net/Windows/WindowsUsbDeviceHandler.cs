@@ -103,7 +103,7 @@ namespace Usb.Net.Windows
 
             //TODO: Where is the logger/tracer?
             var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
-            var retVal = new WindowsUsbInterface(interfaceHandle, Logger, Tracer, readBufferLength, writeBufferLength);
+            var retVal = new WindowsUsbInterface(interfaceHandle, Logger, Tracer);
             WindowsDeviceBase.HandleError(isSuccess, "Couldn't query interface");
 
             for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)

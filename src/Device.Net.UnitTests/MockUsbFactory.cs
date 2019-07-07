@@ -29,20 +29,15 @@ namespace Device.Net.UnitTests
 
         public override IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            if (deviceDefinition != null)
-            {
-                if (deviceDefinition.DeviceId == DeviceId)
-                {
-                    if (!deviceDefinition.DeviceType.HasValue || deviceDefinition.DeviceType == DeviceType.Usb)
-                    {
-                        Logger?.Log(string.Format(FoundMessage, DeviceId), nameof(MockUsbFactory), null, LogLevel.Information);
+            if (deviceDefinition == null) throw new Exception("Couldn't get a device");
 
-                        return new MockUsbDevice(Logger, Tracer);
-                    }
-                }
-            }
+            if (deviceDefinition.DeviceId != DeviceId) throw new Exception("Couldn't get a device");
 
-            throw new Exception("Couldn't get a device");
+            if (deviceDefinition.DeviceType.HasValue && deviceDefinition.DeviceType != DeviceType.Usb)  throw new Exception("Couldn't get a device");
+
+            Logger?.Log(string.Format(FoundMessage, DeviceId), nameof(MockUsbFactory), null, LogLevel.Information);
+
+            return new MockUsbDevice(Logger, Tracer);
         }
     }
 }
