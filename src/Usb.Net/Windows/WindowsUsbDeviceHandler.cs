@@ -131,12 +131,14 @@ namespace Usb.Net.Windows
             _DeviceHandle = null;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (disposed) return;
             disposed = true;
 
             Close();
+
+            base.Dispose();
 
             GC.SuppressFinalize(this);
         }

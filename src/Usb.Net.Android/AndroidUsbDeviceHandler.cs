@@ -35,16 +35,15 @@ namespace Usb.Net.Android
         #region Constructor
         public AndroidUsbDeviceHandler(UsbManager usbManager, Context androidContext, int deviceNumberId, ILogger logger, ITracer tracer, ushort? readBufferLength, ushort? writeBufferLength) : base(logger, tracer, readBufferLength, writeBufferLength)
         {
-            DeviceNumberId = deviceNumberId;
-            UsbManager = usbManager;
-            AndroidContext = androidContext;
+            UsbManager = usbManager ?? throw new ArgumentNullException(nameof(usbManager));
+            AndroidContext = androidContext ?? throw new ArgumentNullException(nameof(androidContext));
             DeviceNumberId = deviceNumberId;
         }
         #endregion
 
         #region Public Methods 
 
-        public void Dispose()
+        public override void Dispose()
         {
             if (disposed) return;
             disposed = true;
@@ -52,6 +51,8 @@ namespace Usb.Net.Android
             Close();
 
             _InitializingSemaphoreSlim.Dispose();
+
+            base.Dispose();
 
             GC.SuppressFinalize(this);
         }
@@ -81,13 +82,11 @@ namespace Usb.Net.Android
             _IsClosing = false;
         }
 
-        //TODO: Make async properly
         public Task<byte[]> ReadAsync()
         {
             return ReadUsbInterface.ReadAsync(ReadBufferSize);
         }
 
-        //TODO: Perhaps we should implement Batch Begin/Complete so that the UsbRequest is not created again and again. This will be expensive
         public Task WriteAsync(byte[] data)
         {
             return WriteUsbInterface.WriteAsync(data);
@@ -226,6 +225,9 @@ namespace Usb.Net.Android
         #endregion
 
         #region Finalizer
+        /// <summary>
+        /// What's this then?
+        /// </summary>
         ~AndroidUsbDeviceHandler()
         {
             Dispose();

@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 namespace Usb.Net
 {
-    public abstract class UsbDeviceHandlerBase
+    public abstract class UsbDeviceHandlerBase : IDisposable
     {
         #region Fields
+        private bool disposed;
         private IUsbInterface _ReadUsbInterface;
         private IUsbInterface _WriteUsbInterface;
         #endregion
@@ -47,6 +48,18 @@ namespace Usb.Net
                 if (!UsbInterfaces.Contains(value)) throw new Exception("The interface is not contained the list of valid interfaces.");
                 _WriteUsbInterface = value;
             }
+        }
+        public virtual void Dispose()
+        {
+            if (disposed) return;
+            disposed = true;
+
+            foreach (var usbInterface in UsbInterfaces)
+            {
+                usbInterface.Dispose();
+            }
+
+            GC.SuppressFinalize(this);
         }
         #endregion
     }
