@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
@@ -9,7 +10,7 @@ namespace Usb.Net.Windows
     public class WindowsUsbInterface : UsbInterfaceBase, IUsbInterface
     {
         #region Private Properties
-        private  bool _IsDisposed;
+        private bool _IsDisposed;
         private readonly SafeFileHandle _SafeFileHandle;
         /// <summary>
         /// TODO: Make private?
@@ -42,9 +43,7 @@ namespace Usb.Net.Windows
         {
             return await Task.Run(() =>
             {
-                if (!SetTimeout(timeout))
-                    throw new ApplicationException($"Unable to Set timeout.");
-
+                SetTimeout(timeout);
                 var bytes = new byte[bufferLength];
                 var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_SafeFileHandle, InterruptEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
                 //TODO: Should get Last error here and if it's Timeout, don't handle error?
@@ -78,12 +77,9 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Private Methods
-        private bool SetTimeout(uint timeout)
+        private void SetTimeout(uint timeout)
         {
-            if (!WinUsbApiCalls.WinUsb_SetPipePolicy(_SafeFileHandle, InterruptEndpoint.PipeId, 0x03, sizeof(uint), ref timeout))
-                return false;
-
-            return true;
+            if (!WinUsbApiCalls.WinUsb_SetPipePolicy(_SafeFileHandle, InterruptEndpoint.PipeId, 0x03, sizeof(uint), ref timeout)) throw new ApiException($"Unable to Set timeout.");
         }
         #endregion
     }

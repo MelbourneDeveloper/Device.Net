@@ -57,7 +57,7 @@ namespace Usb.Net
             get => _InterruptUsbInterface;
             set
             {
-                if (!UsbInterfaces.Contains(value)) throw new Exception("The interface is not contained the list of valid interfaces.");
+                if (!UsbInterfaces.Contains(value)) throw new ValidationException("The interface is not contained the list of valid interfaces.");
                 _InterruptUsbInterface = value;
             }
         }
