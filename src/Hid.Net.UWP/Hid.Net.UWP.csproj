@@ -42,7 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UWPHidDevice.cs" />
+    <Compile Include="UWPHidDeviceHandler.cs" />
     <Compile Include="UWPHidDeviceFactory.cs" />
     <EmbeddedResource Include="Properties\Hid.Net.UWP.rd.xml" />
     <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />

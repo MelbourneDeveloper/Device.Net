@@ -92,7 +92,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Methods
-        public override Task WriteAsync(byte[] data)
+        public Task WriteAsync(byte[] data)
         {
             return WriteReportAsync(data, 0);
         }
@@ -155,7 +155,7 @@ namespace Hid.Net.UWP
             if (DataHasExtraByte)
             {
                 reportId = bytes[0];
-                bytes = RemoveFirstByte(bytes);
+                bytes = DeviceBase.RemoveFirstByte(bytes);
             }
 
             return new ReadReport(reportId, bytes);
