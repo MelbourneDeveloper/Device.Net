@@ -92,7 +92,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Methods
-        public Task WriteAsync(byte[] data)
+        public virtual Task WriteAsync(byte[] data)
         {
             return WriteReportAsync(data, 0);
         }
