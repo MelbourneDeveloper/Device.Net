@@ -1,5 +1,4 @@
 ﻿using Device.Net;
-using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
@@ -39,20 +38,6 @@ namespace Usb.Net.Windows
             });
         }
 
-        public async Task<byte[]> ReadInterruptAsync(uint bufferLength, uint timeout)
-        {
-            return await Task.Run(() =>
-            {
-                SetTimeout(timeout);
-                var bytes = new byte[bufferLength];
-                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_SafeFileHandle, InterruptEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
-                //TODO: Should get Last error here and if it's Timeout, don't handle error?
-                WindowsDeviceBase.HandleError(isSuccess, "Couldn't read data from interrupt pipe"); //TODO: Error code 121 is timeout, I think we should ignore this?
-                Tracer?.Trace(false, bytes);
-                return bytes;
-            });
-        }
-
         public async Task WriteAsync(byte[] data)
         {
             await Task.Run(() =>
@@ -73,13 +58,6 @@ namespace Usb.Net.Windows
             WindowsDeviceBase.HandleError(isSuccess, "Interface could not be disposed");
 
             GC.SuppressFinalize(this);
-        }
-        #endregion
-
-        #region Private Methods
-        private void SetTimeout(uint timeout)
-        {
-            if (!WinUsbApiCalls.WinUsb_SetPipePolicy(_SafeFileHandle, InterruptEndpoint.PipeId, 0x03, sizeof(uint), ref timeout)) throw new ApiException($"Unable to Set timeout.");
         }
         #endregion
     }

@@ -26,7 +26,7 @@ namespace Usb.Net
             get => _ReadEndpoint ?? (_ReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead));
             set
             {
-                if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException("This endpoint is not contained in the list of valid endpoints");
+                if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
                 _ReadEndpoint = value;
             }
         }
@@ -36,26 +36,17 @@ namespace Usb.Net
             get => _WriteEndpoint ?? (_WriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite));
             set
             {
-                if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException("This endpoint is not contained in the list of valid endpoints");
+                if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
                 _WriteEndpoint = value;
             }
         }
 
         public IUsbInterfaceEndpoint InterruptEndpoint
         {
-            get
-            {
-                //This is a bit stinky but should work
-                if (_InterruptEndpoint == null)
-                {
-                    _InterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt);
-                }
-
-                return _InterruptEndpoint;
-            }
+            get => _InterruptEndpoint ?? (_InterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt));
             set
             {
-                if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException("This endpoint is not contained in the list of valid endpoints");
+                if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
                 _InterruptEndpoint = value;
             }
         }

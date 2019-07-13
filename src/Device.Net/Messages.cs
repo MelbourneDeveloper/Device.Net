@@ -36,5 +36,9 @@
         public const string ErrorMessageCouldntGetDevice = "Couldn't get a device";
         #endregion
 
+        #region USB
+        public const string ErrorMessageInvalidEndpoint = "This endpoint is not contained in the list of valid endpoints";
+        #endregion
+
     }
 }
