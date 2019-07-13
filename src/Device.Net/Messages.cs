@@ -8,6 +8,7 @@
         public const string ErrorMessageCantOpenWrite = "Could not open connection for writing";
         public const string ErrorMessageCantOpenRead = "Could not open connection for reading";
         public const string DeviceDisposedErrorMessage = "This device has already been disposed";
+        public static string GetErrorMessageCantConnect(string deviceId) => $"Could not connect to device with Device Id {deviceId}. Check that the package manifest has been configured to allow this device.";
         #endregion
 
         #region Misc
@@ -42,7 +43,8 @@
         #region USB
         public const string ErrorMessageInvalidEndpoint = "This endpoint is not contained in the list of valid endpoints";
         public const string ErrorMessageInvalidInterface = "The interface is not contained the list of valid interfaces.";
+        public const string ErrorMessageNoInterfaceFound ="There was no Usb Interface found for the device.";
+        public const string MessageNoEndpointFound = "There was no endpoint found on the Usb interface";
         #endregion
-
     }
 }

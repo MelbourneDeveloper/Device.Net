@@ -24,7 +24,6 @@ namespace Usb.Net.Windows
         }
         #endregion
 
-
         #region Public Methods
         public async Task<byte[]> ReadAsync(uint bufferLength)
         {
