@@ -14,6 +14,7 @@ namespace Device.Net.UWP
         #region Protected Properties
         protected T ConnectedDevice { get; private set; }
         protected bool Disposed { get; private set; }
+        public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; protected set; }
         #endregion
 
         #region Public Abstract

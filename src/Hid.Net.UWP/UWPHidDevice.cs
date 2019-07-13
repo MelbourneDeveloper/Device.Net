@@ -174,6 +174,11 @@ namespace Hid.Net.UWP
         {
             return HidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
         }
+
+        public Task<byte[]> WriteAndReadAsync(byte[] writeBuffer)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

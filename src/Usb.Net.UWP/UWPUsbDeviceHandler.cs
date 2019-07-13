@@ -25,7 +25,6 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Properties
-        public ConnectedDeviceDefinition DeviceDefinition { get; }
         public UsbInterfaceHandler UsbInterfaceHandler { get; }
         #endregion
 
@@ -59,7 +58,7 @@ namespace Usb.Net.UWP
 
         public UWPUsbDeviceHandler(ConnectedDeviceDefinition deviceDefinition, ILogger logger, ITracer tracer) : base(deviceDefinition.DeviceId, logger, tracer)
         {
-            DeviceDefinition = deviceDefinition;
+            ConnectedDeviceDefinition = deviceDefinition;
             UsbInterfaceHandler = new UsbInterfaceHandler(logger, tracer);
         }
         #endregion
@@ -149,7 +148,7 @@ namespace Usb.Net.UWP
 
         public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync()
         {
-            return Task.FromResult<ConnectedDeviceDefinitionBase>(DeviceDefinition);
+            return Task.FromResult<ConnectedDeviceDefinitionBase>(ConnectedDeviceDefinition);
         }
         #endregion
     }
