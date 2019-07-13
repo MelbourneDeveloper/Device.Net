@@ -11,7 +11,7 @@ using Windows.Storage;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDeviceHandler : UWPDeviceHandlerBase<HidDevice>
+    public class UWPHidDevice : UWPDeviceHandlerBase<HidDevice>, IHidDevice
     {
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
@@ -37,15 +37,15 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPHidDeviceHandler(ILogger logger, ITracer tracer) : this(null, logger, tracer)
+        public UWPHidDevice(ILogger logger, ITracer tracer) : this(null, logger, tracer)
         {
         }
 
-        public UWPHidDeviceHandler(string deviceId) : this(deviceId, null, null)
+        public UWPHidDevice(string deviceId) : this(deviceId, null, null)
         {
         }
 
-        public UWPHidDeviceHandler(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
+        public UWPHidDevice(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
         {
         }
         #endregion
