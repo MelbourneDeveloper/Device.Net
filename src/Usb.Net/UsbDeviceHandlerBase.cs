@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Usb.Net
 {
-    public abstract class UsbDeviceHandlerBase : IDisposable
+    public class UsbInterfaceHandler : IDisposable
     {
         #region Fields
         private bool disposed;
@@ -14,16 +14,11 @@ namespace Usb.Net
         private IUsbInterface _InterruptUsbInterface;
         #endregion
 
-        protected ushort? _ReadBufferSize { get;  set; }
-        protected ushort? _WriteBufferSize { get;  set; }
-
         #region Constructor
-        protected UsbDeviceHandlerBase(ILogger logger, ITracer tracer, ushort? readBufferLength, ushort? writeBufferLength)
+        public UsbInterfaceHandler(ILogger logger, ITracer tracer)
         {
             Tracer = tracer;
             Logger = logger;
-            _ReadBufferSize = readBufferLength;
-            _WriteBufferSize = writeBufferLength;
         }
         #endregion
 
@@ -37,7 +32,7 @@ namespace Usb.Net
             get => _ReadUsbInterface;
             set
             {
-                if (!UsbInterfaces.Contains(value)) throw new ValidationException("The interface is not contained the list of valid interfaces.");
+                if (!UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
                 _ReadUsbInterface = value;
             }
         }
@@ -47,7 +42,7 @@ namespace Usb.Net
             get => _WriteUsbInterface;
             set
             {
-                if (!UsbInterfaces.Contains(value)) throw new ValidationException("The interface is not contained the list of valid interfaces.");
+                if (!UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
                 _WriteUsbInterface = value;
             }
         }
@@ -57,7 +52,7 @@ namespace Usb.Net
             get => _InterruptUsbInterface;
             set
             {
-                if (!UsbInterfaces.Contains(value)) throw new ValidationException("The interface is not contained the list of valid interfaces.");
+                if (!UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
                 _InterruptUsbInterface = value;
             }
         }

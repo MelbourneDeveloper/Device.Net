@@ -41,6 +41,7 @@
 
         #region USB
         public const string ErrorMessageInvalidEndpoint = "This endpoint is not contained in the list of valid endpoints";
+        public const string ErrorMessageInvalidInterface = "The interface is not contained the list of valid interfaces.";
         #endregion
 
     }

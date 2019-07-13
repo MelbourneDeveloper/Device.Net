@@ -25,6 +25,7 @@ namespace Usb.Net.UWP
 
         #region Public Properties
         public ConnectedDeviceDefinition DeviceDefinition { get; }
+        public UsbInterfaceHandler UsbInterfaceHandler { get; }
         #endregion
 
         #region Public Override Properties
@@ -44,6 +45,7 @@ namespace Usb.Net.UWP
         public UWPUsbDeviceHandler(ConnectedDeviceDefinition deviceDefinition, ILogger logger, ITracer tracer) : base(deviceDefinition.DeviceId, logger, tracer)
         {
             DeviceDefinition = deviceDefinition;
+            UsbInterfaceHandler = new UsbInterfaceHandler(logger, tracer);
         }
         #endregion
 
