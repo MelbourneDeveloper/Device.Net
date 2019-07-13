@@ -13,6 +13,10 @@ namespace Hid.Net.UWP
 {
     public class UWPHidDevice : UWPDeviceHandlerBase<HidDevice>, IHidDevice
     {
+        #region Fields
+        private bool disposed;
+        #endregion
+
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
         public byte DefaultReportId { get; set; }
@@ -55,7 +59,7 @@ namespace Hid.Net.UWP
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
 
-            if (Disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
+            if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
             Log("Initializing Hid device", null);
 
@@ -92,6 +96,14 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Methods
+        public override void Dispose()
+        {
+            if (disposed) return;
+            disposed = true;
+
+            base.Dispose();
+        }
+
         public virtual Task WriteAsync(byte[] data)
         {
             return WriteReportAsync(data, 0);

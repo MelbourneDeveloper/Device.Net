@@ -41,6 +41,7 @@
     <AssemblyOriginatorKeyFile>../Device.Net/Device.Net.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UWPHidDeviceFactory.cs" />
     <Compile Include="UWPHidDevice.cs" />
