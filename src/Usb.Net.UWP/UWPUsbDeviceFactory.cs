@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.UWP;
 using Device.Net.Windows;
+using System;
 using System.Threading.Tasks;
 
 namespace Usb.Net.UWP
@@ -31,7 +32,9 @@ namespace Usb.Net.UWP
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            return deviceDefinition.DeviceType == DeviceType.Hid ? null : new UWPUsbDevice(new  UWPUsbDeviceHandler(deviceDefinition, Logger, Tracer));
+            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
+
+            return deviceDefinition.DeviceType == DeviceType.Hid ? null : new UWPUsbDevice(new UWPUsbDeviceHandler(deviceDefinition, Logger, Tracer));
         }
         #endregion
 
@@ -51,7 +54,7 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Overrides
-        public override Task<ConnectionInfo> TestConnection(string Id) => Task.FromResult(new ConnectionInfo { CanConnect = true });
+        public override Task<ConnectionInfo> TestConnection(string deviceId) => Task.FromResult(new ConnectionInfo { CanConnect = true });
         #endregion
     }
 }

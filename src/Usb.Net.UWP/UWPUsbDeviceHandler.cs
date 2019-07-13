@@ -14,6 +14,10 @@ namespace Usb.Net.UWP
 {
     public class UWPUsbDeviceHandler : UWPDeviceHandlerBase<windowsUsbDevice>, IUsbDeviceHandler
     {
+        #region Fields
+        private bool disposed;
+        #endregion
+
         #region Public Properties
         public UsbInterfaceHandler UsbInterfaceHandler { get; }
         #endregion
@@ -56,7 +60,7 @@ namespace Usb.Net.UWP
         #region Private Methods
         public override async Task InitializeAsync()
         {
-            if (Disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
+            if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
             await GetDeviceAsync(DeviceId);
 
@@ -102,11 +106,13 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Methods
-        public void Dispose()
+        public override void Dispose()
         {
+            if (disposed) return;
+            disposed = true;
 
-
-            UsbInterfaceHandler.Dispose();
+            UsbInterfaceHandler?.Dispose();
+            base.Dispose();
         }
 
         public Task WriteAsync(byte[] data)

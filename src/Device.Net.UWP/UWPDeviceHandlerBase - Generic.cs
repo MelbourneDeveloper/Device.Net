@@ -9,11 +9,11 @@ namespace Device.Net.UWP
     {
         #region Fields
         private bool _IsClosing;
+        private bool disposed;
         #endregion
 
         #region Protected Properties
         protected T ConnectedDevice { get; private set; }
-        protected bool Disposed { get; private set; }
         public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; protected set; }
         #endregion
 
@@ -75,10 +75,10 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Virtual Methods
-        public void Dispose()
+        public virtual void Dispose()
         {
-            if (Disposed) return;
-            Disposed = true;
+            if (disposed) return;
+            disposed = true;
 
             Close();
             ReadChunkTaskCompletionSource?.Task?.Dispose();
