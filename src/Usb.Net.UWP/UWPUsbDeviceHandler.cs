@@ -2,13 +2,14 @@
 using Device.Net.Exceptions;
 using Device.Net.UWP;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Devices.Usb;
-using windowsUsbDevice = Windows.Devices.Usb.UsbDevice;
 using Windows.Foundation;
+using windowsUsbDevice = Windows.Devices.Usb.UsbDevice;
 
 namespace Usb.Net.UWP
 {
@@ -31,6 +32,20 @@ namespace Usb.Net.UWP
         #region Public Override Properties
         public override ushort WriteBufferSize => (ushort)_DefaultOutPipe.EndpointDescriptor.MaxPacketSize;
         public override ushort ReadBufferSize => (ushort)_DefaultInPipe.EndpointDescriptor.MaxPacketSize;
+
+        public IUsbInterface ReadUsbInterface
+        {
+            get => UsbInterfaceHandler.ReadUsbInterface;
+            set => UsbInterfaceHandler.ReadUsbInterface = value;
+        }
+
+        public IUsbInterface WriteUsbInterface
+        {
+            get => UsbInterfaceHandler.WriteUsbInterface;
+            set => UsbInterfaceHandler.WriteUsbInterface = value;
+        }
+
+        public IList<IUsbInterface> UsbInterfaces => UsbInterfaceHandler.UsbInterfaces;       
         #endregion
 
         #region Constructors
