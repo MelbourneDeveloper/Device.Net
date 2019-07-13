@@ -5,7 +5,7 @@ using Windows.Foundation;
 
 namespace Device.Net.UWP
 {
-    public abstract class UWPDeviceBase<T> : UWPDeviceBase, IDevice
+    public abstract class UWPDeviceHandlerBase<T> : UWPDeviceHandlerBase, IDeviceHandler
     {
         #region Fields
         private bool _IsClosing;
@@ -16,10 +16,14 @@ namespace Device.Net.UWP
         protected bool Disposed { get; private set; }
         #endregion
 
+        #region Public Abstract
+        public abstract ushort WriteBufferSize { get; }
+        public abstract ushort ReadBufferSize { get; }
+        #endregion
+
         #region Constructor
-        protected UWPDeviceBase(string deviceId, ILogger logger, ITracer tracer) : base(logger, tracer)
+        protected UWPDeviceHandlerBase(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
         {
-            DeviceId = deviceId;
         }
         #endregion
 
@@ -37,7 +41,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Overrides
-        public override async Task<byte[]> ReadAsync()
+        public async Task<byte[]> ReadAsync()
         {
             if (IsReading)
             {
@@ -66,19 +70,17 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Override Properties
-        public override bool IsInitialized => ConnectedDevice != null;
+        public bool IsInitialized => ConnectedDevice != null;
         #endregion
 
         #region Public Virtual Methods
-        public override void Dispose()
+        public void Dispose()
         {
             if (Disposed) return;
             Disposed = true;
 
             Close();
             ReadChunkTaskCompletionSource?.Task?.Dispose();
-
-            base.Dispose();
 
             GC.SuppressFinalize(this);
         }
@@ -104,7 +106,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Finaliser
-        ~UWPDeviceBase()
+        ~UWPDeviceHandlerBase()
         {
             Dispose();
         }
