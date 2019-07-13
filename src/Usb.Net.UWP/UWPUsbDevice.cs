@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Device.Net.Exceptions;
 using Device.Net.UWP;
 using System;
 using System.IO;
@@ -10,7 +11,7 @@ using Windows.Foundation;
 
 namespace Usb.Net.UWP
 {
-    public class UWPUsbDevice : UWPDeviceBase<UsbDevice>
+    public class UWPUsbDevice : UWPDeviceHandlerBase<UsbDevice>
     {
         #region Fields
         /// <summary>
@@ -44,7 +45,7 @@ namespace Usb.Net.UWP
         #region Private Methods
         public override async Task InitializeAsync()
         {
-            if (Disposed) throw new Exception(DeviceDisposedErrorMessage);
+            if (Disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
             await GetDeviceAsync(DeviceId);
 

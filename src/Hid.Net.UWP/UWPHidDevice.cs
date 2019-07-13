@@ -11,7 +11,7 @@ using Windows.Storage;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDevice : UWPDeviceBase<HidDevice>, IHidDevice
+    public class UWPHidDeviceHandler : UWPDeviceHandlerBase<HidDevice>
     {
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
@@ -37,15 +37,15 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPHidDevice(ILogger logger, ITracer tracer) : this(null, logger, tracer)
+        public UWPHidDeviceHandler(ILogger logger, ITracer tracer) : this(null, logger, tracer)
         {
         }
 
-        public UWPHidDevice(string deviceId) : this(deviceId, null, null)
+        public UWPHidDeviceHandler(string deviceId) : this(deviceId, null, null)
         {
         }
 
-        public UWPHidDevice(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
+        public UWPHidDeviceHandler(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
         {
         }
         #endregion
@@ -55,7 +55,7 @@ namespace Hid.Net.UWP
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
 
-            if (Disposed) throw new ValidationException(DeviceDisposedErrorMessage);
+            if (Disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
             Log("Initializing Hid device", null);
 

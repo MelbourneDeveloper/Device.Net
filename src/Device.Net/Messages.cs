@@ -7,6 +7,7 @@
         public const string ErrorMessageCouldntIntializeDevice = "Couldn't initialize device";
         public const string ErrorMessageCantOpenWrite = "Could not open connection for writing";
         public const string ErrorMessageCantOpenRead = "Could not open connection for reading";
+        public const string DeviceDisposedErrorMessage = "This device has already been disposed";
         #endregion
 
         #region Misc
@@ -21,6 +22,8 @@
         }
 
         public const string ErrorMessageReadWrite = "Read/Write Error";
+        public const string WriteErrorMessage = "An error occurred while attempting to write to the device";
+        public const string ReadErrorMessage = "An error occurred while attempting to read from the device";
         #endregion
 
         #region Polling

@@ -160,7 +160,7 @@ namespace Hid.Net.Windows
 
         public override async Task InitializeAsync()
         {
-            if (disposed) throw new ValidationException(DeviceDisposedErrorMessage);
+            if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
             await Task.Run(() => Initialize());
         }
@@ -178,7 +178,7 @@ namespace Hid.Net.Windows
 
             if (_ReadFileStream == null)
             {
-                throw new NotInitializedException("The device has not been initialized");
+                throw new NotInitializedException(Messages.ErrorMessageNotInitialized);
             }
 
             var bytes = new byte[ReadBufferSize];
@@ -189,8 +189,8 @@ namespace Hid.Net.Windows
             }
             catch (Exception ex)
             {
-                Log(Helpers.ReadErrorMessage, ex);
-                throw new IOException(Helpers.ReadErrorMessage, ex);
+                Log(Messages.ReadErrorMessage, ex);
+                throw new IOException(Messages.ReadErrorMessage, ex);
             }
 
             if (ReadBufferHasReportId) reportId = bytes.First();
@@ -245,8 +245,8 @@ namespace Hid.Net.Windows
                 }
                 catch (Exception ex)
                 {
-                    Log(Helpers.WriteErrorMessage, ex);
-                    throw new IOException(Helpers.WriteErrorMessage, ex);
+                    Log(Messages.WriteErrorMessage, ex);
+                    throw new IOException(Messages.WriteErrorMessage, ex);
                 }
             }
             else

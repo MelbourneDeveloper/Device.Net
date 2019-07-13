@@ -116,7 +116,7 @@ namespace Usb.Net.Android
         {
             try
             {
-                if (disposed) throw new Exception(DeviceBase.DeviceDisposedErrorMessage);
+                if (disposed) throw new Exception(Messages.DeviceDisposedErrorMessage);
 
                 await _InitializingSemaphoreSlim.WaitAsync();
 
