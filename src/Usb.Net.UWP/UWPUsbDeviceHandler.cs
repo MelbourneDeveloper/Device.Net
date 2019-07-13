@@ -45,7 +45,7 @@ namespace Usb.Net.UWP
             set => UsbInterfaceHandler.WriteUsbInterface = value;
         }
 
-        public IList<IUsbInterface> UsbInterfaces => UsbInterfaceHandler.UsbInterfaces;       
+        public IList<IUsbInterface> UsbInterfaces => UsbInterfaceHandler.UsbInterfaces;
         #endregion
 
         #region Constructors
@@ -145,6 +145,11 @@ namespace Usb.Net.UWP
                 Logger?.Log(message, GetType().Name, null, LogLevel.Error);
                 throw new IOException(message);
             }
+        }
+
+        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync()
+        {
+            return Task.FromResult<ConnectedDeviceDefinitionBase>(DeviceDefinition);
         }
         #endregion
     }
