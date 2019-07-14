@@ -119,6 +119,8 @@ namespace Usb.Net.Android
 
         public async Task InitializeAsync()
         {
+            throw new NotImplementedException("Interrupt pipes need to be fixed");
+
             try
             {
                 if (disposed) throw new Exception(Messages.DeviceDisposedErrorMessage);
@@ -186,11 +188,12 @@ namespace Usb.Net.Android
                                 WriteUsbInterface = androidUsbInterface;
                             }
 
-                            if (InterruptUsbInterface == null && isInterrupt)
-                            {
-                                androidUsbInterface.InterruptEndpoint = androidUsbEndpoint;
-                                InterruptUsbInterface = androidUsbInterface;
-                            }
+                            //TODO:
+                            //if (InterruptUsbInterface == null && isInterrupt)
+                            //{
+                            //    androidUsbInterface.InterruptEndpoint = androidUsbEndpoint;
+                            //    InterruptUsbInterface = androidUsbInterface;
+                            //}
                         }
 
                         if (!_UsbDeviceConnection.ClaimInterface(usbInterface, true))
@@ -212,11 +215,12 @@ namespace Usb.Net.Android
                         WriteUsbInterface = androidUsbInterface;
                     }
 
-                    if (androidUsbInterface.InterruptEndpoint == null)
-                    {
-                        androidUsbInterface.InterruptEndpoint = androidUsbInterface.UsbInterfaceEndpoints[2];
-                        InterruptUsbInterface = androidUsbInterface;
-                    }
+                    //TODO: 
+                    //if (androidUsbInterface.InterruptEndpoint == null)
+                    //{
+                    //    androidUsbInterface.InterruptEndpoint = androidUsbInterface.UsbInterfaceEndpoints[2];
+                    //    InterruptUsbInterface = androidUsbInterface;
+                    //}
                 }
 
                 Log("Hid device initialized. About to tell everyone.", null);

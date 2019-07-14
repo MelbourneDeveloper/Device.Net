@@ -67,14 +67,14 @@ namespace Usb.Net.UWP
 
             IBuffer buffer = null;
 
-            if (ReadEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptInPipe> endpoint)
+            if (ReadEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptInPipe> usbInterruptInPipe)
             {
-                asdasd
+                throw new NotImplementedException("This needs fixing. Need to implement the old hack to listen to the interrupt data event");
             }
-            else if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkInPipe> endpoint2)
+            else if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkInPipe> usbBulkInPipe)
             {
                 buffer = new wss.Buffer(bufferLength);
-                await endpoint2.Pipe.InputStream.ReadAsync(buffer, bufferLength, InputStreamOptions.None);
+                await usbBulkInPipe.Pipe.InputStream.ReadAsync(buffer, bufferLength, InputStreamOptions.None);
             }
             else
             {
@@ -96,14 +96,14 @@ namespace Usb.Net.UWP
 
             uint count = 0;
 
-            if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptOutPipe> endpoint)
+            if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptOutPipe> usbInterruptOutPipe)
             {
-                count = await endpoint.Pipe.OutputStream.WriteAsync(buffer);
+                count = await usbInterruptOutPipe.Pipe.OutputStream.WriteAsync(buffer);
 
             }
-            else if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> endpoint2)
+            else if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> usbBulkOutPipe)
             {
-                count = await endpoint2.Pipe.OutputStream.WriteAsync(buffer);
+                count = await usbBulkOutPipe.Pipe.OutputStream.WriteAsync(buffer);
             }
             else
             {
