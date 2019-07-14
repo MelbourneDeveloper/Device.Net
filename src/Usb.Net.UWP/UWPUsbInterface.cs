@@ -78,18 +78,25 @@ namespace Usb.Net.UWP
             if (WriteEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
 
             if (data.Length > WriteBufferSize) throw new ValidationException(Messages.ErrorMessageBufferSizeTooLarge);
-            var endpoint = (UWPUsbInterfaceEndpoint<UsbBulkOutPipe>)WriteEndpoint;
-            var count = await endpoint.Pipe.OutputStream.WriteAsync(data.AsBuffer());
 
-            if (count == data.Length)
+            if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> endpoint)
             {
-                Tracer?.Trace(true, data);
+                var count = await endpoint.Pipe.OutputStream.WriteAsync(data.AsBuffer());
+
+                if (count == data.Length)
+                {
+                    Tracer?.Trace(true, data);
+                }
+                else
+                {
+                    var message = Messages.GetErrorMessageInvalidWriteLength(data.Length, count);
+                    Logger?.Log(message, GetType().Name, null, LogLevel.Error);
+                    throw new IOException(message);
+                }
             }
             else
             {
-                var message = Messages.GetErrorMessageInvalidWriteLength(data.Length, count);
-                Logger?.Log(message, GetType().Name, null, LogLevel.Error);
-                throw new IOException(message);
+                throw new NotImplementedException();
             }
         }
 

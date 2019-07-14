@@ -86,13 +86,26 @@ namespace Usb.Net.UWP
                         WriteUsbInterface = uwpUsbInterface;
                     }
 
-                    if (usbInterface.InterruptInPipes.Count == 0)
+                    if (UsbInterfaceHandler.InterruptUsbInterface == null && uwpUsbInterface.InterruptEndpoint != null)
                     {
-                        Log(Messages.MessageNoEndpointFound + $" Interface index: {interfaceIndex}", null);
-                        continue;
+                        UsbInterfaceHandler.InterruptUsbInterface = uwpUsbInterface;
                     }
 
                     interfaceIndex++;
+                }
+
+                if (UsbInterfaceHandler.ReadUsbInterface == null && UsbInterfaceHandler.InterruptUsbInterface?.InterruptEndpoint != null)
+                {
+                    Logger?.Log(Messages.WarningNoReadInterfaceFound, nameof(UWPUsbDeviceHandler), null, LogLevel.Warning);
+                    UsbInterfaceHandler.ReadUsbInterface = UsbInterfaceHandler.InterruptUsbInterface;
+                    UsbInterfaceHandler.ReadUsbInterface.ReadEndpoint = UsbInterfaceHandler.InterruptUsbInterface?.InterruptEndpoint;
+                }
+
+                if (UsbInterfaceHandler.WriteUsbInterface == null && UsbInterfaceHandler.InterruptUsbInterface?.InterruptEndpoint != null)
+                {
+                    Logger?.Log(Messages.WarningNoWriteInterfaceFound, nameof(UWPUsbDeviceHandler), null, LogLevel.Warning);
+                    UsbInterfaceHandler.WriteUsbInterface = UsbInterfaceHandler.InterruptUsbInterface;
+                    UsbInterfaceHandler.WriteUsbInterface.WriteEndpoint = UsbInterfaceHandler.InterruptUsbInterface?.InterruptEndpoint;
                 }
             }
             else
