@@ -13,6 +13,8 @@ namespace Usb.Net
         ushort ReadBufferSize { get; }
         ushort WriteBufferSize { get; }
         Task WriteAsync(byte[] data);
-        Task<byte[]> ReadAsync(uint bufferLength);        
+        Task<byte[]> ReadAsync(uint bufferLength);
+        //TODO: Implement me
+        //byte InterfaceNumber { get; }
     }
 }

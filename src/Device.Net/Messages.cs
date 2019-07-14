@@ -47,6 +47,10 @@
         public const string ErrorMessageNoInterfaceFound ="There was no Usb Interface found for the device.";
         public const string MessageNoEndpointFound = "There was no endpoint found on the Usb interface";
         public const string ErrorMessageNoReadInterfaceFound = "There was no read Usb Interface found for the device.";
+        public static string GetErrorMessageNoBulkInPipe(byte interfaceNumber)
+        {
+            return $"No bulk in pipes found. Interrupt pipes to be used instead. Interface Number {interfaceNumber}";
+        }
         #endregion
     }
 }

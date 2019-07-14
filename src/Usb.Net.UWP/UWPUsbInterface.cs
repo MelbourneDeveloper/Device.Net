@@ -24,7 +24,10 @@ namespace Usb.Net.UWP
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
 
-            if (usbInterface.BulkInPipes.Count == 0) throw new DeviceException(Messages.ErrorMessageNoReadInterfaceFound);
+            if (usbInterface.BulkInPipes.Count == 0)
+            {
+                Logger?.Log(Messages.GetErrorMessageNoBulkInPipe(usbInterface.InterfaceNumber), nameof(UWPUsbInterface), null, LogLevel.Warning);
+            }
 
             foreach (var inPipe in usbInterface.InterruptInPipes)
             {
@@ -94,9 +97,12 @@ namespace Usb.Net.UWP
         public void Dispose()
         {
             if (disposedValue) return;
-            disposedValue = true;
+            disposedValue = true;    
         }
         #endregion
 
+        public  byte InterfaceNumber => UsbInterface.InterfaceNumber;
+
+        public override string ToString() => InterfaceNumber.ToString();
     }
 }
