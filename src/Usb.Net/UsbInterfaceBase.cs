@@ -10,7 +10,8 @@ namespace Usb.Net
         #region Fields
         private IUsbInterfaceEndpoint _ReadEndpoint;
         private IUsbInterfaceEndpoint _WriteEndpoint;
-        private IUsbInterfaceEndpoint _InterruptEndpoint;
+        private IUsbInterfaceEndpoint _WriteInterruptEndpoint;
+        private IUsbInterfaceEndpoint _ReadInterruptEndpoint;
         #endregion
 
         #region Public Properties
@@ -41,13 +42,23 @@ namespace Usb.Net
             }
         }
 
-        public IUsbInterfaceEndpoint InterruptEndpoint
+        public IUsbInterfaceEndpoint WriteInterruptEndpoint
         {
-            get => _InterruptEndpoint ?? (_InterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt));
+            get => _WriteInterruptEndpoint ?? (_WriteInterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt && p.IsWrite));
             set
             {
                 if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
-                _InterruptEndpoint = value;
+                _WriteInterruptEndpoint = value;
+            }
+        }
+
+        public IUsbInterfaceEndpoint ReadInterruptEndpoint
+        {
+            get => _ReadInterruptEndpoint ?? (_ReadInterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt && p.IsRead));
+            set
+            {
+                if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
+                _ReadInterruptEndpoint = value;
             }
         }
         #endregion

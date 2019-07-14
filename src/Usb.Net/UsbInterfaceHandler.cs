@@ -47,6 +47,7 @@ namespace Usb.Net
             }
         }
 
+        //TODO: Do we need two interfaces? One for read, and one for write?
         public IUsbInterface InterruptUsbInterface
         {
             get => _InterruptUsbInterface;

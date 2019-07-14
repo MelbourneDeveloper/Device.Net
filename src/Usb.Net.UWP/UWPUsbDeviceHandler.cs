@@ -86,7 +86,7 @@ namespace Usb.Net.UWP
                         WriteUsbInterface = uwpUsbInterface;
                     }
 
-                    if (UsbInterfaceHandler.InterruptUsbInterface == null && uwpUsbInterface.InterruptEndpoint != null)
+                    if (UsbInterfaceHandler.InterruptUsbInterface == null && uwpUsbInterface.WriteInterruptEndpoint != null)
                     {
                         UsbInterfaceHandler.InterruptUsbInterface = uwpUsbInterface;
                     }
@@ -94,18 +94,18 @@ namespace Usb.Net.UWP
                     interfaceIndex++;
                 }
 
-                if (UsbInterfaceHandler.ReadUsbInterface == null && UsbInterfaceHandler.InterruptUsbInterface?.InterruptEndpoint != null)
+                if (UsbInterfaceHandler.ReadUsbInterface == null && UsbInterfaceHandler.InterruptUsbInterface?.ReadInterruptEndpoint != null)
                 {
                     Logger?.Log(Messages.WarningNoReadInterfaceFound, nameof(UWPUsbDeviceHandler), null, LogLevel.Warning);
                     UsbInterfaceHandler.ReadUsbInterface = UsbInterfaceHandler.InterruptUsbInterface;
-                    UsbInterfaceHandler.ReadUsbInterface.ReadEndpoint = UsbInterfaceHandler.InterruptUsbInterface?.InterruptEndpoint;
+                    UsbInterfaceHandler.ReadUsbInterface.ReadEndpoint = UsbInterfaceHandler.InterruptUsbInterface?.ReadInterruptEndpoint;
                 }
 
-                if (UsbInterfaceHandler.WriteUsbInterface == null && UsbInterfaceHandler.InterruptUsbInterface?.InterruptEndpoint != null)
+                if (UsbInterfaceHandler.WriteUsbInterface == null && UsbInterfaceHandler.InterruptUsbInterface?.WriteInterruptEndpoint != null)
                 {
                     Logger?.Log(Messages.WarningNoWriteInterfaceFound, nameof(UWPUsbDeviceHandler), null, LogLevel.Warning);
                     UsbInterfaceHandler.WriteUsbInterface = UsbInterfaceHandler.InterruptUsbInterface;
-                    UsbInterfaceHandler.WriteUsbInterface.WriteEndpoint = UsbInterfaceHandler.InterruptUsbInterface?.InterruptEndpoint;
+                    UsbInterfaceHandler.WriteUsbInterface.WriteEndpoint = UsbInterfaceHandler.InterruptUsbInterface?.WriteInterruptEndpoint;
                 }
             }
             else

@@ -10,7 +10,8 @@ namespace Usb.Net
         IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints { get; }
         IUsbInterfaceEndpoint WriteEndpoint { get; set; }
         //TODO: Do we need a read and write interrupt endpoint?
-        IUsbInterfaceEndpoint InterruptEndpoint { get; set; }
+        IUsbInterfaceEndpoint WriteInterruptEndpoint { get; set; }
+        IUsbInterfaceEndpoint ReadInterruptEndpoint { get; set; }
         //TODO: Remove these. They should come from the endpoint... or be specified there
         ushort ReadBufferSize { get; }
         ushort WriteBufferSize { get; }

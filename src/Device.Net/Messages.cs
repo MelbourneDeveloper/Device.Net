@@ -13,7 +13,7 @@
 
         #region Misc
         public const string ErrorMessageReentry = "Reentry. This method is not thread safe";
-        public static string SuccessMessageWriteAndReadCalled => $"Successfully called {nameof(DeviceBase.WriteAndReadAsync)}";
+        public static string SuccessMessageWriteAndReadCalled => $"Successfully called {nameof(DeviceBase.WriteAndReadAsync)}";    
         #endregion
 
         #region IO
@@ -42,6 +42,7 @@
         #endregion
 
         #region USB
+        public const string ErrorMessageWriteEndpointNotRecognized = "The specified write endpoint is not of the correct type and cannot be used";
         public const string ErrorMessageInvalidEndpoint = "This endpoint is not contained in the list of valid endpoints";
         public const string ErrorMessageInvalidInterface = "The interface is not contained the list of valid interfaces.";
         public const string ErrorMessageNoInterfaceFound ="There was no Usb Interface found for the device.";

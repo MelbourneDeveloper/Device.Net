@@ -5,8 +5,8 @@ using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Devices.Usb;
-using wss=Windows.Storage.Streams;
 using windowsUsbInterface = Windows.Devices.Usb.UsbInterface;
+using wss = Windows.Storage.Streams;
 
 namespace Usb.Net.UWP
 {
@@ -33,7 +33,14 @@ namespace Usb.Net.UWP
             {
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbInterruptInPipe>(inPipe);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
-                if (InterruptEndpoint == null) InterruptEndpoint = uwpUsbInterfaceEndpoint;
+                if (ReadInterruptEndpoint == null) ReadInterruptEndpoint = uwpUsbInterfaceEndpoint;
+            }
+
+            foreach (var outPipe in usbInterface.InterruptOutPipes)
+            {
+                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbInterruptOutPipe>(outPipe);
+                UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
+                if (WriteInterruptEndpoint == null) WriteInterruptEndpoint = uwpUsbInterfaceEndpoint;
             }
 
             foreach (var inPipe in usbInterface.BulkInPipes)
@@ -41,12 +48,6 @@ namespace Usb.Net.UWP
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbBulkInPipe>(inPipe);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
                 if (ReadEndpoint == null) ReadEndpoint = uwpUsbInterfaceEndpoint;
-            }
-
-            foreach (var outPipe in usbInterface.InterruptOutPipes)
-            {
-                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbInterruptOutPipe>(outPipe);
-                UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
             }
 
             foreach (var outPipe in usbInterface.BulkOutPipes)
@@ -79,36 +80,46 @@ namespace Usb.Net.UWP
 
             if (data.Length > WriteBufferSize) throw new ValidationException(Messages.ErrorMessageBufferSizeTooLarge);
 
-            if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> endpoint)
-            {
-                var count = await endpoint.Pipe.OutputStream.WriteAsync(data.AsBuffer());
+            var buffer = data.AsBuffer();
 
-                if (count == data.Length)
-                {
-                    Tracer?.Trace(true, data);
-                }
-                else
-                {
-                    var message = Messages.GetErrorMessageInvalidWriteLength(data.Length, count);
-                    Logger?.Log(message, GetType().Name, null, LogLevel.Error);
-                    throw new IOException(message);
-                }
+            uint count = 0;
+
+            if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptOutPipe> endpoint)
+            {
+                count = await endpoint.Pipe.OutputStream.WriteAsync(buffer);
+
+            }
+            else if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> endpoint2)
+            {
+                count = await endpoint2.Pipe.OutputStream.WriteAsync(buffer);
             }
             else
             {
-                throw new NotImplementedException();
+                throw new DeviceException(Messages.ErrorMessageWriteEndpointNotRecognized);
+            }    
+
+            if (count == data.Length)
+            {
+                Tracer?.Trace(true, data);
             }
+            else
+            {
+                var message = Messages.GetErrorMessageInvalidWriteLength(data.Length, count);
+                Logger?.Log(message, GetType().Name, null, LogLevel.Error);
+                throw new IOException(message);
+            }
+
         }
 
         #region IDisposable Support
         public void Dispose()
         {
             if (disposedValue) return;
-            disposedValue = true;    
+            disposedValue = true;
         }
         #endregion
 
-        public  byte InterfaceNumber => UsbInterface.InterfaceNumber;
+        public byte InterfaceNumber => UsbInterface.InterfaceNumber;
 
         public override string ToString() => InterfaceNumber.ToString();
     }
