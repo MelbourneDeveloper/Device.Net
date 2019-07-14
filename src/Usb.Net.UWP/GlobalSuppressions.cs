@@ -9,4 +9,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "<Pending>", Scope = "member", Target = "~M:Usb.Net.UWP.UWPUsbDeviceHandler.Dispose")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "<Pending>", Scope = "member", Target = "~M:Usb.Net.UWP.UWPUsbDeviceHandler.Dispose")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA1816:Dispose methods should call SuppressFinalize", Justification = "<Pending>", Scope = "member", Target = "~M:Usb.Net.UWP.UWPUsbInterface.Dispose")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pending>", Scope = "member", Target = "~M:Usb.Net.UWP.UWPUsbInterfaceEndpoint`1.ToString~System.String")]
 

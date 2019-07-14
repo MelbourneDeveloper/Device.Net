@@ -2,29 +2,39 @@
 
 namespace Usb.Net.UWP
 {
-    public class UWPUsbInterfaceEndpoint : IUsbInterfaceEndpoint
+    public class UWPUsbInterfaceEndpoint<T> : IUsbInterfaceEndpoint
     {
         #region Public Properties
-        public UsbInterruptOutPipe InPipe { get; }
-        public UsbInterruptInPipe OutPipe { get; }
-        public bool IsRead => InPipe != null;
-        public bool IsWrite => OutPipe != null;
-        //TODO: They don't think it be like it is, but it do
-        public bool IsInterrupt => true;
-#pragma warning disable CA1065 
+        public UsbBulkOutPipe UsbBulkOutPipe => Pipe as UsbBulkOutPipe;
+        public UsbInterruptOutPipe UsbInterruptOutPipe => Pipe as UsbInterruptOutPipe;
+        public UsbInterruptInPipe UsbInterruptInPipe => Pipe as UsbInterruptInPipe;
+        public UsbBulkInPipe UsbBulkInPipe => Pipe as UsbBulkInPipe;
+
+        public T Pipe { get; }
+        public bool IsRead => UsbInterruptInPipe != null || UsbBulkInPipe != null;
+        public bool IsWrite => UsbInterruptOutPipe != null || UsbBulkOutPipe != null;
+        public bool IsInterrupt => UsbInterruptOutPipe != null || UsbInterruptInPipe != null;
         //Which one?
-        public byte PipeId => throw new System.NotImplementedException();
-#pragma warning restore CA1065
-        public ushort ReadBufferSize => (ushort)InPipe.EndpointDescriptor.MaxPacketSize;
-        public ushort WriteBufferSize => (ushort)OutPipe.EndpointDescriptor.MaxPacketSize;
+        public byte PipeId { get; }
+        public ushort ReadBufferSize { get; }
+        public ushort WriteBufferSize => ReadBufferSize;
         #endregion
 
         #region Constructor
-        public UWPUsbInterfaceEndpoint(UsbInterruptOutPipe inpipe, UsbInterruptInPipe outpipe)
+        public UWPUsbInterfaceEndpoint(T pipe)
         {
-            InPipe = inpipe;
-            OutPipe = outpipe;
+            Pipe = pipe;
+            var endpointDescriptorProperty = pipe.GetType().GetProperty(nameof(UsbBulkOutPipe.EndpointDescriptor));
+            var endpointDescriptor = endpointDescriptorProperty.GetValue(pipe);
+            var endpointNumberProperty = endpointDescriptor.GetType().GetProperty(nameof(UsbBulkOutEndpointDescriptor.EndpointNumber));
+            PipeId = (byte)endpointNumberProperty.GetValue(pipe);
+            var maxPacketSizeProperty = endpointDescriptor.GetType().GetProperty(nameof(UsbBulkOutEndpointDescriptor.MaxPacketSize));
+            ReadBufferSize = (ushort)maxPacketSizeProperty.GetValue(pipe);
         }
+        #endregion
+
+        #region Public Overrides
+        public override string ToString() => $"{typeof(T).Name} Endpoint: {PipeId}";
         #endregion
     }
 }
