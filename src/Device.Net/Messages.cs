@@ -25,6 +25,7 @@
         public const string ErrorMessageReadWrite = "Read/Write Error";
         public const string WriteErrorMessage = "An error occurred while attempting to write to the device";
         public const string ReadErrorMessage = "An error occurred while attempting to read from the device";
+        public const string ErrorMessageBufferSizeTooLarge = "The buffer size is too large";
         #endregion
 
         #region Polling
@@ -45,6 +46,7 @@
         public const string ErrorMessageInvalidInterface = "The interface is not contained the list of valid interfaces.";
         public const string ErrorMessageNoInterfaceFound ="There was no Usb Interface found for the device.";
         public const string MessageNoEndpointFound = "There was no endpoint found on the Usb interface";
+        public const string ErrorMessageNoReadInterfaceFound = "There was no read Usb Interface found for the device.";
         #endregion
     }
 }

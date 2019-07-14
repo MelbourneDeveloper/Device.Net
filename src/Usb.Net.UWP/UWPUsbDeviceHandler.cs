@@ -3,10 +3,7 @@ using Device.Net.Exceptions;
 using Device.Net.UWP;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-using Windows.Devices.Usb;
 using Windows.Foundation;
 using windowsUsbDevice = Windows.Devices.Usb.UsbDevice;
 
@@ -96,13 +93,6 @@ namespace Usb.Net.UWP
             return windowsUsbDevice.FromIdAsync(id);
         }
 
-        #endregion
-
-        #region Event Handlers
-        private void InterruptPipe_DataReceived(UsbInterruptInPipe sender, UsbInterruptInEventArgs args)
-        {
-            HandleDataReceived(args.InterruptData.ToArray());
-        }
         #endregion
 
         #region Public Methods

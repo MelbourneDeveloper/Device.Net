@@ -4,6 +4,8 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.Devices.Usb;
+using wss=Windows.Storage.Streams;
 using windowsUsbInterface = Windows.Devices.Usb.UsbInterface;
 
 namespace Usb.Net.UWP
@@ -22,50 +24,59 @@ namespace Usb.Net.UWP
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
 
-            //TODO: This is totally wrong. We are only picking up Interrupt pipes here. Pipes are being used all wrong on UWP right now.
+            if (usbInterface.BulkInPipes.Count == 0) throw new DeviceException(Messages.ErrorMessageNoReadInterfaceFound);
 
             foreach (var inPipe in usbInterface.InterruptInPipes)
             {
-                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint(null, inPipe);
+                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbInterruptInPipe>(inPipe);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
-                if (WriteEndpoint == null) WriteEndpoint = uwpUsbInterfaceEndpoint;
+                if (InterruptEndpoint == null) InterruptEndpoint = uwpUsbInterfaceEndpoint;
+            }
+
+            foreach (var inPipe in usbInterface.BulkInPipes)
+            {
+                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbBulkInPipe>(inPipe);
+                UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
             }
 
             foreach (var outPipe in usbInterface.InterruptOutPipes)
             {
-                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint(outPipe, null);
+                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbInterruptOutPipe>(outPipe);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
                 if (ReadEndpoint == null) ReadEndpoint = uwpUsbInterfaceEndpoint;
             }
 
-            interruptPipe.DataReceived += InterruptPipe_DataReceived;
+            foreach (var outPipe in usbInterface.BulkOutPipes)
+            {
+                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbBulkOutPipe>(outPipe);
+                UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
+                if (WriteEndpoint == null) WriteEndpoint = uwpUsbInterfaceEndpoint;
+            }
 
-            //TODO: Fill in the DeviceDefinition...
-
-
-
-            _DefaultOutPipe = _DefaultConfigurationInterface.InterruptOutPipes.FirstOrDefault();
-
-            if (_DefaultOutPipe == null) throw new DeviceException("Could not get the default out pipe for the default USB interface");
-
-            _DefaultInPipe = _DefaultConfigurationInterface.InterruptInPipes.FirstOrDefault();
-
-            if (_DefaultOutPipe == null) throw new DeviceException("Could not get the default in pipe for the default USB interface");
-
+            //TODO: Why does not UWP not support Control Transfer?
         }
 
-        public Task<byte[]> ReadAsync(uint bufferLength)
+        public async Task<byte[]> ReadAsync(uint bufferLength)
         {
-            throw new NotImplementedException();
+            if (ReadEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
+
+            var endpoint = (UWPUsbInterfaceEndpoint<UsbBulkInPipe>)ReadEndpoint;
+
+            var buffer = new wss.Buffer(bufferLength);
+            await endpoint.Pipe.InputStream.ReadAsync(buffer, bufferLength, wss.InputStreamOptions.None);
+
+            return buffer.ToArray();
         }
 
         public async Task WriteAsync(byte[] data)
         {
-            if (ReadEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
+            if (data == null) throw new ArgumentNullException(nameof(data));
 
-            if (data.Length > WriteBufferSize) throw new ValidationException("The buffer size is too large");
-            var endpoint = (UWPUsbInterfaceEndpoint)ReadEndpoint;
-            var count = await WriteEndpoint.WriteAsync(data.AsBuffer());
+            if (WriteEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
+
+            if (data.Length > WriteBufferSize) throw new ValidationException(Messages.ErrorMessageBufferSizeTooLarge);
+            var endpoint = (UWPUsbInterfaceEndpoint<UsbBulkOutPipe>)WriteEndpoint;
+            var count = await endpoint.Pipe.OutputStream.WriteAsync(data.AsBuffer());
 
             if (count == data.Length)
             {
