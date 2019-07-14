@@ -5,6 +5,7 @@ using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Devices.Usb;
+using Windows.Storage.Streams;
 using windowsUsbInterface = Windows.Devices.Usb.UsbInterface;
 using wss = Windows.Storage.Streams;
 
@@ -64,10 +65,21 @@ namespace Usb.Net.UWP
         {
             if (ReadEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
 
-            var endpoint = (UWPUsbInterfaceEndpoint<UsbBulkInPipe>)ReadEndpoint;
+            IBuffer buffer = null;
 
-            var buffer = new wss.Buffer(bufferLength);
-            await endpoint.Pipe.InputStream.ReadAsync(buffer, bufferLength, wss.InputStreamOptions.None);
+            if (ReadEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptInPipe> endpoint)
+            {
+                asdasd
+            }
+            else if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkInPipe> endpoint2)
+            {
+                buffer = new wss.Buffer(bufferLength);
+                await endpoint2.Pipe.InputStream.ReadAsync(buffer, bufferLength, InputStreamOptions.None);
+            }
+            else
+            {
+                throw new DeviceException(Messages.ErrorMessageReadEndpointNotRecognized);
+            }
 
             return buffer.ToArray();
         }
@@ -96,7 +108,7 @@ namespace Usb.Net.UWP
             else
             {
                 throw new DeviceException(Messages.ErrorMessageWriteEndpointNotRecognized);
-            }    
+            }
 
             if (count == data.Length)
             {
