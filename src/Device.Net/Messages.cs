@@ -46,7 +46,8 @@
         public const string ErrorMessageInvalidInterface = "The interface is not contained the list of valid interfaces.";
         public const string ErrorMessageNoInterfaceFound ="There was no Usb Interface found for the device.";
         public const string MessageNoEndpointFound = "There was no endpoint found on the Usb interface";
-        public const string ErrorMessageNoReadInterfaceFound = "There was no read Usb Interface found for the device.";
+        public const string ErrorMessageNoReadInterfaceSpecified = "There was no read Usb Interface specified for the device.";
+        public const string ErrorMessageNoWriteInterfaceSpecified = "There was no write Usb Interface specified for the device.";
         public static string GetErrorMessageNoBulkInPipe(byte interfaceNumber)
         {
             return $"No bulk in pipes found. Interrupt pipes to be used instead. Interface Number {interfaceNumber}";

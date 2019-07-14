@@ -27,9 +27,10 @@ namespace Usb.Net.UWP
             var endpointDescriptorProperty = pipe.GetType().GetProperty(nameof(UsbBulkOutPipe.EndpointDescriptor));
             var endpointDescriptor = endpointDescriptorProperty.GetValue(pipe);
             var endpointNumberProperty = endpointDescriptor.GetType().GetProperty(nameof(UsbBulkOutEndpointDescriptor.EndpointNumber));
-            PipeId = (byte)endpointNumberProperty.GetValue(pipe);
+            PipeId = (byte)endpointNumberProperty.GetValue(endpointDescriptor);
             var maxPacketSizeProperty = endpointDescriptor.GetType().GetProperty(nameof(UsbBulkOutEndpointDescriptor.MaxPacketSize));
-            ReadBufferSize = (ushort)maxPacketSizeProperty.GetValue(pipe);
+            var maxPacketSize = (uint)maxPacketSizeProperty.GetValue(endpointDescriptor);
+            ReadBufferSize = (ushort)maxPacketSize;
         }
         #endregion
 

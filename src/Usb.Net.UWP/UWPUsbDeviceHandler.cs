@@ -63,7 +63,7 @@ namespace Usb.Net.UWP
 
             if (ConnectedDevice != null)
             {
-                if (ConnectedDevice.Configuration.UsbInterfaces == null)
+                if (ConnectedDevice.Configuration.UsbInterfaces == null || ConnectedDevice.Configuration.UsbInterfaces.Count == 0)
                 {
                     ConnectedDevice.Dispose();
                     throw new DeviceException(Messages.ErrorMessageNoInterfaceFound);
@@ -72,13 +72,26 @@ namespace Usb.Net.UWP
                 var interfaceIndex = 0;
                 foreach (var usbInterface in ConnectedDevice.Configuration.UsbInterfaces)
                 {
-                    UsbInterfaceHandler.UsbInterfaces.Add(new UWPUsbInterface(usbInterface, Logger, Tracer));
+                    var uwpUsbInterface = new UWPUsbInterface(usbInterface, Logger, Tracer);
 
-                    if (usbInterface.InterruptInPipes.Count==0)
+                    UsbInterfaceHandler.UsbInterfaces.Add(uwpUsbInterface);
+
+                    if (ReadUsbInterface == null && uwpUsbInterface.ReadEndpoint != null)
+                    {
+                        ReadUsbInterface = uwpUsbInterface;
+                    }
+
+                    if (WriteUsbInterface == null && uwpUsbInterface.WriteEndpoint != null)
+                    {
+                        WriteUsbInterface = uwpUsbInterface;
+                    }
+
+                    if (usbInterface.InterruptInPipes.Count == 0)
                     {
                         Log(Messages.MessageNoEndpointFound + $" Interface index: {interfaceIndex}", null);
                         continue;
-                    } 
+                    }
+
                     interfaceIndex++;
                 }
             }
