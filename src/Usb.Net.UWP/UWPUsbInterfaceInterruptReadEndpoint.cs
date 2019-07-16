@@ -1,18 +1,20 @@
 ﻿using Device.Net;
-using Device.Net.Exceptions;
+using System;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.Usb;
 
 namespace Usb.Net.UWP
 {
-    public class UWPUsbInterfaceInterruptReadEndpoint : UWPUsbInterfaceEndpoint<UsbInterruptInPipe> 
+    public class UWPUsbInterfaceInterruptReadEndpoint : UWPUsbInterfaceEndpoint<UsbInterruptInPipe>, IDisposable
     {
         #region Fields
-        private bool IsReading { get; set; }
-        private Collection<byte[]> Chunks { get; } = new Collection<byte[]>();
-        private TaskCompletionSource<byte[]> ReadChunkTaskCompletionSource { get; set; }
+        private readonly Collection<byte[]> _Chunks = new Collection<byte[]>();
+        private readonly SemaphoreSlim _ReadLock = new SemaphoreSlim(1, 1);
+        private bool disposed;
+        private TaskCompletionSource<byte[]> _ReadChunkTaskCompletionSource;
         #endregion
 
         #region Public Properties
@@ -30,53 +32,59 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Events
-        private void UsbInterruptInPipe_DataReceived(UsbInterruptInPipe sender, UsbInterruptInEventArgs args)
+        private async void UsbInterruptInPipe_DataReceived(UsbInterruptInPipe sender, UsbInterruptInEventArgs args)
         {
-            HandleDataReceived(args.InterruptData.ToArray());
-        }
-        #endregion
-
-        #region Private Methods
-        private void HandleDataReceived(byte[] bytes)
-        {
-            if (!IsReading)
+            try
             {
-                lock (Chunks)
+                await _ReadLock.WaitAsync();
+
+                var bytes = args.InterruptData.ToArray();
+
+                _Chunks.Add(bytes);
+
+                if (bytes != null)
                 {
-                    Chunks.Add(bytes);
+                    Logger?.Log($"{bytes.Length} read on interrupt pipe {UsbInterruptInPipe.EndpointDescriptor.EndpointNumber}", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
                 }
             }
-            else
+            finally
             {
-                IsReading = false;
-                ReadChunkTaskCompletionSource.SetResult(bytes);
+                _ReadLock.Release();
             }
         }
         #endregion
 
         #region Public Methods
+        public void Dispose()
+        {
+            if (disposed) return;
+            disposed = true;
+            _ReadLock.Dispose();
+            GC.SuppressFinalize(this);
+        }
+
         public async Task<byte[]> ReadAsync()
         {
-            if (IsReading)
+            try
             {
-                throw new DeviceException("Reentry");
-            }
+                await _ReadLock.WaitAsync();
 
-            //TODO: this should be a semaphore not a lock
-            lock (Chunks)
-            {
-                if (Chunks.Count > 0)
+                if (_Chunks.Count > 0)
                 {
-                    var retVal = Chunks[0];
+                    var retVal = _Chunks[0];
                     Tracer?.Trace(false, retVal);
-                    Chunks.RemoveAt(0);
+                    _Chunks.RemoveAt(0);
                     return retVal;
                 }
-            }
 
-            IsReading = true;
-            ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
-            return await ReadChunkTaskCompletionSource.Task;
+                throw new NotImplementedException("This might cause a deadlock?");
+                _ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
+                return await _ReadChunkTaskCompletionSource.Task;
+            }
+            finally
+            {
+                _ReadLock.Release();
+            }
         }
         #endregion
 
