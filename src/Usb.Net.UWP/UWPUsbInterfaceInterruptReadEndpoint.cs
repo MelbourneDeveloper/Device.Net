@@ -40,6 +40,17 @@ namespace Usb.Net.UWP
 
                 var bytes = args.InterruptData.ToArray();
 
+                if(_ReadChunkTaskCompletionSource!=null)
+                {
+                    //In this case there should be no chunks. TODO: Put some unit tests around this.
+                    //The read method wil be waiting on this
+
+                    //NOTE: The semaphore will get released here, and then in the read method. Is this OK?
+
+                    _ReadChunkTaskCompletionSource.SetResult(bytes);
+                    return;
+                }
+
                 _Chunks.Add(bytes);
 
                 if (bytes != null)
@@ -69,17 +80,21 @@ namespace Usb.Net.UWP
             {
                 await _ReadLock.WaitAsync();
 
+                byte[] retVal = null;
+
                 if (_Chunks.Count > 0)
                 {
-                    var retVal = _Chunks[0];
+                    retVal = _Chunks[0];
                     Tracer?.Trace(false, retVal);
                     _Chunks.RemoveAt(0);
                     return retVal;
                 }
 
-                throw new NotImplementedException("This might cause a deadlock?");
+                //Wait for the event here. Once the event occurs, this should return and the semaphore should be released
                 _ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
-                return await _ReadChunkTaskCompletionSource.Task;
+                retVal = await _ReadChunkTaskCompletionSource.Task;
+                _ReadChunkTaskCompletionSource = null;
+                return retVal;
             }
             finally
             {

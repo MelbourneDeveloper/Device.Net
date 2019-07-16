@@ -32,7 +32,7 @@ namespace Usb.Net.UWP
 
             foreach (var inPipe in usbInterface.InterruptInPipes)
             {
-                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbInterruptInPipe>(inPipe);
+                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceInterruptReadEndpoint(inPipe, Logger, Tracer);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
                 if (ReadInterruptEndpoint == null) ReadInterruptEndpoint = uwpUsbInterfaceEndpoint;
             }
@@ -67,9 +67,9 @@ namespace Usb.Net.UWP
 
             IBuffer buffer = null;
 
-            if (ReadEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptInPipe> usbInterruptInPipe)
+            if (ReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe)
             {
-                throw new NotImplementedException("This needs fixing. Need to implement the old hack to listen to the interrupt data event");
+                return await usbInterruptInPipe.ReadAsync();
             }
             else if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkInPipe> usbBulkInPipe)
             {
