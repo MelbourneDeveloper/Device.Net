@@ -10,7 +10,7 @@ using usbDevice = Android.Hardware.Usb.UsbDevice;
 
 namespace Usb.Net.Android
 {
-    public class AndroidUsbDeviceHandler : UsbDeviceHandlerBase, IUsbDeviceHandler
+    public class AndroidUsbDeviceHandler : UsbInterfaceHandler, IUsbDeviceHandler
     {
         #region Fields
         private UsbDeviceConnection _UsbDeviceConnection;
@@ -18,6 +18,9 @@ namespace Usb.Net.Android
         private readonly SemaphoreSlim _InitializingSemaphoreSlim = new SemaphoreSlim(1, 1);
         private bool _IsClosing;
         private bool disposed;
+        protected ushort? _ReadBufferSize { get; set; }
+        protected ushort? _WriteBufferSize { get; set; }
+
         #endregion
 
         #region Public Override Properties
@@ -33,8 +36,10 @@ namespace Usb.Net.Android
         #endregion
 
         #region Constructor
-        public AndroidUsbDeviceHandler(UsbManager usbManager, Context androidContext, int deviceNumberId, ILogger logger, ITracer tracer, ushort? readBufferLength, ushort? writeBufferLength) : base(logger, tracer, readBufferLength, writeBufferLength)
+        public AndroidUsbDeviceHandler(UsbManager usbManager, Context androidContext, int deviceNumberId, ILogger logger, ITracer tracer, ushort? readBufferLength, ushort? writeBufferLength) : base(logger, tracer)
         {
+            _ReadBufferSize = readBufferLength;
+            _WriteBufferSize = writeBufferLength;
             UsbManager = usbManager ?? throw new ArgumentNullException(nameof(usbManager));
             AndroidContext = androidContext ?? throw new ArgumentNullException(nameof(androidContext));
             DeviceNumberId = deviceNumberId;
@@ -114,9 +119,11 @@ namespace Usb.Net.Android
 
         public async Task InitializeAsync()
         {
+            throw new NotImplementedException("Interrupt pipes need to be fixed");
+
             try
             {
-                if (disposed) throw new Exception(DeviceBase.DeviceDisposedErrorMessage);
+                if (disposed) throw new Exception(Messages.DeviceDisposedErrorMessage);
 
                 await _InitializingSemaphoreSlim.WaitAsync();
 
@@ -181,11 +188,12 @@ namespace Usb.Net.Android
                                 WriteUsbInterface = androidUsbInterface;
                             }
 
-                            if (InterruptUsbInterface == null && isInterrupt)
-                            {
-                                androidUsbInterface.InterruptEndpoint = androidUsbEndpoint;
-                                InterruptUsbInterface = androidUsbInterface;
-                            }
+                            //TODO:
+                            //if (InterruptUsbInterface == null && isInterrupt)
+                            //{
+                            //    androidUsbInterface.InterruptEndpoint = androidUsbEndpoint;
+                            //    InterruptUsbInterface = androidUsbInterface;
+                            //}
                         }
 
                         if (!_UsbDeviceConnection.ClaimInterface(usbInterface, true))
@@ -207,11 +215,12 @@ namespace Usb.Net.Android
                         WriteUsbInterface = androidUsbInterface;
                     }
 
-                    if (androidUsbInterface.InterruptEndpoint == null)
-                    {
-                        androidUsbInterface.InterruptEndpoint = androidUsbInterface.UsbInterfaceEndpoints[2];
-                        InterruptUsbInterface = androidUsbInterface;
-                    }
+                    //TODO: 
+                    //if (androidUsbInterface.InterruptEndpoint == null)
+                    //{
+                    //    androidUsbInterface.InterruptEndpoint = androidUsbInterface.UsbInterfaceEndpoints[2];
+                    //    InterruptUsbInterface = androidUsbInterface;
+                    //}
                 }
 
                 Log("Hid device initialized. About to tell everyone.", null);

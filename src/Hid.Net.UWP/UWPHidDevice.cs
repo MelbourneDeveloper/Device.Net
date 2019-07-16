@@ -11,8 +11,12 @@ using Windows.Storage;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDevice : UWPDeviceBase<HidDevice>, IHidDevice
+    public class UWPHidDevice : UWPDeviceHandlerBase<HidDevice>, IHidDevice
     {
+        #region Fields
+        private bool disposed;
+        #endregion
+
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
         public byte DefaultReportId { get; set; }
@@ -55,7 +59,7 @@ namespace Hid.Net.UWP
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
 
-            if (Disposed) throw new ValidationException(DeviceDisposedErrorMessage);
+            if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
             Log("Initializing Hid device", null);
 
@@ -92,7 +96,15 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Methods
-        public override Task WriteAsync(byte[] data)
+        public override void Dispose()
+        {
+            if (disposed) return;
+            disposed = true;
+
+            base.Dispose();
+        }
+
+        public virtual Task WriteAsync(byte[] data)
         {
             return WriteReportAsync(data, 0);
         }
@@ -155,7 +167,7 @@ namespace Hid.Net.UWP
             if (DataHasExtraByte)
             {
                 reportId = bytes[0];
-                bytes = RemoveFirstByte(bytes);
+                bytes = DeviceBase.RemoveFirstByte(bytes);
             }
 
             return new ReadReport(reportId, bytes);
@@ -173,6 +185,11 @@ namespace Hid.Net.UWP
         public static IAsyncOperation<HidDevice> GetHidDevice(string id)
         {
             return HidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
+        }
+
+        public Task<byte[]> WriteAndReadAsync(byte[] writeBuffer)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

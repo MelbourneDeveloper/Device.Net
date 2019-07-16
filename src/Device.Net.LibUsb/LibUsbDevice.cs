@@ -1,4 +1,5 @@
-﻿using LibUsbDotNet;
+﻿using Device.Net.Exceptions;
+using LibUsbDotNet;
 using LibUsbDotNet.LudnMonoLibUsb;
 using LibUsbDotNet.Main;
 using LibUsbDotNet.WinUsb;
@@ -64,7 +65,7 @@ namespace Device.Net.LibUsb
 
         public async Task InitializeAsync()
         {
-            if (disposed) throw new Exception(DeviceBase.DeviceDisposedErrorMessage);
+            if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
             await Task.Run(() =>
             {

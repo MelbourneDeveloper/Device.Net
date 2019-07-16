@@ -149,6 +149,10 @@
       <Project>{8e29e247-78b7-4fc8-af1c-da273050978c}</Project>
       <Name>Usb.Net.UWP</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Usb.Net\Usb.Net.csproj">
+      <Project>{a3248195-3edf-4fe6-b065-865f74d53b0b}</Project>
+      <Name>Usb.Net</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

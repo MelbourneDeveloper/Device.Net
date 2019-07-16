@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="ConnectionInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UWPDeviceBase - Generic.cs" />
+    <Compile Include="UWPDeviceHandlerBase - Generic.cs" />
     <Compile Include="UWPDeviceBase.cs" />
     <Compile Include="UWPDeviceFactoryBase.cs" />
     <EmbeddedResource Include="Properties\Device.Net.UWP.rd.xml" />

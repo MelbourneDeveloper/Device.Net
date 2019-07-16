@@ -7,6 +7,8 @@
         public const string ErrorMessageCouldntIntializeDevice = "Couldn't initialize device";
         public const string ErrorMessageCantOpenWrite = "Could not open connection for writing";
         public const string ErrorMessageCantOpenRead = "Could not open connection for reading";
+        public const string DeviceDisposedErrorMessage = "This device has already been disposed";
+        public static string GetErrorMessageCantConnect(string deviceId) => $"Could not connect to device with Device Id {deviceId}. Check that the package manifest has been configured to allow this device.";
         #endregion
 
         #region Misc
@@ -21,6 +23,9 @@
         }
 
         public const string ErrorMessageReadWrite = "Read/Write Error";
+        public const string WriteErrorMessage = "An error occurred while attempting to write to the device";
+        public const string ReadErrorMessage = "An error occurred while attempting to read from the device";
+        public const string ErrorMessageBufferSizeTooLarge = "The buffer size is too large";
         #endregion
 
         #region Polling
@@ -37,8 +42,20 @@
         #endregion
 
         #region USB
+        public const string ErrorMessageReadEndpointNotRecognized = "The specified read endpoint is not of the correct type and cannot be used";
+        public const string ErrorMessageWriteEndpointNotRecognized = "The specified write endpoint is not of the correct type and cannot be used";
         public const string ErrorMessageInvalidEndpoint = "This endpoint is not contained in the list of valid endpoints";
+        public const string ErrorMessageInvalidInterface = "The interface is not contained the list of valid interfaces.";
+        public const string ErrorMessageNoInterfaceFound ="There was no Usb Interface found for the device.";
+        public const string MessageNoEndpointFound = "There was no endpoint found on the Usb interface";
+        public const string ErrorMessageNoReadInterfaceSpecified = "There was no read Usb Interface specified for the device.";
+        public const string WarningNoReadInterfaceFound = "There was no read Usb Interface found for the device. Attempting to use Interrupt interface instead";
+        public const string WarningNoWriteInterfaceFound = "There was no write Usb Interface found for the device. Attempting to use Interrupt interface instead";
+        public const string ErrorMessageNoWriteInterfaceSpecified = "There was no write Usb Interface specified for the device.";
+        public static string GetErrorMessageNoBulkInPipe(byte interfaceNumber)
+        {
+            return $"No bulk in pipes found. Interrupt pipes to be used instead. Interface Number {interfaceNumber}";
+        }
         #endregion
-
     }
 }

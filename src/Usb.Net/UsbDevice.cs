@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Device.Net.Exceptions;
 using System;
 using System.Threading.Tasks;
 
@@ -24,7 +25,7 @@ namespace Usb.Net
         /// </summary>
         public UsbDevice(IUsbDeviceHandler usbDeviceHandler, ILogger logger, ITracer tracer) : base(logger, tracer)
         {
-            UsbDeviceHandler = usbDeviceHandler;
+            UsbDeviceHandler = usbDeviceHandler ?? throw new ArgumentNullException(nameof(usbDeviceHandler));
         }
         #endregion
 
@@ -41,11 +42,15 @@ namespace Usb.Net
 
         public override Task<byte[]> ReadAsync()
         {
+            if (UsbDeviceHandler.ReadUsbInterface == null) throw new DeviceException(Messages.ErrorMessageNoReadInterfaceSpecified);
+
             return UsbDeviceHandler.ReadUsbInterface.ReadAsync(ReadBufferSize);
         }
 
         public override Task WriteAsync(byte[] data)
         {
+            if (UsbDeviceHandler.WriteUsbInterface == null) throw new DeviceException(Messages.ErrorMessageNoWriteInterfaceSpecified);
+
             return UsbDeviceHandler.WriteUsbInterface.WriteAsync(data);
         }
 

@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 
 namespace Usb.Net.Windows
 {
-    public class WindowsUsbDeviceHandler : UsbDeviceHandlerBase, IUsbDeviceHandler
+    public class WindowsUsbDeviceHandler : UsbInterfaceHandler, IUsbDeviceHandler
     {
         #region Fields
         private bool disposed;
         private SafeFileHandle _DeviceHandle;
+        protected ushort? _ReadBufferSize { get; set; }
+        protected ushort? _WriteBufferSize { get; set; }
         #endregion
 
         #region Public Properties
@@ -25,8 +27,10 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsUsbDeviceHandler(string deviceId, ILogger logger, ITracer tracer, ushort? writeBufferLength, ushort? readBufferLength) : base(logger, tracer, writeBufferLength, readBufferLength)
+        public WindowsUsbDeviceHandler(string deviceId, ILogger logger, ITracer tracer, ushort? writeBufferLength, ushort? readBufferLength) : base(logger, tracer)
         {
+            _ReadBufferSize = readBufferLength;
+            _WriteBufferSize = writeBufferLength;
             DeviceId = deviceId;
         }
         #endregion

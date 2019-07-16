@@ -1,20 +1,17 @@
-﻿using System;
+﻿using Device.Net;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Device.Net;
 
 namespace Usb.Net
 {
-    public interface IUsbDeviceHandler : IDisposable
+    public interface IUsbDeviceHandler : IDeviceHandler
     {
         IUsbInterface ReadUsbInterface { get; set; }
         IList<IUsbInterface> UsbInterfaces { get; }
         IUsbInterface WriteUsbInterface { get; set; }
-        ushort WriteBufferSize { get; }
-        ushort ReadBufferSize { get; }
-        bool IsInitialized { get; }
-        Task InitializeAsync();
-        void Close();
+        /// <summary>
+        /// TODO: Why is this here?
+        /// </summary>
         Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync();
     }
 }

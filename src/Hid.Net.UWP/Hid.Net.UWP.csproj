@@ -41,9 +41,10 @@
     <AssemblyOriginatorKeyFile>../Device.Net/Device.Net.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UWPHidDevice.cs" />
     <Compile Include="UWPHidDeviceFactory.cs" />
+    <Compile Include="UWPHidDevice.cs" />
     <EmbeddedResource Include="Properties\Hid.Net.UWP.rd.xml" />
     <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">

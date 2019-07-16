@@ -18,7 +18,7 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>    
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -38,19 +38,27 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AssemblyOriginatorKeyFile>../Device.Net/Device.Net.pfx</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>    
+    <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UWPUsbDeviceFactory.cs" />
     <Compile Include="UWPUsbDevice.cs" />
+    <Compile Include="UWPUsbDeviceFactory.cs" />
+    <Compile Include="UWPUsbDeviceHandler.cs" />
+    <Compile Include="UWPUsbInterface.cs" />
+    <Compile Include="UWPUsbInterfaceInterruptReadEndpoint.cs" />
+    <Compile Include="UWPUsbInterfaceEndpoint.cs" />
     <EmbeddedResource Include="Properties\Usb.Net.UWP.rd.xml" />
-    <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />    
+    <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
+      <Version>2.9.3</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.1.9</Version>
     </PackageReference>
@@ -64,15 +72,17 @@
       <Project>{aac55ee8-183b-487f-9e2c-08e14e7e4894}</Project>
       <Name>Device.Net</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Usb.Net\Usb.Net.csproj">
+      <Project>{a3248195-3edf-4fe6-b065-865f74d53b0b}</Project>
+      <Name>Usb.Net</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <PropertyGroup>
-
   </PropertyGroup>
   <PropertyGroup>
-
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
