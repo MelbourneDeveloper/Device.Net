@@ -9,12 +9,16 @@ namespace Usb.Net.UWP
 {
     public class UWPUsbInterfaceInterruptReadEndpoint : UWPUsbInterfaceEndpoint<UsbInterruptInPipe> 
     {
+        #region Fields
+        private bool IsReading { get; set; }
+        private Collection<byte[]> Chunks { get; } = new Collection<byte[]>();
+        private TaskCompletionSource<byte[]> ReadChunkTaskCompletionSource { get; set; }
+        #endregion
+
+        #region Public Properties
         public ILogger Logger { get; }
         public ITracer Tracer { get; }
-
-        protected bool IsReading { get; set; }
-        protected Collection<byte[]> Chunks { get; } = new Collection<byte[]>();
-        protected TaskCompletionSource<byte[]> ReadChunkTaskCompletionSource { get; set; }
+        #endregion
 
         #region Constructor
         public UWPUsbInterfaceInterruptReadEndpoint(UsbInterruptInPipe pipe, ILogger logger, ITracer tracer) : base(pipe)
@@ -23,13 +27,17 @@ namespace Usb.Net.UWP
             Tracer = tracer;
             UsbInterruptInPipe.DataReceived += UsbInterruptInPipe_DataReceived;
         }
+        #endregion
 
+        #region Events
         private void UsbInterruptInPipe_DataReceived(UsbInterruptInPipe sender, UsbInterruptInEventArgs args)
         {
             HandleDataReceived(args.InterruptData.ToArray());
         }
+        #endregion
 
-        protected void HandleDataReceived(byte[] bytes)
+        #region Private Methods
+        private void HandleDataReceived(byte[] bytes)
         {
             if (!IsReading)
             {
@@ -44,8 +52,10 @@ namespace Usb.Net.UWP
                 ReadChunkTaskCompletionSource.SetResult(bytes);
             }
         }
+        #endregion
 
-        public  async Task<byte[]> ReadAsync()
+        #region Public Methods
+        public async Task<byte[]> ReadAsync()
         {
             if (IsReading)
             {
@@ -68,7 +78,6 @@ namespace Usb.Net.UWP
             ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
             return await ReadChunkTaskCompletionSource.Task;
         }
-
         #endregion
 
 
