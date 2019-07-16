@@ -50,6 +50,7 @@
     <Compile Include="UWPUsbDeviceFactory.cs" />
     <Compile Include="UWPUsbDeviceHandler.cs" />
     <Compile Include="UWPUsbInterface.cs" />
+    <Compile Include="UWPUsbInterfaceInterruptReadEndpoint.cs" />
     <Compile Include="UWPUsbInterfaceEndpoint.cs" />
     <EmbeddedResource Include="Properties\Usb.Net.UWP.rd.xml" />
     <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />
