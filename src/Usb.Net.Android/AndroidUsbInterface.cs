@@ -11,16 +11,20 @@ namespace Usb.Net.Android
     {
         #region Fields
         private bool disposed;
-        private readonly UsbInterface _UsbInterface;
         private readonly UsbDeviceConnection _UsbDeviceConnection;
         #endregion
 
         #region Constructor
-        public AndroidUsbInterface(UsbInterface usbInterface, UsbDeviceConnection usbDeviceConnection, ILogger logger, ITracer tracer) : base(logger, tracer )
+        public AndroidUsbInterface(UsbInterface usbInterface, UsbDeviceConnection usbDeviceConnection, ILogger logger, ITracer tracer) : base(logger, tracer)
         {
-            _UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
+            UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
             _UsbDeviceConnection = usbDeviceConnection ?? throw new ArgumentNullException(nameof(usbDeviceConnection));
         }
+        #endregion
+
+        #region Public Properties
+        public byte InterfaceNumber => (byte)UsbInterface.Id;
+        public UsbInterface UsbInterface { get; }
         #endregion
 
         #region Public Methods
@@ -71,27 +75,27 @@ namespace Usb.Net.Android
         {
             await Task.Run(async () =>
             {
-               try
-               {
+                try
+                {
                     //TODO: Perhaps we should implement Batch Begin/Complete so that the UsbRequest is not created again and again. This will be expensive
 
                     var request = new UsbRequest();
-                   var endpoint = ((AndroidUsbEndpoint)WriteEndpoint).UsbEndpoint;
-                   request.Initialize(_UsbDeviceConnection, endpoint);
-                   var byteBuffer = ByteBuffer.Wrap(data);
+                    var endpoint = ((AndroidUsbEndpoint)WriteEndpoint).UsbEndpoint;
+                    request.Initialize(_UsbDeviceConnection, endpoint);
+                    var byteBuffer = ByteBuffer.Wrap(data);
 
-                   Tracer?.Trace(true, data);
+                    Tracer?.Trace(true, data);
 
 #pragma warning disable CS0618 
                     request.Queue(byteBuffer, data.Length);
 #pragma warning restore CS0618 
                     await _UsbDeviceConnection.RequestWaitAsync();
-               }
-               catch (Exception ex)
-               {
-                   Logger?.Log(Messages.WriteErrorMessage, nameof(AndroidUsbInterface), ex, LogLevel.Error);
-                   throw new IOException(Messages.WriteErrorMessage, ex);
-               }
+                }
+                catch (Exception ex)
+                {
+                    Logger?.Log(Messages.WriteErrorMessage, nameof(AndroidUsbInterface), ex, LogLevel.Error);
+                    throw new IOException(Messages.WriteErrorMessage, ex);
+                }
             });
         }
 
@@ -100,8 +104,18 @@ namespace Usb.Net.Android
             if (disposed) return;
             disposed = true;
 
-            _UsbInterface.Dispose();
+            UsbInterface.Dispose();
             _UsbDeviceConnection.Dispose();
+        }
+
+        public override Task ClaimInterface()
+        {
+            if (!_UsbDeviceConnection.ClaimInterface(UsbInterface, true))
+            {
+                throw new Exception("could not claim interface");
+            }
+
+            return Task.FromResult(true);
         }
         #endregion
     }

@@ -19,8 +19,11 @@ namespace Usb.Net.UWP
 
         #region Public Properties
         public windowsUsbInterface UsbInterface { get; }
+        public byte InterfaceNumber => UsbInterface.InterfaceNumber;
+        public override string ToString() => InterfaceNumber.ToString();
         #endregion
 
+        #region Public Methods
         public UWPUsbInterface(windowsUsbInterface usbInterface, ILogger logger, ITracer tracer) : base(logger, tracer)
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
@@ -122,6 +125,7 @@ namespace Usb.Net.UWP
             }
 
         }
+        #endregion
 
         #region IDisposable Support
         public void Dispose()
@@ -130,9 +134,5 @@ namespace Usb.Net.UWP
             disposedValue = true;
         }
         #endregion
-
-        public byte InterfaceNumber => UsbInterface.InterfaceNumber;
-
-        public override string ToString() => InterfaceNumber.ToString();
     }
 }

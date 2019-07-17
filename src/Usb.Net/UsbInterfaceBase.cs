@@ -2,10 +2,11 @@
 using Device.Net.Exceptions;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Usb.Net
 {
-    public abstract class UsbInterfaceBase 
+    public abstract class UsbInterfaceBase
     {
         #region Fields
         private IUsbInterfaceEndpoint _ReadEndpoint;
@@ -15,7 +16,7 @@ namespace Usb.Net
         #endregion
 
         #region Public Properties
-        public ILogger Logger { get;  }
+        public ILogger Logger { get; }
         public ITracer Tracer { get; }
         public ushort ReadBufferSize => _ReadEndpoint.ReadBufferSize;
         public ushort WriteBufferSize => _WriteEndpoint.WriteBufferSize;
@@ -60,6 +61,19 @@ namespace Usb.Net
                 if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
                 _ReadInterruptEndpoint = value;
             }
+        }
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Note: some platforms require a call to be made to claim the interface. This is currently only for Android but may change
+        /// </summary>
+        /// <returns></returns>
+#pragma warning disable CS1998
+        public virtual async Task ClaimInterface()
+#pragma warning restore CS1998 
+        {
         }
         #endregion
 

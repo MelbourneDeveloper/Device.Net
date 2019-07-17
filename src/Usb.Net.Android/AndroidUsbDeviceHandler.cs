@@ -119,8 +119,6 @@ namespace Usb.Net.Android
 
         public async Task InitializeAsync()
         {
-            throw new NotImplementedException("Interrupt pipes need to be fixed");
-
             try
             {
                 if (disposed) throw new Exception(Messages.DeviceDisposedErrorMessage);
@@ -175,55 +173,13 @@ namespace Usb.Net.Android
                             var isInterrupt = usbEndpoint.Type == UsbAddressing.XferInterrupt && usbEndpoint.Direction != UsbAddressing.Out;
                             var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, isRead, isWrite, isInterrupt, (byte)usbEndpoint.Address);
                             androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
-
-                            if (ReadUsbInterface == null && isRead)
-                            {
-                                androidUsbInterface.ReadEndpoint = androidUsbEndpoint;
-                                ReadUsbInterface = androidUsbInterface;
-                            }
-
-                            if (WriteUsbInterface == null && isWrite)
-                            {
-                                androidUsbInterface.WriteEndpoint = androidUsbEndpoint;
-                                WriteUsbInterface = androidUsbInterface;
-                            }
-
-                            //TODO:
-                            //if (InterruptUsbInterface == null && isInterrupt)
-                            //{
-                            //    androidUsbInterface.InterruptEndpoint = androidUsbEndpoint;
-                            //    InterruptUsbInterface = androidUsbInterface;
-                            //}
                         }
-
-                        if (!_UsbDeviceConnection.ClaimInterface(usbInterface, true))
-                        {
-                            throw new Exception("could not claim interface");
-                        }
-                    }
-
-                    //TODO: This is a big guess and a hack. It only kicks in if the previous code fails. This needs to be reworked for different devices
-                    if (androidUsbInterface.ReadEndpoint == null)
-                    {
-                        androidUsbInterface.ReadEndpoint = androidUsbInterface.UsbInterfaceEndpoints[0];
-                        ReadUsbInterface = androidUsbInterface;
-                    }
-
-                    if (androidUsbInterface.WriteEndpoint == null)
-                    {
-                        androidUsbInterface.WriteEndpoint = androidUsbInterface.UsbInterfaceEndpoints[1];
-                        WriteUsbInterface = androidUsbInterface;
-                    }
-
-                    //TODO: 
-                    //if (androidUsbInterface.InterruptEndpoint == null)
-                    //{
-                    //    androidUsbInterface.InterruptEndpoint = androidUsbInterface.UsbInterfaceEndpoints[2];
-                    //    InterruptUsbInterface = androidUsbInterface;
-                    //}
+                    }                    
                 }
 
                 Log("Hid device initialized. About to tell everyone.", null);
+
+                throw new NotImplementedException("Claim interface needs to be called");
             }
             catch (Exception ex)
             {
