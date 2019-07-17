@@ -20,8 +20,8 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Override Properties
-        public override ushort WriteBufferSize => WriteUsbInterface.WriteEndpoint.WriteBufferSize;
-        public override ushort ReadBufferSize => ReadUsbInterface.ReadEndpoint.ReadBufferSize;
+        public override ushort WriteBufferSize => WriteUsbInterface.BulkWriteEndpoint.WriteBufferSize;
+        public override ushort ReadBufferSize => ReadUsbInterface.BulkReadEndpoint.ReadBufferSize;
 
         public IUsbInterface ReadUsbInterface
         {

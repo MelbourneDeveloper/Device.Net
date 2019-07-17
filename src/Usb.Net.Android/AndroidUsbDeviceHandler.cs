@@ -179,6 +179,8 @@ namespace Usb.Net.Android
 
                 Log("Hid device initialized. About to tell everyone.", null);
 
+                base.RegisterDefaultInterfaces();
+
                 throw new NotImplementedException("Claim interface needs to be called");
             }
             catch (Exception ex)

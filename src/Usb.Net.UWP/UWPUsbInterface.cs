@@ -37,28 +37,28 @@ namespace Usb.Net.UWP
             {
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceInterruptReadEndpoint(inPipe, Logger, Tracer);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
-                if (ReadInterruptEndpoint == null) ReadInterruptEndpoint = uwpUsbInterfaceEndpoint;
+                if (InterruptReadEndpoint == null) InterruptReadEndpoint = uwpUsbInterfaceEndpoint;
             }
 
             foreach (var outPipe in usbInterface.InterruptOutPipes)
             {
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbInterruptOutPipe>(outPipe);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
-                if (WriteInterruptEndpoint == null) WriteInterruptEndpoint = uwpUsbInterfaceEndpoint;
+                if (InterruptWriteEndpoint == null) InterruptWriteEndpoint = uwpUsbInterfaceEndpoint;
             }
 
             foreach (var inPipe in usbInterface.BulkInPipes)
             {
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbBulkInPipe>(inPipe);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
-                if (ReadEndpoint == null) ReadEndpoint = uwpUsbInterfaceEndpoint;
+                if (BulkReadEndpoint == null) BulkReadEndpoint = uwpUsbInterfaceEndpoint;
             }
 
             foreach (var outPipe in usbInterface.BulkOutPipes)
             {
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbBulkOutPipe>(outPipe);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
-                if (WriteEndpoint == null) WriteEndpoint = uwpUsbInterfaceEndpoint;
+                if (BulkWriteEndpoint == null) BulkWriteEndpoint = uwpUsbInterfaceEndpoint;
             }
 
             //TODO: Why does not UWP not support Control Transfer?
@@ -66,15 +66,15 @@ namespace Usb.Net.UWP
 
         public async Task<byte[]> ReadAsync(uint bufferLength)
         {
-            if (ReadEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
+            if (BulkReadEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
 
             IBuffer buffer = null;
 
-            if (ReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe)
+            if (BulkReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe)
             {
                 return await usbInterruptInPipe.ReadAsync();
             }
-            else if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkInPipe> usbBulkInPipe)
+            else if (BulkWriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkInPipe> usbBulkInPipe)
             {
                 buffer = new wss.Buffer(bufferLength);
                 await usbBulkInPipe.Pipe.InputStream.ReadAsync(buffer, bufferLength, InputStreamOptions.None);
@@ -91,7 +91,7 @@ namespace Usb.Net.UWP
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
-            if (WriteEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
+            if (BulkWriteEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
 
             if (data.Length > WriteBufferSize) throw new ValidationException(Messages.ErrorMessageBufferSizeTooLarge);
 
@@ -99,12 +99,12 @@ namespace Usb.Net.UWP
 
             uint count = 0;
 
-            if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptOutPipe> usbInterruptOutPipe)
+            if (BulkWriteEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptOutPipe> usbInterruptOutPipe)
             {
                 count = await usbInterruptOutPipe.Pipe.OutputStream.WriteAsync(buffer);
 
             }
-            else if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> usbBulkOutPipe)
+            else if (BulkWriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> usbBulkOutPipe)
             {
                 count = await usbBulkOutPipe.Pipe.OutputStream.WriteAsync(buffer);
             }

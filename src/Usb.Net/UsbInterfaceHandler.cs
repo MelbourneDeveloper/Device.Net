@@ -2,6 +2,7 @@
 using Device.Net.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Usb.Net
 {
@@ -23,11 +24,25 @@ namespace Usb.Net
         }
         #endregion
 
+        #region Protected Methods
+        protected void RegisterDefaultInterfaces()
+        {
+            foreach (var usbInterface in UsbInterfaces)
+            {
+                usbInterface.RegisterDefaultEndpoints();
+            }
+
+            ReadUsbInterface = UsbInterfaces.FirstOrDefault(i => i.BulkReadEndpoint != null);
+            WriteUsbInterface = UsbInterfaces.FirstOrDefault(i => i.BulkWriteEndpoint != null);
+            ReadInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptReadEndpoint != null);
+            WriteInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptWriteEndpoint != null);
+        }
+        #endregion
+
         #region Public Properties        
         public ITracer Tracer { get; }
         public ILogger Logger { get; }
         public IList<IUsbInterface> UsbInterfaces { get; } = new List<IUsbInterface>();
-
         public IUsbInterface ReadUsbInterface
         {
             get => _ReadUsbInterface;

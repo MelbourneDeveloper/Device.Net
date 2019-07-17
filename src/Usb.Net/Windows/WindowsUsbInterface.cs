@@ -35,7 +35,7 @@ namespace Usb.Net.Windows
             return await Task.Run(() =>
             {
                 var bytes = new byte[bufferLength];
-                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_SafeFileHandle, ReadEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
+                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_SafeFileHandle, BulkReadEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't read data");
                 Tracer?.Trace(false, bytes);
                 return bytes;
@@ -46,7 +46,7 @@ namespace Usb.Net.Windows
         {
             await Task.Run(() =>
             {
-                var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_SafeFileHandle, WriteEndpoint.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
+                var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_SafeFileHandle, BulkWriteEndpoint.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't write data");
                 Tracer?.Trace(true, data);
             });

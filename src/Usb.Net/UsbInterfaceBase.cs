@@ -23,7 +23,7 @@ namespace Usb.Net
 
         public IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints { get; } = new List<IUsbInterfaceEndpoint>();
 
-        public IUsbInterfaceEndpoint ReadEndpoint
+        public IUsbInterfaceEndpoint BulkReadEndpoint
         {
             get => _ReadEndpoint ?? (_ReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead && !p.IsInterrupt));
             set
@@ -33,7 +33,7 @@ namespace Usb.Net
             }
         }
 
-        public IUsbInterfaceEndpoint WriteEndpoint
+        public IUsbInterfaceEndpoint BulkWriteEndpoint
         {
             get => _WriteEndpoint ?? (_WriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite && !p.IsInterrupt));
             set
@@ -43,7 +43,7 @@ namespace Usb.Net
             }
         }
 
-        public IUsbInterfaceEndpoint WriteInterruptEndpoint
+        public IUsbInterfaceEndpoint InterruptWriteEndpoint
         {
             get => _WriteInterruptEndpoint ?? (_WriteInterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt && p.IsWrite));
             set
@@ -53,7 +53,7 @@ namespace Usb.Net
             }
         }
 
-        public IUsbInterfaceEndpoint ReadInterruptEndpoint
+        public IUsbInterfaceEndpoint InterruptReadEndpoint
         {
             get => _ReadInterruptEndpoint ?? (_ReadInterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt && p.IsRead));
             set
@@ -65,6 +65,16 @@ namespace Usb.Net
         #endregion
 
         #region Public Methods
+        public void RegisterDefaultEndpoints()
+        {
+            //TODO: This should look for bulk transfer, not not interrupt
+            BulkReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(e => e.IsRead && !e.IsInterrupt);
+            BulkWriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(e => e.IsWrite && !e.IsInterrupt);
+
+            InterruptReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(e => e.IsRead && e.IsInterrupt);
+            InterruptWriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(e => e.IsWrite && e.IsInterrupt);
+        }
+
 
         /// <summary>
         /// Note: some platforms require a call to be made to claim the interface. This is currently only for Android but may change

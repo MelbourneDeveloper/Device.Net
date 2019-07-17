@@ -6,11 +6,19 @@ namespace Usb.Net
 {
     public interface IUsbDeviceHandler : IDeviceHandler
     {
-        IUsbInterface ReadUsbInterface { get; set; }
-        IList<IUsbInterface> UsbInterfaces { get; }
-        IUsbInterface WriteUsbInterface { get; set; }
         /// <summary>
-        /// TODO: Why is this here?
+        /// Usb interface for reading from the device. Note: this will default to the first read Bulk interface. If this is incorrect, inspect the UsbInterfaces property.
+        /// </summary>
+        IUsbInterface ReadUsbInterface { get; set; }
+        /// <summary>
+        /// Usb interface for writing to the device. Note: this will default to the first write Bulk interface. If this is incorrect, inspect the UsbInterfaces property.
+        /// </summary>
+        IUsbInterface WriteUsbInterface { get; set; }
+
+        IList<IUsbInterface> UsbInterfaces { get; }
+
+        /// <summary>
+        /// TODO: This shouldn't be here. Don't use this
         /// </summary>
         Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync();
     }
