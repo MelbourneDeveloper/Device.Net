@@ -15,7 +15,7 @@ namespace Usb.Net.Android
         #endregion
 
         #region Constructor
-        public AndroidUsbInterface(UsbInterface usbInterface, UsbDeviceConnection usbDeviceConnection, ILogger logger, ITracer tracer) : base(logger, tracer)
+        public AndroidUsbInterface(UsbInterface usbInterface, UsbDeviceConnection usbDeviceConnection, ILogger logger, ITracer tracer, ushort? readBufferSize, ushort? writeBufferSize) : base(logger, tracer, readBufferSize, writeBufferSize)
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
             _UsbDeviceConnection = usbDeviceConnection ?? throw new ArgumentNullException(nameof(usbDeviceConnection));

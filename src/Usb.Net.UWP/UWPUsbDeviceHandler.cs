@@ -13,6 +13,8 @@ namespace Usb.Net.UWP
     {
         #region Fields
         private bool disposed;
+        private readonly ushort? _WriteBufferSize;
+        private readonly ushort? _ReadBufferSize;
         #endregion
 
         #region Public Properties
@@ -20,8 +22,8 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Override Properties
-        public override ushort WriteBufferSize => WriteUsbInterface.BulkWriteEndpoint.WriteBufferSize;
-        public override ushort ReadBufferSize => ReadUsbInterface.BulkReadEndpoint.ReadBufferSize;
+        public override ushort WriteBufferSize => _WriteBufferSize ?? WriteUsbInterface.BulkWriteEndpoint?.WriteBufferSize ?? WriteUsbInterface.InterruptWriteEndpoint?.WriteBufferSize;
+        public override ushort ReadBufferSize => _ReadBufferSize ?? ReadUsbInterface.BulkReadEndpoint?.ReadBufferSize;
 
         public IUsbInterface ReadUsbInterface
         {
@@ -39,18 +41,20 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPUsbDeviceHandler(ILogger logger, ITracer tracer) : this(null, logger, tracer)
+        public UWPUsbDeviceHandler(ILogger logger, ITracer tracer) : this(null, logger, tracer, null, null)
         {
         }
 
-        public UWPUsbDeviceHandler(ConnectedDeviceDefinition deviceDefinition) : this(deviceDefinition, null, null)
+        public UWPUsbDeviceHandler(ConnectedDeviceDefinition deviceDefinition) : this(deviceDefinition, null, null, null, null)
         {
         }
 
-        public UWPUsbDeviceHandler(ConnectedDeviceDefinition connectedDeviceDefinition, ILogger logger, ITracer tracer) : base(connectedDeviceDefinition?.DeviceId, logger, tracer)
+        public UWPUsbDeviceHandler(ConnectedDeviceDefinition connectedDeviceDefinition, ILogger logger, ITracer tracer, ushort? readBufferSzie, ushort? writeBufferSize) : base(connectedDeviceDefinition?.DeviceId, logger, tracer)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             UsbInterfaceHandler = new UsbInterfaceHandler(logger, tracer);
+            _WriteBufferSize = writeBufferSize;
+            _ReadBufferSize = readBufferSzie;
         }
         #endregion
 
@@ -72,9 +76,9 @@ namespace Usb.Net.UWP
                 var interfaceIndex = 0;
                 foreach (var usbInterface in ConnectedDevice.Configuration.UsbInterfaces)
                 {
-                    var uwpUsbInterface = new UWPUsbInterface(usbInterface, Logger, Tracer);
+                    var uwpUsbInterface = new UWPUsbInterface(usbInterface, Logger, Tracer, _ReadBufferSize, _WriteBufferSize);
 
-                    UsbInterfaceHandler.UsbInterfaces.Add(uwpUsbInterface);         
+                    UsbInterfaceHandler.UsbInterfaces.Add(uwpUsbInterface);
                     interfaceIndex++;
                 }
             }

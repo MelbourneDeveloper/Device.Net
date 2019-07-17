@@ -24,7 +24,7 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Methods
-        public UWPUsbInterface(windowsUsbInterface usbInterface, ILogger logger, ITracer tracer) : base(logger, tracer)
+        public UWPUsbInterface(windowsUsbInterface usbInterface, ILogger logger, ITracer tracer, ushort? readBuffersize, ushort? writeBufferSize) : base(logger, tracer, readBuffersize, writeBufferSize)
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
 

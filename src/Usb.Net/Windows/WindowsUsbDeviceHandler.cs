@@ -107,8 +107,9 @@ namespace Usb.Net.Windows
             //TODO: We need to get the read/write size from a different API call...
 
             //TODO: Where is the logger/tracer?
-            var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);            
-            var retVal = new WindowsUsbInterface(interfaceHandle, Logger, Tracer, interfaceDescriptor.bInterfaceNumber);
+            var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
+
+            var retVal = new WindowsUsbInterface(interfaceHandle, Logger, Tracer, interfaceDescriptor.bInterfaceNumber, _ReadBufferSize, _WriteBufferSize);
             WindowsDeviceBase.HandleError(isSuccess, "Couldn't query interface");
 
             for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)
