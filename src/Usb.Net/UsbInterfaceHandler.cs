@@ -25,7 +25,7 @@ namespace Usb.Net
         #endregion
 
         #region Protected Methods
-        protected void RegisterDefaultInterfaces()
+        public void RegisterDefaultInterfaces()
         {
             foreach (var usbInterface in UsbInterfaces)
             {
@@ -62,7 +62,7 @@ namespace Usb.Net
             get => _ReadUsbInterface;
             set
             {
-                if (!UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
+                if (value!=null && !UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
                 _ReadUsbInterface = value;
             }
         }
@@ -72,7 +72,7 @@ namespace Usb.Net
             get => _WriteUsbInterface;
             set
             {
-                if (!UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
+                if (value != null && !UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
                 _WriteUsbInterface = value;
             }
         }
@@ -82,7 +82,7 @@ namespace Usb.Net
             get => _ReadInterruptUsbInterface;
             set
             {
-                if (!UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
+                if (value != null && !UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
                 _ReadInterruptUsbInterface = value;
             }
         }
@@ -92,7 +92,7 @@ namespace Usb.Net
             get => _WriteInterruptUsbInterface;
             set
             {
-                if (!UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
+                if (value != null && !UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
                 _WriteInterruptUsbInterface = value;
             }
         }

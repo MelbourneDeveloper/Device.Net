@@ -9,8 +9,8 @@ namespace Usb.Net
     public abstract class UsbInterfaceBase
     {
         #region Fields
-        private IUsbInterfaceEndpoint _ReadEndpoint;
-        private IUsbInterfaceEndpoint _WriteEndpoint;
+        private IUsbInterfaceEndpoint _BulkReadEndpoint;
+        private IUsbInterfaceEndpoint _BulkWriteEndpoint;
         private IUsbInterfaceEndpoint _WriteInterruptEndpoint;
         private IUsbInterfaceEndpoint _ReadInterruptEndpoint;
         #endregion
@@ -18,28 +18,28 @@ namespace Usb.Net
         #region Public Properties
         public ILogger Logger { get; }
         public ITracer Tracer { get; }
-        public ushort ReadBufferSize => _ReadEndpoint.ReadBufferSize;
-        public ushort WriteBufferSize => _WriteEndpoint.WriteBufferSize;
+        public ushort ReadBufferSize => _BulkReadEndpoint.ReadBufferSize;
+        public ushort WriteBufferSize => _BulkWriteEndpoint.WriteBufferSize;
 
         public IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints { get; } = new List<IUsbInterfaceEndpoint>();
 
         public IUsbInterfaceEndpoint BulkReadEndpoint
         {
-            get => _ReadEndpoint ?? (_ReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead && !p.IsInterrupt));
+            get => _BulkReadEndpoint ?? (_BulkReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead && !p.IsInterrupt));
             set
             {
-                if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
-                _ReadEndpoint = value;
+                if (value!=null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
+                _BulkReadEndpoint = value;
             }
         }
 
         public IUsbInterfaceEndpoint BulkWriteEndpoint
         {
-            get => _WriteEndpoint ?? (_WriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite && !p.IsInterrupt));
+            get => _BulkWriteEndpoint ?? (_BulkWriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite && !p.IsInterrupt));
             set
             {
-                if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
-                _WriteEndpoint = value;
+                if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
+                _BulkWriteEndpoint = value;
             }
         }
 
@@ -48,7 +48,7 @@ namespace Usb.Net
             get => _WriteInterruptEndpoint ?? (_WriteInterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt && p.IsWrite));
             set
             {
-                if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
+                if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
                 _WriteInterruptEndpoint = value;
             }
         }
@@ -58,7 +58,7 @@ namespace Usb.Net
             get => _ReadInterruptEndpoint ?? (_ReadInterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt && p.IsRead));
             set
             {
-                if (!UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
+                if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
                 _ReadInterruptEndpoint = value;
             }
         }

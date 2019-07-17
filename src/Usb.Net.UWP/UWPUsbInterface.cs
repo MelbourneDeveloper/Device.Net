@@ -86,7 +86,8 @@ namespace Usb.Net.UWP
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
-            if (BulkWriteEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
+            //TODO: It might not be the case that Initialize has not been called. Better error message here please.
+            if (BulkWriteEndpoint == null && InterruptWriteEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
 
             if (data.Length > WriteBufferSize) throw new ValidationException(Messages.ErrorMessageBufferSizeTooLarge);
 
@@ -94,15 +95,18 @@ namespace Usb.Net.UWP
 
             uint count = 0;
 
-            if (BulkWriteEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptOutPipe> usbInterruptOutPipe)
-            {
-                count = await usbInterruptOutPipe.Pipe.OutputStream.WriteAsync(buffer);
-
-            }
-            else if (BulkWriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> usbBulkOutPipe)
+            if (BulkWriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> usbBulkOutPipe)
             {
                 count = await usbBulkOutPipe.Pipe.OutputStream.WriteAsync(buffer);
             }
+            else if (InterruptWriteEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptOutPipe> usbInterruptOutPipe)
+            {
+                //Falling back interrupt
+
+                Logger.Log(Messages.WarningMessageWritingToInterrupt, nameof(UWPUsbInterface), null, LogLevel.Warning);
+                count = await usbInterruptOutPipe.Pipe.OutputStream.WriteAsync(buffer);
+            }
+
             else
             {
                 throw new DeviceException(Messages.ErrorMessageWriteEndpointNotRecognized);
