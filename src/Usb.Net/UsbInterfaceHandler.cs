@@ -36,6 +36,20 @@ namespace Usb.Net
             WriteUsbInterface = UsbInterfaces.FirstOrDefault(i => i.BulkWriteEndpoint != null);
             ReadInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptReadEndpoint != null);
             WriteInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptWriteEndpoint != null);
+
+            if (ReadUsbInterface == null && ReadInterruptUsbInterface != null)
+            {
+                //Fall back on interrupt interface. This is pretty bad, but some devices don't use the bulk interface
+                ReadUsbInterface = ReadInterruptUsbInterface;
+                Logger.Log(Messages.GetErrorMessageNoBulkInPipe(ReadUsbInterface.InterfaceNumber, true), nameof(UsbInterfaceHandler), null, LogLevel.Warning);
+            }
+
+            if (WriteUsbInterface == null && WriteInterruptUsbInterface != null)
+            {
+                //Fall back on interrupt interface. This is pretty bad, but some devices don't use the bulk interface
+                WriteUsbInterface = WriteInterruptUsbInterface;
+                Logger.Log(Messages.GetErrorMessageNoBulkInPipe(WriteUsbInterface.InterfaceNumber, false), nameof(UsbInterfaceHandler), null, LogLevel.Warning);
+            }
         }
         #endregion
 

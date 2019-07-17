@@ -92,6 +92,8 @@ namespace Usb.Net.Windows
 
                     i++;
                 }
+
+                RegisterDefaultInterfaces();
             }
             catch (Exception ex)
             {

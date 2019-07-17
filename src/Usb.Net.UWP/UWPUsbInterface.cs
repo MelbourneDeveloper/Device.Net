@@ -28,11 +28,6 @@ namespace Usb.Net.UWP
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
 
-            if (usbInterface.BulkInPipes.Count == 0)
-            {
-                Logger?.Log(Messages.GetErrorMessageNoBulkInPipe(usbInterface.InterfaceNumber), nameof(UWPUsbInterface), null, LogLevel.Warning);
-            }
-
             foreach (var inPipe in usbInterface.InterruptInPipes)
             {
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceInterruptReadEndpoint(inPipe, Logger, Tracer);
