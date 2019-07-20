@@ -13,6 +13,7 @@ namespace Usb.Net.UWP
         #region Fields
         private readonly Collection<byte[]> _Chunks = new Collection<byte[]>();
         private readonly SemaphoreSlim _ReadLock = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _DataReceivedLock = new SemaphoreSlim(1, 1);
         private bool disposed;
         private TaskCompletionSource<byte[]> _ReadChunkTaskCompletionSource;
         #endregion
@@ -36,31 +37,28 @@ namespace Usb.Net.UWP
         {
             try
             {
-                await _ReadLock.WaitAsync();
+                await _DataReceivedLock.WaitAsync();
 
                 var bytes = args.InterruptData.ToArray();
-
-                if(_ReadChunkTaskCompletionSource!=null)
-                {
-                    //In this case there should be no chunks. TODO: Put some unit tests around this.
-                    //The read method wil be waiting on this
-
-                    //NOTE: The semaphore will get released here, and then in the read method. Is this OK?
-
-                    _ReadChunkTaskCompletionSource.SetResult(bytes);
-                    return;
-                }
-
                 _Chunks.Add(bytes);
 
                 if (bytes != null)
                 {
                     Logger?.Log($"{bytes.Length} read on interrupt pipe {UsbInterruptInPipe.EndpointDescriptor.EndpointNumber}", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
                 }
+
+                if (_ReadChunkTaskCompletionSource != null)
+                {
+                    //In this case there should be no chunks. TODO: Put some unit tests around this.
+                    //The read method wil be waiting on this
+
+                    _ReadChunkTaskCompletionSource.SetResult(_Chunks[0]);
+                    return;
+                }
             }
             finally
             {
-                _ReadLock.Release();
+                _DataReceivedLock.Release();
             }
         }
         #endregion
@@ -71,6 +69,7 @@ namespace Usb.Net.UWP
             if (disposed) return;
             disposed = true;
             _ReadLock.Dispose();
+            _DataReceivedLock.Dispose();
             GC.SuppressFinalize(this);
         }
 
@@ -78,22 +77,44 @@ namespace Usb.Net.UWP
         {
             try
             {
+                Logger?.Log($"Read called on {nameof(UWPUsbInterfaceInterruptReadEndpoint)}", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
+
                 await _ReadLock.WaitAsync();
 
                 byte[] retVal = null;
 
-                if (_Chunks.Count > 0)
+                try
                 {
-                    retVal = _Chunks[0];
-                    Tracer?.Trace(false, retVal);
-                    _Chunks.RemoveAt(0);
-                    return retVal;
+                    //Don't let any datas be added to the chunks here
+                    await _DataReceivedLock.WaitAsync();
+
+                    if (_Chunks.Count > 0)
+                    {
+                        retVal = _Chunks[0];
+                        Tracer?.Trace(false, retVal);
+                        _Chunks.RemoveAt(0);
+                        Logger?.Log($"Read the first chunk {nameof(UWPUsbInterfaceInterruptReadEndpoint)}", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
+                        return retVal;
+                    }
                 }
+                catch(Exception ex)
+                {
+                    Logger?.Log($"Error {nameof(ReadAsync)}", nameof(UWPUsbInterfaceInterruptReadEndpoint), ex, LogLevel.Error);
+                    throw;
+                }
+                finally
+                {
+                    _DataReceivedLock.Release();                    
+                }
+
+                Logger?.Log($"Data received lock releasded. Waiting for chunk", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
 
                 //Wait for the event here. Once the event occurs, this should return and the semaphore should be released
                 _ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
                 retVal = await _ReadChunkTaskCompletionSource.Task;
                 _ReadChunkTaskCompletionSource = null;
+
+                Tracer?.Trace(false, retVal);
                 return retVal;
             }
             finally
