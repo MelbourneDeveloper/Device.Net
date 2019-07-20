@@ -168,10 +168,7 @@ namespace Usb.Net.Android
                         if (usbEndpoint != null)
                         {
                             //TODO: This is probably all wrong...
-                            var isRead = usbEndpoint.Type == UsbAddressing.XferBulk && usbEndpoint.Direction != UsbAddressing.Out;
-                            var isWrite = usbEndpoint.Type == UsbAddressing.XferBulk && usbEndpoint.Direction == UsbAddressing.Out;
-                            var isInterrupt = usbEndpoint.Type == UsbAddressing.XferInterrupt && usbEndpoint.Direction != UsbAddressing.Out;
-                            var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, isRead, isWrite, isInterrupt, (byte)usbEndpoint.Address);
+                            var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint);
                             androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
                         }
                     }                    
