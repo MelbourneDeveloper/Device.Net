@@ -10,8 +10,8 @@ namespace Usb.Net
     public abstract class UsbInterfaceBase
     {
         #region Fields
-        private IUsbInterfaceEndpoint _BulkReadEndpoint;
-        private IUsbInterfaceEndpoint _BulkWriteEndpoint;
+        private IUsbInterfaceEndpoint _ReadEndpoint;
+        private IUsbInterfaceEndpoint _WriteEndpoint;
         private IUsbInterfaceEndpoint _WriteInterruptEndpoint;
         private IUsbInterfaceEndpoint _ReadInterruptEndpoint;
         private readonly ushort? _ReadBufferSize;
@@ -28,7 +28,7 @@ namespace Usb.Net
             {
                 if (_ReadBufferSize.HasValue) return _ReadBufferSize.Value;
 
-                if (BulkReadEndpoint != null) return BulkReadEndpoint.ReadBufferSize;
+                if (ReadEndpoint != null) return ReadEndpoint.ReadBufferSize;
 
                 if (InterruptReadEndpoint != null) return InterruptReadEndpoint.ReadBufferSize;
 
@@ -42,7 +42,7 @@ namespace Usb.Net
             {
                 if (_WriteBufferSize.HasValue) return _WriteBufferSize.Value;
 
-                if (BulkWriteEndpoint != null) return BulkWriteEndpoint.ReadBufferSize;
+                if (WriteEndpoint != null) return WriteEndpoint.ReadBufferSize;
 
                 if (InterruptWriteEndpoint != null) return InterruptWriteEndpoint.ReadBufferSize;
 
@@ -52,23 +52,23 @@ namespace Usb.Net
 
         public IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints { get; } = new List<IUsbInterfaceEndpoint>();
 
-        public IUsbInterfaceEndpoint BulkReadEndpoint
+        public IUsbInterfaceEndpoint ReadEndpoint
         {
-            get => _BulkReadEndpoint ?? (_BulkReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead && !p.IsInterrupt));
+            get => _ReadEndpoint ?? (_ReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead && !p.IsInterrupt));
             set
             {
                 if (value!=null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
-                _BulkReadEndpoint = value;
+                _ReadEndpoint = value;
             }
         }
 
-        public IUsbInterfaceEndpoint BulkWriteEndpoint
+        public IUsbInterfaceEndpoint WriteEndpoint
         {
-            get => _BulkWriteEndpoint ?? (_BulkWriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite && !p.IsInterrupt));
+            get => _WriteEndpoint ?? (_WriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite && !p.IsInterrupt));
             set
             {
                 if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
-                _BulkWriteEndpoint = value;
+                _WriteEndpoint = value;
             }
         }
 
@@ -96,12 +96,16 @@ namespace Usb.Net
         #region Public Methods
         public void RegisterDefaultEndpoints()
         {
-            //TODO: This should look for bulk transfer, not not interrupt
-            BulkReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(e => e.IsRead && !e.IsInterrupt);
-            BulkWriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(e => e.IsWrite && !e.IsInterrupt);
+            //TODO: This should look for bulk transfer, not just not interrupt
+            ReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(e => e.IsRead && !e.IsInterrupt);
+            WriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(e => e.IsWrite && !e.IsInterrupt);
 
             InterruptReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(e => e.IsRead && e.IsInterrupt);
             InterruptWriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(e => e.IsWrite && e.IsInterrupt);
+
+            //This falls back on the interrupt endpoint if there is not bulk pipes. This is the just the oddbal scenario
+            if (ReadEndpoint == null && InterruptReadEndpoint != null) ReadEndpoint = InterruptReadEndpoint;
+            if (WriteEndpoint == null && InterruptWriteEndpoint != null) WriteEndpoint = InterruptWriteEndpoint;
         }
 
 

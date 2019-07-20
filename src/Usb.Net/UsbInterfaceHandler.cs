@@ -32,8 +32,8 @@ namespace Usb.Net
                 usbInterface.RegisterDefaultEndpoints();
             }
 
-            ReadUsbInterface = UsbInterfaces.FirstOrDefault(i => i.BulkReadEndpoint != null);
-            WriteUsbInterface = UsbInterfaces.FirstOrDefault(i => i.BulkWriteEndpoint != null);
+            ReadUsbInterface = UsbInterfaces.FirstOrDefault(i => i.ReadEndpoint != null);
+            WriteUsbInterface = UsbInterfaces.FirstOrDefault(i => i.WriteEndpoint != null);
             ReadInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptReadEndpoint != null);
             WriteInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptWriteEndpoint != null);
 

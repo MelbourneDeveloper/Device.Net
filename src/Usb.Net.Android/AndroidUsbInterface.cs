@@ -36,7 +36,7 @@ namespace Usb.Net.Android
                 {
                     var byteBuffer = ByteBuffer.Allocate((int)bufferLength);
                     var request = new UsbRequest();
-                    var endpoint = ((AndroidUsbEndpoint)BulkReadEndpoint).UsbEndpoint;
+                    var endpoint = ((AndroidUsbEndpoint)ReadEndpoint).UsbEndpoint;
                     request.Initialize(_UsbDeviceConnection, endpoint);
 #pragma warning disable CS0618 
                     request.Queue(byteBuffer, (int)bufferLength);
@@ -80,7 +80,7 @@ namespace Usb.Net.Android
                     //TODO: Perhaps we should implement Batch Begin/Complete so that the UsbRequest is not created again and again. This will be expensive
 
                     var request = new UsbRequest();
-                    var endpoint = ((AndroidUsbEndpoint)BulkWriteEndpoint).UsbEndpoint;
+                    var endpoint = ((AndroidUsbEndpoint)WriteEndpoint).UsbEndpoint;
                     request.Initialize(_UsbDeviceConnection, endpoint);
                     var byteBuffer = ByteBuffer.Wrap(data);
 

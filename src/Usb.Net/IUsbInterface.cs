@@ -6,9 +6,9 @@ namespace Usb.Net
 {
     public interface IUsbInterface : IDisposable
     {
-        IUsbInterfaceEndpoint BulkReadEndpoint { get; set; }
+        IUsbInterfaceEndpoint ReadEndpoint { get; set; }
         IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints { get; }
-        IUsbInterfaceEndpoint BulkWriteEndpoint { get; set; }
+        IUsbInterfaceEndpoint WriteEndpoint { get; set; }
         IUsbInterfaceEndpoint InterruptWriteEndpoint { get; set; }
         IUsbInterfaceEndpoint InterruptReadEndpoint { get; set; }
         //TODO: Remove these. They should come from the endpoint... or be specified there

@@ -46,14 +46,14 @@ namespace Usb.Net.UWP
             {
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbBulkInPipe>(inPipe);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
-                if (BulkReadEndpoint == null) BulkReadEndpoint = uwpUsbInterfaceEndpoint;
+                if (ReadEndpoint == null) ReadEndpoint = uwpUsbInterfaceEndpoint;
             }
 
             foreach (var outPipe in usbInterface.BulkOutPipes)
             {
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbBulkOutPipe>(outPipe);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
-                if (BulkWriteEndpoint == null) BulkWriteEndpoint = uwpUsbInterfaceEndpoint;
+                if (WriteEndpoint == null) WriteEndpoint = uwpUsbInterfaceEndpoint;
             }
 
             //TODO: Why does not UWP not support Control Transfer?
@@ -63,7 +63,7 @@ namespace Usb.Net.UWP
         {
             IBuffer buffer = null;
 
-            if (BulkReadEndpoint is UWPUsbInterfaceEndpoint<UsbBulkInPipe> usbBulkInPipe)
+            if (ReadEndpoint is UWPUsbInterfaceEndpoint<UsbBulkInPipe> usbBulkInPipe)
             {
                 buffer = new wss.Buffer(bufferLength);
                 await usbBulkInPipe.Pipe.InputStream.ReadAsync(buffer, bufferLength, InputStreamOptions.None);
@@ -85,7 +85,7 @@ namespace Usb.Net.UWP
             if (data == null) throw new ArgumentNullException(nameof(data));
 
             //TODO: It might not be the case that Initialize has not been called. Better error message here please.
-            if (BulkWriteEndpoint == null && InterruptWriteEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
+            if (WriteEndpoint == null && InterruptWriteEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
 
             if (data.Length > WriteBufferSize) throw new ValidationException(Messages.ErrorMessageBufferSizeTooLarge);
 
@@ -93,7 +93,7 @@ namespace Usb.Net.UWP
 
             uint count = 0;
 
-            if (BulkWriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> usbBulkOutPipe)
+            if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> usbBulkOutPipe)
             {
                 count = await usbBulkOutPipe.Pipe.OutputStream.WriteAsync(buffer);
             }
