@@ -69,7 +69,7 @@ namespace Usb.Net.Windows
                 if (!_ReadBufferSize.HasValue) _ReadBufferSize = (ushort)connectedDeviceDefinition.ReadBufferSize.Value;
 
                 //Get the first (default) interface
-                var defaultInterface = GetInterface(defaultInterfaceHandle, _ReadBufferSize.Value, _WriteBufferSize.Value);
+                var defaultInterface = GetInterface(defaultInterfaceHandle);
 
                 UsbInterfaces.Add(defaultInterface);
 
@@ -85,7 +85,7 @@ namespace Usb.Net.Windows
                         throw new ApiException($"Could not enumerate interfaces for device. Error code: { errorCode}");
                     }
 
-                    var associatedInterface = GetInterface(interfacePointer, _ReadBufferSize.Value, _WriteBufferSize.Value);
+                    var associatedInterface = GetInterface(interfacePointer);
 
                     //TODO: this is bad design. The handler should be taking care of this
                     UsbInterfaces.Add(associatedInterface);
@@ -102,7 +102,7 @@ namespace Usb.Net.Windows
             }
         }
 
-        private WindowsUsbInterface GetInterface(SafeFileHandle interfaceHandle, ushort readBufferLength, ushort writeBufferLength)
+        private WindowsUsbInterface GetInterface(SafeFileHandle interfaceHandle)
         {
             //TODO: We need to get the read/write size from a different API call...
 

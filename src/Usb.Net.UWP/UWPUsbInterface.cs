@@ -19,7 +19,7 @@ namespace Usb.Net.UWP
 
         #region Public Properties
         public windowsUsbInterface UsbInterface { get; }
-        public byte InterfaceNumber => UsbInterface.InterfaceNumber;
+        public override byte InterfaceNumber => UsbInterface.InterfaceNumber;
         public override string ToString() => InterfaceNumber.ToString();
         #endregion
 

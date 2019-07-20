@@ -16,6 +16,7 @@ namespace Usb.Net
         private IUsbInterfaceEndpoint _ReadInterruptEndpoint;
         private readonly ushort? _ReadBufferSize;
         private readonly ushort? _WriteBufferSize;
+        public abstract byte InterfaceNumber { get; }
         #endregion
 
         #region Public Properties
@@ -100,8 +101,17 @@ namespace Usb.Net
             InterruptWriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(e => e.IsWrite && e.IsInterrupt);
 
             //This falls back on the interrupt endpoint if there is not bulk pipes. This is the just the oddbal scenario
-            if (ReadEndpoint == null && InterruptReadEndpoint != null) ReadEndpoint = InterruptReadEndpoint;
-            if (WriteEndpoint == null && InterruptWriteEndpoint != null) WriteEndpoint = InterruptWriteEndpoint;
+            if (ReadEndpoint == null && InterruptReadEndpoint != null)
+            {
+                ReadEndpoint = InterruptReadEndpoint;
+                Logger.Log(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, true), nameof(UsbInterfaceBase), null, LogLevel.Warning);
+            }
+
+            if (WriteEndpoint == null && InterruptWriteEndpoint != null)
+            {
+                WriteEndpoint = InterruptWriteEndpoint;
+                Logger.Log(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, false), nameof(UsbInterfaceBase), null, LogLevel.Warning);
+            }
         }
 
 

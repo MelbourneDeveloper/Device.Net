@@ -18,7 +18,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Properties
-        public byte InterfaceNumber { get; }
+        public override byte InterfaceNumber { get; }
         #endregion
 
         #region Constructor

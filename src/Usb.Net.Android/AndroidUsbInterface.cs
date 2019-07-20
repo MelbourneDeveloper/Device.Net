@@ -23,7 +23,7 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Properties
-        public byte InterfaceNumber => (byte)UsbInterface.Id;
+        public override byte InterfaceNumber => (byte)UsbInterface.Id;
         public UsbInterface UsbInterface { get; }
         #endregion
 

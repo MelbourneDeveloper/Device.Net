@@ -54,7 +54,7 @@
         public const string ErrorMessageNoWriteInterfaceSpecified = "There was no write Usb Interface specified for the device.";
         public const string WarningMessageWritingToInterrupt = "Writing to interrupt endpoint";
 
-        public static string GetErrorMessageNoBulkInPipe(byte interfaceNumber, bool isRead)
+        public static string GetErrorMessageNoBulkPipe(byte interfaceNumber, bool isRead)
         {
             return $"No bulk {(isRead ? "read" : "write")} pipes found. Interrupt pipes to be used instead. Interface Number {interfaceNumber}";
         }
