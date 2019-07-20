@@ -61,18 +61,16 @@ namespace Usb.Net.UWP
 
         public async Task<byte[]> ReadAsync(uint bufferLength)
         {
-            if (BulkReadEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
-
             IBuffer buffer = null;
 
-            if (BulkReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe)
-            {
-                return await usbInterruptInPipe.ReadAsync();
-            }
-            else if (BulkWriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkInPipe> usbBulkInPipe)
+            if (BulkReadEndpoint is UWPUsbInterfaceEndpoint<UsbBulkInPipe> usbBulkInPipe)
             {
                 buffer = new wss.Buffer(bufferLength);
                 await usbBulkInPipe.Pipe.InputStream.ReadAsync(buffer, bufferLength, InputStreamOptions.None);
+            }
+            else if (InterruptReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe)
+            {
+                return await usbInterruptInPipe.ReadAsync();
             }
             else
             {
