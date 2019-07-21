@@ -1,4 +1,5 @@
-﻿using LibUsbDotNet;
+﻿using System;
+using LibUsbDotNet;
 using LibUsbDotNet.Main;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +50,10 @@ namespace Device.Net.LibUsb
 
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
+            if(deviceDefinition==null) throw new ArgumentNullException(nameof(deviceDefinition));
+            if (deviceDefinition.VendorId == null) throw new ArgumentNullException(nameof(ConnectedDeviceDefinition.VendorId));
+            if (deviceDefinition.ProductId == null) throw new ArgumentNullException(nameof(ConnectedDeviceDefinition.ProductId));
+
             var usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value, (int)deviceDefinition.ProductId.Value);
             var usbDevice = UsbDevice.OpenUsbDevice(usbDeviceFinder);
             return usbDevice != null ? new LibUsbDevice(usbDevice, 3000, Logger, Tracer) : null;

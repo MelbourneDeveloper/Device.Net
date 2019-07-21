@@ -64,9 +64,17 @@ namespace Usb.Net.Windows
 
                 var connectedDeviceDefinition = WindowsUsbDeviceFactory.GetDeviceDefinition(defaultInterfaceHandle, DeviceId);
 
-                if (!_WriteBufferSize.HasValue) _WriteBufferSize = (ushort)connectedDeviceDefinition.WriteBufferSize.Value;
+                if (!_WriteBufferSize.HasValue)
+                {
+                    if (!connectedDeviceDefinition.WriteBufferSize.HasValue) throw new ValidationException("Write buffer size not specified");
+                    _WriteBufferSize = (ushort)connectedDeviceDefinition.WriteBufferSize.Value;
+                }
 
-                if (!_ReadBufferSize.HasValue) _ReadBufferSize = (ushort)connectedDeviceDefinition.ReadBufferSize.Value;
+                if (!_ReadBufferSize.HasValue)
+                {
+                    if (!connectedDeviceDefinition.ReadBufferSize.HasValue) throw new ValidationException("Read buffer size not specified");
+                    _ReadBufferSize = (ushort)connectedDeviceDefinition.ReadBufferSize.Value;
+                }
 
                 //Get the first (default) interface
                 var defaultInterface = GetInterface(defaultInterfaceHandle);
