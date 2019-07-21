@@ -1,4 +1,6 @@
-﻿namespace Usb.Net.Windows
+﻿using System;
+
+namespace Usb.Net.Windows
 {
     public class WindowsUsbInterfaceEndpoint : IUsbInterfaceEndpoint
     {
@@ -6,18 +8,14 @@
         public byte PipeId { get; }
         public bool IsRead => (PipeId & WinUsbApiCalls.WritePipeId) != 0;
         public bool IsWrite => (PipeId & WinUsbApiCalls.WritePipeId) == 0;
-        public ushort ReadBufferSize { get; }
-        public ushort WriteBufferSize { get; }
+        public ushort MaxPacketSize => throw new NotImplementedException("Need to call WinUsb_GetPipePolicy. https://github.com/MelbourneDeveloper/Device.Net/issues/72");
         public bool IsInterrupt { get; }
-
         #endregion
 
         #region Constructor
-        internal WindowsUsbInterfaceEndpoint(byte pipeId, ushort readBufferSize, ushort writeBufferSize, WinUsbApiCalls.USBD_PIPE_TYPE usbPipeType)
+        internal WindowsUsbInterfaceEndpoint(byte pipeId, WinUsbApiCalls.USBD_PIPE_TYPE usbPipeType)
         {
             PipeId = pipeId;
-            ReadBufferSize = readBufferSize;
-            WriteBufferSize = writeBufferSize;
             IsInterrupt = usbPipeType == WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeInterrupt;
         }
         #endregion

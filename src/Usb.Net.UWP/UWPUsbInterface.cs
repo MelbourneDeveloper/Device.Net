@@ -19,29 +19,27 @@ namespace Usb.Net.UWP
 
         #region Public Properties
         public windowsUsbInterface UsbInterface { get; }
+        public override byte InterfaceNumber => UsbInterface.InterfaceNumber;
+        public override string ToString() => InterfaceNumber.ToString();
         #endregion
 
-        public UWPUsbInterface(windowsUsbInterface usbInterface, ILogger logger, ITracer tracer) : base(logger, tracer)
+        #region Public Methods
+        public UWPUsbInterface(windowsUsbInterface usbInterface, ILogger logger, ITracer tracer, ushort? readBuffersize, ushort? writeBufferSize) : base(logger, tracer, readBuffersize, writeBufferSize)
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
-
-            if (usbInterface.BulkInPipes.Count == 0)
-            {
-                Logger?.Log(Messages.GetErrorMessageNoBulkInPipe(usbInterface.InterfaceNumber), nameof(UWPUsbInterface), null, LogLevel.Warning);
-            }
 
             foreach (var inPipe in usbInterface.InterruptInPipes)
             {
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceInterruptReadEndpoint(inPipe, Logger, Tracer);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
-                if (ReadInterruptEndpoint == null) ReadInterruptEndpoint = uwpUsbInterfaceEndpoint;
+                if (InterruptReadEndpoint == null) InterruptReadEndpoint = uwpUsbInterfaceEndpoint;
             }
 
             foreach (var outPipe in usbInterface.InterruptOutPipes)
             {
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbInterruptOutPipe>(outPipe);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
-                if (WriteInterruptEndpoint == null) WriteInterruptEndpoint = uwpUsbInterfaceEndpoint;
+                if (InterruptWriteEndpoint == null) InterruptWriteEndpoint = uwpUsbInterfaceEndpoint;
             }
 
             foreach (var inPipe in usbInterface.BulkInPipes)
@@ -63,18 +61,16 @@ namespace Usb.Net.UWP
 
         public async Task<byte[]> ReadAsync(uint bufferLength)
         {
-            if (ReadEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
-
             IBuffer buffer = null;
 
-            if (ReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe)
-            {
-                return await usbInterruptInPipe.ReadAsync();
-            }
-            else if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkInPipe> usbBulkInPipe)
+            if (ReadEndpoint is UWPUsbInterfaceEndpoint<UsbBulkInPipe> usbBulkInPipe)
             {
                 buffer = new wss.Buffer(bufferLength);
                 await usbBulkInPipe.Pipe.InputStream.ReadAsync(buffer, bufferLength, InputStreamOptions.None);
+            }
+            else if (InterruptReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe)
+            {
+                return await usbInterruptInPipe.ReadAsync();
             }
             else
             {
@@ -88,7 +84,8 @@ namespace Usb.Net.UWP
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
-            if (WriteEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
+            //TODO: It might not be the case that Initialize has not been called. Better error message here please.
+            if (WriteEndpoint == null && InterruptWriteEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
 
             if (data.Length > WriteBufferSize) throw new ValidationException(Messages.ErrorMessageBufferSizeTooLarge);
 
@@ -96,15 +93,18 @@ namespace Usb.Net.UWP
 
             uint count = 0;
 
-            if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptOutPipe> usbInterruptOutPipe)
-            {
-                count = await usbInterruptOutPipe.Pipe.OutputStream.WriteAsync(buffer);
-
-            }
-            else if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> usbBulkOutPipe)
+            if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> usbBulkOutPipe)
             {
                 count = await usbBulkOutPipe.Pipe.OutputStream.WriteAsync(buffer);
             }
+            else if (InterruptWriteEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptOutPipe> usbInterruptOutPipe)
+            {
+                //Falling back interrupt
+
+                Logger.Log(Messages.WarningMessageWritingToInterrupt, nameof(UWPUsbInterface), null, LogLevel.Warning);
+                count = await usbInterruptOutPipe.Pipe.OutputStream.WriteAsync(buffer);
+            }
+
             else
             {
                 throw new DeviceException(Messages.ErrorMessageWriteEndpointNotRecognized);
@@ -122,6 +122,7 @@ namespace Usb.Net.UWP
             }
 
         }
+        #endregion
 
         #region IDisposable Support
         public void Dispose()
@@ -130,9 +131,5 @@ namespace Usb.Net.UWP
             disposedValue = true;
         }
         #endregion
-
-        public byte InterfaceNumber => UsbInterface.InterfaceNumber;
-
-        public override string ToString() => InterfaceNumber.ToString();
     }
 }

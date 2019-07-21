@@ -13,6 +13,7 @@ namespace Usb.Net.UWP
         #region Fields
         private readonly Collection<byte[]> _Chunks = new Collection<byte[]>();
         private readonly SemaphoreSlim _ReadLock = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _DataReceivedLock = new SemaphoreSlim(1, 1);
         private bool disposed;
         private TaskCompletionSource<byte[]> _ReadChunkTaskCompletionSource;
         #endregion
@@ -31,36 +32,37 @@ namespace Usb.Net.UWP
         }
         #endregion
 
+        //TODO: Put unit tests around locking here somehow
+
         #region Events
         private async void UsbInterruptInPipe_DataReceived(UsbInterruptInPipe sender, UsbInterruptInEventArgs args)
         {
             try
             {
-                await _ReadLock.WaitAsync();
+                await _DataReceivedLock.WaitAsync();
 
                 var bytes = args.InterruptData.ToArray();
-
-                if(_ReadChunkTaskCompletionSource!=null)
-                {
-                    //In this case there should be no chunks. TODO: Put some unit tests around this.
-                    //The read method wil be waiting on this
-
-                    //NOTE: The semaphore will get released here, and then in the read method. Is this OK?
-
-                    _ReadChunkTaskCompletionSource.SetResult(bytes);
-                    return;
-                }
-
                 _Chunks.Add(bytes);
 
                 if (bytes != null)
                 {
                     Logger?.Log($"{bytes.Length} read on interrupt pipe {UsbInterruptInPipe.EndpointDescriptor.EndpointNumber}", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
                 }
+
+                if (_ReadChunkTaskCompletionSource != null && _ReadChunkTaskCompletionSource.Task.Status!= TaskStatus.RanToCompletion)
+                {
+                    //In this case there should be no chunks. TODO: Put some unit tests around this.
+                    //The read method wil be waiting on this
+                    var result = _Chunks[0];
+                    _Chunks.RemoveAt(0);
+                    _ReadChunkTaskCompletionSource.SetResult(result);
+                    Logger?.Log($"Completion source result set", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
+                    return;
+                }
             }
             finally
             {
-                _ReadLock.Release();
+                _DataReceivedLock.Release();
             }
         }
         #endregion
@@ -71,6 +73,7 @@ namespace Usb.Net.UWP
             if (disposed) return;
             disposed = true;
             _ReadLock.Dispose();
+            _DataReceivedLock.Dispose();
             GC.SuppressFinalize(this);
         }
 
@@ -78,22 +81,48 @@ namespace Usb.Net.UWP
         {
             try
             {
+                Logger?.Log($"Read called on {nameof(UWPUsbInterfaceInterruptReadEndpoint)}", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
+
                 await _ReadLock.WaitAsync();
 
                 byte[] retVal = null;
 
-                if (_Chunks.Count > 0)
+                try
                 {
-                    retVal = _Chunks[0];
-                    Tracer?.Trace(false, retVal);
-                    _Chunks.RemoveAt(0);
-                    return retVal;
+                    //Don't let any datas be added to the chunks here
+                    await _DataReceivedLock.WaitAsync();
+
+                    if (_Chunks.Count > 0)
+                    {
+                        retVal = _Chunks[0];
+                        Tracer?.Trace(false, retVal);
+                        _Chunks.RemoveAt(0);
+                        Logger?.Log($"Read the first chunk {nameof(UWPUsbInterfaceInterruptReadEndpoint)}", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
+                        return retVal;
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Logger?.Log($"Error {nameof(ReadAsync)}", nameof(UWPUsbInterfaceInterruptReadEndpoint), ex, LogLevel.Error);
+                    throw;
+                }
+                finally
+                {
+                    _DataReceivedLock.Release();                    
                 }
 
                 //Wait for the event here. Once the event occurs, this should return and the semaphore should be released
                 _ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
+
+                Logger?.Log($"Data received lock released. Completion source created. Waiting for data.", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
+
                 retVal = await _ReadChunkTaskCompletionSource.Task;
+
                 _ReadChunkTaskCompletionSource = null;
+
+                Logger?.Log($"Completion source nulled", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
+
+                Tracer?.Trace(false, retVal);
                 return retVal;
             }
             finally

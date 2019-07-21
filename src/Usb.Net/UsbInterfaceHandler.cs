@@ -2,6 +2,7 @@
 using Device.Net.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Usb.Net
 {
@@ -11,7 +12,8 @@ namespace Usb.Net
         private bool disposed;
         private IUsbInterface _ReadUsbInterface;
         private IUsbInterface _WriteUsbInterface;
-        private IUsbInterface _InterruptUsbInterface;
+        private IUsbInterface _ReadInterruptUsbInterface;
+        private IUsbInterface _WriteInterruptUsbInterface;
         #endregion
 
         #region Constructor
@@ -22,17 +24,31 @@ namespace Usb.Net
         }
         #endregion
 
+        #region Protected Methods
+        public void RegisterDefaultInterfaces()
+        {
+            foreach (var usbInterface in UsbInterfaces)
+            {
+                usbInterface.RegisterDefaultEndpoints();
+            }
+
+            ReadUsbInterface = UsbInterfaces.FirstOrDefault(i => i.ReadEndpoint != null);
+            WriteUsbInterface = UsbInterfaces.FirstOrDefault(i => i.WriteEndpoint != null);
+            ReadInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptReadEndpoint != null);
+            WriteInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptWriteEndpoint != null);
+        }
+        #endregion
+
         #region Public Properties        
         public ITracer Tracer { get; }
         public ILogger Logger { get; }
         public IList<IUsbInterface> UsbInterfaces { get; } = new List<IUsbInterface>();
-
         public IUsbInterface ReadUsbInterface
         {
             get => _ReadUsbInterface;
             set
             {
-                if (!UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
+                if (value!=null && !UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
                 _ReadUsbInterface = value;
             }
         }
@@ -42,21 +58,31 @@ namespace Usb.Net
             get => _WriteUsbInterface;
             set
             {
-                if (!UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
+                if (value != null && !UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
                 _WriteUsbInterface = value;
             }
         }
 
-        //TODO: Do we need two interfaces? One for read, and one for write?
-        public IUsbInterface InterruptUsbInterface
+        public IUsbInterface ReadInterruptUsbInterface
         {
-            get => _InterruptUsbInterface;
+            get => _ReadInterruptUsbInterface;
             set
             {
-                if (!UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
-                _InterruptUsbInterface = value;
+                if (value != null && !UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
+                _ReadInterruptUsbInterface = value;
             }
         }
+
+        public IUsbInterface WriteInterruptUsbInterface
+        {
+            get => _WriteInterruptUsbInterface;
+            set
+            {
+                if (value != null && !UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
+                _WriteInterruptUsbInterface = value;
+            }
+        }
+
         public virtual void Dispose()
         {
             if (disposed) return;

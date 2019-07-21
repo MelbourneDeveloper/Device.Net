@@ -17,10 +17,15 @@ namespace Usb.Net.Windows
 
         #endregion
 
+        #region Public Properties
+        public override byte InterfaceNumber { get; }
+        #endregion
+
         #region Constructor
-        public WindowsUsbInterface(SafeFileHandle handle, ILogger logger, ITracer tracer) : base(logger, tracer)
+        public WindowsUsbInterface(SafeFileHandle handle, ILogger logger, ITracer tracer, byte interfaceNumber, ushort? readBufferSize, ushort? writeBufferSzie) : base(logger, tracer, readBufferSize, writeBufferSzie)
         {
             _SafeFileHandle = handle;
+            InterfaceNumber = interfaceNumber;
         }
         #endregion
 

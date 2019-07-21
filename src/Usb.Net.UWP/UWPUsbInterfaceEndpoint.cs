@@ -16,8 +16,7 @@ namespace Usb.Net.UWP
         public bool IsInterrupt => UsbInterruptOutPipe != null || UsbInterruptInPipe != null;
         //Which one?
         public byte PipeId { get; }
-        public ushort ReadBufferSize { get; }
-        public ushort WriteBufferSize => ReadBufferSize;
+        public ushort MaxPacketSize { get; }
         #endregion
 
         #region Constructor
@@ -30,7 +29,7 @@ namespace Usb.Net.UWP
             PipeId = (byte)endpointNumberProperty.GetValue(endpointDescriptor);
             var maxPacketSizeProperty = endpointDescriptor.GetType().GetProperty(nameof(UsbBulkOutEndpointDescriptor.MaxPacketSize));
             var maxPacketSize = (uint)maxPacketSizeProperty.GetValue(endpointDescriptor);
-            ReadBufferSize = (ushort)maxPacketSize;
+            MaxPacketSize = (ushort)maxPacketSize;
         }
         #endregion
 

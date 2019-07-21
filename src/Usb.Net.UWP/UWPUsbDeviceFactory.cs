@@ -14,6 +14,11 @@ namespace Usb.Net.UWP
         protected override string ProductFilterName => "System.DeviceInterface.WinUsb.UsbProductId";
         #endregion
 
+        #region Public Properties
+        public ushort? ReadBufferSize { get; set; }
+        public ushort? WriteBufferSize { get; set; }
+        #endregion
+
         #region Protected Override Methods
         protected override string GetAqsFilter(uint? vendorId, uint? productId)
         {
@@ -34,7 +39,7 @@ namespace Usb.Net.UWP
         {
             if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
 
-            return deviceDefinition.DeviceType == DeviceType.Hid ? null : new UWPUsbDevice(new UWPUsbDeviceHandler(deviceDefinition, Logger, Tracer));
+            return deviceDefinition.DeviceType == DeviceType.Hid ? null : new UWPUsbDevice(new UWPUsbDeviceHandler(deviceDefinition, Logger, Tracer, ReadBufferSize, WriteBufferSize));
         }
         #endregion
 

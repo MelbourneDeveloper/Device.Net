@@ -69,12 +69,9 @@ namespace Usb.Net.Windows
                 if (!_ReadBufferSize.HasValue) _ReadBufferSize = (ushort)connectedDeviceDefinition.ReadBufferSize.Value;
 
                 //Get the first (default) interface
-                var defaultInterface = GetInterface(defaultInterfaceHandle, _ReadBufferSize.Value, _WriteBufferSize.Value);
+                var defaultInterface = GetInterface(defaultInterfaceHandle);
 
                 UsbInterfaces.Add(defaultInterface);
-                ReadUsbInterface = defaultInterface;
-                WriteUsbInterface = defaultInterface;
-                InterruptUsbInterface = defaultInterface;
 
                 byte i = 0;
                 while (true)
@@ -88,13 +85,15 @@ namespace Usb.Net.Windows
                         throw new ApiException($"Could not enumerate interfaces for device. Error code: { errorCode}");
                     }
 
-                    var associatedInterface = GetInterface(interfacePointer, _ReadBufferSize.Value, _WriteBufferSize.Value);
+                    var associatedInterface = GetInterface(interfacePointer);
 
                     //TODO: this is bad design. The handler should be taking care of this
                     UsbInterfaces.Add(associatedInterface);
 
                     i++;
                 }
+
+                RegisterDefaultInterfaces();
             }
             catch (Exception ex)
             {
@@ -103,20 +102,21 @@ namespace Usb.Net.Windows
             }
         }
 
-        private WindowsUsbInterface GetInterface(SafeFileHandle interfaceHandle, ushort readBufferLength, ushort writeBufferLength)
+        private WindowsUsbInterface GetInterface(SafeFileHandle interfaceHandle)
         {
             //TODO: We need to get the read/write size from a different API call...
 
             //TODO: Where is the logger/tracer?
             var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
-            var retVal = new WindowsUsbInterface(interfaceHandle, Logger, Tracer);
+
+            var retVal = new WindowsUsbInterface(interfaceHandle, Logger, Tracer, interfaceDescriptor.bInterfaceNumber, _ReadBufferSize, _WriteBufferSize);
             WindowsDeviceBase.HandleError(isSuccess, "Couldn't query interface");
 
             for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)
             {
                 isSuccess = WinUsbApiCalls.WinUsb_QueryPipe(interfaceHandle, 0, i, out var pipeInfo);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't query endpoint");
-                retVal.UsbInterfaceEndpoints.Add(new WindowsUsbInterfaceEndpoint(pipeInfo.PipeId, readBufferLength, writeBufferLength, pipeInfo.PipeType));
+                retVal.UsbInterfaceEndpoints.Add(new WindowsUsbInterfaceEndpoint(pipeInfo.PipeId, pipeInfo.PipeType));
             }
 
             return retVal;
