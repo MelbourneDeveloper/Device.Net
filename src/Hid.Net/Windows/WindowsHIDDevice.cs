@@ -41,9 +41,7 @@ namespace Hid.Net.Windows
         /// <summary>
         /// Creates a Windows Hid Device
         /// </summary>
-        /// <param name="deviceId">The Windows device path of the Hid device</param>
-        /// <param name="defaultReportId">Whether or not to automatically put an extra byte (DefaultReportId) in read and write reports. Some devices accept the Report Id at the index 0 of the write buffer, and send one at index 0 in the read buffer. Usually, after initialization, if WriteBufferSize is 65 instead of 64, this means that the device expects the Report Id at index 0. Note: if a value is specified, it will be expected that the read buffer will contain a Report Id at index 0. Please see https://github.com/MelbourneDeveloper/Device.Net/wiki/DefaultReportId </param>
-        public WindowsHidDevice(string deviceId, byte? defaultReportId) : base(deviceId)
+        public WindowsHidDevice(string deviceId, byte? defaultReportId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
         {
             DefaultReportId = defaultReportId;
         }

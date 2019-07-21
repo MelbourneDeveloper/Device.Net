@@ -14,7 +14,7 @@ namespace Hid.Net.Windows
 
         public byte? DefaultReportId { get; }
 
-        public WindowsHidDeviceFactory(byte? defaultReportId)
+        public WindowsHidDeviceFactory(byte? defaultReportId, ILogger logger, ITracer tracer) : base(logger, tracer)
         {
             DefaultReportId = defaultReportId;
         }
@@ -89,11 +89,10 @@ namespace Hid.Net.Windows
         /// <summary>
         /// Register the factory for enumerating Hid devices on UWP. 
         /// </summary>
-        public static void Register(ILogger logger, ITracer tracer)
+        public static void Register(ILogger logger, ITracer tracer, byte? defaultReportId)
         {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory(logger, tracer));
+            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory(defaultReportId, logger, tracer));
         }
-        public static void Register(ILogger logger, byte? defaultReportId)
         #endregion
     }
 }
