@@ -38,7 +38,7 @@ namespace Device.Net.LibUsb
                     devices = devices.Where(d => d.Vid == deviceDefinition.VendorId.Value);
                 }
 
-                if (deviceDefinition.VendorId.HasValue)
+                if (deviceDefinition.ProductId.HasValue)
                 {
                     devices = devices.Where(d => d.Pid == deviceDefinition.ProductId.Value);
                 }
