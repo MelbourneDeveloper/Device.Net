@@ -23,7 +23,8 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Properties
-        public ILogger Logger { get; set; }
+        public ILogger Logger { get; }
+        public ITracer Tracer { get; }
         #endregion
 
         #region Public Abstract Properties
@@ -32,6 +33,14 @@ namespace Device.Net.UWP
 
         #region Protected Abstract Methods
         protected abstract string GetAqsFilter(uint? vendorId, uint? productId);
+        #endregion
+
+        #region Constructor
+        protected UWPDeviceFactoryBase(ILogger logger, ITracer tracer)
+        {
+            Logger = logger;
+            Tracer = tracer;
+        }
         #endregion
 
         #region Abstraction Methods
@@ -61,11 +70,18 @@ namespace Device.Net.UWP
         #region Public Methods
         public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
         {
-            var aqsFilter = GetAqsFilter(deviceDefinition.VendorId, deviceDefinition.ProductId);
+            string aqsFilter = null;
+            if (deviceDefinition != null)
+            {
+                aqsFilter = GetAqsFilter(deviceDefinition.VendorId, deviceDefinition.ProductId);
+            }
 
-            var deviceInformationCollection = await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask();
+            var deviceInformationCollection = aqsFilter != null
+                ? await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask()
+                : await wde.DeviceInformation.FindAllAsync().AsTask();
 
-            var deviceDefinitions = deviceInformationCollection.Select(d => GetDeviceInformation(d, DeviceType));
+            var deviceInformationList = deviceInformationCollection.ToList();
+            var deviceDefinitions = deviceInformationList.Select(d => GetDeviceInformation(d, DeviceType));
 
             var deviceDefinitionList = new List<ConnectedDeviceDefinition>();
 
@@ -94,6 +110,8 @@ namespace Device.Net.UWP
         #region Public Static Methods
         public static ConnectedDeviceDefinition GetDeviceInformation(wde.DeviceInformation deviceInformation, DeviceType deviceType)
         {
+            if (deviceInformation == null) throw new ArgumentNullException(nameof(deviceInformation));
+
             var retVal = WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(deviceInformation.Id, deviceType);
 
             //foreach (var keyValuePair in deviceInformation.Properties)

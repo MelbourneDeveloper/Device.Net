@@ -8,9 +8,8 @@ namespace Device.Net
     public abstract class DeviceBase : IDisposable
     {
         #region Fields
-        private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
-        private bool disposed = false;
-        public const string DeviceDisposedErrorMessage = "This device has already been disposed";
+        private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        private bool disposed;
         private string _LogRegion;
         #endregion
 
@@ -21,10 +20,18 @@ namespace Device.Net
         #endregion
 
         #region Public Properties
-        public ITracer Tracer { get; set; }
         public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; set; }
         public string DeviceId { get; set; }
-        public ILogger Logger { get; set; }
+        public ILogger Logger { get; }
+        public ITracer Tracer { get; }
+        #endregion
+
+        #region Constructor
+        protected DeviceBase(ILogger logger, ITracer tracer)
+        {
+            Tracer = tracer;
+            Logger = logger;
+        }
         #endregion
 
         #region Private Methods
@@ -75,12 +82,12 @@ namespace Device.Net
             {
                 await WriteAsync(writeBuffer);
                 var retVal = await ReadAsync();
-                Log($"Successfully called {nameof(WriteAndReadAsync)}");
+                Log(Messages.SuccessMessageWriteAndReadCalled);
                 return retVal;
             }
             catch (Exception ex)
             {
-                Log("Read/Write Error", ex);
+                Log(Messages.ErrorMessageReadWrite, ex);
                 throw;
             }
             finally
@@ -94,6 +101,8 @@ namespace Device.Net
         /// </summary> 
         public static byte[] RemoveFirstByte(byte[] bytes)
         {
+            if (bytes == null) throw new ArgumentNullException(nameof(bytes));
+
             var length = bytes.Length - 1;
             var retVal = new byte[length];
 

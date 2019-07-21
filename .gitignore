@@ -24,3 +24,4 @@ file_paths.xml
 *.nupkg
 *.bak
 /.vscode
+*.nuspec

@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
@@ -16,7 +17,10 @@ namespace Hid.Net.Windows
         private SafeFileHandle _ReadSafeFileHandle;
         private SafeFileHandle _WriteSafeFileHandle;
         private bool _IsClosing;
-        private bool disposed = false;
+        private bool disposed;
+        private readonly ushort? _WriteBufferSize;
+        private readonly ushort? _ReadBufferSize;
+
         #endregion
 
         #region Protected Properties
@@ -25,8 +29,8 @@ namespace Hid.Net.Windows
 
         #region Public Overrides
         public override bool IsInitialized => _WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid;
-        public override ushort WriteBufferSize => ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value;
-        public override ushort ReadBufferSize => ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value;
+        public override ushort WriteBufferSize => _WriteBufferSize ?? (ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value);
+        public override ushort ReadBufferSize => _ReadBufferSize ?? (ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value);
         #endregion
 
         #region Public Properties
@@ -43,35 +47,66 @@ namespace Hid.Net.Windows
         {
             DefaultReportId = defaultReportId;
         }
+
+        public WindowsHidDevice(string deviceId, ILogger logger, ITracer tracer) : this(deviceId, null, null, logger, tracer)
+        {
+        }
+
+        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
+        {
+            _WriteBufferSize = writeBufferSize;
+            _ReadBufferSize = readBufferSize;
+        }
         #endregion
 
         #region Private Methods
         private bool Initialize()
         {
-            Close();
-
-            if (string.IsNullOrEmpty(DeviceId))
+            try
             {
-                throw new WindowsHidException($"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
+                Close();
+
+                if (string.IsNullOrEmpty(DeviceId))
+                {
+                    throw new ValidationException($"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
+                }
+
+                _ReadSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+                _WriteSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+
+                if (_ReadSafeFileHandle.IsInvalid)
+                {
+                    throw new ApiException(Messages.ErrorMessageCantOpenRead);
+                }
+
+                if (_WriteSafeFileHandle.IsInvalid)
+                {
+                    throw new ApiException(Messages.ErrorMessageCantOpenWrite);
+                }
+
+                ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
+
+                var readBufferSize = ReadBufferSize;
+                var writeBufferSize = WriteBufferSize;
+
+                if (readBufferSize == 0)
+                {
+                    throw new ValidationException($"{nameof(ReadBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an InputReportByteLength of 0. Please specify this argument in the constructor");
+                }
+
+                if (writeBufferSize == 0)
+                {
+                    throw new ValidationException($"{nameof(WriteBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an OutputReportByteLength of 0. Please specify this argument in the constructor. Note: Hid devices are always opened in write mode. If you need to open in read mode, please log an issue here: https://github.com/MelbourneDeveloper/Device.Net/issues");
+                }
+
+                _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, readBufferSize, false);
+                _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
             }
-
-            _ReadSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
-            _WriteSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
-
-            if (_ReadSafeFileHandle.IsInvalid)
+            catch (Exception ex)
             {
-                throw new Exception("Could not open connection for reading");
+                Logger?.Log($"{nameof(Initialize)} error.", nameof(WindowsHidDevice), ex, LogLevel.Error);
+                throw;
             }
-
-            if (_WriteSafeFileHandle.IsInvalid)
-            {
-                throw new Exception("Could not open connection for writing");
-            }
-
-            ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
-
-            _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, ReadBufferSize, false);
-            _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, WriteBufferSize, false);
 
             return true;
         }
@@ -127,14 +162,16 @@ namespace Hid.Net.Windows
 
         public override async Task InitializeAsync()
         {
-            if (disposed) throw new Exception(DeviceDisposedErrorMessage);
+            if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
             await Task.Run(() => Initialize());
         }
 
         public override async Task<byte[]> ReadAsync()
         {
-            return (await ReadReportAsync()).Data;
+            var data = (await ReadReportAsync()).Data;
+            Tracer?.Trace(false, data);
+            return data;
         }
 
         public async Task<ReadReport> ReadReportAsync()
@@ -143,7 +180,7 @@ namespace Hid.Net.Windows
 
             if (_ReadFileStream == null)
             {
-                throw new Exception("The device has not been initialized");
+                throw new NotInitializedException(Messages.ErrorMessageNotInitialized);
             }
 
             var bytes = new byte[ReadBufferSize];
@@ -154,15 +191,13 @@ namespace Hid.Net.Windows
             }
             catch (Exception ex)
             {
-                Log(Helpers.ReadErrorMessage, ex);
-                throw new IOException(Helpers.ReadErrorMessage, ex);
+                Log(Messages.ReadErrorMessage, ex);
+                throw new IOException(Messages.ReadErrorMessage, ex);
             }
 
             if (DefaultReportId.HasValue) reportId = bytes.First();
 
             var retVal = DefaultReportId.HasValue ? RemoveFirstByte(bytes) : bytes;
-
-            Tracer?.Trace(false, retVal);
 
             return new ReadReport(reportId, retVal);
         }
@@ -174,14 +209,16 @@ namespace Hid.Net.Windows
 
         public async Task WriteReportAsync(byte[] data, byte? reportId)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
             if (_WriteFileStream == null)
             {
-                throw new Exception("The device has not been initialized");
+                throw new NotInitializedException("The device has not been initialized");
             }
 
             if (data.Length > WriteBufferSize)
             {
-                throw new Exception($"Data is longer than {WriteBufferSize - 1} bytes which is the device's OutputReportByteLength.");
+                throw new ValidationException($"Data is longer than {WriteBufferSize - 1} bytes which is the device's OutputReportByteLength.");
             }
 
             byte[] bytes;
@@ -206,14 +243,13 @@ namespace Hid.Net.Windows
                 try
                 {
                     await _WriteFileStream.WriteAsync(bytes, 0, bytes.Length);
+                    Tracer?.Trace(true, bytes);
                 }
                 catch (Exception ex)
                 {
-                    Log(Helpers.WriteErrorMessage, ex);
-                    throw new IOException(Helpers.WriteErrorMessage, ex);
+                    Log(Messages.WriteErrorMessage, ex);
+                    throw new IOException(Messages.WriteErrorMessage, ex);
                 }
-
-                Tracer?.Trace(true, bytes);
             }
             else
             {

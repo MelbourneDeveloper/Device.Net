@@ -14,7 +14,8 @@ namespace Device.Net.Windows
     public abstract class WindowsDeviceFactoryBase
     {
         #region Public Properties
-        public ILogger Logger { get; set; }
+        public ILogger Logger { get;  }
+        public ITracer Tracer { get; }
         #endregion
 
         #region Public Abstract Properties
@@ -24,6 +25,14 @@ namespace Device.Net.Windows
         #region Protected Abstract Methods
         protected abstract ConnectedDeviceDefinition GetDeviceDefinition(string deviceId);
         protected abstract Guid GetClassGuid();
+        #endregion
+
+        #region Constructor
+        protected WindowsDeviceFactoryBase(ILogger logger, ITracer tracer)
+        {
+            Logger = logger;
+            Tracer = tracer;
+        }
         #endregion
 
         #region Public Methods
@@ -37,6 +46,8 @@ namespace Device.Net.Windows
                 var spDeviceInterfaceDetailData = new SpDeviceInterfaceDetailData();
                 spDeviceInterfaceData.CbSize = (uint)Marshal.SizeOf(spDeviceInterfaceData);
                 spDeviceInfoData.CbSize = (uint)Marshal.SizeOf(spDeviceInfoData);
+                string productIdHex = null;
+                string vendorHex = null;
 
                 var guidString = GetClassGuid().ToString();
                 var copyOfClassGuid = new Guid(guidString);
@@ -47,8 +58,11 @@ namespace Device.Net.Windows
 
                 var i = -1;
 
-                var productIdHex = Helpers.GetHex(filterDeviceDefinition.ProductId);
-                var vendorHex = Helpers.GetHex(filterDeviceDefinition.VendorId);
+                if (filterDeviceDefinition != null)
+                {
+                    if (filterDeviceDefinition.ProductId.HasValue) productIdHex = Helpers.GetHex(filterDeviceDefinition.ProductId);
+                    if (filterDeviceDefinition.VendorId.HasValue) vendorHex = Helpers.GetHex(filterDeviceDefinition.VendorId);
+                }
 
                 while (true)
                 {
@@ -90,12 +104,19 @@ namespace Device.Net.Windows
                         }
 
                         //Note this is a bit nasty but we can filter Vid and Pid this way I think...
-                        if (filterDeviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
-                        if (filterDeviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
+                        if (filterDeviceDefinition != null)
+                        {
+                            if (filterDeviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
+                            if (filterDeviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
+                        }
 
                         var connectedDeviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
 
-                        if (connectedDeviceDefinition == null) continue;
+                        if (connectedDeviceDefinition == null)
+                        {
+                            Logger.Log($"Device with path {spDeviceInterfaceDetailData.DevicePath} was skipped. See previous logs.", GetType().Name, null, LogLevel.Warning);
+                            continue;
+                        }
 
                         if (!DeviceManager.IsDefinitionMatch(filterDeviceDefinition, connectedDeviceDefinition)) continue;
 
@@ -134,6 +155,8 @@ namespace Device.Net.Windows
         #region Private Static Methods
         private static uint GetNumberFromDeviceId(string deviceId, string searchString)
         {
+            if (deviceId == null) throw new ArgumentNullException(nameof(deviceId));
+
             var indexOfSearchString = deviceId.IndexOf(searchString, StringComparison.OrdinalIgnoreCase);
             string hexString = null;
             if (indexOfSearchString > -1)
@@ -155,10 +178,8 @@ namespace Device.Net.Windows
                 vid = GetNumberFromDeviceId(deviceId, "vid_");
                 pid = GetNumberFromDeviceId(deviceId, "pid_");
             }
-            catch (Exception)
+            catch 
             {
-                //TODO: Logging
-                //We really need the Vid/Pid here for polling etc. so not sure if swallowing errors it the way to go
             }
 
             return new ConnectedDeviceDefinition(deviceId) { DeviceType = deviceType, VendorId = vid, ProductId = pid };

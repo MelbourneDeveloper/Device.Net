@@ -18,7 +18,7 @@ namespace Usb.Net.UWP.Sample
     public sealed partial class MainPage : Page
     {
         #region Fields
-        private TrezorExample _DeviceConnectionExample = new TrezorExample();
+        private readonly TrezorExample _DeviceConnectionExample = new TrezorExample();
         #endregion
 
         #region Constructor
@@ -29,12 +29,13 @@ namespace Usb.Net.UWP.Sample
             _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
 
             var logger = new DebugLogger();
+            var tracer = new DebugTracer();
 
             //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPUsbDeviceFactory.Register(logger);
+            UWPUsbDeviceFactory.Register(logger, tracer);
 
             //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPHidDeviceFactory.Register(logger);
+            UWPHidDeviceFactory.Register(logger, tracer);
 
         }
         #endregion
@@ -50,7 +51,7 @@ namespace Usb.Net.UWP.Sample
             });
         }
 
-        private async void _DeviceConnectionExample_TrezorInitialized(object sender, System.EventArgs e)
+        private void _DeviceConnectionExample_TrezorInitialized(object sender, System.EventArgs e)
         {
             Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {

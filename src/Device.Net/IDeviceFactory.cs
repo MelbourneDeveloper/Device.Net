@@ -8,5 +8,6 @@ namespace Device.Net
         Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition);
         IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition);
         DeviceType DeviceType { get; }
+        ILogger Logger { get; }
     }
 }

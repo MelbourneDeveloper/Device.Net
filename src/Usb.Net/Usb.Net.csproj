@@ -2,22 +2,22 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Usb.Net</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/MelbourneDeveloper/Usb.Net</PackageProjectUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Device.Net/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
     <Description>A cross platform USB library written in C#</Description>
-    <Version>2.5.0</Version>
-    <AssemblyVersion>2.5.0.0</AssemblyVersion>
-    <FileVersion>2.5.0.0</FileVersion>
+    <Version>2.9.0</Version>
+    <AssemblyVersion>2.9.0.0</AssemblyVersion>
+    <FileVersion>2.9.0.0</FileVersion>
     <Authors>Christian Findlay</Authors>
-    <Copyright>Copyright (c) 2018 Christian Findlay</Copyright>
-    <RepositoryUrl>https://github.com/MelbourneDeveloper/Usb.Net</RepositoryUrl>
+    <Copyright>Copyright (c) 2019 Christian Findlay</Copyright>
+    <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
     <PackageTags>USB Hid Android C#</PackageTags>
-    <PackageReleaseNotes>Split from Hid.Net</PackageReleaseNotes>
     <LangVersion>7.3</LangVersion>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>      
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>    
+    <NoWarn>1701;1702;NU5125</NoWarn>      
   </PropertyGroup>
 
   <Choose>
@@ -30,13 +30,13 @@
       <PropertyGroup>
         <SignAssembly>true</SignAssembly>
         <DelaySign>false</DelaySign>
-        <AssemblyOriginatorKeyFile>Device.Net.pfx</AssemblyOriginatorKeyFile>
+        <AssemblyOriginatorKeyFile>../Device.Net/Device.Net.pfx</AssemblyOriginatorKeyFile>
       </PropertyGroup>
     </When>
   </Choose>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.3">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>

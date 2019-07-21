@@ -1,12 +1,12 @@
-﻿using Android.Content;
-using Android.Hardware.Usb;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Usb.Net.Android;
+using Android.Content;
+using Android.Hardware.Usb;
+using Device.Net;
 
-namespace Device.Net
+namespace Usb.Net.Android
 {
     /// <summary>
     /// TODO: Merge this factory class with other factory classes
@@ -16,7 +16,10 @@ namespace Device.Net
         #region Public Properties
         public UsbManager UsbManager { get; }
         public Context Context { get; }
-        public ILogger Logger { get; set; }
+        public ILogger Logger { get; }
+        public ITracer Tracer { get; }
+        public ushort? ReadBufferSize { get; set; }
+        public ushort? WriteBufferSize { get; set; }
         #endregion
 
         #region Public Static Properties
@@ -24,10 +27,12 @@ namespace Device.Net
         #endregion
 
         #region Constructor
-        public AndroidUsbDeviceFactory(UsbManager usbManager, Context context)
+        public AndroidUsbDeviceFactory(UsbManager usbManager, Context context, ILogger logger, ITracer tracer)
         {
             UsbManager = usbManager;
             Context = context;
+            Logger = logger;
+            Tracer = tracer;
         }
         #endregion
 
@@ -43,7 +48,13 @@ namespace Device.Net
             return Task.Run<IEnumerable<ConnectedDeviceDefinition>>(() =>
             {
                 //TODO: Get more details about the device.
-                return UsbManager.DeviceList.Select(kvp => kvp.Value).Where(d => deviceDefinition.VendorId == d.VendorId && deviceDefinition.ProductId == d.ProductId).Select(GetAndroidDeviceDefinition).ToList();
+                if(deviceDefinition.VendorId.HasValue && deviceDefinition.ProductId.HasValue)
+                    return UsbManager.DeviceList.Select(kvp => kvp.Value).Where(d => deviceDefinition.VendorId == d.VendorId && deviceDefinition.ProductId == d.ProductId).Select(GetAndroidDeviceDefinition).ToList();
+                else if(deviceDefinition.VendorId.HasValue)
+                    return UsbManager.DeviceList.Select(kvp => kvp.Value).Where(d => deviceDefinition.VendorId == d.VendorId).Select(GetAndroidDeviceDefinition).ToList();
+                else
+                    return UsbManager.DeviceList.Select(kvp => kvp.Value).Select(GetAndroidDeviceDefinition).ToList();
+
             });
         }
 
@@ -54,12 +65,12 @@ namespace Device.Net
                 throw new Exception($"The device Id '{deviceDefinition.DeviceId}' is not a valid integer");
             }
 
-            return new AndroidUsbDevice(UsbManager, Context, deviceId) { Logger = Logger };
+            return new AndroidUsbDevice(new AndroidUsbDeviceHandler(UsbManager, Context, deviceId, Logger, Tracer, ReadBufferSize, WriteBufferSize), Logger, Tracer);
         }
         #endregion
 
         #region Public Static Methods
-        public static ConnectedDeviceDefinition GetAndroidDeviceDefinition(UsbDevice usbDevice)
+        public static ConnectedDeviceDefinition GetAndroidDeviceDefinition(global::Android.Hardware.Usb.UsbDevice usbDevice)
         {
             var deviceId = usbDevice.DeviceId.ToString(Helpers.ParsingCulture);
 
@@ -74,14 +85,12 @@ namespace Device.Net
             };
         }
 
-        public static void Register(UsbManager usbManager, Context context)
+        /// <summary>
+        /// Register the factory for enumerating USB devices on Android.
+        /// </summary>
+        public static void Register(UsbManager usbManager, Context context, ILogger logger, ITracer tracer)
         {
-            Register(usbManager, context, null);
-        }
-
-        public static void Register(UsbManager usbManager, Context context, ILogger logger)
-        {
-            DeviceManager.Current.DeviceFactories.Add(new AndroidUsbDeviceFactory(usbManager, context) { Logger = logger });
+            DeviceManager.Current.DeviceFactories.Add(new AndroidUsbDeviceFactory(usbManager, context, logger, tracer));
         }
         #endregion
     }

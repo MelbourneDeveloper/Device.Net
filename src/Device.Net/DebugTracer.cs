@@ -6,7 +6,9 @@ namespace Device.Net
     {
         public void Trace(bool isWrite, byte[] data)
         {
-            Debug.WriteLine($"({string.Join(",", data)}) - {(isWrite ? "Write" : "Read")} ({data.Length})");
+            if (data == null) return;
+
+            Debug.WriteLine($"{(isWrite ? "Write" : "Read")}: ({string.Join(",", data)}) ({data.Length})");
         }
     }
 }

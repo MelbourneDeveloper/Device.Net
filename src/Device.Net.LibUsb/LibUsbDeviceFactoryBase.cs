@@ -9,7 +9,8 @@ namespace Device.Net.LibUsb
     public abstract class LibUsbDeviceFactoryBase : IDeviceFactory
     {
         #region Public Properties
-        public ILogger Logger { get; set; }
+        public ILogger Logger { get; }
+        public ITracer Tracer { get; }
         #endregion
 
         #region Public Abstraction Properties
@@ -21,38 +22,28 @@ namespace Device.Net.LibUsb
         {
             return await Task.Run(() =>
             {
-                IEnumerable<UsbRegistry> devices = null;
+                IEnumerable<UsbRegistry> devices = UsbDevice.AllDevices;
+
+                if (deviceDefinition == null)
+
+                    return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath)
+                    {
+                        VendorId = (uint) usbRegistry.Vid,
+                        ProductId = (uint) usbRegistry.Pid,
+                        DeviceType = DeviceType
+                    }).ToList();
 
                 if (deviceDefinition.VendorId.HasValue)
                 {
-                    if (deviceDefinition.ProductId.HasValue)
-                    {
-                        devices = UsbDevice.AllDevices.Where((d) =>
-                        {
-                            return d.Vid == deviceDefinition.VendorId.Value &&
-                            d.Pid == deviceDefinition.ProductId.Value;
-                        });
-                    }
-                    else
-                    {
-                        devices = UsbDevice.AllDevices.Where(d => d.Vid == deviceDefinition.VendorId.Value);
-                    }
+                    devices = devices.Where(d => d.Vid == deviceDefinition.VendorId.Value);
                 }
 
-                var retVal = new List<ConnectedDeviceDefinition>();
-
-                foreach (var usbRegistry in devices)
+                if (deviceDefinition.VendorId.HasValue)
                 {
-                    retVal.Add(new ConnectedDeviceDefinition(usbRegistry.DevicePath)
-                    {
-                        VendorId = (uint)usbRegistry.Vid,
-                        ProductId = (uint)usbRegistry.Pid,
-                        DeviceType = DeviceType
-                    });
+                    devices = devices.Where(d => d.Pid == deviceDefinition.ProductId.Value);
                 }
 
-
-                return retVal;
+                return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath) {VendorId = (uint) usbRegistry.Vid, ProductId = (uint) usbRegistry.Pid, DeviceType = DeviceType}).ToList();
             });
         }
 
@@ -60,7 +51,15 @@ namespace Device.Net.LibUsb
         {
             var usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value, (int)deviceDefinition.ProductId.Value);
             var usbDevice = UsbDevice.OpenUsbDevice(usbDeviceFinder);
-            return usbDevice != null ? new LibUsbDevice(usbDevice, 3000) { Logger = Logger } : null;
+            return usbDevice != null ? new LibUsbDevice(usbDevice, 3000, Logger, Tracer) : null;
+        }
+        #endregion
+
+        #region Constructor
+        protected LibUsbDeviceFactoryBase(ILogger logger, ITracer tracer)
+        {
+            Logger = logger;
+            Tracer = tracer;
         }
         #endregion
     }

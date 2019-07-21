@@ -1,6 +1,10 @@
-﻿using Device.Net.UWP;
+﻿using Device.Net;
+using Device.Net.Exceptions;
+using Device.Net.UWP;
 using System;
+using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.HumanInterfaceDevice;
 using Windows.Foundation;
@@ -8,8 +12,13 @@ using Windows.Storage;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDevice : UWPDeviceBase<HidDevice>, IHidDevice
+    public class UWPHidDevice : UWPDeviceHandlerBase<HidDevice>, IHidDevice
     {
+        #region Fields
+        private bool disposed;
+        private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        #endregion
+
         #region Public Properties
         public byte? DefaultReportId { get; }
         #endregion
@@ -33,11 +42,15 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPHidDevice()
+        public UWPHidDevice(ILogger logger, ITracer tracer) : this(null, logger, tracer)
         {
         }
 
-        public UWPHidDevice(string deviceId) : base(deviceId)
+        public UWPHidDevice(string deviceId) : this(deviceId, null, null)
+        {
+        }
+
+        public UWPHidDevice(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
         {
         }
         #endregion
@@ -47,7 +60,7 @@ namespace Hid.Net.UWP
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
 
-            if (Disposed) throw new Exception(DeviceDisposedErrorMessage);
+            if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
             Log("Initializing Hid device", null);
 
@@ -59,7 +72,7 @@ namespace Hid.Net.UWP
             }
             else
             {
-                throw new Exception($"The device {DeviceId} failed to initialize");
+                throw new DeviceException($"The device {DeviceId} failed to initialize");
             }
         }
 
@@ -84,13 +97,25 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Methods
-        public override Task WriteAsync(byte[] data)
+        public override void Dispose()
+        {
+            if (disposed) return;
+            disposed = true;
+
+            _WriteAndReadLock.Dispose();
+
+            base.Dispose();
+        }
+
+        public virtual Task WriteAsync(byte[] data)
         {
             return WriteReportAsync(data, 0);
         }
 
         public async Task WriteReportAsync(byte[] data, byte? reportId)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
             byte[] bytes;
             if (reportId.HasValue || DefaultReportId.HasValue)
             {
@@ -110,19 +135,30 @@ namespace Hid.Net.UWP
             try
             {
                 var operation = ConnectedDevice.SendOutputReportAsync(outReport);
-                await operation.AsTask();
-                Tracer?.Trace(false, bytes);
+                var count = await operation.AsTask();
+                if (count == bytes.Length)
+                {
+                    Tracer?.Trace(true, bytes);
+                }
+                else
+                {
+                    var message = Messages.GetErrorMessageInvalidWriteLength(bytes.Length, count);
+                    Logger?.Log(message, GetType().Name, null, LogLevel.Error);
+                    throw new IOException(message);
+                }
             }
             catch (ArgumentException ex)
             {
                 //TODO: Check the string is nasty. Validation on the size of the array being sent should be done earlier anyway
                 if (string.Equals(ex.Message, "Value does not fall within the expected range.", StringComparison.Ordinal))
                 {
-                    throw new Exception("It seems that the data being sent to the device does not match the accepted size. Have you checked DataHasExtraByte?", ex);
+                    throw new IOException("It seems that the data being sent to the device does not match the accepted size. Have you checked DataHasExtraByte?", ex);
                 }
                 throw;
             }
         }
+
+
         #endregion
 
         #region Public Overrides
@@ -134,7 +170,7 @@ namespace Hid.Net.UWP
             if (DefaultReportId.HasValue)
             {
                 reportId = bytes[0];
-                bytes = RemoveFirstByte(bytes);
+                bytes = DeviceBase.RemoveFirstByte(bytes);
             }
 
             return new ReadReport(reportId, bytes);
@@ -142,7 +178,9 @@ namespace Hid.Net.UWP
 
         public override async Task<byte[]> ReadAsync()
         {
-            return (await ReadReportAsync()).Data;
+            var data = (await ReadReportAsync()).Data;
+            Tracer?.Trace(false, data);
+            return data;
         }
         #endregion
 
@@ -150,6 +188,28 @@ namespace Hid.Net.UWP
         public static IAsyncOperation<HidDevice> GetHidDevice(string id)
         {
             return HidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
+        }
+
+        public async Task<byte[]> WriteAndReadAsync(byte[] writeBuffer)
+        {
+            await _WriteAndReadLock.WaitAsync();
+
+            try
+            {
+                await WriteAsync(writeBuffer);
+                var retVal = await ReadAsync();
+                Logger?.Log(Messages.SuccessMessageWriteAndReadCalled, nameof(UWPHidDevice), null, LogLevel.Information);
+                return retVal;
+            }
+            catch (Exception ex)
+            {
+                Log(Messages.ErrorMessageReadWrite, ex);
+                throw;
+            }
+            finally
+            {
+                _WriteAndReadLock.Release();
+            }
         }
         #endregion
     }

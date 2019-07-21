@@ -22,9 +22,17 @@ namespace Hid.Net.Windows
         #region Protected Override Methods
         protected override ConnectedDeviceDefinition GetDeviceDefinition(string deviceId)
         {
-            using (var safeFileHandle = APICalls.CreateFile(deviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero))
+            try
             {
-                return GetDeviceDefinition(deviceId, safeFileHandle);
+                using (var safeFileHandle = APICalls.CreateFile(deviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero))
+                {
+                    return GetDeviceDefinition(deviceId, safeFileHandle);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger?.Log($"{nameof(GetDeviceDefinition)} error. Device Id: {deviceId}", nameof(WindowsHidDeviceFactory), ex, LogLevel.Error);
+                return null;
             }
         }
 
@@ -35,56 +43,57 @@ namespace Hid.Net.Windows
 
         #endregion
 
+        #region Constructor
+        public WindowsHidDeviceFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
+        {
+
+        }
+        #endregion
+
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId, DefaultReportId) { Logger = Logger };
+            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
+
+            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId, Logger, Tracer);
         }
         #endregion
 
         #region Private Static Methods
         public static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)
         {
-            try
-            {
-                var hidAttributes = GetHidAttributes(safeFileHandle);
-                var hidCollectionCapabilities = GetHidCapabilities(safeFileHandle);
-                var manufacturer = GetManufacturer(safeFileHandle);
-                var serialNumber = GetSerialNumber(safeFileHandle);
-                var product = GetProduct(safeFileHandle);
+            var hidAttributes = GetHidAttributes(safeFileHandle);
+            var hidCollectionCapabilities = GetHidCapabilities(safeFileHandle);
+            var manufacturer = GetManufacturer(safeFileHandle);
+            var serialNumber = GetSerialNumber(safeFileHandle);
+            var product = GetProduct(safeFileHandle);
 
-                return new ConnectedDeviceDefinition(deviceId)
-                {
-                    WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
-                    ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,
-                    Manufacturer = manufacturer,
-                    ProductName = product,
-                    ProductId = (ushort)hidAttributes.ProductId,
-                    SerialNumber = serialNumber,
-                    Usage = hidCollectionCapabilities.Usage,
-                    UsagePage = hidCollectionCapabilities.UsagePage,
-                    VendorId = (ushort)hidAttributes.VendorId,
-                    VersionNumber = (ushort)hidAttributes.VersionNumber,
-                    DeviceType = DeviceType.Hid
-                };
-            }
-            catch (Exception)
+            return new ConnectedDeviceDefinition(deviceId)
             {
-                return null;
-            }
+                WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
+                ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,
+                Manufacturer = manufacturer,
+                ProductName = product,
+                ProductId = (ushort)hidAttributes.ProductId,
+                SerialNumber = serialNumber,
+                Usage = hidCollectionCapabilities.Usage,
+                UsagePage = hidCollectionCapabilities.UsagePage,
+                VendorId = (ushort)hidAttributes.VendorId,
+                VersionNumber = (ushort)hidAttributes.VersionNumber,
+                DeviceType = DeviceType.Hid
+            };
         }
         #endregion
 
         #region Public Static Methods
-        public static void Register(byte? defaultReportId)
+        /// <summary>
+        /// Register the factory for enumerating Hid devices on UWP. 
+        /// </summary>
+        public static void Register(ILogger logger, ITracer tracer)
         {
-            Register(null, defaultReportId);
+            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory(logger, tracer));
         }
-
         public static void Register(ILogger logger, byte? defaultReportId)
-        {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory(defaultReportId) { Logger = logger });
-        }
         #endregion
     }
 }
