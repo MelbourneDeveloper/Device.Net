@@ -32,6 +32,8 @@ namespace Usb.Net.UWP
         }
         #endregion
 
+        //TODO: Put unit tests around locking here somehow
+
         #region Events
         private async void UsbInterruptInPipe_DataReceived(UsbInterruptInPipe sender, UsbInterruptInEventArgs args)
         {
@@ -47,13 +49,14 @@ namespace Usb.Net.UWP
                     Logger?.Log($"{bytes.Length} read on interrupt pipe {UsbInterruptInPipe.EndpointDescriptor.EndpointNumber}", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
                 }
 
-                if (_ReadChunkTaskCompletionSource != null)
+                if (_ReadChunkTaskCompletionSource != null && _ReadChunkTaskCompletionSource.Task.Status!= TaskStatus.RanToCompletion)
                 {
                     //In this case there should be no chunks. TODO: Put some unit tests around this.
                     //The read method wil be waiting on this
                     var result = _Chunks[0];
                     _Chunks.RemoveAt(0);
                     _ReadChunkTaskCompletionSource.SetResult(result);
+                    Logger?.Log($"Completion source result set", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
                     return;
                 }
             }
@@ -108,12 +111,16 @@ namespace Usb.Net.UWP
                     _DataReceivedLock.Release();                    
                 }
 
-                Logger?.Log($"Data received lock releasded. Waiting for chunk", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
-
                 //Wait for the event here. Once the event occurs, this should return and the semaphore should be released
                 _ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
+
+                Logger?.Log($"Data received lock released. Completion source created. Waiting for data.", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
+
                 retVal = await _ReadChunkTaskCompletionSource.Task;
+
                 _ReadChunkTaskCompletionSource = null;
+
+                Logger?.Log($"Completion source nulled", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
 
                 Tracer?.Trace(false, retVal);
                 return retVal;
