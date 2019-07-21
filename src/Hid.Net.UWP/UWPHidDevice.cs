@@ -4,6 +4,7 @@ using Device.Net.UWP;
 using System;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.HumanInterfaceDevice;
 using Windows.Foundation;
@@ -15,6 +16,7 @@ namespace Hid.Net.UWP
     {
         #region Fields
         private bool disposed;
+        private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         #endregion
 
         #region Public Properties
@@ -100,6 +102,8 @@ namespace Hid.Net.UWP
         {
             if (disposed) return;
             disposed = true;
+
+            _WriteAndReadLock.Dispose();
 
             base.Dispose();
         }
@@ -187,9 +191,26 @@ namespace Hid.Net.UWP
             return HidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
         }
 
-        public Task<byte[]> WriteAndReadAsync(byte[] writeBuffer)
+        public async Task<byte[]> WriteAndReadAsync(byte[] writeBuffer)
         {
-            throw new NotImplementedException();
+            await _WriteAndReadLock.WaitAsync();
+
+            try
+            {
+                await WriteAsync(writeBuffer);
+                var retVal = await ReadAsync();
+                Logger?.Log(Messages.SuccessMessageWriteAndReadCalled, nameof(UWPHidDevice), null, LogLevel.Information);
+                return retVal;
+            }
+            catch (Exception ex)
+            {
+                Log(Messages.ErrorMessageReadWrite, ex);
+                throw;
+            }
+            finally
+            {
+                _WriteAndReadLock.Release();
+            }
         }
         #endregion
     }
