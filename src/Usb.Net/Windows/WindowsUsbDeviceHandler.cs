@@ -22,8 +22,8 @@ namespace Usb.Net.Windows
         public string DeviceId { get; }
 
         //TODO: Null checking here. These will error if the device doesn't have a value or it is not initialized
-        public ushort WriteBufferSize => _WriteBufferSize.Value;
-        public ushort ReadBufferSize => _ReadBufferSize.Value;
+        public ushort WriteBufferSize => _WriteBufferSize ?? WriteUsbInterface.ReadBufferSize;
+        public ushort ReadBufferSize => _ReadBufferSize ?? ReadUsbInterface.ReadBufferSize;
         #endregion
 
         #region Constructor
