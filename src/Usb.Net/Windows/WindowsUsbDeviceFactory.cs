@@ -41,7 +41,7 @@ namespace Usb.Net.Windows
         #region Private Static Methods
         protected override ConnectedDeviceDefinition GetDeviceDefinition(string deviceId)
         {
-            return GetDeviceDefinitionFromWindowsDeviceId(deviceId, DeviceType.Usb);
+            return GetDeviceDefinitionFromWindowsDeviceId(deviceId, DeviceType.Usb, Logger);
         }
         #endregion
 

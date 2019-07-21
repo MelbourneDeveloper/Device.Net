@@ -81,7 +81,7 @@ namespace Device.Net.UWP
                 : await wde.DeviceInformation.FindAllAsync().AsTask();
 
             var deviceInformationList = deviceInformationCollection.ToList();
-            var deviceDefinitions = deviceInformationList.Select(d => GetDeviceInformation(d, DeviceType));
+            var deviceDefinitions = deviceInformationList.Select(d => GetDeviceInformation(d, DeviceType, Logger));
 
             var deviceDefinitionList = new List<ConnectedDeviceDefinition>();
 
@@ -108,11 +108,11 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Static Methods
-        public static ConnectedDeviceDefinition GetDeviceInformation(wde.DeviceInformation deviceInformation, DeviceType deviceType)
+        public static ConnectedDeviceDefinition GetDeviceInformation(wde.DeviceInformation deviceInformation, DeviceType deviceType, ILogger logger)
         {
             if (deviceInformation == null) throw new ArgumentNullException(nameof(deviceInformation));
 
-            var retVal = WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(deviceInformation.Id, deviceType);
+            var retVal = WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(deviceInformation.Id, deviceType, logger);
 
             //foreach (var keyValuePair in deviceInformation.Properties)
             //{
