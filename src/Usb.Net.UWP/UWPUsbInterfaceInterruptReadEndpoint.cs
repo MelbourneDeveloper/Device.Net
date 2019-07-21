@@ -51,8 +51,9 @@ namespace Usb.Net.UWP
                 {
                     //In this case there should be no chunks. TODO: Put some unit tests around this.
                     //The read method wil be waiting on this
-
-                    _ReadChunkTaskCompletionSource.SetResult(_Chunks[0]);
+                    var result = _Chunks[0];
+                    _Chunks.RemoveAt(0);
+                    _ReadChunkTaskCompletionSource.SetResult(result);
                     return;
                 }
             }
