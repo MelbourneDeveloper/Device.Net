@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.UWP;
 using Device.Net.Windows;
+using System;
 using System.Threading.Tasks;
 
 namespace Usb.Net.UWP
@@ -13,6 +14,11 @@ namespace Usb.Net.UWP
         protected override string ProductFilterName => "System.DeviceInterface.WinUsb.UsbProductId";
         #endregion
 
+        #region Public Properties
+        public ushort? ReadBufferSize { get; set; }
+        public ushort? WriteBufferSize { get; set; }
+        #endregion
+
         #region Protected Override Methods
         protected override string GetAqsFilter(uint? vendorId, uint? productId)
         {
@@ -22,33 +28,38 @@ namespace Usb.Net.UWP
         }
         #endregion
 
+        #region Constructur
+        public UWPUsbDeviceFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
+        {
+        }
+        #endregion
+
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            if (deviceDefinition.DeviceType == DeviceType.Hid) return null;
-            return new UWPUsbDevice(deviceDefinition) { Logger = Logger };
+            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
+
+            return deviceDefinition.DeviceType == DeviceType.Hid ? null : new UWPUsbDevice(new UWPUsbDeviceHandler(deviceDefinition, Logger, Tracer, ReadBufferSize, WriteBufferSize));
         }
         #endregion
 
         #region Public Static Methods
-        public static void Register()
-        {
-            Register(null);
-        }
-
-        public static void Register(ILogger logger)
+        /// <summary>
+        /// Register the factory for enumerating USB devices on UWP.
+        /// </summary>
+        public static void Register(ILogger logger, ITracer tracer)
         {
             foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)
             {
                 if (deviceFactory is UWPUsbDeviceFactory) return;
             }
 
-            DeviceManager.Current.DeviceFactories.Add(new UWPUsbDeviceFactory() { Logger = logger });
+            DeviceManager.Current.DeviceFactories.Add(new UWPUsbDeviceFactory(logger, tracer));
         }
         #endregion
 
         #region Public Overrides
-        public override Task<ConnectionInfo> TestConnection(string Id) => Task.FromResult(new ConnectionInfo {CanConnect=true });
+        public override Task<ConnectionInfo> TestConnection(string deviceId) => Task.FromResult(new ConnectionInfo { CanConnect = true });
         #endregion
     }
 }

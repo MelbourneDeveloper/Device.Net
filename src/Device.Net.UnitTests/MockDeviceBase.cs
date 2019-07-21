@@ -11,6 +11,11 @@ namespace Device.Net.UnitTests
 
         public override bool IsInitialized => _IsInitialized;
 
+        protected MockDeviceBase(ILogger logger, ITracer tracer) : base(logger, tracer)
+        {
+
+        }
+
         public void Close()
         {
         }
@@ -23,16 +28,22 @@ namespace Device.Net.UnitTests
 
         private byte[] LastWrittenBuffer;
 
-        public async override Task<byte[]> ReadAsync()
+        public override async Task<byte[]> ReadAsync()
         {
-            if (LastWrittenBuffer != null) return LastWrittenBuffer;
-
-            return await Task.FromResult(new byte[64] { 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+            if (LastWrittenBuffer != null)
+            {
+                Tracer.Trace(false, LastWrittenBuffer);
+                return LastWrittenBuffer;
+            }
+            var data = new byte[64] { 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            Tracer.Trace(false, data);
+            return await Task.FromResult(data);
         }
 
         public override Task WriteAsync(byte[] data)
         {
             LastWrittenBuffer = data;
+            Tracer.Trace(true, data);
             return Task.FromResult(true);
         }
     }

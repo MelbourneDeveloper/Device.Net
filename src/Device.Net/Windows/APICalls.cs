@@ -1,9 +1,8 @@
-﻿using Device.Net.Windows;
-using System;
-using Microsoft.Win32.SafeHandles;
+﻿using System;
 using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
-namespace Device.Net
+namespace Device.Net.Windows
 {
     public static class APICalls
     {

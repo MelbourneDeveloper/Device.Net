@@ -1,9 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace Device.Net.UWP
 {
-    public abstract class UWPDeviceBase : DeviceBase
+    public abstract class UWPDeviceHandlerBase
     {
         #region Fields
         protected bool IsReading { get; set; }
@@ -14,7 +15,18 @@ namespace Device.Net.UWP
         protected Collection<byte[]> Chunks { get; } = new Collection<byte[]>();
         #endregion
 
+        #region Public Properties
+        public ILogger Logger { get; }
+        public ITracer Tracer { get; }
+        public string DeviceId { get; }
+        #endregion
+
         #region Protected Methods
+        protected void Log(string message, Exception ex)
+        {
+            Logger?.Log(message, nameof(UWPDeviceFactoryBase), ex, LogLevel.Error);
+        }
+
         protected void HandleDataReceived(byte[] bytes)
         {
             if (!IsReading)
@@ -34,6 +46,15 @@ namespace Device.Net.UWP
 
         #region Public Abstract Methods
         public abstract Task InitializeAsync();
+        #endregion
+
+        #region Constructor
+        protected UWPDeviceHandlerBase(string deviceId, ILogger logger, ITracer tracer) 
+        {
+            Logger = logger;
+            Tracer = tracer;
+            DeviceId = deviceId;
+        }
         #endregion
     }
 }

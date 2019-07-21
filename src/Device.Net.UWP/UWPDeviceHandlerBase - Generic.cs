@@ -1,29 +1,30 @@
-﻿using System;
+﻿using Device.Net.Exceptions;
+using System;
 using System.Threading.Tasks;
 using Windows.Foundation;
 
 namespace Device.Net.UWP
 {
-    public abstract class UWPDeviceBase<T> : UWPDeviceBase, IDevice
+    public abstract class UWPDeviceHandlerBase<T> : UWPDeviceHandlerBase, IDeviceHandler
     {
         #region Fields
         private bool _IsClosing;
+        private bool disposed;
         #endregion
 
         #region Protected Properties
         protected T ConnectedDevice { get; private set; }
-        protected bool Disposed { get; private set; } = false;
+        public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; protected set; }
+        #endregion
+
+        #region Public Abstract
+        public abstract ushort WriteBufferSize { get; }
+        public abstract ushort ReadBufferSize { get; }
         #endregion
 
         #region Constructor
-        protected UWPDeviceBase()
+        protected UWPDeviceHandlerBase(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
         {
-
-        }
-
-        protected UWPDeviceBase(string deviceId)
-        {
-            DeviceId = deviceId;
         }
         #endregion
 
@@ -41,11 +42,11 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Overrides
-        public override async Task<byte[]> ReadAsync()
+        public virtual async Task<byte[]> ReadAsync()
         {
             if (IsReading)
             {
-                throw new Exception("Reentry");
+                throw new AsyncException(Messages.ErrorMessageReentry);
             }
 
             //TODO: this should be a semaphore not a lock
@@ -53,33 +54,34 @@ namespace Device.Net.UWP
             {
                 if (Chunks.Count > 0)
                 {
-                    var retVal = Chunks[0];
-                    Tracer?.Trace(false, retVal);
+                    var data2 = Chunks[0];
+                    Logger?.Log("Received data from device", GetType().Name, null, LogLevel.Information);
                     Chunks.RemoveAt(0);
-                    return retVal;
+                    Tracer?.Trace(false, data2);
+                    return data2;
                 }
             }
 
             IsReading = true;
             ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
-            return await ReadChunkTaskCompletionSource.Task;
+            var data = await ReadChunkTaskCompletionSource.Task;
+            Tracer?.Trace(false, data);
+            return data;
         }
         #endregion
 
         #region Public Override Properties
-        public override bool IsInitialized => ConnectedDevice != null;
+        public bool IsInitialized => ConnectedDevice != null;
         #endregion
 
         #region Public Virtual Methods
-        public override void Dispose()
+        public virtual void Dispose()
         {
-            if (Disposed) return;
-            Disposed = true;
+            if (disposed) return;
+            disposed = true;
 
             Close();
             ReadChunkTaskCompletionSource?.Task?.Dispose();
-
-            base.Dispose();
 
             GC.SuppressFinalize(this);
         }
@@ -105,7 +107,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Finaliser
-        ~UWPDeviceBase()
+        ~UWPDeviceHandlerBase()
         {
             Dispose();
         }

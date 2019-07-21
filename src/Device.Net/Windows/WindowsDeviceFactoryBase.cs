@@ -14,7 +14,8 @@ namespace Device.Net.Windows
     public abstract class WindowsDeviceFactoryBase
     {
         #region Public Properties
-        public ILogger Logger { get; set; }
+        public ILogger Logger { get;  }
+        public ITracer Tracer { get; }
         #endregion
 
         #region Public Abstract Properties
@@ -24,6 +25,14 @@ namespace Device.Net.Windows
         #region Protected Abstract Methods
         protected abstract ConnectedDeviceDefinition GetDeviceDefinition(string deviceId);
         protected abstract Guid GetClassGuid();
+        #endregion
+
+        #region Constructor
+        protected WindowsDeviceFactoryBase(ILogger logger, ITracer tracer)
+        {
+            Logger = logger;
+            Tracer = tracer;
+        }
         #endregion
 
         #region Public Methods
@@ -146,6 +155,8 @@ namespace Device.Net.Windows
         #region Private Static Methods
         private static uint GetNumberFromDeviceId(string deviceId, string searchString)
         {
+            if (deviceId == null) throw new ArgumentNullException(nameof(deviceId));
+
             var indexOfSearchString = deviceId.IndexOf(searchString, StringComparison.OrdinalIgnoreCase);
             string hexString = null;
             if (indexOfSearchString > -1)
@@ -158,7 +169,7 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Static Methods
-        public static ConnectedDeviceDefinition GetDeviceDefinitionFromWindowsDeviceId(string deviceId, DeviceType deviceType)
+        public static ConnectedDeviceDefinition GetDeviceDefinitionFromWindowsDeviceId(string deviceId, DeviceType deviceType, ILogger logger)
         {
             uint? vid = null;
             uint? pid = null;
@@ -167,10 +178,9 @@ namespace Device.Net.Windows
                 vid = GetNumberFromDeviceId(deviceId, "vid_");
                 pid = GetNumberFromDeviceId(deviceId, "pid_");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Logging
-                //We really need the Vid/Pid here for polling etc. so not sure if swallowing errors it the way to go
+                logger?.Log($"Error {ex.Message}", nameof(GetDeviceDefinitionFromWindowsDeviceId), ex, LogLevel.Error);
             }
 
             return new ConnectedDeviceDefinition(deviceId) { DeviceType = deviceType, VendorId = vid, ProductId = pid };

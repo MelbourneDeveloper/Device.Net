@@ -7,15 +7,15 @@
     <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Device.Net/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
     <Description>A cross platform USB library written in C#</Description>
-    <Version>2.9.0</Version>
-    <AssemblyVersion>2.9.0.0</AssemblyVersion>
-    <FileVersion>2.9.0.0</FileVersion>
+    <Version>3.0.0</Version>
+    <AssemblyVersion>3.0.0.0</AssemblyVersion>
+    <FileVersion>3.0.0.0</FileVersion>
     <Authors>Christian Findlay</Authors>
     <Copyright>Copyright (c) 2019 Christian Findlay</Copyright>
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
     <PackageTags>USB Hid Android C#</PackageTags>
     <LangVersion>7.3</LangVersion>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>    
     <NoWarn>1701;1702;NU5125</NoWarn>      
   </PropertyGroup>
@@ -36,7 +36,7 @@
   </Choose>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.6.3">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
