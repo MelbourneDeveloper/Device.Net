@@ -60,7 +60,7 @@
     <Compile Include="AndroidUsbInterface.cs" />
     <Compile Include="UsbDeviceBroadcastReceiver.cs" />
     <Compile Include="UsbPermissionBroadcastReceiver.cs" />
-    <Compile Include="AndroidUsbDeviceHandler.cs" />
+    <Compile Include="AndroidUsbInterfaceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

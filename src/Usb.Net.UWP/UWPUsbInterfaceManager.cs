@@ -9,7 +9,7 @@ using windowsUsbDevice = Windows.Devices.Usb.UsbDevice;
 
 namespace Usb.Net.UWP
 {
-    public class UWPUsbDeviceHandler : UWPDeviceHandlerBase<windowsUsbDevice>, IUsbDeviceHandler
+    public class UWPUsbInterfaceManager : UWPDeviceBase<windowsUsbDevice>, IUsbInterfaceManager
     {
         #region Fields
         private bool disposed;
@@ -18,7 +18,7 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Properties
-        public UsbInterfaceHandler UsbInterfaceHandler { get; }
+        public UsbInterfaceManager UsbInterfaceHandler { get; }
         #endregion
 
         #region Public Override Properties
@@ -41,18 +41,18 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPUsbDeviceHandler(ILogger logger, ITracer tracer) : this(null, logger, tracer, null, null)
+        public UWPUsbInterfaceManager(ILogger logger, ITracer tracer) : this(null, logger, tracer, null, null)
         {
         }
 
-        public UWPUsbDeviceHandler(ConnectedDeviceDefinition deviceDefinition) : this(deviceDefinition, null, null, null, null)
+        public UWPUsbInterfaceManager(ConnectedDeviceDefinition deviceDefinition) : this(deviceDefinition, null, null, null, null)
         {
         }
 
-        public UWPUsbDeviceHandler(ConnectedDeviceDefinition connectedDeviceDefinition, ILogger logger, ITracer tracer, ushort? readBufferSzie, ushort? writeBufferSize) : base(connectedDeviceDefinition?.DeviceId, logger, tracer)
+        public UWPUsbInterfaceManager(ConnectedDeviceDefinition connectedDeviceDefinition, ILogger logger, ITracer tracer, ushort? readBufferSzie, ushort? writeBufferSize) : base(connectedDeviceDefinition?.DeviceId, logger, tracer)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
-            UsbInterfaceHandler = new UsbInterfaceHandler(logger, tracer);
+            UsbInterfaceHandler = new UsbInterfaceManager(logger, tracer);
             _WriteBufferSize = writeBufferSize;
             _ReadBufferSize = readBufferSzie;
         }

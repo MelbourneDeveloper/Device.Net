@@ -10,7 +10,7 @@ using usbDevice = Android.Hardware.Usb.UsbDevice;
 
 namespace Usb.Net.Android
 {
-    public class AndroidUsbDeviceHandler : UsbInterfaceHandler, IUsbDeviceHandler
+    public class AndroidUsbInterfaceManager : UsbInterfaceManager, IUsbInterfaceManager
     {
         #region Fields
         private UsbDeviceConnection _UsbDeviceConnection;
@@ -36,7 +36,7 @@ namespace Usb.Net.Android
         #endregion
 
         #region Constructor
-        public AndroidUsbDeviceHandler(UsbManager usbManager, Context androidContext, int deviceNumberId, ILogger logger, ITracer tracer, ushort? readBufferLength, ushort? writeBufferLength) : base(logger, tracer)
+        public AndroidUsbInterfaceManager(UsbManager usbManager, Context androidContext, int deviceNumberId, ILogger logger, ITracer tracer, ushort? readBufferLength, ushort? writeBufferLength) : base(logger, tracer)
         {
             _ReadBufferSize = readBufferLength;
             _WriteBufferSize = writeBufferLength;
@@ -102,7 +102,7 @@ namespace Usb.Net.Android
         #region Private  Methods
         private Task<bool?> RequestPermissionAsync()
         {
-            Logger?.Log("Requesting USB permission", nameof(AndroidUsbDeviceHandler), null, LogLevel.Information);
+            Logger?.Log("Requesting USB permission", nameof(AndroidUsbInterfaceManager), null, LogLevel.Information);
 
             var taskCompletionSource = new TaskCompletionSource<bool?>();
 
@@ -132,7 +132,7 @@ namespace Usb.Net.Android
                 {
                     throw new Exception($"The device {DeviceNumberId} is not connected to the system");
                 }
-                Logger?.Log($"Found device: {_UsbDevice.DeviceName} Id: {_UsbDevice.DeviceId}", nameof(AndroidUsbDeviceHandler), null, LogLevel.Information);
+                Logger?.Log($"Found device: {_UsbDevice.DeviceName} Id: {_UsbDevice.DeviceId}", nameof(AndroidUsbInterfaceManager), null, LogLevel.Information);
 
 
                 var isPermissionGranted = await RequestPermissionAsync();
@@ -204,7 +204,7 @@ namespace Usb.Net.Android
         /// <summary>
         /// What's this then?
         /// </summary>
-        ~AndroidUsbDeviceHandler()
+        ~AndroidUsbInterfaceManager()
         {
             Dispose();
         }

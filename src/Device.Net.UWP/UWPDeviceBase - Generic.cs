@@ -5,7 +5,7 @@ using Windows.Foundation;
 
 namespace Device.Net.UWP
 {
-    public abstract class UWPDeviceHandlerBase<T> : UWPDeviceHandlerBase, IDeviceHandler
+    public abstract class UWPDeviceBase<T> : UWPDeviceBase, IDeviceHandler
     {
         #region Fields
         private bool _IsClosing;
@@ -23,7 +23,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Constructor
-        protected UWPDeviceHandlerBase(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
+        protected UWPDeviceBase(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
         {
         }
         #endregion
@@ -107,7 +107,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Finaliser
-        ~UWPDeviceHandlerBase()
+        ~UWPDeviceBase()
         {
             Dispose();
         }
