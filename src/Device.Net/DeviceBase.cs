@@ -69,12 +69,12 @@ namespace Device.Net
         #endregion
 
         #region Public Abstract Methods
-        public abstract Task<byte[]> ReadAsync();
+        public abstract Task<ReadResult> ReadAsync();
         public abstract Task WriteAsync(byte[] data);
         #endregion
 
         #region Public Methods
-        public async Task<byte[]> WriteAndReadAsync(byte[] writeBuffer)
+        public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer)
         {
             await _WriteAndReadLock.WaitAsync();
 

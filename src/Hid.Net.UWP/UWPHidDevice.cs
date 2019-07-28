@@ -170,14 +170,14 @@ namespace Hid.Net.UWP
 
             if (DataHasExtraByte)
             {
-                reportId = bytes[0];
+                reportId = bytes.Data[0];
                 bytes = DeviceBase.RemoveFirstByte(bytes);
             }
 
             return new ReadReport(reportId, bytes);
         }
 
-        public override async Task<byte[]> ReadAsync()
+        public override async Task<ReadResult> ReadAsync()
         {
             var data = (await ReadReportAsync()).Data;
             Tracer?.Trace(false, data);
@@ -191,7 +191,7 @@ namespace Hid.Net.UWP
             return HidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
         }
 
-        public async Task<byte[]> WriteAndReadAsync(byte[] writeBuffer)
+        public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer)
         {
             await _WriteAndReadLock.WaitAsync();
 

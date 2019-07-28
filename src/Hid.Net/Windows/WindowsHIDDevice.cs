@@ -165,7 +165,7 @@ namespace Hid.Net.Windows
             await Task.Run(() => Initialize());
         }
 
-        public override async Task<byte[]> ReadAsync()
+        public override async Task<ReadResult> ReadAsync()
         {
             var data = (await ReadReportAsync()).Data;
             Tracer?.Trace(false, data);
