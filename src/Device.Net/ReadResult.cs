@@ -6,7 +6,10 @@ namespace Device.Net
     {
         #region Public Properties
         public byte[] Data { get; }
-        public int BytesRead { get; }
+
+
+        //TODO: Int or Uint?
+        public uint BytesRead { get; }
         #endregion
 
         #region Conversion Operators
@@ -19,12 +22,12 @@ namespace Device.Net
         {
             //TODO: This is a bit dodgy... It's breaking a code rule
             if (data == null) throw new ArgumentNullException(nameof(data));
-            return new ReadResult(data, data.Length);
+            return new ReadResult(data, (uint)data.Length);
         }
         #endregion
 
         #region Constructor
-        public ReadResult(byte[] data, int bytesRead)
+        public ReadResult(byte[] data, uint bytesRead)
         {
             Data = data;
             BytesRead = bytesRead;
