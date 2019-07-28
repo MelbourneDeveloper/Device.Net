@@ -73,7 +73,7 @@ namespace Device.Net.UnitTests
             var connectedDeviceDefinition = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
 
 
-            var mockHidDevice = new MockHidDevice(logger, tracer) { DeviceId = connectedDeviceDefinition.DeviceId };
+            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, logger, tracer);
 
             var writeAndReadTasks = new List<Task<byte[]>>();
 
