@@ -13,7 +13,7 @@ namespace Device.Net
         /// <summary>
         /// Read a page of data. Warning: this is not thread safe. WriteAndReadAsync() should be preferred.
         /// </summary>
-        Task<byte[]> ReadAsync();
+        Task<ReadResult> ReadAsync();
 
         /// <summary>
         /// Write a page of data. Warning: this is not thread safe. WriteAndReadAsync() should be preferred.
@@ -28,7 +28,7 @@ namespace Device.Net
         /// <summary>
         /// Write a page of data and then wait for the device to return a page. If the implementation derives from DeviceBase, this method is thread safe.
         /// </summary>
-        Task<byte[]> WriteAndReadAsync(byte[] writeBuffer);
+        Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer);
 
         /// <summary>
         /// Device unique OS level Id for the type of device. The device should have been constructed with this Id. It is used to initialize the device.
