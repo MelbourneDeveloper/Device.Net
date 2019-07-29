@@ -29,7 +29,7 @@ namespace Device.Net
         #region Constructor
         protected DeviceBase(string deviceId, ILogger logger, ITracer tracer)
         {
-            DeviceId = deviceId;
+            DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
             Tracer = tracer;
             Logger = logger;
         }
