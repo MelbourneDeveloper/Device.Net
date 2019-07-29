@@ -30,7 +30,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Methods
-        public async Task<byte[]> ReadAsync(uint bufferLength)
+        public async Task<ReadResult> ReadAsync(uint bufferLength)
         {
             return await Task.Run(() =>
             {
