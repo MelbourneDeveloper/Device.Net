@@ -5,6 +5,7 @@ using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
@@ -59,6 +60,9 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Private Methods
+
+
+
         private bool Initialize()
         {
             try
@@ -70,8 +74,16 @@ namespace Hid.Net.Windows
                     throw new ValidationException($"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
                 }
 
-                _ReadSafeFileHandle = APICalls.CreateFile(DeviceId, 3221225472, 3, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
-                _WriteSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+                var security = new SECURITY_ATTRIBUTES
+                {
+                    lpSecurityDescriptor = IntPtr.Zero,
+                    bInheritHandle = true
+                };
+                security.nLength = Marshal.SizeOf(security);
+
+                _ReadSafeFileHandle = APICalls.CreateFile(DeviceId, 3221225472, 3, ref security, APICalls.OpenExisting, 0, IntPtr.Zero);
+                var gasdasd = new SECURITY_ATTRIBUTES();
+                _WriteSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, ref gasdasd, APICalls.OpenExisting, 0, IntPtr.Zero);
 
                 if (_ReadSafeFileHandle.IsInvalid)
                 {

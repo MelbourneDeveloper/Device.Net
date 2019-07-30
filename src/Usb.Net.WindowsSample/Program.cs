@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Usb.Net.Sample;
 using Device.Net;
+using Hid.Net.Windows;
 
 #if (!LIBUSB)
 using Usb.Net.Windows;
@@ -45,34 +46,9 @@ namespace Usb.Net.WindowsSample
 
         private static async Task Go()
         {
-            var menuOption = await Menu();
-
-            switch (menuOption)
-            {
-                case 1:
-                    try
-                    {
-                        await _DeviceConnectionExample.InitializeTrezorAsync();
-                        await DisplayDataAsync();
-                        _DeviceConnectionExample.Dispose();
-
-                        GC.Collect();
-
-                        await Task.Delay(10000);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.Clear();
-                        Console.WriteLine(ex.ToString());
-                    }
-                    Console.ReadKey();
-                    break;
-                case 2:
-                    Console.Clear();
-                    DisplayWaitMessage();
-                    _DeviceConnectionExample.StartListening();
-                    break;
-            }
+            var asdasd = new WindowsHidDevice(@"\\?\hid#vid_413c&pid_3016#6&876c144&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}");
+            await asdasd.InitializeAsync();
+            var gasdasd =await asdasd.ReadAsync();
         }
         #endregion
 
