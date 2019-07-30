@@ -70,7 +70,7 @@ namespace Hid.Net.Windows
                     throw new ValidationException($"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
                 }
 
-                _ReadSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+                _ReadSafeFileHandle = APICalls.CreateFile(DeviceId, 3221225472, 3, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
                 _WriteSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
 
                 if (_ReadSafeFileHandle.IsInvalid)
@@ -79,6 +79,11 @@ namespace Hid.Net.Windows
                 }
 
                 IsReadOnly = _WriteSafeFileHandle.IsInvalid ? true : false;
+
+                if (IsReadOnly.Value)
+                {
+                    Logger?.Log($"Opening device {DeviceId} in radonly mode.", nameof(WindowsHidDevice), null, LogLevel.Warning);
+                }
 
                 ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
 
@@ -90,15 +95,15 @@ namespace Hid.Net.Windows
                     throw new ValidationException($"{nameof(ReadBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an InputReportByteLength of 0. Please specify this argument in the constructor");
                 }
 
-                if (writeBufferSize == 0)
-                {
-                    throw new ValidationException($"{nameof(WriteBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an OutputReportByteLength of 0. Please specify this argument in the constructor. Note: Hid devices are always opened in write mode. If you need to open in read mode, please log an issue here: https://github.com/MelbourneDeveloper/Device.Net/issues");
-                }
-
-                _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, readBufferSize, false);
+                _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.Read, readBufferSize, false);
 
                 if (!IsReadOnly.Value)
                 {
+                    if (writeBufferSize == 0)
+                    {
+                        throw new ValidationException($"{nameof(WriteBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an OutputReportByteLength of 0. Please specify this argument in the constructor. Note: Hid devices are always opened in write mode. If you need to open in read mode, please log an issue here: https://github.com/MelbourneDeveloper/Device.Net/issues");
+                    }
+
                     //Don't open if this is a read only connection
                     _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
                 }
