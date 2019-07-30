@@ -22,7 +22,9 @@ namespace Hid.Net.Windows
                 const uint shareMode = APICalls.FileShareRead | APICalls.FileShareWrite;
                 const uint creationDisposition = APICalls.OpenExisting;
 
-                using (var safeFileHandle = APICalls.CreateFile(deviceId, desiredAccess, shareMode, IntPtr.Zero, creationDisposition, 0, IntPtr.Zero))
+                //Don't request any access here...
+                //TODO: Put a nicer number than 0 here
+                using (var safeFileHandle = APICalls.CreateFile(deviceId, 0, shareMode, IntPtr.Zero, creationDisposition, 0, IntPtr.Zero))
                 {
                     if (safeFileHandle.IsInvalid) throw new DeviceException($"CreateFile call with Id of {deviceId} failed. Desired Access: {desiredAccess} (GenericRead / GenericWrite). Share mode: {shareMode} (FileShareRead / FileShareWrite). Creation Disposition: {creationDisposition} (OpenExisting)");
 

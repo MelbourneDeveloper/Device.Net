@@ -35,6 +35,7 @@ namespace Hid.Net.Windows
         public override bool IsInitialized => _WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid;
         public override ushort WriteBufferSize => _WriteBufferSize ?? (ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value);
         public override ushort ReadBufferSize => _ReadBufferSize ?? (ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value);
+        public bool? IsReadOnly { get; private set; }
         #endregion
 
         #region Public Properties
@@ -77,10 +78,7 @@ namespace Hid.Net.Windows
                     throw new ApiException(Messages.ErrorMessageCantOpenRead);
                 }
 
-                if (_WriteSafeFileHandle.IsInvalid)
-                {
-                    throw new ApiException(Messages.ErrorMessageCantOpenWrite);
-                }
+                IsReadOnly = _WriteSafeFileHandle.IsInvalid ? true : false;
 
                 ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
 
@@ -98,7 +96,12 @@ namespace Hid.Net.Windows
                 }
 
                 _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.ReadWrite, readBufferSize, false);
-                _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
+
+                if (!IsReadOnly.Value)
+                {
+                    //Don't open if this is a read only connection
+                    _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
+                }
             }
             catch (Exception ex)
             {
@@ -207,6 +210,11 @@ namespace Hid.Net.Windows
 
         public async Task WriteReportAsync(byte[] data, byte? reportId)
         {
+            if (IsReadOnly.HasValue && IsReadOnly.Value)
+            {
+                throw new ValidationException($"This device was opened in Read Only mode.");
+            }
+
             if (data == null) throw new ArgumentNullException(nameof(data));
 
             if (_WriteFileStream == null)
