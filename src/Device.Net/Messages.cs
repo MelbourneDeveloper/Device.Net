@@ -2,6 +2,8 @@
 {
     public static class Messages
     {
+        public const string ObsoleteMessagePlatformSpecificUsbDevice = "Platform specific USB Devices are being deprecated. Please construct a UsbDevice and pass the UsbInterfaceManager in to the constructor. This is to maintain the dependency injection pattern.";
+
         #region Device Initialization
         public const string ErrorMessageNotInitialized = "The device has not been initialized.";
         public const string ErrorMessageCouldntIntializeDevice = "Couldn't initialize device";
