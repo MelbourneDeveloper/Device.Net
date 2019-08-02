@@ -5,7 +5,6 @@
     <Version>3.0.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl></PackageLicenseUrl>
     <Copyright>Copyright (c) 2019 Christian Findlay</Copyright>
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
     <Description>Hid.Net
