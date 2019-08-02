@@ -9,6 +9,14 @@
         #region Success Messages
         public const string SuccessMessageGotWriteAndReadHandle = "Successfully opened handle on device for reading and writing";
         public static string SuccessMessageWriteAndReadCalled => $"Successfully called {nameof(DeviceBase.WriteAndReadAsync)}";
+        public const string SuccessMessageReadFileStreamOpened = "Read file stream opened successfully";
+        public const string SuccessMessageWriteFileStreamOpened = "Write file stream opened successfully";
+        #endregion
+
+        #region Warnings
+        public static string WarningMessageOpeningInReadonlyMode(string deviceId) => $"Opening device {deviceId} in read only mode.";
+        public const string WarningMessageReadFileStreamCantRead = "Read file stream cannot be read from";
+        public const string WarningMessageWriteFileStreamCantWrite = "Write file stream cannot be written to";
         #endregion
 
         #region Device Initialization

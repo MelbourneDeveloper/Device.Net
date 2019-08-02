@@ -83,7 +83,7 @@ namespace Hid.Net.Windows
 
                 if (IsReadOnly.Value)
                 {
-                    Logger?.Log($"Opening device {DeviceId} in radonly mode.", nameof(WindowsHidDevice), null, LogLevel.Warning);
+                    Logger?.Log(Messages.WarningMessageOpeningInReadonlyMode(DeviceId), nameof(WindowsHidDevice), null, LogLevel.Warning);
                 }
 
                 ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
@@ -98,6 +98,15 @@ namespace Hid.Net.Windows
 
                 _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.Read, readBufferSize, false);
 
+                if (_ReadFileStream.CanRead)
+                {
+                    Logger?.Log(Messages.SuccessMessageReadFileStreamOpened, nameof(WindowsHidDevice), null, LogLevel.Information);
+                }
+                else
+                {
+                    Logger?.Log(Messages.WarningMessageReadFileStreamCantRead, nameof(WindowsHidDevice), null, LogLevel.Warning);
+                }
+
                 if (!IsReadOnly.Value)
                 {
                     if (writeBufferSize == 0)
@@ -107,6 +116,16 @@ namespace Hid.Net.Windows
 
                     //Don't open if this is a read only connection
                     _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
+
+                    if (_WriteFileStream.CanWrite)
+                    {
+                        Logger?.Log(Messages.SuccessMessageWriteFileStreamOpened, nameof(WindowsHidDevice), null, LogLevel.Information);
+                    }
+                    else
+                    {
+                        Logger?.Log(Messages.WarningMessageWriteFileStreamCantWrite, nameof(WindowsHidDevice), null, LogLevel.Warning);
+                    }
+
                 }
             }
             catch (Exception ex)
