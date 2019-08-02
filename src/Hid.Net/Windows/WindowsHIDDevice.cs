@@ -94,7 +94,7 @@ namespace Hid.Net.Windows
 
                 if (IsReadOnly.Value)
                 {
-                    Logger?.Log($"Opening device {DeviceId} in radonly mode.", nameof(WindowsHidDevice), null, LogLevel.Warning);
+                    Logger?.Log(Messages.WarningMessageOpeningInReadonlyMode(DeviceId), nameof(WindowsHidDevice), null, LogLevel.Warning);
                 }
 
                 ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
@@ -109,15 +109,34 @@ namespace Hid.Net.Windows
 
                 _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.Read, readBufferSize, false);
 
+                if (_ReadFileStream.CanRead)
+                {
+                    Logger?.Log(Messages.SuccessMessageReadFileStreamOpened, nameof(WindowsHidDevice), null, LogLevel.Information);
+                }
+                else
+                {
+                    Logger?.Log(Messages.WarningMessageReadFileStreamCantRead, nameof(WindowsHidDevice), null, LogLevel.Warning);
+                }
+
                 if (!IsReadOnly.Value)
                 {
                     if (writeBufferSize == 0)
                     {
-                        throw new ValidationException($"{nameof(WriteBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an OutputReportByteLength of 0. Please specify this argument in the constructor. Note: Hid devices are always opened in write mode. If you need to open in read mode, please log an issue here: https://github.com/MelbourneDeveloper/Device.Net/issues");
+                        throw new ValidationException($"{nameof(WriteBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an OutputReportByteLength of 0. Please specify this argument in the constructor");
                     }
 
                     //Don't open if this is a read only connection
                     _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
+
+                    if (_WriteFileStream.CanWrite)
+                    {
+                        Logger?.Log(Messages.SuccessMessageWriteFileStreamOpened, nameof(WindowsHidDevice), null, LogLevel.Information);
+                    }
+                    else
+                    {
+                        Logger?.Log(Messages.WarningMessageWriteFileStreamCantWrite, nameof(WindowsHidDevice), null, LogLevel.Warning);
+                    }
+
                 }
             }
             catch (Exception ex)

@@ -60,6 +60,8 @@ namespace Usb.Net.Windows
                     if (errorCode > 0) throw new ApiException($"Device handle no good. Error code: {errorCode}");
                 }
 
+                Logger?.Log(Messages.SuccessMessageGotWriteAndReadHandle, nameof(WindowsUsbInterfaceManager), null, LogLevel.Information);
+
                 var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
                 WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorMessageCouldntIntializeDevice);
 

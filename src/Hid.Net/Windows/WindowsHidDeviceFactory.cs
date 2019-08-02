@@ -29,6 +29,8 @@ namespace Hid.Net.Windows
                 {
                     if (safeFileHandle.IsInvalid) throw new DeviceException($"CreateFile call with Id of {deviceId} failed. Desired Access: {desiredAccess} (GenericRead / GenericWrite). Share mode: {shareMode} (FileShareRead / FileShareWrite). Creation Disposition: {creationDisposition} (OpenExisting)");
 
+                    Logger?.Log($"Found device {deviceId}", nameof(WindowsHidDeviceFactory), null, LogLevel.Information);
+
                     return GetDeviceDefinition(deviceId, safeFileHandle);
                 }
             }
