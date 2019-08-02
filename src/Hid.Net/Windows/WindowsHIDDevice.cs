@@ -102,7 +102,7 @@ namespace Hid.Net.Windows
                 {
                     if (writeBufferSize == 0)
                     {
-                        throw new ValidationException($"{nameof(WriteBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an OutputReportByteLength of 0. Please specify this argument in the constructor. Note: Hid devices are always opened in write mode. If you need to open in read mode, please log an issue here: https://github.com/MelbourneDeveloper/Device.Net/issues");
+                        throw new ValidationException($"{nameof(WriteBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an OutputReportByteLength of 0. Please specify this argument in the constructor");
                     }
 
                     //Don't open if this is a read only connection
