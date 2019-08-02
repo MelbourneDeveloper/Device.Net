@@ -51,13 +51,14 @@ namespace Usb.Net.Windows
 
                 _DeviceHandle = APICalls.CreateFile(DeviceId, APICalls.GenericWrite | APICalls.GenericRead, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
 
-
                 if (_DeviceHandle.IsInvalid)
                 {
                     //TODO: is error code useful here?
                     errorCode = Marshal.GetLastWin32Error();
                     if (errorCode > 0) throw new ApiException($"Device handle no good. Error code: {errorCode}");
                 }
+
+                Logger?.Log(Messages.SuccessMessageGotWriteAndReadHandle, nameof(WindowsUsbInterfaceManager), null, LogLevel.Information);
 
                 var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
                 WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorMessageCouldntIntializeDevice);
