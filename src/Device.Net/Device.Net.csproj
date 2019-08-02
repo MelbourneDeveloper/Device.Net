@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Device.Net/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <AssemblyVersion>3.0.0.0</AssemblyVersion>
     <FileVersion>3.0.0.0</FileVersion>
     <Version>3.0.0</Version>
@@ -16,7 +16,8 @@
     <PackageTags>Hid USB Android UWP Windows C# MacOS Linux</PackageTags>
     <NoWarn>NU5125</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>CodeRules.ruleset</CodeAnalysisRuleSet>   
+    <CodeAnalysisRuleSet>CodeRules.ruleset</CodeAnalysisRuleSet>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>   
   </PropertyGroup>
 
   <Choose>
@@ -33,8 +34,11 @@
       </PropertyGroup>
     </When>
   </Choose>
-
   <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <None Include="..\..\README.md" Link="README.md" />
   </ItemGroup>
 

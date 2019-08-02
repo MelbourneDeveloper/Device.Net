@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Device.Net/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseUrl></PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
     <Description>A cross platform USB library written in C#</Description>
     <Version>3.0.0</Version>
@@ -17,7 +17,8 @@
     <LangVersion>7.3</LangVersion>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>    
-    <NoWarn>1701;1702;NU5125</NoWarn>      
+    <NoWarn>1701;1702;NU5125</NoWarn>    
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>      
   </PropertyGroup>
 
   <Choose>
@@ -43,6 +44,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
     <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />    
   </ItemGroup>
