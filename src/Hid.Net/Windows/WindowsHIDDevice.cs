@@ -70,7 +70,8 @@ namespace Hid.Net.Windows
                     throw new ValidationException($"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
                 }
 
-                _ReadSafeFileHandle = APICalls.CreateFile(DeviceId, 3221225472, 3, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+                //TODO: Work on getting these correct, and make sure that different values can be passed in here.
+                _ReadSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead, 3, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
                 _WriteSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
 
                 if (_ReadSafeFileHandle.IsInvalid)
