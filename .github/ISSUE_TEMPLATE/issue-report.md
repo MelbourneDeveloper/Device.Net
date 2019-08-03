@@ -13,7 +13,7 @@ Explain your issue clearly
 **Screenshots**
 Add screenshots to help explain your problem. Use Ctrl-V to paste an image here.
 
-- Screenshot of where the exception is occurring (See [Break On All Exceptions](https://christianfindlay.com/2019/07/14/visual-studio-break-on-all-exceptions/) and [this](https://github.com/MelbourneDeveloper/Device.Net/wiki/Debugging,-Logging,-and-Tracing )
+- Screenshot of where the exception is occurring (See [Break On All Exceptions](https://christianfindlay.com/2019/07/14/visual-studio-break-on-all-exceptions/) and [this](https://github.com/MelbourneDeveloper/Device.Net/wiki/Debugging,-Logging,-and-Tracing) )
 
 - Screenshot of the Windows Sample. I.e. run the windows sample and post the console window here.
 
