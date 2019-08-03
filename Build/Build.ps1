@@ -56,6 +56,11 @@ $titleElement = $myXML.CreateElement("title")
 $titleElement.InnerText = $deviceNetTitle
 $myXML.package.metadata.AppendChild($titleElement)
 
+#This seems horribe but what you gonna do?
+$metadataElement = $myXML.GetElementsByTagName("metadata")[0]
+$licenseUrlElement = $myXML.GetElementsByTagName("licenseUrl")[0]
+$metadataElement.RemoveChild($licenseUrlElement)
+
 #Create the UWP Device.Net.UWP file element
 $deviceNetUWPFile = $myXML.CreateElement("file")
 $deviceNetUWPFile.SetAttribute("src", $deviceNetUWPDllPath);
@@ -95,6 +100,11 @@ $myXML.package.metadata.AppendChild($summaryElement)
 $titleElement = $myXML.CreateElement("title")
 $titleElement.InnerText = $hidNetTitle
 $myXML.package.metadata.AppendChild($titleElement)
+
+#This seems horribe but what you gonna do?
+$metadataElement = $myXML.GetElementsByTagName("metadata")[0]
+$licenseUrlElement = $myXML.GetElementsByTagName("licenseUrl")[0]
+$metadataElement.RemoveChild($licenseUrlElement)
 
 $releaseNotesElement = $myXML.CreateElement("releaseNotes")
 $releaseNotesElement.InnerText = $releaseNotes
@@ -137,6 +147,11 @@ $usbNetAndroidDllPath = $basepath + "\src\Usb.Net.Android\bin\Release\" + $usbNe
 $titleElement = $myXML.CreateElement("title")
 $titleElement.InnerText = $usbNetTitle
 $myXML.package.metadata.AppendChild($titleElement)
+
+#This seems horribe but what you gonna do?
+$metadataElement = $myXML.GetElementsByTagName("metadata")[0]
+$licenseUrlElement = $myXML.GetElementsByTagName("licenseUrl")[0]
+$metadataElement.RemoveChild($licenseUrlElement)
 
 $summaryElement = $myXML.CreateElement("summary")
 $summaryElement.InnerText = $usbNetSummary
@@ -188,6 +203,11 @@ $deviceNetLibUsbNetNuspecPath = $basepath + "\src\Device.Net.LibUsb\obj\Release\
 $titleElement = $myXML.CreateElement("title")
 $titleElement.InnerText = $deviceNetLibUsbTitle
 $myXML.package.metadata.AppendChild($titleElement)
+
+#This seems horribe but what you gonna do?
+$metadataElement = $myXML.GetElementsByTagName("metadata")[0]
+$licenseUrlElement = $myXML.GetElementsByTagName("licenseUrl")[0]
+$metadataElement.RemoveChild($licenseUrlElement)
 
 $summaryElement = $myXML.CreateElement("summary")
 $summaryElement.InnerText = $deviceNetLibUsbSummary
