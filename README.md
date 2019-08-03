@@ -22,6 +22,8 @@ This library provides a common Task based Async interface across platforms and d
 
 ## [Quick Start](https://github.com/MelbourneDeveloper/Device.Net/wiki/Quick-Start)
 
+# Important! Before trying this code, see the above Quick Start
+
 Example Code:
 ```cs
 public async Task InitializeTrezorAsync()
