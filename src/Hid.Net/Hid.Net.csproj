@@ -5,7 +5,6 @@
     <Version>3.0.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Device.Net/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>Copyright (c) 2019 Christian Findlay</Copyright>
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
     <Description>Hid.Net
@@ -22,7 +21,8 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
     <PackageId>Hid.Net</PackageId>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>      
-    <NoWarn>1701;1702;NU5125</NoWarn>    
+    <NoWarn>1701;1702;NU5125</NoWarn>      
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>    
   </PropertyGroup>
 
   <Choose>
@@ -57,6 +57,10 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
     <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />
   </ItemGroup>

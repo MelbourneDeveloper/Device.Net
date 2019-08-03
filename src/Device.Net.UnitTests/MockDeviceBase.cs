@@ -28,7 +28,7 @@ namespace Device.Net.UnitTests
 
         private byte[] LastWrittenBuffer;
 
-        public override async Task<byte[]> ReadAsync()
+        public override async Task<ReadResult> ReadAsync()
         {
             if (LastWrittenBuffer != null)
             {

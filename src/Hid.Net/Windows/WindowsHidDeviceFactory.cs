@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
@@ -17,8 +18,18 @@ namespace Hid.Net.Windows
         {
             try
             {
-                using (var safeFileHandle = APICalls.CreateFile(deviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero))
+                const uint desiredAccess = APICalls.GenericRead | APICalls.GenericWrite;
+                const uint shareMode = APICalls.FileShareRead | APICalls.FileShareWrite;
+                const uint creationDisposition = APICalls.OpenExisting;
+
+                //Don't request any access here...
+                //TODO: Put a nicer number than 0 here
+                using (var safeFileHandle = APICalls.CreateFile(deviceId, 0, shareMode, IntPtr.Zero, creationDisposition, 0, IntPtr.Zero))
                 {
+                    if (safeFileHandle.IsInvalid) throw new DeviceException($"CreateFile call with Id of {deviceId} failed. Desired Access: {desiredAccess} (GenericRead / GenericWrite). Share mode: {shareMode} (FileShareRead / FileShareWrite). Creation Disposition: {creationDisposition} (OpenExisting)");
+
+                    Logger?.Log($"Found device {deviceId}", nameof(WindowsHidDeviceFactory), null, LogLevel.Information);
+
                     return GetDeviceDefinition(deviceId, safeFileHandle);
                 }
             }

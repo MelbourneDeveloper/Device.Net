@@ -2,6 +2,23 @@
 {
     public static class Messages
     {
+        #region Code Specific Messages
+        public const string ObsoleteMessagePlatformSpecificUsbDevice = "Platform specific USB Devices are being deprecated. Please construct a UsbDevice and pass the UsbInterfaceManager in to the constructor. This is to maintain the dependency injection pattern.";
+        #endregion
+
+        #region Success Messages
+        public const string SuccessMessageGotWriteAndReadHandle = "Successfully opened handle on device for reading and writing";
+        public static string SuccessMessageWriteAndReadCalled => $"Successfully called {nameof(DeviceBase.WriteAndReadAsync)}";
+        public const string SuccessMessageReadFileStreamOpened = "Read file stream opened successfully";
+        public const string SuccessMessageWriteFileStreamOpened = "Write file stream opened successfully";
+        #endregion
+
+        #region Warnings
+        public static string WarningMessageOpeningInReadonlyMode(string deviceId) => $"Opening device {deviceId} in read only mode.";
+        public const string WarningMessageReadFileStreamCantRead = "Read file stream cannot be read from";
+        public const string WarningMessageWriteFileStreamCantWrite = "Write file stream cannot be written to";
+        #endregion
+
         #region Device Initialization
         public const string ErrorMessageNotInitialized = "The device has not been initialized.";
         public const string ErrorMessageCouldntIntializeDevice = "Couldn't initialize device";
@@ -13,7 +30,6 @@
 
         #region Misc
         public const string ErrorMessageReentry = "Reentry. This method is not thread safe";
-        public static string SuccessMessageWriteAndReadCalled => $"Successfully called {nameof(DeviceBase.WriteAndReadAsync)}";
         #endregion
 
         #region IO

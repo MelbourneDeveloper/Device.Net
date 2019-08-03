@@ -75,7 +75,7 @@ namespace Device.Net.UnitTests
 
             var mockHidDevice = new MockHidDevice(logger, tracer) { DeviceId = connectedDeviceDefinition.DeviceId };
 
-            var writeAndReadTasks = new List<Task<byte[]>>();
+            var writeAndReadTasks = new List<Task<ReadResult>>();
 
             //TODO: Does this properly test thread safety?
 
@@ -91,7 +91,7 @@ namespace Device.Net.UnitTests
             for (byte i = 0; i < results.Length; i++)
             {
                 var result = results[i];
-                Assert.IsTrue(result[0] == i);
+                Assert.IsTrue(result.Data[0] == i);
             }
 
             Assert.AreEqual(readtraceCount + count, tracer.ReadCount);

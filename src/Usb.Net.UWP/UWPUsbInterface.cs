@@ -59,7 +59,7 @@ namespace Usb.Net.UWP
             //TODO: Why does not UWP not support Control Transfer?
         }
 
-        public async Task<byte[]> ReadAsync(uint bufferLength)
+        public async Task<ReadResult> ReadAsync(uint bufferLength)
         {
             IBuffer buffer = null;
 

@@ -95,7 +95,7 @@ namespace Device.Net.LibUsb
             });
         }
 
-        public override async Task<byte[]> ReadAsync()
+        public override async Task<ReadResult> ReadAsync()
         {
             await _WriteAndReadLock.WaitAsync();
 

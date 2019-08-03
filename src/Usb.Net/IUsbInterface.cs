@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Device.Net;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace Usb.Net
         ushort ReadBufferSize { get; }
         ushort WriteBufferSize { get; }
         Task WriteAsync(byte[] data);
-        Task<byte[]> ReadAsync(uint bufferLength);
+        Task<ReadResult> ReadAsync(uint bufferLength);
         byte InterfaceNumber { get; }
         Task ClaimInterface();
 

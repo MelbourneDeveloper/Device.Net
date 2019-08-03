@@ -30,7 +30,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Methods
-        public async Task<byte[]> ReadAsync(uint bufferLength)
+        public async Task<ReadResult> ReadAsync(uint bufferLength)
         {
             return await Task.Run(() =>
             {
@@ -38,7 +38,7 @@ namespace Usb.Net.Windows
                 var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_SafeFileHandle, ReadEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't read data");
                 Tracer?.Trace(false, bytes);
-                return bytes;
+                return new ReadResult(bytes, bytesRead);
             });
         }
 

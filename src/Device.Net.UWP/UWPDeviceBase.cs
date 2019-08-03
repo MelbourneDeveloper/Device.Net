@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Device.Net.UWP
 {
-    public abstract class UWPDeviceHandlerBase
+    public abstract class UWPDeviceBase
     {
         #region Fields
         protected bool IsReading { get; set; }
@@ -49,7 +49,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Constructor
-        protected UWPDeviceHandlerBase(string deviceId, ILogger logger, ITracer tracer) 
+        protected UWPDeviceBase(string deviceId, ILogger logger, ITracer tracer) 
         {
             Logger = logger;
             Tracer = tracer;
