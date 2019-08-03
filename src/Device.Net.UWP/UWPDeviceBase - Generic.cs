@@ -107,7 +107,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Finaliser
-        ~UWPDeviceHandlerBase()
+        ~UWPDeviceBase()
         {
             Dispose();
         }

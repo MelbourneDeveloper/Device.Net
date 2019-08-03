@@ -12,7 +12,7 @@ using Windows.Storage;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDevice : UWPDeviceHandlerBase<HidDevice>, IHidDevice
+    public class UWPHidDevice : UWPDeviceBase<HidDevice>, IHidDevice
     {
         #region Fields
         private bool disposed;
