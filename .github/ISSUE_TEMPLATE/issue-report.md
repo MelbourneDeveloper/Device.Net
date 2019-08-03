@@ -10,16 +10,18 @@ assignees: ''
 **Describe the issue**
 A clear and concise description of what the issue is.
 
+**Screenshots**
+Add screenshots to help explain your problem. 
+
+- Screenshot of where the exception is occurring (See [Break On All Exceptions](https://christianfindlay.com/2019/07/14/visual-studio-break-on-all-exceptions/) and [this](https://github.com/MelbourneDeveloper/Device.Net/wiki/Debugging,-Logging,-and-Tracing)
+
+- Screenshot of the Windows Sample. I.e. run the windows sample and post the console window here.
+
 **Your Code**
 Post your code here. Please use markdown so that the code is formatted.
 
-**Screenshots**
-Add screenshots to help explain your problem. 
-- Screenshot of where the exception is occurring (See [Break On All Exceptions](https://christianfindlay.com/2019/07/14/visual-studio-break-on-all-exceptions/) and [this](https://github.com/MelbourneDeveloper/Device.Net/wiki/Debugging,-Logging,-and-Tracing)
-- Screenshot of the Windows Sample. I.e. run the windows sample and post the console window here.
-
 **Log / Stack Trace**
-Please include the stack trace of where the problem occurred as text or a screenshot.
+Please include the stack trace of where the problem occurred as text or a screenshot. You *must* use logging and include the output here. Please see https://github.com/MelbourneDeveloper/Device.Net/wiki/Debugging,-Logging,-and-Tracing
 
 **Info**
  - Platform: [e.g. Android]
