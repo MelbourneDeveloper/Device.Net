@@ -2,9 +2,9 @@
 
 ![diagram](https://github.com/MelbourneDeveloper/Device.Net/blob/master/Diagram.png)
 
-**Cross platform C# library for talking to connected devices such as Usb, and Hid devices.**
+**Cross platform C# framework for talking to connected devices such as Usb, and Hid devices.**
 
-**Beta 3.0 is out! Please grab the NuGet and report issues in the issues section. Please add Device.Net NuGet**
+**Beta 3.0 2 is out! Please grab the NuGet and report issues in the issues section**
 
 **[Linux and MacOS support](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support) is here! Check out the [MacOS sample](https://github.com/MelbourneDeveloper/Device.Net/tree/master/src/Device.Net.MacOSLibUsbSample) and the [Terminal/Console Linux/MacOS Sample](https://github.com/MelbourneDeveloper/Device.Net/tree/develop/src/Device.Net.LibUsbSample). Grab the NuGet for [Device.Net.LibUsb](https://www.nuget.org/packages/Device.Net.LibUsb/).**
 
