@@ -1,7 +1,9 @@
-﻿using Device.Net.Exceptions;
+﻿using Device.Net;
+using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Hid.Net.Windows
@@ -47,13 +49,32 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Private Static Methods
-        private static string GetHidString(SafeFileHandle safeFileHandle, GetString getString)
+        private static string GetHidString(SafeFileHandle safeFileHandle, GetString getString, ILogger logger, [CallerMemberName] string callMemberName = null)
         {
-            var pointerToBuffer = Marshal.AllocHGlobal(126);
-            var isSuccess = getString(safeFileHandle, pointerToBuffer, 126);
-            Marshal.FreeHGlobal(pointerToBuffer);
-            WindowsDeviceBase.HandleError(isSuccess, "Could not get Hid string");
-            return Marshal.PtrToStringUni(pointerToBuffer);
+            try
+            {
+                var pointerToBuffer = Marshal.AllocHGlobal(126);
+                var isSuccess = getString(safeFileHandle, pointerToBuffer, 126);
+                Marshal.FreeHGlobal(pointerToBuffer);
+
+                if (!isSuccess)
+                {
+                    logger?.Log($"Could not get Hid string. Caller: {callMemberName}", nameof(HidAPICalls), null, LogLevel.Warning);
+                }
+
+
+                return Marshal.PtrToStringUni(pointerToBuffer);
+            }
+            catch (Exception ex)
+            {
+                logger?.Log($"Could not get Hid string. Message: {ex.Message}", nameof(HidAPICalls), ex, LogLevel.Error);
+                return null;
+            }
+            finally
+            {
+                //TODO: Shouldn't this pointer be released?
+                //Marshal.Release(pointerToBuffer);
+            }
         }
         #endregion
 
@@ -82,19 +103,19 @@ namespace Hid.Net.Windows
             return hidCollectionCapabilities;
         }
 
-        public static string GetManufacturer(SafeFileHandle safeFileHandle)
+        public static string GetManufacturer(SafeFileHandle safeFileHandle, ILogger logger)
         {
-            return GetHidString(safeFileHandle, HidD_GetManufacturerString);
+            return GetHidString(safeFileHandle, HidD_GetManufacturerString, logger);
         }
 
-        public static string GetProduct(SafeFileHandle safeFileHandle)
+        public static string GetProduct(SafeFileHandle safeFileHandle, ILogger logger)
         {
-            return GetHidString(safeFileHandle, HidD_GetProductString);
+            return GetHidString(safeFileHandle, HidD_GetProductString, logger);
         }
 
-        public static string GetSerialNumber(SafeFileHandle safeFileHandle)
+        public static string GetSerialNumber(SafeFileHandle safeFileHandle, ILogger logger)
         {
-            return GetHidString(safeFileHandle, HidD_GetSerialNumberString);
+            return GetHidString(safeFileHandle, HidD_GetSerialNumberString, logger);
         }
 
         public static Guid GetHidGuid()
