@@ -36,5 +36,11 @@
         /// The maximum size of data to be read from the device
         /// </summary>
         public int? ReadBufferSize { get; set; }
+
+        public byte DeviceClass { get; set; }
+
+        public byte DeviceSubClass { get; set; }
+
+        public byte DeviceProtocol { get; set; }
     }
 }

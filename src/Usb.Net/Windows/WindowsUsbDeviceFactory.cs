@@ -81,6 +81,9 @@ namespace Usb.Net.Windows
             deviceDefinition.ProductId = _UsbDeviceDescriptor.idProduct;
             deviceDefinition.WriteBufferSize = _UsbDeviceDescriptor.bMaxPacketSize0;
             deviceDefinition.ReadBufferSize = _UsbDeviceDescriptor.bMaxPacketSize0;
+            deviceDefinition.DeviceClass = _UsbDeviceDescriptor.bDeviceClass;
+            deviceDefinition.DeviceSubClass = _UsbDeviceDescriptor.bDeviceSubClass;
+            deviceDefinition.DeviceProtocol = _UsbDeviceDescriptor.bDeviceProtocol;
 
             return deviceDefinition;
         }
