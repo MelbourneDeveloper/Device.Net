@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
@@ -41,7 +42,22 @@ namespace Usb.Net.Windows
         #region Private Static Methods
         protected override ConnectedDeviceDefinition GetDeviceDefinition(string deviceId)
         {
-            return GetDeviceDefinitionFromWindowsDeviceId(deviceId, DeviceType.Usb, Logger);
+            // Getting device interface handle.
+            SafeFileHandle sfh = APICalls.CreateFile(deviceId, APICalls.GenericWrite | APICalls.GenericRead, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
+
+            if (sfh.IsInvalid)
+            {
+                //TODO: is error code useful here?
+                int errorCode = Marshal.GetLastWin32Error();
+                if (errorCode > 0) throw new ApiException($"Device handle no good. Error code: {errorCode}");
+            }
+
+            Logger?.Log(Messages.SuccessMessageGotWriteAndReadHandle, nameof(WindowsUsbInterfaceManager), null, LogLevel.Information);
+
+            var isSuccess = WinUsbApiCalls.WinUsb_Initialize(sfh, out var defaultInterfaceHandle);
+            WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorMessageCouldntIntializeDevice);
+
+            return GetDeviceDefinition(defaultInterfaceHandle, deviceId);
         }
         #endregion
 
