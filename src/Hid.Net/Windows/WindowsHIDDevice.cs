@@ -86,7 +86,7 @@ namespace Hid.Net.Windows
                     Logger?.Log(Messages.WarningMessageOpeningInReadonlyMode(DeviceId), nameof(WindowsHidDevice), null, LogLevel.Warning);
                 }
 
-                ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
+                ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle, Logger);
 
                 var readBufferSize = ReadBufferSize;
                 var writeBufferSize = WriteBufferSize;

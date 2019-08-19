@@ -5,7 +5,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass
 $msbuildToolsPath = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin"
 $version = "3.0.0"
 
-$releaseNotes = "Breaking changes. See https://github.com/MelbourneDeveloper/Device.Net/projects/8"
+$releaseNotes = "Many fixes and enhancements. Some breaking changes. See details: https://github.com/MelbourneDeveloper/Device.Net/projects/8"
 
 $deviceNetTitle = "Device.Net"
 $deviceNetSummary = "Cross platform C# library for talking to connected devices in a uniform way through dependency injection."

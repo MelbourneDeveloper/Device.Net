@@ -30,7 +30,7 @@ namespace Hid.Net.Windows
 
                     Logger?.Log($"Found device {deviceId}", nameof(WindowsHidDeviceFactory), null, LogLevel.Information);
 
-                    return GetDeviceDefinition(deviceId, safeFileHandle);
+                    return GetDeviceDefinition(deviceId, safeFileHandle, Logger);
                 }
             }
             catch (Exception ex)
@@ -64,13 +64,14 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Private Static Methods
-        public static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)
+        public static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle, ILogger logger)
         {
             var hidAttributes = GetHidAttributes(safeFileHandle);
             var hidCollectionCapabilities = GetHidCapabilities(safeFileHandle);
-            var manufacturer = GetManufacturer(safeFileHandle);
-            var serialNumber = GetSerialNumber(safeFileHandle);
-            var product = GetProduct(safeFileHandle);
+
+            var manufacturer = GetManufacturer(safeFileHandle, logger);
+            var serialNumber = GetSerialNumber(safeFileHandle, logger);
+            var product = GetProduct(safeFileHandle, logger);
 
             return new ConnectedDeviceDefinition(deviceId)
             {

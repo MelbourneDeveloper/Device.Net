@@ -51,8 +51,11 @@ namespace Device.Net.Windows
 
                 var guidString = GetClassGuid().ToString();
                 var copyOfClassGuid = new Guid(guidString);
+                const int flags = APICalls.DigcfDeviceinterface | APICalls.DigcfPresent;
 
-                var devicesHandle = APICalls.SetupDiGetClassDevs(ref copyOfClassGuid, IntPtr.Zero, IntPtr.Zero, APICalls.DigcfDeviceinterface | APICalls.DigcfPresent);
+                Log($"About to call {nameof(APICalls.SetupDiGetClassDevs)} for class Guid {guidString}. Flags: {flags}", null, LogLevel.Information);
+
+                var devicesHandle = APICalls.SetupDiGetClassDevs(ref copyOfClassGuid, IntPtr.Zero, IntPtr.Zero, flags);
 
                 spDeviceInterfaceDetailData.CbSize = IntPtr.Size == 8 ? 8 : 4 + Marshal.SystemDefaultCharSize;
 
@@ -77,6 +80,7 @@ namespace Device.Net.Windows
 
                             if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
                             {
+                                Log($"The call to {nameof(APICalls.SetupDiEnumDeviceInterfaces)} returned ERROR_NO_MORE_ITEMS", null, LogLevel.Information);
                                 break;
                             }
 
@@ -93,6 +97,7 @@ namespace Device.Net.Windows
 
                             if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
                             {
+                                Log($"The call to {nameof(APICalls.SetupDiEnumDeviceInterfaces)} returned ERROR_NO_MORE_ITEMS", null, LogLevel.Information);
                                 //TODO: This probably can't happen but leaving this here because there was some strange behaviour
                                 break;
                             }
