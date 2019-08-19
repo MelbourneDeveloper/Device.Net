@@ -16,7 +16,6 @@
     <AssemblyVersion>3.0.0.0</AssemblyVersion>
     <FileVersion>3.0.0.0</FileVersion>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageReleaseNotes>Many fixes and enhancements. Some breaking changes. See details: https://github.com/MelbourneDeveloper/Device.Net/projects/8</PackageReleaseNotes>
   </PropertyGroup>
 
   <Choose>

@@ -17,8 +17,7 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>    
     <NoWarn>1701;1702;NU5125</NoWarn>    
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>    
-    <PackageReleaseNotes>Many fixes and enhancements. Some breaking changes. See details: https://github.com/MelbourneDeveloper/Device.Net/projects/8</PackageReleaseNotes>      
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>      
   </PropertyGroup>
 
   <Choose>

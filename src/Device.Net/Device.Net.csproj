@@ -16,8 +16,7 @@
     <NoWarn>NU5125</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>CodeRules.ruleset</CodeAnalysisRuleSet>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageReleaseNotes>Many fixes and enhancements. Some breaking changes. See details: https://github.com/MelbourneDeveloper/Device.Net/projects/8</PackageReleaseNotes>   
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>   
   </PropertyGroup>
 
   <Choose>
