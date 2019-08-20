@@ -58,6 +58,7 @@
     <Compile Include="AndroidUsbDeviceFactory.cs" />
     <Compile Include="AndroidUsbEndpoint.cs" />
     <Compile Include="AndroidUsbInterface.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="UsbDeviceBroadcastReceiver.cs" />
     <Compile Include="UsbPermissionBroadcastReceiver.cs" />
     <Compile Include="AndroidUsbInterfaceManager.cs" />

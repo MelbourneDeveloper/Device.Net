@@ -39,7 +39,7 @@ namespace Usb.Net.UWP
         {
             if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
 
-            return deviceDefinition.DeviceType == DeviceType.Hid ? null : new UsbDevice(new UWPUsbInterfaceManager(deviceDefinition, Logger, Tracer, ReadBufferSize, WriteBufferSize), Logger, Tracer);
+            return deviceDefinition.DeviceType == DeviceType.Hid ? null : new UsbDevice(deviceDefinition.DeviceId, new UWPUsbInterfaceManager(deviceDefinition, Logger, Tracer, ReadBufferSize, WriteBufferSize), Logger, Tracer);
         }
         #endregion
 
