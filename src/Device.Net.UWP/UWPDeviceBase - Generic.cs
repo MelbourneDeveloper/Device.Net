@@ -42,7 +42,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Overrides
-        public virtual async Task<byte[]> ReadAsync()
+        public virtual async Task<ReadResult> ReadAsync()
         {
             if (IsReading)
             {

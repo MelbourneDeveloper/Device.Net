@@ -28,12 +28,13 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Methods
-        public async Task<byte[]> ReadAsync(uint bufferLength)
+        public async Task<ReadResult> ReadAsync(uint bufferLength)
         {
             return await Task.Run(async () =>
             {
                 try
                 {
+
                     var byteBuffer = ByteBuffer.Allocate((int)bufferLength);
                     var request = new UsbRequest();
                     var endpoint = ((AndroidUsbEndpoint)ReadEndpoint).UsbEndpoint;
@@ -42,14 +43,17 @@ namespace Usb.Net.Android
                     request.Queue(byteBuffer, (int)bufferLength);
 #pragma warning restore CS0618 
                     await _UsbDeviceConnection.RequestWaitAsync();
-                    var buffers = new byte[bufferLength];
+
+                    //TODO: Get the actual length of the data read instead of just returning the length of the array
+
+                    var buffers = new ReadResult(new byte[bufferLength], bufferLength);
 
                     byteBuffer.Rewind();
 
                     //Ouch. Super nasty
                     for (var i = 0; i < bufferLength; i++)
                     {
-                        buffers[i] = (byte)byteBuffer.Get();
+                        buffers.Data[i] = (byte)byteBuffer.Get();
                     }
 
                     //Marshal.Copy(byteBuffer.GetDirectBufferAddress(), buffers, 0, ReadBufferLength);

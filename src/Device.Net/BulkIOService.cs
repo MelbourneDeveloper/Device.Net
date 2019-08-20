@@ -38,7 +38,7 @@ namespace Device.Net
             while (totalRead < len)
             {
                 // Getting some data.
-                var data = await Device.ReadAsync();
+                var data = (await Device.ReadAsync()).Data;
 
                 if (data.Length > len - totalRead)
                 {

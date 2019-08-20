@@ -2,10 +2,10 @@
 Set-ExecutionPolicy -ExecutionPolicy Bypass
 
 #TODO: Unhard code these
-$msbuildToolsPath = "C:\Program Files (x86)\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin"
+$msbuildToolsPath = "C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin"
 $version = "3.0.0"
 
-$releaseNotes = "See https://github.com/MelbourneDeveloper/Device.Net/projects/9"
+$releaseNotes = "Many fixes and enhancements. Some breaking changes. See details: https://github.com/MelbourneDeveloper/Device.Net/projects/8"
 
 $deviceNetTitle = "Device.Net"
 $deviceNetSummary = "Cross platform C# library for talking to connected devices in a uniform way through dependency injection."
@@ -56,6 +56,11 @@ $titleElement = $myXML.CreateElement("title")
 $titleElement.InnerText = $deviceNetTitle
 $myXML.package.metadata.AppendChild($titleElement)
 
+#This seems horribe but what you gonna do?
+$metadataElement = $myXML.GetElementsByTagName("metadata")[0]
+$licenseUrlElement = $myXML.GetElementsByTagName("licenseUrl")[0]
+$metadataElement.RemoveChild($licenseUrlElement)
+
 #Create the UWP Device.Net.UWP file element
 $deviceNetUWPFile = $myXML.CreateElement("file")
 $deviceNetUWPFile.SetAttribute("src", $deviceNetUWPDllPath);
@@ -95,6 +100,11 @@ $myXML.package.metadata.AppendChild($summaryElement)
 $titleElement = $myXML.CreateElement("title")
 $titleElement.InnerText = $hidNetTitle
 $myXML.package.metadata.AppendChild($titleElement)
+
+#This seems horribe but what you gonna do?
+$metadataElement = $myXML.GetElementsByTagName("metadata")[0]
+$licenseUrlElement = $myXML.GetElementsByTagName("licenseUrl")[0]
+$metadataElement.RemoveChild($licenseUrlElement)
 
 $releaseNotesElement = $myXML.CreateElement("releaseNotes")
 $releaseNotesElement.InnerText = $releaseNotes
@@ -137,6 +147,11 @@ $usbNetAndroidDllPath = $basepath + "\src\Usb.Net.Android\bin\Release\" + $usbNe
 $titleElement = $myXML.CreateElement("title")
 $titleElement.InnerText = $usbNetTitle
 $myXML.package.metadata.AppendChild($titleElement)
+
+#This seems horribe but what you gonna do?
+$metadataElement = $myXML.GetElementsByTagName("metadata")[0]
+$licenseUrlElement = $myXML.GetElementsByTagName("licenseUrl")[0]
+$metadataElement.RemoveChild($licenseUrlElement)
 
 $summaryElement = $myXML.CreateElement("summary")
 $summaryElement.InnerText = $usbNetSummary
@@ -188,6 +203,11 @@ $deviceNetLibUsbNetNuspecPath = $basepath + "\src\Device.Net.LibUsb\obj\Release\
 $titleElement = $myXML.CreateElement("title")
 $titleElement.InnerText = $deviceNetLibUsbTitle
 $myXML.package.metadata.AppendChild($titleElement)
+
+#This seems horribe but what you gonna do?
+$metadataElement = $myXML.GetElementsByTagName("metadata")[0]
+$licenseUrlElement = $myXML.GetElementsByTagName("licenseUrl")[0]
+$metadataElement.RemoveChild($licenseUrlElement)
 
 $summaryElement = $myXML.CreateElement("summary")
 $summaryElement.InnerText = $deviceNetLibUsbSummary

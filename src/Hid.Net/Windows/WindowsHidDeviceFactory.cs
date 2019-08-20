@@ -22,11 +22,15 @@ namespace Hid.Net.Windows
                 const uint shareMode = APICalls.FileShareRead | APICalls.FileShareWrite;
                 const uint creationDisposition = APICalls.OpenExisting;
 
-                using (var safeFileHandle = APICalls.CreateFile(deviceId, desiredAccess, shareMode, IntPtr.Zero, creationDisposition, 0, IntPtr.Zero))
+                //Don't request any access here...
+                //TODO: Put a nicer number than 0 here
+                using (var safeFileHandle = APICalls.CreateFile(deviceId, 0, shareMode, IntPtr.Zero, creationDisposition, 0, IntPtr.Zero))
                 {
                     if (safeFileHandle.IsInvalid) throw new DeviceException($"CreateFile call with Id of {deviceId} failed. Desired Access: {desiredAccess} (GenericRead / GenericWrite). Share mode: {shareMode} (FileShareRead / FileShareWrite). Creation Disposition: {creationDisposition} (OpenExisting)");
 
-                    return GetDeviceDefinition(deviceId, safeFileHandle);
+                    Logger?.Log($"Found device {deviceId}", nameof(WindowsHidDeviceFactory), null, LogLevel.Information);
+
+                    return GetDeviceDefinition(deviceId, safeFileHandle, Logger);
                 }
             }
             catch (Exception ex)
@@ -60,13 +64,14 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Private Static Methods
-        public static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)
+        public static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle, ILogger logger)
         {
             var hidAttributes = GetHidAttributes(safeFileHandle);
             var hidCollectionCapabilities = GetHidCapabilities(safeFileHandle);
-            var manufacturer = GetManufacturer(safeFileHandle);
-            var serialNumber = GetSerialNumber(safeFileHandle);
-            var product = GetProduct(safeFileHandle);
+
+            var manufacturer = GetManufacturer(safeFileHandle, logger);
+            var serialNumber = GetSerialNumber(safeFileHandle, logger);
+            var product = GetProduct(safeFileHandle, logger);
 
             return new ConnectedDeviceDefinition(deviceId)
             {
