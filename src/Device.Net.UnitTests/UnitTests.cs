@@ -1,10 +1,12 @@
 using Device.Net.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Usb.Net;
 
 namespace Device.Net.UnitTests
 {
