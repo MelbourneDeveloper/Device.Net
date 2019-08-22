@@ -44,9 +44,8 @@ namespace Device.Net
         {
             if (connectedDeviceDefinition == null) throw new ArgumentNullException(nameof(connectedDeviceDefinition));
 
-            foreach (var deviceFactory in DeviceFactories)
+            foreach (var deviceFactory in DeviceFactories.Where(deviceFactory => !connectedDeviceDefinition.DeviceType.HasValue || (deviceFactory.DeviceType == connectedDeviceDefinition.DeviceType)))
             {
-                if (connectedDeviceDefinition.DeviceType.HasValue && (deviceFactory.DeviceType != connectedDeviceDefinition.DeviceType)) continue;
                 return deviceFactory.GetDevice(connectedDeviceDefinition);
             }
 

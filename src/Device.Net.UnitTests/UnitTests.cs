@@ -1,12 +1,10 @@
 using Device.Net.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Usb.Net;
 
 namespace Device.Net.UnitTests
 {
@@ -189,6 +187,23 @@ namespace Device.Net.UnitTests
             }
 
             throw new Exception("The call was not stopped");
+        }
+
+        [TestMethod]
+        public void TestDeviceException()
+        {
+            try
+            {
+                var deviceManager = new DeviceManager();
+                var device = deviceManager.GetDevice(new ConnectedDeviceDefinition("a"));
+            }
+            catch (DeviceException dex)
+            {
+                Assert.AreEqual(Messages.ErrorMessageCouldntGetDevice, dex.Message);
+                return;
+            }
+
+            Assert.Fail();
         }
 
         #endregion
