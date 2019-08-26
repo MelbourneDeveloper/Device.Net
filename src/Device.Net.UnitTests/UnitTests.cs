@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Device.Net.Windows;
 using Usb.Net;
 using Usb.Net.Windows;
 
@@ -209,6 +210,9 @@ namespace Device.Net.UnitTests
 
             Assert.Fail();
         }
+
+
+
         #endregion
 
         #endregion
