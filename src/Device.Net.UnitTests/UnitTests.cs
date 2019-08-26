@@ -1,10 +1,13 @@
 using Device.Net.Exceptions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Usb.Net;
+using Usb.Net.Windows;
 
 namespace Device.Net.UnitTests
 {
@@ -189,6 +192,7 @@ namespace Device.Net.UnitTests
             throw new Exception("The call was not stopped");
         }
 
+        #region Exceptions
         [TestMethod]
         public void TestDeviceException()
         {
@@ -205,6 +209,7 @@ namespace Device.Net.UnitTests
 
             Assert.Fail();
         }
+        #endregion
 
         #endregion
 

@@ -1,7 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Device.Net.Exceptions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System.Threading.Tasks;
 using Usb.Net;
+using Usb.Net.Windows;
 
 namespace Device.Net.UnitTests
 {
@@ -39,6 +41,28 @@ namespace Device.Net.UnitTests
             await _UsbDevice.WriteAsync(testreadpacket);
             await _UsbDevice.UsbInterfaceManager.WriteUsbInterface.Received().WriteAsync(testreadpacket);
         }
+
+        [TestMethod]
+        public void TestValidationExceptionInvalidInterface()
+        {
+            try
+            {
+                var logger = Substitute.For<ILogger>();
+                var tracer = Substitute.For<ITracer>();
+                const string deviceId = "";
+                var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, logger, tracer, null, null);
+                var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, logger, tracer);
+                usbDevice.UsbInterfaceManager.WriteUsbInterface = new WindowsUsbInterface(null, logger, tracer, 0, null, null);
+            }
+            catch (ValidationException vex)
+            {
+                Assert.AreEqual(Messages.ErrorMessageInvalidInterface, vex.Message);
+                return;
+            }
+
+            Assert.Fail();
+        }
+
         #endregion
 
         #region Helpers
