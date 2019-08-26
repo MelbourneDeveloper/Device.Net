@@ -4,6 +4,9 @@ using Microsoft.Win32.SafeHandles;
 
 namespace Hid.Net.Windows
 {
+    /// <summary>
+    /// Service to handle Hid API calls. Windows oriented for now.
+    /// </summary>
     public interface IHidService
     {
         ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle);

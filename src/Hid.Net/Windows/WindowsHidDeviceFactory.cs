@@ -40,7 +40,7 @@ namespace Hid.Net.Windows
 
         protected override Guid GetClassGuid()
         {
-            return HidAPICalls.GetHidGuid();
+            return HidService.GetHidGuid();
         }
 
         #endregion
