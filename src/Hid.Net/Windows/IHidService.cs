@@ -1,10 +1,12 @@
-﻿using Microsoft.Win32.SafeHandles;
-using System;
+﻿using System;
+using Device.Net;
+using Microsoft.Win32.SafeHandles;
 
 namespace Hid.Net.Windows
 {
     public interface IHidService
     {
+        ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle);
         HidAttributes GetHidAttributes(SafeFileHandle safeFileHandle);
         HidCollectionCapabilities GetHidCapabilities(SafeFileHandle readSafeFileHandle);
         Guid GetHidGuid();

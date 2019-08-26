@@ -1,9 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.Windows;
-using Microsoft.Win32.SafeHandles;
 using System;
-using static Hid.Net.Windows.HidAPICalls;
 
 namespace Hid.Net.Windows
 {
@@ -30,7 +28,7 @@ namespace Hid.Net.Windows
 
                     Logger?.Log($"Found device {deviceId}", nameof(WindowsHidDeviceFactory), null, LogLevel.Information);
 
-                    return GetDeviceDefinition(deviceId, safeFileHandle, Logger);
+                    return HidService.GetDeviceDefinition(deviceId, safeFileHandle);
                 }
             }
             catch (Exception ex)
@@ -42,15 +40,29 @@ namespace Hid.Net.Windows
 
         protected override Guid GetClassGuid()
         {
-            return GetHidGuid();
+            return HidAPICalls.GetHidGuid();
         }
 
+        #endregion
+
+        #region Public Properties
+        public IHidService HidService { get; }
         #endregion
 
         #region Constructor
         public WindowsHidDeviceFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
         {
 
+        }
+
+        public WindowsHidDeviceFactory(ILogger logger, ITracer tracer, IHidService hidService) : base(logger, tracer)
+        {
+            HidService = hidService;
+
+            if (HidService == null)
+            {
+                HidService = new WindowsHidApiService(logger);
+            }
         }
         #endregion
 
@@ -64,30 +76,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Private Static Methods
-        public static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle, ILogger logger)
-        {
-            var hidAttributes = GetHidAttributes(safeFileHandle);
-            var hidCollectionCapabilities = GetHidCapabilities(safeFileHandle);
 
-            var manufacturer = GetManufacturer(safeFileHandle, logger);
-            var serialNumber = GetSerialNumber(safeFileHandle, logger);
-            var product = GetProduct(safeFileHandle, logger);
-
-            return new ConnectedDeviceDefinition(deviceId)
-            {
-                WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
-                ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,
-                Manufacturer = manufacturer,
-                ProductName = product,
-                ProductId = (ushort)hidAttributes.ProductId,
-                SerialNumber = serialNumber,
-                Usage = hidCollectionCapabilities.Usage,
-                UsagePage = hidCollectionCapabilities.UsagePage,
-                VendorId = (ushort)hidAttributes.VendorId,
-                VersionNumber = (ushort)hidAttributes.VersionNumber,
-                DeviceType = DeviceType.Hid
-            };
-        }
         #endregion
 
         #region Public Static Methods

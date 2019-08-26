@@ -40,6 +40,7 @@ namespace Hid.Net.Windows
 
         #region Public Properties
         public byte DefaultReportId { get; set; }
+        public IHidService HidService { get; }
         #endregion
 
         #region Constructor
@@ -51,10 +52,21 @@ namespace Hid.Net.Windows
         {
         }
 
-        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
+        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILogger logger, ITracer tracer) : this(deviceId, writeBufferSize, readBufferSize, logger, tracer, null)
+        {
+
+        }
+
+        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILogger logger, ITracer tracer, IHidService hidService) : base(deviceId, logger, tracer)
         {
             _WriteBufferSize = writeBufferSize;
             _ReadBufferSize = readBufferSize;
+            HidService = hidService;
+
+            if (HidService == null)
+            {
+                HidService = new WindowsHidApiService(logger);
+            }
         }
         #endregion
 
@@ -86,7 +98,7 @@ namespace Hid.Net.Windows
                     Logger?.Log(Messages.WarningMessageOpeningInReadonlyMode(DeviceId), nameof(WindowsHidDevice), null, LogLevel.Warning);
                 }
 
-                ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle, Logger);
+                ConnectedDeviceDefinition = HidService.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
 
                 var readBufferSize = ReadBufferSize;
                 var writeBufferSize = WriteBufferSize;
