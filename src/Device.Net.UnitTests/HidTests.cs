@@ -1,6 +1,8 @@
 ﻿using Hid.Net.Windows;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NSubstitute;
 using System;
+using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests
 {
@@ -8,7 +10,7 @@ namespace Device.Net.UnitTests
     public class HidTests
     {
         [TestMethod]
-        public void TestDeviceExfception()
+        public void TestDeviceIdInvalidException()
         {
             try
             {
@@ -21,6 +23,13 @@ namespace Device.Net.UnitTests
             }
 
             Assert.Fail();
+        }
+
+        [TestMethod]
+        public async Task TestInitializeHidDevice()
+        {
+            var windowsHidDevice = new WindowsHidDevice("test", null, null, Substitute.For<ILogger>(), Substitute.For<ITracer>(), Substitute.For<IHidService>());
+            await windowsHidDevice.InitializeAsync();
         }
     }
 }
