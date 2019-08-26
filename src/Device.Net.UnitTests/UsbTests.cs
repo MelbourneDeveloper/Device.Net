@@ -43,7 +43,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestValidationExceptionInvalidInterface()
+        public void TestValidationExceptionInvalidWriteInterface()
         {
             try
             {
@@ -63,9 +63,58 @@ namespace Device.Net.UnitTests
             Assert.Fail();
         }
 
+        [TestMethod]
+        public void TestValidationExceptionInvalidReadInterface()
+        {
+            try
+            {
+                var logger = Substitute.For<ILogger>();
+                var tracer = Substitute.For<ITracer>();
+                const string deviceId = "";
+                var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, logger, tracer, null, null);
+                var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, logger, tracer);
+                usbDevice.UsbInterfaceManager.ReadUsbInterface = new WindowsUsbInterface(null, logger, tracer, 0, null, null);
+            }
+            catch (ValidationException vex)
+            {
+                Assert.AreEqual(Messages.ErrorMessageInvalidInterface, vex.Message);
+                return;
+            }
+
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public void TestValidationExceptionInvalidWriteEndpoint()
+        {
+            try
+            {
+                var usbDevice = CreateUsbDeviceWithInterface();
+                usbDevice.UsbInterfaceManager.UsbInterfaces[0].WriteEndpoint = Substitute.For<IUsbInterfaceEndpoint>();
+            }
+            catch (ValidationException vex)
+            {
+                Assert.AreEqual(Messages.ErrorMessageInvalidEndpoint, vex.Message);
+                return;
+            }
+
+            Assert.Fail();
+        }
         #endregion
 
         #region Helpers
+        private static UsbDevice CreateUsbDeviceWithInterface()
+        {
+            var logger = Substitute.For<ILogger>();
+            var tracer = Substitute.For<ITracer>();
+            const string deviceId = "";
+            var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, logger, tracer, null, null);
+            var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, logger, tracer);
+            var windowsUsbInterface = new WindowsUsbInterface(null, logger, tracer, 0, null, null);
+            usbDevice.UsbInterfaceManager.UsbInterfaces.Add(windowsUsbInterface);
+            return usbDevice;
+        }
+
         private async Task InitializeDevice()
         {
             if (_UsbDevice != null) return;
