@@ -63,18 +63,12 @@ namespace Hid.Net.Windows
         #region Implementation
         public SafeFileHandle CreateWriteConnection(string deviceId)
         {
-            return APICalls.CreateFile(deviceId, FileAccessRights.GenericRead | FileAccessRights.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+            return CreateConnection(deviceId, FileAccessRights.GenericRead | FileAccessRights.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, APICalls.OpenExisting);
         }
 
         public SafeFileHandle CreateReadConnection(string deviceId, FileAccessRights desiredAccess)
         {
-            //TODO: Work on getting these correct, and make sure that different values can be passed in here.
-            const uint shareMode = APICalls.FileShareRead | APICalls.FileShareWrite;
-            const uint creationDisposition = APICalls.OpenExisting;
-
-            Logger?.Log($"{nameof(APICalls.CreateFile)} call with Id of {deviceId} failed. Desired Access: {desiredAccess} (GenericRead / GenericWrite). Share mode: {shareMode} (FileShareRead / FileShareWrite). Creation Disposition: {creationDisposition} (OpenExisting)", nameof(WindowsHidApiService), null, LogLevel.Information);
-
-            return APICalls.CreateFile(deviceId, desiredAccess, shareMode, IntPtr.Zero, creationDisposition, 0, IntPtr.Zero);
+            return CreateConnection(deviceId, desiredAccess, APICalls.FileShareRead | APICalls.FileShareWrite, APICalls.OpenExisting);
         }
 
         public ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)
@@ -166,7 +160,13 @@ namespace Hid.Net.Windows
         }
         #endregion
 
-        #region Private Static Methods
+        #region Private Methods
+        private SafeFileHandle CreateConnection(string deviceId, FileAccessRights desiredAccess, uint shareMode, uint creationDisposition)
+        {
+            Logger?.Log($"{nameof(APICalls.CreateFile)} call with Id of {deviceId} failed. Desired Access: {desiredAccess}. Share mode: {shareMode}. Creation Disposition: {creationDisposition}", nameof(WindowsHidApiService), null, LogLevel.Information);
+            return APICalls.CreateFile(deviceId, desiredAccess, shareMode, IntPtr.Zero, creationDisposition, 0, IntPtr.Zero);
+        }
+
         private static string GetHidString(SafeFileHandle safeFileHandle, GetString getString, ILogger logger, [CallerMemberName] string callMemberName = null)
         {
             try
