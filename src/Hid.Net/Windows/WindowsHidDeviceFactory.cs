@@ -16,15 +16,9 @@ namespace Hid.Net.Windows
         {
             try
             {
-                const uint desiredAccess = APICalls.GenericRead | APICalls.GenericWrite;
-                const uint shareMode = APICalls.FileShareRead | APICalls.FileShareWrite;
-                const uint creationDisposition = APICalls.OpenExisting;
-
-                //Don't request any access here...
-                //TODO: Put a nicer number than 0 here
-                using (var safeFileHandle = APICalls.CreateFile(deviceId, 0, shareMode, IntPtr.Zero, creationDisposition, 0, IntPtr.Zero))
+                using (var safeFileHandle = HidService.CreateReadConnection(deviceId, FileAccessRights.None))
                 {
-                    if (safeFileHandle.IsInvalid) throw new DeviceException($"CreateFile call with Id of {deviceId} failed. Desired Access: {desiredAccess} (GenericRead / GenericWrite). Share mode: {shareMode} (FileShareRead / FileShareWrite). Creation Disposition: {creationDisposition} (OpenExisting)");
+                    if (safeFileHandle.IsInvalid) throw new DeviceException($"{nameof(HidService.CreateReadConnection)} call with Id of {deviceId} failed.");
 
                     Logger?.Log($"Found device {deviceId}", nameof(WindowsHidDeviceFactory), null, LogLevel.Information);
 

@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
@@ -18,8 +19,9 @@ namespace Hid.Net.Windows
         string GetProduct(SafeFileHandle safeFileHandle);
         string GetSerialNumber(SafeFileHandle safeFileHandle);
         SafeFileHandle CreateWriteConnection(string deviceId);
-        SafeFileHandle CreateReadConnection(string deviceId);
+        SafeFileHandle CreateReadConnection(string deviceId, FileAccessRights desiredAccess);
         Stream OpenRead(SafeFileHandle readSafeFileHandle, ushort readBufferSize);
         Stream OpenWrite(SafeFileHandle writeSafeFileHandle, ushort writeBufferSize);
+
     }
 }

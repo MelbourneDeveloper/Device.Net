@@ -82,7 +82,7 @@ namespace Hid.Net.Windows
                     throw new ValidationException($"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
                 }
 
-                _ReadSafeFileHandle = HidService.CreateReadConnection(DeviceId);
+                _ReadSafeFileHandle = HidService.CreateReadConnection(DeviceId, FileAccessRights.GenericRead);
                 _WriteSafeFileHandle = HidService.CreateWriteConnection(DeviceId);
 
                 if (_ReadSafeFileHandle.IsInvalid)

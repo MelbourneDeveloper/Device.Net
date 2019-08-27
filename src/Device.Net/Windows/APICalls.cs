@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.Win32.SafeHandles;
+using System;
 using System.Runtime.InteropServices;
-using Microsoft.Win32.SafeHandles;
 
 namespace Device.Net.Windows
 {
@@ -11,8 +11,7 @@ namespace Device.Net.Windows
         public const int DigcfPresent = 2;
         public const uint FileShareRead = 1;
         public const uint FileShareWrite = 2;
-        public const uint GenericRead = 2147483648;
-        public const uint GenericWrite = 1073741824;
+
         public const uint OpenExisting = 3;
         public const int FileAttributeNormal = 128;
         public const int FileFlagOverlapped = 1073741824;
@@ -24,7 +23,7 @@ namespace Device.Net.Windows
 
         #region Kernel32
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-        public static extern SafeFileHandle CreateFile(string lpFileName, uint dwDesiredAccess, uint dwShareMode, IntPtr lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);
+        public static extern SafeFileHandle CreateFile(string lpFileName, FileAccessRights dwDesiredAccess, uint dwShareMode, IntPtr lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);
 
         // Used to read bytes from the serial connection. 
         [DllImport("kernel32.dll", SetLastError = true)]

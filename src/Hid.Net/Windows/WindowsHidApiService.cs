@@ -63,13 +63,18 @@ namespace Hid.Net.Windows
         #region Implementation
         public SafeFileHandle CreateWriteConnection(string deviceId)
         {
-            return APICalls.CreateFile(deviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+            return APICalls.CreateFile(deviceId, FileAccessRights.GenericRead | FileAccessRights.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
         }
 
-        public SafeFileHandle CreateReadConnection(string deviceId)
+        public SafeFileHandle CreateReadConnection(string deviceId, FileAccessRights desiredAccess)
         {
             //TODO: Work on getting these correct, and make sure that different values can be passed in here.
-            return APICalls.CreateFile(deviceId, APICalls.GenericRead, 3, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+            const uint shareMode = APICalls.FileShareRead | APICalls.FileShareWrite;
+            const uint creationDisposition = APICalls.OpenExisting;
+
+            Logger?.Log($"{nameof(APICalls.CreateFile)} call with Id of {deviceId} failed. Desired Access: {desiredAccess} (GenericRead / GenericWrite). Share mode: {shareMode} (FileShareRead / FileShareWrite). Creation Disposition: {creationDisposition} (OpenExisting)", nameof(WindowsHidApiService), null, LogLevel.Information);
+
+            return APICalls.CreateFile(deviceId, desiredAccess, shareMode, IntPtr.Zero, creationDisposition, 0, IntPtr.Zero);
         }
 
         public ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)

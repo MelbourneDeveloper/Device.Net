@@ -33,7 +33,7 @@ namespace Device.Net.UnitTests
             const string deviceId = "test";
             var hidService = Substitute.For<IHidService>();
             var safeFileHandle = new SafeFileHandle((IntPtr)100, true);
-            hidService.CreateReadConnection("").ReturnsForAnyArgs(safeFileHandle);
+            hidService.CreateReadConnection("", Windows.FileAccessRights.None).ReturnsForAnyArgs(safeFileHandle);
             hidService.CreateWriteConnection("").ReturnsForAnyArgs(safeFileHandle);
             hidService.GetDeviceDefinition(deviceId, safeFileHandle).ReturnsForAnyArgs(new ConnectedDeviceDefinition(deviceId) { ReadBufferSize = 64, WriteBufferSize = 64 });
 
