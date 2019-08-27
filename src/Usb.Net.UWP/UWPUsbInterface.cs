@@ -61,7 +61,7 @@ namespace Usb.Net.UWP
 
         public async Task<ReadResult> ReadAsync(uint bufferLength)
         {
-            IBuffer buffer = null;
+            IBuffer buffer;
 
             if (ReadEndpoint is UWPUsbInterfaceEndpoint<UsbBulkInPipe> usbBulkInPipe)
             {

@@ -61,12 +61,7 @@ namespace Hid.Net.Windows
         {
             _WriteBufferSize = writeBufferSize;
             _ReadBufferSize = readBufferSize;
-            HidService = hidService;
-
-            if (HidService == null)
-            {
-                HidService = new WindowsHidApiService(logger);
-            }
+            HidService = hidService ?? new WindowsHidApiService(logger);
         }
         #endregion
 
@@ -90,7 +85,7 @@ namespace Hid.Net.Windows
                     throw new ApiException(Messages.ErrorMessageCantOpenRead);
                 }
 
-                IsReadOnly = _WriteSafeFileHandle.IsInvalid ? true : false;
+                IsReadOnly = _WriteSafeFileHandle.IsInvalid;
 
                 if (IsReadOnly.Value)
                 {

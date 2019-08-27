@@ -85,7 +85,7 @@ namespace Usb.Net.UWP
 
                 await _ReadLock.WaitAsync();
 
-                byte[] retVal = null;
+                byte[] retVal;
 
                 try
                 {

@@ -99,7 +99,7 @@ namespace Usb.Net.AndroidSample
                 }
                 else
                 {
-                    DisplayMessage($"No good. No data returned.");
+                    DisplayMessage("No good. No data returned.");
                 }
             }
             catch (Exception ex)

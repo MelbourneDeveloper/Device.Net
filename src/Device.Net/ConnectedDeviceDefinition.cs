@@ -9,7 +9,7 @@ namespace Device.Net
     public class ConnectedDeviceDefinition : ConnectedDeviceDefinitionBase
     {
         #region Public Methods
-        public string DeviceId { get; set; }
+        public string DeviceId { get; }
         #endregion
 
         #region Constructor
