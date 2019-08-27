@@ -28,14 +28,28 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestInitializeHidDevice()
+        public async Task TestInitializeHidDeviceWriteable()
+        {
+            var windowsHidDevice = await InitializeWindowsHidDevice(false);
+            Assert.AreEqual(false, windowsHidDevice.IsReadOnly);
+        }
+
+        [TestMethod]
+        public async Task TestInitializeHidDeviceReadOnly()
+        {
+            var windowsHidDevice = await InitializeWindowsHidDevice(true);
+            Assert.AreEqual(true, windowsHidDevice.IsReadOnly);
+        }
+
+        private static async Task<WindowsHidDevice> InitializeWindowsHidDevice(bool isReadonly)
         {
             const string deviceId = "test";
             var hidService = Substitute.For<IHidService>();
-            var safeFileHandle = new SafeFileHandle((IntPtr)100, true);
-            hidService.CreateReadConnection("", Windows.FileAccessRights.None).ReturnsForAnyArgs(safeFileHandle);
-            hidService.CreateWriteConnection("").ReturnsForAnyArgs(safeFileHandle);
-            hidService.GetDeviceDefinition(deviceId, safeFileHandle).ReturnsForAnyArgs(new ConnectedDeviceDefinition(deviceId) { ReadBufferSize = 64, WriteBufferSize = 64 });
+            var invalidSafeFileHandle = new SafeFileHandle((IntPtr)(-1), true);
+            var validSafeFileHandle = new SafeFileHandle((IntPtr)100, true);
+            hidService.CreateReadConnection("", Windows.FileAccessRights.None).ReturnsForAnyArgs(validSafeFileHandle);
+            hidService.CreateWriteConnection("").ReturnsForAnyArgs(!isReadonly ? validSafeFileHandle : invalidSafeFileHandle);
+            hidService.GetDeviceDefinition(deviceId, validSafeFileHandle).ReturnsForAnyArgs(new ConnectedDeviceDefinition(deviceId) { ReadBufferSize = 64, WriteBufferSize = 64 });
 
             var readStream = Substitute.For<Stream>();
             readStream.CanRead.ReturnsForAnyArgs(true);
@@ -47,6 +61,9 @@ namespace Device.Net.UnitTests
 
             var windowsHidDevice = new WindowsHidDevice(deviceId, null, null, Substitute.For<ILogger>(), Substitute.For<ITracer>(), hidService);
             await windowsHidDevice.InitializeAsync();
+
+            Assert.AreEqual(true, windowsHidDevice.IsInitialized);
+            return windowsHidDevice;
         }
     }
 }
