@@ -163,7 +163,7 @@ namespace Hid.Net.Windows
         #region Private Methods
         private SafeFileHandle CreateConnection(string deviceId, FileAccessRights desiredAccess, uint shareMode, uint creationDisposition)
         {
-            Logger?.Log($"{nameof(APICalls.CreateFile)} call with Id of {deviceId} failed. Desired Access: {desiredAccess}. Share mode: {shareMode}. Creation Disposition: {creationDisposition}", nameof(WindowsHidApiService), null, LogLevel.Information);
+            Logger?.Log($"Calling {nameof(APICalls.CreateFile)} for DeviceId: {deviceId}. Desired Access: {desiredAccess}. Share mode: {shareMode}. Creation Disposition: {creationDisposition}", nameof(WindowsHidApiService), null, LogLevel.Information);
             return APICalls.CreateFile(deviceId, desiredAccess, shareMode, IntPtr.Zero, creationDisposition, 0, IntPtr.Zero);
         }
 
