@@ -59,8 +59,19 @@ namespace Device.Net.UnitTests
             writeStream.CanWrite.ReturnsForAnyArgs(true);
             hidService.OpenWrite(null, 0).ReturnsForAnyArgs(writeStream);
 
-            var windowsHidDevice = new WindowsHidDevice(deviceId, null, null, Substitute.For<ILogger>(), Substitute.For<ITracer>(), hidService);
+            var logger = Substitute.For<ILogger>();
+
+            var windowsHidDevice = new WindowsHidDevice(deviceId, null, null, logger, Substitute.For<ITracer>(), hidService);
             await windowsHidDevice.InitializeAsync();
+
+            if (!isReadonly)
+            {
+                logger.Received().Log(Messages.SuccessMessageReadFileStreamOpened, nameof(WindowsHidDevice), null, LogLevel.Information);
+            }
+            else
+            {
+                logger.Received().Log(Messages.WarningMessageOpeningInReadonlyMode(deviceId), nameof(WindowsHidDevice), null, LogLevel.Warning);
+            }
 
             Assert.AreEqual(true, windowsHidDevice.IsInitialized);
             return windowsHidDevice;
