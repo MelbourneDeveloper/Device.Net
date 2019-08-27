@@ -50,7 +50,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidDeviceFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
+        public WindowsHidDeviceFactory(ILogger logger, ITracer tracer) : this(logger, tracer, null)
         {
 
         }

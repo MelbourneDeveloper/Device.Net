@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32.SafeHandles;
 using NSubstitute;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests
@@ -31,10 +32,19 @@ namespace Device.Net.UnitTests
         {
             const string deviceId = "test";
             var hidService = Substitute.For<IHidService>();
-            var returnThis = new SafeFileHandle((IntPtr)100, true);
-            hidService.CreateReadConnection("").ReturnsForAnyArgs(returnThis);
-            hidService.CreateWriteConnection("").ReturnsForAnyArgs(returnThis);
-            hidService.GetDeviceDefinition(deviceId, returnThis).ReturnsForAnyArgs(new ConnectedDeviceDefinition(deviceId) { ReadBufferSize = 64, WriteBufferSize = 64 });
+            var safeFileHandle = new SafeFileHandle((IntPtr)100, true);
+            hidService.CreateReadConnection("").ReturnsForAnyArgs(safeFileHandle);
+            hidService.CreateWriteConnection("").ReturnsForAnyArgs(safeFileHandle);
+            hidService.GetDeviceDefinition(deviceId, safeFileHandle).ReturnsForAnyArgs(new ConnectedDeviceDefinition(deviceId) { ReadBufferSize = 64, WriteBufferSize = 64 });
+
+            var readStream = Substitute.For<Stream>();
+            readStream.CanRead.ReturnsForAnyArgs(true);
+            hidService.OpenRead(null, 0).ReturnsForAnyArgs(readStream);
+
+            var writeStream = Substitute.For<Stream>();
+            writeStream.CanWrite.ReturnsForAnyArgs(true);
+            hidService.OpenWrite(null, 0).ReturnsForAnyArgs(writeStream);
+
             var windowsHidDevice = new WindowsHidDevice(deviceId, null, null, Substitute.For<ILogger>(), Substitute.For<ITracer>(), hidService);
             await windowsHidDevice.InitializeAsync();
         }

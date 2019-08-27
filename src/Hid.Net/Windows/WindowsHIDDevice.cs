@@ -12,8 +12,8 @@ namespace Hid.Net.Windows
     public sealed class WindowsHidDevice : WindowsDeviceBase, IHidDevice
     {
         #region Fields
-        private FileStream _ReadFileStream;
-        private FileStream _WriteFileStream;
+        private Stream _ReadFileStream;
+        private Stream _WriteFileStream;
         private SafeFileHandle _ReadSafeFileHandle;
         private SafeFileHandle _WriteSafeFileHandle;
         private bool _IsClosing;
@@ -107,7 +107,7 @@ namespace Hid.Net.Windows
                     throw new ValidationException($"{nameof(ReadBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an InputReportByteLength of 0. Please specify this argument in the constructor");
                 }
 
-                _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.Read, readBufferSize, false);
+                _ReadFileStream = HidService.OpenRead(_ReadSafeFileHandle, readBufferSize);
 
                 if (_ReadFileStream.CanRead)
                 {
@@ -126,7 +126,7 @@ namespace Hid.Net.Windows
                     }
 
                     //Don't open if this is a read only connection
-                    _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
+                    _WriteFileStream = HidService.OpenWrite(_WriteSafeFileHandle, writeBufferSize);
 
                     if (_WriteFileStream.CanWrite)
                     {

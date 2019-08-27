@@ -3,6 +3,7 @@ using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -96,7 +97,7 @@ namespace Hid.Net.Windows
             };
         }
 
-        public  string GetManufacturer(SafeFileHandle safeFileHandle)
+        public string GetManufacturer(SafeFileHandle safeFileHandle)
         {
             return GetHidString(safeFileHandle, HidD_GetManufacturerString, Logger);
         }
@@ -147,6 +148,16 @@ namespace Hid.Net.Windows
             _HidGuid = hidGuid;
 
             return hidGuid;
+        }
+
+        public Stream OpenRead(SafeFileHandle readSafeFileHandle, ushort readBufferSize)
+        {
+            return new FileStream(readSafeFileHandle, FileAccess.Read, readBufferSize, false);
+        }
+
+        public Stream OpenWrite(SafeFileHandle writeSafeFileHandle, ushort writeBufferSize)
+        {
+            return new FileStream(writeSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
         }
         #endregion
 
