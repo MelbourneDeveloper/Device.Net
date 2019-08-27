@@ -60,6 +60,17 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Implementation
+        public SafeFileHandle CreateWriteConnection(string deviceId)
+        {
+            return APICalls.CreateFile(deviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+        }
+
+        public SafeFileHandle CreateReadConnection(string deviceId)
+        {
+            //TODO: Work on getting these correct, and make sure that different values can be passed in here.
+            return APICalls.CreateFile(deviceId, APICalls.GenericRead, 3, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+        }
+
         public ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)
         {
             var hidAttributes = GetHidAttributes(safeFileHandle);

@@ -1,6 +1,6 @@
-﻿using System;
-using Device.Net;
+﻿using Device.Net;
 using Microsoft.Win32.SafeHandles;
+using System;
 
 namespace Hid.Net.Windows
 {
@@ -16,5 +16,7 @@ namespace Hid.Net.Windows
         string GetManufacturer(SafeFileHandle safeFileHandle);
         string GetProduct(SafeFileHandle safeFileHandle);
         string GetSerialNumber(SafeFileHandle safeFileHandle);
+        SafeFileHandle CreateWriteConnection(string deviceId);
+        SafeFileHandle CreateReadConnection(string deviceId);
     }
 }

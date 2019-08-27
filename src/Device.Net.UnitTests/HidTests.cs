@@ -1,5 +1,6 @@
 ﻿using Hid.Net.Windows;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Win32.SafeHandles;
 using NSubstitute;
 using System;
 using System.Threading.Tasks;
@@ -28,7 +29,13 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestInitializeHidDevice()
         {
-            var windowsHidDevice = new WindowsHidDevice("test", null, null, Substitute.For<ILogger>(), Substitute.For<ITracer>(), Substitute.For<IHidService>());
+            const string deviceId = "test";
+            var hidService = Substitute.For<IHidService>();
+            var returnThis = new SafeFileHandle((IntPtr)100, true);
+            hidService.CreateReadConnection("").ReturnsForAnyArgs(returnThis);
+            hidService.CreateWriteConnection("").ReturnsForAnyArgs(returnThis);
+            hidService.GetDeviceDefinition(deviceId, returnThis).ReturnsForAnyArgs(new ConnectedDeviceDefinition(deviceId) { ReadBufferSize = 64, WriteBufferSize = 64 });
+            var windowsHidDevice = new WindowsHidDevice(deviceId, null, null, Substitute.For<ILogger>(), Substitute.For<ITracer>(), hidService);
             await windowsHidDevice.InitializeAsync();
         }
     }
