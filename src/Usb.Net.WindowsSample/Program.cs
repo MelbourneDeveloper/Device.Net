@@ -7,6 +7,7 @@ using Device.Net;
 #if (!LIBUSB)
 using Usb.Net.Windows;
 using Hid.Net.Windows;
+using SerialPort.Net.Windows;
 #else
 using Device.Net.LibUsb;
 #endif
@@ -33,6 +34,7 @@ namespace Usb.Net.WindowsSample
 #else
             WindowsUsbDeviceFactory.Register(Logger, Tracer);
             WindowsHidDeviceFactory.Register(Logger, Tracer);
+            WindowsSerialPortDeviceFactory.Register(Logger, Tracer);
 #endif
 
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
