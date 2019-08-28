@@ -9,7 +9,7 @@ namespace Hid.Net.Windows
     /// <summary>
     /// Service to handle Hid API calls. Windows oriented for now.
     /// </summary>
-    public interface IHidService
+    public interface IHidApiService : IApiService
     {
         ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle);
         HidAttributes GetHidAttributes(SafeFileHandle safeFileHandle);
@@ -18,10 +18,7 @@ namespace Hid.Net.Windows
         string GetManufacturer(SafeFileHandle safeFileHandle);
         string GetProduct(SafeFileHandle safeFileHandle);
         string GetSerialNumber(SafeFileHandle safeFileHandle);
-        SafeFileHandle CreateWriteConnection(string deviceId);
-        SafeFileHandle CreateReadConnection(string deviceId, FileAccessRights desiredAccess);
         Stream OpenRead(SafeFileHandle readSafeFileHandle, ushort readBufferSize);
         Stream OpenWrite(SafeFileHandle writeSafeFileHandle, ushort writeBufferSize);
-
     }
 }

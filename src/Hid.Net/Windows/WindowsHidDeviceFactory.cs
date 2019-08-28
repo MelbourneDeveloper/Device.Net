@@ -40,7 +40,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Properties
-        public IHidService HidService { get; }
+        public IHidApiService HidService { get; }
         #endregion
 
         #region Constructor
@@ -49,7 +49,7 @@ namespace Hid.Net.Windows
 
         }
 
-        public WindowsHidDeviceFactory(ILogger logger, ITracer tracer, IHidService hidService) : base(logger, tracer)
+        public WindowsHidDeviceFactory(ILogger logger, ITracer tracer, IHidApiService hidService) : base(logger, tracer)
         {
             HidService = hidService;
 

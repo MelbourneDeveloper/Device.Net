@@ -44,7 +44,7 @@ namespace Device.Net.UnitTests
         private static async Task<WindowsHidDevice> InitializeWindowsHidDevice(bool isReadonly)
         {
             const string deviceId = "test";
-            var hidService = Substitute.For<IHidService>();
+            var hidService = Substitute.For<IHidApiService>();
             var invalidSafeFileHandle = new SafeFileHandle((IntPtr)(-1), true);
             var validSafeFileHandle = new SafeFileHandle((IntPtr)100, true);
             hidService.CreateReadConnection("", Windows.FileAccessRights.None).ReturnsForAnyArgs(validSafeFileHandle);
