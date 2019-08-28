@@ -1,11 +1,13 @@
 ﻿using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Usb.Net.Windows
 {
+    [SuppressMessage("NDepend", "ND2400:PInvokesShouldBeStaticAndNotBePubliclyVisible", Justification = "...")]
     public static partial class WinUsbApiCalls
     {
         #region Constants

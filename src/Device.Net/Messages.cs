@@ -1,5 +1,9 @@
-﻿namespace Device.Net
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Device.Net
 {
+    [SuppressMessage("NDepend", "ND1804:AvoidPubliclyVisibleConstantFields", Justification = "...")]
+    [SuppressMessage("NDepend", "ND1805:FieldsShouldBeDeclaredAsPrivate", Justification = "...")]
     public static class Messages
     {
         #region Code Specific Messages

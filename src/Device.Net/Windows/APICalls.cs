@@ -1,9 +1,11 @@
 ﻿using Microsoft.Win32.SafeHandles;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
 namespace Device.Net.Windows
 {
+    [SuppressMessage("NDepend", "ND2400:PInvokesShouldBeStaticAndNotBePubliclyVisible", Justification = "...")]
     public static class APICalls
     {
         #region Constants
@@ -37,18 +39,22 @@ namespace Device.Net.Windows
         #endregion
 
         #region SetupAPI
+        [SuppressMessage("NDepend", "ND2400:PInvokesShouldBeStaticAndNotBePubliclyVisible", Justification = "...")]
         [DllImport("setupapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern bool SetupDiDestroyDeviceInfoList(IntPtr deviceInfoSet);
 
         /// <summary>
         /// https://docs.microsoft.com/en-us/windows/desktop/api/setupapi/nf-setupapi-setupdienumdeviceinterfaces
         /// </summary>
+        [SuppressMessage("NDepend", "ND2400:PInvokesShouldBeStaticAndNotBePubliclyVisible", Justification = "...")]
         [DllImport(@"setupapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern bool SetupDiEnumDeviceInterfaces(IntPtr hDevInfo, IntPtr devInfo, ref Guid interfaceClassGuid, uint memberIndex, ref SpDeviceInterfaceData deviceInterfaceData);
 
+        [SuppressMessage("NDepend", "ND2400:PInvokesShouldBeStaticAndNotBePubliclyVisible", Justification = "...")]
         [DllImport("setupapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern IntPtr SetupDiGetClassDevs(ref Guid classGuid, IntPtr enumerator, IntPtr hwndParent, uint flags);
 
+        [SuppressMessage("NDepend", "ND2400:PInvokesShouldBeStaticAndNotBePubliclyVisible", Justification = "...")]
         [DllImport(@"setupapi.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         public static extern bool SetupDiGetDeviceInterfaceDetail(IntPtr hDevInfo, ref SpDeviceInterfaceData deviceInterfaceData, ref SpDeviceInterfaceDetailData deviceInterfaceDetailData, uint deviceInterfaceDetailDataSize, out uint requiredSize, ref SpDeviceInfoData deviceInfoData);
         #endregion
