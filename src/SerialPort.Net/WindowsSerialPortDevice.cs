@@ -109,6 +109,11 @@ namespace SerialPort.Net.Windows
 
             base.Dispose();
         }
+
+        public void Close()
+        {
+            Dispose();
+        }
         #endregion
 
         #region Private Methods
@@ -195,14 +200,6 @@ namespace SerialPort.Net.Windows
             {
                 throw new InvalidOperationException(Messages.ErrorMessageNotInitialized);
             }
-        }
-        #endregion
-
-        #region Native Methods
-
-        public void Close()
-        {
-            Dispose();
         }
         #endregion
     }
