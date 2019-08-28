@@ -12,8 +12,21 @@ namespace SerialPort.Net.Windows
 {
     public class WindowsSerialPortDeviceFactory : IDeviceFactory
     {
+        #region Public Properties
         public DeviceType DeviceType => DeviceType.SerialPort;
+        public ILogger Logger { get; }
+        public ITracer Tracer { get; }
+        #endregion
 
+        #region Constructor
+        public WindowsSerialPortDeviceFactory(ILogger logger, ITracer tracer)
+        {
+            Logger = logger;
+            Tracer = tracer;
+        }
+        #endregion
+
+        #region Public Methods
         public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
         {
 #if NETSTANDARD
@@ -77,5 +90,11 @@ namespace SerialPort.Net.Windows
 
             return new WindowsSerialPortDevice(deviceDefinition.DeviceId);
         }
+
+        public static void Register(ILogger logger, ITracer tracer)
+        {
+            DeviceManager.Current.DeviceFactories.Add(new WindowsSerialPortDeviceFactory(logger, tracer));
+        }
+        #endregion
     }
 }

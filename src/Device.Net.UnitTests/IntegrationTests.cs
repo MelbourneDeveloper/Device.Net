@@ -63,12 +63,28 @@ namespace SerialPort.Net
             deviceManager.DeviceFactories.Add(windowsSerialPortDeviceFactory);
             var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.SerialPort } });
 
-            foreach(var device in devices)
+            foreach (var device in devices)
             {
                 device.Dispose();
             }
 
-            Assert.IsTrue(devices.Count > 1);            
+            Assert.IsTrue(devices.Count > 1);
+        }
+
+        [TestMethod]
+        public async Task ConnectedTestGetDevicesSingletonAsync()
+        {
+            WindowsSerialPortDeviceFactory.Register(null, null);
+            var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
+
+            var devices = await DeviceManager.Current.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.SerialPort } });
+
+            foreach (var device in devices)
+            {
+                device.Dispose();
+            }
+
+            Assert.IsTrue(devices.Count > 1);
         }
 
         [TestMethod]
@@ -84,7 +100,7 @@ namespace SerialPort.Net
         {
             if (windowsSerialPortDeviceFactory == null)
             {
-                windowsSerialPortDeviceFactory = new WindowsSerialPortDeviceFactory();
+                windowsSerialPortDeviceFactory = new WindowsSerialPortDeviceFactory(null, null);
             }
 
             return (await windowsSerialPortDeviceFactory.GetConnectedDeviceDefinitionsAsync(null)).ToList();
