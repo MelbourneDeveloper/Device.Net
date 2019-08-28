@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 
 namespace Hid.Net.Windows
 {
-    public class WindowsHidApiService : IHidService
+    public class WindowsHidApiService : ApiService, IHidApiService
     {
         #region Private Static Fields
         private static Guid? _HidGuid;
@@ -19,14 +19,9 @@ namespace Hid.Net.Windows
         private const int HIDP_STATUS_SUCCESS = 0x110000;
         #endregion
 
-        #region Public Properties
-        public ILogger Logger { get; }
-        #endregion
-
         #region Constructor
-        public WindowsHidApiService(ILogger logger)
+        public WindowsHidApiService(ILogger logger) : base(logger)
         {
-            Logger = logger;
         }
         #endregion
 
@@ -61,16 +56,6 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Implementation
-        public SafeFileHandle CreateWriteConnection(string deviceId)
-        {
-            return CreateConnection(deviceId, FileAccessRights.GenericRead | FileAccessRights.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, APICalls.OpenExisting);
-        }
-
-        public SafeFileHandle CreateReadConnection(string deviceId, FileAccessRights desiredAccess)
-        {
-            return CreateConnection(deviceId, desiredAccess, APICalls.FileShareRead | APICalls.FileShareWrite, APICalls.OpenExisting);
-        }
-
         public ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)
         {
             var hidAttributes = GetHidAttributes(safeFileHandle);
@@ -161,12 +146,6 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Private Methods
-        private SafeFileHandle CreateConnection(string deviceId, FileAccessRights desiredAccess, uint shareMode, uint creationDisposition)
-        {
-            Logger?.Log($"Calling {nameof(APICalls.CreateFile)} for DeviceId: {deviceId}. Desired Access: {desiredAccess}. Share mode: {shareMode}. Creation Disposition: {creationDisposition}", nameof(WindowsHidApiService), null, LogLevel.Information);
-            return APICalls.CreateFile(deviceId, desiredAccess, shareMode, IntPtr.Zero, creationDisposition, 0, IntPtr.Zero);
-        }
-
         private static string GetHidString(SafeFileHandle safeFileHandle, GetString getString, ILogger logger, [CallerMemberName] string callMemberName = null)
         {
             try

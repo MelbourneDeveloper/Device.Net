@@ -17,6 +17,9 @@ namespace Device.Net.Windows
         public const int FileFlagOverlapped = 1073741824;
 
         public const int ERROR_NO_MORE_ITEMS = 259;
+
+        public const int PURGE_TXCLEAR = 0x0004;
+        public const int PURGE_RXCLEAR = 0x0008;
         #endregion
 
         #region Methods

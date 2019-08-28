@@ -40,7 +40,7 @@ namespace Hid.Net.Windows
 
         #region Public Properties
         public byte DefaultReportId { get; set; }
-        public IHidService HidService { get; }
+        public IHidApiService HidService { get; }
         #endregion
 
         #region Constructor
@@ -57,7 +57,7 @@ namespace Hid.Net.Windows
 
         }
 
-        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILogger logger, ITracer tracer, IHidService hidService) : base(deviceId, logger, tracer)
+        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILogger logger, ITracer tracer, IHidApiService hidService) : base(deviceId, logger, tracer)
         {
             _WriteBufferSize = writeBufferSize;
             _ReadBufferSize = readBufferSize;
@@ -223,8 +223,8 @@ namespace Hid.Net.Windows
             }
             catch (Exception ex)
             {
-                Log(Messages.ReadErrorMessage, ex);
-                throw new IOException(Messages.ReadErrorMessage, ex);
+                Log(Messages.ErrorMessageRead, ex);
+                throw new IOException(Messages.ErrorMessageRead, ex);
             }
 
             if (ReadBufferHasReportId) reportId = bytes.First();

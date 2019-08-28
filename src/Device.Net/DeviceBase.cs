@@ -70,6 +70,8 @@ namespace Device.Net
         #endregion
 
         #region Public Abstract Methods
+        //TODO: Why are these here?
+
         public abstract Task<ReadResult> ReadAsync();
         public abstract Task WriteAsync(byte[] data);
         #endregion

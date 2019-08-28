@@ -64,8 +64,8 @@ namespace Usb.Net.Android
                 }
                 catch (Exception ex)
                 {
-                    Logger?.Log(Messages.ReadErrorMessage, nameof(AndroidUsbInterfaceManager), ex, LogLevel.Error);
-                    throw new IOException(Messages.ReadErrorMessage, ex);
+                    Logger?.Log(Messages.ErrorMessageRead, nameof(AndroidUsbInterfaceManager), ex, LogLevel.Error);
+                    throw new IOException(Messages.ErrorMessageRead, ex);
                 }
             });
         }
