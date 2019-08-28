@@ -56,6 +56,22 @@ namespace SerialPort.Net
         }
 
         [TestMethod]
+        public async Task ConnectedTestGetDevicesAsync()
+        {
+            var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
+            var deviceManager = new DeviceManager();
+            deviceManager.DeviceFactories.Add(windowsSerialPortDeviceFactory);
+            var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.SerialPort } });
+
+            foreach(var device in devices)
+            {
+                device.Dispose();
+            }
+
+            Assert.IsTrue(devices.Count > 1);            
+        }
+
+        [TestMethod]
         public async Task NotConnectedTestEnumerateAsync()
         {
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();

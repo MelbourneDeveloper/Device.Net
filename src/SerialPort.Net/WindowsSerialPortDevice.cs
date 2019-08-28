@@ -101,11 +101,11 @@ namespace SerialPort.Net.Windows
             if (disposed) return;
             disposed = true;
 
-            if (_ReadSafeFileHandle.IsInvalid) return;
-
-            _ReadSafeFileHandle.Dispose();
-
-            _ReadSafeFileHandle = new SafeFileHandle((IntPtr)0, true);
+            if (_ReadSafeFileHandle != null)
+            {
+                _ReadSafeFileHandle.Dispose();
+                _ReadSafeFileHandle = new SafeFileHandle((IntPtr)0, true);
+            }
 
             base.Dispose();
         }
