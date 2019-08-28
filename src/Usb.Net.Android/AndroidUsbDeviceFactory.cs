@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Android.Content;
+using Android.Hardware.Usb;
+using Device.Net;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Android.Content;
-using Android.Hardware.Usb;
-using Device.Net;
 
 namespace Usb.Net.Android
 {
@@ -48,9 +48,9 @@ namespace Usb.Net.Android
             return Task.Run<IEnumerable<ConnectedDeviceDefinition>>(() =>
             {
                 //TODO: Get more details about the device.
-                if(deviceDefinition.VendorId.HasValue && deviceDefinition.ProductId.HasValue)
+                if (deviceDefinition.VendorId.HasValue && deviceDefinition.ProductId.HasValue)
                     return UsbManager.DeviceList.Select(kvp => kvp.Value).Where(d => deviceDefinition.VendorId == d.VendorId && deviceDefinition.ProductId == d.ProductId).Select(GetAndroidDeviceDefinition).ToList();
-                else if(deviceDefinition.VendorId.HasValue)
+                else if (deviceDefinition.VendorId.HasValue)
                     return UsbManager.DeviceList.Select(kvp => kvp.Value).Where(d => deviceDefinition.VendorId == d.VendorId).Select(GetAndroidDeviceDefinition).ToList();
                 else
                     return UsbManager.DeviceList.Select(kvp => kvp.Value).Select(GetAndroidDeviceDefinition).ToList();
@@ -65,7 +65,7 @@ namespace Usb.Net.Android
                 throw new Exception($"The device Id '{deviceDefinition.DeviceId}' is not a valid integer");
             }
 
-            return new UsbDevice(new AndroidUsbInterfaceManager(UsbManager, Context, deviceId, Logger, Tracer, ReadBufferSize, WriteBufferSize), Logger, Tracer);
+            return new UsbDevice(deviceDefinition.DeviceId, new AndroidUsbInterfaceManager(UsbManager, Context, deviceId, Logger, Tracer, ReadBufferSize, WriteBufferSize), Logger, Tracer);
         }
         #endregion
 

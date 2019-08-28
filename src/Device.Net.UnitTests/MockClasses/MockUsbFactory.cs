@@ -37,7 +37,7 @@ namespace Device.Net.UnitTests
 
             Logger?.Log(string.Format(FoundMessage, DeviceId), nameof(MockUsbFactory), null, LogLevel.Information);
 
-            return new MockUsbDevice(Logger, Tracer);
+            return new MockUsbDevice(DeviceId, Logger, Tracer);
         }
     }
 }

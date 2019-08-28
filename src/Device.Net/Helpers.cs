@@ -18,6 +18,6 @@ namespace Device.Net
             return id?.ToString("X").ToLower().PadLeft(4, '0');
         }
 
-        public static CultureInfo ParsingCulture { get; private set; } = new CultureInfo("en-US");
+        public static CultureInfo ParsingCulture { get; } = new CultureInfo("en-US");
     }
 }

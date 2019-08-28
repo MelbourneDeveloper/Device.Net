@@ -36,7 +36,7 @@ namespace Device.Net.LibUsb
         {
         }
 
-        public LibUsbDevice(UsbDevice usbDevice, int timeout, ILogger logger, ITracer tracer) : base(logger, tracer)
+        public LibUsbDevice(UsbDevice usbDevice, int timeout, ILogger logger, ITracer tracer) : base(usbDevice.DevicePath, logger, tracer)
         {
             UsbDevice = usbDevice;
             Timeout = timeout;

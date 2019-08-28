@@ -9,7 +9,7 @@ namespace Device.Net
 
         public void Log(string message, string region, Exception ex, LogLevel logLevel)
         {
-            var formattedMessage = $"Message: {message}\r\nTime: {DateTime.Now}\r\nSection: {region}\r\nError: {ex}";
+            var formattedMessage = $"Message: {message}\r\nLevel: {logLevel}\r\nTime: {DateTime.Now}\r\nSection: {region}\r\nError: {ex}";
             formattedMessage = $"--------------------------------------\r\n{formattedMessage}\r\n--------------------------------------";
             if (LogToConsole)
             {

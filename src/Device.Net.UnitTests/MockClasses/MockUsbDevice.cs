@@ -6,9 +6,8 @@
         public const uint VendorId = 2;
         public const string MockedDeviceId = "321";
 
-        public MockUsbDevice(ILogger logger, ITracer tracer) : base(logger, tracer)
+        public MockUsbDevice(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
         {
-            DeviceId = MockedDeviceId;
             ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId) { ProductId = ProductId, VendorId = VendorId, DeviceType = DeviceType.Usb };
         }
     }

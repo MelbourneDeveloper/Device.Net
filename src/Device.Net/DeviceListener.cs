@@ -42,11 +42,10 @@ namespace Device.Net
         public DeviceListener(IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions, int? pollMilliseconds)
         {
             FilterDeviceDefinitions.AddRange(filterDeviceDefinitions);
-            if (pollMilliseconds.HasValue)
-            {
-                _PollTimer = new timer(pollMilliseconds.Value);
-                _PollTimer.Elapsed += _PollTimer_Elapsed;
-            }
+            if (!pollMilliseconds.HasValue) return;
+
+            _PollTimer = new timer(pollMilliseconds.Value);
+            _PollTimer.Elapsed += _PollTimer_Elapsed;
         }
         #endregion
 
@@ -115,19 +114,17 @@ namespace Device.Net
                         _CreatedDevicesByDefinition.Add(deviceDefinition, device);
                     }
 
-                    if (!device.IsInitialized)
-                    {
-                        Log($"Attempting to initialize with DeviceId of {device.DeviceId}", null);
+                    if (device.IsInitialized) continue;
 
-                        //The device is not initialized so initialize it
-                        await device.InitializeAsync();
+                    Log($"Attempting to initialize with DeviceId of {device.DeviceId}", null);
 
-                        //Let listeners know a registered device was initialized
-                        DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
+                    //The device is not initialized so initialize it
+                    await device.InitializeAsync();
 
-                        Log(Messages.InformationMessageDeviceConnected, null);
-                    }
+                    //Let listeners know a registered device was initialized
+                    DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
 
+                    Log(Messages.InformationMessageDeviceConnected, null);
                 }
 
                 var removeDefs = new List<FilterDeviceDefinition>();
@@ -137,22 +134,21 @@ namespace Device.Net
                 {
                     var device = _CreatedDevicesByDefinition[filteredDeviceDefinitionKey];
 
-                    if (!connectedDeviceDefinitions.Any(cdd => DeviceManager.IsDefinitionMatch(filteredDeviceDefinitionKey, cdd)))
-                    {
-                        if (device.IsInitialized)
-                        {
-                            //Let listeners know a registered device was disconnected
-                            //NOTE: let the rest of the app know before disposal so that the app can stop doing whatever it's doing.
-                            DeviceDisconnected?.Invoke(this, new DeviceEventArgs(device));
+                    if (connectedDeviceDefinitions.Any(cdd =>
+                        DeviceManager.IsDefinitionMatch(filteredDeviceDefinitionKey, cdd))) continue;
 
-                            //The device is no longer connected so close it
-                            device.Close();
+                    if (!device.IsInitialized) continue;
 
-                            removeDefs.Add(filteredDeviceDefinitionKey);
+                    //Let listeners know a registered device was disconnected
+                    //NOTE: let the rest of the app know before disposal so that the app can stop doing whatever it's doing.
+                    DeviceDisconnected?.Invoke(this, new DeviceEventArgs(device));
 
-                            Log(Messages.InformationMessageDeviceListenerDisconnected, null);
-                        }
-                    }
+                    //The device is no longer connected so close it
+                    device.Close();
+
+                    removeDefs.Add(filteredDeviceDefinitionKey);
+
+                    Log(Messages.InformationMessageDeviceListenerDisconnected, null);
                 }
 
                 foreach (var removeDef in removeDefs)

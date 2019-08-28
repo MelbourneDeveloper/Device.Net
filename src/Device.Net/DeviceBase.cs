@@ -21,14 +21,15 @@ namespace Device.Net
 
         #region Public Properties
         public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; set; }
-        public string DeviceId { get; set; }
+        public string DeviceId { get; }
         public ILogger Logger { get; }
         public ITracer Tracer { get; }
         #endregion
 
         #region Constructor
-        protected DeviceBase(ILogger logger, ITracer tracer)
+        protected DeviceBase(string deviceId, ILogger logger, ITracer tracer)
         {
+            DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
             Tracer = tracer;
             Logger = logger;
         }
@@ -69,6 +70,8 @@ namespace Device.Net
         #endregion
 
         #region Public Abstract Methods
+        //TODO: Why are these here?
+
         public abstract Task<ReadResult> ReadAsync();
         public abstract Task WriteAsync(byte[] data);
         #endregion

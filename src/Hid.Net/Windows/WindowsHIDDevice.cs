@@ -12,8 +12,8 @@ namespace Hid.Net.Windows
     public sealed class WindowsHidDevice : WindowsDeviceBase, IHidDevice
     {
         #region Fields
-        private FileStream _ReadFileStream;
-        private FileStream _WriteFileStream;
+        private Stream _ReadFileStream;
+        private Stream _WriteFileStream;
         private SafeFileHandle _ReadSafeFileHandle;
         private SafeFileHandle _WriteSafeFileHandle;
         private bool _IsClosing;
@@ -32,7 +32,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Overrides
-        public override bool IsInitialized => _WriteSafeFileHandle != null && !_WriteSafeFileHandle.IsInvalid;
+        public override bool IsInitialized => _ReadSafeFileHandle != null && !_ReadSafeFileHandle.IsInvalid;
         public override ushort WriteBufferSize => _WriteBufferSize ?? (ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value);
         public override ushort ReadBufferSize => _ReadBufferSize ?? (ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value);
         public bool? IsReadOnly { get; private set; }
@@ -40,6 +40,7 @@ namespace Hid.Net.Windows
 
         #region Public Properties
         public byte DefaultReportId { get; set; }
+        public IHidApiService HidService { get; }
         #endregion
 
         #region Constructor
@@ -51,10 +52,16 @@ namespace Hid.Net.Windows
         {
         }
 
-        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
+        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILogger logger, ITracer tracer) : this(deviceId, writeBufferSize, readBufferSize, logger, tracer, null)
+        {
+
+        }
+
+        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILogger logger, ITracer tracer, IHidApiService hidService) : base(deviceId, logger, tracer)
         {
             _WriteBufferSize = writeBufferSize;
             _ReadBufferSize = readBufferSize;
+            HidService = hidService ?? new WindowsHidApiService(logger);
         }
         #endregion
 
@@ -70,23 +77,22 @@ namespace Hid.Net.Windows
                     throw new ValidationException($"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
                 }
 
-                //TODO: Work on getting these correct, and make sure that different values can be passed in here.
-                _ReadSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead, 3, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
-                _WriteSafeFileHandle = APICalls.CreateFile(DeviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero);
+                _ReadSafeFileHandle = HidService.CreateReadConnection(DeviceId, FileAccessRights.GenericRead);
+                _WriteSafeFileHandle = HidService.CreateWriteConnection(DeviceId);
 
                 if (_ReadSafeFileHandle.IsInvalid)
                 {
                     throw new ApiException(Messages.ErrorMessageCantOpenRead);
                 }
 
-                IsReadOnly = _WriteSafeFileHandle.IsInvalid ? true : false;
+                IsReadOnly = _WriteSafeFileHandle.IsInvalid;
 
                 if (IsReadOnly.Value)
                 {
                     Logger?.Log(Messages.WarningMessageOpeningInReadonlyMode(DeviceId), nameof(WindowsHidDevice), null, LogLevel.Warning);
                 }
 
-                ConnectedDeviceDefinition = WindowsHidDeviceFactory.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle, Logger);
+                ConnectedDeviceDefinition = HidService.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
 
                 var readBufferSize = ReadBufferSize;
                 var writeBufferSize = WriteBufferSize;
@@ -96,7 +102,7 @@ namespace Hid.Net.Windows
                     throw new ValidationException($"{nameof(ReadBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an InputReportByteLength of 0. Please specify this argument in the constructor");
                 }
 
-                _ReadFileStream = new FileStream(_ReadSafeFileHandle, FileAccess.Read, readBufferSize, false);
+                _ReadFileStream = HidService.OpenRead(_ReadSafeFileHandle, readBufferSize);
 
                 if (_ReadFileStream.CanRead)
                 {
@@ -115,7 +121,7 @@ namespace Hid.Net.Windows
                     }
 
                     //Don't open if this is a read only connection
-                    _WriteFileStream = new FileStream(_WriteSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
+                    _WriteFileStream = HidService.OpenWrite(_WriteSafeFileHandle, writeBufferSize);
 
                     if (_WriteFileStream.CanWrite)
                     {
@@ -217,8 +223,8 @@ namespace Hid.Net.Windows
             }
             catch (Exception ex)
             {
-                Log(Messages.ReadErrorMessage, ex);
-                throw new IOException(Messages.ReadErrorMessage, ex);
+                Log(Messages.ErrorMessageRead, ex);
+                throw new IOException(Messages.ErrorMessageRead, ex);
             }
 
             if (ReadBufferHasReportId) reportId = bytes.First();

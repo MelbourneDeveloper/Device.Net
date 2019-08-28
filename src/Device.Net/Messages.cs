@@ -30,6 +30,7 @@
 
         #region Misc
         public const string ErrorMessageReentry = "Reentry. This method is not thread safe";
+        public const string ErrorMessageOperationNotSupportedOnPlatform = "You can't use this class on this platform";
         #endregion
 
         #region IO
@@ -40,7 +41,7 @@
 
         public const string ErrorMessageReadWrite = "Read/Write Error";
         public const string WriteErrorMessage = "An error occurred while attempting to write to the device";
-        public const string ReadErrorMessage = "An error occurred while attempting to read from the device";
+        public const string ErrorMessageRead = "An error occurred while attempting to read from the device";
         public const string ErrorMessageBufferSizeTooLarge = "The buffer size is too large";
         #endregion
 
@@ -74,6 +75,16 @@
         {
             return $"No bulk {(isRead ? "read" : "write")} pipes found. Interrupt pipes to be used instead. Interface Number {interfaceNumber}";
         }
+        #endregion
+
+        #region Serial Port
+        public const string ErrorCouldNotGetCommState = "Could not get Comm State";
+        public const string ErrorCouldNotSetCommState = "Could not set Comm State";
+        public const string ErrorCouldNotSetCommTimeout = "Could not set Comm Timeout";
+        public const string ErrorMessageStopBitsMustBeSpecified = "Stop bits must be specified";
+        public const string ErrorByteSizeMustBeFiveToEight = "Byte size must be between 5 and 8";
+        public const string ErrorBaudRateInvalid = "Baud rate must be betweem 110 and 256000";
+        public const string ErrorInvalidByteSizeAndStopBitsCombo = "The combination of byte size and stop bits is incorrect. 2 stop bits can't be used with 5 bytes, and byte sizes of more than five can't be used with stop bits of one point five.";
         #endregion
     }
 }

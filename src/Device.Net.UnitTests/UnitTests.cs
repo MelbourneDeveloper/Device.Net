@@ -73,7 +73,7 @@ namespace Device.Net.UnitTests
             var connectedDeviceDefinition = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
 
 
-            var mockHidDevice = new MockHidDevice(logger, tracer) { DeviceId = connectedDeviceDefinition.DeviceId };
+            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, logger, tracer);
 
             var writeAndReadTasks = new List<Task<ReadResult>>();
 
@@ -188,6 +188,28 @@ namespace Device.Net.UnitTests
 
             throw new Exception("The call was not stopped");
         }
+
+        #region Exceptions
+        [TestMethod]
+        public void TestDeviceException()
+        {
+            try
+            {
+                var deviceManager = new DeviceManager();
+                var device = deviceManager.GetDevice(new ConnectedDeviceDefinition("a"));
+            }
+            catch (DeviceException dex)
+            {
+                Assert.AreEqual(Messages.ErrorMessageCouldntGetDevice, dex.Message);
+                return;
+            }
+
+            Assert.Fail();
+        }
+
+
+
+        #endregion
 
         #endregion
 

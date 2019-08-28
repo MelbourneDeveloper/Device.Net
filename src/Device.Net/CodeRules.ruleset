@@ -915,8 +915,8 @@
     <Rule Id="IDE1006WithoutSuggestion" Action="Error" />
   </Rules>
   <Rules AnalyzerId="Microsoft.CodeAnalysis.Features" RuleNamespace="Microsoft.CodeAnalysis.Features">
-    <Rule Id="IDE0010" Action="Error" />
-    <Rule Id="IDE0010WithoutSuggestion" Action="Error" />
+    <Rule Id="IDE0010" Action="Warning" />
+    <Rule Id="IDE0010WithoutSuggestion" Action="Warning" />
     <Rule Id="IDE0033" Action="Error" />
     <Rule Id="IDE0033WithoutSuggestion" Action="Error" />
   </Rules>

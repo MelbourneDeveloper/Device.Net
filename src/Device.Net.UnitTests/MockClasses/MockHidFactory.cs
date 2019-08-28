@@ -35,7 +35,7 @@
 
             Logger?.Log(string.Format(FoundMessage, DeviceId), nameof(MockHidFactory), null, LogLevel.Information);
 
-            return new MockHidDevice(Logger, Tracer);
+            return new MockHidDevice(DeviceId, Logger, Tracer);
         }
     }
 }
