@@ -38,7 +38,7 @@ namespace Device.Net.UnitTests
         public async Task TestDeviceIdIsPersisted()
         {
             var deviceId = "asd";
-            var windowsUsbDevice = new WindowsUsbDevice(deviceId, null, null, null, null);
+            var windowsUsbDevice = new WindowsUsbDevice(deviceId, new DebugLogger(), new DebugTracer(), 80, 80);
             Assert.AreEqual(deviceId, windowsUsbDevice.DeviceId);
         }
 
