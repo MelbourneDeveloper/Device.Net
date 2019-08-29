@@ -12,6 +12,8 @@ using Windows.Storage;
 
 namespace Hid.Net.UWP
 {
+    //TODO: Make this class inherit from DeviceBase
+
     public class UWPHidDevice : UWPDeviceBase<HidDevice>, IHidDevice
     {
         #region Fields
@@ -211,6 +213,11 @@ namespace Hid.Net.UWP
             {
                 _WriteAndReadLock.Release();
             }
+        }
+
+        public Task Flush()
+        {
+            throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
         }
         #endregion
     }

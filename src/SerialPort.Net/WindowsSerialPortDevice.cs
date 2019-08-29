@@ -89,11 +89,11 @@ namespace SerialPort.Net.Windows
             });
         }
 
-        public bool Flush()
+        public override Task Flush()
         {
             ValidateConnection();
 
-            return ApiService.APurgeComm(_ReadSafeFileHandle, APICalls.PURGE_RXCLEAR | APICalls.PURGE_TXCLEAR);
+            return Task.Run(() => ApiService.APurgeComm(_ReadSafeFileHandle, APICalls.PURGE_RXCLEAR | APICalls.PURGE_TXCLEAR));
         }
 
         public override void Dispose()
