@@ -35,6 +35,14 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
+        public async Task TestDeviceIdIsPersisted()
+        {
+            var deviceId = "asd";
+            var windowsUsbDevice = new WindowsUsbDevice(deviceId, null, null, null, null);
+            Assert.AreEqual(deviceId, windowsUsbDevice.DeviceId);
+        }
+
+        [TestMethod]
         public async Task TestWrite()
         {
             await InitializeDevice();
