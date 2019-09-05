@@ -77,6 +77,11 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
+        public virtual Task Flush()
+        {
+            throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
+        }
+
         public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer)
         {
             await _WriteAndReadLock.WaitAsync();

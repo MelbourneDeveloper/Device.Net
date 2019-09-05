@@ -29,6 +29,7 @@
         #endregion
 
         #region Misc
+        public const string ErrorMessageFlushNotImplemented = "Flush has only been implemented on Serial Port devices. Please log a Github issue if you need it.";
         public const string ErrorMessageReentry = "Reentry. This method is not thread safe";
         public const string ErrorMessageOperationNotSupportedOnPlatform = "You can't use this class on this platform";
         #endregion

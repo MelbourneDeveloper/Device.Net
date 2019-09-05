@@ -38,11 +38,16 @@ namespace Device.Net
         /// <summary>
         /// Information about the device. This information should be collected from initialization and will be null when before initialization or after disposal
         /// </summary>
-        ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get;  }
+        ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; }
 
         /// <summary>
         /// Closes the device, but allows for it to be reopened at a later point in time (as opposed to disposing)
         /// </summary>
         void Close();
+
+        /// <summary>
+        /// Flushes the device. Note: Only available for serial port devices currently
+        /// </summary>
+        Task Flush();
     }
 }
