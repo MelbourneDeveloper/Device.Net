@@ -12,8 +12,8 @@ This library provides a common Task based Async interface across platforms and d
 
 | Platform | Device Types |
 | ------------- |:-------------:|
-| .NET Framework     | Hid, USB |
-| .NET Core      | Hid, USB  |
+| .NET Framework     | Hid, USB, Serial Port |
+| .NET Core      | Hid, USB, Serial Port  |
 | Android | USB |
 | UWP | Hid, USB   |
 | Linux, MacOS* | [USB (Via LibUsbDotNet)](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support)  |
