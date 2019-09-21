@@ -134,20 +134,7 @@ namespace Device.Net.LibUsb
 
             try
             {
-                await Task.Run(() =>
-                {
-                    var errorCode = _UsbEndpointWriter.Write(data, Timeout, out var bytesWritten);
-                    if (errorCode == ErrorCode.Ok || errorCode == ErrorCode.Success)
-                    {
-                        Tracer?.Trace(true, data);
-                    }
-                    else
-                    {
-                        var message = $"Error. Write error code: {errorCode}";
-                        Logger?.Log(message, GetType().Name, null, LogLevel.Error);
-                        throw new IOException(message);
-                    }
-                });
+                await WriteUsbInterface.WriteAsync(data);
             }
             finally
             {
@@ -164,10 +151,7 @@ namespace Device.Net.LibUsb
             {
                 return monoUsbDevice.Profile.DeviceDescriptor.VendorID;
             }
-            else
-            {
-                return usbDevice.UsbRegistryInfo.Vid;
-            }
+            return usbDevice.UsbRegistryInfo.Vid;
         }
 
         public static int GetProductId(UsbDevice usbDevice)
@@ -176,10 +160,7 @@ namespace Device.Net.LibUsb
             {
                 return monoUsbDevice.Profile.DeviceDescriptor.ProductID;
             }
-            else
-            {
-                return usbDevice.UsbRegistryInfo.Pid;
-            }
+            return usbDevice.UsbRegistryInfo.Pid;
         }
 
         public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync()

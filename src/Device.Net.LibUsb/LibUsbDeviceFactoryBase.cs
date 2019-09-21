@@ -57,7 +57,7 @@ namespace Device.Net.LibUsb
 
             var usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value, (int)deviceDefinition.ProductId.Value);
             var usbDevice = UsbDevice.OpenUsbDevice(usbDeviceFinder);
-            return usbDevice != null ? new usbnet.UsbDevice(usbDevice.DevicePath, new LibUsbInterfaceManager(usbDevice, 3000, Logger, Tracer), Logger, Tracer) : null;
+            return usbDevice != null ? new usbnet.UsbDevice(usbDevice.DevicePath, new LibUsbInterfaceManager(usbDevice, 3000, Logger, Tracer, 64, 64), Logger, Tracer) : null;
         }
         #endregion
 

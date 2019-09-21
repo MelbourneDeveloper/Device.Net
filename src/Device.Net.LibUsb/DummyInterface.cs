@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
+using LibUsbDotNet.Main;
 using Usb.Net;
 
 namespace Device.Net.LibUsb
@@ -23,10 +25,10 @@ namespace Device.Net.LibUsb
         {
             return Task.Run(() =>
             {
-               var readEndpoint = (ReadEndpoint)ReadEndpoint;
-               var buffer = new byte[bufferLength];
-               readEndpoint.UsbEndpointReader.Read(buffer, Timeout, out var bytesRead);
-               return new ReadResult(buffer, (uint)bytesRead);
+                var readEndpoint = (ReadEndpoint)ReadEndpoint;
+                var buffer = new byte[bufferLength];
+                readEndpoint.UsbEndpointReader.Read(buffer, Timeout, out var bytesRead);
+                return new ReadResult(buffer, (uint)bytesRead);
             });
         }
 
@@ -35,7 +37,17 @@ namespace Device.Net.LibUsb
             return Task.Run(() =>
             {
                 var writeEndpoint = (WriteEndpoint)WriteEndpoint;
-                writeEndpoint.UsbEndpointWriter.Write(data, Timeout, out var bytesWritten);
+                var errorCode = writeEndpoint.UsbEndpointWriter.Write(data, Timeout, out var bytesWritten);
+                if (errorCode == ErrorCode.Ok || errorCode == ErrorCode.Success)
+                {
+                    Tracer?.Trace(true, data);
+                }
+                else
+                {
+                    var message = $"Error. Write error code: {errorCode}";
+                    Logger?.Log(message, GetType().Name, null, LogLevel.Error);
+                    throw new IOException(message);
+                }
             });
         }
     }
