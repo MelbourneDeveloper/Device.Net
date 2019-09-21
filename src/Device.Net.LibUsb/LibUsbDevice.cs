@@ -27,15 +27,18 @@ namespace Device.Net.LibUsb
         public int ProductId => GetProductId(UsbDevice);
         public int Timeout { get; }
         public bool IsInitialized { get; private set; }
-        public ushort WriteBufferSize => throw new NotImplementedException();
-        public ushort ReadBufferSize => throw new NotImplementedException();
+        public ushort WriteBufferSize { get; }
+        public ushort ReadBufferSize { get; }
         #endregion
 
         #region Constructor
-        public LibUsbInterfaceManager(UsbDevice usbDevice, int timeout, ILogger logger, ITracer tracer) : base(logger, tracer)
+        public LibUsbInterfaceManager(UsbDevice usbDevice, int timeout, ILogger logger, ITracer tracer, ushort writeBufferSize, ushort readBufferSize) : base(logger, tracer)
         {
             UsbDevice = usbDevice;
             Timeout = timeout;
+
+            WriteBufferSize = writeBufferSize;
+            ReadBufferSize = readBufferSize;
         }
         #endregion
 
@@ -83,8 +86,19 @@ namespace Device.Net.LibUsb
                     ((IUsbDevice)UsbDevice).ClaimInterface(0);
                 }
 
+                var dummyInterface = new DummyInterface(Logger, Tracer, ReadBufferSize, WriteBufferSize);
+
                 _UsbEndpointWriter = UsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
+
                 _UsbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
+
+                var writeEndpoint = new WriteEndpoint(_UsbEndpointWriter, (ushort)ReadPacketSize);
+
+                var readEndpoint = new ReadEndpoint(_UsbEndpointReader, (ushort)ReadPacketSize);
+
+
+                this.UsbInterfaces.Add(dummyInterface);
+
                 ReadPacketSize = _UsbEndpointReader.EndpointInfo.Descriptor.MaxPacketSize;
 
                 IsInitialized = true;
