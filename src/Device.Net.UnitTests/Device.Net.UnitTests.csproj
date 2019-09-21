@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;net45</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1</TargetFrameworks>
 
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LibUsbDotNet" Version="2.2.29" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.3.2" />
     <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
@@ -14,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Device.Net.LibUsb\Device.Net.LibUsb.csproj" />
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
     <ProjectReference Include="..\Hid.Net\Hid.Net.csproj" />
     <ProjectReference Include="..\SerialPort.Net\SerialPort.Net.csproj" />
