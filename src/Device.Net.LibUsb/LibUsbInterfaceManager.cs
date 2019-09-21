@@ -1,14 +1,12 @@
-﻿using Device.Net.Exceptions;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Device.Net.Exceptions;
 using LibUsbDotNet;
 using LibUsbDotNet.LudnMonoLibUsb;
 using LibUsbDotNet.Main;
 using LibUsbDotNet.WinUsb;
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using usbnet = Usb.Net;
-using Device.Net.LibUsb;
 
 namespace Device.Net.LibUsb
 {
@@ -110,6 +108,9 @@ namespace Device.Net.LibUsb
                 dummyInterface.WriteEndpoint = writeEndpoint;
 
                 UsbInterfaces.Add(dummyInterface);
+
+                WriteUsbInterface = dummyInterface;
+                ReadUsbInterface = dummyInterface;
 
                 IsInitialized = true;
             });
