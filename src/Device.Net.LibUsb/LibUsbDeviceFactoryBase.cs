@@ -23,7 +23,7 @@ namespace Device.Net.LibUsb
         {
             return await Task.Run(() =>
             {
-                IEnumerable<UsbRegistry> devices = UsbDevice.AllDevices;
+                var devices = UsbDevice.AllDevices.ToList();
 
                 if (deviceDefinition == null)
 
@@ -36,12 +36,12 @@ namespace Device.Net.LibUsb
 
                 if (deviceDefinition.VendorId.HasValue)
                 {
-                    devices = devices.Where(d => d.Vid == deviceDefinition.VendorId.Value);
+                    devices = devices.Where(d => d.Vid == deviceDefinition.VendorId.Value).ToList();
                 }
 
                 if (deviceDefinition.ProductId.HasValue)
                 {
-                    devices = devices.Where(d => d.Pid == deviceDefinition.ProductId.Value);
+                    devices = devices.Where(d => d.Pid == deviceDefinition.ProductId.Value).ToList();
                 }
 
                 return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath) {VendorId = (uint) usbRegistry.Vid, ProductId = (uint) usbRegistry.Pid, DeviceType = DeviceType}).ToList();
