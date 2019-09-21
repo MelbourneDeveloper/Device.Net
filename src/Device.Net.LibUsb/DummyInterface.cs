@@ -22,17 +22,21 @@ namespace Device.Net.LibUsb
         public Task<ReadResult> ReadAsync(uint bufferLength)
         {
             return Task.Run(() =>
-           {
+            {
                var readEndpoint = (ReadEndpoint)ReadEndpoint;
                var buffer = new byte[bufferLength];
                readEndpoint.UsbEndpointReader.Read(buffer, Timeout, out var bytesRead);
                return new ReadResult(buffer, (uint)bytesRead);
-           });
+            });
         }
 
         public Task WriteAsync(byte[] data)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                var writeEndpoint = (WriteEndpoint)WriteEndpoint;
+                writeEndpoint.UsbEndpointWriter.Write(data, Timeout, out var bytesWritten);
+            });
         }
     }
 }

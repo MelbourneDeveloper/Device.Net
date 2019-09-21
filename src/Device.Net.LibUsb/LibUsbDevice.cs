@@ -14,11 +14,11 @@ namespace Device.Net.LibUsb
     public class LibUsbInterfaceManager : usbnet.UsbInterfaceManager, usbnet.IUsbInterfaceManager
     {
         #region Fields
-        private UsbEndpointReader _UsbEndpointReader;
-        private UsbEndpointWriter _UsbEndpointWriter;
-        private int ReadPacketSize;
         private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         private bool disposed;
+
+        private ushort? _WriteBufferSize { get; }
+        private ushort? _ReadBufferSize { get; }
         #endregion
 
         #region Public Properties
@@ -27,18 +27,18 @@ namespace Device.Net.LibUsb
         public int ProductId => GetProductId(UsbDevice);
         public int Timeout { get; }
         public bool IsInitialized { get; private set; }
-        public ushort WriteBufferSize { get; }
-        public ushort ReadBufferSize { get; }
+        public ushort WriteBufferSize => WriteUsbInterface.WriteEndpoint.MaxPacketSize;
+        public ushort ReadBufferSize => ReadUsbInterface.ReadEndpoint.MaxPacketSize;
         #endregion
 
         #region Constructor
-        public LibUsbInterfaceManager(UsbDevice usbDevice, int timeout, ILogger logger, ITracer tracer, ushort writeBufferSize, ushort readBufferSize) : base(logger, tracer)
+        public LibUsbInterfaceManager(UsbDevice usbDevice, int timeout, ILogger logger, ITracer tracer, ushort? writeBufferSize, ushort? readBufferSize) : base(logger, tracer)
         {
             UsbDevice = usbDevice;
             Timeout = timeout;
 
-            WriteBufferSize = writeBufferSize;
-            ReadBufferSize = readBufferSize;
+            _WriteBufferSize = writeBufferSize;
+            _ReadBufferSize = readBufferSize;
         }
         #endregion
 
@@ -86,20 +86,29 @@ namespace Device.Net.LibUsb
                     ((IUsbDevice)UsbDevice).ClaimInterface(0);
                 }
 
-                var dummyInterface = new DummyInterface(Logger, Tracer, ReadBufferSize, WriteBufferSize);
+                //Open the first read/write endpoints. TODO: This is dangerous
+                var usbEndpointWriter = UsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
+                var usbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
 
-                _UsbEndpointWriter = UsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
+                //Get the buffer sizes
+                var readBufferSize = _ReadBufferSize ?? (ushort)usbEndpointReader.EndpointInfo.Descriptor.MaxPacketSize;
+                var writeBufferSize = _WriteBufferSize ?? (ushort)usbEndpointWriter.EndpointInfo.Descriptor.MaxPacketSize;
 
-                _UsbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
+                //Create the endpoints
+                var writeEndpoint = new WriteEndpoint(usbEndpointWriter, writeBufferSize);
+                var readEndpoint = new ReadEndpoint(usbEndpointReader, readBufferSize);
 
-                var writeEndpoint = new WriteEndpoint(_UsbEndpointWriter, (ushort)ReadPacketSize);
+                //Create an interface stub. LibUsbDotNet doesn't seem to allow for multiple interfaces? Or at least not allow for listing them
+                var dummyInterface = new DummyInterface(Logger, Tracer, readBufferSize, WriteBufferSize, Timeout);
 
-                var readEndpoint = new ReadEndpoint(_UsbEndpointReader, (ushort)ReadPacketSize);
+                dummyInterface.UsbInterfaceEndpoints.Add(writeEndpoint);
+                dummyInterface.UsbInterfaceEndpoints.Add(readEndpoint);
 
+                //Set the default endpoints
+                dummyInterface.ReadEndpoint = readEndpoint;
+                dummyInterface.WriteEndpoint = writeEndpoint;
 
-                this.UsbInterfaces.Add(dummyInterface);
-
-                ReadPacketSize = _UsbEndpointReader.EndpointInfo.Descriptor.MaxPacketSize;
+                UsbInterfaces.Add(dummyInterface);
 
                 IsInitialized = true;
             });
@@ -111,16 +120,7 @@ namespace Device.Net.LibUsb
 
             try
             {
-                return await Task.Run(() =>
-                {
-                    var data = new byte[ReadPacketSize];
-
-                    _UsbEndpointReader.Read(data, Timeout, out var bytesRead);
-
-                    Tracer?.Trace(false, data);
-
-                    return data;
-                });
+                return await ReadUsbInterface.ReadAsync(ReadBufferSize);
             }
             finally
             {
