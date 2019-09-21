@@ -1,4 +1,3 @@
-using Device.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SerialPort.Net.Windows;
 using System;
@@ -6,10 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SerialPort.Net
+namespace Device.Net.IntegrationTests
 {
     [TestClass]
-    public class IntegrationTests
+    public class SerialPortIntegrationTests
     {
         #region Fields
         private static WindowsSerialPortDeviceFactory windowsSerialPortDeviceFactory;
