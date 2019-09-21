@@ -166,9 +166,16 @@ namespace Device.Net.LibUsb
 
         public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync()
         {
+            //TODO: this isn't very nice
+
             var usbRegistryInfo = UsbDevice.UsbRegistryInfo;
-            var result = usbRegistryInfo.ToConnectedDevice();
-            return Task.FromResult<ConnectedDeviceDefinitionBase>(result);
+            if (usbRegistryInfo != null)
+            {
+                var result = usbRegistryInfo.ToConnectedDevice();
+                return Task.FromResult<ConnectedDeviceDefinitionBase>(result);
+            }
+
+            return Task.FromResult<ConnectedDeviceDefinitionBase>(new ConnectedDeviceDefinition(UsbDevice.DevicePath) { });
         }
         #endregion
     }
