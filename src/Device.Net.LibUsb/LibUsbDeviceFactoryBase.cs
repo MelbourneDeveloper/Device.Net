@@ -26,14 +26,7 @@ namespace Device.Net.LibUsb
             {
                 var devices = UsbDevice.AllDevices.ToList();
 
-                if (deviceDefinition == null)
-
-                    return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath)
-                    {
-                        VendorId = (uint)usbRegistry.Vid,
-                        ProductId = (uint)usbRegistry.Pid,
-                        DeviceType = DeviceType
-                    }).ToList();
+                if (deviceDefinition == null) return devices.Select(usbRegistry => usbRegistry.ToConnectedDevice()).ToList();
 
                 if (deviceDefinition.VendorId.HasValue)
                 {
@@ -45,7 +38,7 @@ namespace Device.Net.LibUsb
                     devices = devices.Where(d => d.Pid == deviceDefinition.ProductId.Value).ToList();
                 }
 
-                return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath) { VendorId = (uint)usbRegistry.Vid, ProductId = (uint)usbRegistry.Pid, DeviceType = DeviceType }).ToList();
+                return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath) { VendorId = (uint)usbRegistry.Vid, ProductId = (uint)usbRegistry.Pid, DeviceType = DeviceType.Usb }).ToList();
             });
         }
 

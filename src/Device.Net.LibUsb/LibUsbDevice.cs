@@ -8,6 +8,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using usbnet = Usb.Net;
+using Device.Net.LibUsb;
 
 namespace Device.Net.LibUsb
 {
@@ -99,7 +100,7 @@ namespace Device.Net.LibUsb
                 var readEndpoint = new ReadEndpoint(usbEndpointReader, readBufferSize);
 
                 //Create an interface stub. LibUsbDotNet doesn't seem to allow for multiple interfaces? Or at least not allow for listing them
-                var dummyInterface = new DummyInterface(Logger, Tracer, readBufferSize, WriteBufferSize, Timeout);
+                var dummyInterface = new DummyInterface(Logger, Tracer, readBufferSize, writeBufferSize, Timeout);
 
                 dummyInterface.UsbInterfaceEndpoints.Add(writeEndpoint);
                 dummyInterface.UsbInterfaceEndpoints.Add(readEndpoint);
@@ -165,7 +166,9 @@ namespace Device.Net.LibUsb
 
         public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync()
         {
-            throw new NotImplementedException();
+            var usbRegistryInfo = UsbDevice.UsbRegistryInfo;
+            var result = usbRegistryInfo.ToConnectedDevice();
+            return Task.FromResult<ConnectedDeviceDefinitionBase>(result);
         }
         #endregion
     }
