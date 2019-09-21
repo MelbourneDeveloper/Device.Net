@@ -1,6 +1,7 @@
+using Device.Net.LibUsb;
 using LibUsbDotNet;
+using LibUsbDotNet.Main;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Device.Net.IntegrationTests
@@ -15,9 +16,16 @@ namespace Device.Net.IntegrationTests
         [TestMethod]
         public async Task ConnectedTestReadAsync()
         {
-            var devices = UsbDevice.AllDevices.ToList();
-            var trezorUsbRegistry = devices.FirstOrDefault(d => d.Pid == 21441 && d.Vid == 4617);
-            Assert.IsNotNull(trezorUsbRegistry);
+            var usbDeviceFinder = new UsbDeviceFinder(4617, 21441);
+            using (var usbDevice = UsbDevice.OpenUsbDevice(usbDeviceFinder))
+            {
+                Assert.IsNotNull(usbDevice);
+
+                using (var libUsbInterfaceManager = new LibUsbInterfaceManager(usbDevice, 3000, new DebugLogger(), new DebugTracer(), null, null))
+                {
+                    await libUsbInterfaceManager.InitializeAsync();
+                }
+            }
         }
         #endregion
 
