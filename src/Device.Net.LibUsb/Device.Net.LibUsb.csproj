@@ -43,6 +43,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
+    <ProjectReference Include="..\Usb.Net\Usb.Net.csproj" />
   </ItemGroup>
 
   <ItemGroup>

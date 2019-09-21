@@ -7,10 +7,11 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using usbnet = Usb.Net;
 
 namespace Device.Net.LibUsb
 {
-    public class LibUsbDevice : DeviceBase, IDevice
+    public class LibUsbInterfaceManager : usbnet.UsbInterfaceManager, usbnet.IUsbInterfaceManager
     {
         #region Fields
         private UsbEndpointReader _UsbEndpointReader;
@@ -18,7 +19,6 @@ namespace Device.Net.LibUsb
         private int ReadPacketSize;
         private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         private bool disposed;
-        private bool _IsInitialized;
         #endregion
 
         #region Public Properties
@@ -26,17 +26,13 @@ namespace Device.Net.LibUsb
         public int VendorId => GetVendorId(UsbDevice);
         public int ProductId => GetProductId(UsbDevice);
         public int Timeout { get; }
-        public override bool IsInitialized => _IsInitialized;
-        public override ushort WriteBufferSize => throw new NotImplementedException();
-        public override ushort ReadBufferSize => throw new NotImplementedException();
+        public bool IsInitialized { get; private set; }
+        public ushort WriteBufferSize => throw new NotImplementedException();
+        public ushort ReadBufferSize => throw new NotImplementedException();
         #endregion
 
         #region Constructor
-        public LibUsbDevice(UsbDevice usbDevice, int timeout) : this(usbDevice, timeout, null, null)
-        {
-        }
-
-        public LibUsbDevice(UsbDevice usbDevice, int timeout, ILogger logger, ITracer tracer) : base(usbDevice.DevicePath, logger, tracer)
+        public LibUsbInterfaceManager(UsbDevice usbDevice, int timeout, ILogger logger, ITracer tracer) : base(logger, tracer)
         {
             UsbDevice = usbDevice;
             Timeout = timeout;
@@ -91,11 +87,11 @@ namespace Device.Net.LibUsb
                 _UsbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
                 ReadPacketSize = _UsbEndpointReader.EndpointInfo.Descriptor.MaxPacketSize;
 
-                _IsInitialized = true;
+                IsInitialized = true;
             });
         }
 
-        public override async Task<ReadResult> ReadAsync()
+        public async Task<ReadResult> ReadAsync()
         {
             await _WriteAndReadLock.WaitAsync();
 
@@ -118,7 +114,7 @@ namespace Device.Net.LibUsb
             }
         }
 
-        public override async Task WriteAsync(byte[] data)
+        public async Task WriteAsync(byte[] data)
         {
             await _WriteAndReadLock.WaitAsync();
 
@@ -170,6 +166,11 @@ namespace Device.Net.LibUsb
             {
                 return usbDevice.UsbRegistryInfo.Pid;
             }
+        }
+
+        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync()
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }

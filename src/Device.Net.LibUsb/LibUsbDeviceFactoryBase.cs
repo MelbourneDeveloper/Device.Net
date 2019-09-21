@@ -4,6 +4,7 @@ using LibUsbDotNet.Main;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using usbnet = Usb.Net;
 
 namespace Device.Net.LibUsb
 {
@@ -29,8 +30,8 @@ namespace Device.Net.LibUsb
 
                     return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath)
                     {
-                        VendorId = (uint) usbRegistry.Vid,
-                        ProductId = (uint) usbRegistry.Pid,
+                        VendorId = (uint)usbRegistry.Vid,
+                        ProductId = (uint)usbRegistry.Pid,
                         DeviceType = DeviceType
                     }).ToList();
 
@@ -44,19 +45,19 @@ namespace Device.Net.LibUsb
                     devices = devices.Where(d => d.Pid == deviceDefinition.ProductId.Value).ToList();
                 }
 
-                return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath) {VendorId = (uint) usbRegistry.Vid, ProductId = (uint) usbRegistry.Pid, DeviceType = DeviceType}).ToList();
+                return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath) { VendorId = (uint)usbRegistry.Vid, ProductId = (uint)usbRegistry.Pid, DeviceType = DeviceType }).ToList();
             });
         }
 
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            if(deviceDefinition==null) throw new ArgumentNullException(nameof(deviceDefinition));
+            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
             if (deviceDefinition.VendorId == null) throw new ArgumentNullException(nameof(ConnectedDeviceDefinition.VendorId));
             if (deviceDefinition.ProductId == null) throw new ArgumentNullException(nameof(ConnectedDeviceDefinition.ProductId));
 
             var usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value, (int)deviceDefinition.ProductId.Value);
             var usbDevice = UsbDevice.OpenUsbDevice(usbDeviceFinder);
-            return usbDevice != null ? new LibUsbDevice(usbDevice, 3000, Logger, Tracer) : null;
+            return usbDevice != null ? new usbnet.UsbDevice(usbDevice.DevicePath, new LibUsbInterfaceManager(usbDevice, 3000, Logger, Tracer), Logger, Tracer) : null;
         }
         #endregion
 
