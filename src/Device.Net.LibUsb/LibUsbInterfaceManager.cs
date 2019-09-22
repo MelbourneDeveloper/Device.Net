@@ -1,6 +1,7 @@
 ﻿using Device.Net.Exceptions;
 using LibUsbDotNet;
 using LibUsbDotNet.LudnMonoLibUsb;
+using LibUsbDotNet.Main;
 using LibUsbDotNet.WinUsb;
 using System;
 using System.Threading;
@@ -102,7 +103,9 @@ namespace Device.Net.LibUsb
                             if (IsWrite)
                             {
                                 //Write endpoint
-                                var usbEndpointWriter = UsbDevice.OpenEndpointWriter();
+                                var id = usbEndpointInfo.Descriptor.EndpointID ^ 128;
+                                //var writeEndpointID = (WriteEndpointID)Enum.Parse(typeof(WriteEndpointID), $"Ep{id.ToString().PadLeft(2, '0')}");
+                                var usbEndpointWriter = UsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
                                 var writeBufferSize = _WriteBufferSize ?? (ushort)usbEndpointInfo.Descriptor.MaxPacketSize;
                                 var writeEndpoint = new WriteEndpoint(usbEndpointWriter, writeBufferSize);
                                 dummyInterface.UsbInterfaceEndpoints.Add(writeEndpoint);
@@ -110,7 +113,10 @@ namespace Device.Net.LibUsb
                             }
                             else
                             {
-                                var usbEndpointReader = UsbDevice.OpenEndpointReader();
+                                //Read endpoint
+                                var id = usbEndpointInfo.Descriptor.EndpointID ^ 1;
+                                //var readEndpointID = (ReadEndpointID)Enum.Parse(typeof(ReadEndpointID), $"Ep{id.ToString().PadLeft(2, '0')}");
+                                var usbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
                                 var readBufferSize = _ReadBufferSize ?? (ushort)usbEndpointInfo.Descriptor.MaxPacketSize;
                                 var readEndpoint = new ReadEndpoint(usbEndpointReader, readBufferSize);
                                 dummyInterface.UsbInterfaceEndpoints.Add(readEndpoint);

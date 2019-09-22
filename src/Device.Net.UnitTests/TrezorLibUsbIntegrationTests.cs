@@ -16,11 +16,8 @@ namespace Device.Net.IntegrationTests
         [TestMethod]
         public async Task ConnectedTestReadAsync()
         {
-            var usbDeviceFinder = new UsbDeviceFinder(4617, 21441);
-            using (var usbDevice = UsbDevice.OpenUsbDevice(usbDeviceFinder))
+            using (var usbDevice = GetTrezorUsbDevice())
             {
-                Assert.IsNotNull(usbDevice);
-
                 using (var libUsbInterfaceManager = new LibUsbInterfaceManager(usbDevice, 3000, new DebugLogger(), new DebugTracer(), null, null))
                 {
                     await libUsbInterfaceManager.InitializeAsync();
@@ -30,6 +27,13 @@ namespace Device.Net.IntegrationTests
         #endregion
 
         #region Helpers
+        private static UsbDevice GetTrezorUsbDevice()
+        {
+            var usbDeviceFinder = new UsbDeviceFinder(4617, 21441);
+            var usbDevice = UsbDevice.OpenUsbDevice(usbDeviceFinder);
+            Assert.IsNotNull(usbDevice);
+            return usbDevice;
+        }
         #endregion
     }
 }
