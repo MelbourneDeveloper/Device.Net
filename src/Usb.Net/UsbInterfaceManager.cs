@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Usb.Net
 {
-    public abstract class UsbInterfaceManager : IDisposable
+    public class UsbInterfaceManager : IDisposable
     {
         #region Fields
         private bool disposed;
@@ -42,8 +42,8 @@ namespace Usb.Net
         #region Public Properties        
         public ITracer Tracer { get; }
         public ILogger Logger { get; }
-        public IList<IUsbInterface> UsbInterfaces { get; } = new List<IUsbInterface>();
-        public IUsbInterface ReadUsbInterface
+        public virtual IList<IUsbInterface> UsbInterfaces { get; } = new List<IUsbInterface>();
+        public virtual IUsbInterface ReadUsbInterface
         {
             get => _ReadUsbInterface;
             set
@@ -53,7 +53,7 @@ namespace Usb.Net
             }
         }
 
-        public IUsbInterface WriteUsbInterface
+        public virtual IUsbInterface WriteUsbInterface
         {
             get => _WriteUsbInterface;
             set
@@ -63,7 +63,7 @@ namespace Usb.Net
             }
         }
 
-        public IUsbInterface ReadInterruptUsbInterface
+        public virtual IUsbInterface ReadInterruptUsbInterface
         {
             get => _ReadInterruptUsbInterface;
             set
@@ -73,7 +73,7 @@ namespace Usb.Net
             }
         }
 
-        public IUsbInterface WriteInterruptUsbInterface
+        public virtual IUsbInterface WriteInterruptUsbInterface
         {
             get => _WriteInterruptUsbInterface;
             set
