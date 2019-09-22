@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Usb.Net
 {
-    public class UsbInterfaceManager : IDisposable
+    public abstract class UsbInterfaceManager : IDisposable
     {
         #region Fields
         private bool disposed;
@@ -17,7 +17,7 @@ namespace Usb.Net
         #endregion
 
         #region Constructor
-        public UsbInterfaceManager(ILogger logger, ITracer tracer)
+        protected UsbInterfaceManager(ILogger logger, ITracer tracer)
         {
             Tracer = tracer;
             Logger = logger;
