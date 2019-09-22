@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Device.Net
+﻿namespace Device.Net
 {
     public struct ReadResult
     {
@@ -13,16 +11,14 @@ namespace Device.Net
         #endregion
 
         #region Conversion Operators
-        public static implicit operator byte[](ReadResult readResult)
+        public static implicit operator byte[] (ReadResult readResult)
         {
             return readResult.Data;
         }
 
         public static implicit operator ReadResult(byte[] data)
         {
-            //TODO: This is a bit dodgy... It's breaking a code rule
-            if (data == null) throw new ArgumentNullException(nameof(data));
-            return new ReadResult(data, (uint)data.Length);
+            return new ReadResult(data, (uint)(data != null ? data.Length : 0));
         }
         #endregion
 

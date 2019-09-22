@@ -32,7 +32,7 @@ namespace Usb.Net.Windows
         public static extern bool WinUsb_GetDescriptor(SafeFileHandle InterfaceHandle, byte DescriptorType, byte Index, ushort LanguageID, out USB_DEVICE_DESCRIPTOR deviceDesc, uint BufferLength, out uint LengthTransfered);
 
         [DllImport("winusb.dll", SetLastError = true)]
-        public static extern bool WinUsb_GetDescriptor(SafeFileHandle InterfaceHandle, byte DescriptorType, byte Index, UInt16 LanguageID, byte[] Buffer, UInt32 BufferLength, out UInt32 LengthTransfered);
+        public static extern bool WinUsb_GetDescriptor(SafeFileHandle InterfaceHandle, byte DescriptorType, byte Index, ushort LanguageID, byte[] Buffer, uint BufferLength, out uint LengthTransfered);
 
         [DllImport("winusb.dll", SetLastError = true)]
         public static extern bool WinUsb_Free(SafeFileHandle InterfaceHandle);
