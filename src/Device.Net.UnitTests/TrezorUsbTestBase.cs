@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NSubstitute;
+using Moq;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,14 +13,14 @@ namespace Device.Net.IntegrationTests
         [TestMethod]
         public async Task ConnectedTestWriteAndReadAsync()
         {
-            var logger = Substitute.For<ILogger>();
-            var tracer = Substitute.For<ITracer>();
+            var logger = new Mock<ILogger>();
+            var tracer = new Mock<ITracer>();
 
             ReadResult readResult = null;
 
-            using (var trezorUsbInterfaceManager = GetTrezorUsbInterfaceManager(logger, tracer))
+            using (var trezorUsbInterfaceManager = GetTrezorUsbInterfaceManager(logger.Object, tracer.Object))
             {
-                using (var trezorUsbDevice = new UsbDevice("", trezorUsbInterfaceManager, logger, tracer))
+                using (var trezorUsbDevice = new UsbDevice("", trezorUsbInterfaceManager, logger.Object, tracer.Object))
                 {
                     await trezorUsbInterfaceManager.InitializeAsync();
 
