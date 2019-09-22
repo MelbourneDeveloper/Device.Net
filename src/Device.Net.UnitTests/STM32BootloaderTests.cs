@@ -29,7 +29,7 @@ namespace Device.Net.IntegrationTests
             await usbNetUsbDevice.InitializeAsync();
 
             var bytes = new byte[64];
-            var asdasd = await usbNetUsbDevice.WriteAndReadAsync(bytes);
+            var result = await usbNetUsbDevice.WriteAndReadAsync(bytes);
         }
     }
 }
