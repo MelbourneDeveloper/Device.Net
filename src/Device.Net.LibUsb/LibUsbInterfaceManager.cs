@@ -89,9 +89,12 @@ namespace Device.Net.LibUsb
                     foreach (var usbInterfaceInfo in usbConfigInfo.InterfaceInfoList)
                     {
                         //Create an interface stub. LibUsbDotNet doesn't seem to allow for multiple interfaces? Or at least not allow for listing them
-                        var dummyInterface = new DummyInterface(Logger, Tracer, null, null, Timeout, usbInterfaceInfo.Descriptor.InterfaceID);
+                        var dummyInterface = new UsbInterface(Logger, Tracer, null, null, Timeout, usbInterfaceInfo.Descriptor.InterfaceID);
 
                         UsbInterfaces.Add(dummyInterface);
+
+                        if (ReadUsbInterface == null) ReadUsbInterface = dummyInterface;
+                        if (WriteUsbInterface == null) WriteUsbInterface = dummyInterface;
 
                         for (var i = 0; i < usbInterfaceInfo.EndpointInfoList.Count; i++)
                         {

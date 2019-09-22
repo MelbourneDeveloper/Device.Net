@@ -6,13 +6,13 @@ using Usb.Net;
 
 namespace Device.Net.LibUsb
 {
-    public class DummyInterface : UsbInterfaceBase, IUsbInterface
+    public class UsbInterface : UsbInterfaceBase, IUsbInterface
     {
         private byte _interfaceId;
 
         public int Timeout { get; set; }
 
-        public DummyInterface(ILogger logger, ITracer tracer, ushort? readBufferSize, ushort? writeBufferSize, int timeout, byte interfaceId) : base(logger, tracer, readBufferSize, writeBufferSize)
+        public UsbInterface(ILogger logger, ITracer tracer, ushort? readBufferSize, ushort? writeBufferSize, int timeout, byte interfaceId) : base(logger, tracer, readBufferSize, writeBufferSize)
         {
             Timeout = timeout;
             _interfaceId = interfaceId;
