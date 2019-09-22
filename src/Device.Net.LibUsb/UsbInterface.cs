@@ -31,6 +31,7 @@ namespace Device.Net.LibUsb
                 var readEndpoint = (ReadEndpoint)ReadEndpoint;
                 var buffer = new byte[bufferLength];
                 readEndpoint.UsbEndpointReader.Read(buffer, Timeout, out var bytesRead);
+                Tracer?.Trace(false, buffer);
                 return new ReadResult(buffer, (uint)bytesRead);
             });
         }

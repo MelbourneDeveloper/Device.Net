@@ -44,6 +44,7 @@ namespace Device.Net.IntegrationTests
             }
 
             tracer.Verify(t => t.Trace(true, TrezorRequest));
+            tracer.Verify(t => t.Trace(false, TrezorResponse));
         }
         #endregion
 

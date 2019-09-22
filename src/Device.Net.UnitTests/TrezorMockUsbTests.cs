@@ -29,6 +29,12 @@ namespace Device.Net.UnitTests
                return Task.FromResult(true);
             });
 
+            usbInterface.Setup(a => a.ReadAsync(It.IsAny<uint>())).Returns(() =>
+            {
+                tracer.Trace(false, TrezorResponse);
+                return Task.FromResult(new ReadResult(TrezorResponse,(uint) TrezorResponse.Length));
+            });
+
             return mockUsbInterfaceManager;
         }
         #endregion
