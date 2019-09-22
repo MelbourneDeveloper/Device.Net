@@ -12,7 +12,21 @@ namespace Device.Net.IntegrationTests
     public class STM32BootloaderTests
     {
         [TestMethod]
-        public async Task Test()
+        public async Task TestWriteAndRead()
+        {
+            usbnet.UsbDevice usbNetUsbDevice = await ConnectAsync();
+
+            var bytes = new byte[64];
+            var result = await usbNetUsbDevice.WriteAndReadAsync(bytes);
+        }
+
+        [TestMethod]
+        public async Task TestConnection()
+        {
+            var usbNetUsbDevice = await ConnectAsync();
+        }
+
+        public async Task<usbnet.UsbDevice> ConnectAsync()
         {
             var usbDeviceFinder = new UsbDeviceFinder(0x0483, 0xDF11);
             var usbDevice = UsbDevice.OpenUsbDevice(usbDeviceFinder);
@@ -27,9 +41,7 @@ namespace Device.Net.IntegrationTests
             var usbNetUsbDevice = new usbnet.UsbDevice("", libUsbInterfaceManager, logger.Object, tracer.Object);
 
             await usbNetUsbDevice.InitializeAsync();
-
-            var bytes = new byte[64];
-            var result = await usbNetUsbDevice.WriteAndReadAsync(bytes);
+            return usbNetUsbDevice;
         }
     }
 }
