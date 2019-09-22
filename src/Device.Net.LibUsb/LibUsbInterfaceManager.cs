@@ -41,27 +41,8 @@ namespace Device.Net.LibUsb
         }
         #endregion
 
-        #region Implementation
-        public void Close()
-        {
-            UsbDevice?.Close();
-        }
-
-        public override void Dispose()
-        {
-            if (disposed) return;
-            disposed = true;
-
-            _WriteAndReadLock.Dispose();
-
-            Close();
-
-            base.Dispose();
-
-            GC.SuppressFinalize(this);
-        }
-
-        public async Task InitializeAsync()
+        #region Protected Overrides
+        protected override async Task InitializeProtectedAsync()
         {
             if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
@@ -132,7 +113,28 @@ namespace Device.Net.LibUsb
                 IsInitialized = true;
             });
         }
+        #endregion
 
+        #region Implementation
+        public void Close()
+        {
+            UsbDevice?.Close();
+        }
+
+        public override void Dispose()
+        {
+            if (disposed) return;
+            disposed = true;
+
+            _WriteAndReadLock.Dispose();
+
+            Close();
+
+            base.Dispose();
+
+            GC.SuppressFinalize(this);
+        }
+    
         public async Task<ReadResult> ReadAsync()
         {
             await _WriteAndReadLock.WaitAsync();

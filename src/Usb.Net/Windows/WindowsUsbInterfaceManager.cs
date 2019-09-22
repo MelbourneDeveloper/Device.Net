@@ -35,6 +35,13 @@ namespace Usb.Net.Windows
         }
         #endregion
 
+        #region Protected Overrides
+        protected override async Task InitializeProtectedAsync()
+        {
+            await Task.Run(Initialize);
+        }
+        #endregion
+
         #region Private Methods
         private void Initialize()
         {
@@ -101,8 +108,6 @@ namespace Usb.Net.Windows
 
                     i++;
                 }
-
-                RegisterDefaultInterfaces();
             }
             catch (Exception ex)
             {
@@ -156,11 +161,6 @@ namespace Usb.Net.Windows
             base.Dispose();
 
             GC.SuppressFinalize(this);
-        }
-
-        public async Task InitializeAsync()
-        {
-            await Task.Run(Initialize);
         }
 
         public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync()

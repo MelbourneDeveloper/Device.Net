@@ -86,8 +86,6 @@ namespace Usb.Net.UWP
             {
                 throw new DeviceException(Messages.GetErrorMessageCantConnect(DeviceId));
             }
-
-            UsbInterfaceHandler.RegisterDefaultInterfaces();
         }
 
         protected override IAsyncOperation<windowsUsbDevice> FromIdAsync(string id)

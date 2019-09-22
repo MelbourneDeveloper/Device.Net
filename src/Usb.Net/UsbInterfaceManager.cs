@@ -3,10 +3,11 @@ using Device.Net.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Usb.Net
 {
-    public class UsbInterfaceManager : IDisposable
+    public abstract class UsbInterfaceManager : IDisposable
     {
         #region Fields
         private bool disposed;
@@ -17,16 +18,26 @@ namespace Usb.Net
         #endregion
 
         #region Constructor
-        public UsbInterfaceManager(ILogger logger, ITracer tracer)
+        protected UsbInterfaceManager(ILogger logger, ITracer tracer)
         {
             Tracer = tracer;
             Logger = logger;
         }
         #endregion
 
-        #region Protected Methods
-        public void RegisterDefaultInterfaces()
+        public async Task InitializeAsync()
         {
+            await InitializeProtectedAsync();
+            RegisterDefaultInterfaces();
+        }
+
+        protected abstract Task InitializeProtectedAsync();
+
+        #region Protected Methods
+        private void RegisterDefaultInterfaces()
+        {
+            if (UsbInterfaces == null) return;
+
             foreach (var usbInterface in UsbInterfaces)
             {
                 usbInterface.RegisterDefaultEndpoints();
