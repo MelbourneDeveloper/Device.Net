@@ -17,7 +17,7 @@ namespace Usb.Net
         #endregion
 
         #region Constructor
-        protected UsbInterfaceManager(ILogger logger, ITracer tracer)
+        public UsbInterfaceManager(ILogger logger, ITracer tracer)
         {
             Tracer = tracer;
             Logger = logger;
