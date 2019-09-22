@@ -27,6 +27,9 @@ namespace Device.Net.IntegrationTests
             var usbNetUsbDevice = new usbnet.UsbDevice("", libUsbInterfaceManager, logger.Object, tracer.Object);
 
             await usbNetUsbDevice.InitializeAsync();
+
+            var bytes = new byte[64];
+            var asdasd = await usbNetUsbDevice.WriteAndReadAsync(bytes);
         }
     }
 }
