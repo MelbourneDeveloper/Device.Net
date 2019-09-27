@@ -152,15 +152,13 @@ namespace Hid.Net.Windows
             {
                 var pointerToBuffer = Marshal.AllocHGlobal(126);
                 var isSuccess = getString(safeFileHandle, pointerToBuffer, 126);
-                Marshal.FreeHGlobal(pointerToBuffer);
-
                 if (!isSuccess)
                 {
                     logger?.Log($"Could not get Hid string. Caller: {callMemberName}", nameof(WindowsHidApiService), null, LogLevel.Warning);
                 }
-
-
-                return Marshal.PtrToStringUni(pointerToBuffer);
+                var text = Marshal.PtrToStringAuto(pointerToBuffer);
+                Marshal.FreeHGlobal(pointerToBuffer);
+                return text;
             }
             catch (Exception ex)
             {
