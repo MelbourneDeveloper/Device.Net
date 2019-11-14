@@ -15,7 +15,7 @@ namespace Device.Net
         #region Fields
         private bool _IsDisposed;
         private readonly timer _PollTimer;
-        private readonly SemaphoreSlim _ListenSemaphoreSlim = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _ListenSemaphoreSlim = null;
 
         /// <summary>
         /// This is the list of Devices by their filter definition. Note this is not actually keyed by the connected definition.
@@ -42,6 +42,7 @@ namespace Device.Net
         public DeviceListener(IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions, int? pollMilliseconds)
         {
             FilterDeviceDefinitions.AddRange(filterDeviceDefinitions);
+            _ListenSemaphoreSlim = new SemaphoreSlim(1, 1);
             if (!pollMilliseconds.HasValue) return;
 
             _PollTimer = new timer(pollMilliseconds.Value);
@@ -52,6 +53,8 @@ namespace Device.Net
         #region Event Handlers
         private async void _PollTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            if (_IsDisposed)
+                return;
             await CheckForDevicesAsync();
         }
         #endregion
@@ -84,6 +87,7 @@ namespace Device.Net
         {
             try
             {
+                if (_IsDisposed) return;
                 await _ListenSemaphoreSlim.WaitAsync();
 
                 var connectedDeviceDefinitions = new List<ConnectedDeviceDefinition>();
@@ -167,7 +171,8 @@ namespace Device.Net
             }
             finally
             {
-                _ListenSemaphoreSlim.Release();
+                if (!_IsDisposed)
+                    _ListenSemaphoreSlim.Release();
             }
         }
 

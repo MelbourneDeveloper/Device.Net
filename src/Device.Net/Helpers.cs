@@ -15,7 +15,7 @@ namespace Device.Net
         public static string GetHex(uint? id)
         {
             //TODO: Fix code rules here
-            return id?.ToString("X").ToLower().PadLeft(4, '0');
+            return id?.ToString("X").PadLeft(4, '0');
         }
 
         public static CultureInfo ParsingCulture { get; } = new CultureInfo("en-US");
