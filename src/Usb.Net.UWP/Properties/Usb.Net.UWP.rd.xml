@@ -29,5 +29,13 @@
 
   	<!-- add directives for your library here -->
 
+    <!-- https://github.com/MelbourneDeveloper/Device.Net/blob/master/src/Usb.Net.UWP/UWPUsbInterfaceEndpoint.cs
+         UWPUsbInterfaceEndpoint(T); Type.GetProperty() may not work in the UWP Release build,
+         if the app is compiled with .NET Native, unless the following types are included here:
+         https://stackoverflow.com/a/35361710 -->
+    <Type Name="Windows.Devices.Usb.UsbBulkInEndpointDescriptor" Dynamic="Required All" />
+    <Type Name="Windows.Devices.Usb.UsbBulkOutEndpointDescriptor" Dynamic="Required All" />
+    <Type Name="Windows.Devices.Usb.UsbInterruptOutEndpointDescriptor" Dynamic="Required All" />
+
   </Library>
 </Directives>
