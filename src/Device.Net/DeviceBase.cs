@@ -77,7 +77,7 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public virtual Task Flush()
+        public virtual Task Flush(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
         }

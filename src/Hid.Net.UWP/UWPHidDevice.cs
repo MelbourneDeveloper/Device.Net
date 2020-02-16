@@ -215,7 +215,7 @@ namespace Hid.Net.UWP
             }
         }
 
-        public Task Flush()
+        public Task Flush(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
         }

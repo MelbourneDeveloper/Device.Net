@@ -86,6 +86,7 @@
         public const string ErrorByteSizeMustBeFiveToEight = "Byte size must be between 5 and 8";
         public const string ErrorBaudRateInvalid = "Baud rate must be betweem 110 and 256000";
         public const string ErrorInvalidByteSizeAndStopBitsCombo = "The combination of byte size and stop bits is incorrect. 2 stop bits can't be used with 5 bytes, and byte sizes of more than five can't be used with stop bits of one point five.";
+        public const string ErrorMessageOperationCanceled = "Operation was cancelled";
         #endregion
     }
 }

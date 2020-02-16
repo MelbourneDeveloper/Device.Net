@@ -49,6 +49,6 @@ namespace Device.Net
         /// <summary>
         /// Flushes the device. Note: Only available for serial port devices currently
         /// </summary>
-        Task Flush();
+        Task Flush(CancellationToken cancellationToken);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests
 {
@@ -28,7 +29,7 @@ namespace Device.Net.UnitTests
 
         private byte[] LastWrittenBuffer;
 
-        public override async Task<ReadResult> ReadAsync()
+        public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             if (LastWrittenBuffer != null)
             {
@@ -40,7 +41,7 @@ namespace Device.Net.UnitTests
             return await Task.FromResult(data);
         }
 
-        public override Task WriteAsync(byte[] data)
+        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             LastWrittenBuffer = data;
             Tracer.Trace(true, data);
