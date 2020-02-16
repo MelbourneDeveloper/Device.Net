@@ -5,6 +5,7 @@ using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
@@ -199,14 +200,14 @@ namespace Hid.Net.Windows
             await Task.Run(() => Initialize());
         }
 
-        public override async Task<ReadResult> ReadAsync()
+        public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             var data = (await ReadReportAsync()).Data;
             Tracer?.Trace(false, data);
             return data;
         }
 
-        public async Task<ReadReport> ReadReportAsync()
+        public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
         {
             byte? reportId = null;
 
@@ -234,12 +235,12 @@ namespace Hid.Net.Windows
             return new ReadReport(reportId, retVal);
         }
 
-        public override Task WriteAsync(byte[] data)
+        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
-            return WriteReportAsync(data, 0);
+            return WriteReportAsync(data, 0, cancellationToken);
         }
 
-        public async Task WriteReportAsync(byte[] data, byte? reportId)
+        public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
             if (IsReadOnly.HasValue && IsReadOnly.Value)
             {

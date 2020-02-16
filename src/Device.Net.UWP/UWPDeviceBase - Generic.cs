@@ -1,5 +1,6 @@
 ﻿using Device.Net.Exceptions;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 
@@ -42,7 +43,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Overrides
-        public virtual async Task<ReadResult> ReadAsync()
+        public virtual async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             if (IsReading)
             {
@@ -95,7 +96,7 @@ namespace Device.Net.UWP
             try
             {
                 if (ConnectedDevice is IDisposable disposable) disposable.Dispose();
-                ConnectedDevice = default(T);
+                ConnectedDevice = default;
             }
             catch (Exception ex)
             {

@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.Exceptions;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Usb.Net
@@ -40,14 +41,14 @@ namespace Usb.Net
             ConnectedDeviceDefinition = await UsbInterfaceManager.GetConnectedDeviceDefinitionAsync();
         }
 
-        public override async Task<ReadResult> ReadAsync()
+        public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             if (UsbInterfaceManager.ReadUsbInterface == null) throw new DeviceException(Messages.ErrorMessageNoReadInterfaceSpecified);
 
             return await UsbInterfaceManager.ReadUsbInterface.ReadAsync(ReadBufferSize);
         }
 
-        public override Task WriteAsync(byte[] data)
+        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             if (UsbInterfaceManager.WriteUsbInterface == null) throw new DeviceException(Messages.ErrorMessageNoWriteInterfaceSpecified);
 
