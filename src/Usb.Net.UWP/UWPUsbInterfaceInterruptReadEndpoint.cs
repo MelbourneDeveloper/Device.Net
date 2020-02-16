@@ -77,7 +77,7 @@ namespace Usb.Net.UWP
             GC.SuppressFinalize(this);
         }
 
-        public async Task<byte[]> ReadAsync()
+        public async Task<byte[]> ReadAsync(CancellationToken cancellationToken = default)
         {
             try
             {
@@ -115,6 +115,8 @@ namespace Usb.Net.UWP
                 _ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
 
                 Logger?.Log($"Data received lock released. Completion source created. Waiting for data.", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
+
+                //Task.WhenAny(new Task[] _ReadChunkTaskCompletionSource.Task)
 
                 retVal = await _ReadChunkTaskCompletionSource.Task;
 

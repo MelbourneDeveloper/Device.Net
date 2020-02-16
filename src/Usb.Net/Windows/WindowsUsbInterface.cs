@@ -2,6 +2,7 @@
 using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Usb.Net.Windows
@@ -30,7 +31,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Methods
-        public async Task<ReadResult> ReadAsync(uint bufferLength)
+        public async Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
         {
             return await Task.Run(() =>
             {
@@ -39,17 +40,17 @@ namespace Usb.Net.Windows
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't read data");
                 Tracer?.Trace(false, bytes);
                 return new ReadResult(bytes, bytesRead);
-            });
+            }, cancellationToken);
         }
 
-        public async Task WriteAsync(byte[] data)
+        public async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             await Task.Run(() =>
             {
                 var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_SafeFileHandle, WriteEndpoint.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't write data");
                 Tracer?.Trace(true, data);
-            });
+            }, cancellationToken);
         }
 
         public void Dispose()

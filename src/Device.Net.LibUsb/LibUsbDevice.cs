@@ -110,7 +110,7 @@ namespace Device.Net.LibUsb
                     Tracer?.Trace(false, data);
 
                     return data;
-                });
+                }, cancellationToken);
             }
             finally
             {

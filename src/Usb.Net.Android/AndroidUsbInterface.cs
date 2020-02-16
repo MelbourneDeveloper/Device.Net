@@ -3,6 +3,7 @@ using Device.Net;
 using Java.Nio;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Usb.Net.Android
@@ -28,7 +29,7 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Methods
-        public async Task<ReadResult> ReadAsync(uint bufferLength)
+        public async Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
         {
             return await Task.Run(async () =>
             {
@@ -67,7 +68,7 @@ namespace Usb.Net.Android
                     Logger?.Log(Messages.ErrorMessageRead, nameof(AndroidUsbInterfaceManager), ex, LogLevel.Error);
                     throw new IOException(Messages.ErrorMessageRead, ex);
                 }
-            });
+            }, cancellationToken);
         }
 
         public Task<byte[]> ReadInterruptAsync(uint bufferLength, uint timeout)
@@ -75,7 +76,7 @@ namespace Usb.Net.Android
             throw new NotImplementedException();
         }
 
-        public async Task WriteAsync(byte[] data)
+        public async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             await Task.Run(async () =>
             {
@@ -100,7 +101,7 @@ namespace Usb.Net.Android
                     Logger?.Log(Messages.WriteErrorMessage, nameof(AndroidUsbInterface), ex, LogLevel.Error);
                     throw new IOException(Messages.WriteErrorMessage, ex);
                 }
-            });
+            }, cancellationToken);
         }
 
         public void Dispose()

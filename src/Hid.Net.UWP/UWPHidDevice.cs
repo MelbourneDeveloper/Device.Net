@@ -181,7 +181,7 @@ namespace Hid.Net.UWP
 
         public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
         {
-            var data = (await ReadReportAsync()).Data;
+            var data = (await ReadReportAsync(cancellationToken)).Data;
             Tracer?.Trace(false, data);
             return data;
         }

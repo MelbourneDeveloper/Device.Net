@@ -3,6 +3,7 @@ using Device.Net.Exceptions;
 using System;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.Usb;
 using Windows.Storage.Streams;
@@ -59,7 +60,7 @@ namespace Usb.Net.UWP
             //TODO: Why does not UWP not support Control Transfer?
         }
 
-        public async Task<ReadResult> ReadAsync(uint bufferLength)
+        public async Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
         {
             IBuffer buffer;
 
@@ -80,7 +81,7 @@ namespace Usb.Net.UWP
             return buffer.ToArray();
         }
 
-        public async Task WriteAsync(byte[] data)
+        public async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
