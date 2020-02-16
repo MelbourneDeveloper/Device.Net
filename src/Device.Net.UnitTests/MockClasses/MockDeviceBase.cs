@@ -40,11 +40,11 @@ namespace Device.Net.UnitTests
             var data = new byte[] { 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             Tracer?.Trace(false, data);
 
-            //Wait a possible cancellation
-            for (var i = 0; i < 5000; i++)
+            //Simulate IO delay and wait for a cancellation
+            for (var i = 0; i < 10; i++)
             {
                 await Task.Delay(1);
-                if (cancellationToken.IsCancellationRequested) throw new OperationCanceledException();
+                if (cancellationToken.IsCancellationRequested) throw new OperationCanceledException(Messages.ErrorMessageOperationCanceled);
             }
 
             return data;
@@ -54,11 +54,11 @@ namespace Device.Net.UnitTests
         {
             LastWrittenBuffer = data;
             Tracer?.Trace(true, data);
-            //Wait a possible cancellation
-            for (var i = 0; i < 5000; i++)
+            //Simulate IO delay and wait for a cancellation
+            for (var i = 0; i < 10; i++)
             {
                 await Task.Delay(1);
-                if (cancellationToken.IsCancellationRequested) throw new OperationCanceledException();
+                if (cancellationToken.IsCancellationRequested) throw new OperationCanceledException(Messages.ErrorMessageOperationCanceled);
             }
         }
     }

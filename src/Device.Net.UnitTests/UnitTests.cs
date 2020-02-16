@@ -214,17 +214,19 @@ namespace Device.Net.UnitTests
             try
             {
                 var device = new MockHidDevice("asd", null, null);
-
                 var cancellationTokenSource = new CancellationTokenSource();
-                device.WriteAndReadAsync(new byte[] { 1, 2, 3 }, cancellationTokenSource.Token);
-                cancellationTokenSource.Cancel();
+
+                var task1 = device.WriteAndReadAsync(new byte[] { 1, 2, 3 }, cancellationTokenSource.Token);
+                var task2 = Task.Run(() => { cancellationTokenSource.Cancel(); });
+
+                await Task.WhenAll(new Task[] { task1, task2 });
             }
             catch (OperationCanceledException oce)
             {
                 Assert.AreEqual(Messages.ErrorMessageOperationCanceled, oce.Message);
                 return;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Assert.Fail();
             }
