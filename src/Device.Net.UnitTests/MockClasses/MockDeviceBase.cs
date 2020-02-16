@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests
@@ -29,23 +30,36 @@ namespace Device.Net.UnitTests
 
         private byte[] LastWrittenBuffer;
 
-        public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
+        public async override Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             if (LastWrittenBuffer != null)
             {
-                Tracer.Trace(false, LastWrittenBuffer);
+                Tracer?.Trace(false, LastWrittenBuffer);
                 return LastWrittenBuffer;
             }
             var data = new byte[] { 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            Tracer.Trace(false, data);
-            return await Task.FromResult(data);
+            Tracer?.Trace(false, data);
+
+            //Wait a possible cancellation
+            for (var i = 0; i < 5000; i++)
+            {
+                await Task.Delay(1);
+                if (cancellationToken.IsCancellationRequested) throw new OperationCanceledException();
+            }
+
+            return data;
         }
 
-        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+        public async override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             LastWrittenBuffer = data;
-            Tracer.Trace(true, data);
-            return Task.FromResult(true);
+            Tracer?.Trace(true, data);
+            //Wait a possible cancellation
+            for (var i = 0; i < 5000; i++)
+            {
+                await Task.Delay(1);
+                if (cancellationToken.IsCancellationRequested) throw new OperationCanceledException();
+            }
         }
     }
 }

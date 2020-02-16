@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests
@@ -207,7 +208,29 @@ namespace Device.Net.UnitTests
             Assert.Fail();
         }
 
+        [TestMethod]
+        public async Task TestCancellationException()
+        {
+            try
+            {
+                var device = new MockHidDevice("asd", null, null);
 
+                var cancellationTokenSource = new CancellationTokenSource();
+                device.WriteAndReadAsync(new byte[] { 1, 2, 3 }, cancellationTokenSource.Token);
+                cancellationTokenSource.Cancel();
+            }
+            catch (OperationCanceledException oce)
+            {
+                Assert.AreEqual(Messages.ErrorMessageOperationCanceled, oce.Message);
+                return;
+            }
+            catch(Exception ex)
+            {
+                Assert.Fail();
+            }
+
+            Assert.Fail();
+        }
 
         #endregion
 
