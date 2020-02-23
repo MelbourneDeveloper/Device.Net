@@ -49,7 +49,7 @@ namespace Usb.Net.UWP
                     Logger?.Log($"{bytes.Length} read on interrupt pipe {UsbInterruptInPipe.EndpointDescriptor.EndpointNumber}", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
                 }
 
-                if (_ReadChunkTaskCompletionSource != null && _ReadChunkTaskCompletionSource.Task.Status!= TaskStatus.RanToCompletion)
+                if (_ReadChunkTaskCompletionSource != null && _ReadChunkTaskCompletionSource.Task.Status != TaskStatus.RanToCompletion)
                 {
                     //In this case there should be no chunks. TODO: Put some unit tests around this.
                     //The read method wil be waiting on this
@@ -101,14 +101,14 @@ namespace Usb.Net.UWP
                         return retVal;
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Logger?.Log($"Error {nameof(ReadAsync)}", nameof(UWPUsbInterfaceInterruptReadEndpoint), ex, LogLevel.Error);
                     throw;
                 }
                 finally
                 {
-                    _DataReceivedLock.Release();                    
+                    _DataReceivedLock.Release();
                 }
 
                 //Wait for the event here. Once the event occurs, this should return and the semaphore should be released
@@ -116,8 +116,8 @@ namespace Usb.Net.UWP
 
                 Logger?.Log($"Data received lock released. Completion source created. Waiting for data.", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
 
-                await SynchronizeWithCancellationToken(async () => { return  _ReadChunkTaskCompletionSource.Task; }, cancellationToken);
-              
+                await _ReadChunkTaskCompletionSource.Task.SynchronizeWithCancellationToken(cancellationToken);
+
                 _ReadChunkTaskCompletionSource = null;
 
                 Logger?.Log($"Completion source nulled", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
@@ -131,23 +131,5 @@ namespace Usb.Net.UWP
             }
         }
         #endregion
-
-        public static async Task SynchronizeWithCancellationToken(Task task, CancellationToken cancellationToken = default)
-        {
-            if (task == null) throw new ArgumentNullException(nameof(task));
-
-            var cancelTask = Task.Run(() =>
-            {
-                while (task.IsCompleted && !task.IsFaulted && !task.IsCanceled)
-                {
-                    //TODO: Soft code this
-                    Task.Delay(10);
-
-                    if (cancellationToken.IsCancellationRequested) throw new OperationCanceledException(Messages.ErrorMessageOperationCanceled);
-                }
-            });
-
-            await Task.WhenAny(new Task[] { task, cancelTask });
-        }
     }
 }

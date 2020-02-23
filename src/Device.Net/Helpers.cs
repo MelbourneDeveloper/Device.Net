@@ -1,4 +1,7 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Device.Net
 {
@@ -19,5 +22,23 @@ namespace Device.Net
         }
 
         public static CultureInfo ParsingCulture { get; } = new CultureInfo("en-US");
+
+        public static async Task SynchronizeWithCancellationToken(this Task task, CancellationToken cancellationToken = default)
+        {
+            if (task == null) throw new ArgumentNullException(nameof(task));
+
+            var cancelTask = Task.Run(() =>
+            {
+                while (task.IsCompleted && !task.IsFaulted && !task.IsCanceled)
+                {
+                    //TODO: Soft code this
+                    Task.Delay(10);
+
+                    if (cancellationToken.IsCancellationRequested) throw new OperationCanceledException(Messages.ErrorMessageOperationCanceled);
+                }
+            });
+
+            await Task.WhenAny(new Task[] { task, cancelTask });
+        }
     }
 }
