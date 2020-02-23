@@ -29,7 +29,7 @@ namespace Device.Net
 
             var cancelTask = Task.Run(() =>
             {
-                while (task.IsCompleted && !task.IsFaulted && !task.IsCanceled)
+                while (!task.IsCompleted && !task.IsFaulted && !task.IsCanceled)
                 {
                     //TODO: Soft code this
                     Task.Delay(10);

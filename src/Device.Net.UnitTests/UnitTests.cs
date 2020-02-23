@@ -275,5 +275,41 @@ namespace Device.Net.UnitTests
             }
         }
         #endregion
+
+        [TestMethod]
+        public async Task TestSynchronizeWithCancellationToken()
+        {
+            try
+            {
+                var task = Task.Run(() =>
+                {
+                    for (var i = 0; i < 100; i++)
+                    {
+                        Thread.Sleep(10);
+                    }
+
+                    Console.WriteLine("Task completed");
+                });
+
+                await Task.Delay(500);
+
+                var cancellationTokenSource = new CancellationTokenSource();
+
+                await Task.WhenAny(new Task[]
+                {
+                task.SynchronizeWithCancellationToken(cancellationTokenSource.Token),
+                Task.Run(() =>
+                {
+                    cancellationTokenSource.Cancel();
+                })
+                });
+            }
+            catch (OperationCanceledException oce)
+            {
+                return;
+            }
+
+            Assert.Fail();
+        }
     }
 }
