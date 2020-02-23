@@ -116,7 +116,7 @@ namespace Usb.Net.UWP
 
                 Logger?.Log($"Data received lock released. Completion source created. Waiting for data.", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
 
-                await SynchronizeWithCancellationToken(async () => { retVal = await _ReadChunkTaskCompletionSource.Task; }, cancellationToken);
+                await SynchronizeWithCancellationToken(async () => { return  _ReadChunkTaskCompletionSource.Task; }, cancellationToken);
               
                 _ReadChunkTaskCompletionSource = null;
 
@@ -132,14 +132,13 @@ namespace Usb.Net.UWP
         }
         #endregion
 
-        public static async Task SynchronizeWithCancellationToken(Func<Task> func, CancellationToken cancellationToken = default)
+        public static async Task SynchronizeWithCancellationToken(Task task, CancellationToken cancellationToken = default)
         {
-            if (func == null) throw new ArgumentNullException(nameof(func));
+            if (task == null) throw new ArgumentNullException(nameof(task));
 
-            var funcTask = func.Invoke();
             var cancelTask = Task.Run(() =>
             {
-                while (funcTask.IsCompleted && !funcTask.IsFaulted && !funcTask.IsCanceled)
+                while (task.IsCompleted && !task.IsFaulted && !task.IsCanceled)
                 {
                     //TODO: Soft code this
                     Task.Delay(10);
@@ -148,7 +147,7 @@ namespace Usb.Net.UWP
                 }
             });
 
-            await Task.WhenAny(new Task[] { funcTask, cancelTask });
+            await Task.WhenAny(new Task[] { task, cancelTask });
         }
     }
 }
