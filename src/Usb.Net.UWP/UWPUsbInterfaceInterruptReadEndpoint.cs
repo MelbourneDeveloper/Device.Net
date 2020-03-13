@@ -116,7 +116,11 @@ namespace Usb.Net.UWP
 
                 Logger?.Log($"Data received lock released. Completion source created. Waiting for data.", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
 
-                await _ReadChunkTaskCompletionSource.Task.SynchronizeWithCancellationToken(cancellationToken);
+                //Cancel the completion source if the token is canceled
+                using (cancellationToken.Register(() => { _ReadChunkTaskCompletionSource.TrySetCanceled(); }))
+                {
+                    await _ReadChunkTaskCompletionSource.Task;
+                }
 
                 _ReadChunkTaskCompletionSource = null;
 

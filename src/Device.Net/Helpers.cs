@@ -23,6 +23,9 @@ namespace Device.Net
 
         public static CultureInfo ParsingCulture { get; } = new CultureInfo("en-US");
 
+        /// <summary>
+        /// TODO: Orphaned, untested method. Leaving here just in case
+        /// </summary>
         public static async Task SynchronizeWithCancellationToken(this Task task, CancellationToken cancellationToken = default)
         {
             if (task == null) throw new ArgumentNullException(nameof(task));

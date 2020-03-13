@@ -64,7 +64,15 @@ namespace Device.Net.UWP
             }
 
             IsReading = true;
+
             ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
+
+            //Cancel the completion source if the token is canceled
+            using (cancellationToken.Register(() => { ReadChunkTaskCompletionSource.TrySetCanceled(); }))
+            {
+                await ReadChunkTaskCompletionSource.Task;
+            }
+
             var data = await ReadChunkTaskCompletionSource.Task;
             Tracer?.Trace(false, data);
             return data;
