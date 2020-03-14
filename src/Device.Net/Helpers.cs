@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
+
+#if!NET45
 using System.Threading;
 using System.Threading.Tasks;
+#endif
 
 namespace Device.Net
 {
@@ -23,25 +27,26 @@ namespace Device.Net
 
         public static CultureInfo ParsingCulture { get; } = new CultureInfo("en-US");
 
+#if!NET45
         /// <summary>
-        /// TODO: Orphaned, untested method. Leaving here just in case
+        /// Create an awaitable task that will return cancelled if the cancellation token requests cancellation
         /// </summary>
-        public static async Task SynchronizeWithCancellationToken(this Task task, CancellationToken cancellationToken = default)
+        public static Task SynchronizeWithCancellationToken(this Task task, int delayMilliseconds = 10, CancellationToken cancellationToken = default)
         {
             if (task == null) throw new ArgumentNullException(nameof(task));
 
-            var cancelTask = Task.Run(() =>
+            while (!task.IsCompleted && !task.IsFaulted && !task.IsCanceled)
             {
-                while (!task.IsCompleted && !task.IsFaulted && !task.IsCanceled)
+                Thread.Sleep(delayMilliseconds);
+
+                if (cancellationToken.IsCancellationRequested)
                 {
-                    //TODO: Soft code this
-                    Task.Delay(10);
-
-                    if (cancellationToken.IsCancellationRequested) throw new OperationCanceledException(Messages.ErrorMessageOperationCanceled);
+                    return Task.FromCanceled(cancellationToken);
                 }
-            });
+            }
 
-            await Task.WhenAny(new Task[] { task, cancelTask });
+            return Task.FromResult(true);
         }
+#endif
     }
 }

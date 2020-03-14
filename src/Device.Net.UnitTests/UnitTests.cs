@@ -276,40 +276,51 @@ namespace Device.Net.UnitTests
         }
         #endregion
 
+#if(!NET45)
         [TestMethod]
         public async Task TestSynchronizeWithCancellationToken()
         {
-            try
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            var completed = false;
+
+            var task = Task.Run(() =>
             {
-                var task = Task.Run(() =>
+                //Iterate for one second
+                for (var i = 0; i < 100; i++)
                 {
-                    for (var i = 0; i < 100; i++)
-                    {
-                        Thread.Sleep(10);
-                    }
+                    Thread.Sleep(10);
+                }
 
-                    Console.WriteLine("Task completed");
-                });
+                completed = true;
+            });
 
-                await Task.Delay(500);
+            var cancellationTokenSource = new CancellationTokenSource();
 
-                var cancellationTokenSource = new CancellationTokenSource();
-
-                await Task.WhenAny(new Task[]
-                {
-                task.SynchronizeWithCancellationToken(cancellationTokenSource.Token),
-                Task.Run(() =>
-                {
-                    cancellationTokenSource.Cancel();
-                })
-                });
-            }
-            catch (OperationCanceledException oce)
+            //Start a task that will cancel in 500 milliseconds
+            var cancelTask = Task.Run(() =>
             {
-                return;
-            }
+                Thread.Sleep(500);
+                cancellationTokenSource.Cancel();
+            });
 
-            Assert.Fail();
+            //Get a task that will finish when the cancellation token is cancelled
+            var syncTask = task.SynchronizeWithCancellationToken(cancellationToken: cancellationTokenSource.Token);
+
+            //Wait for the first task to finish
+            var completedTask = await Task.WhenAny(new Task[]
+            {
+                syncTask,
+                cancelTask
+            });
+
+            //Ensure the task didn't wait a long time
+            Assert.IsTrue(stopWatch.ElapsedMilliseconds < 1000);
+
+            //Ensure the task wasn't completed
+            Assert.IsFalse(completed);
         }
+#endif
     }
 }
