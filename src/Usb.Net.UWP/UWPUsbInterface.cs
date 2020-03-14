@@ -67,7 +67,7 @@ namespace Usb.Net.UWP
             if (ReadEndpoint is UWPUsbInterfaceEndpoint<UsbBulkInPipe> usbBulkInPipe)
             {
                 buffer = new wss.Buffer(bufferLength);
-                await usbBulkInPipe.Pipe.InputStream.ReadAsync(buffer, bufferLength, InputStreamOptions.None);
+                await usbBulkInPipe.Pipe.InputStream.ReadAsync(buffer, bufferLength, InputStreamOptions.None).AsTask(cancellationToken);
             }
             else if (InterruptReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe)
             {
@@ -96,7 +96,7 @@ namespace Usb.Net.UWP
 
             if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> usbBulkOutPipe)
             {
-                count = await usbBulkOutPipe.Pipe.OutputStream.WriteAsync(buffer);
+                count = await usbBulkOutPipe.Pipe.OutputStream.WriteAsync(buffer).AsTask(cancellationToken);
             }
             else if (InterruptWriteEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptOutPipe> usbInterruptOutPipe)
             {
