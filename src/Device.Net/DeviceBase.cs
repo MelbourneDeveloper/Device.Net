@@ -72,24 +72,24 @@ namespace Device.Net
         #region Public Abstract Methods
         //TODO: Why are these here?
 
-        public abstract Task<ReadResult> ReadAsync();
-        public abstract Task WriteAsync(byte[] data);
+        public abstract Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default);
+        public abstract Task WriteAsync(byte[] data, CancellationToken cancellationToken = default);
         #endregion
 
         #region Public Methods
-        public virtual Task Flush()
+        public virtual Task Flush(CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
         }
 
-        public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer)
+        public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
         {
             await _WriteAndReadLock.WaitAsync();
 
             try
             {
-                await WriteAsync(writeBuffer);
-                var retVal = await ReadAsync();
+                await WriteAsync(writeBuffer, cancellationToken);
+                var retVal = await ReadAsync(cancellationToken);
                 Log(Messages.SuccessMessageWriteAndReadCalled);
                 return retVal;
             }

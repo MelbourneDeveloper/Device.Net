@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="Rules for ClassLibrary2" Description="Code analysis rules for ClassLibrary2.csproj." ToolsVersion="15.0">
+<RuleSet Name="Rules for ClassLibrary2" Description="Code analysis rules for ClassLibrary2.csproj." ToolsVersion="16.0">
   <Rules AnalyzerId="FSharp.Editor" RuleNamespace="FSharp.Editor">
     <Rule Id="FS1182" Action="Error" />
     <Rule Id="IDE0001" Action="Error" />
@@ -909,6 +909,7 @@
     <Rule Id="IDE0048WithoutSuggestion" Action="Error" />
     <Rule Id="IDE0049" Action="Error" />
     <Rule Id="IDE0049WithoutSuggestion" Action="Error" />
+    <Rule Id="IDE0060" Action="Error" />
     <Rule Id="IDE1005" Action="Error" />
     <Rule Id="IDE1005WithoutSuggestion" Action="Error" />
     <Rule Id="IDE1006" Action="Error" />

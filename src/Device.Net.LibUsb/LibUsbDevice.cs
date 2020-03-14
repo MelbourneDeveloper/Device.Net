@@ -95,7 +95,7 @@ namespace Device.Net.LibUsb
             });
         }
 
-        public override async Task<ReadResult> ReadAsync()
+        public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             await _WriteAndReadLock.WaitAsync();
 
@@ -110,7 +110,7 @@ namespace Device.Net.LibUsb
                     Tracer?.Trace(false, data);
 
                     return data;
-                });
+                }, cancellationToken);
             }
             finally
             {
@@ -118,7 +118,7 @@ namespace Device.Net.LibUsb
             }
         }
 
-        public override async Task WriteAsync(byte[] data)
+        public override async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             await _WriteAndReadLock.WaitAsync();
 

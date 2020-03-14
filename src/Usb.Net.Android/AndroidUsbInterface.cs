@@ -3,6 +3,7 @@ using Device.Net;
 using Java.Nio;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Usb.Net.Android
@@ -28,7 +29,7 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Methods
-        public async Task<ReadResult> ReadAsync(uint bufferLength)
+        public async Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
         {
             return await Task.Run(async () =>
             {
@@ -41,24 +42,10 @@ namespace Usb.Net.Android
                     request.Initialize(_UsbDeviceConnection, endpoint);
 #pragma warning disable CS0618 
                     request.Queue(byteBuffer, (int)bufferLength);
-#pragma warning restore CS0618 
-                    await _UsbDeviceConnection.RequestWaitAsync();
+#pragma warning restore CS0618
 
-                    //TODO: Get the actual length of the data read instead of just returning the length of the array
-
-                    var buffers = new ReadResult(new byte[bufferLength], bufferLength);
-
-                    byteBuffer.Rewind();
-
-                    //Ouch. Super nasty
-                    for (var i = 0; i < bufferLength; i++)
-                    {
-                        buffers.Data[i] = (byte)byteBuffer.Get();
-                    }
-
-                    //Marshal.Copy(byteBuffer.GetDirectBufferAddress(), buffers, 0, ReadBufferLength);
-
-                    Tracer?.Trace(false, buffers);
+                    //Return the task for a good read, or a cancelled task 
+                    var buffers = await GetReadResultAsync(bufferLength, byteBuffer).SynchronizeWithCancellationToken(cancellationToken);
 
                     return buffers;
                 }
@@ -67,15 +54,10 @@ namespace Usb.Net.Android
                     Logger?.Log(Messages.ErrorMessageRead, nameof(AndroidUsbInterfaceManager), ex, LogLevel.Error);
                     throw new IOException(Messages.ErrorMessageRead, ex);
                 }
-            });
+            }, cancellationToken);
         }
 
-        public Task<byte[]> ReadInterruptAsync(uint bufferLength, uint timeout)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task WriteAsync(byte[] data)
+        public async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             await Task.Run(async () =>
             {
@@ -100,7 +82,7 @@ namespace Usb.Net.Android
                     Logger?.Log(Messages.WriteErrorMessage, nameof(AndroidUsbInterface), ex, LogLevel.Error);
                     throw new IOException(Messages.WriteErrorMessage, ex);
                 }
-            });
+            }, cancellationToken);
         }
 
         public void Dispose()
@@ -120,6 +102,30 @@ namespace Usb.Net.Android
             }
 
             return Task.FromResult(true);
+        }
+        #endregion
+
+        #region Private Methods
+        private async Task<ReadResult> GetReadResultAsync(uint bufferLength, ByteBuffer byteBuffer)
+        {
+            await _UsbDeviceConnection.RequestWaitAsync();
+
+            //TODO: Get the actual length of the data read instead of just returning the length of the array
+
+            var buffers = new ReadResult(new byte[bufferLength], bufferLength);
+
+            byteBuffer.Rewind();
+
+            //Ouch. Super nasty
+            for (var i = 0; i < bufferLength; i++)
+            {
+                buffers.Data[i] = (byte)byteBuffer.Get();
+            }
+
+            //Marshal.Copy(byteBuffer.GetDirectBufferAddress(), buffers, 0, ReadBufferLength);
+
+            Tracer?.Trace(false, buffers);
+            return buffers;
         }
         #endregion
     }

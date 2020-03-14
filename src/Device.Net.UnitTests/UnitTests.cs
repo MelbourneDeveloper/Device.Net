@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests
@@ -207,7 +208,31 @@ namespace Device.Net.UnitTests
             Assert.Fail();
         }
 
+        [TestMethod]
+        public async Task TestCancellationException()
+        {
+            try
+            {
+                var device = new MockHidDevice("asd", null, null);
+                var cancellationTokenSource = new CancellationTokenSource();
 
+                var task1 = device.WriteAndReadAsync(new byte[] { 1, 2, 3 }, cancellationTokenSource.Token);
+                var task2 = Task.Run(() => { cancellationTokenSource.Cancel(); });
+
+                await Task.WhenAll(new Task[] { task1, task2 });
+            }
+            catch (OperationCanceledException oce)
+            {
+                Assert.AreEqual(Messages.ErrorMessageOperationCanceled, oce.Message);
+                return;
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail();
+            }
+
+            Assert.Fail();
+        }
 
         #endregion
 
@@ -250,5 +275,53 @@ namespace Device.Net.UnitTests
             }
         }
         #endregion
+
+#if(!NET45)
+        [TestMethod]
+        public async Task TestSynchronizeWithCancellationToken()
+        {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            var completed = false;
+
+            var task = Task.Run<bool>(() =>
+            {
+                //Iterate for one second
+                for (var i = 0; i < 100; i++)
+                {
+                    Thread.Sleep(10);
+                }
+
+                return true;
+            });
+
+            var cancellationTokenSource = new CancellationTokenSource();
+
+            //Start a task that will cancel in 500 milliseconds
+            var cancelTask = Task.Run<bool>(() =>
+            {
+                Thread.Sleep(500);
+                cancellationTokenSource.Cancel();
+                return true;
+            });
+
+            //Get a task that will finish when the cancellation token is cancelled
+            var syncTask = task.SynchronizeWithCancellationToken(cancellationToken: cancellationTokenSource.Token);
+
+            //Wait for the first task to finish
+            var completedTask = (Task<bool>) await Task.WhenAny(new Task[]
+            {
+                syncTask,
+                cancelTask
+            });
+
+            //Ensure the task didn't wait a long time
+            Assert.IsTrue(stopWatch.ElapsedMilliseconds < 1000);
+
+            //Ensure the task wasn't completed
+            Assert.IsFalse(completed);
+        }
+#endif
     }
 }

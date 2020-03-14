@@ -3,6 +3,7 @@ using Device.Net.Windows;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SerialPort.Net.Windows
@@ -71,13 +72,13 @@ namespace SerialPort.Net.Windows
             return data == null ? 0 : ApiService.AWriteFile(_ReadSafeFileHandle, data, data.Length, out var bytesWritten, 0) ? bytesWritten : -1;
         }
 
-        public override Task WriteAsync(byte[] data)
+        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             ValidateConnection();
-            return Task.Run(() => { Write(data); });
+            return Task.Run(() => { Write(data); }, cancellationToken);
         }
 
-        public override Task<ReadResult> ReadAsync()
+        public override Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             ValidateConnection();
 
@@ -86,14 +87,15 @@ namespace SerialPort.Net.Windows
                 var buffer = new byte[_ReadBufferSize];
                 var bytesRead = Read(buffer);
                 return new ReadResult(buffer, bytesRead);
-            });
+            }, cancellationToken);
         }
 
-        public override Task Flush()
+        public override Task Flush(CancellationToken cancellationToken = default)
         {
             ValidateConnection();
 
-            return Task.Run(() => ApiService.APurgeComm(_ReadSafeFileHandle, APICalls.PURGE_RXCLEAR | APICalls.PURGE_TXCLEAR));
+            return Task.Run(() => ApiService.APurgeComm(_ReadSafeFileHandle, APICalls.PURGE_RXCLEAR | APICalls.PURGE_TXCLEAR),
+                cancellationToken);
         }
 
         public override void Dispose()
