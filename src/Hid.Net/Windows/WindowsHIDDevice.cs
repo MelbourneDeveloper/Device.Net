@@ -222,7 +222,7 @@ namespace Hid.Net.Windows
             {
                 await _ReadFileStream.ReadAsync(bytes, 0, bytes.Length, cancellationToken);
             }
-            catch(OperationCanceledException oce)
+            catch (OperationCanceledException oce)
             {
                 Log(Messages.ErrorMessageOperationCanceled, oce);
                 throw;
@@ -238,11 +238,6 @@ namespace Hid.Net.Windows
             var retVal = ReadBufferHasReportId ? RemoveFirstByte(bytes) : bytes;
 
             return new ReadReport(reportId, retVal);
-        }
-
-        private void Log(object errorMessageOperationCanceled, OperationCanceledException oce)
-        {
-            throw new NotImplementedException();
         }
 
         public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
