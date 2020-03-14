@@ -42,24 +42,10 @@ namespace Usb.Net.Android
                     request.Initialize(_UsbDeviceConnection, endpoint);
 #pragma warning disable CS0618 
                     request.Queue(byteBuffer, (int)bufferLength);
-#pragma warning restore CS0618 
-                    await _UsbDeviceConnection.RequestWaitAsync();
+#pragma warning restore CS0618
 
-                    //TODO: Get the actual length of the data read instead of just returning the length of the array
-
-                    var buffers = new ReadResult(new byte[bufferLength], bufferLength);
-
-                    byteBuffer.Rewind();
-
-                    //Ouch. Super nasty
-                    for (var i = 0; i < bufferLength; i++)
-                    {
-                        buffers.Data[i] = (byte)byteBuffer.Get();
-                    }
-
-                    //Marshal.Copy(byteBuffer.GetDirectBufferAddress(), buffers, 0, ReadBufferLength);
-
-                    Tracer?.Trace(false, buffers);
+                    //Return the task for a good read, or a cancelled task 
+                    var buffers = await GetReadResultAsync(bufferLength, byteBuffer).SynchronizeWithCancellationToken(cancellationToken);
 
                     return buffers;
                 }
@@ -116,6 +102,30 @@ namespace Usb.Net.Android
             }
 
             return Task.FromResult(true);
+        }
+        #endregion
+
+        #region Private Methods
+        private async Task<ReadResult> GetReadResultAsync(uint bufferLength, ByteBuffer byteBuffer)
+        {
+            await _UsbDeviceConnection.RequestWaitAsync();
+
+            //TODO: Get the actual length of the data read instead of just returning the length of the array
+
+            var buffers = new ReadResult(new byte[bufferLength], bufferLength);
+
+            byteBuffer.Rewind();
+
+            //Ouch. Super nasty
+            for (var i = 0; i < bufferLength; i++)
+            {
+                buffers.Data[i] = (byte)byteBuffer.Get();
+            }
+
+            //Marshal.Copy(byteBuffer.GetDirectBufferAddress(), buffers, 0, ReadBufferLength);
+
+            Tracer?.Trace(false, buffers);
+            return buffers;
         }
         #endregion
     }

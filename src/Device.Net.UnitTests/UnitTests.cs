@@ -285,7 +285,7 @@ namespace Device.Net.UnitTests
 
             var completed = false;
 
-            var task = Task.Run(() =>
+            var task = Task.Run<bool>(() =>
             {
                 //Iterate for one second
                 for (var i = 0; i < 100; i++)
@@ -293,23 +293,24 @@ namespace Device.Net.UnitTests
                     Thread.Sleep(10);
                 }
 
-                completed = true;
+                return true;
             });
 
             var cancellationTokenSource = new CancellationTokenSource();
 
             //Start a task that will cancel in 500 milliseconds
-            var cancelTask = Task.Run(() =>
+            var cancelTask = Task.Run<bool>(() =>
             {
                 Thread.Sleep(500);
                 cancellationTokenSource.Cancel();
+                return true;
             });
 
             //Get a task that will finish when the cancellation token is cancelled
             var syncTask = task.SynchronizeWithCancellationToken(cancellationToken: cancellationTokenSource.Token);
 
             //Wait for the first task to finish
-            var completedTask = await Task.WhenAny(new Task[]
+            var completedTask = (Task<bool>) await Task.WhenAny(new Task[]
             {
                 syncTask,
                 cancelTask

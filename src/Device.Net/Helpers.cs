@@ -1,7 +1,7 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 
 #if!NET45
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 #endif
@@ -30,7 +30,7 @@ namespace Device.Net
         /// <summary>
         /// Create an awaitable task that will return cancelled if the cancellation token requests cancellation
         /// </summary>
-        public static Task SynchronizeWithCancellationToken(this Task task, int delayMilliseconds = 10, CancellationToken cancellationToken = default)
+        public static Task<T> SynchronizeWithCancellationToken<T>(this Task<T> task, CancellationToken cancellationToken, int delayMilliseconds = 10)
         {
             if (task == null) throw new ArgumentNullException(nameof(task));
 
@@ -40,11 +40,11 @@ namespace Device.Net
 
                 if (cancellationToken.IsCancellationRequested)
                 {
-                    return Task.FromCanceled(cancellationToken);
+                    return Task.FromCanceled<T>(cancellationToken);
                 }
             }
 
-            return Task.FromResult(true);
+            return task;
         }
 #endif
     }
