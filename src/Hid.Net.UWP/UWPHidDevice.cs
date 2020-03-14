@@ -112,7 +112,7 @@ namespace Hid.Net.UWP
 
         public virtual Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
-            return WriteReportAsync(data, 0);
+            return WriteReportAsync(data, 0, cancellationToken);
         }
 
         public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
@@ -138,7 +138,7 @@ namespace Hid.Net.UWP
             try
             {
                 var operation = ConnectedDevice.SendOutputReportAsync(outReport);
-                var count = await operation.AsTask();
+                var count = await operation.AsTask(cancellationToken);
                 if (count == bytes.Length)
                 {
                     Tracer?.Trace(true, bytes);
@@ -199,8 +199,8 @@ namespace Hid.Net.UWP
 
             try
             {
-                await WriteAsync(writeBuffer);
-                var retVal = await ReadAsync();
+                await WriteAsync(writeBuffer, cancellationToken);
+                var retVal = await ReadAsync(cancellationToken);
                 Logger?.Log(Messages.SuccessMessageWriteAndReadCalled, nameof(UWPHidDevice), null, LogLevel.Information);
                 return retVal;
             }
