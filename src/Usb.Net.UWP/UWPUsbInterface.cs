@@ -71,7 +71,7 @@ namespace Usb.Net.UWP
             }
             else if (InterruptReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe)
             {
-                return await usbInterruptInPipe.ReadAsync();
+                return await usbInterruptInPipe.ReadAsync(cancellationToken);
             }
             else
             {
