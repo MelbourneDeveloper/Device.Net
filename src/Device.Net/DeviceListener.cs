@@ -46,12 +46,12 @@ namespace Device.Net
             if (!pollMilliseconds.HasValue) return;
 
             _PollTimer = new timer(pollMilliseconds.Value);
-            _PollTimer.Elapsed += _PollTimer_Elapsed;
+            _PollTimer.Elapsed += PollTimer_Elapsed;
         }
         #endregion
 
         #region Event Handlers
-        private async void _PollTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private async void PollTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (_IsDisposed)
                 return;
