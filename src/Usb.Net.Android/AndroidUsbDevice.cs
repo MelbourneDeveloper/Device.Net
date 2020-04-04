@@ -8,7 +8,7 @@ namespace Usb.Net.Android
     {
         public AndroidUsbDevice(AndroidUsbInterfaceManager androidUsbInterfaceManager, ILogger logger, ITracer tracer) : base(androidUsbInterfaceManager.DeviceNumberId.ToString(), androidUsbInterfaceManager, logger, tracer)
         {
-            if (androidUsbInterfaceManager == null) throw new ArgumentNullException(nameof(androidUsbInterfaceManager)));
+            if (androidUsbInterfaceManager == null) throw new ArgumentNullException(nameof(androidUsbInterfaceManager));
         }
     }
 }

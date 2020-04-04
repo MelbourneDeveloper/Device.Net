@@ -1,4 +1,5 @@
 ﻿using Android.Hardware.Usb;
+using System;
 
 namespace Usb.Net.Android
 {
@@ -13,6 +14,8 @@ namespace Usb.Net.Android
 
         public AndroidUsbEndpoint(UsbEndpoint usbEndpoint)
         {
+            if (usbEndpoint == null) throw new ArgumentNullException(nameof(usbEndpoint));
+
             var isRead = usbEndpoint.Direction == UsbAddressing.In;
             var isWrite = usbEndpoint.Direction == UsbAddressing.Out;
             var isInterrupt = usbEndpoint.Type == UsbAddressing.XferInterrupt;

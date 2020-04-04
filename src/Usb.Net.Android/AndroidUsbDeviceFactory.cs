@@ -60,7 +60,7 @@ namespace Usb.Net.Android
 
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition)));
+            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
 
             if (!int.TryParse(deviceDefinition.DeviceId, out var deviceId))
             {
@@ -74,6 +74,8 @@ namespace Usb.Net.Android
         #region Public Static Methods
         public static ConnectedDeviceDefinition GetAndroidDeviceDefinition(global::Android.Hardware.Usb.UsbDevice usbDevice)
         {
+            if (usbDevice == null) throw new ArgumentNullException(nameof(usbDevice));
+
             var deviceId = usbDevice.DeviceId.ToString(Helpers.ParsingCulture);
 
             return new ConnectedDeviceDefinition(deviceId)

@@ -52,6 +52,9 @@ namespace Usb.Net.Android
         #region Overrides 
         public override void OnReceive(Context context, Intent intent)
         {
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (intent == null) throw new ArgumentNullException(nameof(intent));
+
             IsPermissionGranted = intent.GetBooleanExtra(UsbManager.ExtraPermissionGranted, false);
 
             Logger?.Log($"USB permission broadcast received. Result: {IsPermissionGranted}", nameof(UsbPermissionBroadcastReceiver), null, LogLevel.Information);
