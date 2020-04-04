@@ -48,7 +48,7 @@
     <EmbeddedResource Include="Properties\Hid.Net.UWP.rd.xml" />
     <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
-      <Version>2.9.3</Version>
+      <Version>2.9.8</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>

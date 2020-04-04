@@ -60,6 +60,8 @@ namespace Usb.Net.Android
 
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
+            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition)));
+
             if (!int.TryParse(deviceDefinition.DeviceId, out var deviceId))
             {
                 throw new Exception($"The device Id '{deviceDefinition.DeviceId}' is not a valid integer");
