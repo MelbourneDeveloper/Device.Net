@@ -1,5 +1,6 @@
 ﻿using Android.Hardware.Usb;
 using Device.Net;
+using Device.Net.Exceptions;
 using Java.Nio;
 using System;
 using System.IO;
@@ -112,7 +113,7 @@ namespace Usb.Net.Android
         {
             if (!_UsbDeviceConnection.ClaimInterface(UsbInterface, true))
             {
-                throw new Exception("could not claim interface");
+                throw new DeviceException("could not claim interface");
             }
 
             return Task.FromResult(true);

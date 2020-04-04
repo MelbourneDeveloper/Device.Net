@@ -1,6 +1,7 @@
 ﻿using Android.Content;
 using Android.Hardware.Usb;
 using Device.Net;
+using Device.Net.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -64,7 +65,7 @@ namespace Usb.Net.Android
 
             if (!int.TryParse(deviceDefinition.DeviceId, out var deviceId))
             {
-                throw new Exception($"The device Id '{deviceDefinition.DeviceId}' is not a valid integer");
+                throw new DeviceException($"The device Id '{deviceDefinition.DeviceId}' is not a valid integer");
             }
 
             return new UsbDevice(deviceDefinition.DeviceId, new AndroidUsbInterfaceManager(UsbManager, Context, deviceId, Logger, Tracer, ReadBufferSize, WriteBufferSize), Logger, Tracer);

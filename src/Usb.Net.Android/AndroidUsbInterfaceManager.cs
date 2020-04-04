@@ -1,6 +1,7 @@
 ﻿using Android.Content;
 using Android.Hardware.Usb;
 using Device.Net;
+using Device.Net.Exceptions;
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -121,7 +122,7 @@ namespace Usb.Net.Android
         {
             try
             {
-                if (disposed) throw new Exception(Messages.DeviceDisposedErrorMessage);
+                if (disposed) throw new DeviceException(Messages.DeviceDisposedErrorMessage);
 
                 await _InitializingSemaphoreSlim.WaitAsync();
 
@@ -130,7 +131,7 @@ namespace Usb.Net.Android
                 _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceNumberId);
                 if (_UsbDevice == null)
                 {
-                    throw new Exception($"The device {DeviceNumberId} is not connected to the system");
+                    throw new DeviceException($"The device {DeviceNumberId} is not connected to the system");
                 }
                 Logger?.Log($"Found device: {_UsbDevice.DeviceName} Id: {_UsbDevice.DeviceId}", nameof(AndroidUsbInterfaceManager), null, LogLevel.Information);
 
@@ -138,19 +139,19 @@ namespace Usb.Net.Android
                 var isPermissionGranted = await RequestPermissionAsync();
                 if (!isPermissionGranted.HasValue)
                 {
-                    throw new Exception("User did not respond to permission request");
+                    throw new DeviceException("User did not respond to permission request");
                 }
 
                 if (!isPermissionGranted.Value)
                 {
-                    throw new Exception("The user did not give the permission to access the device");
+                    throw new DeviceException("The user did not give the permission to access the device");
                 }
 
                 _UsbDeviceConnection = UsbManager.OpenDevice(_UsbDevice);
 
                 if (_UsbDeviceConnection == null)
                 {
-                    throw new Exception("could not open connection");
+                    throw new DeviceException("could not open connection");
                 }
 
                 for (var x = 0; x < _UsbDevice.InterfaceCount; x++)
