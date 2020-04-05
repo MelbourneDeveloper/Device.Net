@@ -89,14 +89,6 @@ namespace Usb.Net.Android
                 DeviceType = DeviceType.Usb
             };
         }
-
-        /// <summary>
-        /// Register the factory for enumerating USB devices on Android.
-        /// </summary>
-        public static void Register(UsbManager usbManager, Context context, ILogger logger, ITracer tracer)
-        {
-            DeviceManager.Current.DeviceFactories.Add(new AndroidUsbDeviceFactory(usbManager, context, logger, tracer));
-        }
         #endregion
     }
 }

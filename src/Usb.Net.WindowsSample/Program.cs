@@ -17,6 +17,7 @@ namespace Usb.Net.WindowsSample
     internal class Program
     {
         #region Fields
+        private static readonly IDeviceManager _DeviceManager = new DeviceManager();
         private static readonly TrezorExample _DeviceConnectionExample = new TrezorExample();
         /// <summary>
         /// TODO: Test these!
@@ -28,13 +29,13 @@ namespace Usb.Net.WindowsSample
         #region Main
         private static void Main(string[] args)
         {
-            //Register the factory for creating Usb devices. This only needs to be done once.
+            //Register the factories for creating Usb devices. This only needs to be done once.
 #if (LIBUSB)
-            LibUsbUsbDeviceFactory.Register(Logger, Tracer);
+            _DeviceManager.RegisterDeviceFactory(new LibUsbUsbDeviceFactory(Logger, Tracer));
 #else
-            WindowsUsbDeviceFactory.Register(Logger, Tracer);
-            WindowsHidDeviceFactory.Register(Logger, Tracer);
-            WindowsSerialPortDeviceFactory.Register(Logger, Tracer);
+            _DeviceManager.RegisterDeviceFactory(new WindowsUsbDeviceFactory(Logger, Tracer));
+            _DeviceManager.RegisterDeviceFactory(new WindowsHidDeviceFactory(Logger, Tracer));
+            _DeviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(Logger, Tracer));
 #endif
 
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
