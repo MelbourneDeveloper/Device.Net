@@ -16,7 +16,7 @@ namespace Usb.Net.AndroidSample
     public class MainActivity : AppCompatActivity
     {
         #region Fields
-        private readonly TrezorExample _TrezorExample = new TrezorExample();
+        private readonly TrezorExample _TrezorExample;
         private readonly IDeviceManager _DeviceManager;
         #endregion
 
@@ -24,6 +24,7 @@ namespace Usb.Net.AndroidSample
         public MainActivity()
         {
             _DeviceManager = new DeviceManager();
+            _TrezorExample = new TrezorExample(_DeviceManager);
         }
         #endregion
 

@@ -31,14 +31,15 @@ namespace Usb.Net.Sample
 
         #region Public Properties
         public IDevice TrezorDevice { get; private set; }
+        public IDeviceManager DeviceManager { get; }
         public DeviceListener DeviceListener { get;  }
         #endregion
 
         #region Constructor
-        public TrezorExample()
+        public TrezorExample(IDeviceManager deviceManager)
         {
-            throw new NotImplementedException("The device manager needs to be instantiated");
-            DeviceListener = new DeviceListener(null, _DeviceDefinitions, PollMilliseconds) { Logger = new DebugLogger() };
+            DeviceManager = deviceManager;
+            DeviceListener = new DeviceListener(deviceManager, _DeviceDefinitions, PollMilliseconds) { Logger = new DebugLogger() };
         }
         #endregion
 

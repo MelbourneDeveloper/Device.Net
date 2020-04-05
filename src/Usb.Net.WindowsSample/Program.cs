@@ -18,7 +18,7 @@ namespace Usb.Net.WindowsSample
     {
         #region Fields
         private static readonly IDeviceManager _DeviceManager = new DeviceManager();
-        private static readonly TrezorExample _DeviceConnectionExample = new TrezorExample();
+        private static TrezorExample _DeviceConnectionExample;
         /// <summary>
         /// TODO: Test these!
         /// </summary>
@@ -38,6 +38,7 @@ namespace Usb.Net.WindowsSample
             _DeviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(Logger, Tracer));
 #endif
 
+            _DeviceConnectionExample = new TrezorExample(_DeviceManager);
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
 
@@ -109,7 +110,7 @@ namespace Usb.Net.WindowsSample
             {
                 Console.Clear();
 
-                var devices = await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null);
+                var devices = await _DeviceManager.GetConnectedDeviceDefinitionsAsync(null);
                 Console.WriteLine("Currently connected devices: ");
                 foreach (var device in devices)
                 {
