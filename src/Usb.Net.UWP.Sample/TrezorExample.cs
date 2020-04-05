@@ -31,7 +31,7 @@ namespace Usb.Net.Sample
 
         #region Public Properties
         public IDevice TrezorDevice { get; private set; }
-        public  DeviceListener DeviceListener { get;  }
+        public  IDeviceListener DeviceListener { get;  }
         #endregion
 
         #region Constructor

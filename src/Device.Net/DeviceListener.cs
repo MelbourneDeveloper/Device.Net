@@ -10,7 +10,7 @@ using timer = System.Timers.Timer;
 
 namespace Device.Net
 {
-    public sealed class DeviceListener : IDisposable
+    public sealed class DeviceListener : IDeviceListener
     {
         #region Fields
         private bool _IsDisposed;
