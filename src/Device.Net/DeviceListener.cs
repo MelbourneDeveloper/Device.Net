@@ -96,13 +96,13 @@ namespace Device.Net
                 var connectedDeviceDefinitions = new List<ConnectedDeviceDefinition>();
                 foreach (var deviceDefinition in FilterDeviceDefinitions)
                 {
-                    connectedDeviceDefinitions.AddRange(await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(deviceDefinition));
+                    connectedDeviceDefinitions.AddRange(await DeviceManager.GetConnectedDeviceDefinitionsAsync(deviceDefinition));
                 }
 
                 //Iterate through connected devices
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                 {
-                    var deviceDefinition = FilterDeviceDefinitions.FirstOrDefault(d => DeviceManager.IsDefinitionMatch(d, connectedDeviceDefinition));
+                    var deviceDefinition = FilterDeviceDefinitions.FirstOrDefault(d => Net.DeviceManager.IsDefinitionMatch(d, connectedDeviceDefinition));
 
                     if (deviceDefinition == null) continue;
 
@@ -117,7 +117,7 @@ namespace Device.Net
                     if (device == null)
                     {
                         //Need to use the connected device def here instead of the filter version because the filter version won't have the id or any details
-                        device = DeviceManager.Current.GetDevice(connectedDeviceDefinition);
+                        device = DeviceManager.GetDevice(connectedDeviceDefinition);
                         _CreatedDevicesByDefinition.Add(deviceDefinition, device);
                     }
 
@@ -142,7 +142,7 @@ namespace Device.Net
                     var device = _CreatedDevicesByDefinition[filteredDeviceDefinitionKey];
 
                     if (connectedDeviceDefinitions.Any(cdd =>
-                        DeviceManager.IsDefinitionMatch(filteredDeviceDefinitionKey, cdd))) continue;
+                        Net.DeviceManager.IsDefinitionMatch(filteredDeviceDefinitionKey, cdd))) continue;
 
                     if (!device.IsInitialized) continue;
 

@@ -31,13 +31,14 @@ namespace Usb.Net.Sample
 
         #region Public Properties
         public IDevice TrezorDevice { get; private set; }
-        public  IDeviceListener DeviceListener { get;  }
+        public DeviceListener DeviceListener { get;  }
         #endregion
 
         #region Constructor
         public TrezorExample()
         {
-            DeviceListener = new DeviceListener(_DeviceDefinitions, PollMilliseconds) { Logger = new DebugLogger() };
+            throw new NotImplementedException("The device manager needs to be instantiated");
+            DeviceListener = new DeviceListener(null, _DeviceDefinitions, PollMilliseconds) { Logger = new DebugLogger() };
         }
         #endregion
 
@@ -67,7 +68,7 @@ namespace Usb.Net.Sample
         public async Task InitializeTrezorAsync()
         {
             //Get the first available device and connect to it
-            var devices = await DeviceManager.Current.GetDevicesAsync(_DeviceDefinitions);
+            var devices = await DeviceListener.DeviceManager.GetDevicesAsync(_DeviceDefinitions);
             TrezorDevice = devices.FirstOrDefault();
 
             if (TrezorDevice == null) throw new Exception("There were no devices found");
