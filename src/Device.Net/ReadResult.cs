@@ -2,7 +2,9 @@
 
 namespace Device.Net
 {
+#pragma warning disable CA1815 // Override equals and operator equals on value types
     public struct ReadResult
+#pragma warning restore CA1815 // Override equals and operator equals on value types
     {
         #region Public Properties
         public byte[] Data { get; }
