@@ -10,16 +10,16 @@ using timer = System.Timers.Timer;
 
 namespace Device.Net
 {
-    public sealed class DeviceObservable : IObservable<ConnectionInfo>, IDisposable
+    public sealed class DeviceObservable : IObservable<ConnectionEvent>, IDisposable
     {
-        private readonly List<IObserver<ConnectionInfo>> observers;
+        private readonly List<IObserver<ConnectionEvent>> observers;
 
         private class Unsubscriber : IDisposable
         {
-            private readonly List<IObserver<ConnectionInfo>> _observers;
-            private readonly IObserver<ConnectionInfo> _observer;
+            private readonly List<IObserver<ConnectionEvent>> _observers;
+            private readonly IObserver<ConnectionEvent> _observer;
 
-            public Unsubscriber(List<IObserver<ConnectionInfo>> observers, IObserver<ConnectionInfo> observer)
+            public Unsubscriber(List<IObserver<ConnectionEvent>> observers, IObserver<ConnectionEvent> observer)
             {
                 _observers = observers;
                 _observer = observer;
@@ -31,7 +31,7 @@ namespace Device.Net
             }
         }
 
-        public IDisposable Subscribe(IObserver<ConnectionInfo> observer)
+        public IDisposable Subscribe(IObserver<ConnectionEvent> observer)
         {
             if (!observers.Contains(observer))
                 observers.Add(observer);
@@ -64,7 +64,7 @@ namespace Device.Net
         /// <param name="pollMilliseconds">Poll interval in milliseconds, or null if checking is called externally</param>
         public DeviceObservable(IDeviceManager deviceManager, IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions, int? pollMilliseconds)
         {
-            observers = new List<IObserver<ConnectionInfo>>();
+            observers = new List<IObserver<ConnectionEvent>>();
 
             DeviceManager = deviceManager ?? throw new ArgumentNullException(nameof(deviceManager));
 
@@ -153,7 +153,8 @@ namespace Device.Net
                     await device.InitializeAsync();
 
                     //Let listeners know a registered device was initialized
-                    DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
+                    foreach (var observer in observers)
+                        observer.OnNext(new ConnectionEvent { Device = device });
 
                     Log(Messages.InformationMessageDeviceConnected, null);
                 }
@@ -172,7 +173,8 @@ namespace Device.Net
 
                     //Let listeners know a registered device was disconnected
                     //NOTE: let the rest of the app know before disposal so that the app can stop doing whatever it's doing.
-                    DeviceDisconnected?.Invoke(this, new DeviceEventArgs(device));
+                    foreach (var observer in observers)
+                        observer.OnNext(new ConnectionEvent { Device = device, IsDisconnection = true });
 
                     //The device is no longer connected so close it
                     device.Close();

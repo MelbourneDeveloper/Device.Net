@@ -1,6 +1,6 @@
 ﻿namespace Device.Net
 {
-    public class ConnectionInfo
+    public class ConnectionEvent
     {
         public IDevice Device { get; set; }
         public bool IsDisconnection { get; set; }

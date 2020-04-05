@@ -2,7 +2,7 @@
 
 namespace Device.Net
 {
-    public class DeviceObserver : IObserver<ConnectionInfo>
+    public class DeviceObserver : IObserver<ConnectionEvent>
     {
         public void OnCompleted()
         {
@@ -14,7 +14,7 @@ namespace Device.Net
             throw new NotImplementedException();
         }
 
-        public void OnNext(ConnectionInfo value)
+        public void OnNext(ConnectionEvent value)
         {
             throw new NotImplementedException();
         }
