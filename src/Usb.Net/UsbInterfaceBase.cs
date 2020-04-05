@@ -54,7 +54,7 @@ namespace Usb.Net
             get => _ReadEndpoint ?? (_ReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead && !p.IsInterrupt));
             set
             {
-                if (value!=null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
+                if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
                 _ReadEndpoint = value;
             }
         }
@@ -104,13 +104,13 @@ namespace Usb.Net
             if (ReadEndpoint == null && InterruptReadEndpoint != null)
             {
                 ReadEndpoint = InterruptReadEndpoint;
-                Logger.Log(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, true), nameof(UsbInterfaceBase), null, LogLevel.Warning);
+                Logger?.Log(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, true), nameof(UsbInterfaceBase), null, LogLevel.Warning);
             }
 
             if (WriteEndpoint == null && InterruptWriteEndpoint != null)
             {
                 WriteEndpoint = InterruptWriteEndpoint;
-                Logger.Log(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, false), nameof(UsbInterfaceBase), null, LogLevel.Warning);
+                Logger?.Log(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, false), nameof(UsbInterfaceBase), null, LogLevel.Warning);
             }
         }
 

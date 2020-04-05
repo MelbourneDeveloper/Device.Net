@@ -16,6 +16,12 @@ namespace Device.Net.UnitTests
         private static readonly MockTracer tracer = new MockTracer();
         private static readonly IDeviceManager _DeviceManager = new DeviceManager();
 
+        [TestMethod]
+        public void Test()
+        {
+
+        }
+
         #region Tests
         [TestInitialize]
         public void Startup()

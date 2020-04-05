@@ -10,6 +10,7 @@ using timer = System.Timers.Timer;
 
 namespace Device.Net
 {
+
     public sealed class DeviceObservable : IObservable<ConnectionEvent>, IDisposable
     {
         private readonly List<IObserver<ConnectionEvent>> observers;
@@ -62,7 +63,7 @@ namespace Device.Net
         /// </summary>
         /// <param name="filterDeviceDefinitions">Device definitions to connect to and disconnect from</param>
         /// <param name="pollMilliseconds">Poll interval in milliseconds, or null if checking is called externally</param>
-        public DeviceObservable(IDeviceManager deviceManager, IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions, int? pollMilliseconds)
+        public DeviceObservable(IDeviceManager deviceManager, IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions, int? pollMilliseconds = 5)
         {
             observers = new List<IObserver<ConnectionEvent>>();
 
