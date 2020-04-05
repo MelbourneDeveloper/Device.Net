@@ -53,7 +53,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.1.9</Version>
+      <Version>6.2.10</Version>
     </PackageReference>
     <ProjectReference Include="..\Device.Net.UWP\Device.Net.UWP.csproj">
       <Project>{45e6e89a-aedb-457a-9c80-310fa2eeaef1}</Project>
