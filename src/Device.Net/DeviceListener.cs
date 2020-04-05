@@ -26,6 +26,7 @@ namespace Device.Net
         #region Public Properties
         public List<FilterDeviceDefinition> FilterDeviceDefinitions { get; } = new List<FilterDeviceDefinition>();
         public ILogger Logger { get; set; }
+        public IDeviceManager DeviceManager { get; }
         #endregion
 
         #region Events
@@ -39,8 +40,10 @@ namespace Device.Net
         /// </summary>
         /// <param name="filterDeviceDefinitions">Device definitions to connect to and disconnect from</param>
         /// <param name="pollMilliseconds">Poll interval in milliseconds, or null if checking is called externally</param>
-        public DeviceListener(IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions, int? pollMilliseconds)
+        public DeviceListener(IDeviceManager deviceManager, IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions, int? pollMilliseconds)
         {
+            DeviceManager = deviceManager ?? throw new ArgumentNullException(nameof(deviceManager));
+
             FilterDeviceDefinitions.AddRange(filterDeviceDefinitions);
             _ListenSemaphoreSlim = new SemaphoreSlim(1, 1);
             if (!pollMilliseconds.HasValue) return;
@@ -78,7 +81,7 @@ namespace Device.Net
                 throw new ValidationException(Messages.ErrorMessagePollingNotEnabled);
             }
 
-            if (DeviceManager.Current.DeviceFactories.Count == 0) throw new DeviceFactoriesNotRegisteredException();
+            //if (DeviceManager.Current.DeviceFactories.Count == 0) throw new DeviceFactoriesNotRegisteredException();
 
             _PollTimer.Start();
         }

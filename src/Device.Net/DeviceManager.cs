@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Device.Net
 {
-    public class DeviceManager
+    public class DeviceManager : IDeviceManager
     {
         #region Public Properties
         public List<IDeviceFactory> DeviceFactories { get; } = new List<IDeviceFactory>();
         #endregion
 
         #region Public Static Properties
-        public static DeviceManager Current { get; } = new DeviceManager();
+        //public static IDeviceManager Current { get; } = new DeviceManager();
         #endregion
 
         #region Public Methods
@@ -26,7 +26,7 @@ namespace Device.Net
             {
                 var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitionsAsync(deviceDefinition);
 
-                foreach(var connectedDeviceDefinition in connectedDeviceDefinitions)
+                foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                 {
                     //Don't add the same device twice
                     //Note: this probably won't cause issues where there is no DeviceId, but funny behaviour is probably going on when there isn't anyway...
@@ -95,7 +95,7 @@ namespace Device.Net
             var deviceTypePasses = !filterDevice.DeviceType.HasValue || filterDevice.DeviceType == actualDevice.DeviceType;
             var usagePagePasses = !filterDevice.UsagePage.HasValue || filterDevice.UsagePage == actualDevice.UsagePage;
 
-            var returnValue = 
+            var returnValue =
                 vendorIdPasses &&
                 productIdPasses &&
                 deviceTypePasses &&
