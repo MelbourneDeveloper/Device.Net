@@ -19,8 +19,8 @@ namespace Usb.Net.Android
         private readonly SemaphoreSlim _InitializingSemaphoreSlim = new SemaphoreSlim(1, 1);
         private bool _IsClosing;
         private bool disposed;
-        protected ushort? _ReadBufferSize { get; set; }
-        protected ushort? _WriteBufferSize { get; set; }
+        private ushort? _ReadBufferSize { get; set; }
+        private ushort? _WriteBufferSize { get; set; }
 
         #endregion
 
@@ -31,8 +31,8 @@ namespace Usb.Net.Android
         #region Public Properties
         public UsbManager UsbManager { get; }
         public Context AndroidContext { get; private set; }
-        public ushort ReadBufferSize => ReadUsbInterface.ReadBufferSize;
-        public ushort WriteBufferSize => ReadUsbInterface.WriteBufferSize;
+        public ushort WriteBufferSize => _WriteBufferSize ?? WriteUsbInterface.ReadBufferSize;
+        public ushort ReadBufferSize => _ReadBufferSize ?? ReadUsbInterface.ReadBufferSize;
         public int DeviceNumberId { get; }
         #endregion
 
@@ -159,7 +159,7 @@ namespace Usb.Net.Android
                     //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
                     var usbInterface = _UsbDevice.GetInterface(x);
 
-                    var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, Logger, Tracer, _ReadBufferSize, _WriteBufferSize);
+                    var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, Logger, Tracer, ReadBufferSize, WriteBufferSize);
                     UsbInterfaces.Add(androidUsbInterface);
 
                     for (var y = 0; y < usbInterface.EndpointCount; y++)
