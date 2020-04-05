@@ -14,13 +14,14 @@ namespace Device.Net.UnitTests
     {
         private static readonly MockLogger logger = new MockLogger();
         private static readonly MockTracer tracer = new MockTracer();
+        private static readonly IDeviceManager _DeviceManager = new DeviceManager();
 
         #region Tests
         [TestInitialize]
         public void Startup()
         {
-            MockHidFactory.Register(logger, tracer);
-            MockUsbFactory.Register(logger, tracer);
+            _DeviceManager.RegisterDeviceFactory(new MockHidFactory(logger, tracer));
+            _DeviceManager.RegisterDeviceFactory(new MockUsbFactory(logger, tracer));
         }
 
         [TestMethod]
@@ -37,13 +38,13 @@ namespace Device.Net.UnitTests
         {
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
-            var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList();
+            var connectedDeviceDefinitions = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList();
 
             if (connectedDeviceDefinitions.Count > 0)
             {
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                 {
-                    var device = DeviceManager.Current.GetDevice(connectedDeviceDefinition);
+                    var device = _DeviceManager.GetDevice(connectedDeviceDefinition);
 
                     if (device != null && connectedDeviceDefinition.DeviceType == DeviceType.Hid)
                     {
@@ -71,7 +72,7 @@ namespace Device.Net.UnitTests
 
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
-            var connectedDeviceDefinition = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
+            var connectedDeviceDefinition = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
 
 
             var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, logger, tracer);
@@ -110,7 +111,7 @@ namespace Device.Net.UnitTests
         {
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
-            var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = 0, VendorId = 0 })).ToList();
+            var connectedDeviceDefinitions = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = 0, VendorId = 0 })).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
             Assert.AreEqual(expectedCount, connectedDeviceDefinitions.Count);
         }
@@ -123,7 +124,7 @@ namespace Device.Net.UnitTests
         {
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
-            var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null)).ToList();
+            var connectedDeviceDefinitions = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync(null)).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
             Assert.AreEqual(expectedCount, connectedDeviceDefinitions.Count);
         }
@@ -150,11 +151,11 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestDeviceFactoriesNotRegisteredException()
         {
-            DeviceManager.Current.DeviceFactories.Clear();
+            _DeviceManager.DeviceFactories.Clear();
 
             try
             {
-                await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null);
+                await _DeviceManager.GetConnectedDeviceDefinitionsAsync(null);
             }
             catch (DeviceFactoriesNotRegisteredException)
             {
@@ -171,11 +172,11 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public void TestListenerDeviceFactoriesNotRegisteredException()
         {
-            DeviceManager.Current.DeviceFactories.Clear();
+            _DeviceManager.DeviceFactories.Clear();
 
             try
             {
-                var deviceListner = new DeviceListener(DeviceManager.Current, new List<FilterDeviceDefinition>(), 1000);
+                var deviceListner = new DeviceListener(_DeviceManager, new List<FilterDeviceDefinition>(), 1000);
                 deviceListner.Start();
             }
             catch (DeviceFactoriesNotRegisteredException)
@@ -243,7 +244,7 @@ namespace Device.Net.UnitTests
         {
             var listenTaskCompletionSource = new TaskCompletionSource<bool>();
 
-            var deviceListener = new DeviceListener(DeviceManager.Current, new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = MockHidDevice.VendorId, ProductId = MockHidDevice.ProductId } }, 1000);
+            var deviceListener = new DeviceListener(_DeviceManager, new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = MockHidDevice.VendorId, ProductId = MockHidDevice.ProductId } }, 1000);
             deviceListener.DeviceInitialized += (a, deviceEventArgs) =>
             {
                 Console.WriteLine($"{deviceEventArgs.Device?.DeviceId} connected");

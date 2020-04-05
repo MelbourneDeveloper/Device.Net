@@ -20,11 +20,6 @@
 
         public override uint VendorId => MockHidDevice.VendorId;
 
-        public static void Register(ILogger logger, ITracer tracer)
-        {
-            DeviceManager.Current.DeviceFactories.Add(new MockHidFactory(logger, tracer));
-        }
-
         public override IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
             if (deviceDefinition == null) return null;

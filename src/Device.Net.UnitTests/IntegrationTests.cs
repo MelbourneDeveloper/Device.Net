@@ -74,10 +74,11 @@ namespace SerialPort.Net
         [TestMethod]
         public async Task ConnectedTestGetDevicesSingletonAsync()
         {
-            WindowsSerialPortDeviceFactory.Register(null, null);
+            var deviceManager = new DeviceManager();
+            deviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(null, null));
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
 
-            var devices = await DeviceManager.Current.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.SerialPort } });
+            var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.SerialPort } });
 
             foreach (var device in devices)
             {

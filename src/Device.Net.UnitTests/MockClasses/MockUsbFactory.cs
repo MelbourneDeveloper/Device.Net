@@ -22,11 +22,6 @@ namespace Device.Net.UnitTests
 
         public const string FoundMessage = "Found device {0}";
 
-        public static void Register(ILogger logger, ITracer tracer)
-        {
-            DeviceManager.Current.DeviceFactories.Add(new MockUsbFactory(logger, tracer));
-        }
-
         public override IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
             if (deviceDefinition == null) throw new Exception("Couldn't get a device");
