@@ -8,5 +8,6 @@ namespace Device.Net
         Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition);
         IDevice GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition);
         Task<List<IDevice>> GetDevicesAsync(IList<FilterDeviceDefinition> deviceDefinitions);
+        bool IsInitialized { get; }
     }
 }

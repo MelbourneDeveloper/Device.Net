@@ -81,7 +81,7 @@ namespace Device.Net
                 throw new ValidationException(Messages.ErrorMessagePollingNotEnabled);
             }
 
-            //if (DeviceManager.Current.DeviceFactories.Count == 0) throw new DeviceFactoriesNotRegisteredException();
+            if (!DeviceManager.IsInitialized) throw new DeviceFactoriesNotRegisteredException();
 
             _PollTimer.Start();
         }

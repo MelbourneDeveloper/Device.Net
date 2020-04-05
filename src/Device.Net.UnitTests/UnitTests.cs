@@ -175,7 +175,7 @@ namespace Device.Net.UnitTests
 
             try
             {
-                var deviceListner = new DeviceListener(new List<FilterDeviceDefinition>(), 1000);
+                var deviceListner = new DeviceListener(DeviceManager.Current, new List<FilterDeviceDefinition>(), 1000);
                 deviceListner.Start();
             }
             catch (DeviceFactoriesNotRegisteredException)
@@ -243,7 +243,7 @@ namespace Device.Net.UnitTests
         {
             var listenTaskCompletionSource = new TaskCompletionSource<bool>();
 
-            var deviceListener = new DeviceListener(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = MockHidDevice.VendorId, ProductId = MockHidDevice.ProductId } }, 1000);
+            var deviceListener = new DeviceListener(DeviceManager.Current, new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = MockHidDevice.VendorId, ProductId = MockHidDevice.ProductId } }, 1000);
             deviceListener.DeviceInitialized += (a, deviceEventArgs) =>
             {
                 Console.WriteLine($"{deviceEventArgs.Device?.DeviceId} connected");
@@ -310,7 +310,7 @@ namespace Device.Net.UnitTests
             var syncTask = task.SynchronizeWithCancellationToken(cancellationToken: cancellationTokenSource.Token);
 
             //Wait for the first task to finish
-            var completedTask = (Task<bool>) await Task.WhenAny(new Task[]
+            var completedTask = (Task<bool>)await Task.WhenAny(new Task[]
             {
                 syncTask,
                 cancelTask

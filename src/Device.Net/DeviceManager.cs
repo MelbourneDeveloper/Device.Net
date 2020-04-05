@@ -10,10 +10,11 @@ namespace Device.Net
     {
         #region Public Properties
         public List<IDeviceFactory> DeviceFactories { get; } = new List<IDeviceFactory>();
+        public bool IsInitialized => DeviceFactories.Count > 0;
         #endregion
 
         #region Public Static Properties
-        //public static IDeviceManager Current { get; } = new DeviceManager();
+        public static DeviceManager Current { get; } = new DeviceManager();
         #endregion
 
         #region Public Methods
