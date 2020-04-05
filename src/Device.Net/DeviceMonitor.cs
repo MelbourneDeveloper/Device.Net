@@ -43,16 +43,6 @@ namespace Device.Net
         }
         #endregion
 
-        #region Implementation
-        public IDisposable Subscribe(IObserver<ConnectionEventArgs> observer)
-        {
-            if (!_Observers.Contains(observer))
-                _Observers.Add(observer);
-
-            return new Unsubscriber(_Observers, observer);
-        }
-        #endregion
-
         #region Public Properties
         public List<FilterDeviceDefinition> FilterDeviceDefinitions { get; } = new List<FilterDeviceDefinition>();
         public ILogger Logger { get; set; }
@@ -98,7 +88,13 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
+        public IDisposable Subscribe(IObserver<ConnectionEventArgs> observer)
+        {
+            if (!_Observers.Contains(observer))
+                _Observers.Add(observer);
 
+            return new Unsubscriber(_Observers, observer);
+        }
         /// <summary>
         /// Starts the polling for devices if polling is being used.
         /// </summary>
