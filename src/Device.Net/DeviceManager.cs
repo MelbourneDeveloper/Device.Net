@@ -13,10 +13,6 @@ namespace Device.Net
         public bool IsInitialized => DeviceFactories.Count > 0;
         #endregion
 
-        #region Public Static Properties
-        public static DeviceManager Current { get; } = new DeviceManager();
-        #endregion
-
         #region Public Methods
         public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
         {

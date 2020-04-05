@@ -7,13 +7,5 @@
         }
 
         public override DeviceType DeviceType => DeviceType.Usb;
-
-        /// <summary>
-        /// Register the factory for enumerating USB devices.
-        /// </summary>
-        public static void Register(ILogger logger, ITracer tracer)
-        {
-            DeviceManager.Current.DeviceFactories.Add(new LibUsbUsbDeviceFactory(logger, tracer));
-        }
     }
 }

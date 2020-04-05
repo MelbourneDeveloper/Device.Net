@@ -43,23 +43,9 @@ namespace Usb.Net.UWP
         }
         #endregion
 
-        #region Public Static Methods
-        /// <summary>
-        /// Register the factory for enumerating USB devices on UWP.
-        /// </summary>
-        public static void Register(ILogger logger, ITracer tracer)
-        {
-            foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)
-            {
-                if (deviceFactory is UWPUsbDeviceFactory) return;
-            }
-
-            DeviceManager.Current.DeviceFactories.Add(new UWPUsbDeviceFactory(logger, tracer));
-        }
-        #endregion
-
         #region Public Overrides
         public override Task<ConnectionInfo> TestConnection(string deviceId) => Task.FromResult(new ConnectionInfo { CanConnect = true });
         #endregion
     }
 }
+
