@@ -10,7 +10,7 @@ namespace Device.Net.UnitTests
     public class DeviceObservableTests
     {
         [TestMethod]
-        public async Task Testes()
+        public async Task TestPubSub()
         {
             var deviceObservable = new DeviceObservable(
                 new DeviceManager(),
