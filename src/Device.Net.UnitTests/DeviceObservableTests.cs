@@ -31,7 +31,11 @@ namespace Device.Net.UnitTests
 
             deviceObservable.Start();
 
-            while (true)
+            var hasConnected = false;
+
+            deviceObserver.ConnectionEventOccurred += (sender, args) => { if (!args.IsDisconnection) hasConnected = true; };
+
+            while (!hasConnected)
             {
                 await Task.Delay(1000);
             }
