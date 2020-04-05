@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Device.Net;
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Usb.Net
@@ -14,8 +16,8 @@ namespace Usb.Net
         //TODO: Remove these. They should come from the endpoint... or be specified there
         ushort ReadBufferSize { get; }
         ushort WriteBufferSize { get; }
-        Task WriteAsync(byte[] data);
-        Task<byte[]> ReadAsync(uint bufferLength);
+        Task WriteAsync(byte[] data, CancellationToken cancellationToken = default);
+        Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default);
         byte InterfaceNumber { get; }
         Task ClaimInterface();
 

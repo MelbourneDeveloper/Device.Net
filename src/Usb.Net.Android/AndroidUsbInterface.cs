@@ -1,8 +1,10 @@
 ﻿using Android.Hardware.Usb;
 using Device.Net;
+using Device.Net.Exceptions;
 using Java.Nio;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Usb.Net.Android
@@ -28,12 +30,13 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Methods
-        public async Task<byte[]> ReadAsync(uint bufferLength)
+        public async Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
         {
             return await Task.Run(async () =>
             {
                 try
                 {
+
                     var byteBuffer = ByteBuffer.Allocate((int)bufferLength);
                     var request = new UsbRequest();
                     var endpoint = ((AndroidUsbEndpoint)ReadEndpoint).UsbEndpoint;
@@ -42,14 +45,17 @@ namespace Usb.Net.Android
                     request.Queue(byteBuffer, (int)bufferLength);
 #pragma warning restore CS0618 
                     await _UsbDeviceConnection.RequestWaitAsync();
-                    var buffers = new byte[bufferLength];
+
+                    //TODO: Get the actual length of the data read instead of just returning the length of the array
+
+                    var buffers = new ReadResult(new byte[bufferLength], bufferLength);
 
                     byteBuffer.Rewind();
 
                     //Ouch. Super nasty
                     for (var i = 0; i < bufferLength; i++)
                     {
-                        buffers[i] = (byte)byteBuffer.Get();
+                        buffers.Data[i] = (byte)byteBuffer.Get();
                     }
 
                     //Marshal.Copy(byteBuffer.GetDirectBufferAddress(), buffers, 0, ReadBufferLength);
@@ -60,18 +66,13 @@ namespace Usb.Net.Android
                 }
                 catch (Exception ex)
                 {
-                    Logger?.Log(Messages.ReadErrorMessage, nameof(AndroidUsbDeviceHandler), ex, LogLevel.Error);
-                    throw new IOException(Messages.ReadErrorMessage, ex);
+                    Logger?.Log(Messages.ErrorMessageRead, nameof(AndroidUsbInterfaceManager), ex, LogLevel.Error);
+                    throw new IOException(Messages.ErrorMessageRead, ex);
                 }
-            });
+            }, cancellationToken);
         }
 
-        public Task<byte[]> ReadInterruptAsync(uint bufferLength, uint timeout)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task WriteAsync(byte[] data)
+        public async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             await Task.Run(async () =>
             {
@@ -96,7 +97,7 @@ namespace Usb.Net.Android
                     Logger?.Log(Messages.WriteErrorMessage, nameof(AndroidUsbInterface), ex, LogLevel.Error);
                     throw new IOException(Messages.WriteErrorMessage, ex);
                 }
-            });
+            }, cancellationToken);
         }
 
         public void Dispose()
@@ -112,7 +113,7 @@ namespace Usb.Net.Android
         {
             if (!_UsbDeviceConnection.ClaimInterface(UsbInterface, true))
             {
-                throw new Exception("could not claim interface");
+                throw new DeviceException("could not claim interface");
             }
 
             return Task.FromResult(true);

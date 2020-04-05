@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
     <ProjectReference Include="..\Hid.Net\Hid.Net.csproj" />
+    <ProjectReference Include="..\SerialPort.Net\SerialPort.Net.csproj" />
     <ProjectReference Include="..\Usb.Net\Usb.Net.csproj" />
   </ItemGroup>
 

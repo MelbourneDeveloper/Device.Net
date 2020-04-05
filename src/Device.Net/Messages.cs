@@ -2,6 +2,23 @@
 {
     public static class Messages
     {
+        #region Code Specific Messages
+        public const string ObsoleteMessagePlatformSpecificUsbDevice = "Platform specific USB Devices are being deprecated. Please construct a UsbDevice and pass the UsbInterfaceManager in to the constructor. This is to maintain the dependency injection pattern.";
+        #endregion
+
+        #region Success Messages
+        public const string SuccessMessageGotWriteAndReadHandle = "Successfully opened handle on device for reading and writing";
+        public static string SuccessMessageWriteAndReadCalled => $"Successfully called {nameof(DeviceBase.WriteAndReadAsync)}";
+        public const string SuccessMessageReadFileStreamOpened = "Read file stream opened successfully";
+        public const string SuccessMessageWriteFileStreamOpened = "Write file stream opened successfully";
+        #endregion
+
+        #region Warnings
+        public static string WarningMessageOpeningInReadonlyMode(string deviceId) => $"Opening device {deviceId} in read only mode.";
+        public const string WarningMessageReadFileStreamCantRead = "Read file stream cannot be read from";
+        public const string WarningMessageWriteFileStreamCantWrite = "Write file stream cannot be written to";
+        #endregion
+
         #region Device Initialization
         public const string ErrorMessageNotInitialized = "The device has not been initialized.";
         public const string ErrorMessageCouldntIntializeDevice = "Couldn't initialize device";
@@ -12,8 +29,9 @@
         #endregion
 
         #region Misc
+        public const string ErrorMessageFlushNotImplemented = "Flush has only been implemented on Serial Port devices. Please log a Github issue if you need it.";
         public const string ErrorMessageReentry = "Reentry. This method is not thread safe";
-        public static string SuccessMessageWriteAndReadCalled => $"Successfully called {nameof(DeviceBase.WriteAndReadAsync)}";
+        public const string ErrorMessageOperationNotSupportedOnPlatform = "You can't use this class on this platform";
         #endregion
 
         #region IO
@@ -24,7 +42,7 @@
 
         public const string ErrorMessageReadWrite = "Read/Write Error";
         public const string WriteErrorMessage = "An error occurred while attempting to write to the device";
-        public const string ReadErrorMessage = "An error occurred while attempting to read from the device";
+        public const string ErrorMessageRead = "An error occurred while attempting to read from the device";
         public const string ErrorMessageBufferSizeTooLarge = "The buffer size is too large";
         #endregion
 
@@ -58,6 +76,17 @@
         {
             return $"No bulk {(isRead ? "read" : "write")} pipes found. Interrupt pipes to be used instead. Interface Number {interfaceNumber}";
         }
+        #endregion
+
+        #region Serial Port
+        public const string ErrorCouldNotGetCommState = "Could not get Comm State";
+        public const string ErrorCouldNotSetCommState = "Could not set Comm State";
+        public const string ErrorCouldNotSetCommTimeout = "Could not set Comm Timeout";
+        public const string ErrorMessageStopBitsMustBeSpecified = "Stop bits must be specified";
+        public const string ErrorByteSizeMustBeFiveToEight = "Byte size must be between 5 and 8";
+        public const string ErrorBaudRateInvalid = "Baud rate must be betweem 110 and 256000";
+        public const string ErrorInvalidByteSizeAndStopBitsCombo = "The combination of byte size and stop bits is incorrect. 2 stop bits can't be used with 5 bytes, and byte sizes of more than five can't be used with stop bits of one point five.";
+        public const string ErrorMessageOperationCanceled = "Operation was cancelled";
         #endregion
     }
 }

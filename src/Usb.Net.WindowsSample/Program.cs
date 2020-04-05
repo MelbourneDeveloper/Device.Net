@@ -7,6 +7,7 @@ using Device.Net;
 #if (!LIBUSB)
 using Usb.Net.Windows;
 using Hid.Net.Windows;
+using SerialPort.Net.Windows;
 #else
 using Device.Net.LibUsb;
 #endif
@@ -16,7 +17,8 @@ namespace Usb.Net.WindowsSample
     internal class Program
     {
         #region Fields
-        private static readonly TrezorExample _DeviceConnectionExample = new TrezorExample();
+        private static readonly IDeviceManager _DeviceManager = new DeviceManager();
+        private static TrezorExample _DeviceConnectionExample;
         /// <summary>
         /// TODO: Test these!
         /// </summary>
@@ -27,14 +29,16 @@ namespace Usb.Net.WindowsSample
         #region Main
         private static void Main(string[] args)
         {
-            //Register the factory for creating Usb devices. This only needs to be done once.
+            //Register the factories for creating Usb devices. This only needs to be done once.
 #if (LIBUSB)
-            LibUsbUsbDeviceFactory.Register(Logger, Tracer);
+            _DeviceManager.RegisterDeviceFactory(new LibUsbUsbDeviceFactory(Logger, Tracer));
 #else
-            WindowsUsbDeviceFactory.Register(Logger, Tracer);
-            WindowsHidDeviceFactory.Register(Logger, Tracer);
+            _DeviceManager.RegisterDeviceFactory(new WindowsUsbDeviceFactory(Logger, Tracer));
+            _DeviceManager.RegisterDeviceFactory(new WindowsHidDeviceFactory(Logger, Tracer));
+            _DeviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(Logger, Tracer));
 #endif
 
+            _DeviceConnectionExample = new TrezorExample(_DeviceManager);
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
 
@@ -106,7 +110,7 @@ namespace Usb.Net.WindowsSample
             {
                 Console.Clear();
 
-                var devices = await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null);
+                var devices = await _DeviceManager.GetConnectedDeviceDefinitionsAsync(null);
                 Console.WriteLine("Currently connected devices: ");
                 foreach (var device in devices)
                 {

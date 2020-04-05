@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="ConnectionInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UWPDeviceHandlerBase - Generic.cs" />
+    <Compile Include="UWPDeviceBase - Generic.cs" />
     <Compile Include="UWPDeviceBase.cs" />
     <Compile Include="UWPDeviceFactoryBase.cs" />
     <EmbeddedResource Include="Properties\Device.Net.UWP.rd.xml" />
@@ -54,12 +54,12 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
-      <Version>2.9.3</Version>
+      <Version>2.9.8</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.1.9</Version>
+      <Version>6.2.10</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

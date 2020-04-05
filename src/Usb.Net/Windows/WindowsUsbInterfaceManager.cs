@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Usb.Net.Windows
 {
-    public class WindowsUsbDeviceHandler : UsbInterfaceHandler, IUsbDeviceHandler
+    public class WindowsUsbInterfaceManager : UsbInterfaceManager, IUsbInterfaceManager
     {
         #region Fields
         private bool disposed;
@@ -22,12 +22,12 @@ namespace Usb.Net.Windows
         public string DeviceId { get; }
 
         //TODO: Null checking here. These will error if the device doesn't have a value or it is not initialized
-        public ushort WriteBufferSize => _WriteBufferSize.Value;
-        public ushort ReadBufferSize => _ReadBufferSize.Value;
+        public ushort WriteBufferSize => _WriteBufferSize ?? WriteUsbInterface.ReadBufferSize;
+        public ushort ReadBufferSize => _ReadBufferSize ?? ReadUsbInterface.ReadBufferSize;
         #endregion
 
         #region Constructor
-        public WindowsUsbDeviceHandler(string deviceId, ILogger logger, ITracer tracer, ushort? writeBufferLength, ushort? readBufferLength) : base(logger, tracer)
+        public WindowsUsbInterfaceManager(string deviceId, ILogger logger, ITracer tracer, ushort? writeBufferLength, ushort? readBufferLength) : base(logger, tracer)
         {
             _ReadBufferSize = readBufferLength;
             _WriteBufferSize = writeBufferLength;
@@ -49,8 +49,7 @@ namespace Usb.Net.Windows
                     throw new ValidationException($"{nameof(DeviceDefinitionBase)} must be specified before {nameof(InitializeAsync)} can be called.");
                 }
 
-                _DeviceHandle = APICalls.CreateFile(DeviceId, APICalls.GenericWrite | APICalls.GenericRead, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
-
+                _DeviceHandle = APICalls.CreateFile(DeviceId, FileAccessRights.GenericWrite | FileAccessRights.GenericRead, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
 
                 if (_DeviceHandle.IsInvalid)
                 {
@@ -59,14 +58,24 @@ namespace Usb.Net.Windows
                     if (errorCode > 0) throw new ApiException($"Device handle no good. Error code: {errorCode}");
                 }
 
+                Logger?.Log(Messages.SuccessMessageGotWriteAndReadHandle, nameof(WindowsUsbInterfaceManager), null, LogLevel.Information);
+
                 var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
                 WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorMessageCouldntIntializeDevice);
 
                 var connectedDeviceDefinition = WindowsUsbDeviceFactory.GetDeviceDefinition(defaultInterfaceHandle, DeviceId);
 
-                if (!_WriteBufferSize.HasValue) _WriteBufferSize = (ushort)connectedDeviceDefinition.WriteBufferSize.Value;
+                if (!_WriteBufferSize.HasValue)
+                {
+                    if (!connectedDeviceDefinition.WriteBufferSize.HasValue) throw new ValidationException("Write buffer size not specified");
+                    _WriteBufferSize = (ushort)connectedDeviceDefinition.WriteBufferSize.Value;
+                }
 
-                if (!_ReadBufferSize.HasValue) _ReadBufferSize = (ushort)connectedDeviceDefinition.ReadBufferSize.Value;
+                if (!_ReadBufferSize.HasValue)
+                {
+                    if (!connectedDeviceDefinition.ReadBufferSize.HasValue) throw new ValidationException("Read buffer size not specified");
+                    _ReadBufferSize = (ushort)connectedDeviceDefinition.ReadBufferSize.Value;
+                }
 
                 //Get the first (default) interface
                 var defaultInterface = GetInterface(defaultInterfaceHandle);
@@ -159,7 +168,7 @@ namespace Usb.Net.Windows
             if (_DeviceHandle == null) throw new NotInitializedException();
 
             //TODO: Is this right?
-            return Task.Run<ConnectedDeviceDefinitionBase>(() => { return WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(DeviceId, DeviceType.Usb); });
+            return Task.Run<ConnectedDeviceDefinitionBase>(() => { return WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(DeviceId, DeviceType.Usb, Logger); });
         }
         #endregion
     }

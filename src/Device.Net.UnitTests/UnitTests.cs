@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests
@@ -13,13 +14,14 @@ namespace Device.Net.UnitTests
     {
         private static readonly MockLogger logger = new MockLogger();
         private static readonly MockTracer tracer = new MockTracer();
+        private static readonly IDeviceManager _DeviceManager = new DeviceManager();
 
         #region Tests
         [TestInitialize]
         public void Startup()
         {
-            MockHidFactory.Register(logger, tracer);
-            MockUsbFactory.Register(logger, tracer);
+            _DeviceManager.RegisterDeviceFactory(new MockHidFactory(logger, tracer));
+            _DeviceManager.RegisterDeviceFactory(new MockUsbFactory(logger, tracer));
         }
 
         [TestMethod]
@@ -36,13 +38,13 @@ namespace Device.Net.UnitTests
         {
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
-            var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList();
+            var connectedDeviceDefinitions = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList();
 
             if (connectedDeviceDefinitions.Count > 0)
             {
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                 {
-                    var device = DeviceManager.Current.GetDevice(connectedDeviceDefinition);
+                    var device = _DeviceManager.GetDevice(connectedDeviceDefinition);
 
                     if (device != null && connectedDeviceDefinition.DeviceType == DeviceType.Hid)
                     {
@@ -70,12 +72,12 @@ namespace Device.Net.UnitTests
 
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
-            var connectedDeviceDefinition = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
+            var connectedDeviceDefinition = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
 
 
-            var mockHidDevice = new MockHidDevice(logger, tracer) { DeviceId = connectedDeviceDefinition.DeviceId };
+            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, logger, tracer);
 
-            var writeAndReadTasks = new List<Task<byte[]>>();
+            var writeAndReadTasks = new List<Task<ReadResult>>();
 
             //TODO: Does this properly test thread safety?
 
@@ -91,7 +93,7 @@ namespace Device.Net.UnitTests
             for (byte i = 0; i < results.Length; i++)
             {
                 var result = results[i];
-                Assert.IsTrue(result[0] == i);
+                Assert.IsTrue(result.Data[0] == i);
             }
 
             Assert.AreEqual(readtraceCount + count, tracer.ReadCount);
@@ -109,7 +111,7 @@ namespace Device.Net.UnitTests
         {
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
-            var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = 0, VendorId = 0 })).ToList();
+            var connectedDeviceDefinitions = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = 0, VendorId = 0 })).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
             Assert.AreEqual(expectedCount, connectedDeviceDefinitions.Count);
         }
@@ -122,7 +124,7 @@ namespace Device.Net.UnitTests
         {
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
-            var connectedDeviceDefinitions = (await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null)).ToList();
+            var connectedDeviceDefinitions = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync(null)).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
             Assert.AreEqual(expectedCount, connectedDeviceDefinitions.Count);
         }
@@ -149,11 +151,11 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestDeviceFactoriesNotRegisteredException()
         {
-            DeviceManager.Current.DeviceFactories.Clear();
+            _DeviceManager.DeviceFactories.Clear();
 
             try
             {
-                await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null);
+                await _DeviceManager.GetConnectedDeviceDefinitionsAsync(null);
             }
             catch (DeviceFactoriesNotRegisteredException)
             {
@@ -170,11 +172,11 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public void TestListenerDeviceFactoriesNotRegisteredException()
         {
-            DeviceManager.Current.DeviceFactories.Clear();
+            _DeviceManager.DeviceFactories.Clear();
 
             try
             {
-                var deviceListner = new DeviceListener(new List<FilterDeviceDefinition>(), 1000);
+                var deviceListner = new DeviceListener(_DeviceManager, new List<FilterDeviceDefinition>(), 1000);
                 deviceListner.Start();
             }
             catch (DeviceFactoriesNotRegisteredException)
@@ -189,6 +191,52 @@ namespace Device.Net.UnitTests
             throw new Exception("The call was not stopped");
         }
 
+        #region Exceptions
+        [TestMethod]
+        public void TestDeviceException()
+        {
+            try
+            {
+                var deviceManager = new DeviceManager();
+                var device = deviceManager.GetDevice(new ConnectedDeviceDefinition("a"));
+            }
+            catch (DeviceException dex)
+            {
+                Assert.AreEqual(Messages.ErrorMessageCouldntGetDevice, dex.Message);
+                return;
+            }
+
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        public async Task TestCancellationException()
+        {
+            try
+            {
+                var device = new MockHidDevice("asd", null, null);
+                var cancellationTokenSource = new CancellationTokenSource();
+
+                var task1 = device.WriteAndReadAsync(new byte[] { 1, 2, 3 }, cancellationTokenSource.Token);
+                var task2 = Task.Run(() => { cancellationTokenSource.Cancel(); });
+
+                await Task.WhenAll(new Task[] { task1, task2 });
+            }
+            catch (OperationCanceledException oce)
+            {
+                Assert.AreEqual(Messages.ErrorMessageOperationCanceled, oce.Message);
+                return;
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail();
+            }
+
+            Assert.Fail();
+        }
+
+        #endregion
+
         #endregion
 
         #region Helpers
@@ -196,7 +244,7 @@ namespace Device.Net.UnitTests
         {
             var listenTaskCompletionSource = new TaskCompletionSource<bool>();
 
-            var deviceListener = new DeviceListener(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = MockHidDevice.VendorId, ProductId = MockHidDevice.ProductId } }, 1000);
+            var deviceListener = new DeviceListener(_DeviceManager, new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = MockHidDevice.VendorId, ProductId = MockHidDevice.ProductId } }, 1000);
             deviceListener.DeviceInitialized += (a, deviceEventArgs) =>
             {
                 Console.WriteLine($"{deviceEventArgs.Device?.DeviceId} connected");
@@ -228,5 +276,53 @@ namespace Device.Net.UnitTests
             }
         }
         #endregion
+
+#if(!NET45)
+        [TestMethod]
+        public async Task TestSynchronizeWithCancellationToken()
+        {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+
+            var completed = false;
+
+            var task = Task.Run<bool>(() =>
+            {
+                //Iterate for one second
+                for (var i = 0; i < 100; i++)
+                {
+                    Thread.Sleep(10);
+                }
+
+                return true;
+            });
+
+            var cancellationTokenSource = new CancellationTokenSource();
+
+            //Start a task that will cancel in 500 milliseconds
+            var cancelTask = Task.Run<bool>(() =>
+            {
+                Thread.Sleep(500);
+                cancellationTokenSource.Cancel();
+                return true;
+            });
+
+            //Get a task that will finish when the cancellation token is cancelled
+            var syncTask = task.SynchronizeWithCancellationToken(cancellationToken: cancellationTokenSource.Token);
+
+            //Wait for the first task to finish
+            var completedTask = (Task<bool>)await Task.WhenAny(new Task[]
+            {
+                syncTask,
+                cancelTask
+            });
+
+            //Ensure the task didn't wait a long time
+            Assert.IsTrue(stopWatch.ElapsedMilliseconds < 1000);
+
+            //Ensure the task wasn't completed
+            Assert.IsFalse(completed);
+        }
+#endif
     }
 }

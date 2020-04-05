@@ -21,14 +21,15 @@ namespace Device.Net
 
         #region Public Properties
         public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; set; }
-        public string DeviceId { get; set; }
+        public string DeviceId { get; }
         public ILogger Logger { get; }
         public ITracer Tracer { get; }
         #endregion
 
         #region Constructor
-        protected DeviceBase(ILogger logger, ITracer tracer)
+        protected DeviceBase(string deviceId, ILogger logger, ITracer tracer)
         {
+            DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
             Tracer = tracer;
             Logger = logger;
         }
@@ -69,19 +70,26 @@ namespace Device.Net
         #endregion
 
         #region Public Abstract Methods
-        public abstract Task<byte[]> ReadAsync();
-        public abstract Task WriteAsync(byte[] data);
+        //TODO: Why are these here?
+
+        public abstract Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default);
+        public abstract Task WriteAsync(byte[] data, CancellationToken cancellationToken = default);
         #endregion
 
         #region Public Methods
-        public async Task<byte[]> WriteAndReadAsync(byte[] writeBuffer)
+        public virtual Task Flush(CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
+        }
+
+        public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
         {
             await _WriteAndReadLock.WaitAsync();
 
             try
             {
-                await WriteAsync(writeBuffer);
-                var retVal = await ReadAsync();
+                await WriteAsync(writeBuffer, cancellationToken);
+                var retVal = await ReadAsync(cancellationToken);
                 Log(Messages.SuccessMessageWriteAndReadCalled);
                 return retVal;
             }

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Usb.Net
 {
-    public interface IUsbDeviceHandler : IDeviceHandler
+    public interface IUsbInterfaceManager : IDeviceHandler
     {
         /// <summary>
         /// Usb interface for reading from the device. Note: this will default to the first read Bulk interface. If this is incorrect, inspect the UsbInterfaces property.

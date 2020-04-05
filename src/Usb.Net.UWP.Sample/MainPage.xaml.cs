@@ -18,7 +18,8 @@ namespace Usb.Net.UWP.Sample
     public sealed partial class MainPage : Page
     {
         #region Fields
-        private readonly TrezorExample _DeviceConnectionExample = new TrezorExample();
+        private IDeviceManager _DeviceManager = new DeviceManager();
+        private readonly TrezorExample _DeviceConnectionExample;
         #endregion
 
         #region Constructor
@@ -32,11 +33,13 @@ namespace Usb.Net.UWP.Sample
             var tracer = new DebugTracer();
 
             //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPUsbDeviceFactory.Register(logger, tracer);
+            _DeviceManager.RegisterDeviceFactory(new UWPUsbDeviceFactory(logger, tracer));
 
-            //Register the factory for creating Usb devices. This only needs to be done once.
-            UWPHidDeviceFactory.Register(logger, tracer);
+            //Register the factory for creating Hid devices. This only needs to be done once.
+            _DeviceManager.RegisterDeviceFactory(new UWPHidDeviceFactory(logger, tracer));
 
+            //Create the example
+            _DeviceConnectionExample = new TrezorExample(_DeviceManager);
         }
         #endregion
 

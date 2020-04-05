@@ -39,7 +39,7 @@ namespace Usb.Net.UWP
         {
             if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
 
-            return deviceDefinition.DeviceType == DeviceType.Hid ? null : new UWPUsbDevice(new UWPUsbDeviceHandler(deviceDefinition, Logger, Tracer, ReadBufferSize, WriteBufferSize));
+            return deviceDefinition.DeviceType == DeviceType.Hid ? null : new UsbDevice(deviceDefinition.DeviceId, new UWPUsbInterfaceManager(deviceDefinition, Logger, Tracer, ReadBufferSize, WriteBufferSize), Logger, Tracer);
         }
         #endregion
 
@@ -47,6 +47,7 @@ namespace Usb.Net.UWP
         /// <summary>
         /// Register the factory for enumerating USB devices on UWP.
         /// </summary>
+        [Obsolete(DeviceManager.ObsoleteMessage)]
         public static void Register(ILogger logger, ITracer tracer)
         {
             foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)
@@ -63,3 +64,4 @@ namespace Usb.Net.UWP
         #endregion
     }
 }
+

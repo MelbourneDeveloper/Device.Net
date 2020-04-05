@@ -12,11 +12,13 @@ using Windows.Storage;
 
 namespace Hid.Net.UWP
 {
-    public class UWPHidDevice : UWPDeviceHandlerBase<HidDevice>, IHidDevice
+    //TODO: Make this class inherit from DeviceBase
+
+    public class UWPHidDevice : UWPDeviceBase<HidDevice>, IHidDevice
     {
         #region Fields
         private bool disposed;
-        private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         #endregion
 
         #region Public Properties
@@ -35,7 +37,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Event Handlers
-        private void _HidDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args)
+        private void HidDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args)
         {
             HandleDataReceived(InputReportToBytes(args));
         }
@@ -68,7 +70,7 @@ namespace Hid.Net.UWP
 
             if (ConnectedDevice != null)
             {
-                ConnectedDevice.InputReportReceived += _HidDevice_InputReportReceived;
+                ConnectedDevice.InputReportReceived += HidDevice_InputReportReceived;
             }
             else
             {
@@ -107,12 +109,12 @@ namespace Hid.Net.UWP
             base.Dispose();
         }
 
-        public virtual Task WriteAsync(byte[] data)
+        public virtual Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
-            return WriteReportAsync(data, 0);
+            return WriteReportAsync(data, 0, cancellationToken);
         }
 
-        public async Task WriteReportAsync(byte[] data, byte? reportId)
+        public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
@@ -135,7 +137,7 @@ namespace Hid.Net.UWP
             try
             {
                 var operation = ConnectedDevice.SendOutputReportAsync(outReport);
-                var count = await operation.AsTask();
+                var count = await operation.AsTask(cancellationToken);
                 if (count == bytes.Length)
                 {
                     Tracer?.Trace(true, bytes);
@@ -162,23 +164,23 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Overrides
-        public async Task<ReadReport> ReadReportAsync()
+        public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
         {
             byte? reportId = null;
-            var bytes = await base.ReadAsync();
+            var bytes = await base.ReadAsync(cancellationToken);
 
             if (DefaultReportId.HasValue)
             {
-                reportId = bytes[0];
+                reportId = bytes.Data[0];
                 bytes = DeviceBase.RemoveFirstByte(bytes);
             }
 
             return new ReadReport(reportId, bytes);
         }
 
-        public override async Task<byte[]> ReadAsync()
+        public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
         {
-            var data = (await ReadReportAsync()).Data;
+            var data = (await ReadReportAsync(cancellationToken)).Data;
             Tracer?.Trace(false, data);
             return data;
         }
@@ -190,14 +192,14 @@ namespace Hid.Net.UWP
             return HidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
         }
 
-        public async Task<byte[]> WriteAndReadAsync(byte[] writeBuffer)
+        public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
         {
             await _WriteAndReadLock.WaitAsync();
 
             try
             {
-                await WriteAsync(writeBuffer);
-                var retVal = await ReadAsync();
+                await WriteAsync(writeBuffer, cancellationToken);
+                var retVal = await ReadAsync(cancellationToken);
                 Logger?.Log(Messages.SuccessMessageWriteAndReadCalled, nameof(UWPHidDevice), null, LogLevel.Information);
                 return retVal;
             }
@@ -210,6 +212,11 @@ namespace Hid.Net.UWP
             {
                 _WriteAndReadLock.Release();
             }
+        }
+
+        public Task Flush(CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
         }
         #endregion
     }

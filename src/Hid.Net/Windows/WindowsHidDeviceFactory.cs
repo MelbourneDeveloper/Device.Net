@@ -1,8 +1,7 @@
 ﻿using Device.Net;
+using Device.Net.Exceptions;
 using Device.Net.Windows;
-using Microsoft.Win32.SafeHandles;
 using System;
-using static Hid.Net.Windows.HidAPICalls;
 
 namespace Hid.Net.Windows
 {
@@ -24,9 +23,13 @@ namespace Hid.Net.Windows
         {
             try
             {
-                using (var safeFileHandle = APICalls.CreateFile(deviceId, APICalls.GenericRead | APICalls.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting, 0, IntPtr.Zero))
+                using (var safeFileHandle = HidService.CreateReadConnection(deviceId, FileAccessRights.None))
                 {
-                    return GetDeviceDefinition(deviceId, safeFileHandle);
+                    if (safeFileHandle.IsInvalid) throw new DeviceException($"{nameof(HidService.CreateReadConnection)} call with Id of {deviceId} failed.");
+
+                    Logger?.Log($"Found device {deviceId}", nameof(WindowsHidDeviceFactory), null, LogLevel.Information);
+
+                    return HidService.GetDeviceDefinition(deviceId, safeFileHandle);
                 }
             }
             catch (Exception ex)
@@ -38,15 +41,29 @@ namespace Hid.Net.Windows
 
         protected override Guid GetClassGuid()
         {
-            return GetHidGuid();
+            return HidService.GetHidGuid();
         }
 
         #endregion
 
+        #region Public Properties
+        public IHidApiService HidService { get; }
+        #endregion
+
         #region Constructor
-        public WindowsHidDeviceFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
+        public WindowsHidDeviceFactory(ILogger logger, ITracer tracer) : this(logger, tracer, null)
         {
 
+        }
+
+        public WindowsHidDeviceFactory(ILogger logger, ITracer tracer, IHidApiService hidService) : base(logger, tracer)
+        {
+            HidService = hidService;
+
+            if (HidService == null)
+            {
+                HidService = new WindowsHidApiService(logger);
+            }
         }
         #endregion
 
@@ -60,35 +77,14 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Private Static Methods
-        public static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, SafeFileHandle safeFileHandle)
-        {
-            var hidAttributes = GetHidAttributes(safeFileHandle);
-            var hidCollectionCapabilities = GetHidCapabilities(safeFileHandle);
-            var manufacturer = GetManufacturer(safeFileHandle);
-            var serialNumber = GetSerialNumber(safeFileHandle);
-            var product = GetProduct(safeFileHandle);
 
-            return new ConnectedDeviceDefinition(deviceId)
-            {
-                WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
-                ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,
-                Manufacturer = manufacturer,
-                ProductName = product,
-                ProductId = (ushort)hidAttributes.ProductId,
-                SerialNumber = serialNumber,
-                Usage = hidCollectionCapabilities.Usage,
-                UsagePage = hidCollectionCapabilities.UsagePage,
-                VendorId = (ushort)hidAttributes.VendorId,
-                VersionNumber = (ushort)hidAttributes.VersionNumber,
-                DeviceType = DeviceType.Hid
-            };
-        }
         #endregion
 
         #region Public Static Methods
         /// <summary>
         /// Register the factory for enumerating Hid devices on UWP. 
         /// </summary>
+        [Obsolete(DeviceManager.ObsoleteMessage)]
         public static void Register(ILogger logger, ITracer tracer, byte? defaultReportId)
         {
             DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory(defaultReportId, logger, tracer));

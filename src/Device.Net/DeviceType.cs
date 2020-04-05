@@ -3,6 +3,7 @@
     public enum DeviceType
     {
         Hid,
-        Usb
+        Usb,
+        SerialPort
     }
 }

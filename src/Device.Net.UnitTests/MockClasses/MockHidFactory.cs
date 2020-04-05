@@ -20,11 +20,6 @@
 
         public override uint VendorId => MockHidDevice.VendorId;
 
-        public static void Register(ILogger logger, ITracer tracer)
-        {
-            DeviceManager.Current.DeviceFactories.Add(new MockHidFactory(logger, tracer));
-        }
-
         public override IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
             if (deviceDefinition == null) return null;
@@ -35,7 +30,7 @@
 
             Logger?.Log(string.Format(FoundMessage, DeviceId), nameof(MockHidFactory), null, LogLevel.Information);
 
-            return new MockHidDevice(Logger, Tracer);
+            return new MockHidDevice(DeviceId, Logger, Tracer);
         }
     }
 }

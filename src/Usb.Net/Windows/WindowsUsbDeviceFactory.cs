@@ -34,14 +34,14 @@ namespace Usb.Net.Windows
         {
             if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
 
-            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsUsbDevice(deviceDefinition.DeviceId, Logger, Tracer, ReadBufferSize, WriteBufferSize);
+            return deviceDefinition.DeviceType != DeviceType ? null : new UsbDevice(deviceDefinition.DeviceId, new WindowsUsbInterfaceManager(deviceDefinition.DeviceId, Logger, Tracer, ReadBufferSize, WriteBufferSize), Logger, Tracer);
         }
         #endregion
 
         #region Private Static Methods
         protected override ConnectedDeviceDefinition GetDeviceDefinition(string deviceId)
         {
-            return GetDeviceDefinitionFromWindowsDeviceId(deviceId, DeviceType.Usb);
+            return GetDeviceDefinitionFromWindowsDeviceId(deviceId, DeviceType.Usb, Logger);
         }
         #endregion
 
@@ -49,6 +49,7 @@ namespace Usb.Net.Windows
         /// <summary>
         /// Register the factory for enumerating USB devices in Windows.
         /// </summary>
+        [Obsolete(DeviceManager.ObsoleteMessage)]
         public static void Register(ILogger logger, ITracer tracer)
         {
             DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory(logger, tracer));

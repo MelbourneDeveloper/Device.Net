@@ -48,12 +48,12 @@
     <EmbeddedResource Include="Properties\Hid.Net.UWP.rd.xml" />
     <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers">
-      <Version>2.9.3</Version>
+      <Version>2.9.8</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.1.9</Version>
+      <Version>6.2.10</Version>
     </PackageReference>
     <ProjectReference Include="..\Device.Net.UWP\Device.Net.UWP.csproj">
       <Project>{45e6e89a-aedb-457a-9c80-310fa2eeaef1}</Project>
