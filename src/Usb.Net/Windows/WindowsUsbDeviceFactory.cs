@@ -46,6 +46,15 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Static Methods
+        /// <summary>
+        /// Register the factory for enumerating USB devices in Windows.
+        /// </summary>
+        [Obsolete(DeviceManager.ObsoleteMessage)]
+        public static void Register(ILogger logger, ITracer tracer)
+        {
+            DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory(logger, tracer));
+        }
+
         public static ConnectedDeviceDefinition GetDeviceDefinition(SafeFileHandle defaultInterfaceHandle, string deviceId)
         {
             var deviceDefinition = new ConnectedDeviceDefinition(deviceId) { DeviceType = DeviceType.Usb };

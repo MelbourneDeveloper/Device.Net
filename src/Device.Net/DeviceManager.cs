@@ -8,9 +8,16 @@ namespace Device.Net
 {
     public class DeviceManager : IDeviceManager
     {
+        public const string ObsoleteMessage = "This method will soon be removed. Create an instance of DeviceManager and register factories there";
+
         #region Public Properties
         public List<IDeviceFactory> DeviceFactories { get; } = new List<IDeviceFactory>();
         public bool IsInitialized => DeviceFactories.Count > 0;
+        #endregion
+
+        #region Public Static Properties
+        [Obsolete("Please create an instance of DeviceManager and register Device Factories on that instance")]
+        public static DeviceManager Current { get; } = new DeviceManager();
         #endregion
 
         #region Public Methods
