@@ -1,11 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Device.Net/blob/master/LICENSE</PackageLicenseUrl>
-    <Version>3.0.0</Version>
+    <Version>3.1.0</Version>
     <Authors>Christian Findlay</Authors>
     <Company>Christian Findlay</Company>
     <Product>Device.Net.LibUsb</Product>
@@ -14,8 +13,9 @@
     <PackageTags>Hid USB MacOS Linux C#</PackageTags>
     <Description>Device.Net based library for USB access on Linux, MacOS and Windows. Use Usb.Net, and Hid.Net for Windows, UWP, and Android support. The base interfaces are the same so the code is compatible on all platforms.</Description>
     <NoWarn>1701;1702;CA1063</NoWarn>
-    <AssemblyVersion>3.0.0.0</AssemblyVersion>
-    <FileVersion>3.0.0.0</FileVersion>
+    <AssemblyVersion>3.1.0.0</AssemblyVersion>
+    <FileVersion>3.1.0.0</FileVersion>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <Choose>
@@ -43,6 +43,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

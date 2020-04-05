@@ -4,10 +4,9 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Device.Net/blob/master/LICENSE</PackageLicenseUrl>
-    <AssemblyVersion>3.0.0.0</AssemblyVersion>
-    <FileVersion>3.0.0.0</FileVersion>
-    <Version>3.0.0</Version>
+    <AssemblyVersion>3.1.0.0</AssemblyVersion>
+    <FileVersion>3.1.0.0</FileVersion>
+    <Version>3.1.0</Version>
     <Authors>Christian Findlay</Authors>
     <Description>Cross platform C# library for talking to connected devices in a uniform way through dependency injection.</Description>
     <Copyright>Copyright (c) 2019 Christian Findlay</Copyright>
@@ -16,7 +15,8 @@
     <PackageTags>Hid USB Android UWP Windows C# MacOS Linux</PackageTags>
     <NoWarn>NU5125</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>CodeRules.ruleset</CodeAnalysisRuleSet>   
+    <CodeAnalysisRuleSet>CodeRules.ruleset</CodeAnalysisRuleSet>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>   
   </PropertyGroup>
 
   <Choose>
@@ -33,15 +33,18 @@
       </PropertyGroup>
     </When>
   </Choose>
-
   <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
     <None Include="..\..\README.md" Link="README.md" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.3">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 

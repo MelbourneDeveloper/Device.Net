@@ -3,6 +3,7 @@ using Device.Net.Exceptions;
 using System;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.Usb;
 using Windows.Storage.Streams;
@@ -59,18 +60,18 @@ namespace Usb.Net.UWP
             //TODO: Why does not UWP not support Control Transfer?
         }
 
-        public async Task<ReadResult> ReadAsync(uint bufferLength)
+        public async Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
         {
-            IBuffer buffer = null;
+            IBuffer buffer;
 
             if (ReadEndpoint is UWPUsbInterfaceEndpoint<UsbBulkInPipe> usbBulkInPipe)
             {
                 buffer = new wss.Buffer(bufferLength);
-                await usbBulkInPipe.Pipe.InputStream.ReadAsync(buffer, bufferLength, InputStreamOptions.None);
+                await usbBulkInPipe.Pipe.InputStream.ReadAsync(buffer, bufferLength, InputStreamOptions.None).AsTask(cancellationToken);
             }
             else if (InterruptReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe)
             {
-                return await usbInterruptInPipe.ReadAsync();
+                return await usbInterruptInPipe.ReadAsync(cancellationToken);
             }
             else
             {
@@ -80,7 +81,7 @@ namespace Usb.Net.UWP
             return buffer.ToArray();
         }
 
-        public async Task WriteAsync(byte[] data)
+        public async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
@@ -95,7 +96,7 @@ namespace Usb.Net.UWP
 
             if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> usbBulkOutPipe)
             {
-                count = await usbBulkOutPipe.Pipe.OutputStream.WriteAsync(buffer);
+                count = await usbBulkOutPipe.Pipe.OutputStream.WriteAsync(buffer).AsTask(cancellationToken);
             }
             else if (InterruptWriteEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptOutPipe> usbInterruptOutPipe)
             {

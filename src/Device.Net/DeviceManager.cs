@@ -6,13 +6,17 @@ using System.Threading.Tasks;
 
 namespace Device.Net
 {
-    public class DeviceManager
+    public class DeviceManager : IDeviceManager
     {
+        public const string ObsoleteMessage = "This method will soon be removed. Create an instance of DeviceManager and register factories there";
+
         #region Public Properties
         public List<IDeviceFactory> DeviceFactories { get; } = new List<IDeviceFactory>();
+        public bool IsInitialized => DeviceFactories.Count > 0;
         #endregion
 
         #region Public Static Properties
+        [Obsolete("Please create an instance of DeviceManager and register Device Factories on that instance")]
         public static DeviceManager Current { get; } = new DeviceManager();
         #endregion
 
@@ -26,7 +30,7 @@ namespace Device.Net
             {
                 var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitionsAsync(deviceDefinition);
 
-                foreach(var connectedDeviceDefinition in connectedDeviceDefinitions)
+                foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                 {
                     //Don't add the same device twice
                     //Note: this probably won't cause issues where there is no DeviceId, but funny behaviour is probably going on when there isn't anyway...
@@ -44,9 +48,8 @@ namespace Device.Net
         {
             if (connectedDeviceDefinition == null) throw new ArgumentNullException(nameof(connectedDeviceDefinition));
 
-            foreach (var deviceFactory in DeviceFactories)
+            foreach (var deviceFactory in DeviceFactories.Where(deviceFactory => !connectedDeviceDefinition.DeviceType.HasValue || (deviceFactory.DeviceType == connectedDeviceDefinition.DeviceType)))
             {
-                if (connectedDeviceDefinition.DeviceType.HasValue && (deviceFactory.DeviceType != connectedDeviceDefinition.DeviceType)) continue;
                 return deviceFactory.GetDevice(connectedDeviceDefinition);
             }
 
@@ -96,7 +99,7 @@ namespace Device.Net
             var deviceTypePasses = !filterDevice.DeviceType.HasValue || filterDevice.DeviceType == actualDevice.DeviceType;
             var usagePagePasses = !filterDevice.UsagePage.HasValue || filterDevice.UsagePage == actualDevice.UsagePage;
 
-            var returnValue = 
+            var returnValue =
                 vendorIdPasses &&
                 productIdPasses &&
                 deviceTypePasses &&

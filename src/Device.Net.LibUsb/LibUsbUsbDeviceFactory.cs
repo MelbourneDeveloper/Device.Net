@@ -1,4 +1,6 @@
-﻿namespace Device.Net.LibUsb
+﻿using System;
+
+namespace Device.Net.LibUsb
 {
     public class LibUsbUsbDeviceFactory : LibUsbDeviceFactoryBase
     {
@@ -11,6 +13,7 @@
         /// <summary>
         /// Register the factory for enumerating USB devices.
         /// </summary>
+        [Obsolete(DeviceManager.ObsoleteMessage)]
         public static void Register(ILogger logger, ITracer tracer)
         {
             DeviceManager.Current.DeviceFactories.Add(new LibUsbUsbDeviceFactory(logger, tracer));

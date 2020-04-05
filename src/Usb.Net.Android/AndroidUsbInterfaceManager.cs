@@ -1,6 +1,7 @@
 ﻿using Android.Content;
 using Android.Hardware.Usb;
 using Device.Net;
+using Device.Net.Exceptions;
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -18,8 +19,8 @@ namespace Usb.Net.Android
         private readonly SemaphoreSlim _InitializingSemaphoreSlim = new SemaphoreSlim(1, 1);
         private bool _IsClosing;
         private bool disposed;
-        protected ushort? _ReadBufferSize { get; set; }
-        protected ushort? _WriteBufferSize { get; set; }
+        private ushort? _ReadBufferSize { get; set; }
+        private ushort? _WriteBufferSize { get; set; }
 
         #endregion
 
@@ -30,8 +31,8 @@ namespace Usb.Net.Android
         #region Public Properties
         public UsbManager UsbManager { get; }
         public Context AndroidContext { get; private set; }
-        public ushort ReadBufferSize => ReadUsbInterface.ReadBufferSize;
-        public ushort WriteBufferSize => ReadUsbInterface.WriteBufferSize;
+        public ushort WriteBufferSize => _WriteBufferSize ?? WriteUsbInterface.ReadBufferSize;
+        public ushort ReadBufferSize => _ReadBufferSize ?? ReadUsbInterface.ReadBufferSize;
         public int DeviceNumberId { get; }
         #endregion
 
@@ -121,7 +122,7 @@ namespace Usb.Net.Android
         {
             try
             {
-                if (disposed) throw new Exception(Messages.DeviceDisposedErrorMessage);
+                if (disposed) throw new DeviceException(Messages.DeviceDisposedErrorMessage);
 
                 await _InitializingSemaphoreSlim.WaitAsync();
 
@@ -130,7 +131,7 @@ namespace Usb.Net.Android
                 _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceNumberId);
                 if (_UsbDevice == null)
                 {
-                    throw new Exception($"The device {DeviceNumberId} is not connected to the system");
+                    throw new DeviceException($"The device {DeviceNumberId} is not connected to the system");
                 }
                 Logger?.Log($"Found device: {_UsbDevice.DeviceName} Id: {_UsbDevice.DeviceId}", nameof(AndroidUsbInterfaceManager), null, LogLevel.Information);
 
@@ -138,19 +139,19 @@ namespace Usb.Net.Android
                 var isPermissionGranted = await RequestPermissionAsync();
                 if (!isPermissionGranted.HasValue)
                 {
-                    throw new Exception("User did not respond to permission request");
+                    throw new DeviceException("User did not respond to permission request");
                 }
 
                 if (!isPermissionGranted.Value)
                 {
-                    throw new Exception("The user did not give the permission to access the device");
+                    throw new DeviceException("The user did not give the permission to access the device");
                 }
 
                 _UsbDeviceConnection = UsbManager.OpenDevice(_UsbDevice);
 
                 if (_UsbDeviceConnection == null)
                 {
-                    throw new Exception("could not open connection");
+                    throw new DeviceException("could not open connection");
                 }
 
                 for (var x = 0; x < _UsbDevice.InterfaceCount; x++)
@@ -158,7 +159,7 @@ namespace Usb.Net.Android
                     //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
                     var usbInterface = _UsbDevice.GetInterface(x);
 
-                    var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, Logger, Tracer, _ReadBufferSize, _WriteBufferSize);
+                    var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, Logger, Tracer, ReadBufferSize, WriteBufferSize);
                     UsbInterfaces.Add(androidUsbInterface);
 
                     for (var y = 0; y < usbInterface.EndpointCount; y++)

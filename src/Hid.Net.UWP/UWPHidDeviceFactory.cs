@@ -94,6 +94,7 @@ namespace Hid.Net.UWP
         /// <summary>
         /// Register the factory for enumerating Hid devices on UWP.
         /// </summary>
+        [Obsolete(DeviceManager.ObsoleteMessage)]
         public static void Register(ILogger logger, ITracer tracer)
         {
             foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)

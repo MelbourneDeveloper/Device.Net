@@ -1,26 +1,26 @@
-# Hid.Net, Usb.Net (Device.Net)
+# Hid.Net, Usb.Net, SerialPort.Net (Device.Net)
 
 ![diagram](https://github.com/MelbourneDeveloper/Device.Net/blob/master/Diagram.png)
 
-**Cross platform C# library for talking to connected devices such as Usb, and Hid devices.**
+**Cross platform C# framework for talking to connected devices such as Usb, Serial Port and Hid devices.**
 
-**Beta 3.0 is out! Please grab the NuGet and report issues in the issues section. Please add Device.Net NuGet**
+**SerialPort.Net is an implementation for Serial Port devices. Currently, Windows is supported, but UWP and others will be on their way. The current version of SerialPort.Net is only in its early stages and may have issues**
 
-**[Linux and MacOS support](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support) is here! Check out the [MacOS sample](https://github.com/MelbourneDeveloper/Device.Net/tree/master/src/Device.Net.MacOSLibUsbSample) and the [Terminal/Console Linux/MacOS Sample](https://github.com/MelbourneDeveloper/Device.Net/tree/develop/src/Device.Net.LibUsbSample). Grab the NuGet for [Device.Net.LibUsb](https://www.nuget.org/packages/Device.Net.LibUsb/).**
-
-This library provides a common Task based Async interface across platforms and device types. This allows for dependency injection so that different types of devices can be used on any platform with the same code. The supported device types are Hid, and USB. Other device types such as Bluetooth and so on may be added in future. Hid.Net is specifically for Hid devices that may be Usb devices. Usb.Net is specifically for Usb devices that don't have a Hid interface. Please visit the [documentation page](https://github.com/MelbourneDeveloper/Device.Net/wiki). Would you you like to [contribute?](https://christianfindlay.com/2019/04/28/calling-all-c-crypto-developers/)
+This framework provides a common Task based Async interface across platforms and device types. This allows for dependency injection so that different types of devices can be used on any platform with the same code. The supported device types are Hid, Serial Port, and USB. Other device types such as Bluetooth and so on may be added in future. Hid.Net is specifically for Hid devices that may be Usb devices. Usb.Net is specifically for Usb devices that don't have a Hid interface. Please visit the [documentation page](https://github.com/MelbourneDeveloper/Device.Net/wiki). Would you you like to [contribute?](https://christianfindlay.com/2019/04/28/calling-all-c-crypto-developers/)
 
 ### Currently supports:
 
 | Platform | Device Types |
 | ------------- |:-------------:|
-| .NET Framework     | Hid, USB |
-| .NET Core      | Hid, USB  |
+| .NET Framework     | Hid, USB, Serial Port |
+| .NET Core      | Hid, USB, Serial Port  |
 | Android | USB |
 | UWP | Hid, USB   |
 | Linux, MacOS* | [USB (Via LibUsbDotNet)](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support)  |
 
 ## [Quick Start](https://github.com/MelbourneDeveloper/Device.Net/wiki/Quick-Start)
+
+**Important! Before trying this code, see the above Quick Start**
 
 Example Code:
 ```cs
@@ -49,11 +49,8 @@ public async Task InitializeTrezorAsync()
     buffer[1] = 0x23;
     buffer[2] = 0x23;
 
-    //Write the data to the device
-    await trezorDevice.WriteAsync(buffer);
-
-    //Read the response
-    var readBuffer = await trezorDevice.ReadAsync();
+    //Write the data to the device and wait for the response
+    var readBuffer = await trezorDevice.WriteAndReadAsync(buffer);
 }
 ```
 

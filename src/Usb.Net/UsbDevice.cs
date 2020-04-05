@@ -1,6 +1,7 @@
-﻿using Device.Net;
+using Device.Net;
 using Device.Net.Exceptions;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Usb.Net
@@ -23,7 +24,7 @@ namespace Usb.Net
         /// <summary>
         /// TODO: Remove the tracer from the constructor. This will get passed to the handler so there's no need for it on the device itself.
         /// </summary>
-        public UsbDevice(IUsbInterfaceManager usbInterfaceManager, ILogger logger, ITracer tracer) : base(logger, tracer)
+        public UsbDevice(string deviceId, IUsbInterfaceManager usbInterfaceManager, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
         {
             UsbInterfaceManager = usbInterfaceManager ?? throw new ArgumentNullException(nameof(usbInterfaceManager));
         }
@@ -40,18 +41,18 @@ namespace Usb.Net
             ConnectedDeviceDefinition = await UsbInterfaceManager.GetConnectedDeviceDefinitionAsync();
         }
 
-        public override async Task<ReadResult> ReadAsync()
+        public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             if (UsbInterfaceManager.ReadUsbInterface == null) throw new DeviceException(Messages.ErrorMessageNoReadInterfaceSpecified);
 
-            return await UsbInterfaceManager.ReadUsbInterface.ReadAsync(ReadBufferSize);
+            return await UsbInterfaceManager.ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
         }
 
-        public override Task WriteAsync(byte[] data)
+        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             if (UsbInterfaceManager.WriteUsbInterface == null) throw new DeviceException(Messages.ErrorMessageNoWriteInterfaceSpecified);
 
-            return UsbInterfaceManager.WriteUsbInterface.WriteAsync(data);
+            return UsbInterfaceManager.WriteUsbInterface.WriteAsync(data, cancellationToken);
         }
 
         public void Close()

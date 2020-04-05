@@ -16,7 +16,16 @@ namespace Usb.Net.AndroidSample
     public class MainActivity : AppCompatActivity
     {
         #region Fields
-        private readonly TrezorExample _TrezorExample = new TrezorExample();
+        private readonly TrezorExample _TrezorExample;
+        private readonly IDeviceManager _DeviceManager;
+        #endregion
+
+        #region Constructor
+        public MainActivity()
+        {
+            _DeviceManager = new DeviceManager();
+            _TrezorExample = new TrezorExample(_DeviceManager);
+        }
         #endregion
 
         #region Protected Override Methods
@@ -68,7 +77,7 @@ namespace Usb.Net.AndroidSample
                 if (usbManager == null) throw new Exception("UsbManager is null");
 
                 //Register the factory for creating Usb devices. This only needs to be done once.
-                AndroidUsbDeviceFactory.Register(usbManager, base.ApplicationContext, new DebugLogger(), new DebugTracer());
+                _DeviceManager.RegisterDeviceFactory(new AndroidUsbDeviceFactory(usbManager, base.ApplicationContext, new DebugLogger(), new DebugTracer()));
 
                 _TrezorExample.TrezorDisconnected += _TrezorExample_TrezorDisconnected;
                 _TrezorExample.TrezorInitialized += _TrezorExample_TrezorInitialized;
@@ -99,7 +108,7 @@ namespace Usb.Net.AndroidSample
                 }
                 else
                 {
-                    DisplayMessage($"No good. No data returned.");
+                    DisplayMessage("No good. No data returned.");
                 }
             }
             catch (Exception ex)
