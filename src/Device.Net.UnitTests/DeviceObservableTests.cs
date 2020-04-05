@@ -12,7 +12,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestPubSub()
         {
-            var deviceObservable = new DeviceObservable(
+            var deviceObservable = new DeviceMonitor(
                 new DeviceManager(),
                 new List<FilterDeviceDefinition>
                 {

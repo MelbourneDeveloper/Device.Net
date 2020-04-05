@@ -10,11 +10,21 @@ using timer = System.Timers.Timer;
 
 namespace Device.Net
 {
-
-    public sealed class DeviceObservable : IObservable<ConnectionEventArgs>, IDisposable
+    public sealed class DeviceMonitor : IObservable<ConnectionEventArgs>, IDisposable
     {
-        private readonly List<IObserver<ConnectionEventArgs>> observers;
+        #region Fields
+        private readonly List<IObserver<ConnectionEventArgs>> _Observers;
+        private bool _IsDisposed;
+        private readonly timer _PollTimer;
+        private readonly SemaphoreSlim _ListenSemaphoreSlim = null;
 
+        /// <summary>
+        /// This is the list of Devices by their filter definition. Note this is not actually keyed by the connected definition.
+        /// </summary>
+        private readonly Dictionary<FilterDeviceDefinition, IDevice> _CreatedDevicesByDefinition = new Dictionary<FilterDeviceDefinition, IDevice>();
+        #endregion
+
+        #region Inner Classes
         private class Unsubscriber : IDisposable
         {
             private readonly List<IObserver<ConnectionEventArgs>> _observers;
@@ -31,24 +41,16 @@ namespace Device.Net
                 if (!(_observer == null)) _observers.Remove(_observer);
             }
         }
+        #endregion
 
+        #region Implementation
         public IDisposable Subscribe(IObserver<ConnectionEventArgs> observer)
         {
-            if (!observers.Contains(observer))
-                observers.Add(observer);
+            if (!_Observers.Contains(observer))
+                _Observers.Add(observer);
 
-            return new Unsubscriber(observers, observer);
+            return new Unsubscriber(_Observers, observer);
         }
-
-        #region Fields
-        private bool _IsDisposed;
-        private readonly timer _PollTimer;
-        private readonly SemaphoreSlim _ListenSemaphoreSlim = null;
-
-        /// <summary>
-        /// This is the list of Devices by their filter definition. Note this is not actually keyed by the connected definition.
-        /// </summary>
-        private readonly Dictionary<FilterDeviceDefinition, IDevice> _CreatedDevicesByDefinition = new Dictionary<FilterDeviceDefinition, IDevice>();
         #endregion
 
         #region Public Properties
@@ -57,15 +59,16 @@ namespace Device.Net
         public IDeviceManager DeviceManager { get; }
         #endregion
 
-        #region Constructor
+        #region Constructor   
         /// <summary>
         /// Handles connecting to and disconnecting from a set of potential devices by their definition
         /// </summary>
+        /// <param name="deviceManager">Manages connections to devices</param>
         /// <param name="filterDeviceDefinitions">Device definitions to connect to and disconnect from</param>
         /// <param name="pollMilliseconds">Poll interval in milliseconds, or null if checking is called externally</param>
-        public DeviceObservable(IDeviceManager deviceManager, IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions, int? pollMilliseconds = 5)
+        public DeviceMonitor(IDeviceManager deviceManager, IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions, int? pollMilliseconds = 5)
         {
-            observers = new List<IObserver<ConnectionEventArgs>>();
+            _Observers = new List<IObserver<ConnectionEventArgs>>();
 
             DeviceManager = deviceManager ?? throw new ArgumentNullException(nameof(deviceManager));
 
@@ -90,7 +93,7 @@ namespace Device.Net
         #region Private Methods
         private void Log(string message, Exception ex, [CallerMemberName] string callerMemberName = null)
         {
-            Logger?.Log(message, $"{ nameof(DeviceObservable)} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
+            Logger?.Log(message, $"{ nameof(DeviceMonitor)} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
         }
         #endregion
 
@@ -154,7 +157,7 @@ namespace Device.Net
                     await device.InitializeAsync();
 
                     //Let listeners know a registered device was initialized
-                    foreach (var observer in observers)
+                    foreach (var observer in _Observers)
                         observer.OnNext(new ConnectionEventArgs { Device = device });
 
                     Log(Messages.InformationMessageDeviceConnected, null);
@@ -174,7 +177,7 @@ namespace Device.Net
 
                     //Let listeners know a registered device was disconnected
                     //NOTE: let the rest of the app know before disposal so that the app can stop doing whatever it's doing.
-                    foreach (var observer in observers)
+                    foreach (var observer in _Observers)
                         observer.OnNext(new ConnectionEventArgs { Device = device, IsDisconnection = true });
 
                     //The device is no longer connected so close it
@@ -234,7 +237,7 @@ namespace Device.Net
         #endregion
 
         #region Finalizer
-        ~DeviceObservable()
+        ~DeviceMonitor()
         {
             Dispose();
         }
