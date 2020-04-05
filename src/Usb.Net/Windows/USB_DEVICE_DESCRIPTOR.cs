@@ -3,7 +3,9 @@
 namespace Usb.Net.Windows
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
+#pragma warning disable CA1815 // Override equals and operator equals on value types
     public struct USB_DEVICE_DESCRIPTOR
+#pragma warning restore CA1815 // Override equals and operator equals on value types
     {
 #pragma warning disable CA1051 // Do not declare visible instance fields
         public byte bLength;
