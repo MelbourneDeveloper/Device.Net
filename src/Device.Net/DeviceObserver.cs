@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Device.Net
 {
-    public class DeviceObserver : IObserver<ConnectionEventArgs>
+    public class DeviceObserver : IObserver<ConnectionEventArgs>, IDeviceThing
     {
         #region Fields
         private readonly object _lock = new object();
@@ -17,6 +17,7 @@ namespace Device.Net
 
         #region Public Properties
         public ReadOnlyCollection<IDevice> Devices { get; private set; } = new ReadOnlyCollection<IDevice>(new List<IDevice>());
+        public IDevice Device => Devices.FirstOrDefault();
         #endregion
 
         #region Implementation

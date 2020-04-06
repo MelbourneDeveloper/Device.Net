@@ -1,5 +1,7 @@
 ﻿using Hid.Net.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Usb.Net.Windows;
@@ -25,20 +27,29 @@ namespace Device.Net.UnitTests
             deviceObservable.DeviceManager.DeviceFactories.Add(new WindowsUsbDeviceFactory(null, null));
             deviceObservable.DeviceManager.DeviceFactories.Add(new WindowsHidDeviceFactory(null, null));
 
-            var deviceObserver = new DeviceObserver();
-
-            deviceObservable.Subscribe(deviceObserver);
-
             deviceObservable.Start();
 
-            var hasConnected = false;
+            var deviceThing = GetDeviceThing(deviceObservable);
 
-            deviceObserver.ConnectionEventOccurred += (sender, args) => { if (!args.IsDisconnection) hasConnected = true; };
-
-            while (!hasConnected)
+            while (true)
             {
+                if (deviceThing.Device != null) return;
                 await Task.Delay(1000);
             }
+        }
+
+        private static IDeviceThing GetDeviceThing(IObservable<ConnectionEventArgs> observable)
+        {
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddSingleton<IDeviceThing, DeviceObserver>((a) =>
+            {
+                var deviceObserver = new DeviceObserver();
+                observable.Subscribe(deviceObserver);
+                return deviceObserver;
+            });
+
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            return serviceProvider.GetService<IDeviceThing>();
         }
     }
 }
