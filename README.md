@@ -1,5 +1,7 @@
 # Hid.Net, Usb.Net, SerialPort.Net (Device.Net)
 
+[Follow Me on Twitter](https://twitter.com/intent/follow?screen_name=cfdevelop&tw_p=followbutton)
+
 ![diagram](https://github.com/MelbourneDeveloper/Device.Net/blob/master/Diagram.png)
 
 **Cross platform C# framework for talking to connected devices such as Usb, Serial Port and Hid devices.**
