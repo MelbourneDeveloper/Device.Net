@@ -54,6 +54,8 @@ namespace Usb.Net.WindowsSample
             var data = await device.WriteAndReadAsync(buffer);
             int temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
 
+            //TODO: Get the humidity
+
             //Note sometimes the divisor is 256...
             //https://github.com/ccwienk/temper/blob/600755de6b9ccd8d481c4844fa08185acd13aef0/temper.py#L113
             var temperature = Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
