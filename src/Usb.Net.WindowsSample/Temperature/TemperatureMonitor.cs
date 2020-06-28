@@ -78,7 +78,6 @@ namespace Usb.Net.WindowsSample.Temperature
 
             GetTemperatures().Wait();
 
-            System.Threading.Thread.Sleep(2500);
             if (temp.HasValue)
             {
                 if (start || (Math.Abs(temp.Value - previous.Value) >= 0.1m))
