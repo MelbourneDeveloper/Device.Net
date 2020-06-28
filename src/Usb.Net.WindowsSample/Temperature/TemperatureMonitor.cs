@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Device.Net;
+using Hid.Net.Windows;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Usb.Net.WindowsSample.Temperature
 {
@@ -9,10 +13,21 @@ namespace Usb.Net.WindowsSample.Temperature
         public class TemperatureMonitor : IObservable<Temperature>
         {
             readonly List<IObserver<Temperature>> observers;
+            private readonly IDeviceManager _DeviceManager = new DeviceManager();
+            private IDevice _device;
 
             public TemperatureMonitor()
             {
                 observers = new List<IObserver<Temperature>>();
+                InitializeAsync().Wait();
+            }
+
+            public async Task InitializeAsync()
+            {
+                _DeviceManager.RegisterDeviceFactory(new WindowsHidDeviceFactory(null, null));
+                var devices = (await _DeviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.Hid, VendorId = 0x413d, ProductId = 0x2107 } })).ToList();
+                _device = devices[1];
+                await _device.InitializeAsync();
             }
 
             private class Unsubscriber : IDisposable
@@ -40,39 +55,54 @@ namespace Usb.Net.WindowsSample.Temperature
                 return new Unsubscriber(observers, observer);
             }
 
-            public void GetTemperature()
+            private decimal? temp;
+
+            private async Task GetTemperatures()
             {
-                // Create an array of sample data to mimic a temperature device.
-                decimal?[] temps = {14.6m, 14.65m, 14.7m, 14.9m, 14.9m, 15.2m, 15.25m, 15.2m,
-                                   15.4m, 15.45m, null };
+                //Thanks to https://github.com/WozSoftware
+                //https://github.com/WozSoftware/Woz.TEMPer/blob/dcd0b49d67ac39d10c3759519050915816c2cd93/Woz.TEMPer/Sensors/TEMPerV14.cs#L15
+
+                var buffer = new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 };
+
+                var data = await _device.WriteAndReadAsync(buffer);
+                int temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
+
+                //TODO: Get the humidity
+
+                //Note sometimes the divisor is 256...
+                //https://github.com/ccwienk/temper/blob/600755de6b9ccd8d481c4844fa08185acd13aef0/temper.py#L113
+                temp = Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
+            }
+
+            private void GetTemperature()
+            {
                 // Store the previous temperature, so notification is only sent after at least .1 change.
                 decimal? previous = null;
                 bool start = true;
 
-                foreach (var temp in temps)
-                {
-                    System.Threading.Thread.Sleep(2500);
-                    if (temp.HasValue)
-                    {
-                        if (start || (Math.Abs(temp.Value - previous.Value) >= 0.1m))
-                        {
-                            Temperature tempData = new Temperature(temp.Value, DateTime.Now);
-                            foreach (var observer in observers)
-                                observer.OnNext(tempData);
-                            previous = temp;
-                            if (start) start = false;
-                        }
-                    }
-                    else
-                    {
-                        foreach (var observer in observers.ToArray())
-                            if (observer != null) observer.OnCompleted();
+                GetTemperatures().Wait();
 
-                        observers.Clear();
-                        break;
+                System.Threading.Thread.Sleep(2500);
+                if (temp.HasValue)
+                {
+                    if (start || (Math.Abs(temp.Value - previous.Value) >= 0.1m))
+                    {
+                        Temperature tempData = new Temperature(temp.Value, DateTime.Now);
+                        foreach (var observer in observers)
+                            observer.OnNext(tempData);
+                        previous = temp;
+                        if (start) start = false;
                     }
                 }
+                else
+                {
+                    foreach (var observer in observers.ToArray())
+                        if (observer != null) observer.OnCompleted();
+
+                    observers.Clear();
+                }
             }
+
         }
     }
 }
