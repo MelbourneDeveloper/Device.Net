@@ -1,8 +1,7 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Usb.Net.Sample;
 using Device.Net;
+using System.Collections.Generic;
 
 #if (!LIBUSB)
 using Usb.Net.Windows;
@@ -18,7 +17,6 @@ namespace Usb.Net.WindowsSample
     {
         #region Fields
         private static readonly IDeviceManager _DeviceManager = new DeviceManager();
-        private static TrezorExample _DeviceConnectionExample;
         /// <summary>
         /// TODO: Test these!
         /// </summary>
@@ -33,119 +31,18 @@ namespace Usb.Net.WindowsSample
 #if (LIBUSB)
             _DeviceManager.RegisterDeviceFactory(new LibUsbUsbDeviceFactory(Logger, Tracer));
 #else
-            _DeviceManager.RegisterDeviceFactory(new WindowsUsbDeviceFactory(Logger, Tracer));
             _DeviceManager.RegisterDeviceFactory(new WindowsHidDeviceFactory(Logger, Tracer));
-            _DeviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(Logger, Tracer));
 #endif
-
-            _DeviceConnectionExample = new TrezorExample(_DeviceManager);
-            _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
-            _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
-
-            Go();
+            GoAsync();
 
             new ManualResetEvent(false).WaitOne();
         }
 
-        private static async Task Go()
+        private static async Task GoAsync()
         {
-            var menuOption = await Menu();
-
-            switch (menuOption)
-            {
-                case 1:
-                    try
-                    {
-                        await _DeviceConnectionExample.InitializeTrezorAsync();
-                        await DisplayDataAsync();
-                        _DeviceConnectionExample.Dispose();
-
-                        GC.Collect();
-
-                        await Task.Delay(10000);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.Clear();
-                        Console.WriteLine(ex.ToString());
-                    }
-                    Console.ReadKey();
-                    break;
-                case 2:
-                    Console.Clear();
-                    DisplayWaitMessage();
-                    _DeviceConnectionExample.StartListening();
-                    break;
-            }
+            var devices = await _DeviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.Hid, VendorId = 0x0413, ProductId = 0x2107 } });
         }
         #endregion
 
-        #region Event Handlers
-        private static void _DeviceConnectionExample_TrezorDisconnected(object sender, EventArgs e)
-        {
-            Console.Clear();
-            Console.WriteLine("Disconnected.");
-            DisplayWaitMessage();
-        }
-
-        private static async void _DeviceConnectionExample_TrezorInitialized(object sender, EventArgs e)
-        {
-            try
-            {
-                Console.Clear();
-                await DisplayDataAsync();
-            }
-            catch (Exception ex)
-            {
-                Console.Clear();
-                Console.WriteLine(ex.ToString());
-            }
-        }
-        #endregion
-
-        #region Private Methods
-        private async static Task<int> Menu()
-        {
-            while (true)
-            {
-                Console.Clear();
-
-                var devices = await _DeviceManager.GetConnectedDeviceDefinitionsAsync(null);
-                Console.WriteLine("Currently connected devices: ");
-                foreach (var device in devices)
-                {
-                    Console.WriteLine(device.DeviceId);
-                }
-                Console.WriteLine();
-
-                Console.WriteLine("Console sample. This sample demonstrates either writing to the first found connected device, or listening for a device and then writing to it. If you listen for the device, you will be able to connect and disconnect multiple times. This represents how users may actually use the device.");
-                Console.WriteLine();
-                Console.WriteLine("1. Write To Connected Device");
-                Console.WriteLine("2. Listen For Device");
-                var consoleKey = Console.ReadKey();
-                if (consoleKey.KeyChar == '1') return 1;
-                if (consoleKey.KeyChar == '2') return 2;
-            }
-        }
-
-        private static async Task DisplayDataAsync()
-        {
-            var bytes = await _DeviceConnectionExample.WriteAndReadFromDeviceAsync();
-            Console.Clear();
-            Console.WriteLine("Device connected. Output:");
-            DisplayData(bytes);
-        }
-
-        private static void DisplayData(byte[] readBuffer)
-        {
-            Console.WriteLine(string.Join(' ', readBuffer));
-            Console.ReadKey();
-        }
-
-        private static void DisplayWaitMessage()
-        {
-            Console.WriteLine("Waiting for device to be plugged in...");
-        }
-        #endregion
     }
 }
