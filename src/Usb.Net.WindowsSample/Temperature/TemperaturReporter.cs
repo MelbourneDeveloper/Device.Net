@@ -2,7 +2,7 @@
 
 namespace Usb.Net.WindowsSample.Temperature
 {
-    public partial class TemperatureReporter : IObserver<Temperature>
+    public class TemperatureReporter : IObserver<Temperature>
     {
         private IDisposable unsubscriber;
         private bool first = true;
