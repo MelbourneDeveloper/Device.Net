@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Device.Net;
 using System.Collections.Generic;
+using System.Linq;
+using System;
 
 #if (!LIBUSB)
 using Usb.Net.Windows;
@@ -40,7 +42,21 @@ namespace Usb.Net.WindowsSample
 
         private static async Task GoAsync()
         {
-            var devices = await _DeviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.Hid, VendorId = 0x0413, ProductId = 0x2107 } });
+            //Thanks to https://github.com/WozSoftware
+            //https://github.com/WozSoftware/Woz.TEMPer/blob/dcd0b49d67ac39d10c3759519050915816c2cd93/Woz.TEMPer/Sensors/TEMPerV14.cs#L15
+
+            var devices = (await _DeviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.Hid, VendorId = 0x413d, ProductId = 0x2107 } })).ToList();
+            var device = devices[1];
+            await device.InitializeAsync();
+
+            var buffer = new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 };
+
+            var data = await device.WriteAndReadAsync(buffer);
+            int temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
+
+            //Note sometimes the divisor is 256...
+            //https://github.com/ccwienk/temper/blob/600755de6b9ccd8d481c4844fa08185acd13aef0/temper.py#L113
+            var temperature = Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
         }
         #endregion
 
