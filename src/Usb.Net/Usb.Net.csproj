@@ -63,4 +63,10 @@
     <None Remove="UWP\**" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' != 'MonoAndroid90' And '$(TargetFramework)' != 'monoandroid10.0'" >
+    <Compile Remove="Android\**" />
+    <EmbeddedResource Remove="Android\**" />
+    <None Remove="Android\**" />
+  </ItemGroup>
+
 </Project>
