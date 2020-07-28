@@ -200,10 +200,6 @@
       <Project>{ecb44ddd-bbfa-459a-9c60-4f65a1014a48}</Project>
       <Name>Hid.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Usb.Net.UWP\Usb.Net.UWP.csproj">
-      <Project>{8e29e247-78b7-4fc8-af1c-da273050978c}</Project>
-      <Name>Usb.Net.UWP</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Usb.Net\Usb.Net.csproj">
       <Project>{a3248195-3edf-4fe6-b065-865f74d53b0b}</Project>
       <Name>Usb.Net</Name>
