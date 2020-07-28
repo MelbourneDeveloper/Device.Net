@@ -71,4 +71,10 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
     <None Remove="Windows\**" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' != 'uap10.0.16299'">
+    <Compile Remove="UWP\**" />
+    <EmbeddedResource Remove="UWP\**" />
+    <None Remove="UWP\**" />
+  </ItemGroup>
+
 </Project>

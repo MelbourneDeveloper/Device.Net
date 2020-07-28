@@ -137,10 +137,6 @@
       <Project>{aac55ee8-183b-487f-9e2c-08e14e7e4894}</Project>
       <Name>Device.Net</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Hid.Net.UWP\Hid.Net.UWP.csproj">
-      <Project>{7618DB72-5741-48EB-A2DC-0823C1817795}</Project>
-      <Name>Hid.Net.UWP</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Usb.Net.UWP\Usb.Net.UWP.csproj">
       <Project>{8e29e247-78b7-4fc8-af1c-da273050978c}</Project>
       <Name>Usb.Net.UWP</Name>
