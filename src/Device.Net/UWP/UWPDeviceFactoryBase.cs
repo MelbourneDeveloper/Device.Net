@@ -1,5 +1,4 @@
-﻿using Device.Net.Windows;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -108,9 +107,17 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Static Methods
+#pragma warning disable IDE0060 // Remove unused parameter
         public static ConnectedDeviceDefinition GetDeviceInformation(wde.DeviceInformation deviceInformation, DeviceType deviceType, ILogger logger)
+#pragma warning restore IDE0060 // Remove unused parameter
         {
             if (deviceInformation == null) throw new ArgumentNullException(nameof(deviceInformation));
+
+            throw new NotImplementedException();
+
+            //No idea what was happening here... Does the windows device factory work for UWP? Was this intentional?
+
+            /*
 
             var retVal = WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(deviceInformation.Id, deviceType, logger);
 
@@ -123,6 +130,8 @@ namespace Device.Net.UWP
             retVal.ProductName = deviceInformation.Name;
 
             return retVal;
+
+            */
         }
         #endregion
     }

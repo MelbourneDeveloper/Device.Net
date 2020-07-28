@@ -54,4 +54,10 @@
     <None Remove="Windows\**" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' != 'uap10.0.16299'">
+    <Compile Remove="UWP\**" />
+    <EmbeddedResource Remove="UWP\**" />
+    <None Remove="UWP\**" />
+  </ItemGroup>
+
 </Project>

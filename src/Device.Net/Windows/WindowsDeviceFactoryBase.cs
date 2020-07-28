@@ -14,7 +14,7 @@ namespace Device.Net.Windows
     public abstract class WindowsDeviceFactoryBase
     {
         #region Public Properties
-        public ILogger Logger { get;  }
+        public ILogger Logger { get; }
         public ITracer Tracer { get; }
         #endregion
 
