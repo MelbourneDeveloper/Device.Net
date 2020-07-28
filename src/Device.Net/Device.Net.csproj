@@ -48,8 +48,10 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
-    <Remove Include="Windows/*.*" />
+  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0' And '$(TargetFramework)' != 'net45'">
+    <Compile Remove="Windows\**" />
+    <EmbeddedResource Remove="Windows\**" />
+    <None Remove="Windows\**" />
   </ItemGroup>
 
 </Project>
