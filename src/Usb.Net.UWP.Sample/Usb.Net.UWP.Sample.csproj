@@ -137,6 +137,10 @@
       <Project>{aac55ee8-183b-487f-9e2c-08e14e7e4894}</Project>
       <Name>Device.Net</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Hid.Net\Hid.Net.csproj">
+      <Project>{ecb44ddd-bbfa-459a-9c60-4f65a1014a48}</Project>
+      <Name>Hid.Net</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Usb.Net\Usb.Net.csproj">
       <Project>{a3248195-3edf-4fe6-b065-865f74d53b0b}</Project>
       <Name>Usb.Net</Name>
