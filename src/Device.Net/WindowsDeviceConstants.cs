@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Device.Net.Windows
+namespace Device.Net
 {
     public static class WindowsDeviceConstants
     {

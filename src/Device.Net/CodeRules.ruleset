@@ -465,12 +465,12 @@
     <Rule Id="IDE0005" Action="Error" />
     <Rule Id="IDE0007" Action="Error" />
     <Rule Id="IDE0007WithoutSuggestion" Action="Error" />
-    <Rule Id="IDE0008" Action="Error" />
-    <Rule Id="IDE0008WithoutSuggestion" Action="Error" />
+    <Rule Id="IDE0008" Action="None" />
+    <Rule Id="IDE0008WithoutSuggestion" Action="None" />
     <Rule Id="IDE0009" Action="Error" />
     <Rule Id="IDE0009WithoutSuggestion" Action="Error" />
-    <Rule Id="IDE0011" Action="Error" />
-    <Rule Id="IDE0011WithoutSuggestion" Action="Error" />
+    <Rule Id="IDE0011" Action="None" />
+    <Rule Id="IDE0011WithoutSuggestion" Action="None" />
     <Rule Id="IDE0016" Action="Error" />
     <Rule Id="IDE0016WithoutSuggestion" Action="Error" />
     <Rule Id="IDE0017" Action="Error" />

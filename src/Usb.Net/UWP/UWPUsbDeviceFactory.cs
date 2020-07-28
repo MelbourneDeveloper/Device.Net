@@ -1,6 +1,5 @@
 ﻿using Device.Net;
 using Device.Net.UWP;
-using Device.Net.Windows;
 using System;
 using System.Threading.Tasks;
 

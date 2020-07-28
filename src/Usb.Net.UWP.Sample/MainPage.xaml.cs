@@ -26,6 +26,9 @@ namespace Usb.Net.UWP.Sample
         public MainPage()
         {
             InitializeComponent();
+
+            _DeviceConnectionExample = new TrezorExample(_DeviceManager);
+
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
 
