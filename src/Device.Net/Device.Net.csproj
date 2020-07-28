@@ -48,4 +48,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
+    <Remove Include="Windows/*.*" />
+  </ItemGroup>
+
 </Project>
