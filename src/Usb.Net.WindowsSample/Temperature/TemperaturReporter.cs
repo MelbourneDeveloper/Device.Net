@@ -2,6 +2,9 @@
 
 namespace Usb.Net.WindowsSample.Temperature
 {
+    /// <summary>
+    /// https://docs.microsoft.com/en-us/dotnet/standard/events/how-to-implement-an-observer#example
+    /// </summary>
     public class TemperatureReporter : IObserver<Temperature>
     {
         private IDisposable unsubscriber;

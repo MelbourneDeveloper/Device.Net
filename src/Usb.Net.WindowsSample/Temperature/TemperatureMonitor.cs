@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Usb.Net.WindowsSample.Temperature
 {
+    /// <summary>
+    /// https://docs.microsoft.com/en-us/dotnet/standard/events/how-to-implement-a-provider#example
+    /// </summary>
     public class TemperatureMonitor : IObservable<Temperature>
     {
         readonly List<IObserver<Temperature>> observers;
