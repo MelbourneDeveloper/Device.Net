@@ -28,10 +28,10 @@ namespace Usb.Net.WindowsSample
         #endregion
 
         #region Main
-        private static void Main(string[] args)
+        private static void Main()
         {
             //Register the factories for creating Usb devices. This only needs to be done once.
-#if (LIBUSB)
+#if LIBUSB
             _DeviceManager.RegisterDeviceFactory(new LibUsbUsbDeviceFactory(Logger, Tracer));
 #else
             _DeviceManager.RegisterDeviceFactory(new WindowsUsbDeviceFactory(Logger, Tracer));
@@ -43,9 +43,7 @@ namespace Usb.Net.WindowsSample
             _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
 
-            Go();
-
-            new ManualResetEvent(false).WaitOne();
+            Go().Wait();
         }
 
         private static async Task Go()
