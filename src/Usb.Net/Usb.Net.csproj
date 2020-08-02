@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net45;MonoAndroid90;monoandroid10.0;uap10.0.16299</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
@@ -49,6 +49,24 @@
     </None>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
     <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />    
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0' And '$(TargetFramework)' != 'net45'">
+    <Compile Remove="Windows\**" />
+    <EmbeddedResource Remove="Windows\**" />
+    <None Remove="Windows\**" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'uap10.0.16299'">
+    <Compile Remove="UWP\**" />
+    <EmbeddedResource Remove="UWP\**" />
+    <None Remove="UWP\**" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'MonoAndroid90' And '$(TargetFramework)' != 'monoandroid10.0'" >
+    <Compile Remove="Android\**" />
+    <EmbeddedResource Remove="Android\**" />
+    <None Remove="Android\**" />
   </ItemGroup>
 
 </Project>

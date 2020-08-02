@@ -22,7 +22,7 @@ namespace Device.Net
         Task WriteAsync(byte[] data, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Dispose of any existing connections and reinitialize the device. 
+        /// Close any existing connections and reinitialize the device. 
         /// </summary>
         Task InitializeAsync();
 
