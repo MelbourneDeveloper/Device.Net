@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
@@ -10,12 +10,11 @@
     <AssemblyVersion>3.1.0.0</AssemblyVersion>
     <FileVersion>3.1.0.0</FileVersion>
     <Authors>Christian Findlay</Authors>
-    <Copyright>Copyright (c) 2019 Christian Findlay</Copyright>
+    <Copyright>Copyright (c) 2020 Christian Findlay</Copyright>
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
     <PackageTags>USB Hid Android C# Serial COM</PackageTags>
     <LangVersion>7.3</LangVersion>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>    
     <NoWarn>1701;1702;NU5125</NoWarn>    
     <PackageLicenseFile>LICENSE</PackageLicenseFile>    
     <PackageReleaseNotes>DeviceId issue fixed. See details: https://github.com/MelbourneDeveloper/Device.Net/projects/10</PackageReleaseNotes>      
@@ -56,7 +55,6 @@
       <PackagePath></PackagePath>
     </None>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
-    <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />    
   </ItemGroup>
 
 </Project>
