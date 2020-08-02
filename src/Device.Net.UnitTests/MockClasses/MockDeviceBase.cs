@@ -30,7 +30,7 @@ namespace Device.Net.UnitTests
 
         private byte[] LastWrittenBuffer;
 
-        public async override Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
+        public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             if (LastWrittenBuffer != null)
             {
@@ -50,7 +50,7 @@ namespace Device.Net.UnitTests
             return data;
         }
 
-        public async override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+        public override async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             LastWrittenBuffer = data;
             Tracer?.Trace(true, data);

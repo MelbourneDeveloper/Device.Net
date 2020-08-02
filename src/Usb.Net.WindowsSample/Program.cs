@@ -5,7 +5,7 @@ using Usb.Net.Sample;
 using Device.Net;
 using Usb.Net.WindowsSample.Temperature;
 
-#if (!LIBUSB)
+#if !LIBUSB
 using Usb.Net.Windows;
 using Hid.Net.Windows;
 using SerialPort.Net.Windows;
@@ -40,8 +40,8 @@ namespace Usb.Net.WindowsSample
 #endif
 
             _DeviceConnectionExample = new TrezorExample(_DeviceManager);
-            _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
-            _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
+            _DeviceConnectionExample.TrezorInitialized += DeviceConnectionExample_TrezorInitialized;
+            _DeviceConnectionExample.TrezorDisconnected += DeviceConnectionExample_TrezorDisconnected;
 
             Go().Wait();
         }
@@ -85,19 +85,22 @@ namespace Usb.Net.WindowsSample
                         Thread.Sleep(1500);
                         temperatureMonitor.GetTemperature();
                     }
+                default:
+                    Console.WriteLine("That's not an option");
+                    break;
             }
         }
         #endregion
 
         #region Event Handlers
-        private static void _DeviceConnectionExample_TrezorDisconnected(object sender, EventArgs e)
+        private static void DeviceConnectionExample_TrezorDisconnected(object sender, EventArgs e)
         {
             Console.Clear();
             Console.WriteLine("Disconnected.");
             DisplayWaitMessage();
         }
 
-        private static async void _DeviceConnectionExample_TrezorInitialized(object sender, EventArgs e)
+        private static async void DeviceConnectionExample_TrezorInitialized(object sender, EventArgs e)
         {
             try
             {
@@ -113,7 +116,7 @@ namespace Usb.Net.WindowsSample
         #endregion
 
         #region Private Methods
-        private async static Task<int> Menu()
+        private static async Task<int> Menu()
         {
             while (true)
             {

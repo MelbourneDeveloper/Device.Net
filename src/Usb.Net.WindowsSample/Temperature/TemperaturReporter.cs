@@ -37,6 +37,8 @@ namespace Usb.Net.WindowsSample.Temperature
 
         public virtual void OnNext(Temperature value)
         {
+            if (value == null) return;
+
             Console.WriteLine("The temperature is {0}°C at {1:g}", value.Degrees, value.Date);
             if (first)
             {
