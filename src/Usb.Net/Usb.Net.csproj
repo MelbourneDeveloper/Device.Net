@@ -35,7 +35,7 @@
   </Choose>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -62,7 +62,7 @@
     <None Remove="UWP\**" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' != 'MonoAndroid90' And '$(TargetFramework)' != 'monoandroid10.0'" >
+  <ItemGroup Condition="'$(TargetFramework)' != 'MonoAndroid90' And '$(TargetFramework)' != 'monoandroid10.0'">
     <Compile Remove="Android\**" />
     <EmbeddedResource Remove="Android\**" />
     <None Remove="Android\**" />
