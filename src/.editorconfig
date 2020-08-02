@@ -35,3 +35,14 @@ dotnet_diagnostic.CA2237.severity = none
 
 # IDE0008: Use explicit type
 csharp_style_var_when_type_is_apparent = true:silent
+
+
+
+# CA1401: P/Invokes should not be visible
+dotnet_diagnostic.CA1401.severity = warning
+
+# CA1707: Identifiers should not contain underscores
+dotnet_diagnostic.CA1707.severity = none
+
+
+dotnet_diagnostic.CA1724.severity = warning

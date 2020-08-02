@@ -108,7 +108,9 @@ namespace Device.Net.UWP
 
         #region Public Static Methods
 #pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable CA1801 // Review unused parameters
         public static ConnectedDeviceDefinition GetDeviceInformation(wde.DeviceInformation deviceInformation, DeviceType deviceType, ILogger logger)
+#pragma warning restore CA1801 // Review unused parameters
 #pragma warning restore IDE0060 // Remove unused parameter
         {
             if (deviceInformation == null) throw new ArgumentNullException(nameof(deviceInformation));

@@ -127,10 +127,13 @@ namespace Device.Net.Windows
 
                         deviceDefinitions.Add(connectedDeviceDefinition);
                     }
+#pragma warning disable CA1031 
                     catch (Exception ex)
                     {
+                        //Log and move on
                         Log(ex);
                     }
+#pragma warning restore CA1031 
                 }
 
                 APICalls.SetupDiDestroyDeviceInfoList(devicesHandle);
