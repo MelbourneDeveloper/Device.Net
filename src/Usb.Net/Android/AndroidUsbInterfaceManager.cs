@@ -127,7 +127,7 @@ namespace Usb.Net.Android
                 await _InitializingSemaphoreSlim.WaitAsync();
 
                 Close();
-                
+
                 _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceNumberId);
                 if (_UsbDevice == null)
                 {
@@ -172,7 +172,7 @@ namespace Usb.Net.Android
                             var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint);
                             androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
                         }
-                    }                    
+                    }
                 }
 
                 Log("Hid device initialized. About to tell everyone.", null);
@@ -190,7 +190,7 @@ namespace Usb.Net.Android
             }
         }
 
-        private void Log(string message, Exception ex, [CallerMemberName]string region = null)
+        private void Log(string message, Exception ex, [CallerMemberName] string region = null)
         {
             Logger?.Log(message, region, ex, LogLevel.Error);
         }

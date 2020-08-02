@@ -15,7 +15,7 @@ namespace Device.Net
         #region Constructor
         public ConnectedDeviceDefinition(string deviceId)
         {
-            if(string.IsNullOrEmpty(deviceId))
+            if (string.IsNullOrEmpty(deviceId))
             {
                 throw new ArgumentNullException(nameof(deviceId));
             }

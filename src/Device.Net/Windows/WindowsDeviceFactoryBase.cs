@@ -127,10 +127,13 @@ namespace Device.Net.Windows
 
                         deviceDefinitions.Add(connectedDeviceDefinition);
                     }
+#pragma warning disable CA1031 
                     catch (Exception ex)
                     {
+                        //Log and move on
                         Log(ex);
                     }
+#pragma warning restore CA1031 
                 }
 
                 APICalls.SetupDiDestroyDeviceInfoList(devicesHandle);
@@ -183,8 +186,11 @@ namespace Device.Net.Windows
                 vid = GetNumberFromDeviceId(deviceId, "vid_");
                 pid = GetNumberFromDeviceId(deviceId, "pid_");
             }
+#pragma warning disable CA1031 
             catch (Exception ex)
+#pragma warning restore CA1031 
             {
+                //If anything goes wrong here, log it and move on. 
                 logger?.Log($"Error {ex.Message}", nameof(GetDeviceDefinitionFromWindowsDeviceId), ex, LogLevel.Error);
             }
 

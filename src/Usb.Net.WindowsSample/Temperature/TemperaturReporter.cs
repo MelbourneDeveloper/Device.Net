@@ -13,6 +13,8 @@ namespace Usb.Net.WindowsSample.Temperature
 
         public virtual void Subscribe(IObservable<Temperature> provider)
         {
+            if (provider == null) throw new ArgumentNullException(nameof(provider));
+
             unsubscriber = provider.Subscribe(this);
         }
 
@@ -26,13 +28,17 @@ namespace Usb.Net.WindowsSample.Temperature
             Console.WriteLine("Additional temperature data will not be transmitted.");
         }
 
+#pragma warning disable CA1716 // Identifiers should not match keywords
         public virtual void OnError(Exception error)
+#pragma warning restore CA1716 // Identifiers should not match keywords
         {
             // Do nothing.
         }
 
         public virtual void OnNext(Temperature value)
         {
+            if (value == null) return;
+
             Console.WriteLine("The temperature is {0}°C at {1:g}", value.Degrees, value.Date);
             if (first)
             {

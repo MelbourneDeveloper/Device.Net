@@ -182,13 +182,13 @@
       <Version>6.2.10</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestAdapter">
-      <Version>2.1.1</Version>
+      <Version>2.1.2</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestFramework">
-      <Version>2.1.1</Version>
+      <Version>2.1.2</Version>
     </PackageReference>
     <PackageReference Include="NSubstitute">
-      <Version>4.2.1</Version>
+      <Version>4.2.2</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

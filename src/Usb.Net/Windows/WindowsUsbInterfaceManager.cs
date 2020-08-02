@@ -13,8 +13,8 @@ namespace Usb.Net.Windows
         #region Fields
         private bool disposed;
         private SafeFileHandle _DeviceHandle;
-        protected ushort? _ReadBufferSize { get; set; }
-        protected ushort? _WriteBufferSize { get; set; }
+        protected ushort? ReadBufferSizeProtected { get; set; }
+        protected ushort? WriteBufferSizeProtected { get; set; }
         #endregion
 
         #region Public Properties
@@ -22,15 +22,15 @@ namespace Usb.Net.Windows
         public string DeviceId { get; }
 
         //TODO: Null checking here. These will error if the device doesn't have a value or it is not initialized
-        public ushort WriteBufferSize => _WriteBufferSize ?? WriteUsbInterface.ReadBufferSize;
-        public ushort ReadBufferSize => _ReadBufferSize ?? ReadUsbInterface.ReadBufferSize;
+        public ushort WriteBufferSize => WriteBufferSizeProtected ?? WriteUsbInterface.ReadBufferSize;
+        public ushort ReadBufferSize => ReadBufferSizeProtected ?? ReadUsbInterface.ReadBufferSize;
         #endregion
 
         #region Constructor
         public WindowsUsbInterfaceManager(string deviceId, ILogger logger, ITracer tracer, ushort? readBufferLength, ushort? writeBufferLength) : base(logger, tracer)
         {
-            _ReadBufferSize = readBufferLength;
-            _WriteBufferSize = writeBufferLength;
+            ReadBufferSizeProtected = readBufferLength;
+            WriteBufferSizeProtected = writeBufferLength;
             DeviceId = deviceId;
         }
         #endregion
@@ -65,19 +65,20 @@ namespace Usb.Net.Windows
 
                 var connectedDeviceDefinition = WindowsUsbDeviceFactory.GetDeviceDefinition(defaultInterfaceHandle, DeviceId);
 
-                if (!_WriteBufferSize.HasValue)
+                if (!WriteBufferSizeProtected.HasValue)
                 {
                     if (!connectedDeviceDefinition.WriteBufferSize.HasValue) throw new ValidationException("Write buffer size not specified");
-                    _WriteBufferSize = (ushort)connectedDeviceDefinition.WriteBufferSize.Value;
+                    WriteBufferSizeProtected = (ushort)connectedDeviceDefinition.WriteBufferSize.Value;
                 }
 
-                if (!_ReadBufferSize.HasValue)
+                if (!ReadBufferSizeProtected.HasValue)
                 {
                     if (!connectedDeviceDefinition.ReadBufferSize.HasValue) throw new ValidationException("Read buffer size not specified");
-                    _ReadBufferSize = (ushort)connectedDeviceDefinition.ReadBufferSize.Value;
+                    ReadBufferSizeProtected = (ushort)connectedDeviceDefinition.ReadBufferSize.Value;
                 }
 
                 //Get the first (default) interface
+#pragma warning disable CA2000 //Ths should be disposed later
                 var defaultInterface = GetInterface(defaultInterfaceHandle);
 
                 UsbInterfaces.Add(defaultInterface);
@@ -103,6 +104,7 @@ namespace Usb.Net.Windows
                 }
 
                 RegisterDefaultInterfaces();
+#pragma warning restore CA2000
             }
             catch (Exception ex)
             {
@@ -118,7 +120,7 @@ namespace Usb.Net.Windows
             //TODO: Where is the logger/tracer?
             var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
 
-            var retVal = new WindowsUsbInterface(interfaceHandle, Logger, Tracer, interfaceDescriptor.bInterfaceNumber, _ReadBufferSize, _WriteBufferSize);
+            var retVal = new WindowsUsbInterface(interfaceHandle, Logger, Tracer, interfaceDescriptor.bInterfaceNumber, ReadBufferSizeProtected, WriteBufferSizeProtected);
             WindowsDeviceBase.HandleError(isSuccess, "Couldn't query interface");
 
             for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)

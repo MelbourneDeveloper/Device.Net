@@ -9,13 +9,12 @@
     <Version>3.1.0</Version>
     <Authors>Christian Findlay</Authors>
     <Description>Cross platform C# library for talking to connected devices in a uniform way through dependency injection.</Description>
-    <Copyright>Copyright (c) 2019 Christian Findlay</Copyright>
+    <Copyright>Copyright (c) 2020 Christian Findlay</Copyright>
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
     <PackageTags>Hid USB Android UWP Windows C# MacOS Linux</PackageTags>
     <NoWarn>NU5125</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>CodeRules.ruleset</CodeAnalysisRuleSet>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>   
   </PropertyGroup>
 
@@ -41,13 +40,6 @@
     <None Include="..\..\README.md" Link="README.md" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
   <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0' And '$(TargetFramework)' != 'net45'">
     <Compile Remove="Windows\**" />
     <EmbeddedResource Remove="Windows\**" />
@@ -58,6 +50,13 @@
     <Compile Remove="UWP\**" />
     <EmbeddedResource Remove="UWP\**" />
     <None Remove="UWP\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

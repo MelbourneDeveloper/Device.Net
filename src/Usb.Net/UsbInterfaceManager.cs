@@ -48,7 +48,7 @@ namespace Usb.Net
             get => _ReadUsbInterface;
             set
             {
-                if (value!=null && !UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
+                if (value != null && !UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
                 _ReadUsbInterface = value;
             }
         }

@@ -1,9 +1,12 @@
-﻿using Device.Net.Exceptions;
+﻿
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System.Threading.Tasks;
 using Usb.Net;
+#if !WINDOWS_UWP
 using Usb.Net.Windows;
+using Device.Net.Exceptions;
+#endif
 
 namespace Device.Net.UnitTests
 {
@@ -34,6 +37,7 @@ namespace Device.Net.UnitTests
             Assert.AreEqual(readResult.Data, testreadpacket);
         }
 
+#if !WINDOWS_UWP
         [TestMethod]
         public async Task TestDeviceIdIsPersisted()
         {
@@ -41,6 +45,7 @@ namespace Device.Net.UnitTests
             var windowsUsbDevice = new WindowsUsbDevice(deviceId, new DebugLogger(), new DebugTracer(), 80, 80);
             Assert.AreEqual(deviceId, windowsUsbDevice.DeviceId);
         }
+#endif
 
         [TestMethod]
         public async Task TestWrite()
@@ -50,6 +55,8 @@ namespace Device.Net.UnitTests
             await _UsbDevice.UsbInterfaceManager.WriteUsbInterface.Received().WriteAsync(testreadpacket);
         }
 
+
+#if !WINDOWS_UWP
         [TestMethod]
         public void TestValidationExceptionInvalidWriteInterface()
         {
@@ -108,9 +115,11 @@ namespace Device.Net.UnitTests
 
             Assert.Fail();
         }
+#endif
         #endregion
 
         #region Helpers
+#if !WINDOWS_UWP
         private static UsbDevice CreateUsbDeviceWithInterface()
         {
             var logger = Substitute.For<ILogger>();
@@ -122,6 +131,7 @@ namespace Device.Net.UnitTests
             usbDevice.UsbInterfaceManager.UsbInterfaces.Add(windowsUsbInterface);
             return usbDevice;
         }
+#endif
 
         private async Task InitializeDevice()
         {

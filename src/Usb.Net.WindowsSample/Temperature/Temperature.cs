@@ -2,7 +2,7 @@
 
 namespace Usb.Net.WindowsSample.Temperature
 {
-    public struct Temperature
+    public class Temperature
     {
         public Temperature(decimal temperature, DateTime dateAndTime)
         {

@@ -9,7 +9,7 @@ namespace Usb.Net.Sample
     internal sealed class TrezorExample : IDisposable
     {
         #region Fields
-#if(LIBUSB)
+#if LIBUSB
         private const int PollMilliseconds = 6000;
 #else
         private const int PollMilliseconds = 3000;
@@ -32,7 +32,7 @@ namespace Usb.Net.Sample
         #region Public Properties
         public IDevice TrezorDevice { get; private set; }
         public IDeviceManager DeviceManager { get; }
-        public DeviceListener DeviceListener { get;  }
+        public DeviceListener DeviceListener { get; }
         #endregion
 
         #region Constructor
