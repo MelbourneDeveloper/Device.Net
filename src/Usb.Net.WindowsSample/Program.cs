@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Usb.Net.Sample;
 using Device.Net;
-using Usb.Net.WindowsSample.Temperature;
 
 #if !LIBUSB
+using System.Threading;
 using Usb.Net.Windows;
 using Hid.Net.Windows;
 using SerialPort.Net.Windows;
+using Usb.Net.WindowsSample.Temperature;
 #else
 using Device.Net.LibUsb;
 #endif
@@ -75,6 +75,7 @@ namespace Usb.Net.WindowsSample
                     DisplayWaitMessage();
                     _DeviceConnectionExample.StartListening();
                     break;
+#if !LIBUSB
                 case 3:
                     var temperatureMonitor = new TemperatureMonitor();
                     var temperaturReporter = new TemperatureReporter();
@@ -85,6 +86,7 @@ namespace Usb.Net.WindowsSample
                         Thread.Sleep(1500);
                         temperatureMonitor.GetTemperature();
                     }
+#endif
                 default:
                     Console.WriteLine("That's not an option");
                     break;

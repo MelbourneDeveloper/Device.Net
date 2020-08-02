@@ -59,12 +59,7 @@ namespace Usb.Net.AndroidSample
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             var id = item.ItemId;
-            if (id == Resource.Id.action_settings)
-            {
-                return true;
-            }
-
-            return base.OnOptionsItemSelected(item);
+            return id == Resource.Id.action_settings || base.OnOptionsItemSelected(item);
         }
         #endregion
 
@@ -73,14 +68,13 @@ namespace Usb.Net.AndroidSample
         {
             try
             {
-                var usbManager = GetSystemService(UsbService) as UsbManager;
-                if (usbManager == null) throw new Exception("UsbManager is null");
+                if (!(GetSystemService(UsbService) is UsbManager usbManager)) throw new Exception("UsbManager is null");
 
                 //Register the factory for creating Usb devices. This only needs to be done once.
                 _DeviceManager.RegisterDeviceFactory(new AndroidUsbDeviceFactory(usbManager, base.ApplicationContext, new DebugLogger(), new DebugTracer()));
 
-                _TrezorExample.TrezorDisconnected += _TrezorExample_TrezorDisconnected;
-                _TrezorExample.TrezorInitialized += _TrezorExample_TrezorInitialized;
+                _TrezorExample.TrezorDisconnected += TrezorExample_TrezorDisconnected;
+                _TrezorExample.TrezorInitialized += TrezorExample_TrezorInitialized;
                 _TrezorExample.StartListening();
 
                 //var attachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
@@ -96,7 +90,7 @@ namespace Usb.Net.AndroidSample
             }
         }
 
-        private async void _TrezorExample_TrezorInitialized(object sender, EventArgs e)
+        private async void TrezorExample_TrezorInitialized(object sender, EventArgs e)
         {
             try
             {
@@ -117,7 +111,7 @@ namespace Usb.Net.AndroidSample
             }
         }
 
-        private void _TrezorExample_TrezorDisconnected(object sender, EventArgs e)
+        private void TrezorExample_TrezorDisconnected(object sender, EventArgs e)
         {
             DisplayMessage("Device disconnected. Waiting for device...");
         }
