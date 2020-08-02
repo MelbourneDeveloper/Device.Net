@@ -9,13 +9,12 @@
     <Version>3.1.0</Version>
     <Authors>Christian Findlay</Authors>
     <Description>Cross platform C# library for talking to connected devices in a uniform way through dependency injection.</Description>
-    <Copyright>Copyright (c) 2019 Christian Findlay</Copyright>
+    <Copyright>Copyright (c) 2020 Christian Findlay</Copyright>
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
     <PackageTags>Hid USB Android UWP Windows C# MacOS Linux</PackageTags>
     <NoWarn>NU5125</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>CodeRules.ruleset</CodeAnalysisRuleSet>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>   
   </PropertyGroup>
 

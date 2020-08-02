@@ -172,9 +172,9 @@ namespace Hid.Net.Windows
                     _WriteSafeFileHandle = null;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Logging
+                Logger?.Log($"{nameof(Close)} error.", nameof(WindowsHidDevice), ex, LogLevel.Error);
             }
 
             _IsClosing = false;
