@@ -49,7 +49,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Constructor
-        protected UWPDeviceBase(string deviceId, ILogger logger, ITracer tracer) 
+        protected UWPDeviceBase(string deviceId, ILogger logger, ITracer tracer)
         {
             Logger = logger;
             Tracer = tracer;

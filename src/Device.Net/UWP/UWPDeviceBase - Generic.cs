@@ -106,9 +106,12 @@ namespace Device.Net.UWP
                 if (ConnectedDevice is IDisposable disposable) disposable.Dispose();
                 ConnectedDevice = default;
             }
+#pragma warning disable CA1031 
             catch (Exception ex)
+#pragma warning restore CA1031 
             {
-                Log("Error disposing", ex);
+                //Log and move on
+                Log("Error closing", ex);
             }
 
             _IsClosing = false;

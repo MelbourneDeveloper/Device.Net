@@ -141,8 +141,7 @@ namespace Device.Net
                 {
                     var device = _CreatedDevicesByDefinition[filteredDeviceDefinitionKey];
 
-                    if (connectedDeviceDefinitions.Any(cdd =>
-                        Net.DeviceManager.IsDefinitionMatch(filteredDeviceDefinitionKey, cdd))) continue;
+                    if (connectedDeviceDefinitions.Any(cdd => Net.DeviceManager.IsDefinitionMatch(filteredDeviceDefinitionKey, cdd))) continue;
 
                     if (!device.IsInitialized) continue;
 
@@ -166,8 +165,11 @@ namespace Device.Net
                 Log(Messages.InformationMessageDeviceListenerPollingComplete, null);
 
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
             {
+                //Log and move on
                 Log(Messages.ErrorMessagePollingError, ex);
 
                 //TODO: What else to do here?

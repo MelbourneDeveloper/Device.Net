@@ -29,8 +29,8 @@ namespace Device.Net.LibUsb
 
                     return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath)
                     {
-                        VendorId = (uint) usbRegistry.Vid,
-                        ProductId = (uint) usbRegistry.Pid,
+                        VendorId = (uint)usbRegistry.Vid,
+                        ProductId = (uint)usbRegistry.Pid,
                         DeviceType = DeviceType
                     }).ToList();
 
@@ -44,13 +44,13 @@ namespace Device.Net.LibUsb
                     devices = devices.Where(d => d.Pid == deviceDefinition.ProductId.Value);
                 }
 
-                return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath) {VendorId = (uint) usbRegistry.Vid, ProductId = (uint) usbRegistry.Pid, DeviceType = DeviceType}).ToList();
+                return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath) { VendorId = (uint)usbRegistry.Vid, ProductId = (uint)usbRegistry.Pid, DeviceType = DeviceType }).ToList();
             });
         }
 
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            if(deviceDefinition==null) throw new ArgumentNullException(nameof(deviceDefinition));
+            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
             if (deviceDefinition.VendorId == null) throw new ArgumentNullException(nameof(ConnectedDeviceDefinition.VendorId));
             if (deviceDefinition.ProductId == null) throw new ArgumentNullException(nameof(ConnectedDeviceDefinition.ProductId));
 

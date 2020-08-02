@@ -28,7 +28,7 @@ namespace Device.Net.UnitTests
 
             if (deviceDefinition.DeviceId != DeviceId) throw new Exception("Couldn't get a device");
 
-            if (deviceDefinition.DeviceType.HasValue && deviceDefinition.DeviceType != DeviceType.Usb)  throw new Exception("Couldn't get a device");
+            if (deviceDefinition.DeviceType.HasValue && deviceDefinition.DeviceType != DeviceType.Usb) throw new Exception("Couldn't get a device");
 
             Logger?.Log(string.Format(FoundMessage, DeviceId), nameof(MockUsbFactory), null, LogLevel.Information);
 
