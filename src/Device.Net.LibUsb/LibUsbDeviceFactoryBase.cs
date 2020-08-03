@@ -4,6 +4,7 @@ using LibUsbDotNet.Main;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Device.Net.LibUsb
 {
@@ -26,13 +27,14 @@ namespace Device.Net.LibUsb
                 IEnumerable<UsbRegistry> devices = UsbDevice.AllDevices;
 
                 if (deviceDefinition == null)
-
+                {
                     return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath)
                     {
                         VendorId = (uint)usbRegistry.Vid,
                         ProductId = (uint)usbRegistry.Pid,
                         DeviceType = DeviceType
                     }).ToList();
+                }
 
                 if (deviceDefinition.VendorId.HasValue)
                 {

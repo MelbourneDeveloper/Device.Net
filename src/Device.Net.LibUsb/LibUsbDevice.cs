@@ -3,6 +3,7 @@ using LibUsbDotNet;
 using LibUsbDotNet.LudnMonoLibUsb;
 using LibUsbDotNet.Main;
 using LibUsbDotNet.WinUsb;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Threading;
@@ -145,29 +146,9 @@ namespace Device.Net.LibUsb
         #endregion
 
         #region Public Static Methods
-        public static int GetVendorId(UsbDevice usbDevice)
-        {
-            if (usbDevice is MonoUsbDevice monoUsbDevice)
-            {
-                return monoUsbDevice.Profile.DeviceDescriptor.VendorID;
-            }
-            else
-            {
-                return usbDevice.UsbRegistryInfo.Vid;
-            }
-        }
+        public static int GetVendorId(UsbDevice usbDevice) => usbDevice is MonoUsbDevice monoUsbDevice ? monoUsbDevice.Profile.DeviceDescriptor.VendorID : usbDevice.UsbRegistryInfo.Vid;
 
-        public static int GetProductId(UsbDevice usbDevice)
-        {
-            if (usbDevice is MonoUsbDevice monoUsbDevice)
-            {
-                return monoUsbDevice.Profile.DeviceDescriptor.ProductID;
-            }
-            else
-            {
-                return usbDevice.UsbRegistryInfo.Pid;
-            }
-        }
+        public static int GetProductId(UsbDevice usbDevice) => usbDevice is MonoUsbDevice monoUsbDevice ? monoUsbDevice.Profile.DeviceDescriptor.ProductID : usbDevice.UsbRegistryInfo.Pid;
         #endregion
     }
 }

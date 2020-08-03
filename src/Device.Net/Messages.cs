@@ -14,7 +14,7 @@
         #endregion
 
         #region Warnings
-        public static string WarningMessageOpeningInReadonlyMode(string deviceId) => $"Opening device {deviceId} in read only mode.";
+        public const string WarningMessageOpeningInReadonlyMode = "Opening device {deviceId} in read only mode.";
         public const string WarningMessageReadFileStreamCantRead = "Read file stream cannot be read from";
         public const string WarningMessageWriteFileStreamCantWrite = "Write file stream cannot be written to";
         #endregion
@@ -22,7 +22,7 @@
         #region Device Initialization
         public const string InformationMessageInitializingDevice = "Initializing device...";
         public const string ErrorMessageNotInitialized = "The device has not been initialized.";
-        public const string ErrorMessageCouldntIntializeDevice = "Couldn't initialize device";
+        public const string ErrorMessageCouldntIntializeDevice = "Couldn't initialize device.";
         public const string ErrorMessageCantOpenWrite = "Could not open connection for writing";
         public const string ErrorMessageCantOpenRead = "Could not open connection for reading";
         public const string DeviceDisposedErrorMessage = "This device has already been disposed";

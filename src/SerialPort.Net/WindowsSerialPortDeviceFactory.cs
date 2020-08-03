@@ -3,7 +3,8 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-#if NETSTANDARD 
+using Microsoft.Extensions.Logging;
+#if NETSTANDARD
 using System.Runtime.InteropServices;
 using Device.Net.Exceptions;
 #endif

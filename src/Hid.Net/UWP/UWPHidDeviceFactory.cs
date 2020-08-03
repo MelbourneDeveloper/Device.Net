@@ -29,9 +29,12 @@ namespace Hid.Net.UWP
         #region Public Override Methods
         public override async Task<ConnectionInfo> TestConnection(string deviceId)
         {
+            IDisposable logScope = null;
             try
             {
                 await _TestConnectionSemaphore.WaitAsync();
+
+                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(TestConnection));
 
                 if (_ConnectionTestedDeviceIds.TryGetValue(deviceId, out var connectionInfo)) return connectionInfo;
 
@@ -41,7 +44,7 @@ namespace Hid.Net.UWP
 
                     if (!canConnect) return new ConnectionInfo { CanConnect = false };
 
-                    Log($"Testing device connection. Id: {deviceId}. Can connect: {canConnect}", null);
+                    Logger?.LogInformation("Testing device connection. Id: {deviceId}. Can connect: {canConnect}", deviceId, canConnect);
 
                     connectionInfo = new ConnectionInfo { CanConnect = canConnect, UsagePage = hidDevice.UsagePage };
 
@@ -52,11 +55,12 @@ namespace Hid.Net.UWP
             }
             catch (Exception ex)
             {
-                Log("Connection failed", ex);
+                Logger?.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
                 return new ConnectionInfo { CanConnect = false };
             }
             finally
             {
+                logScope?.Dispose();
                 _TestConnectionSemaphore.Release();
             }
         }

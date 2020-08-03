@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace Usb.Net.Android

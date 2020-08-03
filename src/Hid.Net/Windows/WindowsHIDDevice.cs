@@ -6,6 +6,7 @@ using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -70,8 +71,12 @@ namespace Hid.Net.Windows
         #region Private Methods
         private bool Initialize()
         {
+            IDisposable logScope = null;
+
             try
             {
+                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(Initialize));
+
                 Close();
 
                 if (string.IsNullOrEmpty(DeviceId))
@@ -91,7 +96,7 @@ namespace Hid.Net.Windows
 
                 if (IsReadOnly.Value)
                 {
-                    Logger?.Log(Messages.WarningMessageOpeningInReadonlyMode(DeviceId), nameof(WindowsHidDevice), null, LogLevel.Warning);
+                    Logger?.LogWarning(Messages.WarningMessageOpeningInReadonlyMode, DeviceId);
                 }
 
                 ConnectedDeviceDefinition = HidService.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
@@ -108,11 +113,11 @@ namespace Hid.Net.Windows
 
                 if (_ReadFileStream.CanRead)
                 {
-                    Logger?.Log(Messages.SuccessMessageReadFileStreamOpened, nameof(WindowsHidDevice), null, LogLevel.Information);
+                    Logger?.LogInformation(Messages.SuccessMessageReadFileStreamOpened);
                 }
                 else
                 {
-                    Logger?.Log(Messages.WarningMessageReadFileStreamCantRead, nameof(WindowsHidDevice), null, LogLevel.Warning);
+                    Logger?.LogWarning(Messages.WarningMessageReadFileStreamCantRead);
                 }
 
                 if (!IsReadOnly.Value)
@@ -127,19 +132,23 @@ namespace Hid.Net.Windows
 
                     if (_WriteFileStream.CanWrite)
                     {
-                        Logger?.Log(Messages.SuccessMessageWriteFileStreamOpened, nameof(WindowsHidDevice), null, LogLevel.Information);
+                        Logger?.LogInformation(Messages.SuccessMessageWriteFileStreamOpened);
                     }
                     else
                     {
-                        Logger?.Log(Messages.WarningMessageWriteFileStreamCantWrite, nameof(WindowsHidDevice), null, LogLevel.Warning);
+                        Logger?.LogWarning(Messages.WarningMessageWriteFileStreamCantWrite);
                     }
 
                 }
             }
             catch (Exception ex)
             {
-                Logger?.Log($"{nameof(Initialize)} error.", nameof(WindowsHidDevice), ex, LogLevel.Error);
+                Logger?.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice, DeviceId, nameof(WindowsHidDevice));
                 throw;
+            }
+            finally
+            {
+                logScope?.Dispose();
             }
 
             return true;
