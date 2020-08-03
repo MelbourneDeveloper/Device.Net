@@ -18,7 +18,7 @@ namespace Usb.Net.UWP.Sample
     public sealed partial class MainPage : Page
     {
         #region Fields
-        private IDeviceManager _DeviceManager = new DeviceManager();
+        private readonly IDeviceManager _DeviceManager = new DeviceManager();
         private readonly TrezorExample _DeviceConnectionExample;
         #endregion
 
@@ -66,6 +66,7 @@ namespace Usb.Net.UWP.Sample
             });
         }
 
+#pragma warning disable IDE0060 // Remove unused parameter
         private async void RunButton_Click(object sender, RoutedEventArgs e)
         {
             RunButton.IsEnabled = false;
@@ -78,6 +79,7 @@ namespace Usb.Net.UWP.Sample
             SetButtonColor(Colors.Red);
             _DeviceConnectionExample.StartListening();
         }
+#pragma warning restore IDE0060 // Remove unused parameter
         #endregion
 
         #region Private Methods

@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.Windows;
+using Microsoft.Extensions.Logging;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
@@ -174,7 +175,7 @@ namespace Hid.Net.Windows
             }
             catch (Exception ex)
             {
-                Logger?.Log($"{nameof(Close)} error.", nameof(WindowsHidDevice), ex, LogLevel.Error);
+                Logger?.LogError(ex, Messages.ErrorMessageCantClose, DeviceId, nameof(WindowsHidDevice));
             }
 
             _IsClosing = false;
@@ -224,12 +225,12 @@ namespace Hid.Net.Windows
             }
             catch (OperationCanceledException oce)
             {
-                Log(Messages.ErrorMessageOperationCanceled, oce);
+                Logger?.LogError(oce, Messages.ErrorMessageOperationCanceled);
                 throw;
             }
             catch (Exception ex)
             {
-                Log(Messages.ErrorMessageRead, ex);
+                Logger?.LogError(ex, Messages.ErrorMessageRead);
                 throw new IOException(Messages.ErrorMessageRead, ex);
             }
 

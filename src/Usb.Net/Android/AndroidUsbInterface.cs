@@ -2,6 +2,7 @@
 using Device.Net;
 using Device.Net.Exceptions;
 using Java.Nio;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Threading;

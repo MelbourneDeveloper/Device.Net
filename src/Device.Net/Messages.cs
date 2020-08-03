@@ -74,6 +74,10 @@
         public static string GetErrorMessageNoBulkPipe(byte interfaceNumber, bool isRead) => $"No bulk {(isRead ? "read" : "write")} pipes found. Interrupt pipes to be used instead. Interface Number {interfaceNumber}";
         #endregion
 
+        #region Hid
+        public const string ErrorMessagesCouldntGetHidString = "Could not get Hid string. Message: {message} Region: {region} Caller: {callMemberName}";
+        #endregion
+
         #region Serial Port
         public const string ErrorCouldNotGetCommState = "Could not get Comm State";
         public const string ErrorCouldNotSetCommState = "Could not set Comm State";

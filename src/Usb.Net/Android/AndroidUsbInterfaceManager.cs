@@ -2,6 +2,7 @@
 using Android.Hardware.Usb;
 using Device.Net;
 using Device.Net.Exceptions;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -19,8 +20,8 @@ namespace Usb.Net.Android
         private readonly SemaphoreSlim _InitializingSemaphoreSlim = new SemaphoreSlim(1, 1);
         private bool _IsClosing;
         private bool disposed;
-        private ushort? _ReadBufferSize { get; set; }
-        private ushort? _WriteBufferSize { get; set; }
+        private ushort? ReadBufferSizeProtected { get; set; }
+        private ushort? WriteBufferSizeProtected { get; set; }
 
         #endregion
 
@@ -31,16 +32,16 @@ namespace Usb.Net.Android
         #region Public Properties
         public UsbManager UsbManager { get; }
         public Context AndroidContext { get; private set; }
-        public ushort WriteBufferSize => _WriteBufferSize ?? WriteUsbInterface.ReadBufferSize;
-        public ushort ReadBufferSize => _ReadBufferSize ?? ReadUsbInterface.ReadBufferSize;
+        public ushort WriteBufferSize => WriteBufferSizeProtected ?? WriteUsbInterface.ReadBufferSize;
+        public ushort ReadBufferSize => ReadBufferSizeProtected ?? ReadUsbInterface.ReadBufferSize;
         public int DeviceNumberId { get; }
         #endregion
 
         #region Constructor
         public AndroidUsbInterfaceManager(UsbManager usbManager, Context androidContext, int deviceNumberId, ILogger logger, ITracer tracer, ushort? readBufferLength, ushort? writeBufferLength) : base(logger, tracer)
         {
-            _ReadBufferSize = readBufferLength;
-            _WriteBufferSize = writeBufferLength;
+            ReadBufferSizeProtected = readBufferLength;
+            WriteBufferSizeProtected = writeBufferLength;
             UsbManager = usbManager ?? throw new ArgumentNullException(nameof(usbManager));
             AndroidContext = androidContext ?? throw new ArgumentNullException(nameof(androidContext));
             DeviceNumberId = deviceNumberId;

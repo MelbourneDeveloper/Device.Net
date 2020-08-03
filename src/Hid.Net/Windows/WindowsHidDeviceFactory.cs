@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.Windows;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace Hid.Net.Windows

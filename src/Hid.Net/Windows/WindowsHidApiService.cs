@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.Windows;
+using Microsoft.Extensions.Logging;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
@@ -139,7 +140,7 @@ namespace Hid.Net.Windows
                 var isSuccess = getString(safeFileHandle, pointerToBuffer, 126);
                 if (!isSuccess)
                 {
-                    logger?.Log($"Could not get Hid string. Caller: {callMemberName}", nameof(WindowsHidApiService), null, LogLevel.Warning);
+                    logger?.LogWarning(Messages.ErrorMessagesCouldntGetHidString, "", nameof(GetHidString), callMemberName);
                 }
                 var text = Marshal.PtrToStringAuto(pointerToBuffer);
                 Marshal.FreeHGlobal(pointerToBuffer);
@@ -147,7 +148,7 @@ namespace Hid.Net.Windows
             }
             catch (Exception ex)
             {
-                logger?.Log($"Could not get Hid string. Message: {ex.Message}", nameof(WindowsHidApiService), ex, LogLevel.Error);
+                logger?.LogError(ex, Messages.ErrorMessagesCouldntGetHidString, ex.Message, nameof(GetHidString), callMemberName);
                 return null;
             }
             finally
