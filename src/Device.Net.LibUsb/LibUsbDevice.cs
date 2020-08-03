@@ -132,7 +132,7 @@ namespace Device.Net.LibUsb
                     else
                     {
                         var message = $"Error. Write error code: {errorCode}";
-                        Logger?.Log(message, GetType().Name, null, LogLevel.Error);
+                        Logger?.LogError(message + " {errorCode}", errorCode);
                         throw new IOException(message);
                     }
                 });
