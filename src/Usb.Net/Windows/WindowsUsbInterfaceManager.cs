@@ -39,8 +39,12 @@ namespace Usb.Net.Windows
         #region Private Methods
         private void Initialize()
         {
+            IDisposable logScope = null;
+
             try
             {
+                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(Initialize));
+
                 Close();
 
                 int errorCode;
@@ -59,9 +63,11 @@ namespace Usb.Net.Windows
                     if (errorCode > 0) throw new ApiException($"Device handle no good. Error code: {errorCode}");
                 }
 
-                Logger?.Log(Messages.SuccessMessageGotWriteAndReadHandle, nameof(WindowsUsbInterfaceManager), null, LogLevel.Information);
+                Logger?.LogInformation(Messages.SuccessMessageGotWriteAndReadHandle);
 
+#pragma warning disable CA2000 //We need to hold on to this handle
                 var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
+#pragma warning restore CA2000 
                 WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorMessageCouldntIntializeDevice);
 
                 var connectedDeviceDefinition = WindowsUsbDeviceFactory.GetDeviceDefinition(defaultInterfaceHandle, DeviceId);
@@ -109,8 +115,12 @@ namespace Usb.Net.Windows
             }
             catch (Exception ex)
             {
-                Logger?.Log($"{nameof(Initialize)} error. DeviceId {DeviceId}", nameof(UsbDevice), ex, LogLevel.Error);
+                Logger?.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
                 throw;
+            }
+            finally
+            {
+                logScope?.Dispose();
             }
         }
 

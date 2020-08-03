@@ -80,9 +80,11 @@ namespace Usb.Net.UWP
 
         public async Task<byte[]> ReadAsync(CancellationToken cancellationToken = default)
         {
+            IDisposable logScope = null;
+
             try
             {
-                Logger?.Log($"Read called on {nameof(UWPUsbInterfaceInterruptReadEndpoint)}", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
+                logScope = Logger?.BeginScope("Endpoint descriptor: {endpointDescriptor} Call: {call}", UsbInterruptInPipe.EndpointDescriptor?.ToString(), nameof(ReadAsync));
 
                 await _ReadLock.WaitAsync();
 
@@ -98,13 +100,13 @@ namespace Usb.Net.UWP
                         retVal = _Chunks[0];
                         Tracer?.Trace(false, retVal);
                         _Chunks.RemoveAt(0);
-                        Logger?.Log($"Read the first chunk {nameof(UWPUsbInterfaceInterruptReadEndpoint)}", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
+                        Logger?.LogDebug(Messages.DebugMessageReadFirstChunk);
                         return retVal;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger?.Log($"Error {nameof(ReadAsync)}", nameof(UWPUsbInterfaceInterruptReadEndpoint), ex, LogLevel.Error);
+                    Logger?.LogError(ex, Messages.ErrorMessageRead);
                     throw;
                 }
                 finally
@@ -115,7 +117,7 @@ namespace Usb.Net.UWP
                 //Wait for the event here. Once the event occurs, this should return and the semaphore should be released
                 _ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
 
-                Logger?.Log($"Data received lock released. Completion source created. Waiting for data.", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
+                Logger?.LogDebug(Messages.DebugMessageLockReleased);
 
                 //Cancel the completion source if the token is canceled
                 using (cancellationToken.Register(() => { _ReadChunkTaskCompletionSource.TrySetCanceled(); }))
@@ -125,13 +127,14 @@ namespace Usb.Net.UWP
 
                 _ReadChunkTaskCompletionSource = null;
 
-                Logger?.Log($"Completion source nulled", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
+                Logger?.LogDebug(Messages.DebugMessageCompletionSourceNulled);
 
                 Tracer?.Trace(false, retVal);
                 return retVal;
             }
             finally
             {
+                logScope?.Dispose();
                 _ReadLock.Release();
             }
         }

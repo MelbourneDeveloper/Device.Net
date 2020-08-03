@@ -8,7 +8,7 @@
 
         #region Success Messages
         public const string SuccessMessageGotWriteAndReadHandle = "Successfully opened handle on device for reading and writing";
-        public const string SuccessMessageWriteAndReadCalled = "Successfully called " + nameof(DeviceBase.WriteAndReadAsync) + " DeviceId: {deviceId}";
+        public const string SuccessMessageWriteAndReadCalled = "Successfully called write and read";
         public const string SuccessMessageReadFileStreamOpened = "Read file stream opened successfully";
         public const string SuccessMessageWriteFileStreamOpened = "Write file stream opened successfully";
         #endregion
@@ -34,11 +34,14 @@
         public const string ErrorMessageFlushNotImplemented = "Flush has only been implemented on Serial Port devices. Please log a Github issue if you need it.";
         public const string ErrorMessageReentry = "Reentry. This method is not thread safe";
         public const string ErrorMessageOperationNotSupportedOnPlatform = "You can't use this class on this platform";
+        public const string InformationMessageFoundDevice = "Found device";
+        public const string DebugMessageCompletionSourceNulled = "Completion source nulled";
         #endregion
 
         #region IO
+        public const string DebugMessageLockReleased = "Data received lock released. Completion source created. Waiting for data.";
         public const string GetErrorMessageInvalidWriteLength = "Write failure. {length} bytes were sent to the device but it claims that {count} were sent. Region: {region}";
-
+        public const string DebugMessageReadFirstChunk = "Read the first chunk";
         public const string ErrorMessageReadWrite = "Read/Write Error DeviceId: {deviceId}";
         public const string WriteErrorMessage = "An error occurred while attempting to write to the device";
         public const string ErrorMessageRead = "An error occurred while attempting to read from the device";
@@ -55,7 +58,7 @@
 
         #region Factories
         public const string ErrorMessageNoDeviceFactoriesRegistered = "No device factories have been registered";
-        public const string ErrorMessageCouldntGetDevice = "Couldn't get a device";
+        public const string ErrorMessageCouldntGetDevice = "Couldn't get device";
         #endregion
 
         #region USB

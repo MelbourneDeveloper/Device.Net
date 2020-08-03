@@ -200,20 +200,26 @@ namespace Hid.Net.UWP
         {
             await _WriteAndReadLock.WaitAsync();
 
+            IDisposable logScope = null;
+
             try
             {
+                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteAndReadAsync));
+
                 await WriteAsync(writeBuffer, cancellationToken);
                 var retVal = await ReadAsync(cancellationToken);
-                Logger?.Log(Messages.SuccessMessageWriteAndReadCalled, nameof(UWPHidDevice), null, LogLevel.Information);
+
+                Logger?.LogDebug(Messages.SuccessMessageWriteAndReadCalled);
                 return retVal;
             }
             catch (Exception ex)
             {
-                Log(Messages.ErrorMessageReadWrite, ex);
+                Logger?.LogError(ex, Messages.ErrorMessageReadWrite);
                 throw;
             }
             finally
             {
+                logScope?.Dispose();
                 _WriteAndReadLock.Release();
             }
         }

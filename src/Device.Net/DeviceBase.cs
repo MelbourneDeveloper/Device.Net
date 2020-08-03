@@ -46,22 +46,28 @@ namespace Device.Net
 
         public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
         {
+            if (writeBuffer == null) throw new ArgumentNullException(nameof(writeBuffer));
+
             await _WriteAndReadLock.WaitAsync();
+
+            IDisposable logScope = null;
 
             try
             {
+                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call} Write Buffer Length: {writeBufferLength}", DeviceId, nameof(WriteAndReadAsync), writeBuffer.Length);
                 await WriteAsync(writeBuffer, cancellationToken);
                 var retVal = await ReadAsync(cancellationToken);
-                Logger?.LogInformation(Messages.SuccessMessageWriteAndReadCalled, new object[] { DeviceId });
+                Logger?.LogInformation(Messages.SuccessMessageWriteAndReadCalled);
                 return retVal;
             }
             catch (Exception ex)
             {
-                Logger?.LogError(ex, Messages.ErrorMessageReadWrite, new object[] { DeviceId });
+                Logger?.LogError(ex, Messages.ErrorMessageReadWrite);
                 throw;
             }
             finally
             {
+                logScope?.Dispose();
                 _WriteAndReadLock.Release();
             }
         }

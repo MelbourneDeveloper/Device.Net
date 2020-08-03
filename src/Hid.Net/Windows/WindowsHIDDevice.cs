@@ -6,7 +6,6 @@ using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -143,7 +142,7 @@ namespace Hid.Net.Windows
             }
             catch (Exception ex)
             {
-                Logger?.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice, DeviceId, nameof(WindowsHidDevice));
+                Logger?.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
                 throw;
             }
             finally
@@ -254,56 +253,71 @@ namespace Hid.Net.Windows
 
         public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
-            if (IsReadOnly.HasValue && IsReadOnly.Value)
-            {
-                throw new ValidationException($"This device was opened in Read Only mode.");
-            }
+            IDisposable logScope = null;
 
-            if (data == null) throw new ArgumentNullException(nameof(data));
-
-            if (_WriteFileStream == null)
+            try
             {
-                throw new NotInitializedException("The device has not been initialized");
-            }
+                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteReportAsync));
 
-            if (data.Length > WriteBufferSize)
-            {
-                throw new ValidationException($"Data is longer than {WriteBufferSize - 1} bytes which is the device's OutputReportByteLength.");
-            }
-
-            byte[] bytes;
-            if (WriteBufferSize == 65)
-            {
-                if (WriteBufferSize == data.Length)
+                if (IsReadOnly.HasValue && IsReadOnly.Value)
                 {
-                    throw new DeviceException("The data sent to the device was a the same length as the HidCollectionCapabilities.OutputReportByteLength. This probably indicates that DataHasExtraByte should be set to false.");
+                    throw new ValidationException($"This device was opened in Read Only mode.");
                 }
 
-                bytes = new byte[WriteBufferSize];
-                Array.Copy(data, 0, bytes, 1, data.Length);
-                bytes[0] = reportId ?? DefaultReportId;
-            }
-            else
-            {
-                bytes = data;
-            }
+                if (data == null) throw new ArgumentNullException(nameof(data));
 
-            if (_WriteFileStream.CanWrite)
-            {
-                try
+                if (_WriteFileStream == null)
                 {
-                    await _WriteFileStream.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
-                    Tracer?.Trace(true, bytes);
+                    throw new NotInitializedException("The device has not been initialized");
                 }
-                catch (Exception ex)
+
+                if (data.Length > WriteBufferSize)
                 {
-                    Log(Messages.WriteErrorMessage, ex);
-                    throw new IOException(Messages.WriteErrorMessage, ex);
+                    throw new ValidationException($"Data is longer than {WriteBufferSize - 1} bytes which is the device's OutputReportByteLength.");
+                }
+
+                byte[] bytes;
+                if (WriteBufferSize == 65)
+                {
+                    if (WriteBufferSize == data.Length)
+                    {
+                        throw new DeviceException("The data sent to the device was a the same length as the HidCollectionCapabilities.OutputReportByteLength. This probably indicates that DataHasExtraByte should be set to false.");
+                    }
+
+                    bytes = new byte[WriteBufferSize];
+                    Array.Copy(data, 0, bytes, 1, data.Length);
+                    bytes[0] = reportId ?? DefaultReportId;
+                }
+                else
+                {
+                    bytes = data;
+                }
+
+                if (_WriteFileStream.CanWrite)
+                {
+                    try
+                    {
+                        await _WriteFileStream.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
+                        Tracer?.Trace(true, bytes);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new IOException(Messages.WriteErrorMessage, ex);
+                    }
+                }
+                else
+                {
+                    throw new IOException("The file stream cannot be written to");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                throw new IOException("The file stream cannot be written to");
+                Logger?.LogError(ex, Messages.WriteErrorMessage);
+                throw;
+            }
+            finally
+            {
+                logScope?.Dispose();
             }
         }
         #endregion

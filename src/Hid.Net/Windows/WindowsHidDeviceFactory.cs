@@ -15,21 +15,29 @@ namespace Hid.Net.Windows
         #region Protected Override Methods
         protected override ConnectedDeviceDefinition GetDeviceDefinition(string deviceId)
         {
+            IDisposable logScope = null;
+
             try
             {
+                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(GetDeviceDefinition));
+
                 using (var safeFileHandle = HidService.CreateReadConnection(deviceId, FileAccessRights.None))
                 {
                     if (safeFileHandle.IsInvalid) throw new DeviceException($"{nameof(HidService.CreateReadConnection)} call with Id of {deviceId} failed.");
 
-                    Logger?.Log($"Found device {deviceId}", nameof(WindowsHidDeviceFactory), null, LogLevel.Information);
+                    Logger?.LogDebug(Messages.InformationMessageFoundDevice);
 
                     return HidService.GetDeviceDefinition(deviceId, safeFileHandle);
                 }
             }
             catch (Exception ex)
             {
-                Logger?.Log($"{nameof(GetDeviceDefinition)} error. Device Id: {deviceId}", nameof(WindowsHidDeviceFactory), ex, LogLevel.Error);
+                Logger?.LogError(ex, Messages.ErrorMessageCouldntGetDevice);
                 return null;
+            }
+            finally
+            {
+                logScope?.Dispose();
             }
         }
 
