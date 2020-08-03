@@ -35,7 +35,7 @@ namespace Usb.Net.Windows
         {
             if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
 
-            return deviceDefinition.DeviceType != DeviceType ? null : new UsbDevice(deviceDefinition.DeviceId, new WindowsUsbInterfaceManager(deviceDefinition.DeviceId, Logger, Tracer, ReadBufferSize, WriteBufferSize), Logger, Tracer);
+            return deviceDefinition.DeviceType != DeviceType ? null : new UsbDevice(deviceDefinition.DeviceId, new WindowsUsbInterfaceManager(deviceDefinition.DeviceId, LoggerFactory.CreateLogger(nameof(WindowsUsbInterfaceManager)), Tracer, ReadBufferSize, WriteBufferSize), LoggerFactory.CreateLogger(nameof(UsbDevice)), Tracer);
         }
         #endregion
 
