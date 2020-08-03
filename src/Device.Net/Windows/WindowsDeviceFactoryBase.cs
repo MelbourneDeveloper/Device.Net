@@ -92,7 +92,7 @@ namespace Device.Net.Windows
 
                                 if (errorCode > 0)
                                 {
-                                    Log($"{nameof(APICalls.SetupDiEnumDeviceInterfaces)} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {i}. The error code was {errorCode}.", null, LogLevel.Warning);
+                                    Logger?.LogWarning("{call} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {index}. The error code was {errorCode}.", nameof(APICalls.SetupDiEnumDeviceInterfaces), i, errorCode);
                                 }
                             }
 
@@ -103,14 +103,14 @@ namespace Device.Net.Windows
 
                                 if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
                                 {
-                                    Log($"The call to {nameof(APICalls.SetupDiEnumDeviceInterfaces)} returned ERROR_NO_MORE_ITEMS", null, LogLevel.Information);
+                                    Logger?.LogDebug("The call to {call} returned ERROR_NO_MORE_ITEMS", new object[] { nameof(APICalls.SetupDiEnumDeviceInterfaces) });
                                     //TODO: This probably can't happen but leaving this here because there was some strange behaviour
                                     break;
                                 }
 
                                 if (errorCode > 0)
                                 {
-                                    Log($"{nameof(APICalls.SetupDiGetDeviceInterfaceDetail)} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {i}. The error code was {errorCode}.", null, LogLevel.Warning);
+                                    Logger?.LogWarning("{nameof(APICalls.SetupDiGetDeviceInterfaceDetail)} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {i}. The error code was {errorCode}.", nameof(APICalls.SetupDiEnumDeviceInterfaces), i, errorCode);
                                 }
                             }
 
@@ -139,11 +139,6 @@ namespace Device.Net.Windows
                             //Log and move on
                             Log(ex);
                         }
-                        finally
-                        {
-                            loggerScope?.Dispose();
-                        }
-
 #pragma warning restore CA1031
                     }
 
@@ -158,7 +153,7 @@ namespace Device.Net.Windows
                 }
                 finally
                 {
-
+                    loggerScope?.Dispose();
                 }
             });
         }
