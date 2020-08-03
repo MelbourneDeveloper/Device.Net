@@ -1,5 +1,7 @@
 using Device.Net.Exceptions;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,7 +14,7 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class UnitTests
     {
-        private static readonly MockLogger logger = new MockLogger();
+        private static readonly Mock<ILogger> logger = new Mock<ILogger>();
         private static readonly MockTracer tracer = new MockTracer();
         private static readonly IDeviceManager _DeviceManager = new DeviceManager();
 
@@ -20,8 +22,8 @@ namespace Device.Net.UnitTests
         [TestInitialize]
         public void Startup()
         {
-            _DeviceManager.RegisterDeviceFactory(new MockHidFactory(logger, tracer));
-            _DeviceManager.RegisterDeviceFactory(new MockUsbFactory(logger, tracer));
+            _DeviceManager.RegisterDeviceFactory(new MockHidFactory(logger.Object, tracer));
+            _DeviceManager.RegisterDeviceFactory(new MockUsbFactory(logger.Object, tracer));
         }
 
         [TestMethod]
@@ -75,7 +77,7 @@ namespace Device.Net.UnitTests
             var connectedDeviceDefinition = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
 
 
-            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, logger, tracer);
+            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, logger.Object, tracer);
 
             var writeAndReadTasks = new List<Task<ReadResult>>();
 
@@ -277,7 +279,7 @@ namespace Device.Net.UnitTests
         }
         #endregion
 
-#if(!NET45)
+#if !NET45
         [TestMethod]
         public async Task TestSynchronizeWithCancellationToken()
         {
@@ -286,7 +288,7 @@ namespace Device.Net.UnitTests
 
             var completed = false;
 
-            var task = Task.Run<bool>(() =>
+            var task = Task.Run(() =>
             {
                 //Iterate for one second
                 for (var i = 0; i < 100; i++)
@@ -300,7 +302,7 @@ namespace Device.Net.UnitTests
             var cancellationTokenSource = new CancellationTokenSource();
 
             //Start a task that will cancel in 500 milliseconds
-            var cancelTask = Task.Run<bool>(() =>
+            var cancelTask = Task.Run(() =>
             {
                 Thread.Sleep(500);
                 cancellationTokenSource.Cancel();

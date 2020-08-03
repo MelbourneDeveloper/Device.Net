@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 
 namespace Device.Net.UnitTests
 {
@@ -30,7 +31,7 @@ namespace Device.Net.UnitTests
 
             if (deviceDefinition.DeviceType.HasValue && deviceDefinition.DeviceType != DeviceType.Usb) throw new Exception("Couldn't get a device");
 
-            Logger?.Log(string.Format(FoundMessage, DeviceId), nameof(MockUsbFactory), null, LogLevel.Information);
+            Logger?.LogInformation(string.Format(FoundMessage, DeviceId));
 
             return new MockUsbDevice(DeviceId, Logger, Tracer);
         }

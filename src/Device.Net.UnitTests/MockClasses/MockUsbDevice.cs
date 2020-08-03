@@ -1,4 +1,6 @@
-﻿namespace Device.Net.UnitTests
+﻿using Microsoft.Extensions.Logging;
+
+namespace Device.Net.UnitTests
 {
     public class MockUsbDevice : MockDeviceBase
     {

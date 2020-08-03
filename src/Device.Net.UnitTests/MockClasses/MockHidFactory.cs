@@ -1,4 +1,6 @@
-﻿namespace Device.Net.UnitTests
+﻿using Microsoft.Extensions.Logging;
+
+namespace Device.Net.UnitTests
 {
     public class MockHidFactory : MockFactoryBase
     {
@@ -28,7 +30,7 @@
 
             if (deviceDefinition.DeviceType.HasValue && deviceDefinition.DeviceType != DeviceType.Hid) return null;
 
-            Logger?.Log(string.Format(FoundMessage, DeviceId), nameof(MockHidFactory), null, LogLevel.Information);
+            Logger?.LogInformation(string.Format(FoundMessage, DeviceId));
 
             return new MockHidDevice(DeviceId, Logger, Tracer);
         }
