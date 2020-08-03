@@ -146,7 +146,7 @@ namespace Device.Net
 
                     removeDefs.Add(filteredDeviceDefinitionKey);
 
-                    Log(Messages.InformationMessageDeviceListenerDisconnected, null);
+                    Logger?.LogDebug(Messages.InformationMessageDeviceListenerDisconnected);
                 }
 
                 foreach (var removeDef in removeDefs)
@@ -154,7 +154,7 @@ namespace Device.Net
                     _CreatedDevicesByDefinition.Remove(removeDef);
                 }
 
-                Log(Messages.InformationMessageDeviceListenerPollingComplete, null);
+                Logger?.LogDebug(Messages.InformationMessageDeviceListenerPollingComplete);
 
             }
 #pragma warning disable CA1031 // Do not catch general exception types
@@ -162,7 +162,7 @@ namespace Device.Net
 #pragma warning restore CA1031 // Do not catch general exception types
             {
                 //Log and move on
-                Log(Messages.ErrorMessagePollingError, ex);
+                Logger?.LogError(ex, Messages.ErrorMessagePollingError);
 
                 //TODO: What else to do here?
             }

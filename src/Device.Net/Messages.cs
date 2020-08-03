@@ -26,6 +26,7 @@
         public const string ErrorMessageCantOpenRead = "Could not open connection for reading";
         public const string DeviceDisposedErrorMessage = "This device has already been disposed";
         public static string GetErrorMessageCantConnect(string deviceId) => $"Could not connect to device with Device Id {deviceId}. Check that the package manifest has been configured to allow this device.";
+        public const string ErrorMessageCantClose = "Error closing device. DeviceId: {deviceId} Region: {region}";
         #endregion
 
         #region Misc
