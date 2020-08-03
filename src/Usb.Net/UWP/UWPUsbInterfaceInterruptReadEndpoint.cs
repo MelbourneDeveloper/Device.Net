@@ -47,7 +47,7 @@ namespace Usb.Net.UWP
 
                 if (bytes != null)
                 {
-                    Logger?.Log($"{bytes.Length} read on interrupt pipe {UsbInterruptInPipe.EndpointDescriptor.EndpointNumber}", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
+                    Logger?.LogInformation("{bytesLength} read on interrupt pipe {endpointNumber}", bytes.Length, UsbInterruptInPipe.EndpointDescriptor.EndpointNumber);
                 }
 
                 if (_ReadChunkTaskCompletionSource != null && _ReadChunkTaskCompletionSource.Task.Status != TaskStatus.RanToCompletion)
@@ -57,7 +57,7 @@ namespace Usb.Net.UWP
                     var result = _Chunks[0];
                     _Chunks.RemoveAt(0);
                     _ReadChunkTaskCompletionSource.SetResult(result);
-                    Logger?.Log($"Completion source result set", nameof(UWPUsbInterfaceInterruptReadEndpoint), null, LogLevel.Information);
+                    Logger?.LogInformation($"Completion source result set");
                     return;
                 }
             }

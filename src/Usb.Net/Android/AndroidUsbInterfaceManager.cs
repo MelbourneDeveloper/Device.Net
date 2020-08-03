@@ -5,7 +5,6 @@ using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using usbDevice = Android.Hardware.Usb.UsbDevice;
@@ -98,7 +97,7 @@ namespace Usb.Net.Android
         #region Private  Methods
         private Task<bool?> RequestPermissionAsync()
         {
-            Logger?.Log("Requesting USB permission", nameof(AndroidUsbInterfaceManager), null, LogLevel.Information);
+            Logger?.LogInformation("Requesting USB permission");
 
             var taskCompletionSource = new TaskCompletionSource<bool?>();
 
@@ -115,8 +114,12 @@ namespace Usb.Net.Android
 
         public async Task InitializeAsync()
         {
+            IDisposable logScope = null;
+
             try
             {
+                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", _UsbDevice.DeviceId, nameof(InitializeAsync));
+
                 if (disposed) throw new DeviceException(Messages.DeviceDisposedErrorMessage);
 
                 await _InitializingSemaphoreSlim.WaitAsync();
@@ -124,12 +127,13 @@ namespace Usb.Net.Android
                 Close();
 
                 _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceNumberId);
+
                 if (_UsbDevice == null)
                 {
                     throw new DeviceException($"The device {DeviceNumberId} is not connected to the system");
                 }
-                Logger?.Log($"Found device: {_UsbDevice.DeviceName} Id: {_UsbDevice.DeviceId}", nameof(AndroidUsbInterfaceManager), null, LogLevel.Information);
 
+                Logger?.LogInformation("Found device: {deviceName} Id: {deviceId}", _UsbDevice.DeviceName, _UsbDevice.DeviceId);
 
                 var isPermissionGranted = await RequestPermissionAsync();
                 if (!isPermissionGranted.HasValue)
@@ -170,22 +174,21 @@ namespace Usb.Net.Android
                     }
                 }
 
-                Log("Hid device initialized. About to tell everyone.", null);
+                Logger?.LogInformation("Hid device initialized. About to tell everyone.");
 
                 RegisterDefaultInterfaces();
             }
             catch (Exception ex)
             {
-                Log("Error initializing Hid Device", ex);
+                Logger?.LogError(ex, "Hid device initialized. About to tell everyone.");
                 throw;
             }
             finally
             {
+                logScope?.Dispose();
                 _InitializingSemaphoreSlim.Release();
             }
         }
-
-        private void Log(string message, Exception ex, [CallerMemberName] string region = null) => Logger?.Log(message, region, ex, LogLevel.Error);
 
         public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync() => Task.Run<ConnectedDeviceDefinitionBase>(() => { return AndroidUsbDeviceFactory.GetAndroidDeviceDefinition(_UsbDevice); });
         #endregion

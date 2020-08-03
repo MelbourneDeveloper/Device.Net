@@ -25,7 +25,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsUsbDeviceFactory(ILogger<WindowsUsbDeviceFactory> logger, ITracer tracer) : base(logger, tracer)
+        public WindowsUsbDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer) : base(loggerFactory, tracer)
         {
         }
         #endregion
@@ -48,14 +48,16 @@ namespace Usb.Net.Windows
         /// Register the factory for enumerating USB devices in Windows.
         /// </summary>
         [Obsolete(DeviceManager.ObsoleteMessage)]
-        public static void Register(ILogger logger, ITracer tracer) => DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory(logger, tracer));
+        public static void Register(ILoggerFactory loggerFactory, ITracer tracer) => DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory(loggerFactory, tracer));
 
         public static ConnectedDeviceDefinition GetDeviceDefinition(SafeFileHandle defaultInterfaceHandle, string deviceId)
         {
             var deviceDefinition = new ConnectedDeviceDefinition(deviceId) { DeviceType = DeviceType.Usb };
 
             var bufferLength = (uint)Marshal.SizeOf(typeof(USB_DEVICE_DESCRIPTOR));
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             var isSuccess2 = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, WinUsbApiCalls.EnglishLanguageID, out var _UsbDeviceDescriptor, bufferLength, out var lengthTransferred);
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
             WindowsDeviceBase.HandleError(isSuccess2, "Couldn't get device descriptor");
 
             if (_UsbDeviceDescriptor.iProduct > 0)
