@@ -3,6 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System.Threading.Tasks;
 using Usb.Net;
+using Moq;
+using Microsoft.Extensions.Logging;
 #if !WINDOWS_UWP
 using Usb.Net.Windows;
 using Device.Net.Exceptions;
@@ -42,7 +44,7 @@ namespace Device.Net.UnitTests
         public async Task TestDeviceIdIsPersisted()
         {
             var deviceId = "asd";
-            var windowsUsbDevice = new WindowsUsbDevice(deviceId, new DebugLogger(), new DebugTracer(), 80, 80);
+            var windowsUsbDevice = new WindowsUsbDevice(deviceId, new Mock<ILoggerFactory>().Object, new DebugTracer(), 80, 80);
             Assert.AreEqual(deviceId, windowsUsbDevice.DeviceId);
         }
 #endif

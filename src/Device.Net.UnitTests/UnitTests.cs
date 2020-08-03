@@ -1,3 +1,6 @@
+
+#if !NET45
+
 using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,16 +17,50 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class UnitTests
     {
-        private static readonly Mock<ILogger> logger = new Mock<ILogger>();
+        private static readonly Mock<ILogger> loggerMock = new Mock<ILogger>();
         private static readonly MockTracer tracer = new MockTracer();
         private static readonly IDeviceManager _DeviceManager = new DeviceManager();
+
+        private static void CheckLogMessageText(string containsText)
+        {
+            loggerMock.Verify
+            (
+                l => l.Log
+                (
+                    //Check the severity level
+                    LogLevel.Error,
+                    //This may or may not be relevant to your scenario
+                    It.IsAny<EventId>(),
+                    //This is the magical Moq code that exposes internal log processing from the extension methods
+                    It.Is<It.IsAnyType>((state, t) =>
+                        //This confirms that the correct log message was sent to the logger. {OriginalFormat} should match the value passed to the logger
+                        //Note: messages should be retrieved from a service that will probably store the strings in a resource file
+                        ((string)GetValue(state, "{OriginalFormat}")).Contains(containsText)
+                ),
+                //Confirm the exception type
+                It.IsAny<NotImplementedException>(),
+                //Accept any valid Func here. The Func is specified by the extension methods
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                //Make sure the message was logged the correct number of times
+                Times.Exactly(1)
+            );
+        }
+
+        private static object GetValue(object state, string key)
+        {
+            var keyValuePairList = (IReadOnlyList<KeyValuePair<string, object>>)state;
+
+            var actualValue = keyValuePairList.First(kvp => string.Compare(kvp.Key, key, StringComparison.Ordinal) == 0).Value;
+
+            return actualValue;
+        }
 
         #region Tests
         [TestInitialize]
         public void Startup()
         {
-            _DeviceManager.RegisterDeviceFactory(new MockHidFactory(logger.Object, tracer));
-            _DeviceManager.RegisterDeviceFactory(new MockUsbFactory(logger.Object, tracer));
+            _DeviceManager.RegisterDeviceFactory(new MockHidFactory(loggerMock.Object, tracer));
+            _DeviceManager.RegisterDeviceFactory(new MockUsbFactory(loggerMock.Object, tracer));
         }
 
         [TestMethod]
@@ -50,12 +87,12 @@ namespace Device.Net.UnitTests
 
                     if (device != null && connectedDeviceDefinition.DeviceType == DeviceType.Hid)
                     {
-                        Assert.IsTrue(logger.LogText.Contains(string.Format(MockHidFactory.FoundMessage, connectedDeviceDefinition.DeviceId)));
+                        CheckLogMessageText(string.Format(MockHidFactory.FoundMessage, connectedDeviceDefinition.DeviceId));
                     }
 
                     if (device != null && connectedDeviceDefinition.DeviceType == DeviceType.Usb)
                     {
-                        Assert.IsTrue(logger.LogText.Contains(string.Format(MockUsbFactory.FoundMessage, connectedDeviceDefinition.DeviceId)));
+                        CheckLogMessageText(string.Format(MockUsbFactory.FoundMessage, connectedDeviceDefinition.DeviceId));
                     }
                 }
             }
@@ -77,7 +114,7 @@ namespace Device.Net.UnitTests
             var connectedDeviceDefinition = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
 
 
-            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, logger.Object, tracer);
+            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, loggerMock.Object, tracer);
 
             var writeAndReadTasks = new List<Task<ReadResult>>();
 
@@ -101,7 +138,7 @@ namespace Device.Net.UnitTests
             Assert.AreEqual(readtraceCount + count, tracer.ReadCount);
             Assert.AreEqual(writetraceCount + count, tracer.WriteCount);
 
-            Assert.IsTrue(logger.LogText.Contains(Messages.SuccessMessageWriteAndReadCalled));
+            CheckLogMessageText(Messages.SuccessMessageWriteAndReadCalled);
         }
 
         [TestMethod]
@@ -279,7 +316,6 @@ namespace Device.Net.UnitTests
         }
         #endregion
 
-#if !NET45
         [TestMethod]
         public async Task TestSynchronizeWithCancellationToken()
         {
@@ -325,6 +361,6 @@ namespace Device.Net.UnitTests
             //Ensure the task wasn't completed
             Assert.IsFalse(completed);
         }
-#endif
     }
 }
+#endif
