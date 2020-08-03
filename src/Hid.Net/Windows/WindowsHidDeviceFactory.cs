@@ -50,12 +50,12 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidDeviceFactory(ILogger logger, ITracer tracer) : this(logger, tracer, null)
+        public WindowsHidDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer) : this(loggerFactory, tracer, null)
         {
 
         }
 
-        public WindowsHidDeviceFactory(ILogger logger, ITracer tracer, IHidApiService hidService) : base(logger, tracer)
+        public WindowsHidDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer, IHidApiService hidService) : base(loggerFactory, tracer)
         {
             HidService = hidService;
 
@@ -84,7 +84,7 @@ namespace Hid.Net.Windows
         /// Register the factory for enumerating Hid devices on UWP. 
         /// </summary>
         [Obsolete(DeviceManager.ObsoleteMessage)]
-        public static void Register(ILogger logger, ITracer tracer) => DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory(logger, tracer));
+        public static void Register(ILoggerFactory loggerFactory, ITracer tracer) => DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory(loggerFactory, tracer));
         #endregion
     }
 }

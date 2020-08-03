@@ -16,13 +16,17 @@ namespace SerialPort.Net.Windows
         #region Public Properties
         public DeviceType DeviceType => DeviceType.SerialPort;
         public ILogger Logger { get; }
+        public ILoggerFactory LoggerFactory { get; }
         public ITracer Tracer { get; }
         #endregion
 
         #region Constructor
-        public WindowsSerialPortDeviceFactory(ILogger logger, ITracer tracer)
+        public WindowsSerialPortDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer)
         {
-            Logger = logger;
+            LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+
+            //Note this loggerfactory may get shared with other factories of this type
+            Logger = loggerFactory.CreateLogger(nameof(WindowsSerialPortDeviceFactory));
             Tracer = tracer;
         }
         #endregion
@@ -93,7 +97,7 @@ namespace SerialPort.Net.Windows
         }
 
         [Obsolete(DeviceManager.ObsoleteMessage)]
-        public static void Register(ILogger logger, ITracer tracer) => DeviceManager.Current.DeviceFactories.Add(new WindowsSerialPortDeviceFactory(logger, tracer));
+        public static void Register(ILoggerFactory loggerFactory, ITracer tracer) => DeviceManager.Current.DeviceFactories.Add(new WindowsSerialPortDeviceFactory(loggerFactory, tracer));
         #endregion
     }
 }

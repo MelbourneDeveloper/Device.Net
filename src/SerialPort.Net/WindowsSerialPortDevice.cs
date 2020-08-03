@@ -1,5 +1,6 @@
 ﻿using Device.Net;
 using Device.Net.Windows;
+using Microsoft.Extensions.Logging;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
@@ -130,6 +131,7 @@ namespace SerialPort.Net.Windows
             dcb.fAbortOnError = 0;
 
             dcb.fParity = 1;
+#pragma warning disable IDE0010 // Add missing cases
             switch (_Parity)
             {
                 case Parity.Even:
@@ -163,6 +165,7 @@ namespace SerialPort.Net.Windows
                 default:
                     throw new ArgumentException(Messages.ErrorMessageStopBitsMustBeSpecified);
             }
+#pragma warning restore IDE0010 // Add missing cases
 
             isSuccess = ApiService.ASetCommState(_ReadSafeFileHandle, ref dcb);
             WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorCouldNotSetCommState);

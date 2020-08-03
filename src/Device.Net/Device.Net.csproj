@@ -39,6 +39,10 @@
       <PackagePath></PackagePath>
     </None>
     <None Include="..\..\README.md" Link="README.md" />
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>    
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0' And '$(TargetFramework)' != 'net45'">
@@ -53,39 +57,11 @@
     <None Remove="UWP\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
 	<ItemGroup Condition="'$(TargetFramework)' != 'net45'">
 		<Compile Remove="Logging/*.*" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'monoandroid10.0'">
 	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
 	    <Version>3.1.6</Version>
-	  </PackageReference>
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
-	    <Version>3.1.6</Version>
-	  </PackageReference>
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
-	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
-	    <Version>3.1.6</Version>
-	  </PackageReference>
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'MonoAndroid90'">
-	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
-	    <Version>3.1.6</Version>
-	  </PackageReference>
+	  </PackageReference>    
 	</ItemGroup>
 
 </Project>

@@ -15,6 +15,7 @@ namespace Device.Net.Windows
     {
         #region Public Properties
         public ILogger Logger { get; }
+        public ILoggerFactory LoggerFactory { get; }
         public ITracer Tracer { get; }
         #endregion
 
@@ -28,9 +29,10 @@ namespace Device.Net.Windows
         #endregion
 
         #region Constructor
-        protected WindowsDeviceFactoryBase(ILogger logger, ITracer tracer)
+        protected WindowsDeviceFactoryBase(ILoggerFactory loggerFactory, ITracer tracer)
         {
-            Logger = logger;
+            LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+            Logger = loggerFactory.CreateLogger(nameof(WindowsDeviceFactoryBase));
             Tracer = tracer;
         }
         #endregion

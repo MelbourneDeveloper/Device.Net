@@ -2,6 +2,9 @@
 using System.Threading.Tasks;
 using Usb.Net.Sample;
 using Device.Net;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 #if !LIBUSB
 using System.Threading;
@@ -30,6 +33,29 @@ namespace Usb.Net.WindowsSample
         #region Main
         private static void Main()
         {
+
+
+            var hostBuilder = Host.CreateDefaultBuilder().
+            ConfigureLogging((builderContext, loggingBuilder) =>
+            {
+                loggingBuilder.AddConsole((options) =>
+                {
+                    //This displays arguments from the scope
+                    options.IncludeScopes = true;
+                });
+            });
+
+            var host = hostBuilder.Build();
+            var logger = host.Services.GetRequiredService<ILogger<WindowsHidDeviceFactory>>();
+            //This specifies that every time a log message is logged, the correlation id will be logged as part of it
+            using (logger.BeginScope("Correlation ID: {correlationID}", 123))
+            {
+                logger.LogInformation("Test");
+                logger.LogInformation("Test2");
+            }
+
+
+
             //Register the factories for creating Usb devices. This only needs to be done once.
 #if LIBUSB
             _DeviceManager.RegisterDeviceFactory(new LibUsbUsbDeviceFactory(Logger, Tracer));

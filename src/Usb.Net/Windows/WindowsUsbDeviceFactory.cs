@@ -25,7 +25,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsUsbDeviceFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
+        public WindowsUsbDeviceFactory(ILogger<WindowsUsbDeviceFactory> logger, ITracer tracer) : base(logger, tracer)
         {
         }
         #endregion
