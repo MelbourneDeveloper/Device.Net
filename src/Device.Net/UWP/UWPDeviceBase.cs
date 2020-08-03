@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
@@ -23,8 +22,6 @@ namespace Device.Net.UWP
         #endregion
 
         #region Protected Methods
-        protected void Log(string message, Exception ex) => Logger?.Log(message, nameof(UWPDeviceFactoryBase), ex, LogLevel.Error);
-
         protected void HandleDataReceived(byte[] bytes)
         {
             if (!IsReading)

@@ -31,5 +31,7 @@
         /// Used to further filter down device definitions on some platforms
         /// </summary>
         public ushort? UsagePage { get; set; }
+
+        public override string ToString() => $"VendorId: {VendorId} Product Id: {ProductId}";
     }
 }

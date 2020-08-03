@@ -40,105 +40,126 @@ namespace Device.Net.Windows
         {
             return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(() =>
             {
-                var deviceDefinitions = new Collection<ConnectedDeviceDefinition>();
-                var spDeviceInterfaceData = new SpDeviceInterfaceData();
-                var spDeviceInfoData = new SpDeviceInfoData();
-                var spDeviceInterfaceDetailData = new SpDeviceInterfaceDetailData();
-                spDeviceInterfaceData.CbSize = (uint)Marshal.SizeOf(spDeviceInterfaceData);
-                spDeviceInfoData.CbSize = (uint)Marshal.SizeOf(spDeviceInfoData);
-                string productIdHex = null;
-                string vendorHex = null;
+                IDisposable loggerScope = null;
 
-                var guidString = GetClassGuid().ToString();
-                var copyOfClassGuid = new Guid(guidString);
-                const int flags = APICalls.DigcfDeviceinterface | APICalls.DigcfPresent;
-
-                Log($"About to call {nameof(APICalls.SetupDiGetClassDevs)} for class Guid {guidString}. Flags: {flags}", null, LogLevel.Information);
-
-                var devicesHandle = APICalls.SetupDiGetClassDevs(ref copyOfClassGuid, IntPtr.Zero, IntPtr.Zero, flags);
-
-                spDeviceInterfaceDetailData.CbSize = IntPtr.Size == 8 ? 8 : 4 + Marshal.SystemDefaultCharSize;
-
-                var i = -1;
-
-                if (filterDeviceDefinition != null)
+                try
                 {
-                    if (filterDeviceDefinition.ProductId.HasValue) productIdHex = Helpers.GetHex(filterDeviceDefinition.ProductId);
-                    if (filterDeviceDefinition.VendorId.HasValue) vendorHex = Helpers.GetHex(filterDeviceDefinition.VendorId);
-                }
+                    Logger?.BeginScope("Filter Device Definition: {filterDeviceDefinition}", new object[] { filterDeviceDefinition.ToString() });
 
-                while (true)
+                    var deviceDefinitions = new Collection<ConnectedDeviceDefinition>();
+                    var spDeviceInterfaceData = new SpDeviceInterfaceData();
+                    var spDeviceInfoData = new SpDeviceInfoData();
+                    var spDeviceInterfaceDetailData = new SpDeviceInterfaceDetailData();
+                    spDeviceInterfaceData.CbSize = (uint)Marshal.SizeOf(spDeviceInterfaceData);
+                    spDeviceInfoData.CbSize = (uint)Marshal.SizeOf(spDeviceInfoData);
+                    string productIdHex = null;
+                    string vendorHex = null;
+
+                    var guidString = GetClassGuid().ToString();
+                    var copyOfClassGuid = new Guid(guidString);
+                    const int flags = APICalls.DigcfDeviceinterface | APICalls.DigcfPresent;
+
+                    Logger?.LogDebug("About to call {call} for class Guid {guidString}. Flags: {flags}", nameof(APICalls.SetupDiGetClassDevs), guidString, flags);
+
+                    var devicesHandle = APICalls.SetupDiGetClassDevs(ref copyOfClassGuid, IntPtr.Zero, IntPtr.Zero, flags);
+
+                    spDeviceInterfaceDetailData.CbSize = IntPtr.Size == 8 ? 8 : 4 + Marshal.SystemDefaultCharSize;
+
+                    var i = -1;
+
+                    if (filterDeviceDefinition != null)
+                    {
+                        if (filterDeviceDefinition.ProductId.HasValue) productIdHex = Helpers.GetHex(filterDeviceDefinition.ProductId);
+                        if (filterDeviceDefinition.VendorId.HasValue) vendorHex = Helpers.GetHex(filterDeviceDefinition.VendorId);
+                    }
+
+                    while (true)
+                    {
+                        try
+                        {
+                            i++;
+
+                            var isSuccess = APICalls.SetupDiEnumDeviceInterfaces(devicesHandle, IntPtr.Zero, ref copyOfClassGuid, (uint)i, ref spDeviceInterfaceData);
+                            if (!isSuccess)
+                            {
+                                var errorCode = Marshal.GetLastWin32Error();
+
+                                if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
+                                {
+                                    Logger?.LogDebug("The call to " + nameof(APICalls.SetupDiEnumDeviceInterfaces) + "  returned ERROR_NO_MORE_ITEMS");
+                                    break;
+                                }
+
+                                if (errorCode > 0)
+                                {
+                                    Log($"{nameof(APICalls.SetupDiEnumDeviceInterfaces)} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {i}. The error code was {errorCode}.", null, LogLevel.Warning);
+                                }
+                            }
+
+                            isSuccess = APICalls.SetupDiGetDeviceInterfaceDetail(devicesHandle, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
+                            if (!isSuccess)
+                            {
+                                var errorCode = Marshal.GetLastWin32Error();
+
+                                if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
+                                {
+                                    Log($"The call to {nameof(APICalls.SetupDiEnumDeviceInterfaces)} returned ERROR_NO_MORE_ITEMS", null, LogLevel.Information);
+                                    //TODO: This probably can't happen but leaving this here because there was some strange behaviour
+                                    break;
+                                }
+
+                                if (errorCode > 0)
+                                {
+                                    Log($"{nameof(APICalls.SetupDiGetDeviceInterfaceDetail)} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {i}. The error code was {errorCode}.", null, LogLevel.Warning);
+                                }
+                            }
+
+                            //Note this is a bit nasty but we can filter Vid and Pid this way I think...
+                            if (filterDeviceDefinition != null)
+                            {
+                                if (filterDeviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
+                                if (filterDeviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
+                            }
+
+                            var connectedDeviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
+
+                            if (connectedDeviceDefinition == null)
+                            {
+                                Logger?.LogWarning("Device with path {devicePath} was skipped. Area: {area} See previous logs.", spDeviceInterfaceDetailData.DevicePath, GetType().Name);
+                                continue;
+                            }
+
+                            if (!DeviceManager.IsDefinitionMatch(filterDeviceDefinition, connectedDeviceDefinition)) continue;
+
+                            deviceDefinitions.Add(connectedDeviceDefinition);
+                        }
+#pragma warning disable CA1031
+                        catch (Exception ex)
+                        {
+                            //Log and move on
+                            Log(ex);
+                        }
+                        finally
+                        {
+                            loggerScope?.Dispose();
+                        }
+
+#pragma warning restore CA1031
+                    }
+
+                    APICalls.SetupDiDestroyDeviceInfoList(devicesHandle);
+
+                    return deviceDefinitions;
+                }
+                catch (Exception ex)
                 {
-                    try
-                    {
-                        i++;
-
-                        var isSuccess = APICalls.SetupDiEnumDeviceInterfaces(devicesHandle, IntPtr.Zero, ref copyOfClassGuid, (uint)i, ref spDeviceInterfaceData);
-                        if (!isSuccess)
-                        {
-                            var errorCode = Marshal.GetLastWin32Error();
-
-                            if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
-                            {
-                                Log($"The call to {nameof(APICalls.SetupDiEnumDeviceInterfaces)} returned ERROR_NO_MORE_ITEMS", null, LogLevel.Information);
-                                break;
-                            }
-
-                            if (errorCode > 0)
-                            {
-                                Log($"{nameof(APICalls.SetupDiEnumDeviceInterfaces)} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {i}. The error code was {errorCode}.", null, LogLevel.Warning);
-                            }
-                        }
-
-                        isSuccess = APICalls.SetupDiGetDeviceInterfaceDetail(devicesHandle, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
-                        if (!isSuccess)
-                        {
-                            var errorCode = Marshal.GetLastWin32Error();
-
-                            if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
-                            {
-                                Log($"The call to {nameof(APICalls.SetupDiEnumDeviceInterfaces)} returned ERROR_NO_MORE_ITEMS", null, LogLevel.Information);
-                                //TODO: This probably can't happen but leaving this here because there was some strange behaviour
-                                break;
-                            }
-
-                            if (errorCode > 0)
-                            {
-                                Log($"{nameof(APICalls.SetupDiGetDeviceInterfaceDetail)} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {i}. The error code was {errorCode}.", null, LogLevel.Warning);
-                            }
-                        }
-
-                        //Note this is a bit nasty but we can filter Vid and Pid this way I think...
-                        if (filterDeviceDefinition != null)
-                        {
-                            if (filterDeviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
-                            if (filterDeviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
-                        }
-
-                        var connectedDeviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
-
-                        if (connectedDeviceDefinition == null)
-                        {
-                            Logger?.LogWarning("Device with path {devicePath} was skipped. Area: {area} See previous logs.", spDeviceInterfaceDetailData.DevicePath, GetType().Name);
-                            continue;
-                        }
-
-                        if (!DeviceManager.IsDefinitionMatch(filterDeviceDefinition, connectedDeviceDefinition)) continue;
-
-                        deviceDefinitions.Add(connectedDeviceDefinition);
-                    }
-#pragma warning disable CA1031 
-                    catch (Exception ex)
-                    {
-                        //Log and move on
-                        Log(ex);
-                    }
-#pragma warning restore CA1031 
+                    Logger?.LogError(ex, "Error calling " + nameof(GetConnectedDeviceDefinitionsAsync) + " region:{region}", new object[] { nameof(WindowsDeviceFactoryBase) });
+                    throw;
                 }
+                finally
+                {
 
-                APICalls.SetupDiDestroyDeviceInfoList(devicesHandle);
-
-                return deviceDefinitions;
+                }
             });
         }
         #endregion

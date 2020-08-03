@@ -115,7 +115,7 @@ namespace Device.Net
 
                     if (device.IsInitialized) continue;
 
-                    Log($"Attempting to initialize with DeviceId of {device.DeviceId}", null);
+                    Logger?.LogDebug("Attempting to initialize with DeviceId of {deviceId}", device.DeviceId);
 
                     //The device is not initialized so initialize it
                     await device.InitializeAsync();
@@ -123,7 +123,7 @@ namespace Device.Net
                     //Let listeners know a registered device was initialized
                     DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
 
-                    Log(Messages.InformationMessageDeviceConnected, null);
+                    Logger?.LogDebug(Messages.InformationMessageDeviceConnected, device.DeviceId);
                 }
 
                 var removeDefs = new List<FilterDeviceDefinition>();
