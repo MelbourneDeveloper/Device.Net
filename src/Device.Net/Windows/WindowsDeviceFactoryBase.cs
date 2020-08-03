@@ -174,7 +174,7 @@ namespace Device.Net.Windows
 #pragma warning restore CA1031 
             {
                 //If anything goes wrong here, log it and move on. 
-                logger?.Log($"Error {ex.Message}", nameof(GetDeviceDefinitionFromWindowsDeviceId), ex, LogLevel.Error);
+                logger?.LogError(ex, "Error {errorMessage} Area: {area}", ex.Message, nameof(GetDeviceDefinitionFromWindowsDeviceId));
             }
 
             return new ConnectedDeviceDefinition(deviceId) { DeviceType = deviceType, VendorId = vid, ProductId = pid };

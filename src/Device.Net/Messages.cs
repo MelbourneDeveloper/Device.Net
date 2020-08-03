@@ -47,7 +47,7 @@
         public const string InformationMessageDeviceListenerPollingComplete = "Poll complete";
         public const string InformationMessageDeviceListenerDisconnected = "Disconnected";
         public const string ErrorMessagePollingError = "Hid polling error";
-        public const string InformationMessageDeviceConnected = "Device connected";
+        public const string InformationMessageDeviceConnected = "Device connected. DeviceId: {deviceId}";
         public const string ErrorMessagePollingNotEnabled = "Polling is not enabled. Please specify pollMilliseconds in the constructor";
         #endregion
 
