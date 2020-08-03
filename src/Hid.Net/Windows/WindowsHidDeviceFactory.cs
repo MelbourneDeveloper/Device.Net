@@ -57,11 +57,13 @@ namespace Hid.Net.Windows
 
         public WindowsHidDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer, IHidApiService hidService) : base(loggerFactory, tracer)
         {
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+
             HidService = hidService;
 
             if (HidService == null)
             {
-                HidService = new WindowsHidApiService(logger);
+                HidService = new WindowsHidApiService(loggerFactory.CreateLogger(nameof(WindowsHidApiService)));
             }
         }
         #endregion

@@ -20,6 +20,7 @@ namespace Usb.Net.Android
         public Context Context { get; }
         public ILogger Logger { get; }
         public ITracer Tracer { get; }
+        public ILoggerFactory LoggerFactory { get; }
         public ushort? ReadBufferSize { get; set; }
         public ushort? WriteBufferSize { get; set; }
         #endregion
@@ -29,11 +30,14 @@ namespace Usb.Net.Android
         #endregion
 
         #region Constructor
-        public AndroidUsbDeviceFactory(UsbManager usbManager, Context context, ILogger logger, ITracer tracer)
+        public AndroidUsbDeviceFactory(UsbManager usbManager, Context context, ILoggerFactory loggerFactory, ITracer tracer)
         {
-            UsbManager = usbManager;
-            Context = context;
-            Logger = logger;
+            UsbManager = usbManager ?? throw new ArgumentNullException(nameof(usbManager));
+            Context = context ?? throw new ArgumentNullException(nameof(context));
+            LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+
+            //Warning: this may get used by other android factories
+            Logger = LoggerFactory.CreateLogger(nameof(AndroidUsbDeviceFactory));
             Tracer = tracer;
         }
         #endregion
@@ -87,7 +91,7 @@ namespace Usb.Net.Android
         /// Register the factory for enumerating USB devices on Android.
         /// </summary>
         [Obsolete(DeviceManager.ObsoleteMessage)]
-        public static void Register(UsbManager usbManager, Context context, ILogger logger, ITracer tracer) => DeviceManager.Current.DeviceFactories.Add(new AndroidUsbDeviceFactory(usbManager, context, logger, tracer));
+        public static void Register(UsbManager usbManager, Context context, ILoggerFactory loggerFactory, ITracer tracer) => DeviceManager.Current.DeviceFactories.Add(new AndroidUsbDeviceFactory(usbManager, context, loggerFactory, tracer));
         #endregion
     }
 }

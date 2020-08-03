@@ -152,8 +152,8 @@ namespace Hid.Net.UWP
                 }
                 else
                 {
-                    Logger?.LogError(Messages.GetErrorMessageInvalidWriteLength, bytes.Length, count, GetType().Name);
-                    throw new IOException(Messages.GetErrorMessageInvalidWriteLength + " see log for details");
+                    Logger?.LogError(Messages.GetErrorMessageInvalidWriteLength(bytes.Length, count) + "{length} {count}", bytes.Length, count, GetType().Name);
+                    throw new IOException(Messages.GetErrorMessageInvalidWriteLength(bytes.Length, count));
                 }
             }
             catch (ArgumentException ex)

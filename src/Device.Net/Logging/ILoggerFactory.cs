@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace Device.Net
+﻿namespace Microsoft.Extensions.Logging
 {
     public interface ILoggerFactory
     {
