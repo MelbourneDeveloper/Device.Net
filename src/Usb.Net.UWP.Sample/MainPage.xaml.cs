@@ -29,8 +29,8 @@ namespace Usb.Net.UWP.Sample
 
             _DeviceConnectionExample = new TrezorExample(_DeviceManager);
 
-            _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
-            _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
+            _DeviceConnectionExample.TrezorInitialized += DeviceConnectionExample_TrezorInitialized;
+            _DeviceConnectionExample.TrezorDisconnected += DeviceConnectionExample_TrezorDisconnected;
 
             var logger = new DebugLogger();
             var tracer = new DebugTracer();
@@ -47,7 +47,7 @@ namespace Usb.Net.UWP.Sample
         #endregion
 
         #region Event Handlers
-        private void _DeviceConnectionExample_TrezorDisconnected(object sender, System.EventArgs e)
+        private void DeviceConnectionExample_TrezorDisconnected(object sender, System.EventArgs e)
         {
             Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
@@ -57,7 +57,7 @@ namespace Usb.Net.UWP.Sample
             });
         }
 
-        private void _DeviceConnectionExample_TrezorInitialized(object sender, System.EventArgs e)
+        private void DeviceConnectionExample_TrezorInitialized(object sender, System.EventArgs e)
         {
             Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {

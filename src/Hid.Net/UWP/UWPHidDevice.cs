@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.UWP;
+using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -59,20 +60,35 @@ namespace Hid.Net.UWP
         public override async Task InitializeAsync()
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
+            IDisposable loggerScope = null;
 
-            if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
-
-            Log("Initializing Hid device", null);
-
-            await GetDeviceAsync(DeviceId);
-
-            if (ConnectedDevice != null)
+            try
             {
-                ConnectedDevice.InputReportReceived += HidDevice_InputReportReceived;
+                loggerScope = Logger?.BeginScope("DeviceId: {deviceId} Region: {region}", DeviceId, nameof(UWPHidDevice));
+
+                if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
+
+                Logger?.LogDebug(Messages.InformationMessageInitializingDevice);
+
+                await GetDeviceAsync(DeviceId);
+
+                if (ConnectedDevice != null)
+                {
+                    ConnectedDevice.InputReportReceived += HidDevice_InputReportReceived;
+                }
+                else
+                {
+                    throw new DeviceException($"The device {DeviceId} failed to initialize");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                throw new DeviceException($"The device {DeviceId} failed to initialize");
+                Logger?.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
+                throw;
+            }
+            finally
+            {
+                loggerScope?.Dispose();
             }
         }
 
@@ -136,9 +152,8 @@ namespace Hid.Net.UWP
                 }
                 else
                 {
-                    var message = Messages.GetErrorMessageInvalidWriteLength(bytes.Length, count);
-                    Logger?.Log(message, GetType().Name, null, LogLevel.Error);
-                    throw new IOException(message);
+                    Logger?.LogError(Messages.GetErrorMessageInvalidWriteLength, bytes.Length, count, GetType().Name);
+                    throw new IOException(Messages.GetErrorMessageInvalidWriteLength + " see log for details");
                 }
             }
             catch (ArgumentException ex)

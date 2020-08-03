@@ -57,7 +57,7 @@ namespace Device.Net.UWP
                 if (Chunks.Count > 0)
                 {
                     var data2 = Chunks[0];
-                    Logger?.Log("Received data from device", GetType().Name, null, LogLevel.Information);
+                    Logger?.LogDebug("Received data from device Region: {region}", GetType().Name);
                     Chunks.RemoveAt(0);
                     Tracer?.Trace(false, data2);
                     return data2;

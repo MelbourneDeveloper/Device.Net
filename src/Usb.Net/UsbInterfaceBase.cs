@@ -1,5 +1,6 @@
 ﻿using Device.Net;
 using Device.Net.Exceptions;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,13 +105,13 @@ namespace Usb.Net
             if (ReadEndpoint == null && InterruptReadEndpoint != null)
             {
                 ReadEndpoint = InterruptReadEndpoint;
-                Logger.Log(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, true), nameof(UsbInterfaceBase), null, LogLevel.Warning);
+                Logger?.LogWarning(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, true) + " Interface # : {interfaceNumber} IsRead: {isRead} Region: {region}", InterfaceNumber, true, nameof(UsbInterfaceBase));
             }
 
             if (WriteEndpoint == null && InterruptWriteEndpoint != null)
             {
                 WriteEndpoint = InterruptWriteEndpoint;
-                Logger.Log(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, false), nameof(UsbInterfaceBase), null, LogLevel.Warning);
+                Logger?.LogWarning(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, false) + " Interface # : {interfaceNumber} IsRead: {isRead} Region: {region}", InterfaceNumber, false, nameof(UsbInterfaceBase));
             }
         }
 

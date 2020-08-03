@@ -137,7 +137,7 @@ namespace Device.Net.Windows
                         catch (Exception ex)
                         {
                             //Log and move on
-                            Log(ex);
+                            Logger?.LogError(ex, ex.Message);
                         }
 #pragma warning restore CA1031
                     }

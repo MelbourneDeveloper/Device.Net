@@ -20,6 +20,7 @@
         #endregion
 
         #region Device Initialization
+        public const string InformationMessageInitializingDevice = "Initializing device...";
         public const string ErrorMessageNotInitialized = "The device has not been initialized.";
         public const string ErrorMessageCouldntIntializeDevice = "Couldn't initialize device";
         public const string ErrorMessageCantOpenWrite = "Could not open connection for writing";
@@ -36,7 +37,7 @@
         #endregion
 
         #region IO
-        public static string GetErrorMessageInvalidWriteLength(int length, uint count) => $"Write failure. {length} bytes were sent to the device but it claims that {count} were sent.";
+        public const string GetErrorMessageInvalidWriteLength = "Write failure. {length} bytes were sent to the device but it claims that {count} were sent. Region: {region}";
 
         public const string ErrorMessageReadWrite = "Read/Write Error DeviceId: {deviceId}";
         public const string WriteErrorMessage = "An error occurred while attempting to write to the device";

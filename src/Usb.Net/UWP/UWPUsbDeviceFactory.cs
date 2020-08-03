@@ -1,5 +1,6 @@
 ﻿using Device.Net;
 using Device.Net.UWP;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 

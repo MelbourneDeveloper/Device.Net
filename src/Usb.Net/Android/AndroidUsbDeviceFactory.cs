@@ -2,6 +2,7 @@
 using Android.Hardware.Usb;
 using Device.Net;
 using Device.Net.Exceptions;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,13 +50,11 @@ namespace Usb.Net.Android
             return Task.Run<IEnumerable<ConnectedDeviceDefinition>>(() =>
             {
                 //TODO: Get more details about the device.
-                if (deviceDefinition.VendorId.HasValue && deviceDefinition.ProductId.HasValue)
-                    return UsbManager.DeviceList.Select(kvp => kvp.Value).Where(d => deviceDefinition.VendorId == d.VendorId && deviceDefinition.ProductId == d.ProductId).Select(GetAndroidDeviceDefinition).ToList();
-                else if (deviceDefinition.VendorId.HasValue)
-                    return UsbManager.DeviceList.Select(kvp => kvp.Value).Where(d => deviceDefinition.VendorId == d.VendorId).Select(GetAndroidDeviceDefinition).ToList();
-                else
-                    return UsbManager.DeviceList.Select(kvp => kvp.Value).Select(GetAndroidDeviceDefinition).ToList();
-
+                return deviceDefinition.VendorId.HasValue && deviceDefinition.ProductId.HasValue
+                    ? UsbManager.DeviceList.Select(kvp => kvp.Value).Where(d => deviceDefinition.VendorId == d.VendorId && deviceDefinition.ProductId == d.ProductId).Select(GetAndroidDeviceDefinition).ToList()
+                    : deviceDefinition.VendorId.HasValue
+                    ? UsbManager.DeviceList.Select(kvp => kvp.Value).Where(d => deviceDefinition.VendorId == d.VendorId).Select(GetAndroidDeviceDefinition).ToList()
+                    : UsbManager.DeviceList.Select(kvp => kvp.Value).Select(GetAndroidDeviceDefinition).ToList();
             });
         }
 

@@ -12,7 +12,7 @@ namespace Usb.Net.WindowsSample.Temperature
     /// </summary>
     public class TemperatureMonitor : IObservable<Temperature>
     {
-        readonly List<IObserver<Temperature>> observers;
+        private readonly List<IObserver<Temperature>> observers;
         private readonly IDeviceManager _DeviceManager = new DeviceManager();
         private IDevice _device;
         private decimal? temp;
