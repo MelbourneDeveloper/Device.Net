@@ -26,7 +26,6 @@ namespace Usb.Net.WindowsSample
         /// <summary>
         /// TODO: Test these!
         /// </summary>
-        private static readonly DebugLogger Logger = new DebugLogger();
         private static readonly DebugTracer Tracer = new DebugTracer();
         #endregion
 
@@ -46,26 +45,20 @@ namespace Usb.Net.WindowsSample
             });
 
             var host = hostBuilder.Build();
-            var logger = host.Services.GetRequiredService<ILogger<WindowsHidDeviceFactory>>();
-            //This specifies that every time a log message is logged, the correlation id will be logged as part of it
-            using (logger.BeginScope("Correlation ID: {correlationID}", 123))
-            {
-                logger.LogInformation("Test");
-                logger.LogInformation("Test2");
-            }
+            var loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
 
 
 
             //Register the factories for creating Usb devices. This only needs to be done once.
 #if LIBUSB
-            _DeviceManager.RegisterDeviceFactory(new LibUsbUsbDeviceFactory(Logger, Tracer));
+            _DeviceManager.RegisterDeviceFactory(new LibUsbUsbDeviceFactory(loggerFactory, Tracer));
 #else
-            _DeviceManager.RegisterDeviceFactory(new WindowsUsbDeviceFactory(Logger, Tracer));
-            _DeviceManager.RegisterDeviceFactory(new WindowsHidDeviceFactory(Logger, Tracer));
-            _DeviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(Logger, Tracer));
+            _DeviceManager.RegisterDeviceFactory(new WindowsUsbDeviceFactory(loggerFactory, Tracer));
+            _DeviceManager.RegisterDeviceFactory(new WindowsHidDeviceFactory(loggerFactory, Tracer));
+            _DeviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(loggerFactory, Tracer));
 #endif
 
-            _DeviceConnectionExample = new TrezorExample(_DeviceManager);
+            _DeviceConnectionExample = new TrezorExample(_DeviceManager, loggerFactory);
             _DeviceConnectionExample.TrezorInitialized += DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += DeviceConnectionExample_TrezorDisconnected;
 

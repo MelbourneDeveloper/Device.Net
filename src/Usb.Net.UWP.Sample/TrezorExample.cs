@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,10 +37,10 @@ namespace Usb.Net.Sample
         #endregion
 
         #region Constructor
-        public TrezorExample(IDeviceManager deviceManager)
+        public TrezorExample(IDeviceManager deviceManager, ILoggerFactory loggerFactory)
         {
             DeviceManager = deviceManager;
-            DeviceListener = new DeviceListener(deviceManager, _DeviceDefinitions, PollMilliseconds) { Logger = new DebugLogger() };
+            DeviceListener = new DeviceListener(deviceManager, _DeviceDefinitions, PollMilliseconds) { Logger = loggerFactory.CreateLogger(nameof(TrezorExample)) };
         }
         #endregion
 
