@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
@@ -63,12 +62,7 @@ namespace Device.Net
         }
         #endregion
 
-        #region Private Methods
-        private void Log(string message, Exception ex, [CallerMemberName] string callerMemberName = null) => Logger?.Log(message, $"{ nameof(DeviceListener)} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
-        #endregion
-
         #region Public Methods
-
         /// <summary>
         /// Starts the polling for devices if polling is being used.
         /// </summary>

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -120,7 +119,7 @@ namespace Device.Net.Windows
 
                         if (connectedDeviceDefinition == null)
                         {
-                            Logger.Log($"Device with path {spDeviceInterfaceDetailData.DevicePath} was skipped. See previous logs.", GetType().Name, null, LogLevel.Warning);
+                            Logger?.LogWarning("Device with path {devicePath} was skipped. Area: {area} See previous logs.", spDeviceInterfaceDetailData.DevicePath, GetType().Name);
                             continue;
                         }
 
@@ -142,14 +141,6 @@ namespace Device.Net.Windows
                 return deviceDefinitions;
             });
         }
-        #endregion
-
-        #region Protected Methods
-        protected void Log(Exception ex, [CallerMemberName] string callMemberName = null) => Log(null, $"{GetType().Name} - {callMemberName}", ex, LogLevel.Error);
-
-        protected void Log(string message, Exception ex, LogLevel logLevel, [CallerMemberName] string callMemberName = null) => Log(message, $"{GetType().Name} - {callMemberName}", ex, logLevel);
-
-        protected void Log(string message, string region, Exception ex, LogLevel logLevel) => Logger?.Log(message, region, ex, logLevel);
         #endregion
 
         #region Private Static Methods
