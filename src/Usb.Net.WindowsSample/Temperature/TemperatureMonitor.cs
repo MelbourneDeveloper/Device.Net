@@ -1,5 +1,6 @@
 ﻿using Device.Net;
 using Hid.Net.Windows;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,16 +17,18 @@ namespace Usb.Net.WindowsSample.Temperature
         private readonly IDeviceManager _DeviceManager = new DeviceManager();
         private IDevice _device;
         private decimal? temp;
+        public ILoggerFactory LoggerFactory { get; }
 
-        public TemperatureMonitor()
+        public TemperatureMonitor(ILoggerFactory loggerFactory)
         {
+            LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             observers = new List<IObserver<Temperature>>();
             InitializeAsync().Wait();
         }
 
         private async Task InitializeAsync()
         {
-            _DeviceManager.RegisterDeviceFactory(new WindowsHidDeviceFactory(null, null));
+            _DeviceManager.RegisterDeviceFactory(new WindowsHidDeviceFactory(LoggerFactory, null));
             var devices = (await _DeviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.Hid, VendorId = 0x413d, ProductId = 0x2107 } })).ToList();
             _device = devices[1];
             await _device.InitializeAsync();
@@ -64,7 +67,7 @@ namespace Usb.Net.WindowsSample.Temperature
             var buffer = new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 };
 
             var data = await _device.WriteAndReadAsync(buffer);
-            int temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
+            var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
 
             //TODO: Get the humidity
 
@@ -77,7 +80,7 @@ namespace Usb.Net.WindowsSample.Temperature
         {
             // Store the previous temperature, so notification is only sent after at least .1 change.
             decimal? previous = null;
-            bool start = true;
+            var start = true;
 
             GetTemperatures().Wait();
 
@@ -85,11 +88,13 @@ namespace Usb.Net.WindowsSample.Temperature
             {
                 if (start || (Math.Abs(temp.Value - previous.Value) >= 0.1m))
                 {
-                    Temperature tempData = new Temperature(temp.Value, DateTime.Now);
+                    var tempData = new Temperature(temp.Value, DateTime.Now);
                     foreach (var observer in observers)
                         observer.OnNext(tempData);
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
                     previous = temp;
                     if (start) start = false;
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
                 }
             }
             else

@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Usb.Net.WindowsSample", "Usb.Net.WindowsSample\Usb.Net.WindowsSample.csproj", "{50D00509-0703-4308-A89A-A5ACADAD7ABA}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hid.Net", "Hid.Net\Hid.Net.csproj", "{ECB44DDD-BBFA-459A-9C60-4F65A1014A48}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Device.Net", "Device.Net\Device.Net.csproj", "{AAC55EE8-183B-487F-9E2C-08E14E7E4894}"
@@ -18,8 +20,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hid", "Hid", "{1E56E335-09DE-435F-9189-5DE50835D54F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{32ED0A31-ACE0-46FC-8644-41F4A94E2FFC}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Usb.Net.WindowsSample", "Usb.Net.WindowsSample\Usb.Net.WindowsSample.csproj", "{50D00509-0703-4308-A89A-A5ACADAD7ABA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Usb.Net.AndroidSample", "Usb.Net.AndroidSample\Usb.Net.AndroidSample.csproj", "{3BC0AC7E-3B3B-4D3F-9CC0-B2BDECC460A6}"
 EndProject

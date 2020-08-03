@@ -21,6 +21,7 @@ namespace Usb.Net.WindowsSample
     internal class Program
     {
         #region Fields
+        private static ILoggerFactory _loggerFactory;
         private static readonly IDeviceManager _DeviceManager = new DeviceManager();
         private static TrezorExample _DeviceConnectionExample;
         /// <summary>
@@ -45,7 +46,7 @@ namespace Usb.Net.WindowsSample
             });
 
             var host = hostBuilder.Build();
-            var loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
+            _loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
 
 
 
@@ -53,12 +54,12 @@ namespace Usb.Net.WindowsSample
 #if LIBUSB
             _DeviceManager.RegisterDeviceFactory(new LibUsbUsbDeviceFactory(loggerFactory, Tracer));
 #else
-            _DeviceManager.RegisterDeviceFactory(new WindowsUsbDeviceFactory(loggerFactory, Tracer));
-            _DeviceManager.RegisterDeviceFactory(new WindowsHidDeviceFactory(loggerFactory, Tracer));
-            _DeviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(loggerFactory, Tracer));
+            _DeviceManager.RegisterDeviceFactory(new WindowsUsbDeviceFactory(_loggerFactory, Tracer));
+            _DeviceManager.RegisterDeviceFactory(new WindowsHidDeviceFactory(_loggerFactory, Tracer));
+            _DeviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(_loggerFactory, Tracer));
 #endif
 
-            _DeviceConnectionExample = new TrezorExample(_DeviceManager, loggerFactory);
+            _DeviceConnectionExample = new TrezorExample(_DeviceManager, _loggerFactory);
             _DeviceConnectionExample.TrezorInitialized += DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += DeviceConnectionExample_TrezorDisconnected;
 
@@ -96,7 +97,7 @@ namespace Usb.Net.WindowsSample
                     break;
 #if !LIBUSB
                 case 3:
-                    var temperatureMonitor = new TemperatureMonitor();
+                    var temperatureMonitor = new TemperatureMonitor(_loggerFactory);
                     var temperaturReporter = new TemperatureReporter();
                     temperaturReporter.Subscribe(temperatureMonitor);
 
