@@ -39,12 +39,6 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Methods
-        protected void Log(string message, Exception ex)
-        {
-            var callerMemberName = "";
-            Logger?.Log(message, $"{ nameof(AndroidUsbDeviceFactory)} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
-        }
-
         public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
         {
             return Task.Run<IEnumerable<ConnectedDeviceDefinition>>(() =>

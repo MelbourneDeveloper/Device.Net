@@ -40,7 +40,7 @@
 
         #region IO
         public const string DebugMessageLockReleased = "Data received lock released. Completion source created. Waiting for data.";
-        public const string GetErrorMessageInvalidWriteLength = "Write failure. {length} bytes were sent to the device but it claims that {count} were sent. Region: {region}";
+        public static string GetErrorMessageInvalidWriteLength(int length, uint count) => $"Write failure. {length} bytes were sent to the device but it claims that {count} were sent.";
         public const string DebugMessageReadFirstChunk = "Read the first chunk";
         public const string ErrorMessageReadWrite = "Read/Write Error DeviceId: {deviceId}";
         public const string WriteErrorMessage = "An error occurred while attempting to write to the device";

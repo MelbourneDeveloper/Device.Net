@@ -35,8 +35,11 @@ namespace Usb.Net.Android
         {
             return await Task.Run(async () =>
             {
+                IDisposable logScope = null;
+
                 try
                 {
+                    logScope = Logger?.BeginScope("UsbInterface: {usbInterface} Call: {call}", UsbInterface.Id, nameof(ReadAsync));
 
                     var byteBuffer = ByteBuffer.Allocate((int)bufferLength);
                     var request = new UsbRequest();
@@ -67,18 +70,29 @@ namespace Usb.Net.Android
                 }
                 catch (Exception ex)
                 {
-                    Logger?.Log(Messages.ErrorMessageRead, nameof(AndroidUsbInterfaceManager), ex, LogLevel.Error);
+                    Logger?.LogError(Messages.ErrorMessageRead);
                     throw new IOException(Messages.ErrorMessageRead, ex);
                 }
+                finally
+                {
+                    logScope?.Dispose();
+                }
+
             }, cancellationToken);
         }
 
         public async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
+            if (data == null) throw new NotImplementedException();
+
             await Task.Run(async () =>
             {
+                IDisposable logScope = null;
+
                 try
                 {
+                    logScope = Logger?.BeginScope("UsbInterface: {usbInterface} Call: {call} Data Length: {writeLength}", UsbInterface.Id, nameof(WriteAsync), data.Length);
+
                     //TODO: Perhaps we should implement Batch Begin/Complete so that the UsbRequest is not created again and again. This will be expensive
 
                     var request = new UsbRequest();
@@ -95,8 +109,12 @@ namespace Usb.Net.Android
                 }
                 catch (Exception ex)
                 {
-                    Logger?.Log(Messages.WriteErrorMessage, nameof(AndroidUsbInterface), ex, LogLevel.Error);
+                    Logger?.LogError(Messages.WriteErrorMessage);
                     throw new IOException(Messages.WriteErrorMessage, ex);
+                }
+                finally
+                {
+                    logScope?.Dispose();
                 }
             }, cancellationToken);
         }

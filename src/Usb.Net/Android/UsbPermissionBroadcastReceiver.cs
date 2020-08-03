@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Hardware.Usb;
-using Device.Net;
+using Microsoft.Extensions.Logging;
 using System;
 using usbDevice = Android.Hardware.Usb.UsbDevice;
 
@@ -34,9 +34,9 @@ namespace Usb.Net.Android
         #region Constructor
         public UsbPermissionBroadcastReceiver(UsbManager manager, usbDevice device, Context context)
         {
-            _Manager = manager;
-            _Device = device;
-            _Context = context;
+            _Manager = manager ?? throw new ArgumentNullException(nameof(manager));
+            _Device = device ?? throw new ArgumentNullException(nameof(device));
+            _Context = context ?? throw new ArgumentNullException(nameof(context));
         }
         #endregion
 
@@ -57,7 +57,7 @@ namespace Usb.Net.Android
 
             IsPermissionGranted = intent.GetBooleanExtra(UsbManager.ExtraPermissionGranted, false);
 
-            Logger?.Log($"USB permission broadcast received. Result: {IsPermissionGranted}", nameof(UsbPermissionBroadcastReceiver), null, LogLevel.Information);
+            Logger?.LogInformation("USB permission broadcast received. Result: {IsPermissionGranted} DeviceId: {deviceId}", IsPermissionGranted, _Device.DeviceId);
 
             context.UnregisterReceiver(this);
             Received?.Invoke(this, new EventArgs());

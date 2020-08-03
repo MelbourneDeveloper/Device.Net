@@ -85,44 +85,56 @@ namespace Usb.Net.UWP
         public async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
-
             //TODO: It might not be the case that Initialize has not been called. Better error message here please.
             if (WriteEndpoint == null && InterruptWriteEndpoint == null) throw new ValidationException(Messages.ErrorMessageNotInitialized);
 
             if (data.Length > WriteBufferSize) throw new ValidationException(Messages.ErrorMessageBufferSizeTooLarge);
 
-            var buffer = data.AsBuffer();
+            IDisposable logScope = null;
 
-            uint count = 0;
-
-            if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> usbBulkOutPipe)
+            try
             {
-                count = await usbBulkOutPipe.Pipe.OutputStream.WriteAsync(buffer).AsTask(cancellationToken);
-            }
-            else if (InterruptWriteEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptOutPipe> usbInterruptOutPipe)
-            {
-                //Falling back interrupt
+                logScope = Logger?.BeginScope("Interface number: {interfaceNumber} Call: {call}", UsbInterface.InterfaceNumber, nameof(WriteAsync));
 
-                Logger.Log(Messages.WarningMessageWritingToInterrupt, nameof(UWPUsbInterface), null, LogLevel.Warning);
-                count = await usbInterruptOutPipe.Pipe.OutputStream.WriteAsync(buffer);
-            }
+                var buffer = data.AsBuffer();
 
-            else
-            {
-                throw new DeviceException(Messages.ErrorMessageWriteEndpointNotRecognized);
-            }
+                uint count = 0;
 
-            if (count == data.Length)
-            {
-                Tracer?.Trace(true, data);
-            }
-            else
-            {
-                var message = Messages.GetErrorMessageInvalidWriteLength(data.Length, count);
-                Logger?.Log(message, GetType().Name, null, LogLevel.Error);
-                throw new IOException(message);
-            }
+                if (WriteEndpoint is UWPUsbInterfaceEndpoint<UsbBulkOutPipe> usbBulkOutPipe)
+                {
+                    count = await usbBulkOutPipe.Pipe.OutputStream.WriteAsync(buffer).AsTask(cancellationToken);
+                }
+                else if (InterruptWriteEndpoint is UWPUsbInterfaceEndpoint<UsbInterruptOutPipe> usbInterruptOutPipe)
+                {
+                    //Falling back to interrupt
 
+                    Logger?.LogWarning(Messages.WarningMessageWritingToInterrupt);
+                    count = await usbInterruptOutPipe.Pipe.OutputStream.WriteAsync(buffer);
+                }
+
+                else
+                {
+                    throw new DeviceException(Messages.ErrorMessageWriteEndpointNotRecognized);
+                }
+
+                if (count == data.Length)
+                {
+                    Tracer?.Trace(true, data);
+                }
+                else
+                {
+                    throw new IOException(Messages.GetErrorMessageInvalidWriteLength(data.Length, count));
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger?.LogError(Messages.WarningMessageWritingToInterrupt);
+                throw;
+            }
+            finally
+            {
+                logScope?.Dispose();
+            }
         }
         #endregion
 
