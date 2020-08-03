@@ -1,4 +1,3 @@
-
 #if !NET45
 
 using Device.Net.Exceptions;
@@ -21,14 +20,14 @@ namespace Device.Net.UnitTests
         private static readonly MockTracer tracer = new MockTracer();
         private static readonly IDeviceManager _DeviceManager = new DeviceManager();
 
-        private static void CheckLogMessageText(string containsText)
+        private static void CheckLogMessageText(string containsText, LogLevel logLevel)
         {
             loggerMock.Verify
             (
                 l => l.Log
                 (
                     //Check the severity level
-                    LogLevel.Error,
+                    logLevel,
                     //This may or may not be relevant to your scenario
                     It.IsAny<EventId>(),
                     //This is the magical Moq code that exposes internal log processing from the extension methods
@@ -87,12 +86,12 @@ namespace Device.Net.UnitTests
 
                     if (device != null && connectedDeviceDefinition.DeviceType == DeviceType.Hid)
                     {
-                        CheckLogMessageText(string.Format(MockHidFactory.FoundMessage, connectedDeviceDefinition.DeviceId));
+                        CheckLogMessageText(string.Format(MockHidFactory.FoundMessage, connectedDeviceDefinition.DeviceId), LogLevel.Information);
                     }
 
                     if (device != null && connectedDeviceDefinition.DeviceType == DeviceType.Usb)
                     {
-                        CheckLogMessageText(string.Format(MockUsbFactory.FoundMessage, connectedDeviceDefinition.DeviceId));
+                        CheckLogMessageText(string.Format(MockUsbFactory.FoundMessage, connectedDeviceDefinition.DeviceId), LogLevel.Information);
                     }
                 }
             }
@@ -138,7 +137,7 @@ namespace Device.Net.UnitTests
             Assert.AreEqual(readtraceCount + count, tracer.ReadCount);
             Assert.AreEqual(writetraceCount + count, tracer.WriteCount);
 
-            CheckLogMessageText(Messages.SuccessMessageWriteAndReadCalled);
+            CheckLogMessageText(Messages.SuccessMessageWriteAndReadCalled, LogLevel.Information);
         }
 
         [TestMethod]
