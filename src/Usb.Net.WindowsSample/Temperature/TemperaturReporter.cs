@@ -18,15 +18,9 @@ namespace Usb.Net.WindowsSample.Temperature
             unsubscriber = provider.Subscribe(this);
         }
 
-        public virtual void Unsubscribe()
-        {
-            unsubscriber.Dispose();
-        }
+        public virtual void Unsubscribe() => unsubscriber.Dispose();
 
-        public virtual void OnCompleted()
-        {
-            Console.WriteLine("Additional temperature data will not be transmitted.");
-        }
+        public virtual void OnCompleted() => Console.WriteLine("Additional temperature data will not be transmitted.");
 
 #pragma warning disable CA1716 // Identifiers should not match keywords
         public virtual void OnError(Exception error)

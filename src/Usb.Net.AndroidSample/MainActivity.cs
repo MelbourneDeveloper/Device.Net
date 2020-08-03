@@ -111,10 +111,7 @@ namespace Usb.Net.AndroidSample
             }
         }
 
-        private void TrezorExample_TrezorDisconnected(object sender, EventArgs e)
-        {
-            DisplayMessage("Device disconnected. Waiting for device...");
-        }
+        private void TrezorExample_TrezorDisconnected(object sender, EventArgs e) => DisplayMessage("Device disconnected. Waiting for device...");
         #endregion
 
         #region Private Methods

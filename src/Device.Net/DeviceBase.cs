@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +11,6 @@ namespace Device.Net
         #region Fields
         private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         private bool disposed;
-        private string _LogRegion;
         #endregion
 
         #region Public Abstract Properties
@@ -35,40 +35,6 @@ namespace Device.Net
         }
         #endregion
 
-        #region Private Methods
-        private void Log(string message, string region, Exception ex, LogLevel logLevel)
-        {
-            Logger?.Log(message, region, ex, logLevel);
-        }
-
-        private void Log(string message, Exception ex, LogLevel logLevel, [CallerMemberName] string callMemberName = null)
-        {
-            if (_LogRegion == null)
-            {
-                _LogRegion = GetType().Name;
-            }
-
-            Log(message, $"{_LogRegion} - {callMemberName}", ex, logLevel);
-        }
-        #endregion
-
-        #region Protected Methods
-        protected void Log(string message, [CallerMemberName] string callMemberName = null)
-        {
-            Log(message, null, LogLevel.Information, callMemberName);
-        }
-
-        protected void Log(string message, Exception ex, [CallerMemberName] string callMemberName = null)
-        {
-            Log(message, ex, LogLevel.Error, callMemberName);
-        }
-
-        protected void Log(string message, LogLevel logLevel, [CallerMemberName] string callMemberName = null)
-        {
-            Log(message, null, logLevel, callMemberName);
-        }
-        #endregion
-
         #region Public Abstract Methods
         //TODO: Why are these here?
 
@@ -77,10 +43,7 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public virtual Task Flush(CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
-        }
+        public virtual Task Flush(CancellationToken cancellationToken = default) => throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
 
         public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
         {
@@ -90,12 +53,12 @@ namespace Device.Net
             {
                 await WriteAsync(writeBuffer, cancellationToken);
                 var retVal = await ReadAsync(cancellationToken);
-                Log(Messages.SuccessMessageWriteAndReadCalled);
+                Logger?.LogInformation(Messages.SuccessMessageWriteAndReadCalled, new object[] { DeviceId });
                 return retVal;
             }
             catch (Exception ex)
             {
-                Log(Messages.ErrorMessageReadWrite, ex);
+                Logger?.LogError(ex, Messages.ErrorMessageReadWrite, new object[] { DeviceId });
                 throw;
             }
             finally

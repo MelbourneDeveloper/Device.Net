@@ -94,10 +94,7 @@ namespace Usb.Net.Android
         /// Register the factory for enumerating USB devices on Android.
         /// </summary>
         [Obsolete(DeviceManager.ObsoleteMessage)]
-        public static void Register(UsbManager usbManager, Context context, ILogger logger, ITracer tracer)
-        {
-            DeviceManager.Current.DeviceFactories.Add(new AndroidUsbDeviceFactory(usbManager, context, logger, tracer));
-        }
+        public static void Register(UsbManager usbManager, Context context, ILogger logger, ITracer tracer) => DeviceManager.Current.DeviceFactories.Add(new AndroidUsbDeviceFactory(usbManager, context, logger, tracer));
         #endregion
     }
 }

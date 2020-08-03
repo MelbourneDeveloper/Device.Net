@@ -9,9 +9,6 @@ namespace Device.Net.UnitTests
 
         public string LogText => _stringBuilder.ToString();
 
-        public void Log(string message, string region, Exception ex, LogLevel logLevel)
-        {
-            _stringBuilder.Append(message);
-        }
+        public void Log(string message, string region, Exception ex, LogLevel logLevel) => _stringBuilder.Append(message);
     }
 }

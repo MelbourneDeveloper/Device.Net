@@ -160,10 +160,7 @@ namespace Usb.Net.Windows
             GC.SuppressFinalize(this);
         }
 
-        public async Task InitializeAsync()
-        {
-            await Task.Run(Initialize);
-        }
+        public async Task InitializeAsync() => await Task.Run(Initialize);
 
         public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync()
         {

@@ -62,15 +62,9 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Public Methods
-        public Task InitializeAsync()
-        {
-            return Task.Run(() => { Initialize(); });
-        }
+        public Task InitializeAsync() => Task.Run(() => { Initialize(); });
 
-        private int Write(byte[] data)
-        {
-            return data == null ? 0 : ApiService.AWriteFile(_ReadSafeFileHandle, data, data.Length, out var bytesWritten, 0) ? bytesWritten : -1;
-        }
+        private int Write(byte[] data) => data == null ? 0 : ApiService.AWriteFile(_ReadSafeFileHandle, data, data.Length, out var bytesWritten, 0) ? bytesWritten : -1;
 
         public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
@@ -112,10 +106,7 @@ namespace SerialPort.Net.Windows
             base.Dispose();
         }
 
-        public void Close()
-        {
-            Dispose();
-        }
+        public void Close() => Dispose();
         #endregion
 
         #region Private Methods

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -144,20 +145,11 @@ namespace Device.Net.Windows
         #endregion
 
         #region Protected Methods
-        protected void Log(Exception ex, [CallerMemberName] string callMemberName = null)
-        {
-            Log(null, $"{GetType().Name} - {callMemberName}", ex, LogLevel.Error);
-        }
+        protected void Log(Exception ex, [CallerMemberName] string callMemberName = null) => Log(null, $"{GetType().Name} - {callMemberName}", ex, LogLevel.Error);
 
-        protected void Log(string message, Exception ex, LogLevel logLevel, [CallerMemberName] string callMemberName = null)
-        {
-            Log(message, $"{GetType().Name} - {callMemberName}", ex, logLevel);
-        }
+        protected void Log(string message, Exception ex, LogLevel logLevel, [CallerMemberName] string callMemberName = null) => Log(message, $"{GetType().Name} - {callMemberName}", ex, logLevel);
 
-        protected void Log(string message, string region, Exception ex, LogLevel logLevel)
-        {
-            Logger?.Log(message, region, ex, logLevel);
-        }
+        protected void Log(string message, string region, Exception ex, LogLevel logLevel) => Logger?.Log(message, region, ex, logLevel);
         #endregion
 
         #region Private Static Methods

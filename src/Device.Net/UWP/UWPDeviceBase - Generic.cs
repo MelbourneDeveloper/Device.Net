@@ -1,4 +1,5 @@
 ﻿using Device.Net.Exceptions;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

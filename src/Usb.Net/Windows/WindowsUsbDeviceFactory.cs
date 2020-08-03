@@ -39,10 +39,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Private Static Methods
-        protected override ConnectedDeviceDefinition GetDeviceDefinition(string deviceId)
-        {
-            return GetDeviceDefinitionFromWindowsDeviceId(deviceId, DeviceType.Usb, Logger);
-        }
+        protected override ConnectedDeviceDefinition GetDeviceDefinition(string deviceId) => GetDeviceDefinitionFromWindowsDeviceId(deviceId, DeviceType.Usb, Logger);
         #endregion
 
         #region Public Static Methods
@@ -50,10 +47,7 @@ namespace Usb.Net.Windows
         /// Register the factory for enumerating USB devices in Windows.
         /// </summary>
         [Obsolete(DeviceManager.ObsoleteMessage)]
-        public static void Register(ILogger logger, ITracer tracer)
-        {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory(logger, tracer));
-        }
+        public static void Register(ILogger logger, ITracer tracer) => DeviceManager.Current.DeviceFactories.Add(new WindowsUsbDeviceFactory(logger, tracer));
 
         public static ConnectedDeviceDefinition GetDeviceDefinition(SafeFileHandle defaultInterfaceHandle, string deviceId)
         {

@@ -32,6 +32,7 @@
       </PropertyGroup>
     </When>
   </Choose>
+	
   <ItemGroup>
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
@@ -58,5 +59,33 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' != 'net45'">
+		<Compile Remove="Logging/*.*" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'monoandroid10.0'">
+	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
+	    <Version>3.1.6</Version>
+	  </PackageReference>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
+	    <Version>3.1.6</Version>
+	  </PackageReference>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.16299'">
+	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
+	    <Version>3.1.6</Version>
+	  </PackageReference>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'MonoAndroid90'">
+	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
+	    <Version>3.1.6</Version>
+	  </PackageReference>
+	</ItemGroup>
 
 </Project>

@@ -32,10 +32,7 @@ namespace Hid.Net.Windows
             }
         }
 
-        protected override Guid GetClassGuid()
-        {
-            return HidService.GetHidGuid();
-        }
+        protected override Guid GetClassGuid() => HidService.GetHidGuid();
 
         #endregion
 
@@ -78,10 +75,7 @@ namespace Hid.Net.Windows
         /// Register the factory for enumerating Hid devices on UWP. 
         /// </summary>
         [Obsolete(DeviceManager.ObsoleteMessage)]
-        public static void Register(ILogger logger, ITracer tracer)
-        {
-            DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory(logger, tracer));
-        }
+        public static void Register(ILogger logger, ITracer tracer) => DeviceManager.Current.DeviceFactories.Add(new WindowsHidDeviceFactory(logger, tracer));
         #endregion
     }
 }

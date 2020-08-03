@@ -88,15 +88,9 @@ namespace Usb.Net.Android
             _IsClosing = false;
         }
 
-        public Task<ReadResult> ReadAsync()
-        {
-            return ReadUsbInterface.ReadAsync(ReadBufferSize);
-        }
+        public Task<ReadResult> ReadAsync() => ReadUsbInterface.ReadAsync(ReadBufferSize);
 
-        public Task WriteAsync(byte[] data)
-        {
-            return WriteUsbInterface.WriteAsync(data);
-        }
+        public Task WriteAsync(byte[] data) => WriteUsbInterface.WriteAsync(data);
 
         #endregion
 
@@ -190,15 +184,9 @@ namespace Usb.Net.Android
             }
         }
 
-        private void Log(string message, Exception ex, [CallerMemberName] string region = null)
-        {
-            Logger?.Log(message, region, ex, LogLevel.Error);
-        }
+        private void Log(string message, Exception ex, [CallerMemberName] string region = null) => Logger?.Log(message, region, ex, LogLevel.Error);
 
-        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync()
-        {
-            return Task.Run<ConnectedDeviceDefinitionBase>(() => { return AndroidUsbDeviceFactory.GetAndroidDeviceDefinition(_UsbDevice); });
-        }
+        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync() => Task.Run<ConnectedDeviceDefinitionBase>(() => { return AndroidUsbDeviceFactory.GetAndroidDeviceDefinition(_UsbDevice); });
         #endregion
 
         #region Finalizer

@@ -158,10 +158,7 @@ namespace Usb.Net.WindowsSample
             Console.ReadKey();
         }
 
-        private static void DisplayWaitMessage()
-        {
-            Console.WriteLine("Waiting for device to be plugged in...");
-        }
+        private static void DisplayWaitMessage() => Console.WriteLine("Waiting for device to be plugged in...");
         #endregion
     }
 }

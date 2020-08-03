@@ -81,20 +81,11 @@ namespace Hid.Net.Windows
             };
         }
 
-        public string GetManufacturer(SafeFileHandle safeFileHandle)
-        {
-            return GetHidString(safeFileHandle, HidD_GetManufacturerString, Logger);
-        }
+        public string GetManufacturer(SafeFileHandle safeFileHandle) => GetHidString(safeFileHandle, HidD_GetManufacturerString, Logger);
 
-        public string GetProduct(SafeFileHandle safeFileHandle)
-        {
-            return GetHidString(safeFileHandle, HidD_GetProductString, Logger);
-        }
+        public string GetProduct(SafeFileHandle safeFileHandle) => GetHidString(safeFileHandle, HidD_GetProductString, Logger);
 
-        public string GetSerialNumber(SafeFileHandle safeFileHandle)
-        {
-            return GetHidString(safeFileHandle, HidD_GetSerialNumberString, Logger);
-        }
+        public string GetSerialNumber(SafeFileHandle safeFileHandle) => GetHidString(safeFileHandle, HidD_GetSerialNumberString, Logger);
 
         public HidAttributes GetHidAttributes(SafeFileHandle safeFileHandle)
         {
@@ -134,15 +125,9 @@ namespace Hid.Net.Windows
             return hidGuid;
         }
 
-        public Stream OpenRead(SafeFileHandle readSafeFileHandle, ushort readBufferSize)
-        {
-            return new FileStream(readSafeFileHandle, FileAccess.Read, readBufferSize, false);
-        }
+        public Stream OpenRead(SafeFileHandle readSafeFileHandle, ushort readBufferSize) => new FileStream(readSafeFileHandle, FileAccess.Read, readBufferSize, false);
 
-        public Stream OpenWrite(SafeFileHandle writeSafeFileHandle, ushort writeBufferSize)
-        {
-            return new FileStream(writeSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
-        }
+        public Stream OpenWrite(SafeFileHandle writeSafeFileHandle, ushort writeBufferSize) => new FileStream(writeSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
         #endregion
 
         #region Private Methods

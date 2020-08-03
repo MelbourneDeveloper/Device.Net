@@ -17,10 +17,7 @@ namespace SerialPort.Net
 
         #region Tests
         [TestMethod]
-        public async Task ConnectedTestReadAsync()
-        {
-            await ReadAsync();
-        }
+        public async Task ConnectedTestReadAsync() => await ReadAsync();
 
         [TestMethod]
         public async Task NotConnectedTestReadAsync()

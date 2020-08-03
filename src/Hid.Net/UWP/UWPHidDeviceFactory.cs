@@ -22,10 +22,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Protected Override Methods
-        protected override string GetAqsFilter(uint? vendorId, uint? productId)
-        {
-            return $"{InterfaceEnabledPart} {GetVendorPart(vendorId)} {GetProductPart(productId)}";
-        }
+        protected override string GetAqsFilter(uint? vendorId, uint? productId) => $"{InterfaceEnabledPart} {GetVendorPart(vendorId)} {GetProductPart(productId)}";
         #endregion
 
         #region Public Override Methods

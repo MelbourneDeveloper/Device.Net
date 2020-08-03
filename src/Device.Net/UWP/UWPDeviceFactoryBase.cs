@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -55,14 +56,6 @@ namespace Device.Net.UWP
             string productPart = null;
             if (productId.HasValue) productPart = $"AND {ProductFilterName}:={productId.Value}";
             return productPart;
-        }
-        #endregion
-
-        #region Protected Methods
-        protected void Log(string message, Exception ex)
-        {
-            var callerMemberName = "";
-            Logger?.Log(message, $"{ nameof(UWPDeviceFactoryBase)} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
         }
         #endregion
 

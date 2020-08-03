@@ -8,7 +8,7 @@
 
         #region Success Messages
         public const string SuccessMessageGotWriteAndReadHandle = "Successfully opened handle on device for reading and writing";
-        public static string SuccessMessageWriteAndReadCalled => $"Successfully called {nameof(DeviceBase.WriteAndReadAsync)}";
+        public const string SuccessMessageWriteAndReadCalled = "Successfully called " + nameof(DeviceBase.WriteAndReadAsync) + " DeviceId: {deviceId}";
         public const string SuccessMessageReadFileStreamOpened = "Read file stream opened successfully";
         public const string SuccessMessageWriteFileStreamOpened = "Write file stream opened successfully";
         #endregion
@@ -35,12 +35,9 @@
         #endregion
 
         #region IO
-        public static string GetErrorMessageInvalidWriteLength(int length, uint count)
-        {
-            return $"Write failure. {length} bytes were sent to the device but it claims that {count} were sent.";
-        }
+        public static string GetErrorMessageInvalidWriteLength(int length, uint count) => $"Write failure. {length} bytes were sent to the device but it claims that {count} were sent.";
 
-        public const string ErrorMessageReadWrite = "Read/Write Error";
+        public const string ErrorMessageReadWrite = "Read/Write Error DeviceId: {deviceId}";
         public const string WriteErrorMessage = "An error occurred while attempting to write to the device";
         public const string ErrorMessageRead = "An error occurred while attempting to read from the device";
         public const string ErrorMessageBufferSizeTooLarge = "The buffer size is too large";
@@ -72,10 +69,7 @@
         public const string ErrorMessageNoWriteInterfaceSpecified = "There was no write Usb Interface specified for the device.";
         public const string WarningMessageWritingToInterrupt = "Writing to interrupt endpoint";
 
-        public static string GetErrorMessageNoBulkPipe(byte interfaceNumber, bool isRead)
-        {
-            return $"No bulk {(isRead ? "read" : "write")} pipes found. Interrupt pipes to be used instead. Interface Number {interfaceNumber}";
-        }
+        public static string GetErrorMessageNoBulkPipe(byte interfaceNumber, bool isRead) => $"No bulk {(isRead ? "read" : "write")} pipes found. Interrupt pipes to be used instead. Interface Number {interfaceNumber}";
         #endregion
 
         #region Serial Port

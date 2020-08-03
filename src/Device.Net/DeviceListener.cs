@@ -1,4 +1,5 @@
 ﻿using Device.Net.Exceptions;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,10 +64,7 @@ namespace Device.Net
         #endregion
 
         #region Private Methods
-        private void Log(string message, Exception ex, [CallerMemberName] string callerMemberName = null)
-        {
-            Logger?.Log(message, $"{ nameof(DeviceListener)} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
-        }
+        private void Log(string message, Exception ex, [CallerMemberName] string callerMemberName = null) => Logger?.Log(message, $"{ nameof(DeviceListener)} - {callerMemberName}", ex, ex != null ? LogLevel.Error : LogLevel.Information);
         #endregion
 
         #region Public Methods
@@ -181,10 +179,7 @@ namespace Device.Net
             }
         }
 
-        public void Stop()
-        {
-            _PollTimer.Stop();
-        }
+        public void Stop() => _PollTimer.Stop();
 
         public void Dispose()
         {

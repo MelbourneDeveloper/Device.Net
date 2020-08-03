@@ -99,10 +99,7 @@ namespace Usb.Net.UWP.Sample
             TheProgressRing.IsActive = false;
         }
 
-        private void SetButtonColor(Color backGroundColor)
-        {
-            PollButton.Background = new SolidColorBrush(backGroundColor);
-        }
+        private void SetButtonColor(Color backGroundColor) => PollButton.Background = new SolidColorBrush(backGroundColor);
         #endregion
     }
 }

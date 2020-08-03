@@ -90,10 +90,7 @@ namespace Usb.Net.UWP
             UsbInterfaceHandler.RegisterDefaultInterfaces();
         }
 
-        protected override IAsyncOperation<windowsUsbDevice> FromIdAsync(string id)
-        {
-            return windowsUsbDevice.FromIdAsync(id);
-        }
+        protected override IAsyncOperation<windowsUsbDevice> FromIdAsync(string id) => windowsUsbDevice.FromIdAsync(id);
 
         #endregion
 
@@ -107,15 +104,9 @@ namespace Usb.Net.UWP
             base.Dispose();
         }
 
-        public Task WriteAsync(byte[] data)
-        {
-            return WriteUsbInterface.WriteAsync(data);
-        }
+        public Task WriteAsync(byte[] data) => WriteUsbInterface.WriteAsync(data);
 
-        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync()
-        {
-            return Task.FromResult(ConnectedDeviceDefinition);
-        }
+        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync() => Task.FromResult(ConnectedDeviceDefinition);
         #endregion
     }
 }

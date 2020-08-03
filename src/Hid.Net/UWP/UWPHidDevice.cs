@@ -38,10 +38,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Event Handlers
-        private void HidDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args)
-        {
-            HandleDataReceived(InputReportToBytes(args));
-        }
+        private void HidDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args) => HandleDataReceived(InputReportToBytes(args));
         #endregion
 
         #region Constructors
@@ -79,10 +76,7 @@ namespace Hid.Net.UWP
             }
         }
 
-        protected override IAsyncOperation<HidDevice> FromIdAsync(string id)
-        {
-            return GetHidDevice(id);
-        }
+        protected override IAsyncOperation<HidDevice> FromIdAsync(string id) => GetHidDevice(id);
         #endregion
 
         #region Private Static Methods
@@ -110,10 +104,7 @@ namespace Hid.Net.UWP
             base.Dispose();
         }
 
-        public virtual Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
-        {
-            return WriteReportAsync(data, 0, cancellationToken);
-        }
+        public virtual Task WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, 0, cancellationToken);
 
         public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
@@ -188,10 +179,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Static Methods
-        public static IAsyncOperation<HidDevice> GetHidDevice(string id)
-        {
-            return HidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
-        }
+        public static IAsyncOperation<HidDevice> GetHidDevice(string id) => HidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
 
         public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
         {
@@ -215,10 +203,7 @@ namespace Hid.Net.UWP
             }
         }
 
-        public Task Flush(CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
-        }
+        public Task Flush(CancellationToken cancellationToken = default) => throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
         #endregion
     }
 }

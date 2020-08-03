@@ -49,3 +49,6 @@ dotnet_diagnostic.CA1724.severity = warning
 
 # CA1031: Do not catch general exception types
 dotnet_diagnostic.CA1031.severity = warning
+
+# IDE0022: Use block body for methods
+csharp_style_expression_bodied_methods = when_on_single_line:silent
