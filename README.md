@@ -8,8 +8,6 @@
 
 **Cross platform C# framework for talking to connected devices such as Usb, Serial Port and Hid devices.**
 
-**Pull Requests are super welcome! This framework really needs the community's help. I should be able to get to a round of fixes very soon**
-
 This framework provides a common Task based Async interface across platforms and device types. This allows for dependency injection so that different types of devices can be used on any platform with the same code. The supported device types are Hid, Serial Port, and USB. Other device types such as Bluetooth and so on may be added in future. Hid.Net is specifically for Hid devices that may be Usb devices. Usb.Net is specifically for Usb devices that don't have a Hid interface. Please visit the [documentation page](https://github.com/MelbourneDeveloper/Device.Net/wiki). Would you you like to [contribute?](https://christianfindlay.com/2019/04/28/calling-all-c-crypto-developers/)
 
 ### Currently supports:
