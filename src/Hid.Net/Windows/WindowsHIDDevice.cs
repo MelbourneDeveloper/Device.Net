@@ -242,7 +242,7 @@ namespace Hid.Net.Windows
 
         public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
-            return WriteReportAsync(data, 0, cancellationToken);
+            return WriteReportAsync(data, null, cancellationToken);
         }
 
         public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
