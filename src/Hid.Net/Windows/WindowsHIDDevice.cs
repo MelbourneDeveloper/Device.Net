@@ -265,15 +265,12 @@ namespace Hid.Net.Windows
             }
 
             byte[] bytes;
-            if (WriteBufferSize == 65)
+            if (reportId.HasValue)
             {
-                if (WriteBufferSize == data.Length)
-                {
-                    throw new DeviceException("The data sent to the device was a the same length as the HidCollectionCapabilities.OutputReportByteLength. This probably indicates that DataHasExtraByte should be set to false.");
-                }
-
-                bytes = new byte[WriteBufferSize];
+                //Copy the data to a new array that is one byte larger and shif the data to the right by 1
+                bytes = new byte[WriteBufferSize + 1];
                 Array.Copy(data, 0, bytes, 1, data.Length);
+                //Put the report Id at the first index
                 bytes[0] = reportId ?? DefaultReportId;
             }
             else
