@@ -249,10 +249,7 @@ namespace Hid.Net.Windows
             return new ReadReport(reportId, retVal);
         }
 
-        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
-        {
-            return WriteReportAsync(data, null, cancellationToken);
-        }
+        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, null, cancellationToken);
 
         public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
@@ -274,22 +271,13 @@ namespace Hid.Net.Windows
                     throw new NotInitializedException("The device has not been initialized");
                 }
 
-            byte[] bytes;
-            if (reportId.HasValue)
-            {
-                //Copy the data to a new array that is one byte larger and shif the data to the right by 1
-                bytes = new byte[WriteBufferSize + 1];
-                Array.Copy(data, 0, bytes, 1, data.Length);
-                //Put the report Id at the first index
-                bytes[0] = reportId ?? DefaultReportId;
-            }
-            else
-            {
-                bytes = data;
-            }
-
-                    bytes = new byte[WriteBufferSize];
+                byte[] bytes;
+                if (reportId.HasValue)
+                {
+                    //Copy the data to a new array that is one byte larger and shif the data to the right by 1
+                    bytes = new byte[WriteBufferSize + 1];
                     Array.Copy(data, 0, bytes, 1, data.Length);
+                    //Put the report Id at the first index
                     bytes[0] = reportId ?? DefaultReportId;
                 }
                 else
