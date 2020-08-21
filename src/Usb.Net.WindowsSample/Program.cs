@@ -2,8 +2,6 @@
 using System.Threading.Tasks;
 using Usb.Net.Sample;
 using Device.Net;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 #if !LIBUSB
@@ -33,22 +31,14 @@ namespace Usb.Net.WindowsSample
         #region Main
         private static void Main()
         {
-
-
-            var hostBuilder = Host.CreateDefaultBuilder().
-            ConfigureLogging((builderContext, loggingBuilder) =>
+            _loggerFactory = LoggerFactory.Create((builder) =>
             {
-                loggingBuilder.AddConsole((options) =>
+                builder.AddConsole((options) =>
                 {
                     //This displays arguments from the scope
                     options.IncludeScopes = true;
                 });
             });
-
-            var host = hostBuilder.Build();
-            _loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
-
-
 
             //Register the factories for creating Usb devices. This only needs to be done once.
 #if LIBUSB

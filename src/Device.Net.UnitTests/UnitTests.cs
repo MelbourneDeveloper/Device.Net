@@ -206,15 +206,22 @@ namespace Device.Net.UnitTests
 
             throw new Exception("The call was not stopped");
         }
+        #endregion
+
+        /// <summary>
+        /// Dummy logger factory for now
+        /// </summary>
+        private readonly ILoggerFactory _loggerFactory = LoggerFactory.Create((builder) => { });
 
         [TestMethod]
         public void TestListenerDeviceFactoriesNotRegisteredException()
         {
             _DeviceManager.DeviceFactories.Clear();
 
+
             try
             {
-                var deviceListner = new DeviceListener(_DeviceManager, new List<FilterDeviceDefinition>(), 1000);
+                var deviceListner = new DeviceListener(_DeviceManager, new List<FilterDeviceDefinition>(), 1000, _loggerFactory);
                 deviceListner.Start();
             }
             catch (DeviceFactoriesNotRegisteredException)
@@ -272,9 +279,6 @@ namespace Device.Net.UnitTests
 
             Assert.Fail();
         }
-
-        #endregion
-
         #endregion
 
         #region Helpers
@@ -282,7 +286,10 @@ namespace Device.Net.UnitTests
         {
             var listenTaskCompletionSource = new TaskCompletionSource<bool>();
 
-            var deviceListener = new DeviceListener(_DeviceManager, new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = MockHidDevice.VendorId, ProductId = MockHidDevice.ProductId } }, 1000);
+            var deviceListener = new DeviceListener(
+                _DeviceManager,
+                new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = MockHidDevice.VendorId, ProductId = MockHidDevice.ProductId } },
+                1000, _loggerFactory);
             deviceListener.DeviceInitialized += (a, deviceEventArgs) =>
             {
                 Console.WriteLine($"{deviceEventArgs.Device?.DeviceId} connected");

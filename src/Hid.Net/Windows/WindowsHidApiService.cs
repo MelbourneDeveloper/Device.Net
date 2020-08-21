@@ -21,7 +21,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidApiService(ILogger logger) : base(logger)
+        public WindowsHidApiService(ILoggerFactory loggerFactory) : base(loggerFactory?.CreateLogger<WindowsHidApiService>())
         {
         }
         #endregion

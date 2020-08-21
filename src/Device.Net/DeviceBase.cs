@@ -12,6 +12,10 @@ namespace Device.Net
         private bool disposed;
         #endregion
 
+        #region Protected Properties
+        protected ILogger Logger { get; }
+        #endregion
+
         #region Public Abstract Properties
         public abstract ushort WriteBufferSize { get; }
         public abstract ushort ReadBufferSize { get; }
@@ -21,7 +25,6 @@ namespace Device.Net
         #region Public Properties
         public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; set; }
         public string DeviceId { get; }
-        public ILogger Logger { get; }
         public ITracer Tracer { get; }
         #endregion
 

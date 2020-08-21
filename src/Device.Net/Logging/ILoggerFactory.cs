@@ -2,6 +2,6 @@
 {
     public interface ILoggerFactory
     {
-        ILogger CreateLogger(string categoryName);
+        ILogger CreateLogger<T>();
     }
 }

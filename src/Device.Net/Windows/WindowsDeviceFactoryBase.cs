@@ -13,8 +13,11 @@ namespace Device.Net.Windows
     /// </summary>
     public abstract class WindowsDeviceFactoryBase
     {
+        #region Fields
+        private readonly ILogger _logger;
+        #endregion
+
         #region Public Properties
-        public ILogger Logger { get; }
         public ILoggerFactory LoggerFactory { get; }
         public ITracer Tracer { get; }
         #endregion
@@ -32,7 +35,7 @@ namespace Device.Net.Windows
         protected WindowsDeviceFactoryBase(ILoggerFactory loggerFactory, ITracer tracer)
         {
             LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-            Logger = loggerFactory.CreateLogger(nameof(WindowsDeviceFactoryBase));
+            _logger = loggerFactory.CreateLogger<WindowsDeviceFactoryBase>();
             Tracer = tracer;
         }
         #endregion
@@ -46,7 +49,7 @@ namespace Device.Net.Windows
 
                 try
                 {
-                    Logger?.BeginScope("Filter Device Definition: {filterDeviceDefinition}", new object[] { filterDeviceDefinition?.ToString() });
+                    _logger?.BeginScope("Filter Device Definition: {filterDeviceDefinition}", new object[] { filterDeviceDefinition?.ToString() });
 
                     var deviceDefinitions = new Collection<ConnectedDeviceDefinition>();
                     var spDeviceInterfaceData = new SpDeviceInterfaceData();
@@ -61,7 +64,7 @@ namespace Device.Net.Windows
                     var copyOfClassGuid = new Guid(guidString);
                     const int flags = APICalls.DigcfDeviceinterface | APICalls.DigcfPresent;
 
-                    Logger?.LogDebug("About to call {call} for class Guid {guidString}. Flags: {flags}", nameof(APICalls.SetupDiGetClassDevs), guidString, flags);
+                    _logger?.LogDebug("About to call {call} for class Guid {guidString}. Flags: {flags}", nameof(APICalls.SetupDiGetClassDevs), guidString, flags);
 
                     var devicesHandle = APICalls.SetupDiGetClassDevs(ref copyOfClassGuid, IntPtr.Zero, IntPtr.Zero, flags);
 
@@ -88,13 +91,13 @@ namespace Device.Net.Windows
 
                                 if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
                                 {
-                                    Logger?.LogDebug("The call to " + nameof(APICalls.SetupDiEnumDeviceInterfaces) + "  returned ERROR_NO_MORE_ITEMS");
+                                    _logger?.LogDebug("The call to " + nameof(APICalls.SetupDiEnumDeviceInterfaces) + "  returned ERROR_NO_MORE_ITEMS");
                                     break;
                                 }
 
                                 if (errorCode > 0)
                                 {
-                                    Logger?.LogWarning("{call} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {index}. The error code was {errorCode}.", nameof(APICalls.SetupDiEnumDeviceInterfaces), i, errorCode);
+                                    _logger?.LogWarning("{call} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {index}. The error code was {errorCode}.", nameof(APICalls.SetupDiEnumDeviceInterfaces), i, errorCode);
                                 }
                             }
 
@@ -105,14 +108,14 @@ namespace Device.Net.Windows
 
                                 if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
                                 {
-                                    Logger?.LogDebug("The call to {call} returned ERROR_NO_MORE_ITEMS", new object[] { nameof(APICalls.SetupDiEnumDeviceInterfaces) });
+                                    _logger?.LogDebug("The call to {call} returned ERROR_NO_MORE_ITEMS", new object[] { nameof(APICalls.SetupDiEnumDeviceInterfaces) });
                                     //TODO: This probably can't happen but leaving this here because there was some strange behaviour
                                     break;
                                 }
 
                                 if (errorCode > 0)
                                 {
-                                    Logger?.LogWarning("{nameof(APICalls.SetupDiGetDeviceInterfaceDetail)} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {i}. The error code was {errorCode}.", nameof(APICalls.SetupDiEnumDeviceInterfaces), i, errorCode);
+                                    _logger?.LogWarning("{nameof(APICalls.SetupDiGetDeviceInterfaceDetail)} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {i}. The error code was {errorCode}.", nameof(APICalls.SetupDiEnumDeviceInterfaces), i, errorCode);
                                 }
                             }
 
@@ -127,7 +130,7 @@ namespace Device.Net.Windows
 
                             if (connectedDeviceDefinition == null)
                             {
-                                Logger?.LogWarning("Device with path {devicePath} was skipped. Area: {area} See previous logs.", spDeviceInterfaceDetailData.DevicePath, GetType().Name);
+                                _logger?.LogWarning("Device with path {devicePath} was skipped. Area: {area} See previous logs.", spDeviceInterfaceDetailData.DevicePath, GetType().Name);
                                 continue;
                             }
 
@@ -139,7 +142,7 @@ namespace Device.Net.Windows
                         catch (Exception ex)
                         {
                             //Log and move on
-                            Logger?.LogError(ex, ex.Message);
+                            _logger?.LogError(ex, ex.Message);
                         }
 #pragma warning restore CA1031
                     }
@@ -150,7 +153,7 @@ namespace Device.Net.Windows
                 }
                 catch (Exception ex)
                 {
-                    Logger?.LogError(ex, "Error calling " + nameof(GetConnectedDeviceDefinitionsAsync) + " region:{region}", new object[] { nameof(WindowsDeviceFactoryBase) });
+                    _logger?.LogError(ex, "Error calling " + nameof(GetConnectedDeviceDefinitionsAsync) + " region:{region}", new object[] { nameof(WindowsDeviceFactoryBase) });
                     throw;
                 }
                 finally

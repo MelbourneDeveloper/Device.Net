@@ -19,20 +19,20 @@ namespace Hid.Net.Windows
 
             try
             {
-                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(GetDeviceDefinition));
+                logScope = _logger?.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(GetDeviceDefinition));
 
                 using (var safeFileHandle = HidService.CreateReadConnection(deviceId, FileAccessRights.None))
                 {
                     if (safeFileHandle.IsInvalid) throw new DeviceException($"{nameof(HidService.CreateReadConnection)} call with Id of {deviceId} failed.");
 
-                    Logger?.LogDebug(Messages.InformationMessageFoundDevice);
+                    _logger?.LogDebug(Messages.InformationMessageFoundDevice);
 
                     return HidService.GetDeviceDefinition(deviceId, safeFileHandle);
                 }
             }
             catch (Exception ex)
             {
-                Logger?.LogError(ex, Messages.ErrorMessageCouldntGetDevice);
+                _logger?.LogError(ex, Messages.ErrorMessageCouldntGetDevice);
                 return null;
             }
             finally

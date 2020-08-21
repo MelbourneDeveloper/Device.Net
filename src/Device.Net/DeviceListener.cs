@@ -16,6 +16,7 @@ namespace Device.Net
         private bool _IsDisposed;
         private readonly timer _PollTimer;
         private readonly SemaphoreSlim _ListenSemaphoreSlim = null;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// This is the list of Devices by their filter definition. Note this is not actually keyed by the connected definition.
@@ -25,7 +26,6 @@ namespace Device.Net
 
         #region Public Properties
         public List<FilterDeviceDefinition> FilterDeviceDefinitions { get; } = new List<FilterDeviceDefinition>();
-        public ILogger Logger { get; set; }
         public IDeviceManager DeviceManager { get; }
         #endregion
 
@@ -40,8 +40,14 @@ namespace Device.Net
         /// </summary>
         /// <param name="filterDeviceDefinitions">Device definitions to connect to and disconnect from</param>
         /// <param name="pollMilliseconds">Poll interval in milliseconds, or null if checking is called externally</param>
-        public DeviceListener(IDeviceManager deviceManager, IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions, int? pollMilliseconds)
+        public DeviceListener(
+            IDeviceManager deviceManager,
+            IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
+            int? pollMilliseconds,
+            ILoggerFactory loggerFactory)
         {
+            _logger = loggerFactory?.CreateLogger<DeviceListener>();
+
             DeviceManager = deviceManager ?? throw new ArgumentNullException(nameof(deviceManager));
 
             FilterDeviceDefinitions.AddRange(filterDeviceDefinitions);
@@ -115,7 +121,7 @@ namespace Device.Net
 
                     if (device.IsInitialized) continue;
 
-                    Logger?.LogDebug("Attempting to initialize with DeviceId of {deviceId}", device.DeviceId);
+                    _logger?.LogDebug("Attempting to initialize with DeviceId of {deviceId}", device.DeviceId);
 
                     //The device is not initialized so initialize it
                     await device.InitializeAsync();
@@ -123,7 +129,7 @@ namespace Device.Net
                     //Let listeners know a registered device was initialized
                     DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
 
-                    Logger?.LogDebug(Messages.InformationMessageDeviceConnected, device.DeviceId);
+                    _logger?.LogDebug(Messages.InformationMessageDeviceConnected, device.DeviceId);
                 }
 
                 var removeDefs = new List<FilterDeviceDefinition>();
@@ -146,7 +152,7 @@ namespace Device.Net
 
                     removeDefs.Add(filteredDeviceDefinitionKey);
 
-                    Logger?.LogDebug(Messages.InformationMessageDeviceListenerDisconnected);
+                    _logger?.LogDebug(Messages.InformationMessageDeviceListenerDisconnected);
                 }
 
                 foreach (var removeDef in removeDefs)
@@ -154,7 +160,7 @@ namespace Device.Net
                     _CreatedDevicesByDefinition.Remove(removeDef);
                 }
 
-                Logger?.LogDebug(Messages.InformationMessageDeviceListenerPollingComplete);
+                _logger?.LogDebug(Messages.InformationMessageDeviceListenerPollingComplete);
 
             }
 #pragma warning disable CA1031 // Do not catch general exception types
@@ -162,7 +168,7 @@ namespace Device.Net
 #pragma warning restore CA1031 // Do not catch general exception types
             {
                 //Log and move on
-                Logger?.LogError(ex, Messages.ErrorMessagePollingError);
+                _logger?.LogError(ex, Messages.ErrorMessagePollingError);
 
                 //TODO: What else to do here?
             }

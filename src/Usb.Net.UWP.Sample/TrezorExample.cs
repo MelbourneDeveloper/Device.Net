@@ -40,7 +40,7 @@ namespace Usb.Net.Sample
         public TrezorExample(IDeviceManager deviceManager, ILoggerFactory loggerFactory)
         {
             DeviceManager = deviceManager;
-            DeviceListener = new DeviceListener(deviceManager, _DeviceDefinitions, PollMilliseconds) { Logger = loggerFactory.CreateLogger(nameof(TrezorExample)) };
+            DeviceListener = new DeviceListener(deviceManager, _DeviceDefinitions, PollMilliseconds, loggerFactory);
         }
         #endregion
 

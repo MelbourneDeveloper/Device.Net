@@ -37,7 +37,9 @@ namespace SerialPort.Net
         [TestMethod]
         public async Task ConnectedTestEnumerateAsync()
         {
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
         }
 
         [TestMethod]
@@ -55,7 +57,9 @@ namespace SerialPort.Net
         [TestMethod]
         public async Task ConnectedTestGetDevicesAsync()
         {
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
             var deviceManager = new DeviceManager();
             deviceManager.DeviceFactories.Add(windowsSerialPortDeviceFactory);
             var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.SerialPort } });
@@ -73,7 +77,9 @@ namespace SerialPort.Net
         {
             var deviceManager = new DeviceManager();
             deviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(null, null));
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
 
             var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.SerialPort } });
 

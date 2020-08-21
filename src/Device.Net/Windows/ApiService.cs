@@ -7,8 +7,8 @@ namespace Device.Net.Windows
 {
     public class ApiService : IApiService
     {
-        #region Public Properties
-        public ILogger Logger { get; }
+        #region Fields
+        protected ILogger Logger { get; }
         #endregion
 
         #region Constructor
