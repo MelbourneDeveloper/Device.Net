@@ -67,9 +67,9 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Constructor
-        public UWPHidDeviceFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
+        public UWPHidDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer) : base(loggerFactory, loggerFactory.CreateLogger<UWPHidDeviceFactory>(), tracer)
         {
-
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
         }
         #endregion
 
@@ -97,14 +97,16 @@ namespace Hid.Net.UWP
         /// Register the factory for enumerating Hid devices on UWP.
         /// </summary>
         [Obsolete(DeviceManager.ObsoleteMessage)]
-        public static void Register(ILogger logger, ITracer tracer)
+        public static void Register(ILoggerFactory loggerFactory, ITracer tracer)
         {
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+
             foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)
             {
                 if (deviceFactory is UWPHidDeviceFactory) return;
             }
 
-            DeviceManager.Current.DeviceFactories.Add(new UWPHidDeviceFactory(logger, tracer));
+            DeviceManager.Current.DeviceFactories.Add(new UWPHidDeviceFactory(loggerFactory, tracer));
         }
         #endregion
 

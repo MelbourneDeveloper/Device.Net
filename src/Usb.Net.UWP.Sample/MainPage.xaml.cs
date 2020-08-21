@@ -1,5 +1,6 @@
 ﻿using Device.Net;
 using Hid.Net.UWP;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Usb.Net.Sample;
 using Windows.UI;
@@ -27,22 +28,26 @@ namespace Usb.Net.UWP.Sample
         {
             InitializeComponent();
 
-            _DeviceConnectionExample = new TrezorExample(_DeviceManager);
+            var loggerFactory = LoggerFactory.Create((builder) =>
+            {
+                builder.AddDebug();
+            });
+
+            _DeviceConnectionExample = new TrezorExample(_DeviceManager, loggerFactory);
 
             _DeviceConnectionExample.TrezorInitialized += DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += DeviceConnectionExample_TrezorDisconnected;
 
-            var logger = new DebugLogger();
             var tracer = new DebugTracer();
 
             //Register the factory for creating Usb devices. This only needs to be done once.
-            _DeviceManager.RegisterDeviceFactory(new UWPUsbDeviceFactory(logger, tracer));
+            _DeviceManager.RegisterDeviceFactory(new UWPUsbDeviceFactory(loggerFactory, tracer));
 
             //Register the factory for creating Hid devices. This only needs to be done once.
-            _DeviceManager.RegisterDeviceFactory(new UWPHidDeviceFactory(logger, tracer));
+            _DeviceManager.RegisterDeviceFactory(new UWPHidDeviceFactory(loggerFactory, tracer));
 
             //Create the example
-            _DeviceConnectionExample = new TrezorExample(_DeviceManager);
+            _DeviceConnectionExample = new TrezorExample(_DeviceManager, loggerFactory);
         }
         #endregion
 
@@ -67,6 +72,7 @@ namespace Usb.Net.UWP.Sample
         }
 
 #pragma warning disable IDE0060 // Remove unused parameter
+#pragma warning disable IDE0051 // Remove unused private members
         private async void RunButton_Click(object sender, RoutedEventArgs e)
         {
             RunButton.IsEnabled = false;
@@ -80,6 +86,7 @@ namespace Usb.Net.UWP.Sample
             _DeviceConnectionExample.StartListening();
         }
 #pragma warning restore IDE0060 // Remove unused parameter
+#pragma warning restore IDE0051 // Remove unused private members
         #endregion
 
         #region Private Methods

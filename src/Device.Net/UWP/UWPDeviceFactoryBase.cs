@@ -17,13 +17,17 @@ namespace Device.Net.UWP
         protected const string InterfaceEnabledPart = "AND System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True";
         #endregion
 
+        #region Protected Properties
+        protected ILoggerFactory LoggerFactory { get; }
+        protected ILogger Logger { get; }
+        #endregion
+
         #region Protected Abstraction Properties
         protected abstract string VendorFilterName { get; }
         protected abstract string ProductFilterName { get; }
         #endregion
 
         #region Public Properties
-        public ILogger Logger { get; }
         public ITracer Tracer { get; }
         #endregion
 
@@ -36,8 +40,10 @@ namespace Device.Net.UWP
         #endregion
 
         #region Constructor
-        protected UWPDeviceFactoryBase(ILogger logger, ITracer tracer)
+        protected UWPDeviceFactoryBase(ILoggerFactory loggerFactory, ILogger logger, ITracer tracer)
         {
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+
             Logger = logger;
             Tracer = tracer;
         }

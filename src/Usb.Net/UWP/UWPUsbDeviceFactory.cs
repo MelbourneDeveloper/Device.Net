@@ -29,7 +29,7 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Constructur
-        public UWPUsbDeviceFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
+        public UWPUsbDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer) : base(loggerFactory, loggerFactory.CreateLogger<UWPUsbDeviceFactory>(), tracer)
         {
         }
         #endregion
@@ -48,14 +48,16 @@ namespace Usb.Net.UWP
         /// Register the factory for enumerating USB devices on UWP.
         /// </summary>
         [Obsolete(DeviceManager.ObsoleteMessage)]
-        public static void Register(ILogger logger, ITracer tracer)
+        public static void Register(ILoggerFactory loggerFactory, ITracer tracer)
         {
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+
             foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)
             {
                 if (deviceFactory is UWPUsbDeviceFactory) return;
             }
 
-            DeviceManager.Current.DeviceFactories.Add(new UWPUsbDeviceFactory(logger, tracer));
+            DeviceManager.Current.DeviceFactories.Add(new UWPUsbDeviceFactory(loggerFactory, tracer));
         }
         #endregion
 
