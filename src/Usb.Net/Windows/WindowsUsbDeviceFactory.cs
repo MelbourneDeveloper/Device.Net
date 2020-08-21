@@ -25,8 +25,9 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsUsbDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer) : base(loggerFactory, tracer)
+        public WindowsUsbDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer) : base(loggerFactory, loggerFactory.CreateLogger<WindowsUsbDeviceFactory>(), tracer)
         {
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
         }
         #endregion
 
@@ -35,12 +36,20 @@ namespace Usb.Net.Windows
         {
             if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
 
-            return deviceDefinition.DeviceType != DeviceType ? null : new UsbDevice(deviceDefinition.DeviceId, new WindowsUsbInterfaceManager(deviceDefinition.DeviceId, LoggerFactory.CreateLogger(nameof(WindowsUsbInterfaceManager)), Tracer, ReadBufferSize, WriteBufferSize), LoggerFactory.CreateLogger(nameof(UsbDevice)), Tracer);
+            return deviceDefinition.DeviceType != DeviceType ? null :
+                new UsbDevice(deviceDefinition.DeviceId,
+                new WindowsUsbInterfaceManager(
+                    deviceDefinition.DeviceId,
+                    LoggerFactory.CreateLogger<WindowsUsbInterfaceManager>(),
+                    Tracer,
+                    ReadBufferSize,
+                    WriteBufferSize)
+                , LoggerFactory.CreateLogger<UsbDevice>(), Tracer);
         }
         #endregion
 
         #region Private Static Methods
-        protected override ConnectedDeviceDefinition GetDeviceDefinition(string deviceId) => GetDeviceDefinitionFromWindowsDeviceId(deviceId, DeviceType.Usb, _logger);
+        protected override ConnectedDeviceDefinition GetDeviceDefinition(string deviceId) => GetDeviceDefinitionFromWindowsDeviceId(deviceId, DeviceType.Usb, Logger);
         #endregion
 
         #region Public Static Methods

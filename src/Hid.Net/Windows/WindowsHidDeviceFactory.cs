@@ -19,20 +19,20 @@ namespace Hid.Net.Windows
 
             try
             {
-                logScope = _logger?.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(GetDeviceDefinition));
+                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(GetDeviceDefinition));
 
                 using (var safeFileHandle = HidService.CreateReadConnection(deviceId, FileAccessRights.None))
                 {
                     if (safeFileHandle.IsInvalid) throw new DeviceException($"{nameof(HidService.CreateReadConnection)} call with Id of {deviceId} failed.");
 
-                    _logger?.LogDebug(Messages.InformationMessageFoundDevice);
+                    Logger?.LogDebug(Messages.InformationMessageFoundDevice);
 
                     return HidService.GetDeviceDefinition(deviceId, safeFileHandle);
                 }
             }
             catch (Exception ex)
             {
-                _logger?.LogError(ex, Messages.ErrorMessageCouldntGetDevice);
+                Logger?.LogError(ex, Messages.ErrorMessageCouldntGetDevice);
                 return null;
             }
             finally
@@ -55,7 +55,7 @@ namespace Hid.Net.Windows
 
         }
 
-        public WindowsHidDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer, IHidApiService hidService) : base(loggerFactory, tracer)
+        public WindowsHidDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer, IHidApiService hidService) : base(loggerFactory, loggerFactory.CreateLogger<WindowsHidDeviceFactory>(), tracer)
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
@@ -63,7 +63,7 @@ namespace Hid.Net.Windows
 
             if (HidService == null)
             {
-                HidService = new WindowsHidApiService(loggerFactory.CreateLogger(nameof(WindowsHidApiService)));
+                HidService = new WindowsHidApiService(loggerFactory);
             }
         }
         #endregion
@@ -73,7 +73,7 @@ namespace Hid.Net.Windows
         {
             if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
 
-            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId, LoggerFactory.CreateLogger(nameof(WindowsHidDevice)), Tracer);
+            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId, LoggerFactory, Tracer);
         }
         #endregion
 

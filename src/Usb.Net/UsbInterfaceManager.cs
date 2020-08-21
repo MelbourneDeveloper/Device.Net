@@ -17,6 +17,10 @@ namespace Usb.Net
         private IUsbInterface _WriteInterruptUsbInterface;
         #endregion
 
+        #region Protected Properties
+        protected ILogger Logger { get; }
+        #endregion
+
         #region Constructor
         public UsbInterfaceManager(ILogger logger, ITracer tracer)
         {
@@ -42,7 +46,6 @@ namespace Usb.Net
 
         #region Public Properties        
         public ITracer Tracer { get; }
-        public ILogger Logger { get; }
         public IList<IUsbInterface> UsbInterfaces { get; } = new List<IUsbInterface>();
         public IUsbInterface ReadUsbInterface
         {

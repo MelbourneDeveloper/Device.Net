@@ -60,9 +60,9 @@ namespace Device.Net.UnitTests
             writeStream.CanWrite.ReturnsForAnyArgs(true);
             hidService.OpenWrite(null, 0).ReturnsForAnyArgs(writeStream);
 
-            var logger = Substitute.For<ILogger>();
+            var loggerFactory = Substitute.For<ILoggerFactory>();
 
-            var windowsHidDevice = new WindowsHidDevice(deviceId, null, null, logger, Substitute.For<ITracer>(), hidService);
+            var windowsHidDevice = new WindowsHidDevice(deviceId, null, null, loggerFactory, Substitute.For<ITracer>(), hidService);
             await windowsHidDevice.InitializeAsync();
 
             throw new NotImplementedException();

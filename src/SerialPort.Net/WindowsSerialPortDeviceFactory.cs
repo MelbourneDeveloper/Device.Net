@@ -26,7 +26,7 @@ namespace SerialPort.Net.Windows
             LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
 
             //Note this loggerfactory may get shared with other factories of this type
-            Logger = loggerFactory.CreateLogger(nameof(WindowsSerialPortDeviceFactory));
+            Logger = loggerFactory.CreateLogger<WindowsSerialPortDeviceFactory>();
             Tracer = tracer;
         }
         #endregion

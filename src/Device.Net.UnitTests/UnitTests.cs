@@ -1,5 +1,7 @@
 #if !NET45
 
+#pragma warning disable IDE0055
+
 using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -369,4 +371,7 @@ namespace Device.Net.UnitTests
         }
     }
 }
+
+#pragma warning restore IDE0055
+
 #endif
