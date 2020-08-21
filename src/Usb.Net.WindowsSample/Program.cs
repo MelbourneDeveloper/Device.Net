@@ -42,7 +42,7 @@ namespace Usb.Net.WindowsSample
 
             //Register the factories for creating Usb devices. This only needs to be done once.
 #if LIBUSB
-            _DeviceManager.RegisterDeviceFactory(new LibUsbUsbDeviceFactory(loggerFactory, Tracer));
+            _DeviceManager.RegisterDeviceFactory(new LibUsbUsbDeviceFactory(_loggerFactory, Tracer));
 #else
             _DeviceManager.RegisterDeviceFactory(new WindowsUsbDeviceFactory(_loggerFactory, Tracer));
             _DeviceManager.RegisterDeviceFactory(new WindowsHidDeviceFactory(_loggerFactory, Tracer));
