@@ -33,11 +33,7 @@ namespace Usb.Net.WindowsSample
         {
             _loggerFactory = LoggerFactory.Create((builder) =>
             {
-                builder.AddConsole((options) =>
-                {
-                    //This displays arguments from the scope
-                    options.IncludeScopes = true;
-                });
+                builder.AddDebug();
             });
 
             //Register the factories for creating Usb devices. This only needs to be done once.
