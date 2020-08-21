@@ -12,11 +12,11 @@ namespace Device.Net.LibUsb
     {
         #region Protected Properties
         protected ILogger Logger { get; }
+        protected ILoggerFactory LoggerFactory { get; }
         #endregion
 
         #region Public Properties
         public ITracer Tracer { get; }
-        public ILoggerFactory LoggerFactory { get; }
         #endregion
 
         #region Public Abstraction Properties
@@ -57,8 +57,10 @@ namespace Device.Net.LibUsb
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
             if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
+#pragma warning disable CA2208 // Instantiate argument exceptions correctly
             if (deviceDefinition.VendorId == null) throw new ArgumentNullException(nameof(ConnectedDeviceDefinition.VendorId));
             if (deviceDefinition.ProductId == null) throw new ArgumentNullException(nameof(ConnectedDeviceDefinition.ProductId));
+#pragma warning restore CA2208 // Instantiate argument exceptions correctly
 
             var usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value, (int)deviceDefinition.ProductId.Value);
             var usbDevice = UsbDevice.OpenUsbDevice(usbDeviceFinder);

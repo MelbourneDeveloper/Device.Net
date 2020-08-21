@@ -37,9 +37,11 @@ namespace Device.Net.LibUsb
         {
         }
 
+#pragma warning disable CA1062 // Validate arguments of public methods
         public LibUsbDevice(UsbDevice usbDevice, int timeout, ILogger logger, ITracer tracer) : base(usbDevice.DevicePath, logger, tracer)
+#pragma warning restore CA1062 // Validate arguments of public methods
         {
-            UsbDevice = usbDevice;
+            UsbDevice = usbDevice ?? throw new ArgumentNullException(nameof(usbDevice));
             Timeout = timeout;
         }
         #endregion
@@ -146,9 +148,18 @@ namespace Device.Net.LibUsb
         #endregion
 
         #region Public Static Methods
-        public static int GetVendorId(UsbDevice usbDevice) => usbDevice is MonoUsbDevice monoUsbDevice ? monoUsbDevice.Profile.DeviceDescriptor.VendorID : usbDevice.UsbRegistryInfo.Vid;
+        public static int GetVendorId(UsbDevice usbDevice)
+        {
+            if (usbDevice == null) throw new ArgumentNullException(nameof(usbDevice));
+            return usbDevice is MonoUsbDevice monoUsbDevice ? monoUsbDevice.Profile.DeviceDescriptor.VendorID : usbDevice.UsbRegistryInfo.Vid;
+        }
 
-        public static int GetProductId(UsbDevice usbDevice) => usbDevice is MonoUsbDevice monoUsbDevice ? monoUsbDevice.Profile.DeviceDescriptor.ProductID : usbDevice.UsbRegistryInfo.Pid;
+        public static int GetProductId(UsbDevice usbDevice)
+        {
+            if (usbDevice == null) throw new ArgumentNullException(nameof(usbDevice));
+
+            return usbDevice is MonoUsbDevice monoUsbDevice ? monoUsbDevice.Profile.DeviceDescriptor.ProductID : usbDevice.UsbRegistryInfo.Pid;
+        }
         #endregion
     }
 }
