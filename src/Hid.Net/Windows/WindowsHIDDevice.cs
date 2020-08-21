@@ -249,7 +249,10 @@ namespace Hid.Net.Windows
             return new ReadReport(reportId, retVal);
         }
 
-        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, 0, cancellationToken);
+        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+        {
+            return WriteReportAsync(data, null, cancellationToken);
+        }
 
         public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
@@ -271,18 +274,19 @@ namespace Hid.Net.Windows
                     throw new NotInitializedException("The device has not been initialized");
                 }
 
-                if (data.Length > WriteBufferSize)
-                {
-                    throw new ValidationException($"Data is longer than {WriteBufferSize - 1} bytes which is the device's OutputReportByteLength.");
-                }
-
-                byte[] bytes;
-                if (WriteBufferSize == 65)
-                {
-                    if (WriteBufferSize == data.Length)
-                    {
-                        throw new DeviceException("The data sent to the device was a the same length as the HidCollectionCapabilities.OutputReportByteLength. This probably indicates that DataHasExtraByte should be set to false.");
-                    }
+            byte[] bytes;
+            if (reportId.HasValue)
+            {
+                //Copy the data to a new array that is one byte larger and shif the data to the right by 1
+                bytes = new byte[WriteBufferSize + 1];
+                Array.Copy(data, 0, bytes, 1, data.Length);
+                //Put the report Id at the first index
+                bytes[0] = reportId ?? DefaultReportId;
+            }
+            else
+            {
+                bytes = data;
+            }
 
                     bytes = new byte[WriteBufferSize];
                     Array.Copy(data, 0, bytes, 1, data.Length);
