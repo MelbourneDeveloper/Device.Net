@@ -37,7 +37,7 @@ namespace Usb.Net.Android
             LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
 
             //Warning: this may get used by other android factories
-            Logger = LoggerFactory.CreateLogger(nameof(AndroidUsbDeviceFactory));
+            Logger = LoggerFactory.CreateLogger<AndroidUsbDeviceFactory>();
             Tracer = tracer;
         }
         #endregion

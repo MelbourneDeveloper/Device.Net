@@ -17,18 +17,18 @@ namespace Usb.Net.WindowsSample.Temperature
         private readonly IDeviceManager _DeviceManager = new DeviceManager();
         private IDevice _device;
         private decimal? temp;
-        public ILoggerFactory LoggerFactory { get; }
+        private readonly ILoggerFactory _loggerFactory;
 
         public TemperatureMonitor(ILoggerFactory loggerFactory)
         {
-            LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             observers = new List<IObserver<Temperature>>();
             InitializeAsync().Wait();
         }
 
         private async Task InitializeAsync()
         {
-            _DeviceManager.RegisterDeviceFactory(new WindowsHidDeviceFactory(LoggerFactory, null));
+            _DeviceManager.RegisterDeviceFactory(new WindowsHidDeviceFactory(_loggerFactory, null));
             var devices = (await _DeviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.Hid, VendorId = 0x413d, ProductId = 0x2107 } })).ToList();
             _device = devices[1];
             await _device.InitializeAsync();

@@ -13,20 +13,23 @@ namespace SerialPort.Net.Windows
 {
     public class WindowsSerialPortDeviceFactory : IDeviceFactory
     {
+        #region Fields
+        private readonly ILogger _logger;
+        private readonly ILoggerFactory _loggerFactory;
+        #endregion
+
         #region Public Properties
         public DeviceType DeviceType => DeviceType.SerialPort;
-        public ILogger Logger { get; }
-        public ILoggerFactory LoggerFactory { get; }
         public ITracer Tracer { get; }
         #endregion
 
         #region Constructor
         public WindowsSerialPortDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer)
         {
-            LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
 
             //Note this loggerfactory may get shared with other factories of this type
-            Logger = loggerFactory.CreateLogger<WindowsSerialPortDeviceFactory>();
+            _logger = _loggerFactory.CreateLogger<WindowsSerialPortDeviceFactory>();
             Tracer = tracer;
         }
         #endregion
@@ -67,9 +70,9 @@ namespace SerialPort.Net.Windows
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
-                //TODO: Logging
+                _logger?.LogError(ex, ex.Message);
             }
 
             if (!registryAvailable)

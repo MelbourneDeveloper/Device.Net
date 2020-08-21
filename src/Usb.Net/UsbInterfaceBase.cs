@@ -20,8 +20,11 @@ namespace Usb.Net
         public abstract byte InterfaceNumber { get; }
         #endregion
 
+        #region Protected Properties
+        protected ILogger Logger { get; }
+        #endregion
+
         #region Public Properties
-        public ILogger Logger { get; }
         public ITracer Tracer { get; }
 
         public ushort ReadBufferSize

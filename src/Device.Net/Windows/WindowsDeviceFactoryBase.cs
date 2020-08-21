@@ -15,10 +15,10 @@ namespace Device.Net.Windows
     {
         #region Protected Properties
         protected ILogger Logger { get; }
+        protected ILoggerFactory LoggerFactory { get; }
         #endregion
 
         #region Public Properties
-        public ILoggerFactory LoggerFactory { get; }
         public ITracer Tracer { get; }
         #endregion
 

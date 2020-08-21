@@ -10,8 +10,11 @@ namespace Device.Net.LibUsb
 {
     public abstract class LibUsbDeviceFactoryBase : IDeviceFactory
     {
+        #region Protected Properties
+        protected ILogger Logger { get; }
+        #endregion
+
         #region Public Properties
-        public ILogger Logger { get; }
         public ITracer Tracer { get; }
         public ILoggerFactory LoggerFactory { get; }
         #endregion
@@ -59,7 +62,7 @@ namespace Device.Net.LibUsb
 
             var usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value, (int)deviceDefinition.ProductId.Value);
             var usbDevice = UsbDevice.OpenUsbDevice(usbDeviceFinder);
-            return usbDevice != null ? new LibUsbDevice(usbDevice, 3000, LoggerFactory.CreateLogger(nameof(LibUsbDevice)), Tracer) : null;
+            return usbDevice != null ? new LibUsbDevice(usbDevice, 3000, LoggerFactory.CreateLogger<LibUsbDevice>(), Tracer) : null;
         }
         #endregion
 
@@ -67,7 +70,7 @@ namespace Device.Net.LibUsb
         protected LibUsbDeviceFactoryBase(ILoggerFactory loggerFactory, ITracer tracer)
         {
             LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-            Logger = loggerFactory.CreateLogger(nameof(LibUsbDeviceFactoryBase));
+            Logger = loggerFactory.CreateLogger<LibUsbDeviceFactoryBase>();
             Tracer = tracer;
         }
         #endregion
