@@ -23,7 +23,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
     <PackageReference Include="Microsoft.Extensions.Logging">
-      <Version>3.1.6</Version>
+      <Version>3.1.7</Version>
     </PackageReference>
   </ItemGroup>
 
