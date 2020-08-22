@@ -20,7 +20,7 @@ namespace Usb.Net.WindowsSample
     {
         #region Fields
         private static ILoggerFactory _loggerFactory;
-        private static readonly IDeviceManager _DeviceManager = new DeviceManager();
+        private static IDeviceManager _DeviceManager;
         private static TrezorExample _DeviceConnectionExample;
         /// <summary>
         /// TODO: Test these!
@@ -35,6 +35,8 @@ namespace Usb.Net.WindowsSample
             {
                 builder.AddDebug();
             });
+
+            _DeviceManager = new DeviceManager(_loggerFactory);
 
             //Register the factories for creating Usb devices. This only needs to be done once.
 #if LIBUSB

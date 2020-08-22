@@ -14,13 +14,14 @@ namespace Usb.Net.WindowsSample.Temperature
     public class TemperatureMonitor : IObservable<Temperature>
     {
         private readonly List<IObserver<Temperature>> observers;
-        private readonly IDeviceManager _DeviceManager = new DeviceManager();
+        private readonly IDeviceManager _DeviceManager;
         private IDevice _device;
         private decimal? temp;
         private readonly ILoggerFactory _loggerFactory;
 
         public TemperatureMonitor(ILoggerFactory loggerFactory)
         {
+            _DeviceManager = new DeviceManager(loggerFactory);
             _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             observers = new List<IObserver<Temperature>>();
             InitializeAsync().Wait();

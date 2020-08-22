@@ -1,5 +1,7 @@
 using Device.Net;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using SerialPort.Net.Windows;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,7 @@ namespace SerialPort.Net
     {
         #region Fields
         private static WindowsSerialPortDeviceFactory windowsSerialPortDeviceFactory;
+        private readonly Mock<ILoggerFactory> _loggerFactoryMock = new Mock<ILoggerFactory>();
         #endregion
 
         #region Tests
@@ -59,7 +62,7 @@ namespace SerialPort.Net
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
-            var deviceManager = new DeviceManager();
+            var deviceManager = new DeviceManager(_loggerFactoryMock.Object);
             deviceManager.DeviceFactories.Add(windowsSerialPortDeviceFactory);
             var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.SerialPort } });
 
@@ -74,7 +77,7 @@ namespace SerialPort.Net
         [TestMethod]
         public async Task ConnectedTestGetDevicesSingletonAsync()
         {
-            var deviceManager = new DeviceManager();
+            var deviceManager = new DeviceManager(_loggerFactoryMock.Object);
             deviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(null, null));
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();

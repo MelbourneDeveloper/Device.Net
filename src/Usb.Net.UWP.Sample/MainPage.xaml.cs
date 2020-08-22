@@ -19,7 +19,7 @@ namespace Usb.Net.UWP.Sample
     public sealed partial class MainPage : Page
     {
         #region Fields
-        private readonly IDeviceManager _DeviceManager = new DeviceManager();
+        private readonly IDeviceManager _DeviceManager;
         private readonly TrezorExample _DeviceConnectionExample;
         #endregion
 
@@ -32,6 +32,8 @@ namespace Usb.Net.UWP.Sample
             {
                 builder.AddDebug();
             });
+
+            _DeviceManager = new DeviceManager(loggerFactory);
 
             _DeviceConnectionExample = new TrezorExample(_DeviceManager, loggerFactory);
 

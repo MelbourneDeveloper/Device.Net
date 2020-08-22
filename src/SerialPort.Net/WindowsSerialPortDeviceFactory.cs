@@ -98,9 +98,6 @@ namespace SerialPort.Net.Windows
 
             return new WindowsSerialPortDevice(deviceDefinition.DeviceId);
         }
-
-        [Obsolete(DeviceManager.ObsoleteMessage)]
-        public static void Register(ILoggerFactory loggerFactory, ITracer tracer) => DeviceManager.Current.DeviceFactories.Add(new WindowsSerialPortDeviceFactory(loggerFactory, tracer));
         #endregion
     }
 }

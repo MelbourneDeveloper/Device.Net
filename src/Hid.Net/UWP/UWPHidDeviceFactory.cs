@@ -92,24 +92,6 @@ namespace Hid.Net.UWP
         }
         #endregion
 
-        #region Public Static Methods
-        /// <summary>
-        /// Register the factory for enumerating Hid devices on UWP.
-        /// </summary>
-        [Obsolete(DeviceManager.ObsoleteMessage)]
-        public static void Register(ILoggerFactory loggerFactory, ITracer tracer)
-        {
-            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
-
-            foreach (var deviceFactory in DeviceManager.Current.DeviceFactories)
-            {
-                if (deviceFactory is UWPHidDeviceFactory) return;
-            }
-
-            DeviceManager.Current.DeviceFactories.Add(new UWPHidDeviceFactory(loggerFactory, tracer));
-        }
-        #endregion
-
         #region Finalizer
         ~UWPHidDeviceFactory()
         {

@@ -1,4 +1,5 @@
 ﻿using Device.Net.Exceptions;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +9,23 @@ namespace Device.Net
 {
     public class DeviceManager : IDeviceManager
     {
-        public const string ObsoleteMessage = "This method will soon be removed. Create an instance of DeviceManager and register factories there";
+        //TODO: Put logging in here
+
+        #region Fields
+        private readonly ILoggerFactory _loggerFactory;
+        #endregion
 
         #region Public Properties
+        public const string ObsoleteMessage = "This method will soon be removed. Create an instance of DeviceManager and register factories there";
         public List<IDeviceFactory> DeviceFactories { get; } = new List<IDeviceFactory>();
         public bool IsInitialized => DeviceFactories.Count > 0;
         #endregion
 
-        #region Public Static Properties
-        [Obsolete("Please create an instance of DeviceManager and register Device Factories on that instance")]
-        public static DeviceManager Current { get; } = new DeviceManager();
+        #region Constructor
+        public DeviceManager(ILoggerFactory loggerFactory)
+        {
+            _loggerFactory = loggerFactory;
+        }
         #endregion
 
         #region Public Methods

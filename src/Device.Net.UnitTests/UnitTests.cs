@@ -1,6 +1,8 @@
+#pragma warning disable IDE0055
+
+
 #if !NET45
 
-#pragma warning disable IDE0055
 
 using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
@@ -20,7 +22,8 @@ namespace Device.Net.UnitTests
     {
         private static readonly Mock<ILogger> loggerMock = new Mock<ILogger>();
         private static readonly MockTracer tracer = new MockTracer();
-        private static readonly IDeviceManager _DeviceManager = new DeviceManager();
+        private static readonly Mock<ILoggerFactory> _LoggerFactoryMock = new Mock<ILoggerFactory>();
+        private static readonly IDeviceManager _DeviceManager = new DeviceManager(_LoggerFactoryMock.Object);
 
         private static void CheckLogMessageText(string containsText, LogLevel logLevel)
         {
@@ -244,7 +247,7 @@ namespace Device.Net.UnitTests
         {
             try
             {
-                var deviceManager = new DeviceManager();
+                var deviceManager = new DeviceManager(_LoggerFactoryMock.Object);
                 var device = deviceManager.GetDevice(new ConnectedDeviceDefinition("a"));
             }
             catch (DeviceException dex)
@@ -372,6 +375,6 @@ namespace Device.Net.UnitTests
     }
 }
 
-#pragma warning restore IDE0055
-
 #endif
+
+#pragma warning restore IDE0055

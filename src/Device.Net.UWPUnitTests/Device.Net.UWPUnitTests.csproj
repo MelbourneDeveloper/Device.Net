@@ -131,9 +131,6 @@
     <Compile Include="..\Device.Net.UnitTests\MockClasses\MockHidFactory.cs">
       <Link>MockClasses\MockHidFactory.cs</Link>
     </Compile>
-    <Compile Include="..\Device.Net.UnitTests\MockClasses\MockLogger.cs">
-      <Link>MockClasses\MockLogger.cs</Link>
-    </Compile>
     <Compile Include="..\Device.Net.UnitTests\MockClasses\MockTracer.cs">
       <Link>MockClasses\MockTracer.cs</Link>
     </Compile>
@@ -178,8 +175,14 @@
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug">
+      <Version>3.1.7</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.10</Version>
+    </PackageReference>
+    <PackageReference Include="Moq">
+      <Version>4.14.5</Version>
     </PackageReference>
     <PackageReference Include="MSTest.TestAdapter">
       <Version>2.1.2</Version>
