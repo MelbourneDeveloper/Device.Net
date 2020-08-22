@@ -15,7 +15,7 @@ namespace Device.Net
         #region Fields
         private bool _IsDisposed;
         private readonly timer _PollTimer;
-        private readonly SemaphoreSlim _ListenSemaphoreSlim = null;
+        private readonly SemaphoreSlim _ListenSemaphoreSlim = new SemaphoreSlim(1, 1);
         private readonly ILogger _logger;
 
         /// <summary>
@@ -51,7 +51,6 @@ namespace Device.Net
             DeviceManager = deviceManager ?? throw new ArgumentNullException(nameof(deviceManager));
 
             FilterDeviceDefinitions.AddRange(filterDeviceDefinitions);
-            _ListenSemaphoreSlim = new SemaphoreSlim(1, 1);
             if (!pollMilliseconds.HasValue) return;
 
             _PollTimer = new timer(pollMilliseconds.Value);

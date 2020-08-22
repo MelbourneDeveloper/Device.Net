@@ -51,7 +51,7 @@ namespace Device.Net
         {
             if (writeBuffer == null) throw new ArgumentNullException(nameof(writeBuffer));
 
-            await _WriteAndReadLock.WaitAsync();
+            await _WriteAndReadLock.WaitAsync(cancellationToken);
 
             IDisposable logScope = null;
 
