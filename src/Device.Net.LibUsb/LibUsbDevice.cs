@@ -107,7 +107,7 @@ namespace Device.Net.LibUsb
 
                     _UsbEndpointReader.Read(data, Timeout, out var bytesRead);
 
-                    Tracer?.Trace(false, data);
+                    Logger.LogTrace(new Trace(false, data));
 
                     return data;
                 }, cancellationToken);
@@ -129,7 +129,7 @@ namespace Device.Net.LibUsb
                     var errorCode = _UsbEndpointWriter.Write(data, Timeout, out var bytesWritten);
                     if (errorCode == ErrorCode.Ok || errorCode == ErrorCode.Success)
                     {
-                        Tracer?.Trace(true, data);
+                        Logger.LogTrace(new Trace(true, data));
                     }
                     else
                     {

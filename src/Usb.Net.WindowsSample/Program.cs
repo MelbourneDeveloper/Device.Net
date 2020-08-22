@@ -22,10 +22,6 @@ namespace Usb.Net.WindowsSample
         private static ILoggerFactory _loggerFactory;
         private static IDeviceManager _DeviceManager;
         private static TrezorExample _DeviceConnectionExample;
-        /// <summary>
-        /// TODO: Test these!
-        /// </summary>
-        private static readonly DebugTracer Tracer = new DebugTracer();
         #endregion
 
         #region Main

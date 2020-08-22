@@ -64,7 +64,7 @@ namespace Usb.Net.Android
 
                     //Marshal.Copy(byteBuffer.GetDirectBufferAddress(), buffers, 0, ReadBufferLength);
 
-                    Tracer?.Trace(false, buffers);
+                    Logger.LogTrace(new Trace(false, buffers));
 
                     return buffers;
                 }
@@ -100,7 +100,7 @@ namespace Usb.Net.Android
                     request.Initialize(_UsbDeviceConnection, endpoint);
                     var byteBuffer = ByteBuffer.Wrap(data);
 
-                    Tracer?.Trace(true, data);
+                    Logger.LogTrace(new Trace(true, data));
 
 #pragma warning disable CS0618 
                     request.Queue(byteBuffer, data.Length);

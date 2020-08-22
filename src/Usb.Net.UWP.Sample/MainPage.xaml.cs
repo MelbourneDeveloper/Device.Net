@@ -40,8 +40,6 @@ namespace Usb.Net.UWP.Sample
             _DeviceConnectionExample.TrezorInitialized += DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += DeviceConnectionExample_TrezorDisconnected;
 
-            var tracer = new DebugTracer();
-
             //Register the factory for creating Usb devices. This only needs to be done once.
             _DeviceManager.RegisterDeviceFactory(new UWPUsbDeviceFactory(loggerFactory));
 

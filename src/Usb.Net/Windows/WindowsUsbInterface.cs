@@ -39,7 +39,7 @@ namespace Usb.Net.Windows
                 var bytes = new byte[bufferLength];
                 var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_SafeFileHandle, ReadEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't read data");
-                Tracer?.Trace(false, bytes);
+                Logger.LogTrace(new Trace(false, bytes));
                 return new ReadResult(bytes, bytesRead);
             }, cancellationToken);
         }
@@ -50,7 +50,7 @@ namespace Usb.Net.Windows
             {
                 var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_SafeFileHandle, WriteEndpoint.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't write data");
-                Tracer?.Trace(true, data);
+                Logger.LogTrace(new Trace(true, data));
             }, cancellationToken);
         }
 

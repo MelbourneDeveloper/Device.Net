@@ -21,7 +21,6 @@ namespace Device.Net.UnitTests
     public class UnitTests
     {
         private static readonly Mock<ILogger> loggerMock = new Mock<ILogger>();
-        private static readonly MockTracer tracer = new MockTracer();
         private static readonly Mock<ILoggerFactory> _LoggerFactoryMock = new Mock<ILoggerFactory>();
         private static readonly IDeviceManager _DeviceManager = new DeviceManager(_LoggerFactoryMock.Object);
 
@@ -105,45 +104,48 @@ namespace Device.Net.UnitTests
             Assert.AreEqual(expectedCount, connectedDeviceDefinitions.Count);
         }
 
+#pragma warning disable IDE0022 // Use expression body for methods
         [TestMethod]
         [DataRow(true, true, MockHidDevice.VendorId, MockHidDevice.ProductId)]
         [DataRow(true, false, MockHidDevice.VendorId, MockHidDevice.ProductId)]
         public async Task TestWriteAndReadThreadSafety(bool isHidConnected, bool isUsbConnected, uint vid, uint pid)
         {
-            var readtraceCount = tracer.ReadCount;
-            var writetraceCount = tracer.WriteCount;
+            throw new NotImplementedException("Fix this test");
+            //var readtraceCount = tracer.ReadCount;
+            //var writetraceCount = tracer.WriteCount;
 
-            MockHidFactory.IsConnectedStatic = isHidConnected;
-            MockUsbFactory.IsConnectedStatic = isUsbConnected;
-            var connectedDeviceDefinition = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
+            //MockHidFactory.IsConnectedStatic = isHidConnected;
+            //MockUsbFactory.IsConnectedStatic = isUsbConnected;
+            //var connectedDeviceDefinition = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
 
 
-            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, loggerMock.Object);
+            //var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, loggerMock.Object);
 
-            var writeAndReadTasks = new List<Task<ReadResult>>();
+            //var writeAndReadTasks = new List<Task<ReadResult>>();
 
-            //TODO: Does this properly test thread safety?
+            ////TODO: Does this properly test thread safety?
 
-            const int count = 10;
+            //const int count = 10;
 
-            for (byte i = 0; i < count; i++)
-            {
-                writeAndReadTasks.Add(mockHidDevice.WriteAndReadAsync(new byte[64] { i, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }));
-            }
+            //for (byte i = 0; i < count; i++)
+            //{
+            //    writeAndReadTasks.Add(mockHidDevice.WriteAndReadAsync(new byte[64] { i, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }));
+            //}
 
-            var results = await Task.WhenAll(writeAndReadTasks);
+            //var results = await Task.WhenAll(writeAndReadTasks);
 
-            for (byte i = 0; i < results.Length; i++)
-            {
-                var result = results[i];
-                Assert.IsTrue(result.Data[0] == i);
-            }
+            //for (byte i = 0; i < results.Length; i++)
+            //{
+            //    var result = results[i];
+            //    Assert.IsTrue(result.Data[0] == i);
+            //}
 
-            Assert.AreEqual(readtraceCount + count, tracer.ReadCount);
-            Assert.AreEqual(writetraceCount + count, tracer.WriteCount);
+            //Assert.AreEqual(readtraceCount + count, tracer.ReadCount);
+            //Assert.AreEqual(writetraceCount + count, tracer.WriteCount);
 
-            CheckLogMessageText(Messages.SuccessMessageWriteAndReadCalled, LogLevel.Information);
+            //CheckLogMessageText(Messages.SuccessMessageWriteAndReadCalled, LogLevel.Information);
         }
+#pragma warning restore IDE0022 // Use expression body for methods
 
         [TestMethod]
         [DataRow(true, true, 0)]

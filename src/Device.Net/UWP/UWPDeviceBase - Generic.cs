@@ -59,7 +59,7 @@ namespace Device.Net.UWP
                     var data2 = Chunks[0];
                     Logger?.LogDebug("Received data from device Region: {region}", GetType().Name);
                     Chunks.RemoveAt(0);
-                    Tracer?.Trace(false, data2);
+                    Logger.LogTrace(new Trace(false, data2));
                     return data2;
                 }
             }
@@ -75,7 +75,7 @@ namespace Device.Net.UWP
             }
 
             var data = await ReadChunkTaskCompletionSource.Task;
-            Tracer?.Trace(false, data);
+            Logger.LogTrace(new Trace(false, data));
             return data;
         }
         #endregion

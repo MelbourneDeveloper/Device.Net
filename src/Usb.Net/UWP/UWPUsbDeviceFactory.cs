@@ -28,7 +28,7 @@ namespace Usb.Net.UWP
         }
         #endregion
 
-        #region Constructur
+        #region Constructor
         public UWPUsbDeviceFactory(ILoggerFactory loggerFactory) : base(loggerFactory, loggerFactory.CreateLogger<UWPUsbDeviceFactory>())
         {
         }
@@ -39,7 +39,13 @@ namespace Usb.Net.UWP
         {
             if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
 
-            return deviceDefinition.DeviceType == DeviceType.Hid ? null : new UsbDevice(deviceDefinition.DeviceId, new UWPUsbInterfaceManager(deviceDefinition, Tracer, WriteBufferSize), Logger);
+            return deviceDefinition.DeviceType == DeviceType.Hid ? null :
+                new UsbDevice(deviceDefinition.DeviceId,
+                new UWPUsbInterfaceManager(
+                    deviceDefinition,
+                    LoggerFactory.CreateLogger<UWPUsbInterfaceManager>(),
+                    ReadBufferSize,
+                    WriteBufferSize), Logger);
         }
         #endregion
 

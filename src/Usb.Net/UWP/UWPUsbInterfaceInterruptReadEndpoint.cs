@@ -93,7 +93,7 @@ namespace Usb.Net.UWP
                     if (_Chunks.Count > 0)
                     {
                         retVal = _Chunks[0];
-                        Tracer?.Trace(false, retVal);
+                        _logger.LogTrace(new Trace(false, retVal));
                         _Chunks.RemoveAt(0);
                         _logger?.LogDebug(Messages.DebugMessageReadFirstChunk);
                         return retVal;
@@ -124,7 +124,7 @@ namespace Usb.Net.UWP
 
                 _logger?.LogDebug(Messages.DebugMessageCompletionSourceNulled);
 
-                Tracer?.Trace(false, retVal);
+                _logger.LogTrace(new Trace(false, retVal));
                 return retVal;
             }
             finally

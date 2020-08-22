@@ -3,11 +3,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System.Threading.Tasks;
 using Usb.Net;
-using Moq;
 using Microsoft.Extensions.Logging;
 #if !WINDOWS_UWP
 using Usb.Net.Windows;
 using Device.Net.Exceptions;
+using Moq;
 #endif
 
 namespace Device.Net.UnitTests

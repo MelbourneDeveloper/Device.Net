@@ -209,10 +209,12 @@ namespace Hid.Net.Windows
             await Task.Run(() => Initialize());
         }
 
+
+
         public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             var data = (await ReadReportAsync(cancellationToken)).Data;
-            Tracer?.Trace(false, data);
+            Logger.LogTrace(new Trace(false, data));
             return data;
         }
 
@@ -290,7 +292,7 @@ namespace Hid.Net.Windows
                     try
                     {
                         await _WriteFileStream.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
-                        Tracer?.Trace(true, bytes);
+                        Logger.LogTrace(new Trace(true, bytes));
                     }
                     catch (Exception ex)
                     {

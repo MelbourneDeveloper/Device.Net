@@ -119,7 +119,7 @@ namespace Usb.Net.UWP
 
                 if (count == data.Length)
                 {
-                    Tracer?.Trace(true, data);
+                    Logger.LogTrace(new Trace(true, data));
                 }
                 else
                 {

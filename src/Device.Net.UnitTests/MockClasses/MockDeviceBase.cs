@@ -35,11 +35,11 @@ namespace Device.Net.UnitTests
         {
             if (LastWrittenBuffer != null)
             {
-                Tracer?.Trace(false, LastWrittenBuffer);
+                Logger.LogTrace(new Trace(false, LastWrittenBuffer));
                 return LastWrittenBuffer;
             }
             var data = new byte[] { 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            Tracer?.Trace(false, data);
+            Logger.LogTrace(new Trace(false, data));
 
             //Simulate IO delay and wait for a cancellation
             for (var i = 0; i < 10; i++)
@@ -54,7 +54,7 @@ namespace Device.Net.UnitTests
         public override async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             LastWrittenBuffer = data;
-            Tracer?.Trace(true, data);
+            Logger.LogTrace(new Trace(true, data));
             //Simulate IO delay and wait for a cancellation
             for (var i = 0; i < 10; i++)
             {
