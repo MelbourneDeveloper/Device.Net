@@ -27,10 +27,6 @@ namespace Device.Net.UWP
         protected abstract string ProductFilterName { get; }
         #endregion
 
-        #region Public Properties
-        public ITracer Tracer { get; }
-        #endregion
-
         #region Public Abstract Properties
         public abstract DeviceType DeviceType { get; }
         #endregion
@@ -40,12 +36,11 @@ namespace Device.Net.UWP
         #endregion
 
         #region Constructor
-        protected UWPDeviceFactoryBase(ILoggerFactory loggerFactory, ILogger logger, ITracer tracer)
+        protected UWPDeviceFactoryBase(ILoggerFactory loggerFactory, ILogger logger)
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
             Logger = logger;
-            Tracer = tracer;
         }
         #endregion
 

@@ -43,15 +43,15 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPHidDevice(ILogger logger, ITracer tracer) : this(null, logger, tracer)
+        public UWPHidDevice(ILogger logger) : this(null, logger)
         {
         }
 
-        public UWPHidDevice(string deviceId) : this(deviceId, null, null)
+        public UWPHidDevice(string deviceId) : this(deviceId, null)
         {
         }
 
-        public UWPHidDevice(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
+        public UWPHidDevice(string deviceId, ILogger logger) : base(deviceId, logger)
         {
         }
         #endregion

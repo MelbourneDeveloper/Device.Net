@@ -32,11 +32,11 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsSerialPortDevice(string deviceId) : this(deviceId, new ApiService(null), 9600, StopBits.One, Parity.None, 8, 1024, null, null)
+        public WindowsSerialPortDevice(string deviceId) : this(deviceId, new ApiService(null), 9600, StopBits.One, Parity.None, 8, 1024, null)
         {
         }
 
-        public WindowsSerialPortDevice(string deviceId, IApiService apiService, int baudRate, StopBits stopBits, Parity parity, byte byteSize, ushort readBufferSize, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
+        public WindowsSerialPortDevice(string deviceId, IApiService apiService, int baudRate, StopBits stopBits, Parity parity, byte byteSize, ushort readBufferSize, ILogger logger) : base(deviceId, logger)
         {
             ApiService = apiService ?? throw new ArgumentNullException(nameof(apiService));
 

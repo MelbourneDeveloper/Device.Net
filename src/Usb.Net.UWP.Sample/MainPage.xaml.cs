@@ -43,10 +43,10 @@ namespace Usb.Net.UWP.Sample
             var tracer = new DebugTracer();
 
             //Register the factory for creating Usb devices. This only needs to be done once.
-            _DeviceManager.RegisterDeviceFactory(new UWPUsbDeviceFactory(loggerFactory, tracer));
+            _DeviceManager.RegisterDeviceFactory(new UWPUsbDeviceFactory(loggerFactory));
 
             //Register the factory for creating Hid devices. This only needs to be done once.
-            _DeviceManager.RegisterDeviceFactory(new UWPHidDeviceFactory(loggerFactory, tracer));
+            _DeviceManager.RegisterDeviceFactory(new UWPHidDeviceFactory(loggerFactory));
 
             //Create the example
             _DeviceConnectionExample = new TrezorExample(_DeviceManager, loggerFactory);

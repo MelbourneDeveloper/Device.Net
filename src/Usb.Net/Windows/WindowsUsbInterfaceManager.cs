@@ -28,7 +28,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsUsbInterfaceManager(string deviceId, ILogger logger, ITracer tracer, ushort? readBufferLength, ushort? writeBufferLength) : base(logger, tracer)
+        public WindowsUsbInterfaceManager(string deviceId, ILogger logger, ushort? readBufferLength, ushort? writeBufferLength) : base(logger)
         {
             ReadBufferSizeProtected = readBufferLength;
             WriteBufferSizeProtected = writeBufferLength;
@@ -131,7 +131,7 @@ namespace Usb.Net.Windows
             //TODO: Where is the logger/tracer?
             var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
 
-            var retVal = new WindowsUsbInterface(interfaceHandle, Logger, Tracer, interfaceDescriptor.bInterfaceNumber, ReadBufferSizeProtected, WriteBufferSizeProtected);
+            var retVal = new WindowsUsbInterface(interfaceHandle, Logger, interfaceDescriptor.bInterfaceNumber, ReadBufferSizeProtected, WriteBufferSizeProtected);
             WindowsDeviceBase.HandleError(isSuccess, "Couldn't query interface");
 
             for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)

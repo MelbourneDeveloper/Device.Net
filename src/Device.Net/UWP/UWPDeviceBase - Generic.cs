@@ -25,7 +25,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Constructor
-        protected UWPDeviceBase(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
+        protected UWPDeviceBase(string deviceId, ILogger logger) : base(deviceId, logger)
         {
         }
         #endregion

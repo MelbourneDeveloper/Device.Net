@@ -131,9 +131,6 @@
     <Compile Include="..\Device.Net.UnitTests\MockClasses\MockHidFactory.cs">
       <Link>MockClasses\MockHidFactory.cs</Link>
     </Compile>
-    <Compile Include="..\Device.Net.UnitTests\MockClasses\MockTracer.cs">
-      <Link>MockClasses\MockTracer.cs</Link>
-    </Compile>
     <Compile Include="..\Device.Net.UnitTests\MockClasses\MockUsbDevice.cs">
       <Link>MockClasses\MockUsbDevice.cs</Link>
     </Compile>

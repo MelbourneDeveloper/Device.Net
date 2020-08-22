@@ -37,7 +37,7 @@ namespace Usb.Net.Android
         #endregion
 
         #region Constructor
-        public AndroidUsbInterfaceManager(UsbManager usbManager, Context androidContext, int deviceNumberId, ILogger logger, ITracer tracer, ushort? readBufferLength, ushort? writeBufferLength) : base(logger, tracer)
+        public AndroidUsbInterfaceManager(UsbManager usbManager, Context androidContext, int deviceNumberId, ILogger logger, ushort? readBufferLength, ushort? writeBufferLength) : base(logger)
         {
             ReadBufferSizeProtected = readBufferLength;
             WriteBufferSizeProtected = writeBufferLength;
@@ -158,7 +158,7 @@ namespace Usb.Net.Android
                     //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
                     var usbInterface = _UsbDevice.GetInterface(x);
 
-                    var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, Logger, Tracer, ReadBufferSize, WriteBufferSize);
+                    var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, Logger, ReadBufferSize, WriteBufferSize);
                     UsbInterfaces.Add(androidUsbInterface);
 
                     for (var y = 0; y < usbInterface.EndpointCount; y++)

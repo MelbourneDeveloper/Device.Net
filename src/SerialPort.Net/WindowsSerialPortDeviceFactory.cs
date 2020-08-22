@@ -20,17 +20,15 @@ namespace SerialPort.Net.Windows
 
         #region Public Properties
         public DeviceType DeviceType => DeviceType.SerialPort;
-        public ITracer Tracer { get; }
         #endregion
 
         #region Constructor
-        public WindowsSerialPortDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer)
+        public WindowsSerialPortDeviceFactory(ILoggerFactory loggerFactory)
         {
             _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
 
             //Note this loggerfactory may get shared with other factories of this type
             _logger = _loggerFactory.CreateLogger<WindowsSerialPortDeviceFactory>();
-            Tracer = tracer;
         }
         #endregion
 

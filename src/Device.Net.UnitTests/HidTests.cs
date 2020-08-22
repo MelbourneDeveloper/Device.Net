@@ -17,7 +17,7 @@ namespace Device.Net.UnitTests
         {
             try
             {
-                new WindowsHidDevice(null, null, null);
+                new WindowsHidDevice(null, null);
             }
             catch (ArgumentNullException ane)
             {
@@ -62,7 +62,7 @@ namespace Device.Net.UnitTests
 
             var loggerFactory = Substitute.For<ILoggerFactory>();
 
-            var windowsHidDevice = new WindowsHidDevice(deviceId, null, null, loggerFactory, Substitute.For<ITracer>(), hidService);
+            var windowsHidDevice = new WindowsHidDevice(deviceId, null, null, loggerFactory, hidService);
             await windowsHidDevice.InitializeAsync();
 
             throw new NotImplementedException();

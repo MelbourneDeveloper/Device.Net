@@ -5,7 +5,7 @@ namespace Device.Net.UnitTests
 {
     public class MockUsbFactory : MockFactoryBase
     {
-        public MockUsbFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
+        public MockUsbFactory(ILogger logger) : base(logger)
         {
         }
 
@@ -33,7 +33,7 @@ namespace Device.Net.UnitTests
 
             Logger?.LogInformation(string.Format(FoundMessage, DeviceId));
 
-            return new MockUsbDevice(DeviceId, Logger, Tracer);
+            return new MockUsbDevice(DeviceId, Logger);
         }
     }
 }

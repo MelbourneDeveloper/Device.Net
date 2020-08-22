@@ -25,7 +25,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsUsbDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer) : base(loggerFactory, loggerFactory.CreateLogger<WindowsUsbDeviceFactory>(), tracer)
+        public WindowsUsbDeviceFactory(ILoggerFactory loggerFactory) : base(loggerFactory, loggerFactory.CreateLogger<WindowsUsbDeviceFactory>())
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
         }
@@ -38,13 +38,12 @@ namespace Usb.Net.Windows
 
             return deviceDefinition.DeviceType != DeviceType ? null :
                 new UsbDevice(deviceDefinition.DeviceId,
-                new WindowsUsbInterfaceManager(
+                    new WindowsUsbInterfaceManager(
                     deviceDefinition.DeviceId,
-                    LoggerFactory.CreateLogger<WindowsUsbInterfaceManager>(),
-                    Tracer,
-                    ReadBufferSize,
-                    WriteBufferSize)
-                , LoggerFactory.CreateLogger<UsbDevice>(), Tracer);
+                        LoggerFactory.CreateLogger<WindowsUsbInterfaceManager>(),
+                        ReadBufferSize,
+                        WriteBufferSize)
+                , LoggerFactory.CreateLogger<UsbDevice>());
         }
         #endregion
 

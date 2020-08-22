@@ -78,7 +78,7 @@ namespace SerialPort.Net
         public async Task ConnectedTestGetDevicesSingletonAsync()
         {
             var deviceManager = new DeviceManager(_loggerFactoryMock.Object);
-            deviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(null, null));
+            deviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(null));
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
@@ -106,7 +106,7 @@ namespace SerialPort.Net
         {
             if (windowsSerialPortDeviceFactory == null)
             {
-                windowsSerialPortDeviceFactory = new WindowsSerialPortDeviceFactory(null, null);
+                windowsSerialPortDeviceFactory = new WindowsSerialPortDeviceFactory(null);
             }
 
             return (await windowsSerialPortDeviceFactory.GetConnectedDeviceDefinitionsAsync(null)).ToList();

@@ -8,7 +8,7 @@ namespace Device.Net.UnitTests
         public const uint VendorId = 2;
         public const string MockedDeviceId = "321";
 
-        public MockUsbDevice(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
+        public MockUsbDevice(string deviceId, ILogger logger) : base(deviceId, logger)
         {
             ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId) { ProductId = ProductId, VendorId = VendorId, DeviceType = DeviceType.Usb };
         }

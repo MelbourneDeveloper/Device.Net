@@ -13,12 +13,10 @@ namespace Device.Net.UnitTests
         public abstract DeviceType DeviceType { get; }
 
         public ILogger Logger { get; }
-        public ITracer Tracer { get; }
 
-        protected MockFactoryBase(ILogger logger, ITracer tracer)
+        protected MockFactoryBase(ILogger logger)
         {
             Logger = logger;
-            Tracer = tracer;
         }
 
         public abstract uint ProductId { get; }

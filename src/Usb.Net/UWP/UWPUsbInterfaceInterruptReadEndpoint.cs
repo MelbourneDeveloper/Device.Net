@@ -17,18 +17,13 @@ namespace Usb.Net.UWP
         private readonly SemaphoreSlim _DataReceivedLock = new SemaphoreSlim(1, 1);
         private bool disposed;
         private TaskCompletionSource<byte[]> _ReadChunkTaskCompletionSource;
-        #endregion
-
-        #region Public Properties
-        public ILogger Logger { get; }
-        public ITracer Tracer { get; }
+        private readonly ILogger _logger;
         #endregion
 
         #region Constructor
-        public UWPUsbInterfaceInterruptReadEndpoint(UsbInterruptInPipe pipe, ILogger logger, ITracer tracer) : base(pipe)
+        public UWPUsbInterfaceInterruptReadEndpoint(UsbInterruptInPipe pipe, ILogger logger) : base(pipe)
         {
-            Logger = logger;
-            Tracer = tracer;
+            _logger = logger;
             UsbInterruptInPipe.DataReceived += UsbInterruptInPipe_DataReceived;
         }
         #endregion
@@ -47,7 +42,7 @@ namespace Usb.Net.UWP
 
                 if (bytes != null)
                 {
-                    Logger?.LogInformation("{bytesLength} read on interrupt pipe {endpointNumber}", bytes.Length, UsbInterruptInPipe.EndpointDescriptor.EndpointNumber);
+                    _logger?.LogInformation("{bytesLength} read on interrupt pipe {endpointNumber}", bytes.Length, UsbInterruptInPipe.EndpointDescriptor.EndpointNumber);
                 }
 
                 if (_ReadChunkTaskCompletionSource != null && _ReadChunkTaskCompletionSource.Task.Status != TaskStatus.RanToCompletion)
@@ -57,7 +52,7 @@ namespace Usb.Net.UWP
                     var result = _Chunks[0];
                     _Chunks.RemoveAt(0);
                     _ReadChunkTaskCompletionSource.SetResult(result);
-                    Logger?.LogInformation($"Completion source result set");
+                    _logger?.LogInformation($"Completion source result set");
                     return;
                 }
             }
@@ -84,7 +79,7 @@ namespace Usb.Net.UWP
 
             try
             {
-                logScope = Logger?.BeginScope("Endpoint descriptor: {endpointDescriptor} Call: {call}", UsbInterruptInPipe.EndpointDescriptor?.ToString(), nameof(ReadAsync));
+                logScope = _logger?.BeginScope("Endpoint descriptor: {endpointDescriptor} Call: {call}", UsbInterruptInPipe.EndpointDescriptor?.ToString(), nameof(ReadAsync));
 
                 await _ReadLock.WaitAsync();
 
@@ -100,13 +95,13 @@ namespace Usb.Net.UWP
                         retVal = _Chunks[0];
                         Tracer?.Trace(false, retVal);
                         _Chunks.RemoveAt(0);
-                        Logger?.LogDebug(Messages.DebugMessageReadFirstChunk);
+                        _logger?.LogDebug(Messages.DebugMessageReadFirstChunk);
                         return retVal;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger?.LogError(ex, Messages.ErrorMessageRead);
+                    _logger?.LogError(ex, Messages.ErrorMessageRead);
                     throw;
                 }
                 finally
@@ -117,7 +112,7 @@ namespace Usb.Net.UWP
                 //Wait for the event here. Once the event occurs, this should return and the semaphore should be released
                 _ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
 
-                Logger?.LogDebug(Messages.DebugMessageLockReleased);
+                _logger?.LogDebug(Messages.DebugMessageLockReleased);
 
                 //Cancel the completion source if the token is canceled
                 using (cancellationToken.Register(() => { _ReadChunkTaskCompletionSource.TrySetCanceled(); }))
@@ -127,7 +122,7 @@ namespace Usb.Net.UWP
 
                 _ReadChunkTaskCompletionSource = null;
 
-                Logger?.LogDebug(Messages.DebugMessageCompletionSourceNulled);
+                _logger?.LogDebug(Messages.DebugMessageCompletionSourceNulled);
 
                 Tracer?.Trace(false, retVal);
                 return retVal;

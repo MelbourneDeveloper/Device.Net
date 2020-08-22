@@ -8,7 +8,7 @@ namespace Device.Net.UnitTests
         public const uint VendorId = 1;
         public const string MockedDeviceId = "123";
 
-        public MockHidDevice(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
+        public MockHidDevice(string deviceId, ILogger logger) : base(deviceId, logger)
         {
             ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId) { ProductId = ProductId, VendorId = VendorId, DeviceType = DeviceType.Hid };
         }

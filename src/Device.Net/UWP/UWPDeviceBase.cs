@@ -13,11 +13,11 @@ namespace Device.Net.UWP
         #region Protected Properties
         protected TaskCompletionSource<byte[]> ReadChunkTaskCompletionSource { get; set; }
         protected Collection<byte[]> Chunks { get; } = new Collection<byte[]>();
+        protected ILogger Logger { get; }
+
         #endregion
 
         #region Public Properties
-        public ILogger Logger { get; }
-        public ITracer Tracer { get; }
         public string DeviceId { get; }
         #endregion
 
@@ -44,10 +44,9 @@ namespace Device.Net.UWP
         #endregion
 
         #region Constructor
-        protected UWPDeviceBase(string deviceId, ILogger logger, ITracer tracer)
+        protected UWPDeviceBase(string deviceId, ILogger logger)
         {
             Logger = logger;
-            Tracer = tracer;
             DeviceId = deviceId;
         }
         #endregion

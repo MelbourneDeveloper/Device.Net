@@ -50,12 +50,12 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer) : this(loggerFactory, tracer, null)
+        public WindowsHidDeviceFactory(ILoggerFactory loggerFactory) : this(loggerFactory, null)
         {
 
         }
 
-        public WindowsHidDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer, IHidApiService hidService) : base(loggerFactory, loggerFactory.CreateLogger<WindowsHidDeviceFactory>(), tracer)
+        public WindowsHidDeviceFactory(ILoggerFactory loggerFactory, IHidApiService hidService) : base(loggerFactory, loggerFactory.CreateLogger<WindowsHidDeviceFactory>())
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
@@ -73,7 +73,7 @@ namespace Hid.Net.Windows
         {
             if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
 
-            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId, LoggerFactory, Tracer);
+            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId, LoggerFactory);
         }
         #endregion
 

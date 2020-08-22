@@ -6,7 +6,7 @@ namespace Device.Net.UnitTests
     {
         public const string FoundMessage = "Found device {0}";
 
-        public MockHidFactory(ILogger logger, ITracer tracer) : base(logger, tracer)
+        public MockHidFactory(ILogger logger) : base(logger)
         {
         }
 
@@ -32,7 +32,7 @@ namespace Device.Net.UnitTests
 
             Logger?.LogInformation(string.Format(FoundMessage, DeviceId));
 
-            return new MockHidDevice(DeviceId, Logger, Tracer);
+            return new MockHidDevice(DeviceId, Logger);
         }
     }
 }

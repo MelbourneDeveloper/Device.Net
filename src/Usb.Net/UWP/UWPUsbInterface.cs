@@ -26,13 +26,13 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Methods
-        public UWPUsbInterface(windowsUsbInterface usbInterface, ILogger logger, ITracer tracer, ushort? readBuffersize, ushort? writeBufferSize) : base(logger, tracer, readBuffersize, writeBufferSize)
+        public UWPUsbInterface(windowsUsbInterface usbInterface, ILogger logger, ushort? readBuffersize, ushort? writeBufferSize) : base(logger, readBuffersize, writeBufferSize)
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
 
             foreach (var inPipe in usbInterface.InterruptInPipes)
             {
-                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceInterruptReadEndpoint(inPipe, Logger, Tracer);
+                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceInterruptReadEndpoint(inPipe, Logger);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
                 if (InterruptReadEndpoint == null) InterruptReadEndpoint = uwpUsbInterfaceEndpoint;
             }

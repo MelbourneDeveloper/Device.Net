@@ -46,20 +46,20 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidDevice(string deviceId) : this(deviceId, null, null, null, null)
+        public WindowsHidDevice(string deviceId) : this(deviceId, null, null, null)
         {
         }
 
-        public WindowsHidDevice(string deviceId, ILoggerFactory loggerFactory, ITracer tracer) : this(deviceId, null, null, loggerFactory, tracer)
+        public WindowsHidDevice(string deviceId, ILoggerFactory loggerFactory) : this(deviceId, null, null, loggerFactory)
         {
         }
 
-        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILoggerFactory loggerFactory, ITracer tracer) : this(deviceId, writeBufferSize, readBufferSize, loggerFactory, tracer, null)
+        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILoggerFactory loggerFactory) : this(deviceId, writeBufferSize, readBufferSize, loggerFactory, null)
         {
 
         }
 
-        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILoggerFactory loggerFactory, ITracer tracer, IHidApiService hidService) : base(deviceId, loggerFactory?.CreateLogger<WindowsHidDevice>(), tracer)
+        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILoggerFactory loggerFactory, IHidApiService hidService) : base(deviceId, loggerFactory?.CreateLogger<WindowsHidDevice>())
         {
             _WriteBufferSize = writeBufferSize;
             _ReadBufferSize = readBufferSize;

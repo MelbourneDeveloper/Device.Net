@@ -67,7 +67,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Constructor
-        public UWPHidDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer) : base(loggerFactory, loggerFactory.CreateLogger<UWPHidDeviceFactory>(), tracer)
+        public UWPHidDeviceFactory(ILoggerFactory loggerFactory) : base(loggerFactory, loggerFactory.CreateLogger<UWPHidDeviceFactory>())
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
         }
@@ -78,7 +78,7 @@ namespace Hid.Net.UWP
         {
             if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
 
-            return deviceDefinition.DeviceType == DeviceType.Usb ? null : new UWPHidDevice(deviceDefinition.DeviceId, Logger, Tracer);
+            return deviceDefinition.DeviceType == DeviceType.Usb ? null : new UWPHidDevice(deviceDefinition.DeviceId, Logger);
         }
 
         public void Dispose()

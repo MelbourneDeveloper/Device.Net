@@ -4,7 +4,7 @@ namespace Device.Net.LibUsb
 {
     public class LibUsbUsbDeviceFactory : LibUsbDeviceFactoryBase
     {
-        public LibUsbUsbDeviceFactory(ILoggerFactory loggerFactory, ITracer tracer) : base(loggerFactory, tracer)
+        public LibUsbUsbDeviceFactory(ILoggerFactory loggerFactory) : base(loggerFactory)
         {
         }
 

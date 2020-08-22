@@ -22,9 +22,8 @@ namespace Usb.Net
         #endregion
 
         #region Constructor
-        public UsbInterfaceManager(ILogger logger, ITracer tracer)
+        public UsbInterfaceManager(ILogger logger)
         {
-            Tracer = tracer;
             Logger = logger;
         }
         #endregion
@@ -45,7 +44,6 @@ namespace Usb.Net
         #endregion
 
         #region Public Properties        
-        public ITracer Tracer { get; }
         public IList<IUsbInterface> UsbInterfaces { get; } = new List<IUsbInterface>();
         public IUsbInterface ReadUsbInterface
         {

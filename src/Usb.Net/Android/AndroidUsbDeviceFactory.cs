@@ -15,11 +15,13 @@ namespace Usb.Net.Android
     /// </summary>
     public class AndroidUsbDeviceFactory : IDeviceFactory
     {
+        #region Fields
+        private readonly ILogger _logger;
+        #endregion
+
         #region Public Properties
         public UsbManager UsbManager { get; }
         public Context Context { get; }
-        public ILogger Logger { get; }
-        public ITracer Tracer { get; }
         public ILoggerFactory LoggerFactory { get; }
         public ushort? ReadBufferSize { get; set; }
         public ushort? WriteBufferSize { get; set; }
@@ -30,15 +32,14 @@ namespace Usb.Net.Android
         #endregion
 
         #region Constructor
-        public AndroidUsbDeviceFactory(UsbManager usbManager, Context context, ILoggerFactory loggerFactory, ITracer tracer)
+        public AndroidUsbDeviceFactory(UsbManager usbManager, Context context, ILoggerFactory loggerFactory)
         {
             UsbManager = usbManager ?? throw new ArgumentNullException(nameof(usbManager));
             Context = context ?? throw new ArgumentNullException(nameof(context));
             LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
 
             //Warning: this may get used by other android factories
-            Logger = LoggerFactory.CreateLogger<AndroidUsbDeviceFactory>();
-            Tracer = tracer;
+            _logger = LoggerFactory.CreateLogger<AndroidUsbDeviceFactory>();
         }
         #endregion
 
@@ -65,7 +66,7 @@ namespace Usb.Net.Android
                 throw new DeviceException($"The device Id '{deviceDefinition.DeviceId}' is not a valid integer");
             }
 
-            return new UsbDevice(deviceDefinition.DeviceId, new AndroidUsbInterfaceManager(UsbManager, Context, deviceId, Logger, Tracer, ReadBufferSize, WriteBufferSize), Logger, Tracer);
+            return new UsbDevice(deviceDefinition.DeviceId, new AndroidUsbInterfaceManager(UsbManager, Context, deviceId, _logger, ReadBufferSize, WriteBufferSize), _logger);
         }
         #endregion
 

@@ -8,13 +8,12 @@ namespace Usb.Net.Windows
     public class WindowsUsbDevice : UsbDevice
     {
 #pragma warning disable CA1062 // Validate arguments of public methods
-        public WindowsUsbDevice(string deviceId, ILoggerFactory loggerFactory, ITracer tracer, ushort? readBufferSize, ushort? writeBufferSize) : base(deviceId,
+        public WindowsUsbDevice(string deviceId, ILoggerFactory loggerFactory, ushort? readBufferSize, ushort? writeBufferSize) : base(deviceId,
             new WindowsUsbInterfaceManager(deviceId,
                 loggerFactory.CreateLogger<WindowsUsbInterfaceManager>(),
-                tracer,
                 readBufferSize,
                 writeBufferSize),
-            loggerFactory.CreateLogger<WindowsUsbDevice>(), tracer)
+            loggerFactory.CreateLogger<WindowsUsbDevice>())
 #pragma warning restore CA1062 // Validate arguments of public methods
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));

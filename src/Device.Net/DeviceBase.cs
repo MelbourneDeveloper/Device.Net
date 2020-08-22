@@ -25,14 +25,12 @@ namespace Device.Net
         #region Public Properties
         public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; set; }
         public string DeviceId { get; }
-        public ITracer Tracer { get; }
         #endregion
 
         #region Constructor
-        protected DeviceBase(string deviceId, ILogger logger, ITracer tracer)
+        protected DeviceBase(string deviceId, ILogger logger)
         {
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
-            Tracer = tracer;
             Logger = logger;
         }
         #endregion

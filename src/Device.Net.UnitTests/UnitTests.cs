@@ -63,8 +63,8 @@ namespace Device.Net.UnitTests
         [TestInitialize]
         public void Startup()
         {
-            _DeviceManager.RegisterDeviceFactory(new MockHidFactory(loggerMock.Object, tracer));
-            _DeviceManager.RegisterDeviceFactory(new MockUsbFactory(loggerMock.Object, tracer));
+            _DeviceManager.RegisterDeviceFactory(new MockHidFactory(loggerMock.Object));
+            _DeviceManager.RegisterDeviceFactory(new MockUsbFactory(loggerMock.Object));
         }
 
         [TestMethod]
@@ -118,7 +118,7 @@ namespace Device.Net.UnitTests
             var connectedDeviceDefinition = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
 
 
-            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, loggerMock.Object, tracer);
+            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, loggerMock.Object);
 
             var writeAndReadTasks = new List<Task<ReadResult>>();
 
@@ -264,7 +264,7 @@ namespace Device.Net.UnitTests
         {
             try
             {
-                var device = new MockHidDevice("asd", null, null);
+                var device = new MockHidDevice("asd", null);
                 var cancellationTokenSource = new CancellationTokenSource();
 
                 var task1 = device.WriteAndReadAsync(new byte[] { 1, 2, 3 }, cancellationTokenSource.Token);
