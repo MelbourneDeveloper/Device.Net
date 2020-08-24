@@ -35,6 +35,7 @@
   </Choose>
 	
   <ItemGroup>
+    <None Include="..\..\..\src\.editorconfig" Link=".editorconfig" />
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>

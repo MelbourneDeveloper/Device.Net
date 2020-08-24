@@ -24,7 +24,7 @@ namespace Usb.Net
         #region Constructor
         public UsbInterfaceManager(ILogger logger)
         {
-            Logger = logger;
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         #endregion
 
