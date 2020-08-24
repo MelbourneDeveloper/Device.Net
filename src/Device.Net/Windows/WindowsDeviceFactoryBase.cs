@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -164,44 +163,6 @@ namespace Device.Net.Windows
                     loggerScope?.Dispose();
                 }
             });
-        }
-        #endregion
-
-        #region Private Static Methods
-        private static uint GetNumberFromDeviceId(string deviceId, string searchString)
-        {
-            if (deviceId == null) throw new ArgumentNullException(nameof(deviceId));
-
-            var indexOfSearchString = deviceId.IndexOf(searchString, StringComparison.OrdinalIgnoreCase);
-            string hexString = null;
-            if (indexOfSearchString > -1)
-            {
-                hexString = deviceId.Substring(indexOfSearchString + searchString.Length, 4);
-            }
-            var numberAsInteger = uint.Parse(hexString, NumberStyles.HexNumber);
-            return numberAsInteger;
-        }
-        #endregion
-
-        #region Public Static Methods
-        public static ConnectedDeviceDefinition GetDeviceDefinitionFromWindowsDeviceId(string deviceId, DeviceType deviceType, ILogger logger)
-        {
-            uint? vid = null;
-            uint? pid = null;
-            try
-            {
-                vid = GetNumberFromDeviceId(deviceId, "vid_");
-                pid = GetNumberFromDeviceId(deviceId, "pid_");
-            }
-#pragma warning disable CA1031 
-            catch (Exception ex)
-#pragma warning restore CA1031 
-            {
-                //If anything goes wrong here, log it and move on. 
-                logger?.LogError(ex, "Error {errorMessage} Area: {area}", ex.Message, nameof(GetDeviceDefinitionFromWindowsDeviceId));
-            }
-
-            return new ConnectedDeviceDefinition(deviceId) { DeviceType = deviceType, VendorId = vid, ProductId = pid };
         }
         #endregion
     }

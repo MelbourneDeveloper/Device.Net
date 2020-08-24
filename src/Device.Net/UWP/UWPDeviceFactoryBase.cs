@@ -109,13 +109,7 @@ namespace Device.Net.UWP
         {
             if (deviceInformation == null) throw new ArgumentNullException(nameof(deviceInformation));
 
-            throw new NotImplementedException();
-
-            //No idea what was happening here... Does the windows device factory work for UWP? Was this intentional?
-
-            /*
-
-            var retVal = WindowsDeviceFactoryBase.GetDeviceDefinitionFromWindowsDeviceId(deviceInformation.Id, deviceType, logger);
+            var retVal = DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(deviceInformation.Id, deviceType, logger);
 
             //foreach (var keyValuePair in deviceInformation.Properties)
             //{
@@ -126,8 +120,6 @@ namespace Device.Net.UWP
             retVal.ProductName = deviceInformation.Name;
 
             return retVal;
-
-            */
         }
         #endregion
     }

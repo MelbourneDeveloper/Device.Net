@@ -100,6 +100,46 @@ namespace Device.Net
         }
         #endregion
 
+        #region Public Static Methods
+        public static ConnectedDeviceDefinition GetDeviceDefinitionFromWindowsDeviceId(string deviceId, DeviceType deviceType, ILogger logger)
+        {
+            uint? vid = null;
+            uint? pid = null;
+            try
+            {
+                vid = GetNumberFromDeviceId(deviceId, "vid_");
+                pid = GetNumberFromDeviceId(deviceId, "pid_");
+            }
+#pragma warning disable CA1031 
+            catch (Exception ex)
+#pragma warning restore CA1031 
+            {
+                //If anything goes wrong here, log it and move on. 
+                logger?.LogError(ex, "Error {errorMessage} Area: {area}", ex.Message, nameof(GetDeviceDefinitionFromWindowsDeviceId));
+            }
+
+            return new ConnectedDeviceDefinition(deviceId) { DeviceType = deviceType, VendorId = vid, ProductId = pid };
+        }
+        #endregion
+
+        #region Private Static Methods
+        private static uint GetNumberFromDeviceId(string deviceId, string searchString)
+        {
+            if (deviceId == null) throw new ArgumentNullException(nameof(deviceId));
+
+            var indexOfSearchString = deviceId.IndexOf(searchString, StringComparison.OrdinalIgnoreCase);
+            string hexString = null;
+            if (indexOfSearchString > -1)
+            {
+                hexString = deviceId.Substring(indexOfSearchString + searchString.Length, 4);
+            }
+#pragma warning disable CA1305 // Specify IFormatProvider
+            var numberAsInteger = uint.Parse(hexString, System.Globalization.NumberStyles.HexNumber);
+#pragma warning restore CA1305 // Specify IFormatProvider
+            return numberAsInteger;
+        }
+        #endregion
+
         #region Finalizer
         ~DeviceBase()
         {
