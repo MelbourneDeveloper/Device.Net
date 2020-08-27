@@ -44,6 +44,9 @@ namespace Usb.Net.Android
             UsbManager = usbManager ?? throw new ArgumentNullException(nameof(usbManager));
             AndroidContext = androidContext ?? throw new ArgumentNullException(nameof(androidContext));
             DeviceNumberId = deviceNumberId;
+
+            Logger?.LogInformation("read buffer size: {readBufferLength} writeBufferLength {writeBufferLength}", readBufferLength, writeBufferLength);
+
         }
         #endregion
 
@@ -118,7 +121,7 @@ namespace Usb.Net.Android
 
             try
             {
-                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", _UsbDevice.DeviceId, nameof(InitializeAsync));
+                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceNumberId, nameof(InitializeAsync));
 
                 if (disposed) throw new DeviceException(Messages.DeviceDisposedErrorMessage);
 
