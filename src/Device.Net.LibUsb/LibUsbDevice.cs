@@ -98,10 +98,10 @@ namespace Device.Net.LibUsb
 
         //TODO: make async?
         //TODO: setupPacket not exposed
-        public int ControlTransfer(UsbSetupPacket setupPacket, byte[] buffer)
+        public uint ControlTransfer(UsbSetupPacket setupPacket, byte[] buffer)
         {
             UsbDevice.ControlTransfer(ref setupPacket, buffer, buffer.Length, out int length);
-            return length;
+            return (uint)length;
         }
 
 

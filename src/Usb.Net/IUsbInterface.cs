@@ -15,6 +15,7 @@ namespace Usb.Net
         //TODO: Remove these. They should come from the endpoint... or be specified there
         ushort ReadBufferSize { get; }
         ushort WriteBufferSize { get; }
+        uint ControlTransfer(ISetupPacket setupPacket, byte[] buffer); //TODO: setup packet is defined differently between libUsb and WinUsb (also possibly convert to async)
         Task WriteAsync(byte[] data);
         Task<ReadResult> ReadAsync(uint bufferLength);
         byte InterfaceNumber { get; }
