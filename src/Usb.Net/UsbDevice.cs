@@ -40,6 +40,11 @@ namespace Usb.Net
             ConnectedDeviceDefinition = await UsbInterfaceManager.GetConnectedDeviceDefinitionAsync();
         }
 
+        public uint ControlTransfer(ISetupPacket setupPacket, byte[] buffer)
+        {
+            return UsbInterfaceManager.ReadUsbInterface.ControlTransfer(setupPacket, buffer);
+        }
+
         public override async Task<ReadResult> ReadAsync()
         {
             if (UsbInterfaceManager.ReadUsbInterface == null) throw new DeviceException(Messages.ErrorMessageNoReadInterfaceSpecified);
