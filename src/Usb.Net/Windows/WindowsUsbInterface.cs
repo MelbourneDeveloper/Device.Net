@@ -30,6 +30,17 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Methods
+
+        //TODO: make async?
+        //TODO: WINUSB_SETUP_PACKET not exposed
+        public uint ControlTransfer(WINUSB_SETUP_PACKET setupPacket, byte[] buffer)
+        {
+                uint bytesWritten = 0;
+                //TODO: cannot convert from SafeFileHandle to IntPtr
+                WinUsbApiCalls.WinUsb_ControlTransfer(_SafeFileHandle, setupPacket, buffer, (uint) buffer.Length, ref bytesWritten, IntPtr.Zero); //last pointer is overlapped structure for async operations
+                return bytesWritten;
+        }
+
         public async Task<ReadResult> ReadAsync(uint bufferLength)
         {
             return await Task.Run(() =>
