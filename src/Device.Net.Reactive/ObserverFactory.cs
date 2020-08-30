@@ -8,7 +8,7 @@ namespace Device.Net.Reactive
         private bool isRunning = true;
         private readonly Func<Task<T>> _func;
 
-        public ObserverFactory(Func<Task<T>> func)
+        public ObserverFactory(Func<Task<T>> func = null)
         {
             _func = func;
         }
