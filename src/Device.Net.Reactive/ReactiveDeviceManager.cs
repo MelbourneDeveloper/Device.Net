@@ -13,7 +13,6 @@ namespace Device.Net.Reactive
         #region Fields
         private readonly ILogger<ReactiveDeviceManager> _logger;
         private readonly Func<IDevice, Task> _initializeDeviceAction;
-        private readonly IObserver<ConnectedDevice> _initializedDeviceObserver;
         private readonly ObserverFactory<IReadOnlyCollection<ConnectedDevice>> _connectedDevicesObserverFactory;
         private IDevice _selectedDevice;
         private readonly int _pollMilliseconds;
@@ -24,6 +23,7 @@ namespace Device.Net.Reactive
         #endregion
 
         #region Public Properties
+        public IObserver<ConnectedDevice> InitializedDeviceObserver { get; set; }
         public IObserver<ConnectedDevice> ConnectedDeviceObserver { get; }
         public IList<FilterDeviceDefinition> FilterDeviceDefinitions { get; }
         public Func<IObserver<IReadOnlyCollection<ConnectedDevice>>, IDisposable> SubscribeToConnectedDevices => _connectedDevicesObserverFactory.Subscribe;
@@ -34,7 +34,7 @@ namespace Device.Net.Reactive
             private set
             {
                 _selectedDevice = value;
-                _initializedDeviceObserver.OnNext(value != null ? new ConnectedDevice { DeviceId = value.DeviceId } : null);
+                InitializedDeviceObserver.OnNext(value != null ? new ConnectedDevice { DeviceId = value.DeviceId } : null);
             }
         }
         #endregion
@@ -64,7 +64,7 @@ namespace Device.Net.Reactive
 
             DeviceManager = deviceManager;
             _logger = loggerFactory.CreateLogger<ReactiveDeviceManager>();
-            _initializedDeviceObserver = initializedDeviceObserver;
+            InitializedDeviceObserver = initializedDeviceObserver;
             _connectedDevicesObserverFactory = new ObserverFactory<IReadOnlyCollection<ConnectedDevice>>(
             GetConnectedDevicesAsync
             );
@@ -90,7 +90,7 @@ namespace Device.Net.Reactive
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                _initializedDeviceObserver.OnError(ex);
+                InitializedDeviceObserver.OnError(ex);
 
                 if (ex is IOException)
                 {
@@ -135,7 +135,7 @@ namespace Device.Net.Reactive
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                _initializedDeviceObserver.OnError(ex);
+                InitializedDeviceObserver.OnError(ex);
                 SelectedDevice = null;
             }
         }

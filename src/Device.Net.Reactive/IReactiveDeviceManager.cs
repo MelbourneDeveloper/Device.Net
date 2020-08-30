@@ -13,5 +13,9 @@ namespace Device.Net.Reactive
         /// This property shouldn't be necessary. For some reason, it is only possible to Subscribe once, so we subscribe in the constructor and expose this so that the methods can be called
         /// </summary>
         IObserver<ConnectedDevice> ConnectedDeviceObserver { get; }
+        /// <summary>
+        /// TODO: Remove this. It's another hack
+        /// </summary>
+        IObserver<ConnectedDevice> InitializedDeviceObserver { get; set; }
     }
 }
