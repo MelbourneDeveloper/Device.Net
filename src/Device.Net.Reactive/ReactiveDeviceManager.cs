@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Device.Net.Reactive
 {
-    public class ReactiveDeviceManager : IDisposable
+    public class ReactiveDeviceManager : IDisposable, IReactiveDeviceManager
     {
         #region Fields
         private readonly ILogger<ReactiveDeviceManager> _logger;
@@ -43,7 +43,7 @@ namespace Device.Net.Reactive
         /// 
         /// </summary>
         /// <param name="deviceManager">/param>
-        /// <param name="selectedDeviceObservable">Listens for a selected device<</param>
+        /// <param name="selectedDeviceObservable">Listens for a selected device</param>
         /// <param name="initializedDeviceObserver">Tells others that the device was connected</param>
         /// <param name="connectedDevicesObserver">Tells others which devices are connected</param>
         /// <param name="loggerFactory"></param>
@@ -73,6 +73,13 @@ namespace Device.Net.Reactive
         #endregion
 
         #region Public Methods
+        public async Task<TResponse> WriteAndReadAsync<TRequest, TResponse>(TRequest request, Func<byte[], TResponse> convertFunc) where TRequest : IRequest
+        {
+            var writeBuffer = request.ToArray();
+            var readBuffer = await SelectedDevice.WriteAndReadAsync(writeBuffer);
+            return convertFunc(readBuffer);
+        }
+
         public void Dispose() => _selectedDeviceObserver.Dispose();
         #endregion
 
@@ -107,5 +114,10 @@ namespace Device.Net.Reactive
             }
         }
         #endregion
+    }
+
+    public interface IRequest
+    {
+        byte[] ToArray();
     }
 }
