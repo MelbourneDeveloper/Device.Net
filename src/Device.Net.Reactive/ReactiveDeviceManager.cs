@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -33,7 +34,7 @@ namespace Device.Net.Reactive
             private set
             {
                 _selectedDevice = value;
-                _initializedDeviceObserver.OnNext(new ConnectedDevice { DeviceId = value.DeviceId });
+                _initializedDeviceObserver.OnNext(value != null ? new ConnectedDevice { DeviceId = value.DeviceId } : null);
             }
         }
         #endregion
@@ -75,9 +76,26 @@ namespace Device.Net.Reactive
         #region Public Methods
         public async Task<TResponse> WriteAndReadAsync<TRequest, TResponse>(TRequest request, Func<byte[], TResponse> convertFunc) where TRequest : IRequest
         {
-            var writeBuffer = request.ToArray();
-            var readBuffer = await SelectedDevice.WriteAndReadAsync(writeBuffer);
-            return convertFunc(readBuffer);
+            try
+            {
+                var writeBuffer = request.ToArray();
+                var readBuffer = await SelectedDevice.WriteAndReadAsync(writeBuffer);
+                return convertFunc(readBuffer);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                _initializedDeviceObserver.OnError(ex);
+
+                if (ex is IOException)
+                {
+                    //The exception was an IO exception so disconnect the device
+                    //The listener should reconnect
+                    SelectedDevice = null;
+                }
+
+                throw;
+            }
         }
 
         public void Dispose() => _selectedDeviceObserver.Dispose();
