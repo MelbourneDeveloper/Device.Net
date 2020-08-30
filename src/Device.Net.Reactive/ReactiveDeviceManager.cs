@@ -45,7 +45,7 @@ namespace Device.Net.Reactive
         /// </summary>
         /// <param name="deviceManager">/param>
         /// <param name="selectedDeviceObservable">Listens for a selected device</param>
-        /// <param name="initializedDeviceObserver">Tells others that the device was connected</param>
+        /// <param name="initializedDeviceObserver">Tells others that the device was initialized</param>
         /// <param name="connectedDevicesObserver">Tells others which devices are connected</param>
         /// <param name="loggerFactory"></param>
         public ReactiveDeviceManager(
@@ -76,6 +76,8 @@ namespace Device.Net.Reactive
         #region Public Methods
         public async Task<TResponse> WriteAndReadAsync<TRequest, TResponse>(TRequest request, Func<byte[], TResponse> convertFunc) where TRequest : IRequest
         {
+            if (SelectedDevice == null) throw new InvalidOperationException("No device selected and initialized");
+
             try
             {
                 var writeBuffer = request.ToArray();
@@ -91,6 +93,9 @@ namespace Device.Net.Reactive
                 {
                     //The exception was an IO exception so disconnect the device
                     //The listener should reconnect
+
+                    SelectedDevice.Dispose();
+
                     SelectedDevice = null;
                 }
 
