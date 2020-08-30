@@ -21,7 +21,18 @@ namespace Device.Net.Reactive
             {
                 while (isRunning)
                 {
-                    observer.OnNext(await _func());
+                    if (_func == null)
+                    {
+                        //TODO: Is this right?
+                        await Task.Delay(1000);
+                    }
+                    else
+                    {
+                        var result = await _func();
+
+                        //TODO: Is this right?
+                        observer.OnNext(result);
+                    }
                 }
             });
 
