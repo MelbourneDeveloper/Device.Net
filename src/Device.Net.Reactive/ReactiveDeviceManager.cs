@@ -122,10 +122,18 @@ namespace Device.Net.Reactive
             return new ReadOnlyCollection<ConnectedDevice>(lists);
         }
 
+        //TODO: Disposal. 
+
         private async Task InitializeDeviceAsync(ConnectedDevice connectedDevice)
         {
             try
             {
+                if (connectedDevice == null)
+                {
+                    _logger.LogInformation("Initialize requested but device was null");
+                    return;
+                }
+
                 var device = DeviceManager.GetDevice(new ConnectedDeviceDefinition(connectedDevice.DeviceId));
                 await _initializeDeviceAction(device);
 
