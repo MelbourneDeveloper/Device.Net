@@ -115,9 +115,4 @@ namespace Device.Net.Reactive
         }
         #endregion
     }
-
-    public interface IRequest
-    {
-        byte[] ToArray();
-    }
 }
