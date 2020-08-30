@@ -16,7 +16,6 @@ namespace Device.Net.Reactive
         private readonly IObserver<ConnectedDevice> _initializedDeviceObserver;
         private readonly ObserverFactory<IReadOnlyCollection<ConnectedDevice>> _connectedDevicesObserverFactory;
         private IDevice _selectedDevice;
-        private readonly IDisposable _selectedDeviceObserver;
         private readonly int _pollMilliseconds;
         #endregion
 
@@ -25,6 +24,7 @@ namespace Device.Net.Reactive
         #endregion
 
         #region Public Properties
+        public IObserver<ConnectedDevice> ConnectedDeviceObserver { get; }
         public IList<FilterDeviceDefinition> FilterDeviceDefinitions { get; }
         public Func<IObserver<IReadOnlyCollection<ConnectedDevice>>, IDisposable> SubscribeToConnectedDevices => _connectedDevicesObserverFactory.Subscribe;
 
@@ -58,8 +58,11 @@ namespace Device.Net.Reactive
             int pollMilliseconds
             )
         {
+            //We need to expose this observer so that the methods can be called. For some reason, multiple subscriptions don't work...
+            ConnectedDeviceObserver = (IObserver<ConnectedDevice>)selectedDeviceObservable.Subscribe(
+                (d) => InitializeDeviceAsync(d));
+
             DeviceManager = deviceManager;
-            _selectedDeviceObserver = selectedDeviceObservable.Subscribe((d) => InitializeDeviceAsync(d));
             _logger = loggerFactory.CreateLogger<ReactiveDeviceManager>();
             _initializedDeviceObserver = initializedDeviceObserver;
             _connectedDevicesObserverFactory = new ObserverFactory<IReadOnlyCollection<ConnectedDevice>>(
@@ -103,7 +106,7 @@ namespace Device.Net.Reactive
             }
         }
 
-        public void Dispose() => _selectedDeviceObserver.Dispose();
+        public void Dispose() => ((IDisposable)ConnectedDeviceObserver).Dispose();//Asdasdasd.Dispose();
         #endregion
 
         #region Private Methods
