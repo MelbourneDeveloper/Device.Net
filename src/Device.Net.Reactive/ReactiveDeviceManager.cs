@@ -4,10 +4,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net.Reactive
 {
+    /// <summary>
+    /// This class is a work in progress. It is not production ready.
+    /// </summary>
     public class ReactiveDeviceManager : IDisposable, IReactiveDeviceManager
     {
         #region Fields
@@ -16,6 +20,9 @@ namespace Device.Net.Reactive
         private readonly ObserverFactory<IReadOnlyCollection<ConnectedDevice>> _connectedDevicesObserverFactory;
         private IDevice _selectedDevice;
         private readonly int _pollMilliseconds;
+        private readonly Queue<IRequest> _queuedRequests = new Queue<IRequest>();
+        private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _semaphoreSlim2 = new SemaphoreSlim(1, 1);
         #endregion
 
         #region Protected Properties
@@ -23,6 +30,10 @@ namespace Device.Net.Reactive
         #endregion
 
         #region Public Properties
+        /// <summary>
+        /// Placeholder. Don't use. This functionality will be injected it
+        /// </summary>
+        public bool FilterMiddleMessages { get; set; }
         public IObserver<ConnectedDevice> InitializedDeviceObserver { get; set; }
         public IObserver<ConnectedDevice> ConnectedDeviceObserver { get; }
         public IList<FilterDeviceDefinition> FilterDeviceDefinitions { get; }
@@ -77,23 +88,28 @@ namespace Device.Net.Reactive
         #endregion
 
         #region Public Methods
-        public async Task<TResponse> WriteAndReadAsync<TRequest, TResponse>(TRequest request, Func<byte[], TResponse> convertFunc) where TRequest : IRequest
+
+
+
+
+        public async Task<TResponse> WriteAndReadAsync<TResponse>(IRequest request, Func<byte[], TResponse> convertFunc)
         {
             if (SelectedDevice == null) throw new InvalidOperationException("No device selected and initialized");
 
             try
             {
+                await _semaphoreSlim.WaitAsync();
                 var writeBuffer = request.ToArray();
                 var readBuffer = await SelectedDevice.WriteAndReadAsync(writeBuffer);
-                return convertFunc(readBuffer);
+                return convertFunc != null ? convertFunc(readBuffer) : default;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                InitializedDeviceObserver.OnError(ex);
 
                 if (ex is IOException)
                 {
+                    InitializedDeviceObserver.OnError(ex);
                     //The exception was an IO exception so disconnect the device
                     //The listener should reconnect
 
@@ -103,6 +119,46 @@ namespace Device.Net.Reactive
                 }
 
                 throw;
+            }
+            finally
+            {
+                _semaphoreSlim.Release();
+            }
+        }
+
+        public void QueueRequest(IRequest request)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+
+            _queuedRequests.Enqueue(request);
+            ProcessQueue();
+        }
+
+        private async Task ProcessQueue()
+        {
+            try
+            {
+                await _semaphoreSlim2.WaitAsync();
+
+                IRequest mostRecentRequest = null;
+
+                if (_queuedRequests.Count == 0) return;
+
+                //Eat requests except for the most recent one
+                while (_queuedRequests.Count > 0)
+                {
+                    mostRecentRequest = _queuedRequests.Dequeue();
+                }
+
+                await WriteAndReadAsync<object>(mostRecentRequest, null);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+            finally
+            {
+                _semaphoreSlim2.Release();
             }
         }
 
