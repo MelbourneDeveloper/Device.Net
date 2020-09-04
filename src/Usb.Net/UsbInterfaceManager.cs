@@ -1,4 +1,4 @@
-﻿using Device.Net;
+using Device.Net;
 using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
 using System;
@@ -40,6 +40,8 @@ namespace Usb.Net
             WriteUsbInterface = UsbInterfaces.FirstOrDefault(i => i.WriteEndpoint != null);
             ReadInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptReadEndpoint != null);
             WriteInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptWriteEndpoint != null);
+
+            Logger?.LogInformation("Read interface: {readInterface} Write interface {writeInterface} ReadInterruptUsbInterface: {}", ReadUsbInterface?.InterfaceNumber, WriteUsbInterface?.InterfaceNumber, ReadInterruptUsbInterface?.InterfaceNumber, WriteInterruptUsbInterface?.InterfaceNumber);
         }
         #endregion
 
