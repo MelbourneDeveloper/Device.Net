@@ -19,12 +19,14 @@ namespace Usb.Net
 
         #region Protected Properties
         protected ILogger Logger { get; }
+        protected ILoggerFactory LoggerFactory { get; private set; }
         #endregion
 
         #region Constructor
-        public UsbInterfaceManager(ILogger logger)
+        public UsbInterfaceManager(ILoggerFactory loggerFactory)
         {
-            Logger = logger;
+            LoggerFactory = loggerFactory;
+            Logger = LoggerFactory.CreateLogger<UsbInterfaceManager>();
         }
         #endregion
 

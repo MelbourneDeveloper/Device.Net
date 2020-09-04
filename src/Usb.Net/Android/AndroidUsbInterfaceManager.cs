@@ -14,7 +14,6 @@ namespace Usb.Net.Android
     public class AndroidUsbInterfaceManager : UsbInterfaceManager, IUsbInterfaceManager
     {
         #region Fields
-        private readonly ILoggerFactory _loggerFactory;
         private UsbDeviceConnection _UsbDeviceConnection;
         private usbDevice _UsbDevice;
         private readonly SemaphoreSlim _InitializingSemaphoreSlim = new SemaphoreSlim(1, 1);
@@ -38,7 +37,7 @@ namespace Usb.Net.Android
         #endregion
 
         #region Constructor
-        public AndroidUsbInterfaceManager(UsbManager usbManager, Context androidContext, int deviceNumberId, ILoggerFactory loggerFactory, ushort? readBufferLength, ushort? writeBufferLength) : base(loggerFactory.CreateLogger<AndroidUsbInterfaceManager>())
+        public AndroidUsbInterfaceManager(UsbManager usbManager, Context androidContext, int deviceNumberId, ILoggerFactory loggerFactory, ushort? readBufferLength, ushort? writeBufferLength) : base(loggerFactory)
         {
             ReadBufferSizeProtected = readBufferLength;
             WriteBufferSizeProtected = writeBufferLength;
@@ -162,7 +161,7 @@ namespace Usb.Net.Android
                     //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
                     var usbInterface = _UsbDevice.GetInterface(x);
 
-                    var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, _loggerFactory.CreateLogger<AndroidUsbInterface>(), ReadBufferSize, WriteBufferSize);
+                    var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, LoggerFactory.CreateLogger<AndroidUsbInterface>(), ReadBufferSize, WriteBufferSize);
 
                     Logger.LogInformation("Interface found. Name: {name} Id: {id}", usbInterface.Name, usbInterface.Id);
 
@@ -175,7 +174,7 @@ namespace Usb.Net.Android
                         if (usbEndpoint != null)
                         {
                             //TODO: This is probably all wrong...
-                            var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, _loggerFactory.CreateLogger<AndroidUsbEndpoint>());
+                            var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, LoggerFactory.CreateLogger<AndroidUsbEndpoint>());
                             androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
                         }
                     }

@@ -43,7 +43,7 @@ namespace Usb.Net.UWP
                 new UsbDevice(deviceDefinition.DeviceId,
                 new UWPUsbInterfaceManager(
                     deviceDefinition,
-                    LoggerFactory.CreateLogger<UWPUsbInterfaceManager>(),
+                    LoggerFactory,
                     ReadBufferSize,
                     WriteBufferSize), Logger);
         }

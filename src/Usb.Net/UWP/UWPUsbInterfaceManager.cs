@@ -42,7 +42,7 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPUsbInterfaceManager(ILogger logger) : this(null, logger, null, null)
+        public UWPUsbInterfaceManager(ILoggerFactory loggerFactory) : this(null, loggerFactory, null, null)
         {
         }
 
@@ -50,10 +50,10 @@ namespace Usb.Net.UWP
         {
         }
 
-        public UWPUsbInterfaceManager(ConnectedDeviceDefinition connectedDeviceDefinition, ILogger logger, ushort? readBufferSzie, ushort? writeBufferSize) : base(connectedDeviceDefinition?.DeviceId, logger)
+        public UWPUsbInterfaceManager(ConnectedDeviceDefinition connectedDeviceDefinition, ILoggerFactory loggerFactory, ushort? readBufferSzie, ushort? writeBufferSize) : base(connectedDeviceDefinition?.DeviceId, loggerFactory)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
-            UsbInterfaceHandler = new UsbInterfaceManager(logger);
+            UsbInterfaceHandler = new UsbInterfaceManager(loggerFactory);
             _WriteBufferSize = writeBufferSize;
             _ReadBufferSize = readBufferSzie;
         }

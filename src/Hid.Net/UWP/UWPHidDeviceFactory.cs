@@ -11,6 +11,7 @@ namespace Hid.Net.UWP
     public sealed class UWPHidDeviceFactory : UWPDeviceFactoryBase, IDeviceFactory, IDisposable
     {
         #region Fields
+        private readonly ILoggerFactory _loggerFactory;
         private readonly SemaphoreSlim _TestConnectionSemaphore = new SemaphoreSlim(1, 1);
         private readonly Dictionary<string, ConnectionInfo> _ConnectionTestedDeviceIds = new Dictionary<string, ConnectionInfo>();
         private bool disposed;
@@ -69,7 +70,7 @@ namespace Hid.Net.UWP
         #region Constructor
         public UWPHidDeviceFactory(ILoggerFactory loggerFactory) : base(loggerFactory, loggerFactory.CreateLogger<UWPHidDeviceFactory>())
         {
-            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
         }
         #endregion
 
@@ -78,7 +79,7 @@ namespace Hid.Net.UWP
         {
             if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
 
-            return deviceDefinition.DeviceType == DeviceType.Usb ? null : new UWPHidDevice(deviceDefinition.DeviceId, Logger);
+            return deviceDefinition.DeviceType == DeviceType.Usb ? null : new UWPHidDevice(deviceDefinition.DeviceId, _loggerFactory);
         }
 
         public void Dispose()

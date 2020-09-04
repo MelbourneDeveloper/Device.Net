@@ -40,7 +40,7 @@ namespace Usb.Net.Windows
                 new UsbDevice(deviceDefinition.DeviceId,
                     new WindowsUsbInterfaceManager(
                     deviceDefinition.DeviceId,
-                        LoggerFactory.CreateLogger<WindowsUsbInterfaceManager>(),
+                        LoggerFactory,
                         ReadBufferSize,
                         WriteBufferSize)
                 , LoggerFactory.CreateLogger<UsbDevice>());

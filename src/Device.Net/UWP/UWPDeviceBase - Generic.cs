@@ -17,6 +17,7 @@ namespace Device.Net.UWP
         #region Protected Properties
         protected T ConnectedDevice { get; private set; }
         public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; protected set; }
+        protected ILoggerFactory LoggerFactory { get; private set; }
         #endregion
 
         #region Public Abstract
@@ -25,8 +26,9 @@ namespace Device.Net.UWP
         #endregion
 
         #region Constructor
-        protected UWPDeviceBase(string deviceId, ILogger logger) : base(deviceId, logger)
+        protected UWPDeviceBase(string deviceId, ILoggerFactory loggerFactory, ILogger logger) : base(deviceId, logger)
         {
+            LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
         }
         #endregion
 

@@ -38,8 +38,7 @@ namespace Device.Net.UWP
         #region Constructor
         protected UWPDeviceFactoryBase(ILoggerFactory loggerFactory, ILogger logger)
         {
-            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
-
+            LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             Logger = logger;
         }
         #endregion

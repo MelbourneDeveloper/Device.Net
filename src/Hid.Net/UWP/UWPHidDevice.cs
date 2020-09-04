@@ -43,7 +43,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPHidDevice(ILogger logger) : this(null, logger)
+        public UWPHidDevice(ILoggerFactory loggerFactory) : this(null, loggerFactory)
         {
         }
 
@@ -51,7 +51,7 @@ namespace Hid.Net.UWP
         {
         }
 
-        public UWPHidDevice(string deviceId, ILogger logger) : base(deviceId, logger)
+        public UWPHidDevice(string deviceId, ILoggerFactory loggerFactory) : base(deviceId, loggerFactory, loggerFactory.CreateLogger<UWPHidDevice>())
         {
         }
         #endregion

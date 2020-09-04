@@ -28,7 +28,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsUsbInterfaceManager(string deviceId, ILogger logger, ushort? readBufferLength, ushort? writeBufferLength) : base(logger)
+        public WindowsUsbInterfaceManager(string deviceId, ILoggerFactory loggerFactory, ushort? readBufferLength, ushort? writeBufferLength) : base(loggerFactory)
         {
             ReadBufferSizeProtected = readBufferLength;
             WriteBufferSizeProtected = writeBufferLength;
