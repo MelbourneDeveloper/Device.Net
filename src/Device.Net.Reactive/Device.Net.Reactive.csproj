@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Reactive" Version="4.4.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
   </ItemGroup>
 

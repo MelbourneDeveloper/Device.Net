@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -9,20 +8,24 @@ using System.Threading.Tasks;
 
 namespace Device.Net.Reactive
 {
+
     /// <summary>
     /// This class is a work in progress. It is not production ready.
     /// </summary>
-    public class ReactiveDeviceManager : IDisposable, IReactiveDeviceManager
+    public class ReactiveDeviceManager : IReactiveDeviceManager, IDisposable
     {
         #region Fields
         private readonly ILogger<ReactiveDeviceManager> _logger;
         private readonly Func<IDevice, Task> _initializeDeviceAction;
-        private readonly ObserverFactory<IReadOnlyCollection<ConnectedDevice>> _connectedDevicesObserverFactory;
         private IDevice _selectedDevice;
-        private readonly int _pollMilliseconds;
         private readonly Queue<IRequest> _queuedRequests = new Queue<IRequest>();
         private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
         private readonly SemaphoreSlim _semaphoreSlim2 = new SemaphoreSlim(1, 1);
+        private readonly DeviceNotify _notifyDeviceInitialized;
+        private readonly NotifyDeviceException _notifyDeviceException;
+        private readonly DevicesNotify _notifyConnectedDevices;
+        private bool isDisposed;
+        private readonly int _pollMilliseconds;
         #endregion
 
         #region Protected Properties
@@ -34,10 +37,10 @@ namespace Device.Net.Reactive
         /// Placeholder. Don't use. This functionality will be injected it
         /// </summary>
         public bool FilterMiddleMessages { get; set; }
-        public IObserver<ConnectedDevice> InitializedDeviceObserver { get; set; }
-        public IObserver<ConnectedDevice> ConnectedDeviceObserver { get; }
         public IList<FilterDeviceDefinition> FilterDeviceDefinitions { get; }
-        public Func<IObserver<IReadOnlyCollection<ConnectedDevice>>, IDisposable> SubscribeToConnectedDevices => _connectedDevicesObserverFactory.Subscribe;
+
+
+        public IObservable<IReadOnlyCollection<ConnectedDevice>> ConnectedDevicesObservable { get; }
 
         public IDevice SelectedDevice
         {
@@ -45,7 +48,7 @@ namespace Device.Net.Reactive
             private set
             {
                 _selectedDevice = value;
-                InitializedDeviceObserver.OnNext(value != null ? new ConnectedDevice { DeviceId = value.DeviceId } : null);
+                _notifyDeviceInitialized(value != null ? new ConnectedDevice { DeviceId = value.DeviceId } : null);
             }
         }
         #endregion
@@ -61,24 +64,22 @@ namespace Device.Net.Reactive
         /// <param name="loggerFactory"></param>
         public ReactiveDeviceManager(
             IDeviceManager deviceManager,
-            IObservable<ConnectedDevice> selectedDeviceObservable,
-            IObserver<ConnectedDevice> initializedDeviceObserver,
+            DeviceNotify notifyDeviceInitialized,
+            DevicesNotify notifyConnectedDevices,
+            NotifyDeviceException notifyDeviceException,
             ILoggerFactory loggerFactory,
             Func<IDevice, Task> initializeDeviceAction,
             IList<FilterDeviceDefinition> filterDeviceDefinitions,
             int pollMilliseconds
             )
         {
-            //We need to expose this observer so that the methods can be called. For some reason, multiple subscriptions don't work...
-            ConnectedDeviceObserver = (IObserver<ConnectedDevice>)selectedDeviceObservable.Subscribe(
-                (d) => InitializeDeviceAsync(d));
+
+            _notifyDeviceInitialized = notifyDeviceInitialized ?? throw new ArgumentNullException(nameof(notifyDeviceInitialized));
+            _notifyDeviceException = notifyDeviceException ?? throw new ArgumentNullException(nameof(notifyDeviceException));
+            _notifyConnectedDevices = notifyConnectedDevices ?? throw new ArgumentNullException(nameof(notifyConnectedDevices));
 
             DeviceManager = deviceManager;
             _logger = loggerFactory.CreateLogger<ReactiveDeviceManager>();
-            InitializedDeviceObserver = initializedDeviceObserver;
-            _connectedDevicesObserverFactory = new ObserverFactory<IReadOnlyCollection<ConnectedDevice>>(
-            GetConnectedDevicesAsync
-            );
 
             FilterDeviceDefinitions = filterDeviceDefinitions;
 
@@ -88,9 +89,21 @@ namespace Device.Net.Reactive
         #endregion
 
         #region Public Methods
+        public void Start()
+        {
+            Task.Run(async () =>
+            {
+                while (!isDisposed)
+                {
+                    var devices = await DeviceManager.GetDevicesAsync(FilterDeviceDefinitions);
+                    var lists = devices.Select(d => new ConnectedDevice { DeviceId = d.DeviceId }).ToList();
+                    _notifyConnectedDevices(lists);
+                    await Task.Delay(TimeSpan.FromMilliseconds(_pollMilliseconds));
+                }
+            });
+        }
 
-
-
+        public void SelectDevice(ConnectedDevice connectedDevice) => _ = InitializeDeviceAsync(connectedDevice);
 
         public async Task<TResponse> WriteAndReadAsync<TResponse>(IRequest request, Func<byte[], TResponse> convertFunc)
         {
@@ -109,7 +122,7 @@ namespace Device.Net.Reactive
 
                 if (ex is IOException)
                 {
-                    InitializedDeviceObserver.OnError(ex);
+                    _notifyDeviceException(new ConnectedDevice { DeviceId = SelectedDevice?.DeviceId }, ex);
                     //The exception was an IO exception so disconnect the device
                     //The listener should reconnect
 
@@ -161,25 +174,9 @@ namespace Device.Net.Reactive
                 _semaphoreSlim2.Release();
             }
         }
-
-        public void Dispose() => ((IDisposable)ConnectedDeviceObserver).Dispose();//Asdasdasd.Dispose();
         #endregion
 
         #region Private Methods
-        private async Task<IReadOnlyCollection<ConnectedDevice>> GetConnectedDevicesAsync()
-        {
-            var devices = await DeviceManager.GetDevicesAsync(FilterDeviceDefinitions);
-
-            var lists = devices.Select(d => new ConnectedDevice { DeviceId = d.DeviceId }).ToList();
-
-            //TODO: This should be moved. This will cause a 1 second wait the first time around.
-            await Task.Delay(_pollMilliseconds);
-
-            return new ReadOnlyCollection<ConnectedDevice>(lists);
-        }
-
-        //TODO: Disposal. 
-
         private async Task InitializeDeviceAsync(ConnectedDevice connectedDevice)
         {
             try
@@ -199,10 +196,12 @@ namespace Device.Net.Reactive
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                InitializedDeviceObserver.OnError(ex);
+                _notifyDeviceException(connectedDevice, ex);
                 SelectedDevice = null;
             }
         }
+
+        public void Dispose() => isDisposed = true;
         #endregion
     }
 }
