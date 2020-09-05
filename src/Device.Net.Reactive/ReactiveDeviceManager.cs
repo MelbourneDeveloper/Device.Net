@@ -1,7 +1,9 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,7 +18,6 @@ namespace Device.Net.Reactive
         private readonly ILogger<ReactiveDeviceManager> _logger;
         private readonly Func<IDevice, Task> _initializeDeviceAction;
         private IDevice _selectedDevice;
-        //private readonly int _pollMilliseconds;
         private readonly Queue<IRequest> _queuedRequests = new Queue<IRequest>();
         private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
         private readonly SemaphoreSlim _semaphoreSlim2 = new SemaphoreSlim(1, 1);
@@ -34,6 +35,9 @@ namespace Device.Net.Reactive
         public IObserver<ConnectedDevice> InitializedDeviceObserver { get; set; }
         public IObserver<ConnectedDevice> SelectedDeviceObserver { get; }
         public IList<FilterDeviceDefinition> FilterDeviceDefinitions { get; }
+
+
+        public IObservable<IReadOnlyCollection<ConnectedDevice>> ConnectedDevicesObservable { get; }
 
         public IDevice SelectedDevice
         {
@@ -61,8 +65,9 @@ namespace Device.Net.Reactive
             IObserver<ConnectedDevice> initializedDeviceObserver,
             ILoggerFactory loggerFactory,
             Func<IDevice, Task> initializeDeviceAction,
-            IList<FilterDeviceDefinition> filterDeviceDefinitions
-            //,int pollMilliseconds
+            IList<FilterDeviceDefinition> filterDeviceDefinitions,
+            int pollMilliseconds,
+            CancellationToken cancellationToken
             )
         {
             //We need to expose this observer so that the methods can be called. For some reason, multiple subscriptions don't work...
@@ -76,7 +81,13 @@ namespace Device.Net.Reactive
             FilterDeviceDefinitions = filterDeviceDefinitions;
 
             _initializeDeviceAction = initializeDeviceAction;
-            //_pollMilliseconds = pollMilliseconds;
+
+            ConnectedDevicesObservable = new Func<Task<IReadOnlyCollection<ConnectedDevice>>>(async () =>
+            {
+                var devices = await DeviceManager.GetDevicesAsync(FilterDeviceDefinitions);
+                var lists = devices.Select(d => new ConnectedDevice { DeviceId = d.DeviceId }).ToList();
+                return new ReadOnlyCollection<ConnectedDevice>(lists);
+            }).ToObservable(TimeSpan.FromMilliseconds(pollMilliseconds), cancellationToken);
         }
         #endregion
 

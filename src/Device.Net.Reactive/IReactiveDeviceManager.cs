@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Device.Net.Reactive
@@ -9,6 +10,10 @@ namespace Device.Net.Reactive
 
 
         Task<TResponse> WriteAndReadAsync<TResponse>(IRequest request, Func<byte[], TResponse> convertFunc);
+
+
+        IObservable<IReadOnlyCollection<ConnectedDevice>> ConnectedDevicesObservable { get; }
+
         /// <summary>
         /// TODO:
         /// This property shouldn't be necessary. For some reason, it is only possible to Subscribe once, so we subscribe in the constructor and expose this so that the methods can be called
