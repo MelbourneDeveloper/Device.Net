@@ -50,7 +50,7 @@ namespace Usb.Net.UWP
         {
         }
 
-        public UWPUsbInterfaceManager(ConnectedDeviceDefinition connectedDeviceDefinition, ILoggerFactory loggerFactory, ushort? readBufferSzie, ushort? writeBufferSize) : base(connectedDeviceDefinition?.DeviceId, loggerFactory)
+        public UWPUsbInterfaceManager(ConnectedDeviceDefinition connectedDeviceDefinition, ILoggerFactory loggerFactory, ushort? readBufferSzie, ushort? writeBufferSize) : base(connectedDeviceDefinition?.DeviceId, loggerFactory, loggerFactory.CreateLogger<UWPUsbInterfaceManager>())
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             UsbInterfaceHandler = new UsbInterfaceManager(loggerFactory);
