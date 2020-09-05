@@ -1,9 +1,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,9 +15,8 @@ namespace Device.Net.Reactive
         #region Fields
         private readonly ILogger<ReactiveDeviceManager> _logger;
         private readonly Func<IDevice, Task> _initializeDeviceAction;
-        private readonly ObserverFactory<IReadOnlyCollection<ConnectedDevice>> _connectedDevicesObserverFactory;
         private IDevice _selectedDevice;
-        private readonly int _pollMilliseconds;
+        //private readonly int _pollMilliseconds;
         private readonly Queue<IRequest> _queuedRequests = new Queue<IRequest>();
         private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
         private readonly SemaphoreSlim _semaphoreSlim2 = new SemaphoreSlim(1, 1);
@@ -35,9 +32,8 @@ namespace Device.Net.Reactive
         /// </summary>
         public bool FilterMiddleMessages { get; set; }
         public IObserver<ConnectedDevice> InitializedDeviceObserver { get; set; }
-        public IObserver<ConnectedDevice> ConnectedDeviceObserver { get; }
+        public IObserver<ConnectedDevice> SelectedDeviceObserver { get; }
         public IList<FilterDeviceDefinition> FilterDeviceDefinitions { get; }
-        public Func<IObserver<IReadOnlyCollection<ConnectedDevice>>, IDisposable> SubscribeToConnectedDevices => _connectedDevicesObserverFactory.Subscribe;
 
         public IDevice SelectedDevice
         {
@@ -65,25 +61,22 @@ namespace Device.Net.Reactive
             IObserver<ConnectedDevice> initializedDeviceObserver,
             ILoggerFactory loggerFactory,
             Func<IDevice, Task> initializeDeviceAction,
-            IList<FilterDeviceDefinition> filterDeviceDefinitions,
-            int pollMilliseconds
+            IList<FilterDeviceDefinition> filterDeviceDefinitions
+            //,int pollMilliseconds
             )
         {
             //We need to expose this observer so that the methods can be called. For some reason, multiple subscriptions don't work...
-            ConnectedDeviceObserver = (IObserver<ConnectedDevice>)selectedDeviceObservable.Subscribe(
+            SelectedDeviceObserver = (IObserver<ConnectedDevice>)selectedDeviceObservable.Subscribe(
                 (d) => InitializeDeviceAsync(d));
 
             DeviceManager = deviceManager;
             _logger = loggerFactory.CreateLogger<ReactiveDeviceManager>();
             InitializedDeviceObserver = initializedDeviceObserver;
-            _connectedDevicesObserverFactory = new ObserverFactory<IReadOnlyCollection<ConnectedDevice>>(
-            GetConnectedDevicesAsync
-            );
 
             FilterDeviceDefinitions = filterDeviceDefinitions;
 
             _initializeDeviceAction = initializeDeviceAction;
-            _pollMilliseconds = pollMilliseconds;
+            //_pollMilliseconds = pollMilliseconds;
         }
         #endregion
 
@@ -162,21 +155,21 @@ namespace Device.Net.Reactive
             }
         }
 
-        public void Dispose() => ((IDisposable)ConnectedDeviceObserver).Dispose();//Asdasdasd.Dispose();
+        public void Dispose() => ((IDisposable)SelectedDeviceObserver).Dispose();
         #endregion
 
         #region Private Methods
-        private async Task<IReadOnlyCollection<ConnectedDevice>> GetConnectedDevicesAsync()
-        {
-            var devices = await DeviceManager.GetDevicesAsync(FilterDeviceDefinitions);
+        //private async Task<IReadOnlyCollection<ConnectedDevice>> GetConnectedDevicesAsync()
+        //{
+        //    var devices = await DeviceManager.GetDevicesAsync(FilterDeviceDefinitions);
 
-            var lists = devices.Select(d => new ConnectedDevice { DeviceId = d.DeviceId }).ToList();
+        //    var lists = devices.Select(d => new ConnectedDevice { DeviceId = d.DeviceId }).ToList();
 
-            //TODO: This should be moved. This will cause a 1 second wait the first time around.
-            await Task.Delay(_pollMilliseconds);
+        //    //TODO: This should be moved. This will cause a 1 second wait the first time around.
+        //    await Task.Delay(_pollMilliseconds);
 
-            return new ReadOnlyCollection<ConnectedDevice>(lists);
-        }
+        //    return new ReadOnlyCollection<ConnectedDevice>(lists);
+        //}
 
         //TODO: Disposal. 
 
