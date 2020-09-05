@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -81,7 +82,7 @@ namespace Device.Net.Reactive
             FilterDeviceDefinitions = filterDeviceDefinitions;
 
             _initializeDeviceAction = initializeDeviceAction;
-
+            
             ConnectedDevicesObservable = new Func<Task<IReadOnlyCollection<ConnectedDevice>>>(async () =>
             {
                 var devices = await DeviceManager.GetDevicesAsync(FilterDeviceDefinitions);
@@ -92,10 +93,6 @@ namespace Device.Net.Reactive
         #endregion
 
         #region Public Methods
-
-
-
-
         public async Task<TResponse> WriteAndReadAsync<TResponse>(IRequest request, Func<byte[], TResponse> convertFunc)
         {
             if (SelectedDevice == null) throw new InvalidOperationException("No device selected and initialized");
@@ -170,20 +167,6 @@ namespace Device.Net.Reactive
         #endregion
 
         #region Private Methods
-        //private async Task<IReadOnlyCollection<ConnectedDevice>> GetConnectedDevicesAsync()
-        //{
-        //    var devices = await DeviceManager.GetDevicesAsync(FilterDeviceDefinitions);
-
-        //    var lists = devices.Select(d => new ConnectedDevice { DeviceId = d.DeviceId }).ToList();
-
-        //    //TODO: This should be moved. This will cause a 1 second wait the first time around.
-        //    await Task.Delay(_pollMilliseconds);
-
-        //    return new ReadOnlyCollection<ConnectedDevice>(lists);
-        //}
-
-        //TODO: Disposal. 
-
         private async Task InitializeDeviceAsync(ConnectedDevice connectedDevice)
         {
             try
