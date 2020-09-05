@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Device.Net.Reactive
 {
-    public static class ObservableExtensions
+    public static class DeviceObservableExtensions
     {
         public static IObservable<T> ToObservable<T>(this Func<Task<T>> func, TimeSpan interval, CancellationToken cancellationToken)
         {
@@ -19,7 +19,10 @@ namespace Device.Net.Reactive
                     {
                         try
                         {
-                            observer.OnNext(await func());
+                            if (func != null)
+                            {
+                                observer.OnNext(await func());
+                            }
                         }
                         catch (Exception ex)
                         {
