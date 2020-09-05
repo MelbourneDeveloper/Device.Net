@@ -8,5 +8,9 @@ namespace Device.Net.Reactive
         void QueueRequest(IRequest request);
 
         Task<TResponse> WriteAndReadAsync<TResponse>(IRequest request, Func<byte[], TResponse> convertFunc);
+
+        void SelectDevice(ConnectedDevice connectedDevice);
+
+        void Start();
     }
 }

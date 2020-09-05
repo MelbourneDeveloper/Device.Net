@@ -3,15 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-//using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net.Reactive
 {
-    public delegate void DevicesNotify(IReadOnlyCollection<ConnectedDevice> connectedDevices);
-    public delegate void DeviceNotify(ConnectedDevice connectedDevice);
-    public delegate void NotifyDeviceException(ConnectedDevice connectedDevice, Exception exception);
 
     /// <summary>
     /// This class is a work in progress. It is not production ready.
@@ -29,6 +25,7 @@ namespace Device.Net.Reactive
         private readonly NotifyDeviceException _notifyDeviceException;
         private readonly DevicesNotify _notifyConnectedDevices;
         private bool isDisposed;
+        private readonly int _pollMilliseconds;
         #endregion
 
         #region Protected Properties
@@ -87,7 +84,13 @@ namespace Device.Net.Reactive
             FilterDeviceDefinitions = filterDeviceDefinitions;
 
             _initializeDeviceAction = initializeDeviceAction;
+            _pollMilliseconds = pollMilliseconds;
+        }
+        #endregion
 
+        #region Public Methods
+        public void Start()
+        {
             Task.Run(async () =>
             {
                 while (!isDisposed)
@@ -95,14 +98,12 @@ namespace Device.Net.Reactive
                     var devices = await DeviceManager.GetDevicesAsync(FilterDeviceDefinitions);
                     var lists = devices.Select(d => new ConnectedDevice { DeviceId = d.DeviceId }).ToList();
                     _notifyConnectedDevices(lists);
-                    await Task.Delay(TimeSpan.FromMilliseconds(pollMilliseconds));
+                    await Task.Delay(TimeSpan.FromMilliseconds(_pollMilliseconds));
                 }
             });
         }
-        #endregion
 
-        #region Public Methods
-        public void OnSelectedDeviceChanged(ConnectedDevice connectedDevice) => _ = InitializeDeviceAsync(connectedDevice);
+        public void SelectDevice(ConnectedDevice connectedDevice) => _ = InitializeDeviceAsync(connectedDevice);
 
         public async Task<TResponse> WriteAndReadAsync<TResponse>(IRequest request, Func<byte[], TResponse> convertFunc)
         {
