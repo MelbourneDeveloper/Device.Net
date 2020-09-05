@@ -1,22 +1,22 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
+//using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net.Reactive
 {
+    public delegate void DevicesNotify(IReadOnlyCollection<ConnectedDevice> connectedDevices);
     public delegate void DeviceNotify(ConnectedDevice connectedDevice);
     public delegate void NotifyDeviceException(ConnectedDevice connectedDevice, Exception exception);
 
     /// <summary>
     /// This class is a work in progress. It is not production ready.
     /// </summary>
-    public class ReactiveDeviceManager : IReactiveDeviceManager
+    public class ReactiveDeviceManager : IReactiveDeviceManager, IDisposable
     {
         #region Fields
         private readonly ILogger<ReactiveDeviceManager> _logger;
@@ -27,6 +27,8 @@ namespace Device.Net.Reactive
         private readonly SemaphoreSlim _semaphoreSlim2 = new SemaphoreSlim(1, 1);
         private readonly DeviceNotify _notifyDeviceInitialized;
         private readonly NotifyDeviceException _notifyDeviceException;
+        private readonly DevicesNotify _notifyConnectedDevices;
+        private bool isDisposed;
         #endregion
 
         #region Protected Properties
@@ -66,17 +68,18 @@ namespace Device.Net.Reactive
         public ReactiveDeviceManager(
             IDeviceManager deviceManager,
             DeviceNotify notifyDeviceInitialized,
+            DevicesNotify notifyConnectedDevices,
             NotifyDeviceException notifyDeviceException,
             ILoggerFactory loggerFactory,
             Func<IDevice, Task> initializeDeviceAction,
             IList<FilterDeviceDefinition> filterDeviceDefinitions,
-            int pollMilliseconds,
-            CancellationToken cancellationToken
+            int pollMilliseconds
             )
         {
 
             _notifyDeviceInitialized = notifyDeviceInitialized ?? throw new ArgumentNullException(nameof(notifyDeviceInitialized));
             _notifyDeviceException = notifyDeviceException ?? throw new ArgumentNullException(nameof(notifyDeviceException));
+            _notifyConnectedDevices = notifyConnectedDevices ?? throw new ArgumentNullException(nameof(notifyConnectedDevices));
 
             DeviceManager = deviceManager;
             _logger = loggerFactory.CreateLogger<ReactiveDeviceManager>();
@@ -85,12 +88,16 @@ namespace Device.Net.Reactive
 
             _initializeDeviceAction = initializeDeviceAction;
 
-            ConnectedDevicesObservable = new Func<Task<IReadOnlyCollection<ConnectedDevice>>>(async () =>
+            Task.Run(async () =>
             {
-                var devices = await DeviceManager.GetDevicesAsync(FilterDeviceDefinitions);
-                var lists = devices.Select(d => new ConnectedDevice { DeviceId = d.DeviceId }).ToList();
-                return new ReadOnlyCollection<ConnectedDevice>(lists);
-            }).ToObservable(TimeSpan.FromMilliseconds(pollMilliseconds), cancellationToken);
+                while (!isDisposed)
+                {
+                    var devices = await DeviceManager.GetDevicesAsync(FilterDeviceDefinitions);
+                    var lists = devices.Select(d => new ConnectedDevice { DeviceId = d.DeviceId }).ToList();
+                    _notifyConnectedDevices(lists);
+                    await Task.Delay(TimeSpan.FromMilliseconds(pollMilliseconds));
+                }
+            });
         }
         #endregion
 
@@ -192,6 +199,8 @@ namespace Device.Net.Reactive
                 SelectedDevice = null;
             }
         }
+
+        public void Dispose() => isDisposed = true;
         #endregion
     }
 }
