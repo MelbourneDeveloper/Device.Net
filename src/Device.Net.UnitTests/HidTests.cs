@@ -1,7 +1,10 @@
-﻿using Hid.Net.Windows;
+﻿#if !NET45
+
+using Hid.Net.Windows;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32.SafeHandles;
+using Moq;
 using NSubstitute;
 using System;
 using System.IO;
@@ -28,6 +31,7 @@ namespace Device.Net.UnitTests
             Assert.Fail();
         }
 
+
         [TestMethod]
         public async Task TestInitializeHidDeviceWriteable()
         {
@@ -41,6 +45,7 @@ namespace Device.Net.UnitTests
             var windowsHidDevice = await InitializeWindowsHidDevice(true);
             Assert.AreEqual(true, windowsHidDevice.IsReadOnly);
         }
+
 
         private static async Task<WindowsHidDevice> InitializeWindowsHidDevice(bool isReadonly)
         {
@@ -60,24 +65,32 @@ namespace Device.Net.UnitTests
             writeStream.CanWrite.ReturnsForAnyArgs(true);
             hidService.OpenWrite(null, 0).ReturnsForAnyArgs(writeStream);
 
-            var loggerFactory = Substitute.For<ILoggerFactory>();
+            var loggerFactory = new Mock<ILoggerFactory>();
+            var logger = new Mock<ILogger<WindowsHidDevice>>();
 
-            var windowsHidDevice = new WindowsHidDevice(deviceId, null, null, loggerFactory, hidService);
+            loggerFactory.Setup(f => f.CreateLogger(It.IsAny<string>())).Returns(logger.Object);
+
+            var windowsHidDevice = new WindowsHidDevice(deviceId, null, null, loggerFactory.Object, hidService);
             await windowsHidDevice.InitializeAsync();
 
-            throw new NotImplementedException();
+            //TODO: Fix this
 
-            //if (!isReadonly)
-            //{
-            //    logger.Received().Log(Messages.SuccessMessageReadFileStreamOpened, nameof(WindowsHidDevice), null, LogLevel.Information);
-            //}
-            //else
-            //{
-            //    logger.Received().Log(Messages.WarningMessageOpeningInReadonlyMode(deviceId), nameof(WindowsHidDevice), null, LogLevel.Warning);
-            //}
+            if (!isReadonly)
+            {
+                //UnitTests.CheckLogMessageText(logger, Messages.SuccessMessageReadFileStreamOpened, LogLevel.Information, Times.Once());
 
-            //Assert.AreEqual(true, windowsHidDevice.IsInitialized);
-            //return windowsHidDevice;
+                //logger.Received().Log(Messages.SuccessMessageReadFileStreamOpened, nameof(WindowsHidDevice), null, LogLevel.Information);
+            }
+            else
+            {
+                //logger.Received().Log(Messages.WarningMessageOpeningInReadonlyMode(deviceId), nameof(WindowsHidDevice), null, LogLevel.Warning);
+            }
+
+            Assert.AreEqual(true, windowsHidDevice.IsInitialized);
+            return windowsHidDevice;
         }
+
     }
 }
+
+#endif

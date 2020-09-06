@@ -20,11 +20,11 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class UnitTests
     {
-        private static readonly Mock<ILogger> loggerMock = new Mock<ILogger>();
+        private static readonly Mock<ILogger> _loggerMock = new Mock<ILogger>();
         private static readonly Mock<ILoggerFactory> _LoggerFactoryMock = new Mock<ILoggerFactory>();
         private static readonly IDeviceManager _DeviceManager = new DeviceManager(_LoggerFactoryMock.Object);
 
-        private static void CheckLogMessageText(string containsText, LogLevel logLevel, Times times)
+        public static void CheckLogMessageText(Mock<ILogger> loggerMock, string containsText, LogLevel logLevel, Times times)
         {
             loggerMock.Verify
             (
@@ -62,8 +62,8 @@ namespace Device.Net.UnitTests
         [TestInitialize]
         public void Startup()
         {
-            _DeviceManager.RegisterDeviceFactory(new MockHidFactory(loggerMock.Object));
-            _DeviceManager.RegisterDeviceFactory(new MockUsbFactory(loggerMock.Object));
+            _DeviceManager.RegisterDeviceFactory(new MockHidFactory(_loggerMock.Object));
+            _DeviceManager.RegisterDeviceFactory(new MockUsbFactory(_loggerMock.Object));
         }
 
         [TestMethod]
@@ -90,12 +90,12 @@ namespace Device.Net.UnitTests
 
                     if (device != null && connectedDeviceDefinition.DeviceType == DeviceType.Hid)
                     {
-                        CheckLogMessageText(string.Format(MockHidFactory.FoundMessage, connectedDeviceDefinition.DeviceId), LogLevel.Information, Times.Once());
+                        CheckLogMessageText(_loggerMock, string.Format(MockHidFactory.FoundMessage, connectedDeviceDefinition.DeviceId), LogLevel.Information, Times.Once());
                     }
 
                     if (device != null && connectedDeviceDefinition.DeviceType == DeviceType.Usb)
                     {
-                        CheckLogMessageText(string.Format(MockUsbFactory.FoundMessage, connectedDeviceDefinition.DeviceId), LogLevel.Information, Times.Once());
+                        CheckLogMessageText(_loggerMock, string.Format(MockUsbFactory.FoundMessage, connectedDeviceDefinition.DeviceId), LogLevel.Information, Times.Once());
                     }
                 }
             }
@@ -114,7 +114,7 @@ namespace Device.Net.UnitTests
 
             var actualCount = 0;
 
-            loggerMock.Setup(l => l.Log(
+            _loggerMock.Setup(l => l.Log(
             LogLevel.Trace,
             It.IsAny<EventId>(),
             It.IsAny<It.IsAnyType>(),
@@ -129,7 +129,7 @@ namespace Device.Net.UnitTests
             var connectedDeviceDefinition = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList().First();
 
 
-            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, loggerMock.Object);
+            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, _loggerMock.Object);
 
             var writeAndReadTasks = new List<Task<ReadResult>>();
 
@@ -154,7 +154,7 @@ namespace Device.Net.UnitTests
             //TODO: this should get called 10 times and that seems to be what's happening, bu tif you specify 10 it says that it was called 20.
             //Bug in Moq?
 
-            CheckLogMessageText(Messages.SuccessMessageWriteAndReadCalled, LogLevel.Information, Times.AtLeast(1));
+            CheckLogMessageText(_loggerMock, Messages.SuccessMessageWriteAndReadCalled, LogLevel.Information, Times.AtLeast(1));
         }
 #pragma warning restore IDE0022 // Use expression body for methods
 

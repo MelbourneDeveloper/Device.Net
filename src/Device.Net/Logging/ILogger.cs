@@ -11,4 +11,9 @@ namespace Microsoft.Extensions.Logging
         void LogDebug(string message, params object[] args);
         void LogTrace<T>(T state);
     }
+
+    public interface ILogger<T> : ILogger
+    {
+
+    }
 }
