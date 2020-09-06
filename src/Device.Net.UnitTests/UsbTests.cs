@@ -64,11 +64,11 @@ namespace Device.Net.UnitTests
         {
             try
             {
-                var logger = Substitute.For<ILogger>();
+                var logger = new Mock<ILoggerFactory>();
                 const string deviceId = "";
-                var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, logger, null, null);
-                var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, logger);
-                usbDevice.UsbInterfaceManager.WriteUsbInterface = new WindowsUsbInterface(null, logger, 0, null, null);
+                var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, logger.Object, null, null);
+                var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, null);
+                usbDevice.UsbInterfaceManager.WriteUsbInterface = new WindowsUsbInterface(null, null, 0, null, null);
             }
             catch (ValidationException vex)
             {
@@ -84,11 +84,11 @@ namespace Device.Net.UnitTests
         {
             try
             {
-                var logger = Substitute.For<ILogger>();
+                var logger = new Mock<ILoggerFactory>();
                 const string deviceId = "";
-                var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, logger, null, null);
-                var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, logger);
-                usbDevice.UsbInterfaceManager.ReadUsbInterface = new WindowsUsbInterface(null, logger, 0, null, null);
+                var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, logger.Object, null, null);
+                var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, null);
+                usbDevice.UsbInterfaceManager.ReadUsbInterface = new WindowsUsbInterface(null, null, 0, null, null);
             }
             catch (ValidationException vex)
             {
@@ -122,11 +122,11 @@ namespace Device.Net.UnitTests
 #if !WINDOWS_UWP
         private static UsbDevice CreateUsbDeviceWithInterface()
         {
-            var logger = Substitute.For<ILogger>();
+            var logger = new Mock<ILoggerFactory>();
             const string deviceId = "";
-            var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, logger, null, null);
-            var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, logger);
-            var windowsUsbInterface = new WindowsUsbInterface(null, logger, 0, null, null);
+            var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, logger.Object, null, null);
+            var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, null);
+            var windowsUsbInterface = new WindowsUsbInterface(null, null, 0, null, null);
             usbDevice.UsbInterfaceManager.UsbInterfaces.Add(windowsUsbInterface);
             return usbDevice;
         }
