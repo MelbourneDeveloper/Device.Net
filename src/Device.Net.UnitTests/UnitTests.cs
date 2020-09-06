@@ -78,24 +78,33 @@ namespace Device.Net.UnitTests
         [DataRow(false, false, 0, MockUsbDevice.VendorId, MockUsbDevice.ProductId)]
         public async Task TestWithMatchedFilterAsync(bool isHidConnected, bool isUsbConnected, int expectedCount, uint vid, uint pid)
         {
+            var loggerFactoryMock = new Mock<ILoggerFactory>();
+            var loggerMock = new Mock<ILogger>();
+            var deviceManager = new DeviceManager(loggerFactoryMock.Object);
+
+
+            deviceManager.RegisterDeviceFactory(new MockHidFactory(loggerMock.Object));
+            deviceManager.RegisterDeviceFactory(new MockUsbFactory(loggerMock.Object));
+
+
             MockHidFactory.IsConnectedStatic = isHidConnected;
             MockUsbFactory.IsConnectedStatic = isUsbConnected;
-            var connectedDeviceDefinitions = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList();
+            var connectedDeviceDefinitions = (await deviceManager.GetConnectedDeviceDefinitionsAsync(new FilterDeviceDefinition { ProductId = pid, VendorId = vid })).ToList();
 
             if (connectedDeviceDefinitions.Count > 0)
             {
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                 {
-                    var device = _DeviceManager.GetDevice(connectedDeviceDefinition);
+                    var device = deviceManager.GetDevice(connectedDeviceDefinition);
 
                     if (device != null && connectedDeviceDefinition.DeviceType == DeviceType.Hid)
                     {
-                        CheckLogMessageText(_loggerMock, string.Format(MockHidFactory.FoundMessage, connectedDeviceDefinition.DeviceId), LogLevel.Information, Times.Once());
+                        CheckLogMessageText(loggerMock, string.Format(MockHidFactory.FoundMessage, connectedDeviceDefinition.DeviceId), LogLevel.Information, Times.Once());
                     }
 
                     if (device != null && connectedDeviceDefinition.DeviceType == DeviceType.Usb)
                     {
-                        CheckLogMessageText(_loggerMock, string.Format(MockUsbFactory.FoundMessage, connectedDeviceDefinition.DeviceId), LogLevel.Information, Times.Once());
+                        CheckLogMessageText(loggerMock, string.Format(MockUsbFactory.FoundMessage, connectedDeviceDefinition.DeviceId), LogLevel.Information, Times.Once());
                     }
                 }
             }
