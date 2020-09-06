@@ -9,7 +9,7 @@ namespace Device.Net.Reactive
 
         Task<TResponse> WriteAndReadAsync<TResponse>(IRequest request, Func<byte[], TResponse> convertFunc);
 
-        void SelectDevice(ConnectedDevice connectedDevice);
+        void SelectDevice(DeviceSelectedArgs connectedDevice);
 
         void Start();
     }

@@ -103,7 +103,7 @@ namespace Device.Net.Reactive
             });
         }
 
-        public void SelectDevice(ConnectedDevice connectedDevice) => _ = InitializeDeviceAsync(connectedDevice);
+        public void SelectDevice(DeviceSelectedArgs connectedDevice) => _ = InitializeDeviceAsync(connectedDevice.ConnectedDevice);
 
         public async Task<TResponse> WriteAndReadAsync<TResponse>(IRequest request, Func<byte[], TResponse> convertFunc)
         {
