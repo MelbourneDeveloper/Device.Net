@@ -1,4 +1,6 @@
-﻿using Device.Net.Exceptions;
+﻿/*
+
+using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ using timer = System.Timers.Timer;
 
 namespace Device.Net
 {
+
     public sealed class DeviceListener : IDeviceListener
     {
         #region Fields
@@ -212,4 +215,8 @@ namespace Device.Net
         }
         #endregion
     }
+
+
 }
+
+*/

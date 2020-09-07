@@ -13,6 +13,7 @@ namespace Device.Net
 
         #region Fields
         private readonly ILoggerFactory _loggerFactory;
+        private readonly ILogger _logger;
         #endregion
 
         #region Public Properties
@@ -24,23 +25,32 @@ namespace Device.Net
         #region Constructor
         public DeviceManager(ILoggerFactory loggerFactory)
         {
-            _loggerFactory = loggerFactory;
+            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+            _logger = loggerFactory.CreateLogger<DeviceManager>();
         }
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(Func<IDeviceFactory, Task<IEnumerable<ConnectedDeviceDefinition>>> func)
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
             if (DeviceFactories.Count == 0) throw new DeviceFactoriesNotRegisteredException();
-
-            if (func == null) throw new ArgumentNullException(nameof(func));
 
             var retVal = new List<ConnectedDeviceDefinition>();
 
             foreach (var deviceFactory in DeviceFactories)
             {
-                var factoryResults = await func(deviceFactory);
-                retVal.AddRange(factoryResults);
+                try
+                {
+                    //TODO: Do this in parallel?
+                    var factoryResults = await deviceFactory.GetConnectedDeviceDefinitionsAsync();
+                    retVal.AddRange(factoryResults);
+
+                    _logger.LogDebug("Called " + nameof(GetConnectedDeviceDefinitionsAsync) + " on " + deviceFactory.GetType().Name);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error calling " + nameof(GetConnectedDeviceDefinitionsAsync));
+                }
             }
 
             return retVal;

@@ -33,7 +33,7 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
 #if NETSTANDARD
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -92,9 +92,9 @@ namespace SerialPort.Net.Windows
 
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
-
-            return new WindowsSerialPortDevice(deviceDefinition.DeviceId);
+            return deviceDefinition == null
+                ? throw new ArgumentNullException(nameof(deviceDefinition))
+                : new WindowsSerialPortDevice(deviceDefinition.DeviceId);
         }
         #endregion
     }

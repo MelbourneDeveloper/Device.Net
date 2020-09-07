@@ -50,12 +50,23 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidDeviceFactory(ILoggerFactory loggerFactory) : this(loggerFactory, null)
+        public WindowsHidDeviceFactory(
+            ILoggerFactory loggerFactory,
+            GetConnectedDevicesAsync getConnectedDevicesAsync) : this(
+                loggerFactory,
+                null,
+                getConnectedDevicesAsync)
         {
 
         }
 
-        public WindowsHidDeviceFactory(ILoggerFactory loggerFactory, IHidApiService hidService) : base(loggerFactory, loggerFactory.CreateLogger<WindowsHidDeviceFactory>())
+        public WindowsHidDeviceFactory(
+            ILoggerFactory loggerFactory,
+            IHidApiService hidService,
+            GetConnectedDevicesAsync getConnectedDevicesAsync) : base(
+                loggerFactory,
+                loggerFactory.CreateLogger<WindowsHidDeviceFactory>(),
+                getConnectedDevicesAsync)
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
@@ -69,12 +80,9 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Methods
-        public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
-        {
-            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
-
-            return deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId, LoggerFactory);
-        }
+        public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition) => deviceDefinition == null
+                ? throw new ArgumentNullException(nameof(deviceDefinition))
+                : deviceDefinition.DeviceType != DeviceType ? null : new WindowsHidDevice(deviceDefinition.DeviceId, LoggerFactory);
         #endregion
 
         #region Private Static Methods

@@ -25,18 +25,19 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsUsbDeviceFactory(ILoggerFactory loggerFactory) : base(loggerFactory, loggerFactory.CreateLogger<WindowsUsbDeviceFactory>())
+        public WindowsUsbDeviceFactory(
+            ILoggerFactory loggerFactory,
+            GetConnectedDevicesAsync getConnectedDevicesAsync
+            ) : base(loggerFactory, loggerFactory.CreateLogger<WindowsUsbDeviceFactory>(), getConnectedDevicesAsync)
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
         }
         #endregion
 
         #region Public Methods
-        public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
-        {
-            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
-
-            return deviceDefinition.DeviceType != DeviceType ? null :
+        public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition) => deviceDefinition == null
+                ? throw new ArgumentNullException(nameof(deviceDefinition))
+                : deviceDefinition.DeviceType != DeviceType ? null :
                 new UsbDevice(deviceDefinition.DeviceId,
                     new WindowsUsbInterfaceManager(
                     deviceDefinition.DeviceId,
@@ -44,7 +45,7 @@ namespace Usb.Net.Windows
                         ReadBufferSize,
                         WriteBufferSize)
                 , LoggerFactory.CreateLogger<UsbDevice>());
-        }
+
         #endregion
 
         #region Private Static Methods
