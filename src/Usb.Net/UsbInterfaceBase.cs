@@ -25,25 +25,9 @@ namespace Usb.Net
         #endregion
 
         #region Public Properties
-        public ushort ReadBufferSize
-        {
-            get
-            {
-                if (_ReadBufferSize.HasValue) return _ReadBufferSize.Value;
+        public ushort ReadBufferSize => _ReadBufferSize ?? (ReadEndpoint != null ? ReadEndpoint.MaxPacketSize : throw new NotImplementedException());
 
-                return ReadEndpoint != null ? ReadEndpoint.MaxPacketSize : throw new NotImplementedException();
-            }
-        }
-
-        public ushort WriteBufferSize
-        {
-            get
-            {
-                if (_WriteBufferSize.HasValue) return _WriteBufferSize.Value;
-
-                return WriteEndpoint != null ? WriteEndpoint.MaxPacketSize : throw new NotImplementedException();
-            }
-        }
+        public ushort WriteBufferSize => _WriteBufferSize ?? (WriteEndpoint != null ? WriteEndpoint.MaxPacketSize : throw new NotImplementedException());
 
         public IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints { get; } = new List<IUsbInterfaceEndpoint>();
 

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 namespace Device.Net.Reactive
 {
     public delegate IDevice GetDevice(string deviceId);
+    public delegate Task<IReadOnlyList<ConnectedDeviceDefinition>> GetConnectedDevicesAsync();
 
     /// <summary>
     /// This class is a work in progress. It is not production ready.
@@ -27,7 +28,7 @@ namespace Device.Net.Reactive
         private readonly DevicesNotify _notifyConnectedDevices;
         private bool isDisposed;
         private readonly int _pollMilliseconds;
-        private readonly Task<IReadOnlyList<ConnectedDeviceDefinition>> _getConnectedDevicesAsync;
+        private readonly GetConnectedDevicesAsync _getConnectedDevicesAsync;
         private readonly GetDevice _getDevice;
         #endregion
 
@@ -68,7 +69,7 @@ namespace Device.Net.Reactive
             NotifyDeviceException notifyDeviceException,
             ILoggerFactory loggerFactory,
             Func<IDevice, Task> initializeDeviceAction,
-            Task<IReadOnlyList<ConnectedDeviceDefinition>> getConnectedDevicesAsync,
+            GetConnectedDevicesAsync getConnectedDevicesAsync,
             GetDevice getDevice,
             int pollMilliseconds
             )
@@ -96,7 +97,7 @@ namespace Device.Net.Reactive
             {
                 while (!isDisposed)
                 {
-                    var devices = await _getConnectedDevicesAsync;
+                    var devices = await _getConnectedDevicesAsync();
                     var lists = devices.Select(d => new ConnectedDevice { DeviceId = d.DeviceId }).ToList();
                     _notifyConnectedDevices(lists);
                     await Task.Delay(TimeSpan.FromMilliseconds(_pollMilliseconds));
