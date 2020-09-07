@@ -29,23 +29,18 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(Func<IDeviceFactory, Task<IEnumerable<ConnectedDeviceDefinition>>> func)
         {
             if (DeviceFactories.Count == 0) throw new DeviceFactoriesNotRegisteredException();
 
+            if (func == null) throw new ArgumentNullException(nameof(func));
+
             var retVal = new List<ConnectedDeviceDefinition>();
+
             foreach (var deviceFactory in DeviceFactories)
             {
-                var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitionsAsync(deviceDefinition);
-
-                foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
-                {
-                    //Don't add the same device twice
-                    //Note: this probably won't cause issues where there is no DeviceId, but funny behaviour is probably going on when there isn't anyway...
-                    if (retVal.Select(d => d.DeviceId).Contains(connectedDeviceDefinition.DeviceId)) continue;
-
-                    retVal.Add(connectedDeviceDefinition);
-                }
+                var factoryResults = await func(deviceFactory);
+                retVal.AddRange(factoryResults);
             }
 
             return retVal;
@@ -62,36 +57,6 @@ namespace Device.Net
             }
 
             throw new DeviceException(Messages.ErrorMessageCouldntGetDevice);
-        }
-
-        public async Task<List<IDevice>> GetDevicesAsync(IList<FilterDeviceDefinition> deviceDefinitions)
-        {
-            if (deviceDefinitions == null) throw new ArgumentNullException(nameof(deviceDefinitions), $"{nameof(GetConnectedDeviceDefinitionsAsync)} can be used to enumerate all devices without specifying definitions.");
-
-            var retVal = new List<IDevice>();
-
-            foreach (var deviceFactory in DeviceFactories)
-            {
-                foreach (var filterDeviceDefinition in deviceDefinitions)
-                {
-                    if (filterDeviceDefinition.DeviceType.HasValue && (deviceFactory.DeviceType != filterDeviceDefinition.DeviceType)) continue;
-
-                    var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitionsAsync(filterDeviceDefinition);
-                    retVal.AddRange
-                    (
-                        connectedDeviceDefinitions.Select
-                        (
-                            connectedDeviceDefinition => deviceFactory.GetDevice(connectedDeviceDefinition)
-                        ).
-                        Where
-                        (
-                            device => device != null
-                        )
-                    );
-                }
-            }
-
-            return retVal;
         }
         #endregion
 
