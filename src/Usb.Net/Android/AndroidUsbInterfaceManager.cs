@@ -156,6 +156,8 @@ namespace Usb.Net.Android
                     throw new DeviceException("could not open connection");
                 }
 
+                Logger.LogInformation("Interface count: {count}", _UsbDevice.InterfaceCount);
+
                 for (var x = 0; x < _UsbDevice.InterfaceCount; x++)
                 {
                     //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
@@ -163,7 +165,7 @@ namespace Usb.Net.Android
 
                     var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, LoggerFactory.CreateLogger<AndroidUsbInterface>(), ReadBufferSize, WriteBufferSize);
 
-                    Logger.LogInformation("Interface found. Name: {name} Id: {id}", usbInterface.Name, usbInterface.Id);
+                    Logger.LogInformation("Interface found. Name: {name} Id: {id} Endpoint Count: {endpointCount} Interface Class: {interfaceclass} Interface Subclass: {interfacesubclass}", usbInterface.Name, usbInterface.Id, usbInterface.EndpointCount, usbInterface.InterfaceClass, usbInterface.InterfaceSubclass);
 
                     UsbInterfaces.Add(androidUsbInterface);
 
@@ -173,11 +175,12 @@ namespace Usb.Net.Android
 
                         if (usbEndpoint != null)
                         {
-                            //TODO: This is probably all wrong...
                             var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, LoggerFactory.CreateLogger<AndroidUsbEndpoint>());
                             androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
                         }
                     }
+
+                    await androidUsbInterface.ClaimInterface();
                 }
 
                 RegisterDefaultInterfaces();

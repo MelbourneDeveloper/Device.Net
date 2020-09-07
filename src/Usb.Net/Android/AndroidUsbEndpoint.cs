@@ -31,7 +31,7 @@ namespace Usb.Net.Android
             UsbEndpoint = usbEndpoint;
             PipeId = (byte)usbEndpoint.Address;
 
-            _logger?.LogInformation("Endpoint found. Direction: {direction} Type: {type}", usbEndpoint.Direction, usbEndpoint.Type);
+            _logger?.LogInformation("Endpoint found. PipeId/Address {address} Direction: {direction} Type: {type}", usbEndpoint.Address, usbEndpoint.Direction, usbEndpoint.Type);
         }
     }
 }
