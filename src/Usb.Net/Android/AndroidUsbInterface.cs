@@ -91,21 +91,27 @@ namespace Usb.Net.Android
 
                 try
                 {
-                    logScope = Logger?.BeginScope("UsbInterface: {usbInterface} Call: {call} Data Length: {writeLength}", UsbInterface.Id, nameof(WriteAsync), data.Length);
 
                     //TODO: Perhaps we should implement Batch Begin/Complete so that the UsbRequest is not created again and again. This will be expensive
 
                     var request = new UsbRequest();
                     var endpoint = ((AndroidUsbEndpoint)WriteEndpoint).UsbEndpoint;
+
+                    logScope = Logger?.BeginScope("UsbInterface: {usbInterface} Endpoint: {endpoint} Call: {call} Data Length: {writeLength}", UsbInterface.Id, endpoint.Address, nameof(WriteAsync), data.Length);
+
+                    Logger?.LogInformation("Before Write UsbInterface: {usbInterface} Endpoint: {endpoint} Call: {call} Data Length: {writeLength}", UsbInterface.Id, endpoint.Address, nameof(WriteAsync), data.Length);
+
+
                     request.Initialize(_UsbDeviceConnection, endpoint);
                     var byteBuffer = ByteBuffer.Wrap(data);
-
-                    Logger.LogTrace(new Trace(true, data));
 
 #pragma warning disable CS0618 
                     request.Queue(byteBuffer, data.Length);
 #pragma warning restore CS0618 
+
                     await _UsbDeviceConnection.RequestWaitAsync();
+
+                    Logger.LogTrace(new Trace(true, data), $"Write endpoint: {endpoint.Address}");
                 }
                 catch (Exception ex)
                 {

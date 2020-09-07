@@ -38,6 +38,11 @@ namespace Usb.Net
             {
                 if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
                 _ReadEndpoint = value;
+
+#pragma warning disable CA1062 // Validate arguments of public methods
+                Logger?.LogInformation("ReadEndpoint set to pipeid {pipeid}", value?.PipeId);
+#pragma warning restore CA1062 // Validate arguments of public methods
+
             }
         }
 
@@ -48,6 +53,9 @@ namespace Usb.Net
             {
                 if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
                 _WriteEndpoint = value;
+#pragma warning disable CA1062 // Validate arguments of public methods
+                Logger?.LogInformation("WriteEndpoint set to pipeid {pipeid}", value?.PipeId);
+#pragma warning restore CA1062 // Validate arguments of public methods
             }
         }
 

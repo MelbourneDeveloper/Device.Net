@@ -43,7 +43,12 @@ namespace Usb.Net
             ReadInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptReadEndpoint != null);
             WriteInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptWriteEndpoint != null);
 
-            Logger?.LogInformation("Read interface: {readInterface} Write interface {writeInterface} ReadInterruptUsbInterface: {}", ReadUsbInterface?.InterfaceNumber, WriteUsbInterface?.InterfaceNumber, ReadInterruptUsbInterface?.InterfaceNumber, WriteInterruptUsbInterface?.InterfaceNumber);
+            Logger?.LogInformation("Defaults: Read interface: {readInterface} Write interface {writeInterface} Read PipeId: {readPipeId} Write PipeId: {writePipeId}",
+                ReadUsbInterface?.InterfaceNumber,
+                WriteUsbInterface?.InterfaceNumber,
+                ReadUsbInterface?.ReadEndpoint?.PipeId,
+                WriteUsbInterface?.WriteEndpoint?.PipeId
+                );
         }
         #endregion
 
