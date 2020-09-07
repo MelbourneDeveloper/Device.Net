@@ -130,12 +130,9 @@ namespace Usb.Net.Android
 
         public override Task ClaimInterface()
         {
-            if (!_UsbDeviceConnection.ClaimInterface(UsbInterface, true))
-            {
-                throw new DeviceException("could not claim interface");
-            }
-
-            return Task.FromResult(true);
+            return !_UsbDeviceConnection.ClaimInterface(UsbInterface, true)
+                ? throw new DeviceException("could not claim interface")
+                : Task.FromResult(true);
         }
         #endregion
     }

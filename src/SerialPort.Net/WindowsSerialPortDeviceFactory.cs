@@ -92,9 +92,9 @@ namespace SerialPort.Net.Windows
 
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
-
-            return new WindowsSerialPortDevice(deviceDefinition.DeviceId);
+            return deviceDefinition == null
+                ? throw new ArgumentNullException(nameof(deviceDefinition))
+                : new WindowsSerialPortDevice(deviceDefinition.DeviceId);
         }
         #endregion
     }

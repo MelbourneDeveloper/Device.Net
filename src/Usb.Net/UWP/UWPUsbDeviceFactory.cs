@@ -37,9 +37,9 @@ namespace Usb.Net.UWP
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
-
-            return deviceDefinition.DeviceType == DeviceType.Hid ? null :
+            return deviceDefinition == null
+                ? throw new ArgumentNullException(nameof(deviceDefinition))
+                : deviceDefinition.DeviceType == DeviceType.Hid ? null :
                 new UsbDevice(deviceDefinition.DeviceId,
                 new UWPUsbInterfaceManager(
                     deviceDefinition,

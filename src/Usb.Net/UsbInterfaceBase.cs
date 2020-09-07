@@ -31,9 +31,7 @@ namespace Usb.Net
             {
                 if (_ReadBufferSize.HasValue) return _ReadBufferSize.Value;
 
-                if (ReadEndpoint != null) return ReadEndpoint.MaxPacketSize;
-
-                throw new NotImplementedException();
+                return ReadEndpoint != null ? ReadEndpoint.MaxPacketSize : throw new NotImplementedException();
             }
         }
 
@@ -43,9 +41,7 @@ namespace Usb.Net
             {
                 if (_WriteBufferSize.HasValue) return _WriteBufferSize.Value;
 
-                if (WriteEndpoint != null) return WriteEndpoint.MaxPacketSize;
-
-                throw new NotImplementedException();
+                return WriteEndpoint != null ? WriteEndpoint.MaxPacketSize : throw new NotImplementedException();
             }
         }
 

@@ -150,15 +150,16 @@ namespace Device.Net.LibUsb
         #region Public Static Methods
         public static int GetVendorId(UsbDevice usbDevice)
         {
-            if (usbDevice == null) throw new ArgumentNullException(nameof(usbDevice));
-            return usbDevice is MonoUsbDevice monoUsbDevice ? monoUsbDevice.Profile.DeviceDescriptor.VendorID : usbDevice.UsbRegistryInfo.Vid;
+            return usbDevice == null
+                ? throw new ArgumentNullException(nameof(usbDevice))
+                : usbDevice is MonoUsbDevice monoUsbDevice ? monoUsbDevice.Profile.DeviceDescriptor.VendorID : usbDevice.UsbRegistryInfo.Vid;
         }
 
         public static int GetProductId(UsbDevice usbDevice)
         {
-            if (usbDevice == null) throw new ArgumentNullException(nameof(usbDevice));
-
-            return usbDevice is MonoUsbDevice monoUsbDevice ? monoUsbDevice.Profile.DeviceDescriptor.ProductID : usbDevice.UsbRegistryInfo.Pid;
+            return usbDevice == null
+                ? throw new ArgumentNullException(nameof(usbDevice))
+                : usbDevice is MonoUsbDevice monoUsbDevice ? monoUsbDevice.Profile.DeviceDescriptor.ProductID : usbDevice.UsbRegistryInfo.Pid;
         }
         #endregion
     }

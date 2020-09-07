@@ -23,8 +23,7 @@ namespace Device.Net
         public static implicit operator ReadResult(byte[] data)
         {
             //TODO: This is a bit dodgy... It's breaking a code rule
-            if (data == null) throw new ArgumentNullException(nameof(data));
-            return new ReadResult(data, (uint)data.Length);
+            return data == null ? throw new ArgumentNullException(nameof(data)) : new ReadResult(data, (uint)data.Length);
         }
         #endregion
 
