@@ -3,14 +3,20 @@ using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Hid.Net.Windows
 {
 
-
     public static class WindowsHidDeviceFactoryExtensions
     {
-        public static IDeviceFactory CreateWindowsHidDeviceFactory(ILoggerFactory loggerFactory, IHidApiService hidApiService = null, Guid? classGuid = null)
+        public static IDeviceFactory CreateWindowsHidDeviceFactory(
+            this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
+            ILoggerFactory loggerFactory,
+            IHidApiService hidApiService = null,
+            Guid? classGuid = null,
+            ushort? readBufferSize = null)
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
@@ -18,24 +24,23 @@ namespace Hid.Net.Windows
 
             var windowsDeviceEnumerator = new WindowsDeviceEnumerator(
                 loggerFactory.CreateLogger<WindowsDeviceEnumerator>(),
-                classGuid,
-                (d) => GetDeviceDefinition(d, selectedHidApiService, loggerFactory.CreateLogger<WindowsHidDeviceFactoryExtensions>())
+                classGuid ?? selectedHidApiService.GetHidGuid(),
+                (d) => GetDeviceDefinition(d, selectedHidApiService, loggerFactory.CreateLogger(nameof(WindowsHidDeviceFactoryExtensions))),
+                async (c) =>
+                    filterDeviceDefinitions.FirstOrDefault((f) => DeviceManager.IsDefinitionMatch(f, c)) != null
                 );
 
-            return CreateWindowsHidDeviceFactory(windowsDeviceEnumerator.GetConnectedDeviceDefinitionsAsync, (c) => new WindowsHidDevice(c.DeviceId, loggerFactory, hidApiService: selectedHidApiService), loggerFactory);
+            return new DeviceFactory(
+                loggerFactory,
+                windowsDeviceEnumerator.GetConnectedDeviceDefinitionsAsync,
+                (c) => new WindowsHidDevice
+                (
+                    c.DeviceId,
+                    loggerFactory,
+                    hidApiService: selectedHidApiService,
+                    readBufferSize: readBufferSize
+                ));
         }
-
-        public static IDeviceFactory CreateWindowsHidDeviceFactory(this GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync, GetDevice getDevice, ILoggerFactory loggerFactory)
-        {
-            return getConnectedDeviceDefinitionsAsync == null
-                ? throw new ArgumentNullException(nameof(getConnectedDeviceDefinitionsAsync))
-                : getDevice == null
-                ? throw new ArgumentNullException(nameof(getDevice))
-                : loggerFactory == null
-                ? throw new ArgumentNullException(nameof(loggerFactory))
-                : new DeviceFactory(loggerFactory, getConnectedDeviceDefinitionsAsync, getDevice);
-        }
-
 
         private static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, IHidApiService HidService, ILogger Logger)
         {
