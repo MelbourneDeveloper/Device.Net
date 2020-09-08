@@ -3,6 +3,7 @@ using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Hid.Net.UWP
 {
@@ -11,6 +12,24 @@ namespace Hid.Net.UWP
     /// </summary>
     public static class UWPHidDeviceFactoryExtensions
     {
+        private const string InterfaceEnabledPart = "AND System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True";
+        private const string VendorFilterName = "System.DeviceInterface.Hid.VendorId";
+        private const string ProductFilterName = "System.DeviceInterface.Hid.ProductId";
+
+        private static string GetVendorPart(uint? vendorId)
+        {
+            string vendorPart = null;
+            if (vendorId.HasValue) vendorPart = $"AND {VendorFilterName}:={vendorId.Value}";
+            return vendorPart;
+        }
+
+        private static string GetProductPart(uint? productId)
+        {
+            string productPart = null;
+            if (productId.HasValue) productPart = $"AND {ProductFilterName}:={productId.Value}";
+            return productPart;
+        }
+
         public static IDeviceFactory CreateUwpHidDeviceFactory(
 #pragma warning disable IDE0060 // Remove unused parameter
             this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
@@ -22,9 +41,9 @@ namespace Hid.Net.UWP
 
             if (getDevice == null) getDevice = (c) => new UWPHidDevice(c.DeviceId, loggerFactory);
 
-            //var aqs = $"{InterfaceEnabledPart} {GetVendorPart(vendorId)} {GetProductPart(productId)}";
-            var aqs = "";
-            throw new NotImplementedException("Need to build the aqs string");
+            var firstDevice = filterDeviceDefinitions.First();
+
+            var aqs = $"{InterfaceEnabledPart} {GetVendorPart(firstDevice.VendorId)} {GetProductPart(firstDevice.ProductId)}";
 
             var logger = loggerFactory.CreateLogger<UwpHidDeviceEnumerator>();
 
