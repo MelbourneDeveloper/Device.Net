@@ -36,7 +36,7 @@ namespace Hid.Net.Windows
                 windowsDeviceEnumerator.GetConnectedDeviceDefinitionsAsync,
                 async (c) => new WindowsHidDevice
                 (
-                    c.DeviceId,
+                    c,
                     loggerFactory,
                     hidApiService: selectedHidApiService,
                     readBufferSize: readBufferSize,

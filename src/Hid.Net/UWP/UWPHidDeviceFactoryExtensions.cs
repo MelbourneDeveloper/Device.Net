@@ -26,7 +26,7 @@ namespace Hid.Net.UWP
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
-            if (getDevice == null) getDevice = async (c) => new UWPHidDevice(c.DeviceId, loggerFactory);
+            if (getDevice == null) getDevice = async (c) => new UWPHidDevice(c, loggerFactory);
 
             var firstDevice = filterDeviceDefinitions.First();
 
