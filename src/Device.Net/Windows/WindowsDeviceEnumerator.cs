@@ -7,35 +7,37 @@ using System.Threading.Tasks;
 
 namespace Device.Net.Windows
 {
+    public delegate Task<bool> IsMatch(ConnectedDeviceDefinition connectedDeviceDefinition);
+
     public class WindowsDeviceEnumerator
     {
         private readonly ILogger Logger;
-        private readonly GetClassGuid _getClassGuid;
+        private readonly Guid _classGuid;
         private readonly GetDeviceDefinition _getDeviceDefinition;
-        private readonly FilterDeviceDefinition _filterDeviceDefinition;
+        private readonly IsMatch _isMatch;
 
         public WindowsDeviceEnumerator(
             ILogger logger,
-            GetClassGuid getClassGuid,
+            Guid classGuid,
             GetDeviceDefinition getDeviceDefinition,
-            FilterDeviceDefinition filterDeviceDefinition
+            IsMatch isMatch
             )
         {
             Logger = logger;
-            _getClassGuid = getClassGuid;
+            _classGuid = classGuid;
             _getDeviceDefinition = getDeviceDefinition;
-            _filterDeviceDefinition = filterDeviceDefinition;
+            _isMatch = isMatch;
         }
 
         public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
-            return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(() =>
+            return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(async () =>
             {
                 IDisposable loggerScope = null;
 
                 try
                 {
-                    Logger?.BeginScope("Filter Device Definition: {filterDeviceDefinition}", new object[] { _filterDeviceDefinition?.ToString() });
+                    Logger?.BeginScope("Calling " + nameof(GetConnectedDeviceDefinitionsAsync));
 
                     var deviceDefinitions = new Collection<ConnectedDeviceDefinition>();
                     var spDeviceInterfaceData = new SpDeviceInterfaceData();
@@ -43,26 +45,18 @@ namespace Device.Net.Windows
                     var spDeviceInterfaceDetailData = new SpDeviceInterfaceDetailData();
                     spDeviceInterfaceData.CbSize = (uint)Marshal.SizeOf(spDeviceInterfaceData);
                     spDeviceInfoData.CbSize = (uint)Marshal.SizeOf(spDeviceInfoData);
-                    string productIdHex = null;
-                    string vendorHex = null;
 
-                    var guidString = _getClassGuid().ToString();
-                    var copyOfClassGuid = new Guid(guidString);
                     const int flags = APICalls.DigcfDeviceinterface | APICalls.DigcfPresent;
 
-                    Logger?.LogDebug("About to call {call} for class Guid {guidString}. Flags: {flags}", nameof(APICalls.SetupDiGetClassDevs), guidString, flags);
+                    var copyOfClassGuid = new Guid(_classGuid.ToString());
+
+                    Logger?.LogDebug("About to call {call} for class Guid {guidString}. Flags: {flags}", nameof(APICalls.SetupDiGetClassDevs), _classGuid.ToString(), flags);
 
                     var devicesHandle = APICalls.SetupDiGetClassDevs(ref copyOfClassGuid, IntPtr.Zero, IntPtr.Zero, flags);
 
                     spDeviceInterfaceDetailData.CbSize = IntPtr.Size == 8 ? 8 : 4 + Marshal.SystemDefaultCharSize;
 
                     var i = -1;
-
-                    if (_filterDeviceDefinition != null)
-                    {
-                        if (_filterDeviceDefinition.ProductId.HasValue) productIdHex = Helpers.GetHex(_filterDeviceDefinition.ProductId);
-                        if (_filterDeviceDefinition.VendorId.HasValue) vendorHex = Helpers.GetHex(_filterDeviceDefinition.VendorId);
-                    }
 
                     while (true)
                     {
@@ -105,13 +99,6 @@ namespace Device.Net.Windows
                                 }
                             }
 
-                            //Note this is a bit nasty but we can filter Vid and Pid this way I think...
-                            if (_filterDeviceDefinition != null)
-                            {
-                                if (_filterDeviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
-                                if (_filterDeviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
-                            }
-
                             var connectedDeviceDefinition = _getDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
 
                             if (connectedDeviceDefinition == null)
@@ -120,7 +107,7 @@ namespace Device.Net.Windows
                                 continue;
                             }
 
-                            if (!DeviceManager.IsDefinitionMatch(_filterDeviceDefinition, connectedDeviceDefinition)) continue;
+                            if (!await _isMatch(connectedDeviceDefinition)) continue;
 
                             deviceDefinitions.Add(connectedDeviceDefinition);
                         }
