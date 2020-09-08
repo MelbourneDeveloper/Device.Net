@@ -16,7 +16,8 @@ namespace Hid.Net.Windows
             ILoggerFactory loggerFactory,
             IHidApiService hidApiService = null,
             Guid? classGuid = null,
-            ushort? readBufferSize = null)
+            ushort? readBufferSize = null,
+            ushort? writeBufferSize = null
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
@@ -38,7 +39,8 @@ namespace Hid.Net.Windows
                     c.DeviceId,
                     loggerFactory,
                     hidApiService: selectedHidApiService,
-                    readBufferSize: readBufferSize
+                    readBufferSize: readBufferSize,
+                    writeBufferSize: writeBufferSize
                 ));
         }
 
