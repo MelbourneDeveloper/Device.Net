@@ -57,7 +57,7 @@ namespace Device.Net
         }
 
         //TODO: Duplicate code here...
-        public IDevice GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition)
+        public Task<IDevice> GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition)
         {
             if (connectedDeviceDefinition == null) throw new ArgumentNullException(nameof(connectedDeviceDefinition));
 
@@ -71,7 +71,7 @@ namespace Device.Net
         #endregion
 
         #region Public Static Methods
-        public static bool IsDefinitionMatch(FilterDeviceDefinition filterDevice, ConnectedDeviceDefinition actualDevice)
+        public static bool IsDefinitionMatch(FilterDeviceDefinition filterDevice, ConnectedDeviceDefinition actualDevice, DeviceType deviceType)
         {
             if (actualDevice == null) throw new ArgumentNullException(nameof(actualDevice));
 
@@ -79,7 +79,7 @@ namespace Device.Net
 
             var vendorIdPasses = !filterDevice.VendorId.HasValue || filterDevice.VendorId == actualDevice.VendorId;
             var productIdPasses = !filterDevice.ProductId.HasValue || filterDevice.ProductId == actualDevice.ProductId;
-            var deviceTypePasses = !filterDevice.DeviceType.HasValue || filterDevice.DeviceType == actualDevice.DeviceType;
+            var deviceTypePasses = !actualDevice.DeviceType.HasValue || actualDevice.DeviceType == deviceType;
             var usagePagePasses = !filterDevice.UsagePage.HasValue || filterDevice.UsagePage == actualDevice.UsagePage;
 
             var returnValue =

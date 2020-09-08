@@ -14,6 +14,7 @@ namespace Device.Net
 
         #region Protected Properties
         protected ILogger Logger { get; }
+        protected ILoggerFactory LoggerFactory { get; }
         #endregion
 
         #region Public Abstract Properties
@@ -28,10 +29,11 @@ namespace Device.Net
         #endregion
 
         #region Constructor
-        protected DeviceBase(string deviceId, ILogger logger)
+        protected DeviceBase(string deviceId, ILoggerFactory loggerFactory, ILogger logger)
         {
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
-            Logger = logger;
+            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
         }
         #endregion
 

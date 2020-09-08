@@ -1,6 +1,4 @@
-﻿using Device.Net;
-using Device.Net.UWP;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,11 +6,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using wde = Windows.Devices.Enumeration;
 
-namespace Hid.Net.UWP
+namespace Device.Net.UWP
 {
     public delegate Task<ConnectionInfo> TestConnection(string deviceId);
 
-    public class UwpHidDeviceEnumerator
+    public class UwpDeviceEnumerator
     {
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger _logger;
@@ -23,7 +21,7 @@ namespace Hid.Net.UWP
         private readonly TestConnection _testConnection;
 
         #region Constructor
-        public UwpHidDeviceEnumerator(
+        public UwpDeviceEnumerator(
             ILoggerFactory loggerFactory,
             ILogger logger,
             string aqf,

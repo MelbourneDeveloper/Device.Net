@@ -28,13 +28,13 @@ namespace Hid.Net.Windows
                 classGuid ?? selectedHidApiService.GetHidGuid(),
                 (d) => GetDeviceDefinition(d, selectedHidApiService, loggerFactory.CreateLogger(nameof(WindowsHidDeviceFactoryExtensions))),
                 async (c) =>
-                    filterDeviceDefinitions.FirstOrDefault((f) => DeviceManager.IsDefinitionMatch(f, c)) != null
+                    filterDeviceDefinitions.FirstOrDefault((f) => DeviceManager.IsDefinitionMatch(f, c, DeviceType.Hid)) != null
                 );
 
             return new DeviceFactory(
                 loggerFactory,
                 windowsDeviceEnumerator.GetConnectedDeviceDefinitionsAsync,
-                (c) => new WindowsHidDevice
+                async (c) => new WindowsHidDevice
                 (
                     c.DeviceId,
                     loggerFactory,

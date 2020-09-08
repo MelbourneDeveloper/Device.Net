@@ -1,9 +1,10 @@
 ﻿using Device.Net;
+using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace Usb.Net
+namespace Usb.Net.UWP
 {
     public delegate Task<IUsbInterfaceManager> GetUsbInterfaceManager(string deviceId);
 
@@ -12,9 +13,13 @@ namespace Usb.Net
         public static IDeviceFactory CreateUsbDeviceFactory(
             ILoggerFactory loggerFactory,
             GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync,
-            GetUsbInterfaceManager getUsbInterfaceManager) => loggerFactory == null
-                ? throw new ArgumentNullException(nameof(loggerFactory))
-                : new DeviceFactory(
+            GetUsbInterfaceManager getUsbInterfaceManager)
+        {
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+
+            var logger = loggerFactory.CreateLogger<UwpDeviceEnumerator>();
+
+            return new DeviceFactory(
                 loggerFactory,
                 getConnectedDeviceDefinitionsAsync,
                 async (d) =>
@@ -22,6 +27,7 @@ namespace Usb.Net
                     var usbInterfaceManager = await getUsbInterfaceManager(d.DeviceId);
                     return new UsbDevice(d.DeviceId, usbInterfaceManager, loggerFactory);
                 });
+        }
     }
 }
 
