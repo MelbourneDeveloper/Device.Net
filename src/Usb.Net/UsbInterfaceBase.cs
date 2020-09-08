@@ -25,29 +25,9 @@ namespace Usb.Net
         #endregion
 
         #region Public Properties
-        public ushort ReadBufferSize
-        {
-            get
-            {
-                if (_ReadBufferSize.HasValue) return _ReadBufferSize.Value;
+        public ushort ReadBufferSize => _ReadBufferSize ?? (ReadEndpoint != null ? ReadEndpoint.MaxPacketSize : throw new NotImplementedException());
 
-                if (ReadEndpoint != null) return ReadEndpoint.MaxPacketSize;
-
-                throw new NotImplementedException();
-            }
-        }
-
-        public ushort WriteBufferSize
-        {
-            get
-            {
-                if (_WriteBufferSize.HasValue) return _WriteBufferSize.Value;
-
-                if (WriteEndpoint != null) return WriteEndpoint.MaxPacketSize;
-
-                throw new NotImplementedException();
-            }
-        }
+        public ushort WriteBufferSize => _WriteBufferSize ?? (WriteEndpoint != null ? WriteEndpoint.MaxPacketSize : throw new NotImplementedException());
 
         public IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints { get; } = new List<IUsbInterfaceEndpoint>();
 
@@ -58,6 +38,11 @@ namespace Usb.Net
             {
                 if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
                 _ReadEndpoint = value;
+
+#pragma warning disable CA1062 // Validate arguments of public methods
+                Logger?.LogInformation("ReadEndpoint set to pipeid {pipeid}", value?.PipeId);
+#pragma warning restore CA1062 // Validate arguments of public methods
+
             }
         }
 
@@ -68,6 +53,9 @@ namespace Usb.Net
             {
                 if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
                 _WriteEndpoint = value;
+#pragma warning disable CA1062 // Validate arguments of public methods
+                Logger?.LogInformation("WriteEndpoint set to pipeid {pipeid}", value?.PipeId);
+#pragma warning restore CA1062 // Validate arguments of public methods
             }
         }
 

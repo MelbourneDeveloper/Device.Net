@@ -70,13 +70,11 @@ namespace Usb.Net.UWP
                 buffer = new wss.Buffer(bufferLength);
                 await usbBulkInPipe.Pipe.InputStream.ReadAsync(buffer, bufferLength, InputStreamOptions.None).AsTask(cancellationToken);
             }
-            else if (InterruptReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe)
-            {
-                return await usbInterruptInPipe.ReadAsync(cancellationToken);
-            }
             else
             {
-                throw new DeviceException(Messages.ErrorMessageReadEndpointNotRecognized);
+                return InterruptReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe
+                    ? (ReadResult)await usbInterruptInPipe.ReadAsync(cancellationToken)
+                    : throw new DeviceException(Messages.ErrorMessageReadEndpointNotRecognized);
             }
 
             return buffer.ToArray();

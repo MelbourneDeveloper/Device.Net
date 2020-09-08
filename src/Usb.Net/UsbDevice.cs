@@ -44,16 +44,16 @@ namespace Usb.Net
 
         public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
         {
-            if (UsbInterfaceManager.ReadUsbInterface == null) throw new DeviceException(Messages.ErrorMessageNoReadInterfaceSpecified);
-
-            return await UsbInterfaceManager.ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
+            return UsbInterfaceManager.ReadUsbInterface == null
+                ? throw new DeviceException(Messages.ErrorMessageNoReadInterfaceSpecified)
+                : await UsbInterfaceManager.ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
         }
 
         public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
-            if (UsbInterfaceManager.WriteUsbInterface == null) throw new DeviceException(Messages.ErrorMessageNoWriteInterfaceSpecified);
-
-            return UsbInterfaceManager.WriteUsbInterface.WriteAsync(data, cancellationToken);
+            return UsbInterfaceManager.WriteUsbInterface == null
+                ? throw new DeviceException(Messages.ErrorMessageNoWriteInterfaceSpecified)
+                : UsbInterfaceManager.WriteUsbInterface.WriteAsync(data, cancellationToken);
         }
 
         public void Close()

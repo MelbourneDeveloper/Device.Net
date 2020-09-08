@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace Device.Net.Reactive
 {
+    public delegate IDevice GetDevice(string deviceId);
+    public delegate Task<IReadOnlyList<ConnectedDeviceDefinition>> GetConnectedDevicesAsync();
 
     /// <summary>
     /// This class is a work in progress. It is not production ready.
@@ -26,19 +28,15 @@ namespace Device.Net.Reactive
         private readonly DevicesNotify _notifyConnectedDevices;
         private bool isDisposed;
         private readonly int _pollMilliseconds;
-        #endregion
-
-        #region Protected Properties
-        protected IDeviceManager DeviceManager { get; }
+        private readonly GetConnectedDevicesAsync _getConnectedDevicesAsync;
+        private readonly GetDevice _getDevice;
         #endregion
 
         #region Public Properties
         /// <summary>
-        /// Placeholder. Don't use. This functionality will be injected it
+        /// Placeholder. Don't use. This functionality will be injected in
         /// </summary>
         public bool FilterMiddleMessages { get; set; }
-        public IList<FilterDeviceDefinition> FilterDeviceDefinitions { get; }
-
 
         public IObservable<IReadOnlyCollection<ConnectedDevice>> ConnectedDevicesObservable { get; }
 
@@ -57,31 +55,35 @@ namespace Device.Net.Reactive
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="deviceManager">/param>
-        /// <param name="selectedDeviceObservable">Listens for a selected device</param>
-        /// <param name="initializedDeviceObserver">Tells others that the device was initialized</param>
-        /// <param name="connectedDevicesObserver">Tells others which devices are connected</param>
+        /// <param name="notifyDeviceInitialized">Tells others that the device was initialized</param>
+        /// <param name="notifyConnectedDevices">Tells others which devices are connected</param>
+        /// <param name="notifyDeviceException"></param>
         /// <param name="loggerFactory"></param>
+        /// <param name="initializeDeviceAction"></param>
+        /// <param name="getConnectedDevicesAsync"></param>
+        /// <param name="getDevice"></param>
+        /// <param name="pollMilliseconds"></param>
         public ReactiveDeviceManager(
-            IDeviceManager deviceManager,
             DeviceNotify notifyDeviceInitialized,
             DevicesNotify notifyConnectedDevices,
             NotifyDeviceException notifyDeviceException,
             ILoggerFactory loggerFactory,
             Func<IDevice, Task> initializeDeviceAction,
-            IList<FilterDeviceDefinition> filterDeviceDefinitions,
+            GetConnectedDevicesAsync getConnectedDevicesAsync,
+            GetDevice getDevice,
             int pollMilliseconds
             )
         {
 
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+
             _notifyDeviceInitialized = notifyDeviceInitialized ?? throw new ArgumentNullException(nameof(notifyDeviceInitialized));
             _notifyDeviceException = notifyDeviceException ?? throw new ArgumentNullException(nameof(notifyDeviceException));
             _notifyConnectedDevices = notifyConnectedDevices ?? throw new ArgumentNullException(nameof(notifyConnectedDevices));
+            _getConnectedDevicesAsync = getConnectedDevicesAsync ?? throw new ArgumentNullException(nameof(getConnectedDevicesAsync));
+            _getDevice = getDevice ?? throw new ArgumentNullException(nameof(getDevice));
 
-            DeviceManager = deviceManager;
             _logger = loggerFactory.CreateLogger<ReactiveDeviceManager>();
-
-            FilterDeviceDefinitions = filterDeviceDefinitions;
 
             _initializeDeviceAction = initializeDeviceAction;
             _pollMilliseconds = pollMilliseconds;
@@ -95,7 +97,7 @@ namespace Device.Net.Reactive
             {
                 while (!isDisposed)
                 {
-                    var devices = await DeviceManager.GetDevicesAsync(FilterDeviceDefinitions);
+                    var devices = await _getConnectedDevicesAsync();
                     var lists = devices.Select(d => new ConnectedDevice { DeviceId = d.DeviceId }).ToList();
                     _notifyConnectedDevices(lists);
                     await Task.Delay(TimeSpan.FromMilliseconds(_pollMilliseconds));
@@ -103,6 +105,10 @@ namespace Device.Net.Reactive
             });
         }
 
+        /// <summary>
+        /// Sets the selected device
+        /// </summary>
+        /// <param name="connectedDevice"></param>
         public void SelectDevice(DeviceSelectedArgs connectedDevice) => _ = InitializeDeviceAsync(connectedDevice.ConnectedDevice);
 
         public async Task<TResponse> WriteAndReadAsync<TResponse>(IRequest request, Func<byte[], TResponse> convertFunc)
@@ -157,10 +163,13 @@ namespace Device.Net.Reactive
 
                 if (_queuedRequests.Count == 0) return;
 
-                //Eat requests except for the most recent one
-                while (_queuedRequests.Count > 0)
+                if (FilterMiddleMessages)
                 {
-                    mostRecentRequest = _queuedRequests.Dequeue();
+                    //Eat requests except for the most recent one
+                    while (_queuedRequests.Count > 0)
+                    {
+                        mostRecentRequest = _queuedRequests.Dequeue();
+                    }
                 }
 
                 await WriteAndReadAsync<object>(mostRecentRequest, null);
@@ -187,7 +196,7 @@ namespace Device.Net.Reactive
                     return;
                 }
 
-                var device = DeviceManager.GetDevice(new ConnectedDeviceDefinition(connectedDevice.DeviceId));
+                var device = _getDevice(connectedDevice.DeviceId);
                 await _initializeDeviceAction(device);
 
                 _logger.LogInformation("Device initialized {deviceId}", connectedDevice.DeviceId);

@@ -185,9 +185,9 @@ namespace SerialPort.Net.Windows
 
         private uint Read(byte[] data)
         {
-            if (ApiService.AReadFile(_ReadSafeFileHandle, data, data.Length, out var bytesRead, 0)) return bytesRead;
-
-            throw new IOException(Messages.ErrorMessageRead);
+            return ApiService.AReadFile(_ReadSafeFileHandle, data, data.Length, out var bytesRead, 0)
+                ? bytesRead
+                : throw new IOException(Messages.ErrorMessageRead);
         }
 
         private void ValidateConnection()
