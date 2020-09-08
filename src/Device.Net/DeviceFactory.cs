@@ -8,7 +8,7 @@ namespace Device.Net
     public delegate Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync();
     public delegate Guid GetClassGuid();
     public delegate ConnectedDeviceDefinition GetDeviceDefinition(string deviceId);
-    public delegate Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition);
+    public delegate Task<IDevice> GetDevice(string deviceId);
 
     public sealed class DeviceFactory : IDeviceFactory
     {
@@ -45,7 +45,7 @@ namespace Device.Net
         #region Public Methods
         public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync() => _getConnectedDevicesAsync();
 
-        public Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition) => _getDevice(deviceDefinition);
+        public Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition) => deviceDefinition == null ? throw new ArgumentNullException(nameof(deviceDefinition)) : _getDevice(deviceDefinition.DeviceId);
         #endregion
     }
 }

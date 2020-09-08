@@ -21,8 +21,8 @@ namespace Usb.Net
             getConnectedDeviceDefinitionsAsync,
             async (d) =>
             {
-                var usbInterfaceManager = await getUsbInterfaceManager(d.DeviceId);
-                return new UsbDevice(d.DeviceId, usbInterfaceManager, loggerFactory);
+                var usbInterfaceManager = await getUsbInterfaceManager(d);
+                return new UsbDevice(d, usbInterfaceManager, loggerFactory);
             });
     }
 }
