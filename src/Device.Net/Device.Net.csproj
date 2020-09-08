@@ -65,4 +65,8 @@
 	  </PackageReference>    
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Include="UWP\AqsHelpers.cs" />
+	</ItemGroup>
+
 </Project>

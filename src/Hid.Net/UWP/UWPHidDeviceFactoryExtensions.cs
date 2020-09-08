@@ -12,23 +12,6 @@ namespace Hid.Net.UWP
     /// </summary>
     public static class UWPHidDeviceFactoryExtensions
     {
-        private const string InterfaceEnabledPart = "AND System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True";
-        private const string VendorFilterName = "System.DeviceInterface.Hid.VendorId";
-        private const string ProductFilterName = "System.DeviceInterface.Hid.ProductId";
-
-        private static string GetVendorPart(uint? vendorId)
-        {
-            string vendorPart = null;
-            if (vendorId.HasValue) vendorPart = $"AND {VendorFilterName}:={vendorId.Value}";
-            return vendorPart;
-        }
-
-        private static string GetProductPart(uint? productId)
-        {
-            string productPart = null;
-            if (productId.HasValue) productPart = $"AND {ProductFilterName}:={productId.Value}";
-            return productPart;
-        }
 
         /// <summary>
         /// TODO: This is wrong. It will only search for one device
@@ -48,7 +31,7 @@ namespace Hid.Net.UWP
             var firstDevice = filterDeviceDefinitions.First();
 
             //TODO: WRONG!!!
-            var aqs = $"{InterfaceEnabledPart} {GetVendorPart(firstDevice.VendorId)} {GetProductPart(firstDevice.ProductId)}";
+            var aqs = $"{AqsHelpers.InterfaceEnabledPart} {AqsHelpers.GetVendorPart(firstDevice.VendorId)} {AqsHelpers.GetProductPart(firstDevice.ProductId)}";
 
             var logger = loggerFactory.CreateLogger<UwpDeviceEnumerator>();
 
