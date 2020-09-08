@@ -10,22 +10,32 @@ using wde = Windows.Devices.Enumeration;
 
 namespace Hid.Net.UWP
 {
+    public delegate Task<ConnectionInfo> TestConnection(string deviceId);
+
     public class UwpHidDeviceEnumerator
     {
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger _logger;
         private readonly string aqsFilter;
         private readonly SemaphoreSlim _TestConnectionSemaphore = new SemaphoreSlim(1, 1);
+        private readonly Dictionary<string, ConnectionInfo> _ConnectionTestedDeviceIds = new Dictionary<string, ConnectionInfo>();
+        private readonly DeviceType _deviceType;
+        private readonly TestConnection _testConnection;
 
         #region Constructor
-        protected UwpHidDeviceEnumerator(
+        public UwpHidDeviceEnumerator(
             ILoggerFactory loggerFactory,
             ILogger logger,
-            string aqf)
+            string aqf,
+            DeviceType deviceType,
+            TestConnection testConnection
+            )
         {
             _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             _logger = logger;
             aqsFilter = aqf;
+            _deviceType = deviceType;
+            _testConnection = testConnection;
         }
         #endregion
 
@@ -37,7 +47,7 @@ namespace Hid.Net.UWP
                 : await wde.DeviceInformation.FindAllAsync().AsTask();
 
             var deviceInformationList = deviceInformationCollection.ToList();
-            var deviceDefinitions = deviceInformationList.Select(d => GetDeviceInformation(d, DeviceType, _logger));
+            var deviceDefinitions = deviceInformationList.Select(d => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(d.Id, _deviceType, _logger));
 
             var deviceDefinitionList = new List<ConnectedDeviceDefinition>();
 
@@ -66,20 +76,11 @@ namespace Hid.Net.UWP
 
                 if (_ConnectionTestedDeviceIds.TryGetValue(deviceId, out var connectionInfo)) return connectionInfo;
 
-                using (var hidDevice = await UWPHidDevice.GetHidDevice(deviceId).AsTask())
-                {
-                    var canConnect = hidDevice != null;
+                connectionInfo = await _testConnection(deviceId);
 
-                    if (!canConnect) return new ConnectionInfo { CanConnect = false };
+                _ConnectionTestedDeviceIds.Add(deviceId, connectionInfo);
 
-                    _logger?.LogInformation("Testing device connection. Id: {deviceId}. Can connect: {canConnect}", deviceId, canConnect);
-
-                    connectionInfo = new ConnectionInfo { CanConnect = canConnect, UsagePage = hidDevice.UsagePage };
-
-                    _ConnectionTestedDeviceIds.Add(deviceId, connectionInfo);
-
-                    return connectionInfo;
-                }
+                return connectionInfo;
             }
             catch (Exception ex)
             {

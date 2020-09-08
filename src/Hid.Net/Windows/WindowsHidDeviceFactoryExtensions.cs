@@ -17,7 +17,7 @@ namespace Hid.Net.Windows
             IHidApiService hidApiService = null,
             Guid? classGuid = null,
             ushort? readBufferSize = null,
-            ushort? writeBufferSize = null
+            ushort? writeBufferSize = null)
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
