@@ -16,9 +16,11 @@ namespace Hid.Net.UWP
             this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
 #pragma warning restore IDE0060 // Remove unused parameter
             ILoggerFactory loggerFactory,
-            GetDevice getDevice)
+            GetDevice getDevice = null)
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+
+            if (getDevice == null) getDevice = (c) => new UWPHidDevice(c.DeviceId, loggerFactory);
 
             //var aqs = $"{InterfaceEnabledPart} {GetVendorPart(vendorId)} {GetProductPart(productId)}";
             var aqs = "";

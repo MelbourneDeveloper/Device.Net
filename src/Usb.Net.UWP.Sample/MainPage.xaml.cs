@@ -41,7 +41,7 @@ namespace Usb.Net.UWP.Sample
             _DeviceConnectionExample.TrezorDisconnected += DeviceConnectionExample_TrezorDisconnected;
 
             //Register the factory for creating Usb devices. This only needs to be done once.
-            _DeviceManager.RegisterDeviceFactory(new UWPUsbDeviceFactory(loggerFactory));
+            _DeviceManager.RegisterDeviceFactory(_DeviceConnectionExample.DeviceDefinitions.CreateUwpHidDeviceFactory(loggerFactory));
 
             //Register the factory for creating Hid devices. This only needs to be done once.
             _DeviceManager.RegisterDeviceFactory(new UWPHidDeviceFactory(loggerFactory));

@@ -16,7 +16,7 @@ namespace Usb.Net.Sample
         private const int PollMilliseconds = 3000;
 #endif
         //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
-        private readonly List<FilterDeviceDefinition> _DeviceDefinitions = new List<FilterDeviceDefinition>
+        public readonly List<FilterDeviceDefinition> DeviceDefinitions = new List<FilterDeviceDefinition>
         {
             new FilterDeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x", UsagePage=65280 },
             new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x (Android Only)" },
@@ -40,7 +40,7 @@ namespace Usb.Net.Sample
         public TrezorExample(IDeviceManager deviceManager, ILoggerFactory loggerFactory)
         {
             DeviceManager = deviceManager;
-            DeviceListener = new DeviceListener(deviceManager, _DeviceDefinitions, PollMilliseconds, loggerFactory);
+            DeviceListener = new DeviceListener(deviceManager, PollMilliseconds, loggerFactory);
         }
         #endregion
 
@@ -70,8 +70,9 @@ namespace Usb.Net.Sample
         public async Task InitializeTrezorAsync()
         {
             //Get the first available device and connect to it
-            var devices = await DeviceListener.DeviceManager.GetDevicesAsync(_DeviceDefinitions);
-            TrezorDevice = devices.FirstOrDefault();
+            var devices = await DeviceListener.DeviceManager.GetConnectedDeviceDefinitionsAsync();
+            var firstConnectedDeviceDefinition = devices.FirstOrDefault();
+            TrezorDevice = DeviceListener.DeviceManager.GetDevice(firstConnectedDeviceDefinition);
 
             if (TrezorDevice == null) throw new Exception("There were no devices found");
 
