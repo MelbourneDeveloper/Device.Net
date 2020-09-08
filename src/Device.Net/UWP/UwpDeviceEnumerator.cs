@@ -23,14 +23,13 @@ namespace Device.Net.UWP
         #region Constructor
         public UwpDeviceEnumerator(
             ILoggerFactory loggerFactory,
-            ILogger logger,
             string aqf,
             DeviceType deviceType,
             TestConnection testConnection
             )
         {
             _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-            _logger = logger;
+            _logger = loggerFactory.CreateLogger<UwpDeviceEnumerator>() ;
             aqsFilter = aqf;
             _deviceType = deviceType;
             _testConnection = testConnection;

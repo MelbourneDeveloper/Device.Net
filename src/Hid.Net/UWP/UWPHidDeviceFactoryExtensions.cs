@@ -56,7 +56,6 @@ namespace Hid.Net.UWP
             {
                 var uwpHidDeviceEnumerator = new UwpDeviceEnumerator(
                     loggerFactory,
-                    logger,
                     aqs,
                     DeviceType.Hid,
                     async (deviceId) =>
