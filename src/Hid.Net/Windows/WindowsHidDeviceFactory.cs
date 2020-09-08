@@ -1,83 +1,111 @@
 ﻿using Device.Net;
-using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
 using System;
 
 namespace Hid.Net.Windows
 {
-    public class WindowsHidDeviceFactory : WindowsDeviceFactoryBase, IDeviceFactory
+
+
+    public static class WindowsHidDeviceFactoryExtensions
     {
-        #region Public Override Properties
-        public override DeviceType DeviceType => DeviceType.Hid;
-        #endregion
+        public static IDeviceFactory CreateWindowsHidDeviceFactory(ILoggerFactory loggerFactory)
+        {
+            //var asdasd = new ASDasdasd(loggerFactory.CreateLogger<ASDasdasd>());
+
+
+            var asdasd = new WindowsDeviceEnumerator();
+
+            return CreateWindowsHidDeviceFactory(asdasd.GetConnectedDeviceDefinitionsAsync, (c) => new WindowsHidDevice(c.DeviceId, loggerFactory), loggerFactory);
+        }
+
+        public static IDeviceFactory CreateWindowsHidDeviceFactory(this GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync, GetDevice getDevice, ILoggerFactory loggerFactory)
+        {
+            return getConnectedDeviceDefinitionsAsync == null
+                ? throw new ArgumentNullException(nameof(getConnectedDeviceDefinitionsAsync))
+                : getDevice == null
+                ? throw new ArgumentNullException(nameof(getDevice))
+                : loggerFactory == null
+                ? throw new ArgumentNullException(nameof(loggerFactory))
+                : new DeviceFactory(loggerFactory, getConnectedDeviceDefinitionsAsync, getDevice);
+        }
+    }
+
+    internal class ASDasdasd
+    {
+        private readonly ILogger Logger;
+
+        internal ASDasdasd(ILogger logger)
+        {
+            Logger = logger;
+        }
 
         #region Protected Override Methods
-        protected override ConnectedDeviceDefinition GetDeviceDefinition(string deviceId)
-        {
-            IDisposable logScope = null;
+        //public ConnectedDeviceDefinition GetDeviceDefinition(string deviceId)
+        //{
+        //    IDisposable logScope = null;
 
-            try
-            {
-                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(GetDeviceDefinition));
+        //    try
+        //    {
+        //        logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(GetDeviceDefinition));
 
-                using (var safeFileHandle = HidService.CreateReadConnection(deviceId, FileAccessRights.None))
-                {
-                    if (safeFileHandle.IsInvalid) throw new DeviceException($"{nameof(HidService.CreateReadConnection)} call with Id of {deviceId} failed.");
+        //        using (var safeFileHandle = HidService.CreateReadConnection(deviceId, FileAccessRights.None))
+        //        {
+        //            if (safeFileHandle.IsInvalid) throw new DeviceException($"{nameof(HidService.CreateReadConnection)} call with Id of {deviceId} failed.");
 
-                    Logger?.LogDebug(Messages.InformationMessageFoundDevice);
+        //            Logger?.LogDebug(Messages.InformationMessageFoundDevice);
 
-                    return HidService.GetDeviceDefinition(deviceId, safeFileHandle);
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger?.LogError(ex, Messages.ErrorMessageCouldntGetDevice);
-                return null;
-            }
-            finally
-            {
-                logScope?.Dispose();
-            }
-        }
+        //            return HidService.GetDeviceDefinition(deviceId, safeFileHandle);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Logger?.LogError(ex, Messages.ErrorMessageCouldntGetDevice);
+        //        return null;
+        //    }
+        //    finally
+        //    {
+        //        logScope?.Dispose();
+        //    }
+        //}
 
-        protected override Guid GetClassGuid() => HidService.GetHidGuid();
+        //protected override Guid GetClassGuid() => HidService.GetHidGuid();
 
         #endregion
 
-        #region Public Properties
-        public IHidApiService HidService { get; }
-        #endregion
+        //#region Public Properties
+        //public IHidApiService HidService { get; }
+        //#endregion
 
-        #region Constructor
-        public WindowsHidDeviceFactory(
-            ILoggerFactory loggerFactory,
-            GetConnectedDevicesAsync getConnectedDevicesAsync) : this(
-                loggerFactory,
-                null,
-                getConnectedDevicesAsync)
-        {
+        //#region Constructor
+        //public WindowsHidDeviceFactory(
+        //    ILoggerFactory loggerFactory,
+        //    GetConnectedDevicesAsync getConnectedDevicesAsync) : this(
+        //        loggerFactory,
+        //        null,
+        //        getConnectedDevicesAsync)
+        //{
 
-        }
+        //}
 
-        public WindowsHidDeviceFactory(
-            ILoggerFactory loggerFactory,
-            IHidApiService hidService,
-            GetConnectedDevicesAsync getConnectedDevicesAsync) : base(
-                loggerFactory,
-                loggerFactory.CreateLogger<WindowsHidDeviceFactory>(),
-                getConnectedDevicesAsync)
-        {
-            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+        //public WindowsHidDeviceFactory(
+        //    ILoggerFactory loggerFactory,
+        //    IHidApiService hidService,
+        //    GetConnectedDevicesAsync getConnectedDevicesAsync) : base(
+        //        loggerFactory,
+        //        loggerFactory.CreateLogger<WindowsHidDeviceFactory>(),
+        //        getConnectedDevicesAsync)
+        //{
+        //    if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
-            HidService = hidService;
+        //    HidService = hidService;
 
-            if (HidService == null)
-            {
-                HidService = new WindowsHidApiService(loggerFactory);
-            }
-        }
-        #endregion
+        //    if (HidService == null)
+        //    {
+        //        HidService = new WindowsHidApiService(loggerFactory);
+        //    }
+        //}
+        //#endregion
 
         #region Public Methods
         public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition) => deviceDefinition == null

@@ -12,19 +12,22 @@ namespace Device.Net.Windows
         private readonly ILogger Logger;
         private readonly GetClassGuid _getClassGuid;
         private readonly GetDeviceDefinition _getDeviceDefinition;
+        private readonly FilterDeviceDefinition _filterDeviceDefinition;
 
         public WindowsDeviceEnumerator(
             ILogger logger,
             GetClassGuid getClassGuid,
-            GetDeviceDefinition getDeviceDefinition
+            GetDeviceDefinition getDeviceDefinition,
+            FilterDeviceDefinition filterDeviceDefinition
             )
         {
             Logger = logger;
             _getClassGuid = getClassGuid;
             _getDeviceDefinition = getDeviceDefinition;
+            _filterDeviceDefinition = filterDeviceDefinition;
         }
 
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition filterDeviceDefinition)
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
             return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(() =>
             {
@@ -32,7 +35,7 @@ namespace Device.Net.Windows
 
                 try
                 {
-                    Logger?.BeginScope("Filter Device Definition: {filterDeviceDefinition}", new object[] { filterDeviceDefinition?.ToString() });
+                    Logger?.BeginScope("Filter Device Definition: {filterDeviceDefinition}", new object[] { _filterDeviceDefinition?.ToString() });
 
                     var deviceDefinitions = new Collection<ConnectedDeviceDefinition>();
                     var spDeviceInterfaceData = new SpDeviceInterfaceData();
@@ -55,10 +58,10 @@ namespace Device.Net.Windows
 
                     var i = -1;
 
-                    if (filterDeviceDefinition != null)
+                    if (_filterDeviceDefinition != null)
                     {
-                        if (filterDeviceDefinition.ProductId.HasValue) productIdHex = Helpers.GetHex(filterDeviceDefinition.ProductId);
-                        if (filterDeviceDefinition.VendorId.HasValue) vendorHex = Helpers.GetHex(filterDeviceDefinition.VendorId);
+                        if (_filterDeviceDefinition.ProductId.HasValue) productIdHex = Helpers.GetHex(_filterDeviceDefinition.ProductId);
+                        if (_filterDeviceDefinition.VendorId.HasValue) vendorHex = Helpers.GetHex(_filterDeviceDefinition.VendorId);
                     }
 
                     while (true)
@@ -103,10 +106,10 @@ namespace Device.Net.Windows
                             }
 
                             //Note this is a bit nasty but we can filter Vid and Pid this way I think...
-                            if (filterDeviceDefinition != null)
+                            if (_filterDeviceDefinition != null)
                             {
-                                if (filterDeviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
-                                if (filterDeviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
+                                if (_filterDeviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
+                                if (_filterDeviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
                             }
 
                             var connectedDeviceDefinition = _getDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
@@ -117,7 +120,7 @@ namespace Device.Net.Windows
                                 continue;
                             }
 
-                            if (!DeviceManager.IsDefinitionMatch(filterDeviceDefinition, connectedDeviceDefinition)) continue;
+                            if (!DeviceManager.IsDefinitionMatch(_filterDeviceDefinition, connectedDeviceDefinition)) continue;
 
                             deviceDefinitions.Add(connectedDeviceDefinition);
                         }

@@ -28,7 +28,7 @@ namespace Device.Net.Windows
         #region Constructor
         /// <param name="loggerFactory">The factory for creating new loggers for each device</param>
         /// <param name="logger">The logger that this base class will use. The generic type should come from the inheriting class</param>
-        protected DeviceFactory(
+        public DeviceFactory(
 
             ILoggerFactory loggerFactory,
             GetConnectedDeviceDefinitionsAsync getConnectedDevicesAsync,
