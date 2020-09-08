@@ -29,7 +29,7 @@ namespace Device.Net.UWP
             )
         {
             _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-            _logger = loggerFactory.CreateLogger<UwpDeviceEnumerator>() ;
+            _logger = loggerFactory.CreateLogger<UwpDeviceEnumerator>();
             aqsFilter = aqf;
             _deviceType = deviceType;
             _testConnection = testConnection;
