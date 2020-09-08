@@ -15,7 +15,8 @@ namespace Usb.Net
         GetUsbInterfaceManager getUsbInterfaceManager)
         => loggerFactory == null
             ? throw new ArgumentNullException(nameof(loggerFactory))
-            : new DeviceFactory(
+            :
+            new DeviceFactory(
             loggerFactory,
             getConnectedDeviceDefinitionsAsync,
             async (d) =>

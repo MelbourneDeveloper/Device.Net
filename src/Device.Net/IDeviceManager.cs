@@ -7,9 +7,7 @@ namespace Device.Net
     {
         List<IDeviceFactory> DeviceFactories { get; }
         Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync();
-        IDevice GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition);
+        Task<IDevice> GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition);
         bool IsInitialized { get; }
-
-        void RegisterDeviceFactory(object p);
     }
 }

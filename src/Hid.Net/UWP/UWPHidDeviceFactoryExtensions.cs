@@ -31,7 +31,7 @@ namespace Hid.Net.UWP
             var firstDevice = filterDeviceDefinitions.First();
 
             //TODO: WRONG!!!
-            var aqs = $"{AqsHelpers.InterfaceEnabledPart} {AqsHelpers.GetVendorPart(firstDevice.VendorId)} {AqsHelpers.GetProductPart(firstDevice.ProductId)}";
+            var aqs = $"{AqsHelpers.InterfaceEnabledPart} {AqsHelpers.GetVendorPart(firstDevice.VendorId, DeviceType.Hid)} {AqsHelpers.GetProductPart(firstDevice.ProductId, DeviceType.Hid)}";
 
             var logger = loggerFactory.CreateLogger<UwpDeviceEnumerator>();
 

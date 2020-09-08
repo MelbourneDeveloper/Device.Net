@@ -3,22 +3,24 @@
     public static class AqsHelpers
     {
         public const string InterfaceEnabledPart = "AND System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True";
-        private const string VendorFilterName = "System.DeviceInterface.Hid.VendorId";
-        private const string ProductFilterName = "System.DeviceInterface.Hid.ProductId";
+        private const string HidVendorFilterName = "System.DeviceInterface.Hid.VendorId";
+        private const string HidProductFilterName = "System.DeviceInterface.Hid.ProductId";
 
-        public static string GetVendorPart(uint? vendorId)
+        private const string VendorFilterName = "System.DeviceInterface.WinUsb.UsbVendorId";
+        private const string ProductFilterName = "System.DeviceInterface.WinUsb.UsbProductId";
+
+        public static string GetVendorPart(uint? vendorId, DeviceType deviceType)
         {
             string vendorPart = null;
-            if (vendorId.HasValue) vendorPart = $"AND {VendorFilterName}:={vendorId.Value}";
+            if (vendorId.HasValue) vendorPart = $"AND { (deviceType == DeviceType.Hid ? HidVendorFilterName : VendorFilterName)}:={vendorId.Value}";
             return vendorPart;
         }
 
-        public static string GetProductPart(uint? productId)
+        public static string GetProductPart(uint? productId, DeviceType deviceType)
         {
             string productPart = null;
-            if (productId.HasValue) productPart = $"AND {ProductFilterName}:={productId.Value}";
+            if (productId.HasValue) productPart = $"AND {(deviceType == DeviceType.Hid ? HidProductFilterName : ProductFilterName) }:={productId.Value}";
             return productPart;
         }
-
     }
 }

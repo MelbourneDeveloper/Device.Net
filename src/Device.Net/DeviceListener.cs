@@ -104,7 +104,7 @@ namespace Device.Net
                     if (device == null)
                     {
                         //Need to use the connected device def here instead of the filter version because the filter version won't have the id or any details
-                        device = DeviceManager.GetDevice(connectedDeviceDefinition);
+                        device = await DeviceManager.GetDevice(connectedDeviceDefinition);
                         _CreatedDevicesByDefinition.Add(connectedDeviceDefinition.DeviceId, device);
                     }
 

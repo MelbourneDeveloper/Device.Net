@@ -2,6 +2,7 @@
 using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Usb.Net.UWP
 {
@@ -16,6 +17,13 @@ namespace Usb.Net.UWP
             ushort? writeBufferSize = null
             )
         {
+            var firstDevice = filterDeviceDefinitions.First();
+
+            //TODO: WRONG!!!
+
+            var interfaceClassGuid = "System.Devices.InterfaceClassGuid:=\"{" + WindowsDeviceConstants.WinUSBGuid + "}\"";
+            var aqs = $"{interfaceClassGuid} {AqsHelpers.InterfaceEnabledPart} {AqsHelpers.GetVendorPart(firstDevice.VendorId, DeviceType.Usb)} {AqsHelpers.GetProductPart(firstDevice.ProductId, DeviceType.Usb)}";
+
             if (getConnectedDeviceDefinitionsAsync == null)
             {
                 var uwpHidDeviceEnumerator = new UwpDeviceEnumerator(
@@ -29,9 +37,10 @@ namespace Usb.Net.UWP
 
             if (getUsbInterfaceManager == null)
             {
-                getUsbInterfaceManager = (d) =>
+                getUsbInterfaceManager = async (d) =>
                     new UWPUsbInterfaceManager(
-                    deviceDefinition,
+                    //TODO: no idea if this is OK...
+                    new ConnectedDeviceDefinition(d),
                     loggerFactory,
                     readBufferSize,
                     writeBufferSize);
