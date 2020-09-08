@@ -6,6 +6,15 @@ namespace Device.Net.UnitTests
 {
     public abstract class MockFactoryBase : IDeviceFactory
     {
+        private readonly FilterDeviceDefinition _deviceDefinition;
+        private readonly DeviceType _deviceType;
+
+        public MockFactoryBase(FilterDeviceDefinition deviceDefinitions, DeviceType deviceType)
+        {
+            _deviceDefinition = deviceDefinitions;
+            _deviceType = deviceType;
+        }
+
         public abstract bool IsConnected { get; }
 
         public abstract string DeviceId { get; }
@@ -22,7 +31,7 @@ namespace Device.Net.UnitTests
         public abstract uint ProductId { get; }
         public abstract uint VendorId { get; }
 
-        public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
+        public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
             var result = new List<ConnectedDeviceDefinition>();
 
@@ -36,7 +45,7 @@ namespace Device.Net.UnitTests
 
             if (!IsConnected) return Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(result);
 
-            if (DeviceManager.IsDefinitionMatch(deviceDefinition, mockConnectedDeviceDefinition))
+            if (DeviceManager.IsDefinitionMatch(_deviceDefinition, mockConnectedDeviceDefinition, _deviceType))
             {
                 result.Add(mockConnectedDeviceDefinition);
             }
@@ -44,6 +53,6 @@ namespace Device.Net.UnitTests
             return Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(result);
         }
 
-        public abstract IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition);
+        public abstract Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition);
     }
 }

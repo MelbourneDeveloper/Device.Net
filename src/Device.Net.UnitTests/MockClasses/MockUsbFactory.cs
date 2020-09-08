@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests
 {
@@ -23,7 +24,7 @@ namespace Device.Net.UnitTests
 
         public const string FoundMessage = "Found device {0}";
 
-        public override IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
+        public override async Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
             if (deviceDefinition == null) throw new Exception("Couldn't get a device");
 

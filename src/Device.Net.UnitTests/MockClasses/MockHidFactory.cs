@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests
 {
@@ -22,7 +23,7 @@ namespace Device.Net.UnitTests
 
         public override uint VendorId => MockHidDevice.VendorId;
 
-        public override IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
+        public override async Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
             if (deviceDefinition == null) return null;
 
