@@ -12,8 +12,6 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class IntegrationTestsUsb
     {
-
-
         [TestMethod]
         public async Task TestWriteAndReadFromTrezorUsb()
         {
@@ -26,6 +24,8 @@ namespace Device.Net.UnitTests
             var factory = new WindowsUsbDeviceFactory(loggerFactory);
             var deviceManager = new DeviceManager(loggerFactory);
             deviceManager.DeviceFactories.Add(factory);
+
+            //Get the filtered devices
             var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition>
             {
                 new FilterDeviceDefinition
@@ -60,7 +60,6 @@ namespace Device.Net.UnitTests
             //Assert that the response part meets the specification
             Assert.IsTrue(expectedResult.SequenceEqual(response.Data));
         }
-
     }
 }
 
