@@ -1,4 +1,3 @@
-using Device.Net;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -7,10 +6,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SerialPort.Net
+namespace Device.Net.UnitTests
 {
     [TestClass]
-    public class IntegrationTests
+    public class IntegrationTestsSerialPort
     {
         #region Fields
         private static WindowsSerialPortDeviceFactory windowsSerialPortDeviceFactory;
@@ -98,6 +97,28 @@ namespace SerialPort.Net
         {
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
             Assert.IsTrue(connectedDeviceDefinitions.Count == 1);
+        }
+
+        [TestMethod]
+        public async Task TestWriteAndReadFromTrezorUsb()
+        {
+            var deviceManager = new DeviceManager(_loggerFactoryMock.Object);
+            deviceManager.DeviceFactories.Add(windowsSerialPortDeviceFactory);
+            var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition>
+            {
+                new FilterDeviceDefinition
+                {
+                    DeviceType= DeviceType.Usb,
+                    VendorId= 0x1209,
+                    ProductId=0x53C1,
+                    //This does not affect the filtering
+                    Label="Trezor One Firmware 1.7.x"
+                },
+            });
+
+            var trezorDevice = devices.FirstOrDefault();
+
+            Assert.IsNotNull(trezorDevice);
         }
         #endregion
 
