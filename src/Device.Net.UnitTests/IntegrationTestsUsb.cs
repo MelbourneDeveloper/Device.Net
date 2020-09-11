@@ -3,7 +3,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Usb.Net.Windows;
@@ -22,31 +21,15 @@ namespace Device.Net.UnitTests
                 _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
             });
 
-            var factory = new WindowsUsbDeviceFactory(loggerFactory);
-            var deviceManager = new DeviceManager(loggerFactory);
-            deviceManager.DeviceFactories.Add(factory);
-
             //Get the filtered devices
-            var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition>
+            var filterDeviceDefinition = new FilterDeviceDefinition
             {
-                new FilterDeviceDefinition
-                {
-                    DeviceType= DeviceType.Usb,
-                    VendorId= 0x1209,
-                    ProductId=0x53C1,
-                    //This does not affect the filtering
-                    Label="Trezor One Firmware 1.7.x"
-                },
-            });
-
-            //Get the first available device
-            var trezorDevice = devices.FirstOrDefault();
-
-            //Ensure that it gets picked up
-            Assert.IsNotNull(trezorDevice);
-
-            //Initialize the device
-            await trezorDevice.InitializeAsync();
+                DeviceType = DeviceType.Usb,
+                VendorId = 0x1209,
+                ProductId = 0x53C1,
+                //This does not affect the filtering
+                Label = "Trezor One Firmware 1.7.x"
+            };
 
             //Send the request part of the Message Contract
             var request = new byte[64];
@@ -54,7 +37,7 @@ namespace Device.Net.UnitTests
             request[1] = 0x23;
             request[2] = 0x23;
 
-            var integrationTester = new IntegrationTester(trezorDevice);
+            var integrationTester = new IntegrationTester(filterDeviceDefinition, new WindowsUsbDeviceFactory(loggerFactory), loggerFactory);
             await integrationTester.TestAsync(request, async (responseData) =>
              {
                  //Specify the response part of the Message Contract
@@ -63,8 +46,6 @@ namespace Device.Net.UnitTests
                  //Assert that the response part meets the specification
                  Assert.IsTrue(expectedResult.SequenceEqual(responseData));
              });
-
-
         }
     }
 }
