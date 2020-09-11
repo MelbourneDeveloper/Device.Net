@@ -56,6 +56,12 @@ namespace Usb.Net
                 : UsbInterfaceManager.WriteUsbInterface.WriteAsync(data, cancellationToken);
         }
 
+        //TODO: public Task<uint> SendControlOutTransferAsync(UsbSetupPacket setupPacket, IBuffer buffer);
+        public uint SendControlOutTransfer(ISetupPacket setupPacket, byte[] buffer) => UsbInterfaceManager.WriteUsbInterface.SendControlOutTransfer(setupPacket, buffer);
+
+        //TODO: public Task<uint> SendControlInTransferAsync(UsbSetupPacket setupPacket);
+        public uint SendControlInTransfer(ISetupPacket setupPacket) => UsbInterfaceManager.ReadUsbInterface.SendControlInTransfer(setupPacket);
+
         public void Close()
         {
             if (_IsClosing) return;
