@@ -29,9 +29,10 @@ namespace Usb.Net.WindowsSample.Temperature
 
         private async Task InitializeAsync()
         {
-            _DeviceManager.RegisterDeviceFactory(new WindowsHidDeviceFactory(_loggerFactory));
-            var devices = (await _DeviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.Hid, VendorId = 0x413d, ProductId = 0x2107 } })).ToList();
-            _device = devices[1];
+            var windowsHidDeviceFactory = new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 }.CreateWindowsHidDeviceFactory(_loggerFactory);
+            _DeviceManager.RegisterDeviceFactory(windowsHidDeviceFactory);
+            var devices = (await _DeviceManager.GetConnectedDeviceDefinitionsAsync()).ToList();
+            _device = await windowsHidDeviceFactory.GetDevice(devices.First());
             await _device.InitializeAsync();
         }
 

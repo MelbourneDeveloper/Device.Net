@@ -16,12 +16,16 @@ namespace Usb.Net.Sample
         private const int PollMilliseconds = 3000;
 #endif
         //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
-        public readonly List<FilterDeviceDefinition> DeviceDefinitions = new List<FilterDeviceDefinition>
+        public readonly List<FilterDeviceDefinition> HidDeviceDefinitions = new List<FilterDeviceDefinition>
         {
-            new FilterDeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x", UsagePage=65280 },
-            new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x (Android Only)" },
-            new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, Label="Trezor One Firmware 1.7.x" },
-            new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C0, Label="Model T" }
+            new FilterDeviceDefinition{ VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x", UsagePage=65280 }
+        };
+
+        public readonly List<FilterDeviceDefinition> UsbDeviceDefinitions = new List<FilterDeviceDefinition>
+        {
+            new FilterDeviceDefinition{ VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x (Android Only)" },
+            new FilterDeviceDefinition{ VendorId= 0x1209, ProductId=0x53C1, Label="Trezor One Firmware 1.7.x" },
+            new FilterDeviceDefinition{ VendorId= 0x1209, ProductId=0x53C0, Label="Model T" }
         };
         #endregion
 
