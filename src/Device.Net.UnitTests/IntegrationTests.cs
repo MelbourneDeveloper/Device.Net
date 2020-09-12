@@ -49,6 +49,13 @@ namespace Device.Net.UnitTests
         new WindowsUsbDeviceFactory(_loggerFactory)
         );
 
+
+        [TestMethod]
+        public async Task TestWriteAndReadFromTrezorModelTUsb() => TestWriteAndReadFromTrezor(
+        new FilterDeviceDefinition { DeviceType = DeviceType.Usb, VendorId = 0x1209, ProductId = 0x53c1 },
+        new WindowsUsbDeviceFactory(_loggerFactory)
+        );
+
         private async Task TestWriteAndReadFromTrezor(FilterDeviceDefinition filterDeviceDefinition, IDeviceFactory deviceFactory)
         {
             //Send the request part of the Message Contract
@@ -138,6 +145,10 @@ namespace Device.Net.UnitTests
         #region Private Methods
         private static Task AssertTrezorResult(ReadResult responseData, IDevice device)
         {
+            Assert.AreEqual(64, responseData.BytesRead);
+
+            Assert.AreEqual(64, responseData.Data.Length);
+
             //Specify the response part of the Message Contract
             var expectedResult = new byte[] { 63, 35, 35 };
 
