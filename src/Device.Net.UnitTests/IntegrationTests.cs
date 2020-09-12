@@ -92,6 +92,10 @@ namespace Device.Net.UnitTests
                  Assert.AreEqual((ushort)1, device.ConnectedDeviceDefinition.Usage);
                  Assert.AreEqual((ushort)65280, device.ConnectedDeviceDefinition.UsagePage);
                  Assert.AreEqual((ushort)256, device.ConnectedDeviceDefinition.VersionNumber);
+
+                 var windowsHidDevice = (WindowsHidDevice)device;
+                 Assert.AreEqual(64, windowsHidDevice.ReadBufferSize);
+                 Assert.AreEqual(64, windowsHidDevice.WriteBufferSize);
              });
         }
         #endregion

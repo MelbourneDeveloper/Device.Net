@@ -1,3 +1,5 @@
+#if !NET45
+
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -11,6 +13,16 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class IntegrationTestsSerialPort
     {
+        private readonly ILoggerFactory _loggerFactory;
+
+        public IntegrationTestsSerialPort()
+        {
+            _loggerFactory = LoggerFactory.Create((builder) =>
+            {
+                _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
+            });
+        }
+
         #region Fields
         private static WindowsSerialPortDeviceFactory windowsSerialPortDeviceFactory;
         private readonly Mock<ILoggerFactory> _loggerFactoryMock = new Mock<ILoggerFactory>();
@@ -48,11 +60,9 @@ namespace Device.Net.UnitTests
         {
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
             Assert.IsTrue(connectedDeviceDefinitions.Count > 1);
-            using (var serialPortDevice = windowsSerialPortDeviceFactory.GetDevice(connectedDeviceDefinitions[1]))
-            {
-                await serialPortDevice.InitializeAsync();
-                Assert.IsTrue(serialPortDevice.IsInitialized);
-            }
+            using var serialPortDevice = windowsSerialPortDeviceFactory.GetDevice(connectedDeviceDefinitions[1]);
+            await serialPortDevice.InitializeAsync();
+            Assert.IsTrue(serialPortDevice.IsInitialized);
         }
 
         [TestMethod]
@@ -77,7 +87,7 @@ namespace Device.Net.UnitTests
         public async Task ConnectedTestGetDevicesSingletonAsync()
         {
             var deviceManager = new DeviceManager(_loggerFactoryMock.Object);
-            deviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(null));
+            deviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(_loggerFactory));
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
@@ -123,11 +133,11 @@ namespace Device.Net.UnitTests
         #endregion
 
         #region Helpers
-        private static async Task<List<ConnectedDeviceDefinition>> GetConnectedDevicesAsync()
+        private async Task<List<ConnectedDeviceDefinition>> GetConnectedDevicesAsync()
         {
             if (windowsSerialPortDeviceFactory == null)
             {
-                windowsSerialPortDeviceFactory = new WindowsSerialPortDeviceFactory(null);
+                windowsSerialPortDeviceFactory = new WindowsSerialPortDeviceFactory(_loggerFactory);
             }
 
             return (await windowsSerialPortDeviceFactory.GetConnectedDeviceDefinitionsAsync(null)).ToList();
@@ -135,15 +145,15 @@ namespace Device.Net.UnitTests
 
         private static async Task ReadAsync()
         {
-            using (var serialPortDevice = new WindowsSerialPortDevice(@"\\.\COM3"))
-            {
-                await serialPortDevice.InitializeAsync();
-                var result = await serialPortDevice.ReadAsync();
-                Assert.IsTrue(result.Data.Length > 0);
-                var range = result.Data.ToList().GetRange(0, 10);
-                Assert.IsFalse(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }.SequenceEqual(range));
-            }
+            using var serialPortDevice = new WindowsSerialPortDevice(@"\\.\COM1");
+            await serialPortDevice.InitializeAsync();
+            var result = await serialPortDevice.ReadAsync();
+            Assert.IsTrue(result.Data.Length > 0);
+            var range = result.Data.ToList().GetRange(0, 10);
+            Assert.IsFalse(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }.SequenceEqual(range));
         }
         #endregion
     }
 }
+
+#endif
