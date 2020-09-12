@@ -108,28 +108,6 @@ namespace Device.Net.UnitTests
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
             Assert.IsTrue(connectedDeviceDefinitions.Count == 1);
         }
-
-        [TestMethod]
-        public async Task TestWriteAndReadFromTrezorUsb()
-        {
-            var deviceManager = new DeviceManager(_loggerFactoryMock.Object);
-            deviceManager.DeviceFactories.Add(windowsSerialPortDeviceFactory);
-            var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition>
-            {
-                new FilterDeviceDefinition
-                {
-                    DeviceType= DeviceType.Usb,
-                    VendorId= 0x1209,
-                    ProductId=0x53C1,
-                    //This does not affect the filtering
-                    Label="Trezor One Firmware 1.7.x"
-                },
-            });
-
-            var trezorDevice = devices.FirstOrDefault();
-
-            Assert.IsNotNull(trezorDevice);
-        }
         #endregion
 
         #region Helpers
@@ -145,7 +123,7 @@ namespace Device.Net.UnitTests
 
         private static async Task ReadAsync()
         {
-            using var serialPortDevice = new WindowsSerialPortDevice(@"\\.\COM1");
+            using var serialPortDevice = new WindowsSerialPortDevice(@"\\.\COM4");
             await serialPortDevice.InitializeAsync();
             var result = await serialPortDevice.ReadAsync();
             Assert.IsTrue(result.Data.Length > 0);
