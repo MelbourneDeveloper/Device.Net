@@ -27,7 +27,7 @@ namespace Device.Net.UnitTests
             _loggerFactory = loggerFactory;
         }
 
-        public async Task TestAsync(byte[] writeData, Func<byte[], IDevice, Task> assertFunc)
+        public async Task TestAsync(byte[] writeData, Func<ReadResult, IDevice, Task> assertFunc)
         {
             var deviceManager = new DeviceManager(_loggerFactory);
             deviceManager.DeviceFactories.Add(_deviceFactory);
@@ -47,7 +47,7 @@ namespace Device.Net.UnitTests
             await device.InitializeAsync();
 
             var result = await device.WriteAndReadAsync(writeData);
-            await assertFunc(result.Data, device);
+            await assertFunc(result, device);
         }
     }
 }

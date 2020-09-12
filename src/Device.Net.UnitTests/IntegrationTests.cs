@@ -57,6 +57,35 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
+        public async Task TestWriteAndReadFromTemperHid()
+        {
+            //Send the request part of the Message Contract
+            var request = new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 };
+
+            var filterDeviceDefinition = new FilterDeviceDefinition { DeviceType = DeviceType.Hid, VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 };
+
+            var integrationTester = new IntegrationTester(
+                filterDeviceDefinition, new WindowsHidDeviceFactory(_loggerFactory), _loggerFactory);
+            await integrationTester.TestAsync(request, async (result, device) =>
+            {
+                Assert.IsTrue(device.IsInitialized);
+
+                var temperatureTimesOneHundred = (result.Data[4] & 0xFF) + (result.Data[3] << 8);
+                var temp = Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
+
+                //I think my room should pretty much always be between these temperatures
+                Assert.IsTrue(temp > 10 && temp < 35);
+
+                Assert.AreEqual(9, device.ConnectedDeviceDefinition.ReadBufferSize);
+                Assert.AreEqual(9, device.ConnectedDeviceDefinition.WriteBufferSize);
+
+                var windowsHidDevice = (WindowsHidDevice)device;
+                Assert.AreEqual(9, windowsHidDevice.ReadBufferSize);
+                Assert.AreEqual(9, windowsHidDevice.WriteBufferSize);
+            });
+        }
+
+        [TestMethod]
         public async Task TestWriteAndReadFromNanoHid()
         {
             //Send the request part of the Message Contract
@@ -77,9 +106,9 @@ namespace Device.Net.UnitTests
                 filterDeviceDefinition, new WindowsHidDeviceFactory(_loggerFactory), _loggerFactory);
             await integrationTester.TestAsync(request, async (result, device) =>
              {
-                 Assert.AreEqual(64, result.Length);
-                 Assert.AreEqual(63, result[0]);
-                 Assert.AreEqual(62, result[1]);
+                 Assert.AreEqual(64, result.Data.Length);
+                 Assert.AreEqual(63, result.Data[0]);
+                 Assert.AreEqual(62, result.Data[1]);
 
                  Assert.AreEqual(DeviceType.Hid, device.ConnectedDeviceDefinition.DeviceType);
                  Assert.AreEqual("AirNetix", device.ConnectedDeviceDefinition.Manufacturer);
@@ -101,13 +130,13 @@ namespace Device.Net.UnitTests
         #endregion
 
         #region Private Methods
-        private static Task AssertTrezorResult(byte[] responseData, IDevice device)
+        private static Task AssertTrezorResult(ReadResult responseData, IDevice device)
         {
             //Specify the response part of the Message Contract
             var expectedResult = new byte[] { 63, 35, 35, 0, 17, 0, 0, 0, 194, 10, 9, 116, 114, 101, 122, 111, 114, 46, 105, 111, 16, 1, 24, 9, 32, 1, 50, 24, 51, 66, 69, 65, 55, 66, 50, 55, 50, 55, 66, 49, 55, 57, 50, 52, 67, 56, 67, 70, 68, 56, 53, 48, 56, 1, 64, 0, 74, 5, 101, 110, 45, 85, 83, 82 };
 
             //Assert that the response part meets the specification
-            Assert.IsTrue(expectedResult.SequenceEqual(responseData));
+            Assert.IsTrue(expectedResult.SequenceEqual(responseData.Data));
 
             return Task.FromResult(true);
         }
