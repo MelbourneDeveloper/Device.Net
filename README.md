@@ -1,5 +1,7 @@
 # Hid.Net, Usb.Net, SerialPort.Net (Device.Net)
 
+## [Join the conversation](https://discord.gg/ZcvXARm) on Discord ##
+
 ## [Follow Me on Twitter](https://twitter.com/intent/follow?screen_name=cfdevelop&tw_p=followbutton) ##
 
 ![diagram](https://github.com/MelbourneDeveloper/Device.Net/blob/master/Diagram.png)
