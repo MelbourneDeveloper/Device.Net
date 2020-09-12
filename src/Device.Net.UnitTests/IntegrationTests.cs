@@ -67,23 +67,37 @@ namespace Device.Net.UnitTests
             request[3] = 1;
             request[4] = 1;
 
+            var filterDeviceDefinition = new FilterDeviceDefinition
+            {
+                ProductId = 4112,
+                VendorId = 10741
+            };
+
             var integrationTester = new IntegrationTester(
-                new FilterDeviceDefinition
-                {
-                    ProductId = 4112,
-                    VendorId = 10741
-                }, new WindowsHidDeviceFactory(_loggerFactory), _loggerFactory);
-            await integrationTester.TestAsync(request, async (a) =>
+                filterDeviceDefinition, new WindowsHidDeviceFactory(_loggerFactory), _loggerFactory);
+            await integrationTester.TestAsync(request, async (result, device) =>
              {
-                 Assert.AreEqual(64, a.Length);
-                 Assert.AreEqual(63, a[0]);
-                 Assert.AreEqual(62, a[1]);
+                 Assert.AreEqual(64, result.Length);
+                 Assert.AreEqual(63, result[0]);
+                 Assert.AreEqual(62, result[1]);
+
+                 Assert.AreEqual(DeviceType.Hid, device.ConnectedDeviceDefinition.DeviceType);
+                 Assert.AreEqual("AirNetix", device.ConnectedDeviceDefinition.Manufacturer);
+                 Assert.AreEqual(filterDeviceDefinition.ProductId, device.ConnectedDeviceDefinition.ProductId);
+                 Assert.AreEqual(filterDeviceDefinition.VendorId, device.ConnectedDeviceDefinition.VendorId);
+                 Assert.AreEqual("STS-170", device.ConnectedDeviceDefinition.ProductName);
+                 Assert.AreEqual(64, device.ConnectedDeviceDefinition.ReadBufferSize);
+                 Assert.AreEqual(64, device.ConnectedDeviceDefinition.WriteBufferSize);
+                 Assert.AreEqual("000000000001", device.ConnectedDeviceDefinition.SerialNumber);
+                 Assert.AreEqual((ushort)1, device.ConnectedDeviceDefinition.Usage);
+                 Assert.AreEqual((ushort)65280, device.ConnectedDeviceDefinition.UsagePage);
+                 Assert.AreEqual((ushort)256, device.ConnectedDeviceDefinition.VersionNumber);
              });
         }
         #endregion
 
         #region Private Methods
-        private static Task AssertTrezorResult(byte[] responseData)
+        private static Task AssertTrezorResult(byte[] responseData, IDevice device)
         {
             //Specify the response part of the Message Contract
             var expectedResult = new byte[] { 63, 35, 35, 0, 17, 0, 0, 0, 194, 10, 9, 116, 114, 101, 122, 111, 114, 46, 105, 111, 16, 1, 24, 9, 32, 1, 50, 24, 51, 66, 69, 65, 55, 66, 50, 55, 50, 55, 66, 49, 55, 57, 50, 52, 67, 56, 67, 70, 68, 56, 53, 48, 56, 1, 64, 0, 74, 5, 101, 110, 45, 85, 83, 82 };
