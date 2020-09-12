@@ -31,13 +31,16 @@ namespace Device.Net.UnitTests
 
         #region Tests
         [TestMethod]
-        public async Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(0x1209, 0x53C1, DeviceType.Hid);
+        public async Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(
+                    new FilterDeviceDefinition { DeviceType = DeviceType.Usb, VendorId = 0x1209, ProductId = 0x53C1, Label = "Trezor One Firmware 1.7.x" }
+        );
 
         [TestMethod]
-        public async Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(0x534C, 0x0001, DeviceType.Usb);
+        public async Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(
+            new FilterDeviceDefinition { DeviceType = DeviceType.Hid, VendorId = 0x534C, ProductId = 0x0001, Label = "Trezor One Firmware 1.6.x", UsagePage = 65280 }
+            );
 
-
-        private async Task TestWriteAndReadFromTrezor(uint vendorId, uint productId, DeviceType deviceType)
+        private async Task TestWriteAndReadFromTrezor(FilterDeviceDefinition filterDeviceDefinition)
         {
             //Send the request part of the Message Contract
             var request = new byte[64];
@@ -46,14 +49,7 @@ namespace Device.Net.UnitTests
             request[2] = 0x23;
 
             var integrationTester = new IntegrationTester(
-                new FilterDeviceDefinition
-                {
-                    DeviceType = deviceType,
-                    VendorId = vendorId,
-                    ProductId = productId,
-                    //This does not affect the filtering
-                    Label = "Trezor One Firmware 1.7.x"
-                }, new WindowsUsbDeviceFactory(_loggerFactory), _loggerFactory);
+                filterDeviceDefinition, new WindowsUsbDeviceFactory(_loggerFactory), _loggerFactory);
             await integrationTester.TestAsync(request, AssertResult);
         }
         #endregion
