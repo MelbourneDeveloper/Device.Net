@@ -10,7 +10,8 @@ using Usb.Net.Windows;
 namespace Device.Net.UnitTests
 {
     [TestClass]
-    public class IntegrationTestsUsb
+    public class IntegrationTests
+
     {
         #region Fields
         private ILoggerFactory _loggerFactory;
@@ -30,7 +31,13 @@ namespace Device.Net.UnitTests
 
         #region Tests
         [TestMethod]
-        public async Task TestWriteAndReadFromTrezorUsb()
+        public async Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(0x1209, 0x53C1, DeviceType.Usb);
+
+        [TestMethod]
+        public async Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(0x534C, 0x0001, DeviceType.Usb);
+
+
+        private async Task TestWriteAndReadFromTrezor(uint vendorId, uint productId, DeviceType deviceType)
         {
             //Send the request part of the Message Contract
             var request = new byte[64];
@@ -41,9 +48,9 @@ namespace Device.Net.UnitTests
             var integrationTester = new IntegrationTester(
                 new FilterDeviceDefinition
                 {
-                    DeviceType = DeviceType.Usb,
-                    VendorId = 0x1209,
-                    ProductId = 0x53C1,
+                    DeviceType = deviceType,
+                    VendorId = vendorId,
+                    ProductId = productId,
                     //This does not affect the filtering
                     Label = "Trezor One Firmware 1.7.x"
                 }, new WindowsUsbDeviceFactory(_loggerFactory), _loggerFactory);
