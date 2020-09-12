@@ -31,7 +31,7 @@ namespace Device.Net.UnitTests
 
         #region Tests
         [TestMethod]
-        public async Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(0x1209, 0x53C1, DeviceType.Usb);
+        public async Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(0x1209, 0x53C1, DeviceType.Hid);
 
         [TestMethod]
         public async Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(0x534C, 0x0001, DeviceType.Usb);
