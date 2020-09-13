@@ -23,10 +23,12 @@ namespace Usb.Net.Windows
         {
             if (getConnectedDeviceDefinitionsAsync == null)
             {
+                var logger = loggerFactory.CreateLogger<WindowsDeviceEnumerator>();
+
                 var uwpHidDeviceEnumerator = new WindowsDeviceEnumerator(
-                    loggerFactory.CreateLogger<WindowsDeviceEnumerator>(),
+                    logger,
                     classGuid ?? WindowsDeviceConstants.WinUSBGuid,
-                    GetDeviceDefinition,
+                    (d) => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(d, DeviceType.Usb, logger),
                     async (c) =>
                     filterDeviceDefinitions.FirstOrDefault((f) => DeviceManager.IsDefinitionMatch(f, c, DeviceType.Usb)) != null);
 
