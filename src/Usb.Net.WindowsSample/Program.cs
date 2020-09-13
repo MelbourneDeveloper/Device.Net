@@ -9,6 +9,7 @@ using System.Threading;
 using Hid.Net.Windows;
 using SerialPort.Net.Windows;
 using Usb.Net.WindowsSample.Temperature;
+using Usb.Net.Windows;
 #else
 using Device.Net.LibUsb;
 #endif
@@ -38,7 +39,7 @@ namespace Usb.Net.WindowsSample
             _DeviceManager.RegisterDeviceFactory(new LibUsbUsbDeviceFactory(_loggerFactory));
 #else
             _DeviceManager.RegisterDeviceFactory(TrezorExample.UsbDeviceDefinitions.CreateWindowsUsbDeviceFactory(_loggerFactory));
-            _DeviceManager.RegisterDeviceFactory(TrezorExample.UsbDeviceDefinitions.CreateWindowsHidDeviceFactory(_loggerFactory));
+            _DeviceManager.RegisterDeviceFactory(TrezorExample.HidDeviceDefinitions.CreateWindowsHidDeviceFactory(_loggerFactory));
             _DeviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(_loggerFactory));
 #endif
 
