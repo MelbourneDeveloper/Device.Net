@@ -60,7 +60,7 @@ namespace Device.Net.UnitTests
         {
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
             Assert.IsTrue(connectedDeviceDefinitions.Count > 1);
-            using var serialPortDevice = windowsSerialPortDeviceFactory.GetDevice(connectedDeviceDefinitions[1]);
+            using var serialPortDevice = await windowsSerialPortDeviceFactory.GetDevice(connectedDeviceDefinitions[1]);
             await serialPortDevice.InitializeAsync();
             Assert.IsTrue(serialPortDevice.IsInitialized);
         }
@@ -73,14 +73,14 @@ namespace Device.Net.UnitTests
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
             var deviceManager = new DeviceManager(_loggerFactoryMock.Object);
             deviceManager.DeviceFactories.Add(windowsSerialPortDeviceFactory);
-            var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.SerialPort } });
+            var devices = await deviceManager.GetConnectedDeviceDefinitionsAsync();
 
             foreach (var device in devices)
             {
-                device.Dispose();
+                Assert.AreEqual(DeviceType.SerialPort, device.DeviceType);
             }
 
-            Assert.IsTrue(devices.Count > 1);
+            Assert.IsTrue(devices.Count() > 1);
         }
 
         [TestMethod]
