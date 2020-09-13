@@ -32,6 +32,14 @@ namespace Device.Net.UnitTests
 
         #region Tests
         [TestMethod]
+        public async Task TestConnectToSTMDFUMode()
+        {
+            var windowsUsbDevice = new WindowsUsbDevice(@"USB\VID_0483&PID_DF11\00000008FFFF", _loggerFactory);
+            await windowsUsbDevice.InitializeAsync();
+        }
+
+
+        [TestMethod]
         public async Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition { DeviceType = DeviceType.Usb, VendorId = 0x1209, ProductId = 0x53C1, Label = "Trezor One Firmware 1.7.x" },
             new WindowsUsbDeviceFactory(_loggerFactory)
