@@ -8,7 +8,7 @@ namespace Usb.Net.UWP
 {
     public static class UwpUsbDeviceFactoryExtensions
     {
-        public static IDeviceFactory UwpUsbDeviceFactory(
+        public static IDeviceFactory CreateUwpUsbDeviceFactory(
             this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
             ILoggerFactory loggerFactory,
             GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,

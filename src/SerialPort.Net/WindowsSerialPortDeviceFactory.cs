@@ -90,11 +90,13 @@ namespace SerialPort.Net.Windows
             return returnValue;
         }
 
-        public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
+        public Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            return deviceDefinition == null
+            var device = deviceDefinition == null
                 ? throw new ArgumentNullException(nameof(deviceDefinition))
                 : new WindowsSerialPortDevice(deviceDefinition.DeviceId);
+
+            return Task.FromResult<IDevice>(device);
         }
         #endregion
     }

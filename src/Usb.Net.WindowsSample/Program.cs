@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 
 #if !LIBUSB
 using System.Threading;
-using Usb.Net.Windows;
 using Hid.Net.Windows;
 using SerialPort.Net.Windows;
 using Usb.Net.WindowsSample.Temperature;
@@ -38,8 +37,8 @@ namespace Usb.Net.WindowsSample
 #if LIBUSB
             _DeviceManager.RegisterDeviceFactory(new LibUsbUsbDeviceFactory(_loggerFactory));
 #else
-            _DeviceManager.RegisterDeviceFactory(new WindowsUsbDeviceFactory(_loggerFactory));
-            _DeviceManager.RegisterDeviceFactory(new WindowsHidDeviceFactory(_loggerFactory));
+            _DeviceManager.RegisterDeviceFactory(TrezorExample.UsbDeviceDefinitions.CreateWindowsUsbDeviceFactory(_loggerFactory));
+            _DeviceManager.RegisterDeviceFactory(TrezorExample.UsbDeviceDefinitions.CreateWindowsHidDeviceFactory(_loggerFactory));
             _DeviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(_loggerFactory));
 #endif
 
@@ -128,7 +127,7 @@ namespace Usb.Net.WindowsSample
             {
                 Console.Clear();
 
-                var devices = await _DeviceManager.GetConnectedDeviceDefinitionsAsync(null);
+                var devices = await _DeviceManager.GetConnectedDeviceDefinitionsAsync();
                 Console.WriteLine("Currently connected devices: ");
                 foreach (var device in devices)
                 {
