@@ -36,8 +36,21 @@ namespace SerialPort.Net.Windows
         {
         }
 
-        public WindowsSerialPortDevice(string deviceId, IApiService apiService, int baudRate, StopBits stopBits, Parity parity, byte byteSize, ushort readBufferSize, ILogger logger) : base(deviceId, logger)
+        public WindowsSerialPortDevice(
+            string deviceId,
+            IApiService apiService,
+            int baudRate,
+            StopBits stopBits,
+            Parity parity,
+            byte byteSize,
+            ushort readBufferSize,
+            ILoggerFactory loggerFactory) : base(
+                deviceId,
+                loggerFactory,
+                loggerFactory.CreateLogger<WindowsSerialPortDevice>())
         {
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+
             ApiService = apiService ?? throw new ArgumentNullException(nameof(apiService));
 
             ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId);
