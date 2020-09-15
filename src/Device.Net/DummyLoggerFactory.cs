@@ -1,4 +1,7 @@
-﻿#pragma warning disable
+﻿
+#if !NET45
+
+#pragma warning disable
 
 using Microsoft.Extensions.Logging;
 using System;
@@ -37,5 +40,6 @@ namespace Device.Net
     }
 }
 
+#endif
 
 #pragma warning restore 

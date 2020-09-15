@@ -3,14 +3,12 @@ using System.Threading.Tasks;
 using Usb.Net.Sample;
 using Device.Net;
 using Microsoft.Extensions.Logging;
-using Device.Net.Reactive;
 
 #if !LIBUSB
-using System.Threading;
 using Hid.Net.Windows;
 using SerialPort.Net.Windows;
-using Usb.Net.WindowsSample.Temperature;
 using Usb.Net.Windows;
+using Device.Net.Reactive;
 #else
 using Device.Net.LibUsb;
 #endif
@@ -82,18 +80,15 @@ namespace Usb.Net.WindowsSample
                     break;
 #if !LIBUSB
                 case 3:
+                    using (var deviceDataStreamer =
+                        new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 }.
+                        CreateWindowsHidDeviceManager(_loggerFactory).
+                        CreateDeviceDataStreamer<double>(async (device) => { }))
+                    {
+                        await Task.Delay(5000);
+                    }
 
-                    var asdas = new DeviceDataStreamer<double>()
-
-                //var temperatureMonitor = new TemperatureMonitor(_loggerFactory);
-                //var temperaturReporter = new TemperatureReporter();
-                //temperaturReporter.Subscribe(temperatureMonitor);
-
-                //while (true)
-                //{
-                //    Thread.Sleep(1500);
-                //    temperatureMonitor.GetTemperature();
-                //}
+                    break;
 #endif
                 default:
                     Console.WriteLine("That's not an option");

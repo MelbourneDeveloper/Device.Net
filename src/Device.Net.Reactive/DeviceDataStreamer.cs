@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Device.Net.Reactive
 {
 
-    public delegate Task<T> ProcessData<T>(IDevice device);
+    public delegate Task ProcessData<T>(IDevice device);
 
     public class DeviceDataStreamer<T> : IDisposable
     {
@@ -56,7 +56,7 @@ namespace Device.Net.Reactive
                             await _currentDevice.InitializeAsync();
                         }
 
-                        var value = await _processData(_currentDevice);
+                        await _processData(_currentDevice);
                     }
                     catch (Exception ex)
                     {
