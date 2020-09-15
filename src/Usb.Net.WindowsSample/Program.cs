@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Usb.Net.Sample;
 using Device.Net;
 using Microsoft.Extensions.Logging;
+using Device.Net.Reactive;
 
 #if !LIBUSB
 using System.Threading;
@@ -81,15 +82,18 @@ namespace Usb.Net.WindowsSample
                     break;
 #if !LIBUSB
                 case 3:
-                    var temperatureMonitor = new TemperatureMonitor(_loggerFactory);
-                    var temperaturReporter = new TemperatureReporter();
-                    temperaturReporter.Subscribe(temperatureMonitor);
 
-                    while (true)
-                    {
-                        Thread.Sleep(1500);
-                        temperatureMonitor.GetTemperature();
-                    }
+                    var asdas = new DeviceDataStreamer<double>()
+
+                //var temperatureMonitor = new TemperatureMonitor(_loggerFactory);
+                //var temperaturReporter = new TemperatureReporter();
+                //temperaturReporter.Subscribe(temperatureMonitor);
+
+                //while (true)
+                //{
+                //    Thread.Sleep(1500);
+                //    temperatureMonitor.GetTemperature();
+                //}
 #endif
                 default:
                     Console.WriteLine("That's not an option");
