@@ -7,8 +7,26 @@ using System.Linq;
 
 namespace Usb.Net.Windows
 {
+
     public static class WindowsUsbDeviceFactoryExtensions
     {
+        public static IDeviceFactory CreateWindowsUsbDeviceFactory(
+            this FilterDeviceDefinition filterDeviceDefinition,
+            ILoggerFactory loggerFactory,
+            GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+            GetUsbInterfaceManager getUsbInterfaceManager = null,
+            Guid? classGuid = null,
+            ushort? readBufferSize = null,
+            ushort? writeBufferSize = null
+        ) => CreateWindowsUsbDeviceFactory(
+            asd,
+            loggerFactory,
+            getConnectedDeviceDefinitionsAsync,
+            getUsbInterfaceManager,
+            classGuid,
+            readBufferSize,
+            writeBufferSize);
+
         public static IDeviceFactory CreateWindowsUsbDeviceFactory(
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
         ILoggerFactory loggerFactory,
