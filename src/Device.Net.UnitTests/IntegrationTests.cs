@@ -33,14 +33,12 @@ namespace Device.Net.UnitTests
         #region Tests
         [TestMethod]
         public async Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(
-            new FilterDeviceDefinition { DeviceType = DeviceType.Usb, VendorId = 0x1209, ProductId = 0x53C1, Label = "Trezor One Firmware 1.7.x" },
-            new WindowsUsbDeviceFactory(_loggerFactory)
+            new FilterDeviceDefinition { VendorId = 0x1209, ProductId = 0x53C1, Label = "Trezor One Firmware 1.7.x" }.CreateWindowsUsbDeviceFactory(_loggerFactory)
         );
 
         [TestMethod]
         public async Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(
-            new FilterDeviceDefinition { DeviceType = DeviceType.Hid, VendorId = 0x534C, ProductId = 0x0001, Label = "Trezor One Firmware 1.6.x", UsagePage = 65280 },
-            new WindowsHidDeviceFactory(_loggerFactory)
+            new FilterDeviceDefinition { VendorId = 0x534C, ProductId = 0x0001, Label = "Trezor One Firmware 1.6.x", UsagePage = 65280 }.CreateWindowsHidDeviceFactory(_loggerFactory)
             );
 
         [TestMethod]
@@ -51,11 +49,10 @@ namespace Device.Net.UnitTests
 
         [TestMethod]
         public async Task TestWriteAndReadFromTrezorModelTUsb() => TestWriteAndReadFromTrezor(
-        new FilterDeviceDefinition { DeviceType = DeviceType.Usb, VendorId = 0x1209, ProductId = 0x53c1 },
-        new WindowsUsbDeviceFactory(_loggerFactory)
+        new FilterDeviceDefinition { VendorId = 0x1209, ProductId = 0x53c1 }.CreateWindowsUsbDeviceFactory(_loggerFactory)
         );
 
-        private async Task TestWriteAndReadFromTrezor(FilterDeviceDefinition filterDeviceDefinition, IDeviceFactory deviceFactory)
+        private async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory)
         {
             //Send the request part of the Message Contract
             var request = new byte[64];
@@ -64,7 +61,7 @@ namespace Device.Net.UnitTests
             request[2] = 0x23;
 
             var integrationTester = new IntegrationTester(
-                filterDeviceDefinition, deviceFactory, _loggerFactory);
+                deviceFactory, _loggerFactory);
             await integrationTester.TestAsync(request, AssertTrezorResult);
         }
 
@@ -74,10 +71,10 @@ namespace Device.Net.UnitTests
             //Send the request part of the Message Contract
             var request = new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 };
 
-            var filterDeviceDefinition = new FilterDeviceDefinition { DeviceType = DeviceType.Hid, VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 };
+            var filterDeviceDefinition = new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 };
 
             var integrationTester = new IntegrationTester(
-                filterDeviceDefinition, new WindowsHidDeviceFactory(_loggerFactory), _loggerFactory);
+                filterDeviceDefinition.CreateWindowsHidDeviceFactory(_loggerFactory), _loggerFactory);
             await integrationTester.TestAsync(request, async (result, device) =>
             {
                 Assert.IsTrue(device.IsInitialized);
@@ -115,7 +112,7 @@ namespace Device.Net.UnitTests
             };
 
             var integrationTester = new IntegrationTester(
-                filterDeviceDefinition, new WindowsHidDeviceFactory(_loggerFactory), _loggerFactory);
+                filterDeviceDefinition.CreateWindowsHidDeviceFactory(_loggerFactory), _loggerFactory);
             await integrationTester.TestAsync(request, async (result, device) =>
              {
                  Assert.AreEqual(64, result.Data.Length);

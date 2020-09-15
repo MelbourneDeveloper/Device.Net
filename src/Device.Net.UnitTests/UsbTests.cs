@@ -54,7 +54,8 @@ namespace Device.Net.UnitTests
         public async Task TestDeviceIdIsPersisted()
         {
             var deviceId = "asd";
-            var windowsUsbDevice = new WindowsUsbDevice(deviceId, new Mock<ILoggerFactory>().Object, 80, 80);
+            var mock = new Mock<ILoggerFactory>();
+            var windowsUsbDevice = new UsbDevice(deviceId, new WindowsUsbInterfaceManager(deviceId, mock.Object, 80, 80), mock.Object);
             Assert.AreEqual(deviceId, windowsUsbDevice.DeviceId);
         }
 #endif

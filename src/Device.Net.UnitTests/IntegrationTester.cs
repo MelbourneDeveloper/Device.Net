@@ -3,7 +3,6 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,7 +10,6 @@ namespace Device.Net.UnitTests
 {
     public class IntegrationTester
     {
-        private readonly FilterDeviceDefinition _filterDeviceDefinition;
         private readonly IDeviceFactory _deviceFactory;
         private readonly ILoggerFactory _loggerFactory;
 
@@ -38,11 +36,13 @@ namespace Device.Net.UnitTests
             //Ensure that it gets picked up
             Assert.IsNotNull(deviceDefinition);
 
-            //Initialize the device
-            await deviceDefinition.InitializeAsync();
+            var device = await deviceManager.GetDevice(deviceDefinition);
 
-            var result = await deviceDefinition.WriteAndReadAsync(writeData);
-            await assertFunc(result, deviceDefinition);
+            //Initialize the device
+            await device.InitializeAsync();
+
+            var result = await device.WriteAndReadAsync(writeData);
+            await assertFunc(result, device);
         }
     }
 }
