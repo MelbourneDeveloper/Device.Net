@@ -25,7 +25,11 @@ namespace Device.Net
         #region Constructor
         public DeviceManager(ILoggerFactory loggerFactory)
         {
+#if NET45
             _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+#else
+            _loggerFactory = loggerFactory ?? new DummyLoggerFactory();
+#endif
             _logger = loggerFactory.CreateLogger<DeviceManager>();
         }
         #endregion

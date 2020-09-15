@@ -95,13 +95,14 @@ namespace Usb.Net.WindowsSample
 #pragma warning disable CA2000 // Dispose objects before losing scope
         private static async Task DisplayTemperature()
         {
-            using var subject = new Subject<decimal>();
-            using var deviceDataStreamer =
-                new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 }.
-                CreateWindowsHidDeviceManager(_loggerFactory).
-                CreateDeviceDataStreamer(async (device) =>
-                {
-                    try
+#pragma warning disable IDE0063 // Use simple 'using' statement
+            using (var subject = new Subject<decimal>())
+#pragma warning restore IDE0063 // Use simple 'using' statement
+            {
+                using var deviceDataStreamer =
+                    new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 }.
+                    CreateWindowsHidDeviceManager(_loggerFactory).
+                    CreateDeviceDataStreamer(async (device) =>
                     {
                         //https://github.com/WozSoftware/Woz.TEMPer/blob/dcd0b49d67ac39d10c3759519050915816c2cd93/Woz.TEMPer/Sensors/TEMPerV14.cs#L15
 
@@ -110,21 +111,17 @@ namespace Usb.Net.WindowsSample
                         var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
 
                         subject.OnNext(Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven));
-                    }
-                    catch (Exception ex)
-                    {
-                        subject.OnError(ex);
-                        throw;
-                    }
-                }).Start();
 
-            subject.Subscribe(
-                (t) => Console.WriteLine($"Temperature is {t}"),
-                (ex) => Console.WriteLine(ex));
+                        //Note it would probably be a good idea to call OnError on the subject so that subscribers can know about errors, but it
+                        //seems as though this unsubscribes them...
+                    }).Start();
 
-            while (true)
-            {
-                await Task.Delay(1000);
+                var subscription = subject.Subscribe((t) => Console.WriteLine($"Temperature is {t}"));
+
+                while (true)
+                {
+                    await Task.Delay(1000);
+                }
             }
         }
 
