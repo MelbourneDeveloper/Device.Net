@@ -16,13 +16,11 @@ namespace Device.Net.UnitTests
         private readonly ILoggerFactory _loggerFactory;
 
         public IntegrationTester(
-            FilterDeviceDefinition filterDeviceDefinition,
             IDeviceFactory deviceFactory,
             //TODO: Mock this
             ILoggerFactory loggerFactory
             )
         {
-            _filterDeviceDefinition = filterDeviceDefinition;
             _deviceFactory = deviceFactory;
             _loggerFactory = loggerFactory;
         }
@@ -32,22 +30,19 @@ namespace Device.Net.UnitTests
             var deviceManager = new DeviceManager(_loggerFactory);
             deviceManager.DeviceFactories.Add(_deviceFactory);
 
-            var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition>
-            {
-                _filterDeviceDefinition,
-            });
+            var devices = await deviceManager.GetConnectedDeviceDefinitionsAsync();
 
             //Get the first available device
-            var device = devices.FirstOrDefault();
+            var deviceDefinition = devices.FirstOrDefault();
 
             //Ensure that it gets picked up
-            Assert.IsNotNull(device);
+            Assert.IsNotNull(deviceDefinition);
 
             //Initialize the device
-            await device.InitializeAsync();
+            await deviceDefinition.InitializeAsync();
 
-            var result = await device.WriteAndReadAsync(writeData);
-            await assertFunc(result, device);
+            var result = await deviceDefinition.WriteAndReadAsync(writeData);
+            await assertFunc(result, deviceDefinition);
         }
     }
 }

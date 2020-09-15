@@ -45,8 +45,7 @@ namespace Device.Net.UnitTests
 
         [TestMethod]
         public async Task TestWriteAndReadFromKeepKeyUsb() => TestWriteAndReadFromTrezor(
-        new FilterDeviceDefinition { DeviceType = DeviceType.Usb, VendorId = 0x2B24, ProductId = 0x2 },
-        new WindowsUsbDeviceFactory(_loggerFactory)
+        new FilterDeviceDefinition { VendorId = 0x2B24, ProductId = 0x2 }.CreateWindowsUsbDeviceFactory(_loggerFactory)
         );
 
 

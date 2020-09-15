@@ -86,7 +86,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task ConnectedTestGetDevicesSingletonAsync()
         {
-            var deviceManager = new DeviceManager(_loggerFactoryMock.Object);
+            var deviceManager =   new DeviceManager(_loggerFactoryMock.Object);
             deviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(_loggerFactory));
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
