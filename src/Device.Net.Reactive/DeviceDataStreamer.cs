@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 namespace Device.Net.Reactive
 {
 
-    public delegate Task ProcessData<T>(IDevice device);
+    public delegate Task ProcessData(IDevice device);
 
-    public class DeviceDataStreamer<T> : IDisposable
+    public class DeviceDataStreamer : IDisposable
     {
         private bool _isRunning;
-        private readonly ProcessData<T> _processData;
+        private readonly ProcessData _processData;
         private readonly IDeviceManager _deviceManager;
         private IDevice _currentDevice;
         private readonly TimeSpan? _interval;
         private readonly ILogger _logger;
 
         public DeviceDataStreamer(
-            ProcessData<T> processData,
+            ProcessData processData,
             IDeviceManager deviceManager,
             TimeSpan? interval = null,
             ILoggerFactory loggerFactory = null
@@ -27,7 +27,7 @@ namespace Device.Net.Reactive
             _processData = processData;
             _deviceManager = deviceManager;
             _interval = interval ?? new TimeSpan(0, 0, 1);
-            _logger = (loggerFactory ?? new DummyLoggerFactory()).CreateLogger<DeviceDataStreamer<T>>();
+            _logger = (loggerFactory ?? new DummyLoggerFactory()).CreateLogger<DeviceDataStreamer>();
         }
 
         public void Start()
@@ -61,6 +61,8 @@ namespace Device.Net.Reactive
                     catch (Exception ex)
                     {
                         _logger.LogError(ex, "Error processing");
+                        _currentDevice?.Dispose();
+                        _currentDevice = null;
                     }
                 }
             });

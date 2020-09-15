@@ -2,6 +2,6 @@
 {
     public static class ReactiveDeviceExtensions
     {
-        public static DeviceDataStreamer<T> CreateDeviceDataStreamer<T>(this IDeviceManager deviceManager, ProcessData<T> processData) => new DeviceDataStreamer<T>(processData, deviceManager);
+        public static DeviceDataStreamer CreateDeviceDataStreamer(this IDeviceManager deviceManager, ProcessData processData) => new DeviceDataStreamer(processData, deviceManager);
     }
 }
