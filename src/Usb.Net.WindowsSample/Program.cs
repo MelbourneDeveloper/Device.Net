@@ -114,12 +114,18 @@ namespace Usb.Net.WindowsSample
                     catch (Exception ex)
                     {
                         subject.OnError(ex);
+                        throw;
                     }
                 }).Start();
 
-            subject.Subscribe((t) => Console.WriteLine($"Temperature is {t}"));
+            subject.Subscribe(
+                (t) => Console.WriteLine($"Temperature is {t}"),
+                (ex) => Console.WriteLine(ex));
 
-            await Task.Delay(10000);
+            while (true)
+            {
+                await Task.Delay(1000);
+            }
         }
 
 #pragma warning restore CA2000 // Dispose objects before losing scope
