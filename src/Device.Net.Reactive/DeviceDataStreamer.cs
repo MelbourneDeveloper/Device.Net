@@ -30,7 +30,7 @@ namespace Device.Net.Reactive
             _logger = (loggerFactory ?? new DummyLoggerFactory()).CreateLogger<DeviceDataStreamer>();
         }
 
-        public void Start()
+        public DeviceDataStreamer Start()
         {
             _isRunning = true;
 
@@ -66,6 +66,8 @@ namespace Device.Net.Reactive
                     }
                 }
             });
+
+            return this;
         }
 
 #pragma warning disable CA1816 // Dispose methods should call SuppressFinalize

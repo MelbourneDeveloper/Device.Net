@@ -84,6 +84,7 @@ namespace Usb.Net.WindowsSample
 
                     using (var subject = new Subject<decimal>())
                     {
+#pragma warning disable CA2000 
                         using var deviceDataStreamer =
                             new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 }.
                             CreateWindowsHidDeviceManager(_loggerFactory).
@@ -103,11 +104,11 @@ namespace Usb.Net.WindowsSample
                                 {
                                     subject.OnError(ex);
                                 }
-                            });
+                            }).Start();
 
-                        subject.Subscribe((t) => Console.WriteLine($"Temperatur was {t}"));
+                        subject.Subscribe((t) => Console.WriteLine($"Temperature is {t}"));
 
-                        await Task.Delay(5000);
+                        await Task.Delay(10000);
                     }
 
                     break;
