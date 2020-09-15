@@ -82,34 +82,7 @@ namespace Usb.Net.WindowsSample
 #if !LIBUSB
                 case 3:
 
-                    using (var subject = new Subject<decimal>())
-                    {
-#pragma warning disable CA2000 
-                        using var deviceDataStreamer =
-                            new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 }.
-                            CreateWindowsHidDeviceManager(_loggerFactory).
-                            CreateDeviceDataStreamer(async (device) =>
-                            {
-                                try
-                                {
-                                    //https://github.com/WozSoftware/Woz.TEMPer/blob/dcd0b49d67ac39d10c3759519050915816c2cd93/Woz.TEMPer/Sensors/TEMPerV14.cs#L15
-
-                                    var data = await device.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
-
-                                    var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
-
-                                    subject.OnNext(Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven));
-                                }
-                                catch (Exception ex)
-                                {
-                                    subject.OnError(ex);
-                                }
-                            }).Start();
-
-                        subject.Subscribe((t) => Console.WriteLine($"Temperature is {t}"));
-
-                        await Task.Delay(10000);
-                    }
+                    await DisplayTemperature();
 
                     break;
 #endif
@@ -118,6 +91,38 @@ namespace Usb.Net.WindowsSample
                     break;
             }
         }
+
+#pragma warning disable CA2000 // Dispose objects before losing scope
+        private static async Task DisplayTemperature()
+        {
+            using var subject = new Subject<decimal>();
+            using var deviceDataStreamer =
+                new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 }.
+                CreateWindowsHidDeviceManager(_loggerFactory).
+                CreateDeviceDataStreamer(async (device) =>
+                {
+                    try
+                    {
+                        //https://github.com/WozSoftware/Woz.TEMPer/blob/dcd0b49d67ac39d10c3759519050915816c2cd93/Woz.TEMPer/Sensors/TEMPerV14.cs#L15
+
+                        var data = await device.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
+
+                        var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
+
+                        subject.OnNext(Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven));
+                    }
+                    catch (Exception ex)
+                    {
+                        subject.OnError(ex);
+                    }
+                }).Start();
+
+            subject.Subscribe((t) => Console.WriteLine($"Temperature is {t}"));
+
+            await Task.Delay(10000);
+        }
+
+#pragma warning restore CA2000 // Dispose objects before losing scope
         #endregion
 
         #region Event Handlers
