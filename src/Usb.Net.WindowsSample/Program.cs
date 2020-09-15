@@ -92,40 +92,38 @@ namespace Usb.Net.WindowsSample
             }
         }
 
-#pragma warning disable CA2000 // Dispose objects before losing scope
+#pragma warning disable CA2000 
+
         private static async Task DisplayTemperature()
         {
-#pragma warning disable IDE0063 // Use simple 'using' statement
-            using (var subject = new Subject<decimal>())
-#pragma warning restore IDE0063 // Use simple 'using' statement
-            {
-                using var deviceDataStreamer =
-                    new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 }.
-                    CreateWindowsHidDeviceManager(_loggerFactory).
-                    CreateDeviceDataStreamer(async (device) =>
-                    {
-                        //https://github.com/WozSoftware/Woz.TEMPer/blob/dcd0b49d67ac39d10c3759519050915816c2cd93/Woz.TEMPer/Sensors/TEMPerV14.cs#L15
-
-                        var data = await device.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
-
-                        var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
-
-                        subject.OnNext(Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven));
-
-                        //Note it would probably be a good idea to call OnError on the subject so that subscribers can know about errors, but it
-                        //seems as though this unsubscribes them...
-                    }).Start();
-
-                var subscription = subject.Subscribe((t) => Console.WriteLine($"Temperature is {t}"));
-
-                while (true)
+            using var subject = new Subject<decimal>();
+            using var deviceDataStreamer =
+                new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 }.
+                CreateWindowsHidDeviceManager(_loggerFactory).
+                CreateDeviceDataStreamer(async (device) =>
                 {
-                    await Task.Delay(1000);
-                }
+                    //https://github.com/WozSoftware/Woz.TEMPer/blob/dcd0b49d67ac39d10c3759519050915816c2cd93/Woz.TEMPer/Sensors/TEMPerV14.cs#L15
+
+                    var data = await device.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
+
+                    var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
+
+                    subject.OnNext(Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven));
+
+                    //Note it would probably be a good idea to call OnError on the subject so that subscribers can know about errors, but it
+                    //seems as though this unsubscribes them...
+                }).Start();
+
+            var subscription = subject.Subscribe((t) => Console.WriteLine($"Temperature is {t}"));
+
+            while (true)
+            {
+                await Task.Delay(1000);
             }
         }
 
-#pragma warning restore CA2000 // Dispose objects before losing scope
+#pragma warning restore CA2000 
+
         #endregion
 
         #region Event Handlers
