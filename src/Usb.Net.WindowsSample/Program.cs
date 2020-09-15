@@ -4,6 +4,7 @@ using Usb.Net.Sample;
 using Device.Net;
 using Microsoft.Extensions.Logging;
 using System.Reactive.Subjects;
+using System.Reactive.Linq;
 
 #if !LIBUSB
 using Hid.Net.Windows;
@@ -97,6 +98,7 @@ namespace Usb.Net.WindowsSample
         private static async Task DisplayTemperature()
         {
             using var subject = new Subject<decimal>();
+
             using var deviceDataStreamer =
                 new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 }.
                 CreateWindowsHidDeviceManager(_loggerFactory).
@@ -114,7 +116,8 @@ namespace Usb.Net.WindowsSample
                     //seems as though this unsubscribes them...
                 }).Start();
 
-            var subscription = subject.Subscribe((t) => Console.WriteLine($"Temperature is {t}"));
+            //Only write the value when the temperatur changes
+            var subscription = subject.Distinct().Subscribe((t) => Console.WriteLine($"Temperature is {t}"));
 
             while (true)
             {

@@ -19,7 +19,7 @@ namespace Usb.Net.Windows
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null
         ) => CreateWindowsUsbDeviceFactory(
-            asd,
+            new List<FilterDeviceDefinition> { filterDeviceDefinition },
             loggerFactory,
             getConnectedDeviceDefinitionsAsync,
             getUsbInterfaceManager,
