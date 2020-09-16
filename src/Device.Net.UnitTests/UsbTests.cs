@@ -22,6 +22,7 @@ namespace Device.Net.UnitTests
         private readonly byte[] testreadpacket = { 1, 2, 3 };
         #endregion
 
+#if !NET45
         public UsbTests()
         {
             //Easier than mocking at this point...
@@ -30,6 +31,7 @@ namespace Device.Net.UnitTests
                 _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
             });
         }
+#endif
 
         #region Tests
         [TestMethod]
