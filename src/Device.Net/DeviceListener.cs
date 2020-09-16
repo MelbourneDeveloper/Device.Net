@@ -105,7 +105,15 @@ namespace Device.Net
                     {
                         //Need to use the connected device def here instead of the filter version because the filter version won't have the id or any details
                         device = await DeviceManager.GetDevice(connectedDeviceDefinition);
-                        _CreatedDevicesByDefinition.Add(connectedDeviceDefinition.DeviceId, device);
+
+                        if (device == null)
+                        {
+                            _logger.LogWarning("A connected device with id {deviceId} was detected but the factory didn't create an instance of it. Bad stuff is going to happen now.", connectedDeviceDefinition.DeviceId);
+                        }
+                        else
+                        {
+                            _CreatedDevicesByDefinition.Add(connectedDeviceDefinition.DeviceId, device);
+                        }
                     }
 
                     if (device.IsInitialized) continue;

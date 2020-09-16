@@ -78,11 +78,8 @@ namespace Device.Net.UnitTests
         [DataRow(false, false, 0, MockUsbDeviceVendorId, MockUsbDeviceProductId)]
         public async Task TestWithMatchedFilterAsync(bool isHidConnected, bool isUsbConnected, int expectedCount, uint vid, uint pid)
         {
-            var loggerFactoryMock = new Mock<ILoggerFactory>();
-
             var (hid, usb) = GetMockedFactories(isHidConnected, isUsbConnected, vid, pid);
-            var deviceManager = new DeviceManager(loggerFactoryMock.Object) { DeviceFactories = { hid.Object, usb.Object } };
-
+            var deviceManager = new DeviceManager(_loggerFactory) { DeviceFactories = { hid.Object, usb.Object } };
 
             var connectedDeviceDefinitions = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList();
 
@@ -128,7 +125,7 @@ namespace Device.Net.UnitTests
             var connectedDeviceDefinition = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList().First();
 
 
-            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, _loggerFactory, _loggerMock.Object);
+            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, _loggerFactory);
 
             var writeAndReadTasks = new List<Task<ReadResult>>();
 
@@ -223,11 +220,11 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestDeviceFactoriesNotRegisteredException()
         {
-            var deviceManager = new Mock<IDeviceManager>();
+            var deviceManager = new DeviceManager(_loggerFactory);
 
             try
             {
-                await deviceManager.Object.GetConnectedDeviceDefinitionsAsync();
+                await deviceManager.GetConnectedDeviceDefinitionsAsync();
             }
             catch (DeviceFactoriesNotRegisteredException)
             {
@@ -285,7 +282,7 @@ namespace Device.Net.UnitTests
         {
             try
             {
-                var device = new MockHidDevice("asd", _loggerFactory, null);
+                var device = new MockHidDevice("asd", _loggerFactory);
                 var cancellationTokenSource = new CancellationTokenSource();
 
                 var task1 = device.WriteAndReadAsync(new byte[] { 1, 2, 3 }, cancellationTokenSource.Token);

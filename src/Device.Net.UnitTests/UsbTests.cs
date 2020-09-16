@@ -80,7 +80,7 @@ namespace Device.Net.UnitTests
                 var logger = new Mock<ILoggerFactory>();
                 const string deviceId = "";
                 var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, logger.Object, null, null);
-                var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, null);
+                var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, _loggerFactory);
                 usbDevice.UsbInterfaceManager.WriteUsbInterface = new WindowsUsbInterface(null, null, 0, null, null);
             }
             catch (ValidationException vex)
@@ -100,7 +100,7 @@ namespace Device.Net.UnitTests
                 var logger = new Mock<ILoggerFactory>();
                 const string deviceId = "";
                 var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, logger.Object, null, null);
-                var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, null);
+                var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, _loggerFactory);
                 usbDevice.UsbInterfaceManager.ReadUsbInterface = new WindowsUsbInterface(null, null, 0, null, null);
             }
             catch (ValidationException vex)
@@ -137,7 +137,7 @@ namespace Device.Net.UnitTests
         {
             const string deviceId = "";
             var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, _loggerFactory, null, null);
-            var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, null);
+            var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, _loggerFactory);
             var windowsUsbInterface = new WindowsUsbInterface(null, null, 0, null, null);
             usbDevice.UsbInterfaceManager.UsbInterfaces.Add(windowsUsbInterface);
             return usbDevice;
