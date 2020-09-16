@@ -125,7 +125,7 @@ namespace Device.Net.UnitTests
             var connectedDeviceDefinition = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList().First();
 
 
-            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, _loggerFactory);
+            var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, _loggerFactory, _loggerMock.Object);
 
             var writeAndReadTasks = new List<Task<ReadResult>>();
 
@@ -282,7 +282,7 @@ namespace Device.Net.UnitTests
         {
             try
             {
-                var device = new MockHidDevice("asd", _loggerFactory);
+                var device = new MockHidDevice("asd", _loggerFactory, _loggerFactory.CreateLogger<MockHidDevice>());
                 var cancellationTokenSource = new CancellationTokenSource();
 
                 var task1 = device.WriteAndReadAsync(new byte[] { 1, 2, 3 }, cancellationTokenSource.Token);
