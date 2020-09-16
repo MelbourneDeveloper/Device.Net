@@ -182,6 +182,10 @@ namespace Device.Net.UnitTests
                         ProductId = 1,
                         VendorId = 1
                     } }));
+
+
+                hidMock.Setup(f => f.GetDevice(It.IsAny<ConnectedDeviceDefinition>())).Returns(
+                Task.FromResult<IDevice>( new MockHidDevice("Asd",_LoggerFactoryMock.Object,_loggerMock.Object)));
             }
 
             if (isUsbConnected && ((!vid.HasValue && !pid.HasValue) || (vid == 2 && pid == 2)))
