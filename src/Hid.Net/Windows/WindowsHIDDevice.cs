@@ -41,7 +41,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Public Properties
-        public byte DefaultReportId { get; set; }
+        public byte? DefaultReportId { get; }
         public IHidApiService HidService { get; }
         #endregion
 
@@ -54,16 +54,17 @@ namespace Hid.Net.Windows
         {
         }
 
-        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILoggerFactory loggerFactory) : this(deviceId, writeBufferSize, readBufferSize, loggerFactory, null)
+        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILoggerFactory loggerFactory) : this(deviceId, writeBufferSize, readBufferSize, loggerFactory, null, null)
         {
 
         }
 
-        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILoggerFactory loggerFactory, IHidApiService hidService) : base(deviceId, loggerFactory?.CreateLogger<WindowsHidDevice>())
+        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILoggerFactory loggerFactory, IHidApiService hidService, byte? defaultReportId = null) : base(deviceId, loggerFactory?.CreateLogger<WindowsHidDevice>())
         {
             _WriteBufferSize = writeBufferSize;
             _ReadBufferSize = readBufferSize;
             HidService = hidService ?? new WindowsHidApiService(loggerFactory);
+            DefaultReportId = defaultReportId;
         }
         #endregion
 
@@ -251,7 +252,7 @@ namespace Hid.Net.Windows
             return new ReadReport(reportId, retVal);
         }
 
-        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, null, cancellationToken);
+        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
 
         public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
@@ -277,10 +278,10 @@ namespace Hid.Net.Windows
                 if (reportId.HasValue)
                 {
                     //Copy the data to a new array that is one byte larger and shif the data to the right by 1
-                    bytes = new byte[WriteBufferSize + 1];
+                    bytes = new byte[WriteBufferSize];
                     Array.Copy(data, 0, bytes, 1, data.Length);
                     //Put the report Id at the first index
-                    bytes[0] = reportId ?? DefaultReportId;
+                    bytes[0] = reportId.Value;
                 }
                 else
                 {

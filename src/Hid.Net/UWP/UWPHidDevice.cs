@@ -24,7 +24,7 @@ namespace Hid.Net.UWP
 
         #region Public Properties
         public bool DataHasExtraByte { get; set; } = true;
-        public byte DefaultReportId { get; set; }
+        public byte? DefaultReportId { get; }
         #endregion
 
         #region Public Override Properties
@@ -120,7 +120,7 @@ namespace Hid.Net.UWP
             base.Dispose();
         }
 
-        public virtual Task WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, 0, cancellationToken);
+        public virtual Task WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
 
         public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
@@ -131,7 +131,7 @@ namespace Hid.Net.UWP
             {
                 bytes = new byte[data.Length + 1];
                 Array.Copy(data, 0, bytes, 1, data.Length);
-                bytes[0] = reportId ?? DefaultReportId;
+                bytes[0] = reportId.Value;
             }
             else
             {
