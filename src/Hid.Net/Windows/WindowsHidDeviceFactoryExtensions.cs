@@ -37,7 +37,8 @@ namespace Hid.Net.Windows
         IHidApiService hidApiService = null,
         Guid? classGuid = null,
         ushort? readBufferSize = null,
-        ushort? writeBufferSize = null)
+        ushort? writeBufferSize = null,
+        byte? defaultReportId = null)
         {
             return CreateWindowsHidDeviceFactory(
                 new List<FilterDeviceDefinition> { filterDeviceDefinition },
@@ -45,7 +46,8 @@ namespace Hid.Net.Windows
                 hidApiService,
                 classGuid,
                 readBufferSize,
-                writeBufferSize
+                writeBufferSize,
+                defaultReportId
                 );
         }
 
@@ -55,7 +57,8 @@ namespace Hid.Net.Windows
             IHidApiService hidApiService = null,
             Guid? classGuid = null,
             ushort? readBufferSize = null,
-            ushort? writeBufferSize = null)
+            ushort? writeBufferSize = null,
+            byte? defaultReportId = null)
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
@@ -78,7 +81,8 @@ namespace Hid.Net.Windows
                     loggerFactory: loggerFactory,
                     hidService: selectedHidApiService,
                     readBufferSize: readBufferSize,
-                    writeBufferSize: writeBufferSize
+                    writeBufferSize: writeBufferSize,
+                    defaultReportId: defaultReportId
                 ),
                 DeviceType.Hid);
         }

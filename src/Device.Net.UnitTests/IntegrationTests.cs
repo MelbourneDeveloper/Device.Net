@@ -46,7 +46,8 @@ namespace Device.Net.UnitTests
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(
-            new FilterDeviceDefinition { VendorId = 0x534C, ProductId = 0x0001, Label = "Trezor One Firmware 1.6.x", UsagePage = 65280 }.CreateWindowsHidDeviceFactory(_loggerFactory)
+            new FilterDeviceDefinition { VendorId = 0x534C, ProductId = 0x0001, Label = "Trezor One Firmware 1.6.x", UsagePage = 65280 }
+            .CreateWindowsHidDeviceFactory(_loggerFactory, defaultReportId: 0)
             );
 
         [TestMethod]
