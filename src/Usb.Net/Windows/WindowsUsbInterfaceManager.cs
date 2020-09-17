@@ -70,7 +70,7 @@ namespace Usb.Net.Windows
 #pragma warning restore CA2000 
                 WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorMessageCouldntIntializeDevice);
 
-                var connectedDeviceDefinition = GetDeviceDefinition(defaultInterfaceHandle, DeviceId);
+                var connectedDeviceDefinition = GetDeviceDefinition(defaultInterfaceHandle, DeviceId, Logger);
 
                 if (!WriteBufferSizeProtected.HasValue)
                 {
@@ -146,7 +146,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Methods
-        public static ConnectedDeviceDefinition GetDeviceDefinition(SafeFileHandle defaultInterfaceHandle, string deviceId)
+        public static ConnectedDeviceDefinition GetDeviceDefinition(SafeFileHandle defaultInterfaceHandle, string deviceId, ILogger logger)
         {
             var deviceDefinition = new ConnectedDeviceDefinition(deviceId) { DeviceType = DeviceType.Usb };
 
@@ -158,17 +158,28 @@ namespace Usb.Net.Windows
 
             if (_UsbDeviceDescriptor.iProduct > 0)
             {
-                deviceDefinition.ProductName = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle, _UsbDeviceDescriptor.iProduct, "Couldn't get product name");
+                deviceDefinition.ProductName = WinUsbApiCalls.GetDescriptor(
+                    defaultInterfaceHandle,
+                    _UsbDeviceDescriptor.iProduct,
+                    "Couldn't get product name",
+                    logger);
             }
 
             if (_UsbDeviceDescriptor.iSerialNumber > 0)
             {
-                deviceDefinition.SerialNumber = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle, _UsbDeviceDescriptor.iSerialNumber, "Couldn't get serial number");
+                deviceDefinition.SerialNumber = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle,
+                                                                             _UsbDeviceDescriptor.iSerialNumber,
+                                                                             "Couldn't get serial number",
+                                                                             logger);
             }
 
             if (_UsbDeviceDescriptor.iManufacturer > 0)
             {
-                deviceDefinition.Manufacturer = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle, _UsbDeviceDescriptor.iManufacturer, "Couldn't get manufacturer");
+                deviceDefinition.Manufacturer = WinUsbApiCalls.GetDescriptor(
+                    defaultInterfaceHandle,
+                    _UsbDeviceDescriptor.iManufacturer,
+                    "Couldn't get manufacturer",
+                    logger);
             }
 
             deviceDefinition.VendorId = _UsbDeviceDescriptor.idVendor;

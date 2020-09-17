@@ -31,15 +31,13 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Static Methods
-        public static void HandleError(bool isSuccess, string message)
+        public static int HandleError(bool isSuccess, string message, bool throwException = true)
         {
-            if (isSuccess) return;
+            if (isSuccess) return 0;
             var errorCode = Marshal.GetLastWin32Error();
 
             //TODO: Loggin
-            if (errorCode == 0) return;
-
-            throw new ApiException($"{message}. Error code: {errorCode}");
+            return errorCode == 0 ? 0 : throwException ? throw new ApiException($"{message}. Error code: {errorCode}") : errorCode;
         }
         #endregion
     }
