@@ -122,20 +122,11 @@
     <Compile Include="..\Device.Net.UnitTests\MockClasses\MockDeviceBase.cs">
       <Link>MockClasses\MockDeviceBase.cs</Link>
     </Compile>
-    <Compile Include="..\Device.Net.UnitTests\MockClasses\MockFactoryBase.cs">
-      <Link>MockClasses\MockFactoryBase.cs</Link>
-    </Compile>
     <Compile Include="..\Device.Net.UnitTests\MockClasses\MockHidDevice.cs">
       <Link>MockClasses\MockHidDevice.cs</Link>
     </Compile>
-    <Compile Include="..\Device.Net.UnitTests\MockClasses\MockHidFactory.cs">
-      <Link>MockClasses\MockHidFactory.cs</Link>
-    </Compile>
     <Compile Include="..\Device.Net.UnitTests\MockClasses\MockUsbDevice.cs">
       <Link>MockClasses\MockUsbDevice.cs</Link>
-    </Compile>
-    <Compile Include="..\Device.Net.UnitTests\MockClasses\MockUsbFactory.cs">
-      <Link>MockClasses\MockUsbFactory.cs</Link>
     </Compile>
     <Compile Include="..\Device.Net.UnitTests\UnitTests.cs">
       <Link>UnitTests.cs</Link>
