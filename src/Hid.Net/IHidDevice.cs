@@ -8,6 +8,6 @@ namespace Hid.Net
     {
         Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default);
         Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default);
-        byte DefaultReportId { get; }
+        byte? DefaultReportId { get; }
     }
 }
