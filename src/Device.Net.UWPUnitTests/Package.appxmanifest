@@ -89,6 +89,11 @@
         <Function Type="classId:ff * *" />
       </Device>
 
+      <!--KeepKey-->
+      <Device Id="vidpid:2B24 0002">
+        <Function Type="classId:ff * *" />
+      </Device>
+
     </DeviceCapability>
 
   </Capabilities>
