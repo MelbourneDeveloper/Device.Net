@@ -161,6 +161,11 @@ namespace Device.Net.UnitTests
                  Assert.AreEqual(63, result.Data[0]);
                  Assert.AreEqual(62, result.Data[1]);
 
+#if WINDOWS_UWP
+                 var windowsHidDevice = (UWPHidDevice)device;
+#else
+                 var windowsHidDevice = (WindowsHidDevice)device;
+                 //TODO: share this with UWP
                  Assert.AreEqual(DeviceType.Hid, device.ConnectedDeviceDefinition.DeviceType);
                  Assert.AreEqual("AirNetix", device.ConnectedDeviceDefinition.Manufacturer);
                  Assert.AreEqual(filterDeviceDefinition.ProductId, device.ConnectedDeviceDefinition.ProductId);
@@ -172,14 +177,9 @@ namespace Device.Net.UnitTests
                  Assert.AreEqual((ushort)1, device.ConnectedDeviceDefinition.Usage);
                  Assert.AreEqual((ushort)65280, device.ConnectedDeviceDefinition.UsagePage);
                  Assert.AreEqual((ushort)256, device.ConnectedDeviceDefinition.VersionNumber);
-
-#if WINDOWS_UWP
-                 var windowsHidDevice = (UWPHidDevice)device;
-#else
-                 var windowsHidDevice = (WindowsHidDevice)device;
-#endif
                  Assert.AreEqual(64, windowsHidDevice.ReadBufferSize);
                  Assert.AreEqual(64, windowsHidDevice.WriteBufferSize);
+#endif
              }, 64);
         }
         #endregion
