@@ -24,7 +24,7 @@ namespace Usb.Net.UWP
                 getConnectedDeviceDefinitionsAsync,
                 getUsbInterfaceManager,
                 readBufferSize,
-                writeBufferSize)
+                writeBufferSize);
         }
 
         public static IDeviceFactory CreateUwpUsbDeviceFactory(

@@ -1,6 +1,5 @@
 #if !NET45
 
-using Hid.Net.UWP;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -10,12 +9,32 @@ using System.Threading.Tasks;
 #if !WINDOWS_UWP
 using Hid.Net.Windows;
 using Usb.Net.Windows;
+using Usb.Net;
 #else
 using Usb.Net.UWP;
+using Hid.Net.UWP;
 #endif
 
 namespace Device.Net.UnitTests
 {
+    public static class GetFactoryExtensions
+    {
+        public static IDeviceFactory GetUsbDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition, ILoggerFactory loggerFactory) =>
+#if !WINDOWS_UWP
+            filterDeviceDefinition.CreateWindowsUsbDeviceFactory(loggerFactory);
+#else
+            filterDeviceDefinition.CreateUwpUsbDeviceFactory(loggerFactory);
+#endif
+
+
+        public static IDeviceFactory GetHidDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition, ILoggerFactory loggerFactory, byte? defultReportId = null) =>
+#if !WINDOWS_UWP
+            filterDeviceDefinition.CreateWindowsHidDeviceFactory(loggerFactory, defaultReportId: defultReportId);
+#else
+            filterDeviceDefinition.CreateUwpHidDeviceFactory(loggerFactory, defaultReportId: defultReportId);
+#endif
+    }
+
     [TestClass]
     public class IntegrationTests
 
@@ -49,41 +68,25 @@ namespace Device.Net.UnitTests
 
         public Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition { VendorId = 0x1209, ProductId = 0x53C1, Label = "Trezor One Firmware 1.7.x" }
-#if !WINDOWS_UWP
-            .CreateWindowsUsbDeviceFactory(_loggerFactory)
-#else
-            .CreateUwpUsbDeviceFactory(_loggerFactory)
-#endif
+            .GetUsbDeviceFactory(_loggerFactory)
         );
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition { VendorId = 0x534C, ProductId = 0x0001, Label = "Trezor One Firmware 1.6.x", UsagePage = 65280 }
-#if !WINDOWS_UWP
-            .CreateWindowsHidDeviceFactory(_loggerFactory, defaultReportId: 0)
-#else
-            .CreateUwpHidDeviceFactory(_loggerFactory, defaultReportId: 0)
-#endif
+            .GetHidDeviceFactory(_loggerFactory, 0)
             );
 
         [TestMethod]
         public Task TestWriteAndReadFromKeepKeyUsb() => TestWriteAndReadFromTrezor(
         new FilterDeviceDefinition { VendorId = 0x2B24, ProductId = 0x2 }
-#if !WINDOWS_UWP
-            .CreateWindowsUsbDeviceFactory(_loggerFactory)
-#else
-            .CreateUwpUsbDeviceFactory(_loggerFactory)
-#endif
+            .GetUsbDeviceFactory(_loggerFactory)
            );
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorModelTUsb() => TestWriteAndReadFromTrezor(
         new FilterDeviceDefinition { VendorId = 0x1209, ProductId = 0x53c1 }
-#if !WINDOWS_UWP
-            .CreateWindowsUsbDeviceFactory(_loggerFactory)
-#else
-            .CreateUwpUsbDeviceFactory(_loggerFactory)
-#endif
+            .GetUsbDeviceFactory(_loggerFactory)
             );
 
         private async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64)
@@ -108,7 +111,7 @@ namespace Device.Net.UnitTests
             var filterDeviceDefinition = new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 };
 
             var integrationTester = new IntegrationTester(
-                filterDeviceDefinition.CreateWindowsHidDeviceFactory(_loggerFactory), _loggerFactory);
+                filterDeviceDefinition.GetHidDeviceFactory(_loggerFactory), _loggerFactory);
             await integrationTester.TestAsync(request, async (result, device) =>
             {
                 Assert.IsTrue(device.IsInitialized);
@@ -122,7 +125,11 @@ namespace Device.Net.UnitTests
                 Assert.AreEqual(9, device.ConnectedDeviceDefinition.ReadBufferSize);
                 Assert.AreEqual(9, device.ConnectedDeviceDefinition.WriteBufferSize);
 
+#if WINDOWS_UWP
+                var windowsHidDevice = (UWPHidDevice)device;
+#else
                 var windowsHidDevice = (WindowsHidDevice)device;
+#endif
                 Assert.AreEqual(9, windowsHidDevice.ReadBufferSize);
                 Assert.AreEqual(9, windowsHidDevice.WriteBufferSize);
             }, 9);
@@ -146,7 +153,7 @@ namespace Device.Net.UnitTests
             };
 
             var integrationTester = new IntegrationTester(
-                filterDeviceDefinition.CreateWindowsHidDeviceFactory(_loggerFactory), _loggerFactory);
+                filterDeviceDefinition.GetHidDeviceFactory(_loggerFactory), _loggerFactory);
             await integrationTester.TestAsync(request, async (result, device) =>
              {
                  Assert.AreEqual(64, result.Data.Length);
@@ -165,7 +172,11 @@ namespace Device.Net.UnitTests
                  Assert.AreEqual((ushort)65280, device.ConnectedDeviceDefinition.UsagePage);
                  Assert.AreEqual((ushort)256, device.ConnectedDeviceDefinition.VersionNumber);
 
+#if WINDOWS_UWP
+                 var windowsHidDevice = (UWPHidDevice)device;
+#else
                  var windowsHidDevice = (WindowsHidDevice)device;
+#endif
                  Assert.AreEqual(64, windowsHidDevice.ReadBufferSize);
                  Assert.AreEqual(64, windowsHidDevice.WriteBufferSize);
              }, 64);
