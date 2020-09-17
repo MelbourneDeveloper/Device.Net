@@ -66,6 +66,7 @@ namespace Device.Net.UnitTests
         }
 #endif
 
+        [TestMethod]
         public Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition { VendorId = 0x1209, ProductId = 0x53C1, Label = "Trezor One Firmware 1.7.x" }
             .GetUsbDeviceFactory(_loggerFactory)
