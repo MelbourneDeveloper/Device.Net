@@ -23,7 +23,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Properties
-        public bool DataHasExtraByte { get; set; } = true;
+        public bool DataHasExtraByte { get; set; }
         public byte? DefaultReportId { get; }
         #endregion
 

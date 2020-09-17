@@ -123,16 +123,16 @@ namespace Device.Net.UnitTests
                 //I think my room should pretty much always be between these temperatures
                 Assert.IsTrue(temp > 10 && temp < 35);
 
-                Assert.AreEqual(9, device.ConnectedDeviceDefinition.ReadBufferSize);
-                Assert.AreEqual(9, device.ConnectedDeviceDefinition.WriteBufferSize);
-
 #if WINDOWS_UWP
                 var windowsHidDevice = (UWPHidDevice)device;
 #else
                 var windowsHidDevice = (WindowsHidDevice)device;
-#endif
+                //TODO: Share these with UWP
+                Assert.AreEqual(9, device.ConnectedDeviceDefinition.ReadBufferSize);
+                Assert.AreEqual(9, device.ConnectedDeviceDefinition.WriteBufferSize);
                 Assert.AreEqual(9, windowsHidDevice.ReadBufferSize);
                 Assert.AreEqual(9, windowsHidDevice.WriteBufferSize);
+#endif
             }, 9);
         }
 
