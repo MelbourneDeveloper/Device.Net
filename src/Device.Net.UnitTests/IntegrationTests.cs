@@ -32,23 +32,23 @@ namespace Device.Net.UnitTests
 
         #region Tests
         [TestMethod]
-        public async Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(
+        public Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition { VendorId = 0x1209, ProductId = 0x53C1, Label = "Trezor One Firmware 1.7.x" }.CreateWindowsUsbDeviceFactory(_loggerFactory)
         );
 
         [TestMethod]
-        public async Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(
+        public Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition { VendorId = 0x534C, ProductId = 0x0001, Label = "Trezor One Firmware 1.6.x", UsagePage = 65280 }.CreateWindowsHidDeviceFactory(_loggerFactory)
             );
 
         [TestMethod]
-        public async Task TestWriteAndReadFromKeepKeyUsb() => TestWriteAndReadFromTrezor(
+        public Task TestWriteAndReadFromKeepKeyUsb() => TestWriteAndReadFromTrezor(
         new FilterDeviceDefinition { VendorId = 0x2B24, ProductId = 0x2 }.CreateWindowsUsbDeviceFactory(_loggerFactory)
         );
 
 
         [TestMethod]
-        public async Task TestWriteAndReadFromTrezorModelTUsb() => TestWriteAndReadFromTrezor(
+        public Task TestWriteAndReadFromTrezorModelTUsb() => TestWriteAndReadFromTrezor(
         new FilterDeviceDefinition { VendorId = 0x1209, ProductId = 0x53c1 }.CreateWindowsUsbDeviceFactory(_loggerFactory)
         );
 
