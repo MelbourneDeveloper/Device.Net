@@ -32,13 +32,15 @@ namespace Device.Net
 
             ILoggerFactory loggerFactory,
             GetConnectedDeviceDefinitionsAsync getConnectedDevicesAsync,
-            GetDevice getDevice
+            GetDevice getDevice,
+            DeviceType deviceType
             )
         {
             _getConnectedDevicesAsync = getConnectedDevicesAsync ?? throw new ArgumentNullException(nameof(getConnectedDevicesAsync));
             _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             _logger = _loggerFactory.CreateLogger<DeviceFactory>();
             _getDevice = getDevice;
+            DeviceType = deviceType;
         }
         #endregion
 

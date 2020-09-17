@@ -23,7 +23,8 @@ namespace Usb.Net
             {
                 var usbInterfaceManager = await getUsbInterfaceManager(d);
                 return new UsbDevice(d, usbInterfaceManager, loggerFactory);
-            });
+            },
+            DeviceType.Usb);
     }
 }
 

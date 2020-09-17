@@ -61,7 +61,8 @@ namespace Hid.Net.UWP
             return new DeviceFactory(
                 loggerFactory,
                 getConnectedDeviceDefinitionsAsync,
-                getDevice);
+                getDevice,
+                DeviceType.Hid);
         }
     }
 }

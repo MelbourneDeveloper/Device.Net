@@ -141,7 +141,7 @@ namespace Device.Net.UnitTests
         #region Private Methods
         private static Task AssertTrezorResult(ReadResult responseData, IDevice device)
         {
-            Assert.AreEqual(64, responseData.BytesRead);
+            Assert.AreEqual((uint)64, responseData.BytesRead);
 
             Assert.AreEqual(64, responseData.Data.Length);
 

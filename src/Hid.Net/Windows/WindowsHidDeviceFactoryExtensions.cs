@@ -79,7 +79,8 @@ namespace Hid.Net.Windows
                     hidApiService: selectedHidApiService,
                     readBufferSize: readBufferSize,
                     writeBufferSize: writeBufferSize
-                ));
+                ), 
+                DeviceType.Hid);
         }
 
         private static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, IHidApiService HidService, ILogger Logger)
