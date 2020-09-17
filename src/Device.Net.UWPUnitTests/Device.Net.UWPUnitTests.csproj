@@ -119,6 +119,12 @@
     <SDKReference Include="TestPlatform.Universal, Version=$(UnitTestPlatformVersion)" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Device.Net.UnitTests\IntegrationTester.cs">
+      <Link>IntegrationTester.cs</Link>
+    </Compile>
+    <Compile Include="..\Device.Net.UnitTests\IntegrationTests.cs">
+      <Link>IntegrationTests.cs</Link>
+    </Compile>
     <Compile Include="..\Device.Net.UnitTests\MockClasses\MockDeviceBase.cs">
       <Link>MockClasses\MockDeviceBase.cs</Link>
     </Compile>

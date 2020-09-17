@@ -13,20 +13,26 @@ namespace Hid.Net.UWP
     public static class UWPHidDeviceFactoryExtensions
     {
 
+        public static IDeviceFactory CreateUwpHidDeviceFactory(
+        this FilterDeviceDefinition filterDeviceDefinitions,
+        ILoggerFactory loggerFactory,
+        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+        GetDevice getDevice = null,
+        byte? defaultReportId = null) => CreateUwpHidDeviceFactory(new List<FilterDeviceDefinition> { filterDeviceDefinitions }, loggerFactory, getConnectedDeviceDefinitionsAsync, getDevice, defaultReportId);
+
         /// <summary>
         /// TODO: This is wrong. It will only search for one device
         /// </summary>
         public static IDeviceFactory CreateUwpHidDeviceFactory(
-#pragma warning disable IDE0060 // Remove unused parameter
-            this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
-#pragma warning restore IDE0060 // Remove unused parameter
-            ILoggerFactory loggerFactory,
-            GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-            GetDevice getDevice = null)
+        this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
+        ILoggerFactory loggerFactory,
+        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+        GetDevice getDevice = null,
+        byte? defaultReportId = null)
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 
-            if (getDevice == null) getDevice = async (c) => new UWPHidDevice(c, loggerFactory);
+            if (getDevice == null) getDevice = async (c) => new UWPHidDevice(c, loggerFactory, defaultReportId);
 
             var firstDevice = filterDeviceDefinitions.First();
 

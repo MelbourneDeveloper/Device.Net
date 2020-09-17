@@ -8,14 +8,33 @@ namespace Usb.Net.UWP
 {
     public static class UwpUsbDeviceFactoryExtensions
     {
+
         public static IDeviceFactory CreateUwpUsbDeviceFactory(
-            this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
+            this FilterDeviceDefinition filterDeviceDefinitions,
             ILoggerFactory loggerFactory,
             GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
             GetUsbInterfaceManager getUsbInterfaceManager = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null
             )
+        {
+            return CreateUwpUsbDeviceFactory(
+                new List<FilterDeviceDefinition> { filterDeviceDefinitions },
+                loggerFactory,
+                getConnectedDeviceDefinitionsAsync,
+                getUsbInterfaceManager,
+                readBufferSize,
+                writeBufferSize)
+        }
+
+        public static IDeviceFactory CreateUwpUsbDeviceFactory(
+        this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
+        ILoggerFactory loggerFactory,
+        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+        GetUsbInterfaceManager getUsbInterfaceManager = null,
+        ushort? readBufferSize = null,
+        ushort? writeBufferSize = null
+        )
         {
             var firstDevice = filterDeviceDefinitions.First();
 

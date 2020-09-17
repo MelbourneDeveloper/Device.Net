@@ -51,8 +51,9 @@ namespace Hid.Net.UWP
         {
         }
 
-        public UWPHidDevice(string deviceId, ILoggerFactory loggerFactory) : base(deviceId, loggerFactory, loggerFactory.CreateLogger<UWPHidDevice>())
+        public UWPHidDevice(string deviceId, ILoggerFactory loggerFactory, byte? defaultReportId = null) : base(deviceId, loggerFactory, loggerFactory.CreateLogger<UWPHidDevice>())
         {
+            DefaultReportId = defaultReportId;
         }
         #endregion
 
