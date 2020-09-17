@@ -75,11 +75,11 @@ namespace Hid.Net.Windows
                 async (c) => new WindowsHidDevice
                 (
                     c,
-                    loggerFactory,
-                    hidApiService: selectedHidApiService,
+                    loggerFactory: loggerFactory,
+                    hidService: selectedHidApiService,
                     readBufferSize: readBufferSize,
                     writeBufferSize: writeBufferSize
-                ), 
+                ),
                 DeviceType.Hid);
         }
 

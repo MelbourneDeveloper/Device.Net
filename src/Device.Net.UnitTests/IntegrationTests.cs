@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Usb.Net;
 using Usb.Net.Windows;
 
 namespace Device.Net.UnitTests
@@ -34,37 +35,31 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestConnectToSTMDFUMode()
         {
-            var windowsUsbDevice = new WindowsUsbDevice(@"USB\VID_0483&PID_DF11\00000008FFFF", _loggerFactory);
+            const string deviceID = @"USB\VID_0483&PID_DF11\00000008FFFF";
+            var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID, _loggerFactory, null, null), _loggerFactory);
             await windowsUsbDevice.InitializeAsync();
         }
 
-
-        [TestMethod]
         public Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(
-            new FilterDeviceDefinition { DeviceType = DeviceType.Usb, VendorId = 0x1209, ProductId = 0x53C1, Label = "Trezor One Firmware 1.7.x" },
-            new WindowsUsbDeviceFactory(_loggerFactory)
+            new FilterDeviceDefinition { VendorId = 0x1209, ProductId = 0x53C1, Label = "Trezor One Firmware 1.7.x" }.CreateWindowsUsbDeviceFactory(_loggerFactory)
         );
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(
-            new FilterDeviceDefinition { DeviceType = DeviceType.Hid, VendorId = 0x534C, ProductId = 0x0001, Label = "Trezor One Firmware 1.6.x", UsagePage = 65280 },
-            new WindowsHidDeviceFactory(_loggerFactory)
+            new FilterDeviceDefinition { VendorId = 0x534C, ProductId = 0x0001, Label = "Trezor One Firmware 1.6.x", UsagePage = 65280 }.CreateWindowsHidDeviceFactory(_loggerFactory)
             );
 
         [TestMethod]
         public Task TestWriteAndReadFromKeepKeyUsb() => TestWriteAndReadFromTrezor(
-        new FilterDeviceDefinition { DeviceType = DeviceType.Usb, VendorId = 0x2B24, ProductId = 0x2 },
-        new WindowsUsbDeviceFactory(_loggerFactory)
+        new FilterDeviceDefinition { VendorId = 0x2B24, ProductId = 0x2 }.CreateWindowsUsbDeviceFactory(_loggerFactory)
         );
-
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorModelTUsb() => TestWriteAndReadFromTrezor(
-        new FilterDeviceDefinition { DeviceType = DeviceType.Usb, VendorId = 0x1209, ProductId = 0x53c1 },
-        new WindowsUsbDeviceFactory(_loggerFactory)
+        new FilterDeviceDefinition { VendorId = 0x1209, ProductId = 0x53c1 }.CreateWindowsUsbDeviceFactory(_loggerFactory)
         );
 
-        private async Task TestWriteAndReadFromTrezor(FilterDeviceDefinition filterDeviceDefinition, IDeviceFactory deviceFactory, int expectedDataLength = 64)
+        private async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64)
         {
             //Send the request part of the Message Contract
             var request = new byte[64];
@@ -73,7 +68,7 @@ namespace Device.Net.UnitTests
             request[2] = 0x23;
 
             var integrationTester = new IntegrationTester(
-                filterDeviceDefinition, deviceFactory, _loggerFactory);
+                deviceFactory, _loggerFactory);
             await integrationTester.TestAsync(request, AssertTrezorResult, expectedDataLength);
         }
 
@@ -152,7 +147,7 @@ namespace Device.Net.UnitTests
 
         #region Private Methods
         private static Task AssertTrezorResult(ReadResult responseData, IDevice device)
-        {            
+        {
             //Specify the response part of the Message Contract
             var expectedResult = new byte[] { 63, 35, 35 };
 
