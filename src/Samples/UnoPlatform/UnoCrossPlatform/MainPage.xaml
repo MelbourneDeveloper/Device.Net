@@ -1,0 +1,59 @@
+﻿<Page
+    x:Class="UnoCrossPlatform.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:UnoCrossPlatform"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+
+        <local:BoolToVisibilityConverter x:Key="booltovis" />
+
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Helvetica Neue" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+    </Page.Resources>
+
+    <Grid >
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height=".4*" />
+            <RowDefinition Height=".6*"  />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20" Grid.Row="1">
+
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#155a96" Offset="0" />
+                    <GradientStop Color="#15965a" Offset="1" />
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".35*" />
+                <RowDefinition Height=".35*"  />
+                <RowDefinition Height=".3*"  />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="cat-facts"  FontSize="40" HorizontalAlignment="Center" Margin="10" />
+
+            <HyperlinkButton Content="Daily cat facts!" Grid.Row="1" FontSize="30"  Margin="10" Opacity=".5" NavigateUri="https://alexwohlbruck.github.io/cat-facts/" HorizontalAlignment="Center"   />
+
+            <Button Content="View on GitHub"  Opacity=".5" Grid.Row="2" HorizontalAlignment="Center" Margin="10" Foreground="White" Command="{Binding GoToGithub}" />
+        </Grid>
+
+        <ProgressRing  IsActive="{Binding IsLoading}" Canvas.ZIndex="1" Grid.Row="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="30" />
+
+        <TextBlock Grid.Row="2" Text="{Binding CatFact.text}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Black" FontSize="22" Margin="30" TextWrapping="Wrap" />
+
+        <Button Command="{Binding Next}" Margin="4" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="3" Background="#155a96" Foreground="White"   Width="200" Content="Next"  />
+    </Grid>
+    
+
+</Page>
