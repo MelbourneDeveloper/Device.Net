@@ -1,4 +1,5 @@
 using System;
+using Android.Hardware.Usb;
 using Android.Runtime;
 using Com.Nostra13.Universalimageloader.Core;
 using Windows.UI.Xaml.Media;
@@ -21,6 +22,9 @@ namespace UnoCrossPlatform.Droid
 
         private void ConfigureUniversalImageLoader()
         {
+            MainPage.AppContext = Context;
+            MainPage.UsbManager = (UsbManager)GetSystemService(UsbService);
+
             // Create global configuration and initialize ImageLoader with this config
             var config = new ImageLoaderConfiguration
                 .Builder(Context)
