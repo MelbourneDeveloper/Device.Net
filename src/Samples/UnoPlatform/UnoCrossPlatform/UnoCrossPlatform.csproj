@@ -17,7 +17,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.8" />
     <PackageReference Include="RestClient.Net" Version="4.1.0" />
     <PackageReference Include="Uno.UI" Version="3.0.12" />
-    <ProjectReference Include="..\..\..\Usb.Net\Usb.Net.csproj" />
+    <ProjectReference Include="..\..\..\Hid.Net\Hid.Net.csproj" />
     <ProjectReference Include="..\..\..\Device.Net.Reactive\Device.Net.Reactive.csproj" />
   </ItemGroup>
   <ItemGroup>

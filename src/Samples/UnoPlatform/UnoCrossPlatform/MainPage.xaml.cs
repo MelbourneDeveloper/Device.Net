@@ -1,8 +1,9 @@
 ﻿using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using System;
 
 #if WINDOWS_UWP
-using Usb.Net.UWP;
+using Hid.Net.UWP;
 using Device.Net;
 using Microsoft.Extensions.Logging;
 using Device.Net.Reactive;
@@ -10,6 +11,7 @@ using Device.Net.Reactive;
 
 #pragma warning disable CA2000 // Dispose objects before losing scope
 #pragma warning disable IDE0022 // Use expression body for methods
+#pragma warning disable CA1305 // Specify IFormatProvider
 
 namespace UnoCrossPlatform
 {
@@ -33,7 +35,7 @@ namespace UnoCrossPlatform
 
             var deviceDataStreamer =
             new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 }
-                .CreateUwpUsbDeviceFactory(loggerFactory).ToDeviceManager(loggerFactory)
+                .CreateUwpHidDeviceFactory(loggerFactory).ToDeviceManager(loggerFactory)
                 .CreateDeviceDataStreamer(async (device) =>
                 {
                     //https://github.com/WozSoftware/Woz.TEMPer/blob/dcd0b49d67ac39d10c3759519050915816c2cd93/Woz.TEMPer/Sensors/TEMPerV14.cs#L15
@@ -42,9 +44,12 @@ namespace UnoCrossPlatform
 
                     var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
 
-#pragma warning disable CA1305 // Specify IFormatProvider
-                    TheTextBlock.Text = temperatureTimesOneHundred.ToString() + "°C";
-#pragma warning restore CA1305 // Specify IFormatProvider
+                    var temperatureCelsius = Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
+
+                    _ = DispatchingExtensions.RunOnDispatcher(() =>
+                    {
+                        TheTextBlock.Text = temperatureCelsius.ToString() + "°C";
+                    });
 
                 }).Start();
 #endif
@@ -55,3 +60,4 @@ namespace UnoCrossPlatform
 }
 #pragma warning restore CA2000 // Dispose objects before losing scope
 #pragma warning restore IDE0022 // Use expression body for methods
+#pragma warning restore CA1305 // Specify IFormatProvider
