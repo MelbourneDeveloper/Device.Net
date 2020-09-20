@@ -4,12 +4,14 @@ using System;
 using Device.Net;
 using Microsoft.Extensions.Logging;
 using Device.Net.Reactive;
+using System.Collections.Generic;
 
 #if WINDOWS_UWP
 using Hid.Net.UWP;
 #else
 using Android.Hardware.Usb;
 using Android.Content;
+using Usb.Net.Android;
 #endif
 
 #pragma warning disable CA2000 // Dispose objects before losing scope
@@ -40,13 +42,16 @@ namespace UnoCrossPlatform
                  _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
              });
 
+            var filterDeviceDefinitions = new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 } };
+
             var deviceDataStreamer =
-            new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 }
+            filterDeviceDefinitions
 #if WINDOWS_UWP
-                .CreateUwpHidDeviceFactory(loggerFactory).ToDeviceManager(loggerFactory)
+                .CreateUwpHidDeviceFactory(loggerFactory)
 #else
-                .CreateAndroidUsbDeviceFactory(UsbManager, AppContext, loggerFactory).ToDeviceManager(loggerFactory)
+                .CreateAndroidUsbDeviceFactory(loggerFactory, UsbManager, AppContext)
 #endif
+                .ToDeviceManager(loggerFactory)
                 .CreateDeviceDataStreamer(async (device) =>
                 {
                     var data = await device.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
