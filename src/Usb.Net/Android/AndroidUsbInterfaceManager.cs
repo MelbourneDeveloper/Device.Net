@@ -199,7 +199,24 @@ namespace Usb.Net.Android
             }
         }
 
-        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync() => Task.Run<ConnectedDeviceDefinitionBase>(() => { return AndroidUsbDeviceFactory.GetAndroidDeviceDefinition(_UsbDevice); });
+        public static ConnectedDeviceDefinition GetAndroidDeviceDefinition(usbDevice usbDevice)
+        {
+            if (usbDevice == null) throw new ArgumentNullException(nameof(usbDevice));
+
+            var deviceId = usbDevice.DeviceId.ToString(Helpers.ParsingCulture);
+
+            return new ConnectedDeviceDefinition(deviceId)
+            {
+                ProductName = usbDevice.ProductName,
+                Manufacturer = usbDevice.ManufacturerName,
+                SerialNumber = usbDevice.SerialNumber,
+                ProductId = (uint)usbDevice.ProductId,
+                VendorId = (uint)usbDevice.VendorId,
+                DeviceType = DeviceType.Usb
+            };
+        }
+
+        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync() => Task.Run<ConnectedDeviceDefinitionBase>(() => GetAndroidDeviceDefinition(_UsbDevice));
         #endregion
 
         #region Finalizer

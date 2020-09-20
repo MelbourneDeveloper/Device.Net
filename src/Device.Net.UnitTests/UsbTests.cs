@@ -16,10 +16,22 @@ namespace Device.Net.UnitTests
     public class UsbTests
     {
         #region Fields
+        private readonly ILoggerFactory _loggerFactory;
         private UsbDevice _UsbDevice;
         private const string deviceId = "test";
         private readonly byte[] testreadpacket = { 1, 2, 3 };
         #endregion
+
+#if !NET45
+        public UsbTests()
+        {
+            //Easier than mocking at this point...
+            _loggerFactory = LoggerFactory.Create((builder) =>
+            {
+                _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
+            });
+        }
+#endif
 
         #region Tests
         [TestMethod]
@@ -44,7 +56,8 @@ namespace Device.Net.UnitTests
         public async Task TestDeviceIdIsPersisted()
         {
             var deviceId = "asd";
-            var windowsUsbDevice = new WindowsUsbDevice(deviceId, new Mock<ILoggerFactory>().Object, 80, 80);
+            var mock = new Mock<ILoggerFactory>();
+            var windowsUsbDevice = new UsbDevice(deviceId, new WindowsUsbInterfaceManager(deviceId, mock.Object, 80, 80), mock.Object);
             Assert.AreEqual(deviceId, windowsUsbDevice.DeviceId);
         }
 #endif
@@ -67,7 +80,7 @@ namespace Device.Net.UnitTests
                 var logger = new Mock<ILoggerFactory>();
                 const string deviceId = "";
                 var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, logger.Object, null, null);
-                var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, null);
+                var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, _loggerFactory);
                 usbDevice.UsbInterfaceManager.WriteUsbInterface = new WindowsUsbInterface(null, null, 0, null, null);
             }
             catch (ValidationException vex)
@@ -87,7 +100,7 @@ namespace Device.Net.UnitTests
                 var logger = new Mock<ILoggerFactory>();
                 const string deviceId = "";
                 var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, logger.Object, null, null);
-                var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, null);
+                var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, _loggerFactory);
                 usbDevice.UsbInterfaceManager.ReadUsbInterface = new WindowsUsbInterface(null, null, 0, null, null);
             }
             catch (ValidationException vex)
@@ -120,12 +133,11 @@ namespace Device.Net.UnitTests
 
         #region Helpers
 #if !WINDOWS_UWP
-        private static UsbDevice CreateUsbDeviceWithInterface()
+        private UsbDevice CreateUsbDeviceWithInterface()
         {
-            var logger = new Mock<ILoggerFactory>();
             const string deviceId = "";
-            var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, logger.Object, null, null);
-            var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, null);
+            var usbInterfaceManager = new WindowsUsbInterfaceManager(deviceId, _loggerFactory, null, null);
+            var usbDevice = new UsbDevice(deviceId, usbInterfaceManager, _loggerFactory);
             var windowsUsbInterface = new WindowsUsbInterface(null, null, 0, null, null);
             usbDevice.UsbInterfaceManager.UsbInterfaces.Add(windowsUsbInterface);
             return usbDevice;
@@ -149,7 +161,7 @@ namespace Device.Net.UnitTests
             //TODO: Probably shouldn't be relying on this method
             usbInterfaceManager.GetConnectedDeviceDefinitionAsync().ReturnsForAnyArgs(new ConnectedDeviceDefinition(deviceId) { });
 
-            _UsbDevice = new UsbDevice(deviceId, usbInterfaceManager, Substitute.For<ILogger>());
+            _UsbDevice = new UsbDevice(deviceId, usbInterfaceManager, _loggerFactory);
 
             await _UsbDevice.InitializeAsync();
         }

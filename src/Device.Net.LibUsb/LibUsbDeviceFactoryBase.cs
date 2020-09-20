@@ -59,7 +59,9 @@ namespace Device.Net.LibUsb
 #pragma warning restore CA2208 // Instantiate argument exceptions correctly
 
             var usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value, (int)deviceDefinition.ProductId.Value);
+#pragma warning disable CA2000 // Dispose objects before losing scope
             var usbDevice = UsbDevice.OpenUsbDevice(usbDeviceFinder);
+#pragma warning restore CA2000 // Dispose objects before losing scope
             return usbDevice != null ? new LibUsbDevice(usbDevice, 3000, LoggerFactory.CreateLogger<LibUsbDevice>()) : null;
         }
         #endregion

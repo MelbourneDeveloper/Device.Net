@@ -7,51 +7,37 @@ using System.Threading.Tasks;
 
 namespace Device.Net.Windows
 {
-    /// <summary>
-    /// TODO: Merge this factory class with other factory classes. I.e. create a DeviceFactoryBase class
-    /// </summary>
-    public abstract class WindowsDeviceFactoryBase
+    public delegate Task<bool> IsMatch(ConnectedDeviceDefinition connectedDeviceDefinition);
+
+    public class WindowsDeviceEnumerator
     {
-        #region Protected Properties
-        protected ILogger Logger { get; }
-        protected ILoggerFactory LoggerFactory { get; }
-        #endregion
+        private readonly ILogger Logger;
+        private readonly Guid _classGuid;
+        private readonly GetDeviceDefinition _getDeviceDefinition;
+        private readonly IsMatch _isMatch;
 
-        #region Public Abstract Properties
-        public abstract DeviceType DeviceType { get; }
-        #endregion
-
-        #region Protected Abstract Methods
-        protected abstract ConnectedDeviceDefinition GetDeviceDefinition(string deviceId);
-        protected abstract Guid GetClassGuid();
-        #endregion
-
-        #region Constructor
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="loggerFactory">The factory for creating new loggers for each device</param>
-        /// <param name="logger">The logger that this base class will use. The generic type should come from the inheriting class</param>
-        /// 
-        protected WindowsDeviceFactoryBase(
-            ILoggerFactory loggerFactory,
-            ILogger logger)
+        public WindowsDeviceEnumerator(
+            ILogger logger,
+            Guid classGuid,
+            GetDeviceDefinition getDeviceDefinition,
+            IsMatch isMatch
+            )
         {
-            LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             Logger = logger;
+            _classGuid = classGuid;
+            _getDeviceDefinition = getDeviceDefinition;
+            _isMatch = isMatch;
         }
-        #endregion
 
-        #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition filterDeviceDefinition)
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
-            return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(() =>
+            return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(async () =>
             {
                 IDisposable loggerScope = null;
 
                 try
                 {
-                    loggerScope = Logger?.BeginScope("Filter Device Definition: {filterDeviceDefinition}", new object[] { filterDeviceDefinition?.ToString() });
+                    Logger?.BeginScope("Calling " + nameof(GetConnectedDeviceDefinitionsAsync));
 
                     var deviceDefinitions = new Collection<ConnectedDeviceDefinition>();
                     var spDeviceInterfaceData = new SpDeviceInterfaceData();
@@ -59,26 +45,18 @@ namespace Device.Net.Windows
                     var spDeviceInterfaceDetailData = new SpDeviceInterfaceDetailData();
                     spDeviceInterfaceData.CbSize = (uint)Marshal.SizeOf(spDeviceInterfaceData);
                     spDeviceInfoData.CbSize = (uint)Marshal.SizeOf(spDeviceInfoData);
-                    string productIdHex = null;
-                    string vendorHex = null;
 
-                    var guidString = GetClassGuid().ToString();
-                    var copyOfClassGuid = new Guid(guidString);
                     const int flags = APICalls.DigcfDeviceinterface | APICalls.DigcfPresent;
 
-                    Logger?.LogDebug("About to call {call} for class Guid {guidString}. Flags: {flags}", nameof(APICalls.SetupDiGetClassDevs), guidString, flags);
+                    var copyOfClassGuid = new Guid(_classGuid.ToString());
+
+                    Logger?.LogDebug("About to call {call} for class Guid {guidString}. Flags: {flags}", nameof(APICalls.SetupDiGetClassDevs), _classGuid.ToString(), flags);
 
                     var devicesHandle = APICalls.SetupDiGetClassDevs(ref copyOfClassGuid, IntPtr.Zero, IntPtr.Zero, flags);
 
                     spDeviceInterfaceDetailData.CbSize = IntPtr.Size == 8 ? 8 : 4 + Marshal.SystemDefaultCharSize;
 
                     var i = -1;
-
-                    if (filterDeviceDefinition != null)
-                    {
-                        if (filterDeviceDefinition.ProductId.HasValue) productIdHex = Helpers.GetHex(filterDeviceDefinition.ProductId);
-                        if (filterDeviceDefinition.VendorId.HasValue) vendorHex = Helpers.GetHex(filterDeviceDefinition.VendorId);
-                    }
 
                     while (true)
                     {
@@ -121,14 +99,7 @@ namespace Device.Net.Windows
                                 }
                             }
 
-                            //Note this is a bit nasty but we can filter Vid and Pid this way I think...
-                            if (filterDeviceDefinition != null)
-                            {
-                                if (filterDeviceDefinition.VendorId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(vendorHex)) continue;
-                                if (filterDeviceDefinition.ProductId.HasValue && !spDeviceInterfaceDetailData.DevicePath.ContainsIgnoreCase(productIdHex)) continue;
-                            }
-
-                            var connectedDeviceDefinition = GetDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
+                            var connectedDeviceDefinition = _getDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
 
                             if (connectedDeviceDefinition == null)
                             {
@@ -136,7 +107,7 @@ namespace Device.Net.Windows
                                 continue;
                             }
 
-                            if (!DeviceManager.IsDefinitionMatch(filterDeviceDefinition, connectedDeviceDefinition)) continue;
+                            if (!await _isMatch(connectedDeviceDefinition)) continue;
 
                             deviceDefinitions.Add(connectedDeviceDefinition);
                         }
@@ -155,7 +126,7 @@ namespace Device.Net.Windows
                 }
                 catch (Exception ex)
                 {
-                    Logger?.LogError(ex, "Error calling " + nameof(GetConnectedDeviceDefinitionsAsync) + " region:{region}", new object[] { nameof(WindowsDeviceFactoryBase) });
+                    Logger?.LogError(ex, "Error calling " + nameof(GetConnectedDeviceDefinitionsAsync));
                     throw;
                 }
                 finally
@@ -164,6 +135,5 @@ namespace Device.Net.Windows
                 }
             });
         }
-        #endregion
     }
 }

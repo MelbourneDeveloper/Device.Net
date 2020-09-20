@@ -13,6 +13,7 @@ namespace Device.Net
 
         #region Fields
         private readonly ILoggerFactory _loggerFactory;
+        private readonly ILogger _logger;
         #endregion
 
         #region Public Properties
@@ -24,27 +25,35 @@ namespace Device.Net
         #region Constructor
         public DeviceManager(ILoggerFactory loggerFactory)
         {
-            _loggerFactory = loggerFactory;
+#if NET45
+            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+#else
+            _loggerFactory = loggerFactory ?? new DummyLoggerFactory();
+#endif
+            _logger = loggerFactory.CreateLogger<DeviceManager>();
         }
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
             if (DeviceFactories.Count == 0) throw new DeviceFactoriesNotRegisteredException();
 
             var retVal = new List<ConnectedDeviceDefinition>();
+
             foreach (var deviceFactory in DeviceFactories)
             {
-                var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitionsAsync(deviceDefinition);
-
-                foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
+                try
                 {
-                    //Don't add the same device twice
-                    //Note: this probably won't cause issues where there is no DeviceId, but funny behaviour is probably going on when there isn't anyway...
-                    if (retVal.Select(d => d.DeviceId).Contains(connectedDeviceDefinition.DeviceId)) continue;
+                    //TODO: Do this in parallel?
+                    var factoryResults = await deviceFactory.GetConnectedDeviceDefinitionsAsync();
+                    retVal.AddRange(factoryResults);
 
-                    retVal.Add(connectedDeviceDefinition);
+                    _logger.LogDebug("Called " + nameof(GetConnectedDeviceDefinitionsAsync) + " on " + deviceFactory.GetType().Name);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Error calling " + nameof(GetConnectedDeviceDefinitionsAsync));
                 }
             }
 
@@ -52,7 +61,7 @@ namespace Device.Net
         }
 
         //TODO: Duplicate code here...
-        public IDevice GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition)
+        public Task<IDevice> GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition)
         {
             if (connectedDeviceDefinition == null) throw new ArgumentNullException(nameof(connectedDeviceDefinition));
 
@@ -63,40 +72,10 @@ namespace Device.Net
 
             throw new DeviceException(Messages.ErrorMessageCouldntGetDevice);
         }
-
-        public async Task<List<IDevice>> GetDevicesAsync(IList<FilterDeviceDefinition> deviceDefinitions)
-        {
-            if (deviceDefinitions == null) throw new ArgumentNullException(nameof(deviceDefinitions), $"{nameof(GetConnectedDeviceDefinitionsAsync)} can be used to enumerate all devices without specifying definitions.");
-
-            var retVal = new List<IDevice>();
-
-            foreach (var deviceFactory in DeviceFactories)
-            {
-                foreach (var filterDeviceDefinition in deviceDefinitions)
-                {
-                    if (filterDeviceDefinition.DeviceType.HasValue && (deviceFactory.DeviceType != filterDeviceDefinition.DeviceType)) continue;
-
-                    var connectedDeviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitionsAsync(filterDeviceDefinition);
-                    retVal.AddRange
-                    (
-                        connectedDeviceDefinitions.Select
-                        (
-                            connectedDeviceDefinition => deviceFactory.GetDevice(connectedDeviceDefinition)
-                        ).
-                        Where
-                        (
-                            device => device != null
-                        )
-                    );
-                }
-            }
-
-            return retVal;
-        }
         #endregion
 
         #region Public Static Methods
-        public static bool IsDefinitionMatch(FilterDeviceDefinition filterDevice, ConnectedDeviceDefinition actualDevice)
+        public static bool IsDefinitionMatch(FilterDeviceDefinition filterDevice, ConnectedDeviceDefinition actualDevice, DeviceType deviceType)
         {
             if (actualDevice == null) throw new ArgumentNullException(nameof(actualDevice));
 
@@ -104,7 +83,7 @@ namespace Device.Net
 
             var vendorIdPasses = !filterDevice.VendorId.HasValue || filterDevice.VendorId == actualDevice.VendorId;
             var productIdPasses = !filterDevice.ProductId.HasValue || filterDevice.ProductId == actualDevice.ProductId;
-            var deviceTypePasses = !filterDevice.DeviceType.HasValue || filterDevice.DeviceType == actualDevice.DeviceType;
+            var deviceTypePasses = !actualDevice.DeviceType.HasValue || actualDevice.DeviceType == deviceType;
             var usagePagePasses = !filterDevice.UsagePage.HasValue || filterDevice.UsagePage == actualDevice.UsagePage;
 
             var returnValue =

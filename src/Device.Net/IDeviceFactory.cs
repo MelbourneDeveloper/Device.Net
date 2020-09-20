@@ -5,8 +5,8 @@ namespace Device.Net
 {
     public interface IDeviceFactory
     {
-        Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition);
-        IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition);
+        Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync();
+        Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition);
         DeviceType DeviceType { get; }
     }
 }

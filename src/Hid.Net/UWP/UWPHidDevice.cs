@@ -23,7 +23,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Properties
-        public bool DataHasExtraByte { get; set; } = true;
+        public bool DataHasExtraByte { get; set; }
         public byte? DefaultReportId { get; }
         #endregion
 
@@ -51,8 +51,9 @@ namespace Hid.Net.UWP
         {
         }
 
-        public UWPHidDevice(string deviceId, ILoggerFactory loggerFactory) : base(deviceId, loggerFactory, loggerFactory.CreateLogger<UWPHidDevice>())
+        public UWPHidDevice(string deviceId, ILoggerFactory loggerFactory, byte? defaultReportId = null) : base(deviceId, loggerFactory, loggerFactory.CreateLogger<UWPHidDevice>())
         {
+            DefaultReportId = defaultReportId;
         }
         #endregion
 

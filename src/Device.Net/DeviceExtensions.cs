@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 
 namespace Device.Net
 {
@@ -18,5 +19,8 @@ namespace Device.Net
 
             deviceManager.DeviceFactories.Add(newDeviceFactory);
         }
+
+        public static IDeviceManager ToDeviceManager(this IDeviceFactory deviceFactory, ILoggerFactory loggerFactory) => new DeviceManager(loggerFactory) { DeviceFactories = { deviceFactory } };
+
     }
 }

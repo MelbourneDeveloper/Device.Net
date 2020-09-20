@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace Device.Net.Reactive
 {
-    public delegate IDevice GetDevice(string deviceId);
     public delegate Task<IReadOnlyList<ConnectedDeviceDefinition>> GetConnectedDevicesAsync();
 
     /// <summary>
@@ -196,7 +195,7 @@ namespace Device.Net.Reactive
                     return;
                 }
 
-                var device = _getDevice(connectedDevice.DeviceId);
+                var device = await _getDevice(connectedDevice.DeviceId);
                 await _initializeDeviceAction(device);
 
                 _logger.LogInformation("Device initialized {deviceId}", connectedDevice.DeviceId);

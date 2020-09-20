@@ -25,7 +25,13 @@ namespace Usb.Net
         /// <summary>
         /// TODO: Remove the tracer from the constructor. This will get passed to the handler so there's no need for it on the device itself.
         /// </summary>
-        public UsbDevice(string deviceId, IUsbInterfaceManager usbInterfaceManager, ILogger logger) : base(deviceId, logger)
+        public UsbDevice(
+            string deviceId,
+            IUsbInterfaceManager usbInterfaceManager,
+            ILoggerFactory loggerFactory) : base(
+                deviceId,
+                loggerFactory,
+                loggerFactory.CreateLogger<UsbDevice>())
         {
             UsbInterfaceManager = usbInterfaceManager ?? throw new ArgumentNullException(nameof(usbInterfaceManager));
         }

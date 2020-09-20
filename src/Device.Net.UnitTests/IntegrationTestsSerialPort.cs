@@ -60,7 +60,7 @@ namespace Device.Net.UnitTests
         {
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
             Assert.IsTrue(connectedDeviceDefinitions.Count > 1);
-            using var serialPortDevice = windowsSerialPortDeviceFactory.GetDevice(connectedDeviceDefinitions[1]);
+            using var serialPortDevice = await windowsSerialPortDeviceFactory.GetDevice(connectedDeviceDefinitions[1]);
             await serialPortDevice.InitializeAsync();
             Assert.IsTrue(serialPortDevice.IsInitialized);
         }
@@ -73,14 +73,14 @@ namespace Device.Net.UnitTests
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
             var deviceManager = new DeviceManager(_loggerFactoryMock.Object);
             deviceManager.DeviceFactories.Add(windowsSerialPortDeviceFactory);
-            var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.SerialPort } });
+            var devices = await deviceManager.GetConnectedDeviceDefinitionsAsync();
 
             foreach (var device in devices)
             {
-                device.Dispose();
+                Assert.AreEqual(DeviceType.SerialPort, device.DeviceType);
             }
 
-            Assert.IsTrue(devices.Count > 1);
+            Assert.IsTrue(devices.Count() > 1);
         }
 
         [TestMethod]
@@ -88,18 +88,9 @@ namespace Device.Net.UnitTests
         {
             var deviceManager = new DeviceManager(_loggerFactoryMock.Object);
             deviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(_loggerFactory));
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-            var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
+            var devices = await deviceManager.GetConnectedDeviceDefinitionsAsync();
 
-            var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.SerialPort } });
-
-            foreach (var device in devices)
-            {
-                device.Dispose();
-            }
-
-            Assert.IsTrue(devices.Count > 1);
+            Assert.IsTrue(devices.Count() > 1);
         }
 
         [TestMethod]
@@ -118,7 +109,7 @@ namespace Device.Net.UnitTests
                 windowsSerialPortDeviceFactory = new WindowsSerialPortDeviceFactory(_loggerFactory);
             }
 
-            return (await windowsSerialPortDeviceFactory.GetConnectedDeviceDefinitionsAsync(null)).ToList();
+            return (await windowsSerialPortDeviceFactory.GetConnectedDeviceDefinitionsAsync()).ToList();
         }
 
         private static async Task ReadAsync()
