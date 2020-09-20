@@ -8,6 +8,6 @@
     mc:Ignorable="d">
 
 
-    <TextBlock Text="32.43°C" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="50" FontFamily="Roboto" />
+    <TextBlock x:Name="TheTextBlock" Text="32.43°C" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="50" FontFamily="Roboto" />
 
 </Page>

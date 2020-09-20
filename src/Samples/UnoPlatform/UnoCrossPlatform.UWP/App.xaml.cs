@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using RestClient.Net;
-using System;
-using System.Net.Http;
-using Uno.Extensions;
+﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
