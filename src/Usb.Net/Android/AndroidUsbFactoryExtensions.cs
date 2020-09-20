@@ -9,16 +9,39 @@ namespace Usb.Net.Android
 {
     public static class AndroidUsbFactoryExtensions
     {
+
         public static IDeviceFactory CreateAndroidUsbDeviceFactory(
-            this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
-            ILoggerFactory loggerFactory,
-            UsbManager usbManager,
-            Context context,
-            GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-            GetUsbInterfaceManager getUsbInterfaceManager = null,
-            ushort? readBufferSize = null,
-            ushort? writeBufferSize = null
-            )
+        FilterDeviceDefinition filterDeviceDefinition,
+        ILoggerFactory loggerFactory,
+        UsbManager usbManager,
+        Context context,
+        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+        GetUsbInterfaceManager getUsbInterfaceManager = null,
+        ushort? readBufferSize = null,
+        ushort? writeBufferSize = null
+        )
+        {
+            return CreateAndroidUsbDeviceFactory(
+                new List<FilterDeviceDefinition> { filterDeviceDefinition },
+                loggerFactory,
+                usbManager,
+                context,
+                getConnectedDeviceDefinitionsAsync,
+                getUsbInterfaceManager,
+                readBufferSize,
+                writeBufferSize);
+        }
+
+        public static IDeviceFactory CreateAndroidUsbDeviceFactory(
+        this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
+        ILoggerFactory loggerFactory,
+        UsbManager usbManager,
+        Context context,
+        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+        GetUsbInterfaceManager getUsbInterfaceManager = null,
+        ushort? readBufferSize = null,
+        ushort? writeBufferSize = null
+        )
         {
             if (getConnectedDeviceDefinitionsAsync == null)
             {

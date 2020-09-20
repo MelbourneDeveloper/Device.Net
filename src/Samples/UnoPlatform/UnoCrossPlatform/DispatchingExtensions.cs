@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.Core;
 using Windows.UI.Core;
+
+#if NETFX_CORE
+using Windows.ApplicationModel.Core;
+#endif 
 
 namespace UnoCrossPlatform
 {
@@ -13,6 +16,5 @@ namespace UnoCrossPlatform
 #else
             await CoreDispatcher.Main.RunAsync(CoreDispatcherPriority.Normal, () => action());
 #endif
-
     }
 }

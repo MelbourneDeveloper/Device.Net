@@ -1,12 +1,15 @@
 ﻿using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using System;
-
-#if WINDOWS_UWP
-using Hid.Net.UWP;
 using Device.Net;
 using Microsoft.Extensions.Logging;
 using Device.Net.Reactive;
+
+#if WINDOWS_UWP
+using Hid.Net.UWP;
+#else
+using Android.Hardware.Usb;
+using Android.Content;
 #endif
 
 #pragma warning disable CA2000 // Dispose objects before losing scope
@@ -20,6 +23,11 @@ namespace UnoCrossPlatform
     /// </summary>
     public sealed partial class MainPage : Page
     {
+#if !WINDOWS_UWP
+        public static UsbManager? UsbManager { get; set; }
+        public static Context? AppContext { get; set; }
+#endif
+
         public MainPage()
         {
             InitializeComponent();
@@ -27,7 +35,6 @@ namespace UnoCrossPlatform
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-#if WINDOWS_UWP
             var loggerFactory = LoggerFactory.Create((builder) =>
              {
                  _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
@@ -35,11 +42,13 @@ namespace UnoCrossPlatform
 
             var deviceDataStreamer =
             new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 }
+#if WINDOWS_UWP
                 .CreateUwpHidDeviceFactory(loggerFactory).ToDeviceManager(loggerFactory)
+#else
+                .CreateAndroidUsbDeviceFactory(UsbManager, AppContext, loggerFactory).ToDeviceManager(loggerFactory)
+#endif
                 .CreateDeviceDataStreamer(async (device) =>
                 {
-                    //https://github.com/WozSoftware/Woz.TEMPer/blob/dcd0b49d67ac39d10c3759519050915816c2cd93/Woz.TEMPer/Sensors/TEMPerV14.cs#L15
-
                     var data = await device.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
 
                     var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
@@ -52,7 +61,6 @@ namespace UnoCrossPlatform
                     });
 
                 }).Start();
-#endif
 
             base.OnNavigatedTo(e);
         }
