@@ -3,7 +3,6 @@ using RestClient.Net;
 using System;
 using System.Net.Http;
 using Uno.Extensions;
-using UnoCrossPlatform.ViewModels;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -51,6 +50,7 @@ namespace UnoCrossPlatform
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
+#pragma warning disable Uno0001 // Uno type or member is not implemented
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: Load state from previously suspended application
@@ -64,24 +64,13 @@ namespace UnoCrossPlatform
             {
                 if (rootFrame.Content == null)
                 {
-                    // When the navigation stack isn't restored navigate to the first page,
-                    // configuring the new page by passing required information as a navigation
-                    // parameter
-                    var viewModel = new MainPageViewModel(new Client(
-                        baseUri: new Uri("https://cat-fact.herokuapp.com"),
-#if WASM
-                        createHttpClient: (n) => new HttpClient(new WasmHttpHandler()),
-#else
-                        createHttpClient: (n) => new HttpClient(),
-#endif
-                        logger: LogExtensionPoint.AmbientLoggerFactory.CreateLogger<MainPageViewModel>()),
-                        LogExtensionPoint.AmbientLoggerFactory);
 
-                    _ = rootFrame.Navigate(typeof(MainPage), viewModel);
+                    _ = rootFrame.Navigate(typeof(MainPage));
                 }
                 // Ensure the current window is active
                 window.Current.Activate();
             }
+#pragma warning restore Uno0001 // Uno type or member is not implemented
         }
 
         /// <summary>
