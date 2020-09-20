@@ -31,7 +31,7 @@ namespace UnoCrossPlatform
                  _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
              });
 
-            using var deviceDataStreamer =
+            var deviceDataStreamer =
             new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 }
                 .CreateUwpUsbDeviceFactory(loggerFactory).ToDeviceManager(loggerFactory)
                 .CreateDeviceDataStreamer(async (device) =>
@@ -42,6 +42,9 @@ namespace UnoCrossPlatform
 
                     var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
 
+#pragma warning disable CA1305 // Specify IFormatProvider
+                    TheTextBlock.Text = temperatureTimesOneHundred.ToString() + "°C";
+#pragma warning restore CA1305 // Specify IFormatProvider
 
                 }).Start();
 #endif
