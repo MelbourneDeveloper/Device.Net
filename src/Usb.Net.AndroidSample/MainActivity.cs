@@ -79,8 +79,10 @@ namespace Usb.Net.AndroidSample
 
                 if (!(GetSystemService(UsbService) is UsbManager usbManager)) throw new Exception("UsbManager is null");
 
+                var factory = TrezorExample.UsbDeviceDefinitions.CreateAndroidUsbDeviceFactory(_LoggerFactory, usbManager, base.ApplicationContext);
+
                 //Register the factory for creating Usb devices. This only needs to be done once.
-                _DeviceManager.RegisterDeviceFactory(new AndroidUsbDeviceFactory(usbManager, base.ApplicationContext, _LoggerFactory));
+                _DeviceManager.RegisterDeviceFactory(factory);
 
                 _TrezorExample.TrezorDisconnected += TrezorExample_TrezorDisconnected;
                 _TrezorExample.TrezorInitialized += TrezorExample_TrezorInitialized;
