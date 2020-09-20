@@ -26,23 +26,26 @@ namespace UnoCrossPlatform
     public sealed partial class MainPage : Page
     {
 #if !WINDOWS_UWP
-        public static UsbManager? UsbManager { get; set; }
-        public static Context? AppContext { get; set; }
+        public static UsbManager UsbManager { get; set; }
+        public static Context AppContext { get; set; }
 #endif
 
         public MainPage()
         {
             InitializeComponent();
+            Loaded += MainPage_Loaded;
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private void MainPage_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            var loggerFactory = LoggerFactory.Create((builder) =>
-             {
-                 _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
-             });
+            Loaded -= MainPage_Loaded;
 
-            var filterDeviceDefinitions = new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 } };
+            var loggerFactory = LoggerFactory.Create((builder) =>
+            {
+                _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
+            });
+
+            var filterDeviceDefinitions = new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = 16701, ProductId = 8455, UsagePage = 65280 } };
 
             var deviceDataStreamer =
             filterDeviceDefinitions
@@ -66,8 +69,6 @@ namespace UnoCrossPlatform
                     });
 
                 }).Start();
-
-            base.OnNavigatedTo(e);
         }
     }
 }

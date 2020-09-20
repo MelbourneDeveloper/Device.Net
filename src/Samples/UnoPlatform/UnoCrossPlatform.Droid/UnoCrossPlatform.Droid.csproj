@@ -22,7 +22,6 @@
     <AndroidUseIntermediateDesignerFile>True</AndroidUseIntermediateDesignerFile>
     <ResourcesDirectory>..\UnoCrossPlatform.Shared\Strings</ResourcesDirectory>
     <LangVersion>8.0</LangVersion>
-    <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -98,6 +97,9 @@
     <Content Include="Assets\SplashScreen.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <AndroidResource Include="Resources\xml\device_filter.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <Page Include="..\UnoCrossPlatform.UWP\App.xaml">
