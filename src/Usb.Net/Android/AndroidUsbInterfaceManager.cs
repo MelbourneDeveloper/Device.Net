@@ -31,8 +31,14 @@ namespace Usb.Net.Android
         #region Public Properties
         public UsbManager UsbManager { get; }
         public Context AndroidContext { get; private set; }
-        public ushort WriteBufferSize => WriteBufferSizeProtected ?? WriteUsbInterface.ReadBufferSize;
-        public ushort ReadBufferSize => ReadBufferSizeProtected ?? ReadUsbInterface.ReadBufferSize;
+        public ushort WriteBufferSize => WriteBufferSizeProtected == null && WriteUsbInterface == null
+                    ? throw new InvalidOperationException("WriteBufferSize was not specified, and no write usb interface has been selected")
+                    : WriteBufferSizeProtected ?? WriteUsbInterface.ReadBufferSize;
+
+        public ushort ReadBufferSize => ReadBufferSizeProtected == null && ReadUsbInterface == null
+                    ? throw new InvalidOperationException("ReadBufferSize was not specified, and no read usb interface has been selected")
+                    : ReadBufferSizeProtected ?? ReadUsbInterface.ReadBufferSize;
+
         public int DeviceNumberId { get; }
         #endregion
 
@@ -163,7 +169,7 @@ namespace Usb.Net.Android
                     //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
                     var usbInterface = _UsbDevice.GetInterface(x);
 
-                    var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, LoggerFactory.CreateLogger<AndroidUsbInterface>(), ReadBufferSize, WriteBufferSize);
+                    var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, LoggerFactory.CreateLogger<AndroidUsbInterface>(), ReadBufferSizeProtected, WriteBufferSizeProtected);
 
                     Logger.LogInformation("Interface found. Name: {name} Id: {id} Endpoint Count: {endpointCount} Interface Class: {interfaceclass} Interface Subclass: {interfacesubclass}", usbInterface.Name, usbInterface.Id, usbInterface.EndpointCount, usbInterface.InterfaceClass, usbInterface.InterfaceSubclass);
 
