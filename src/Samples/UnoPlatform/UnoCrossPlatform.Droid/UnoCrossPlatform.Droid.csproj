@@ -94,9 +94,6 @@
     <AndroidResource Include="Resources\values\Styles.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\SplashScreen.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <AndroidResource Include="Resources\xml\device_filter.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
     </AndroidResource>
