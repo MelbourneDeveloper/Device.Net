@@ -8,6 +8,7 @@ using Device.Net.Exceptions;
 using Hid.Net.Windows;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.Win32.SafeHandles;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Usb.Net;
+using Usb.Net.Windows;
 
 namespace Device.Net.UnitTests
 {
@@ -209,9 +211,11 @@ namespace Device.Net.UnitTests
         //Check that we can construct objects without loggers
         [TestMethod]
         public void TestNullLoggers()
-        {           
+        {
             new UsbDevice("asd", new Mock<IUsbInterfaceManager>().Object);
             new WindowsHidDevice("asd");
+            new WindowsUsbInterface(default, 0 );
+            new WindowsUsbInterfaceManager("asd");
         }
 
         [TestMethod]

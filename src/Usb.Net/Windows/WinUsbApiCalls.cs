@@ -1,5 +1,6 @@
 ﻿using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
@@ -63,6 +64,8 @@ namespace Usb.Net.Windows
         #region Public Methods
         public static string GetDescriptor(SafeFileHandle defaultInterfaceHandle, byte index, string errorMessage, ILogger logger)
         {
+            logger = logger ?? NullLogger.Instance;
+
             var buffer = new byte[256];
             var isSuccess = WinUsb_GetDescriptor(defaultInterfaceHandle, USB_STRING_DESCRIPTOR_TYPE, index, EnglishLanguageID, buffer, (uint)buffer.Length, out var transfered);
             if (WindowsDeviceBase.HandleError(isSuccess, errorMessage, false) != 0)

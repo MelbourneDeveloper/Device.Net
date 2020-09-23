@@ -24,7 +24,7 @@ namespace Usb.Net
         #endregion
 
         #region Constructor
-        public UsbInterfaceManager(ILoggerFactory loggerFactory)
+        public UsbInterfaceManager(ILoggerFactory loggerFactory = null)
         {
             LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             Logger = LoggerFactory.CreateLogger<UsbInterfaceManager>();
