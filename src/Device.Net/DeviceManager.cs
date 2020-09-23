@@ -1,5 +1,6 @@
 ﻿using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,11 +26,7 @@ namespace Device.Net
         #region Constructor
         public DeviceManager(ILoggerFactory loggerFactory)
         {
-#if NET45
-            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-#else
-            _loggerFactory = loggerFactory ?? new DummyLoggerFactory();
-#endif
+            _loggerFactory = loggerFactory ?? new NullLoggerFactory();
             _logger = loggerFactory.CreateLogger<DeviceManager>();
         }
         #endregion

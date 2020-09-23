@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,8 +33,8 @@ namespace Device.Net
         protected DeviceBase(string deviceId, ILoggerFactory loggerFactory, ILogger logger)
         {
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
-            Logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+            Logger = logger ?? NullLogger.Instance;
+            LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
         }
         #endregion
 
