@@ -1,5 +1,4 @@
 ﻿using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 using System;
 using Device.Net;
 using Microsoft.Extensions.Logging;
@@ -52,20 +51,33 @@ namespace UnoCrossPlatform
 #if WINDOWS_UWP
                 .CreateUwpHidDeviceFactory(loggerFactory)
 #else
-                .CreateAndroidUsbDeviceFactory(loggerFactory, UsbManager, AppContext, writeBufferSize: 9)
+                .CreateAndroidUsbDeviceFactory(loggerFactory, UsbManager, AppContext, writeBufferSize: 9, readBufferSize: 9)
 #endif
                 .ToDeviceManager(loggerFactory)
                 .CreateDeviceDataStreamer(async (device) =>
                 {
-                    var data = await device.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
+                    string display = null;
 
-                    var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
+                    try
+                    {
+                        var data = await device.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
 
-                    var temperatureCelsius = Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
+                        var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
+
+                        var temperatureCelsius = Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
+
+                        display = temperatureCelsius.ToString() + "°C";
+                    }
+                    catch
+                    {
+                        display = "Bad read";
+                    }
+
+                    if (display == null) return;
 
                     _ = DispatchingExtensions.RunOnDispatcher(() =>
                     {
-                        TheTextBlock.Text = temperatureCelsius.ToString() + "°C";
+                        TheTextBlock.Text = display;
                     });
 
                 }).Start();
