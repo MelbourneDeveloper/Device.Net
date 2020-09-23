@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 #if NETSTANDARD
 using System.Runtime.InteropServices;
 using Device.Net.Exceptions;
@@ -25,7 +26,7 @@ namespace SerialPort.Net.Windows
         #region Constructor
         public WindowsSerialPortDeviceFactory(ILoggerFactory loggerFactory)
         {
-            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
 
             //Note this loggerfactory may get shared with other factories of this type
             _logger = _loggerFactory.CreateLogger<WindowsSerialPortDeviceFactory>();
@@ -70,7 +71,7 @@ namespace SerialPort.Net.Windows
             }
             catch (Exception ex)
             {
-                _logger?.LogError(ex, ex.Message);
+                _logger.LogError(ex, ex.Message);
             }
 
             if (!registryAvailable)
