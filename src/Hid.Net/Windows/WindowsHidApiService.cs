@@ -2,6 +2,7 @@
 using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
@@ -21,7 +22,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidApiService(ILoggerFactory loggerFactory) : base(loggerFactory?.CreateLogger<WindowsHidApiService>())
+        public WindowsHidApiService(ILoggerFactory loggerFactory) : base((loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidApiService>())
         {
         }
         #endregion
@@ -140,7 +141,7 @@ namespace Hid.Net.Windows
                 var isSuccess = getString(safeFileHandle, pointerToBuffer, 126);
                 if (!isSuccess)
                 {
-                    logger?.LogWarning(Messages.ErrorMessagesCouldntGetHidString, "", nameof(GetHidString), callMemberName);
+                    logger.LogWarning(Messages.ErrorMessagesCouldntGetHidString, "", nameof(GetHidString), callMemberName);
                 }
                 var text = Marshal.PtrToStringAuto(pointerToBuffer);
                 Marshal.FreeHGlobal(pointerToBuffer);
@@ -148,7 +149,7 @@ namespace Hid.Net.Windows
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, Messages.ErrorMessagesCouldntGetHidString, ex.Message, nameof(GetHidString), callMemberName);
+                logger.LogError(ex, Messages.ErrorMessagesCouldntGetHidString, ex.Message, nameof(GetHidString), callMemberName);
                 return null;
             }
             finally
