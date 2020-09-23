@@ -117,12 +117,15 @@ namespace Device.Net.UnitTests
                 actualCount++;
             });
 
+            _loggerMock.Setup(l => l.BeginScope(It.IsAny<It.IsAnyType>())).Returns(new Mock<IDisposable>().Object);
+
             var (hid, usb) = GetMockedFactories(isHidConnected, isUsbConnected, vid, pid);
 
 
             var deviceManager = new DeviceManager(_loggerFactory) { DeviceFactories = { hid.Object, usb.Object } };
 
             var connectedDeviceDefinition = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList().First();
+
 
 
             var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, _loggerFactory, _loggerMock.Object);
