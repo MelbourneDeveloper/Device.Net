@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace Device.Net.Reactive
             _processData = processData;
             _deviceManager = deviceManager;
             _interval = interval ?? new TimeSpan(0, 0, 1);
-            _logger = (loggerFactory ?? new DummyLoggerFactory()).CreateLogger<DeviceDataStreamer>();
+            _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<DeviceDataStreamer>();
         }
 
         public DeviceDataStreamer Start()

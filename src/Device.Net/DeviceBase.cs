@@ -58,20 +58,20 @@ namespace Device.Net
 
             try
             {
-                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call} Write Buffer Length: {writeBufferLength}", DeviceId, nameof(WriteAndReadAsync), writeBuffer.Length);
+                logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call} Write Buffer Length: {writeBufferLength}", DeviceId, nameof(WriteAndReadAsync), writeBuffer.Length);
                 await WriteAsync(writeBuffer, cancellationToken);
                 var retVal = await ReadAsync(cancellationToken);
-                Logger?.LogInformation(Messages.SuccessMessageWriteAndReadCalled);
+                Logger.LogInformation(Messages.SuccessMessageWriteAndReadCalled);
                 return retVal;
             }
             catch (Exception ex)
             {
-                Logger?.LogError(ex, Messages.ErrorMessageReadWrite);
+                Logger.LogError(ex, Messages.ErrorMessageReadWrite);
                 throw;
             }
             finally
             {
-                logScope?.Dispose();
+                logScope.Dispose();
                 _WriteAndReadLock.Release();
             }
         }
@@ -118,7 +118,7 @@ namespace Device.Net
 #pragma warning restore CA1031 
             {
                 //If anything goes wrong here, log it and move on. 
-                logger?.LogError(ex, "Error {errorMessage} Area: {area}", ex.Message, nameof(GetDeviceDefinitionFromWindowsDeviceId));
+                (logger ?? NullLogger.Instance).LogError(ex, "Error {errorMessage} Area: {area}", ex.Message, nameof(GetDeviceDefinitionFromWindowsDeviceId));
             }
 
             return new ConnectedDeviceDefinition(deviceId) { DeviceType = deviceType, VendorId = vid, ProductId = pid };

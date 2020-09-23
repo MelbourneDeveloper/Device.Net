@@ -2,6 +2,7 @@
 
 using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,7 +46,7 @@ namespace Device.Net
             int? pollMilliseconds,
             ILoggerFactory loggerFactory)
         {
-            _logger = loggerFactory?.CreateLogger<DeviceListener>();
+            _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<DeviceListener>();
 
             DeviceManager = deviceManager ?? throw new ArgumentNullException(nameof(deviceManager));
 
@@ -118,7 +119,7 @@ namespace Device.Net
 
                     if (device.IsInitialized) continue;
 
-                    _logger?.LogDebug("Attempting to initialize with DeviceId of {deviceId}", device.DeviceId);
+                    _logger.LogDebug("Attempting to initialize with DeviceId of {deviceId}", device.DeviceId);
 
                     //The device is not initialized so initialize it
                     await device.InitializeAsync();
@@ -126,7 +127,7 @@ namespace Device.Net
                     //Let listeners know a registered device was initialized
                     DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
 
-                    _logger?.LogDebug(Messages.InformationMessageDeviceConnected, device.DeviceId);
+                    _logger.LogDebug(Messages.InformationMessageDeviceConnected, device.DeviceId);
                 }
 
                 var removeDeviceIds = new List<string>();
@@ -149,7 +150,7 @@ namespace Device.Net
 
                     removeDeviceIds.Add(deviceId);
 
-                    _logger?.LogDebug(Messages.InformationMessageDeviceListenerDisconnected);
+                    _logger.LogDebug(Messages.InformationMessageDeviceListenerDisconnected);
                 }
 
                 foreach (var deviceId in removeDeviceIds)
@@ -157,7 +158,7 @@ namespace Device.Net
                     _CreatedDevicesByDefinition.Remove(deviceId);
                 }
 
-                _logger?.LogDebug(Messages.InformationMessageDeviceListenerPollingComplete);
+                _logger.LogDebug(Messages.InformationMessageDeviceListenerPollingComplete);
 
             }
 #pragma warning disable CA1031 // Do not catch general exception types
@@ -165,7 +166,7 @@ namespace Device.Net
 #pragma warning restore CA1031 // Do not catch general exception types
             {
                 //Log and move on
-                _logger?.LogError(ex, Messages.ErrorMessagePollingError);
+                _logger.LogError(ex, Messages.ErrorMessagePollingError);
 
                 //TODO: What else to do here?
             }
