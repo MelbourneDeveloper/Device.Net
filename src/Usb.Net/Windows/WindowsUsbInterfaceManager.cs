@@ -43,7 +43,7 @@ namespace Usb.Net.Windows
 
             try
             {
-                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(Initialize));
+                logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(Initialize));
 
                 Close();
 
@@ -63,7 +63,7 @@ namespace Usb.Net.Windows
                     if (errorCode > 0) throw new ApiException($"Device handle no good. Error code: {errorCode}");
                 }
 
-                Logger?.LogInformation(Messages.SuccessMessageGotWriteAndReadHandle);
+                Logger.LogInformation(Messages.SuccessMessageGotWriteAndReadHandle);
 
 #pragma warning disable CA2000 //We need to hold on to this handle
                 var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
@@ -115,12 +115,12 @@ namespace Usb.Net.Windows
             }
             catch (Exception ex)
             {
-                Logger?.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
+                Logger.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
                 throw;
             }
             finally
             {
-                logScope?.Dispose();
+                logScope.Dispose();
             }
         }
 
