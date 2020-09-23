@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,8 @@ namespace Usb.Net.Windows
         ushort? writeBufferSize = null
     )
         {
+            loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
+
             if (getConnectedDeviceDefinitionsAsync == null)
             {
                 var logger = loggerFactory.CreateLogger<WindowsDeviceEnumerator>();
