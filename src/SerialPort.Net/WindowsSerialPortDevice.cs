@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
@@ -47,7 +48,7 @@ namespace SerialPort.Net.Windows
             ILoggerFactory loggerFactory) : base(
                 deviceId,
                 loggerFactory,
-                loggerFactory.CreateLogger<WindowsSerialPortDevice>())
+                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsSerialPortDevice>())
         {
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
 

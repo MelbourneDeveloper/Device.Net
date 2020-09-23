@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -37,7 +38,7 @@ namespace Device.Net
             )
         {
             _getConnectedDevicesAsync = getConnectedDevicesAsync ?? throw new ArgumentNullException(nameof(getConnectedDevicesAsync));
-            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _logger = _loggerFactory.CreateLogger<DeviceFactory>();
             _getDevice = getDevice;
             DeviceType = deviceType;
