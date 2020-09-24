@@ -46,10 +46,10 @@ namespace Usb.Net.UWP
             if (getConnectedDeviceDefinitionsAsync == null)
             {
                 var uwpHidDeviceEnumerator = new UwpDeviceEnumerator(
-                    loggerFactory,
                     aqs,
                     DeviceType.Usb,
-                    async (d) => new ConnectionInfo { CanConnect = true });
+                    async (d) => new ConnectionInfo { CanConnect = true },
+                    loggerFactory);
 
                 getConnectedDeviceDefinitionsAsync = uwpHidDeviceEnumerator.GetConnectedDeviceDefinitionsAsync;
             }
@@ -65,7 +65,7 @@ namespace Usb.Net.UWP
                     writeBufferSize);
             }
 
-            return UsbDeviceFactoryExtensions.CreateUsbDeviceFactory(loggerFactory, getConnectedDeviceDefinitionsAsync, getUsbInterfaceManager);
+            return UsbDeviceFactoryExtensions.CreateUsbDeviceFactory(getConnectedDeviceDefinitionsAsync, getUsbInterfaceManager, loggerFactory);
         }
     }
 }

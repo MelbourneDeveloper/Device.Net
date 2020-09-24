@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +23,13 @@ namespace Device.Net.UWP
 
         #region Constructor
         public UwpDeviceEnumerator(
-            ILoggerFactory loggerFactory,
             string aqf,
             DeviceType deviceType,
-            TestConnection testConnection
-            )
+            TestConnection testConnection,
+            ILoggerFactory loggerFactory = null)
         {
-            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
-            _logger = loggerFactory.CreateLogger<UwpDeviceEnumerator>();
+            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
+            _logger = _loggerFactory.CreateLogger<UwpDeviceEnumerator>();
             aqsFilter = aqf;
             _deviceType = deviceType;
             _testConnection = testConnection;

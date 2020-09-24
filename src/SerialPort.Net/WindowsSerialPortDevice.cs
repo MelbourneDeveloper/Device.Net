@@ -45,13 +45,11 @@ namespace SerialPort.Net.Windows
             Parity parity,
             byte byteSize,
             ushort readBufferSize,
-            ILoggerFactory loggerFactory) : base(
+            ILoggerFactory loggerFactory = null) : base(
                 deviceId,
                 loggerFactory,
                 (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsSerialPortDevice>())
         {
-            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
-
             ApiService = apiService ?? throw new ArgumentNullException(nameof(apiService));
 
             ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId);
