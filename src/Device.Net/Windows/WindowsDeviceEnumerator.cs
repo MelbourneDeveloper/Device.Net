@@ -38,7 +38,7 @@ namespace Device.Net.Windows
 
                 try
                 {
-                    Logger.BeginScope("Calling " + nameof(GetConnectedDeviceDefinitionsAsync));
+                    loggerScope = Logger.BeginScope("Calling " + nameof(GetConnectedDeviceDefinitionsAsync));
 
                     var deviceDefinitions = new Collection<ConnectedDeviceDefinition>();
                     var spDeviceInterfaceData = new SpDeviceInterfaceData();

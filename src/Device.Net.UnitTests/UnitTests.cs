@@ -1,14 +1,10 @@
 #pragma warning disable IDE0055
 
-
 #if !NET45
 
-
 using Device.Net.Exceptions;
-using Hid.Net.Windows;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Win32.SafeHandles;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -16,8 +12,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Usb.Net;
+
+#if NETCOREAPP3_1
+using Hid.Net.Windows;
 using Usb.Net.Windows;
+using Usb.Net;
+#endif
+
 
 namespace Device.Net.UnitTests
 {
@@ -208,6 +209,7 @@ namespace Device.Net.UnitTests
             return (hidMock, usbMock);
         }
 
+#if NETCOREAPP3_1
         //Check that we can construct objects without loggers
         [TestMethod]
         public void TestNullLoggers()
@@ -217,6 +219,7 @@ namespace Device.Net.UnitTests
             new WindowsUsbInterface(default, 0 );
             new WindowsUsbInterfaceManager("asd");
         }
+#endif
 
         [TestMethod]
         public async Task TestDeviceListenerAsync()

@@ -25,8 +25,12 @@ namespace Usb.Net.UWP
         public override string ToString() => InterfaceNumber.ToString();
         #endregion
 
-        #region Public Methods
-        public UWPUsbInterface(windowsUsbInterface usbInterface, ILogger logger, ushort? readBuffersize, ushort? writeBufferSize) : base(logger, readBuffersize, writeBufferSize)
+        #region Constructor
+        public UWPUsbInterface(
+            windowsUsbInterface usbInterface,
+            ILogger logger = null,
+            ushort? readBuffersize = null,
+            ushort? writeBufferSize = null) : base(logger, readBuffersize, writeBufferSize)
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
 
@@ -60,7 +64,9 @@ namespace Usb.Net.UWP
 
             //TODO: Why does not UWP not support Control Transfer?
         }
+        #endregion
 
+        #region Public Methods
         public async Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
         {
             IBuffer buffer;

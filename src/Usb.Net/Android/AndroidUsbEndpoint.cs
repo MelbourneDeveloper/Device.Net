@@ -1,5 +1,6 @@
 ﻿using Android.Hardware.Usb;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 
 namespace Usb.Net.Android
@@ -18,7 +19,7 @@ namespace Usb.Net.Android
 
         public AndroidUsbEndpoint(UsbEndpoint usbEndpoint, int interfaceNumber, ILogger logger)
         {
-            _logger = logger;
+            _logger = logger ?? NullLogger.Instance;
 
             if (usbEndpoint == null) throw new ArgumentNullException(nameof(usbEndpoint));
 
@@ -32,7 +33,7 @@ namespace Usb.Net.Android
             UsbEndpoint = usbEndpoint;
             InterfaceNumber = interfaceNumber;
 
-            _logger?.LogInformation("Endpoint found. Interface Number: {interfaceNumber} PipeId/Address {address} Direction: {direction} Type: {type}", interfaceNumber, usbEndpoint.Address, usbEndpoint.Direction, usbEndpoint.Type);
+            _logger.LogInformation("Endpoint found. Interface Number: {interfaceNumber} PipeId/Address {address} Direction: {direction} Type: {type}", interfaceNumber, usbEndpoint.Address, usbEndpoint.Direction, usbEndpoint.Type);
         }
     }
 }

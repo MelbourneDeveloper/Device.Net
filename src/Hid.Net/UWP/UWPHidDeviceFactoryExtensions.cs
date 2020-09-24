@@ -16,7 +16,7 @@ namespace Hid.Net.UWP
 
         public static IDeviceFactory CreateUwpHidDeviceFactory(
         this FilterDeviceDefinition filterDeviceDefinitions,
-        ILoggerFactory loggerFactory,
+        ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetDevice getDevice = null,
         byte? defaultReportId = null) => CreateUwpHidDeviceFactory(new List<FilterDeviceDefinition> { filterDeviceDefinitions }, loggerFactory, getConnectedDeviceDefinitionsAsync, getDevice, defaultReportId);

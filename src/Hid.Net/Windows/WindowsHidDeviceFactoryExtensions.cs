@@ -14,7 +14,7 @@ namespace Hid.Net.Windows
     {
         public static IDeviceManager CreateWindowsHidDeviceManager(
         this FilterDeviceDefinition filterDeviceDefinition,
-        ILoggerFactory loggerFactory,
+        ILoggerFactory loggerFactory = null,
         IHidApiService hidApiService = null,
         Guid? classGuid = null,
         ushort? readBufferSize = null,
@@ -34,7 +34,7 @@ namespace Hid.Net.Windows
 
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
         this FilterDeviceDefinition filterDeviceDefinition,
-        ILoggerFactory loggerFactory,
+        ILoggerFactory loggerFactory = null,
         IHidApiService hidApiService = null,
         Guid? classGuid = null,
         ushort? readBufferSize = null,
@@ -54,7 +54,7 @@ namespace Hid.Net.Windows
 
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
             this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
-            ILoggerFactory loggerFactory,
+            ILoggerFactory loggerFactory = null,
             IHidApiService hidApiService = null,
             Guid? classGuid = null,
             ushort? readBufferSize = null,

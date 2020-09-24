@@ -118,7 +118,7 @@ namespace Usb.Net
         #endregion
 
         #region Constructor
-        protected UsbInterfaceBase(ILogger logger, ushort? readBufferSize, ushort? writeBufferSize)
+        protected UsbInterfaceBase(ILogger logger = null, ushort? readBufferSize = null, ushort? writeBufferSize = null)
         {
             Logger = logger ?? NullLogger.Instance;
             _ReadBufferSize = readBufferSize;

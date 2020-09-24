@@ -13,7 +13,7 @@ namespace Usb.Net.Windows
     {
         public static IDeviceFactory CreateWindowsUsbDeviceFactory(
             this FilterDeviceDefinition filterDeviceDefinition,
-            ILoggerFactory loggerFactory,
+            ILoggerFactory loggerFactory = null,
             GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
             GetUsbInterfaceManager getUsbInterfaceManager = null,
             Guid? classGuid = null,
@@ -30,7 +30,7 @@ namespace Usb.Net.Windows
 
         public static IDeviceFactory CreateWindowsUsbDeviceFactory(
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
-        ILoggerFactory loggerFactory,
+        ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetUsbInterfaceManager getUsbInterfaceManager = null,
         Guid? classGuid = null,

@@ -11,7 +11,7 @@ namespace Usb.Net.UWP
 
         public static IDeviceFactory CreateUwpUsbDeviceFactory(
             this FilterDeviceDefinition filterDeviceDefinitions,
-            ILoggerFactory loggerFactory,
+            ILoggerFactory loggerFactory = null,
             GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
             GetUsbInterfaceManager getUsbInterfaceManager = null,
             ushort? readBufferSize = null,
