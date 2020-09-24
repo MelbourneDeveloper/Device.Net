@@ -23,6 +23,7 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Public Properties
+        //public DeviceType DeviceType => DeviceType.SerialPort;
         public override bool IsInitialized => _ReadSafeFileHandle != null && !_ReadSafeFileHandle.IsInvalid;
         /// <summary>
         /// TODO: No need to implement this. The property probably shouldn't exist at the base level

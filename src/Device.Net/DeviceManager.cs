@@ -24,10 +24,10 @@ namespace Device.Net
         #endregion
 
         #region Constructor
-        public DeviceManager(ILoggerFactory loggerFactory)
+        public DeviceManager(ILoggerFactory loggerFactory = null)
         {
             _loggerFactory = loggerFactory ?? new NullLoggerFactory();
-            _logger = loggerFactory.CreateLogger<DeviceManager>();
+            _logger = _loggerFactory.CreateLogger<DeviceManager>();
         }
         #endregion
 

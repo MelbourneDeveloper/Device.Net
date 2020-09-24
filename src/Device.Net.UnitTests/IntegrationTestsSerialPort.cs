@@ -1,8 +1,6 @@
 #if !NET45
 
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using SerialPort.Net.Windows;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,19 +11,8 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class IntegrationTestsSerialPort
     {
-        private readonly ILoggerFactory _loggerFactory;
-
-        public IntegrationTestsSerialPort()
-        {
-            _loggerFactory = LoggerFactory.Create((builder) =>
-            {
-                _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
-            });
-        }
-
         #region Fields
         private static WindowsSerialPortDeviceFactory windowsSerialPortDeviceFactory;
-        private readonly Mock<ILoggerFactory> _loggerFactoryMock = new Mock<ILoggerFactory>();
         #endregion
 
         #region Tests
@@ -59,8 +46,8 @@ namespace Device.Net.UnitTests
         public async Task ConnectedTestEnumerateAndConnectAsync()
         {
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
-            Assert.IsTrue(connectedDeviceDefinitions.Count > 1);
-            using var serialPortDevice = await windowsSerialPortDeviceFactory.GetDevice(connectedDeviceDefinitions[1]);
+            Assert.IsTrue(connectedDeviceDefinitions.Count > 0);
+            using var serialPortDevice = await windowsSerialPortDeviceFactory.GetDevice(connectedDeviceDefinitions[0]);
             await serialPortDevice.InitializeAsync();
             Assert.IsTrue(serialPortDevice.IsInitialized);
         }
@@ -71,7 +58,7 @@ namespace Device.Net.UnitTests
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
-            var deviceManager = new DeviceManager(_loggerFactoryMock.Object);
+            var deviceManager = new DeviceManager();
             deviceManager.DeviceFactories.Add(windowsSerialPortDeviceFactory);
             var devices = await deviceManager.GetConnectedDeviceDefinitionsAsync();
 
@@ -80,17 +67,17 @@ namespace Device.Net.UnitTests
                 Assert.AreEqual(DeviceType.SerialPort, device.DeviceType);
             }
 
-            Assert.IsTrue(devices.Count() > 1);
+            Assert.IsTrue(devices.Count() > 0);
         }
 
         [TestMethod]
         public async Task ConnectedTestGetDevicesSingletonAsync()
         {
-            var deviceManager = new DeviceManager(_loggerFactoryMock.Object);
-            deviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(_loggerFactory));
+            var deviceManager = new DeviceManager();
+            deviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory());
             var devices = await deviceManager.GetConnectedDeviceDefinitionsAsync();
 
-            Assert.IsTrue(devices.Count() > 1);
+            Assert.IsTrue(devices.Count() > 0);
         }
 
         [TestMethod]
@@ -106,7 +93,7 @@ namespace Device.Net.UnitTests
         {
             if (windowsSerialPortDeviceFactory == null)
             {
-                windowsSerialPortDeviceFactory = new WindowsSerialPortDeviceFactory(_loggerFactory);
+                windowsSerialPortDeviceFactory = new WindowsSerialPortDeviceFactory();
             }
 
             return (await windowsSerialPortDeviceFactory.GetConnectedDeviceDefinitionsAsync()).ToList();
@@ -114,7 +101,7 @@ namespace Device.Net.UnitTests
 
         private static async Task ReadAsync()
         {
-            using var serialPortDevice = new WindowsSerialPortDevice(@"\\.\COM4");
+            using var serialPortDevice = new WindowsSerialPortDevice(@"\\.\COM1");
             await serialPortDevice.InitializeAsync();
             var result = await serialPortDevice.ReadAsync();
             Assert.IsTrue(result.Data.Length > 0);

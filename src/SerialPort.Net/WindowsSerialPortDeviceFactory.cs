@@ -24,7 +24,7 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsSerialPortDeviceFactory(ILoggerFactory loggerFactory)
+        public WindowsSerialPortDeviceFactory(ILoggerFactory loggerFactory = null)
         {
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
 
@@ -64,7 +64,7 @@ namespace SerialPort.Net.Windows
                         foreach (var valueName in valueNames)
                         {
                             var comPortName = key.GetValue(valueName);
-                            returnValue.Add(new ConnectedDeviceDefinition($@"\\.\{comPortName}") { Label = valueName });
+                            returnValue.Add(new ConnectedDeviceDefinition($@"\\.\{comPortName}") { Label = valueName, DeviceType = DeviceType.SerialPort });
                         }
                     }
                 }
