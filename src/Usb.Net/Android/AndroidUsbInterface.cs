@@ -21,9 +21,9 @@ namespace Usb.Net.Android
         public AndroidUsbInterface(
             UsbInterface usbInterface,
             UsbDeviceConnection usbDeviceConnection,
-            ILogger logger,
-            ushort? readBufferSize,
-            ushort? writeBufferSize) : base(logger, readBufferSize, writeBufferSize)
+            ILogger logger = null,
+            ushort? readBufferSize = null,
+            ushort? writeBufferSize = null) : base(logger, readBufferSize, writeBufferSize)
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
             _UsbDeviceConnection = usbDeviceConnection ?? throw new ArgumentNullException(nameof(usbDeviceConnection));
@@ -40,49 +40,44 @@ namespace Usb.Net.Android
         {
             return await Task.Run(async () =>
             {
-                IDisposable logScope = null;
-
                 try
                 {
-                    logScope = Logger?.BeginScope("UsbInterface: {usbInterface} Call: {call}", UsbInterface.Id, nameof(ReadAsync));
-
-                    var byteBuffer = ByteBuffer.Allocate((int)bufferLength);
-                    var request = new UsbRequest();
-                    var endpoint = ((AndroidUsbEndpoint)ReadEndpoint).UsbEndpoint;
-                    request.Initialize(_UsbDeviceConnection, endpoint);
-#pragma warning disable CS0618 
-                    request.Queue(byteBuffer, (int)bufferLength);
-#pragma warning restore CS0618 
-                    await _UsbDeviceConnection.RequestWaitAsync();
-
-                    //TODO: Get the actual length of the data read instead of just returning the length of the array
-
-                    var buffers = new ReadResult(new byte[bufferLength], bufferLength);
-
-                    byteBuffer.Rewind();
-
-                    //Ouch. Super nasty
-                    for (var i = 0; i < bufferLength; i++)
+                    using (var logScope = Logger.BeginScope("UsbInterface: {usbInterface} Call: {call}", UsbInterface.Id, nameof(ReadAsync)))
                     {
-                        buffers.Data[i] = (byte)byteBuffer.Get();
+
+                        var byteBuffer = ByteBuffer.Allocate((int)bufferLength);
+                        var request = new UsbRequest();
+                        var endpoint = ((AndroidUsbEndpoint)ReadEndpoint).UsbEndpoint;
+                        request.Initialize(_UsbDeviceConnection, endpoint);
+#pragma warning disable CS0618
+                        request.Queue(byteBuffer, (int)bufferLength);
+#pragma warning restore CS0618
+                        await _UsbDeviceConnection.RequestWaitAsync();
+
+                        //TODO: Get the actual length of the data read instead of just returning the length of the array
+
+                        var buffers = new ReadResult(new byte[bufferLength], bufferLength);
+
+                        byteBuffer.Rewind();
+
+                        //Ouch. Super nasty
+                        for (var i = 0; i < bufferLength; i++)
+                        {
+                            buffers.Data[i] = (byte)byteBuffer.Get();
+                        }
+
+                        //Marshal.Copy(byteBuffer.GetDirectBufferAddress(), buffers, 0, ReadBufferLength);
+
+                        Logger.LogTrace(new Trace(false, buffers));
+
+                        return buffers;
                     }
-
-                    //Marshal.Copy(byteBuffer.GetDirectBufferAddress(), buffers, 0, ReadBufferLength);
-
-                    Logger.LogTrace(new Trace(false, buffers));
-
-                    return buffers;
                 }
                 catch (Exception ex)
                 {
-                    Logger?.LogError(Messages.ErrorMessageRead);
+                    Logger.LogError(Messages.ErrorMessageRead);
                     throw new IOException(Messages.ErrorMessageRead, ex);
                 }
-                finally
-                {
-                    logScope?.Dispose();
-                }
-
             }, cancellationToken);
         }
 
@@ -92,40 +87,35 @@ namespace Usb.Net.Android
 
             await Task.Run(async () =>
             {
-                IDisposable logScope = null;
-
                 try
                 {
-
                     //TODO: Perhaps we should implement Batch Begin/Complete so that the UsbRequest is not created again and again. This will be expensive
 
                     var request = new UsbRequest();
                     var endpoint = ((AndroidUsbEndpoint)WriteEndpoint).UsbEndpoint;
 
-                    logScope = Logger?.BeginScope("UsbInterface: {usbInterface} Endpoint: {endpoint} Call: {call} Data Length: {writeLength}", UsbInterface.Id, endpoint.Address, nameof(WriteAsync), data.Length);
+                    using (var logScope = Logger.BeginScope("UsbInterface: {usbInterface} Endpoint: {endpoint} Call: {call} Data Length: {writeLength}", UsbInterface.Id, endpoint.Address, nameof(WriteAsync), data.Length))
+                    {
 
-                    Logger?.LogInformation("Before Write UsbInterface: {usbInterface} Endpoint: {endpoint} Call: {call} Data Length: {writeLength}", UsbInterface.Id, endpoint.Address, nameof(WriteAsync), data.Length);
+                        Logger.LogInformation("Before Write UsbInterface: {usbInterface} Endpoint: {endpoint} Call: {call} Data Length: {writeLength}", UsbInterface.Id, endpoint.Address, nameof(WriteAsync), data.Length);
 
 
-                    request.Initialize(_UsbDeviceConnection, endpoint);
-                    var byteBuffer = ByteBuffer.Wrap(data);
+                        request.Initialize(_UsbDeviceConnection, endpoint);
+                        var byteBuffer = ByteBuffer.Wrap(data);
 
-#pragma warning disable CS0618 
-                    request.Queue(byteBuffer, data.Length);
-#pragma warning restore CS0618 
+#pragma warning disable CS0618
+                        request.Queue(byteBuffer, data.Length);
+#pragma warning restore CS0618
 
-                    await _UsbDeviceConnection.RequestWaitAsync();
+                        await _UsbDeviceConnection.RequestWaitAsync();
 
-                    Logger.LogTrace(new Trace(true, data), $"Write endpoint: {endpoint.Address}");
+                        Logger.LogTrace(new Trace(true, data), $"Write endpoint: {endpoint.Address}");
+                    }
                 }
                 catch (Exception ex)
                 {
-                    Logger?.LogError(Messages.WriteErrorMessage);
+                    Logger.LogError(Messages.WriteErrorMessage);
                     throw new IOException(Messages.WriteErrorMessage, ex);
-                }
-                finally
-                {
-                    logScope?.Dispose();
                 }
             }, cancellationToken);
         }
@@ -141,6 +131,8 @@ namespace Usb.Net.Android
 
         public override Task ClaimInterface()
         {
+            Logger.LogInformation("Claimed interface {interfaceId}", InterfaceNumber);
+
             return !_UsbDeviceConnection.ClaimInterface(UsbInterface, true)
                 ? throw new DeviceException("could not claim interface")
                 : Task.FromResult(true);
