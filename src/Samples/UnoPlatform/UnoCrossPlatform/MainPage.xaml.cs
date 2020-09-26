@@ -61,8 +61,10 @@ namespace UnoCrossPlatform
 
                     try
                     {
+                        //Note this needs an extra 0 at the start for UWP
                         var data = await device.WriteAndReadAsync(new byte[8] { 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
 
+                        //Note this data will have an extra 0 at the start on UWP
                         var temperatureTimesOneHundred = (data.Data[3] & 0xFF) + (data.Data[2] << 8);
 
                         var temperatureCelsius = Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
@@ -82,6 +84,7 @@ namespace UnoCrossPlatform
                     });
 
                 }
+                //Note this breaks UWP
                 , async (d) =>
                  {
                      await d.InitializeAsync();
