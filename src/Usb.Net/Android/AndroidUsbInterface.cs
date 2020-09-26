@@ -131,6 +131,8 @@ namespace Usb.Net.Android
 
         public override Task ClaimInterface()
         {
+            Logger.LogInformation("Claimed interface {interfaceId}", InterfaceNumber);
+
             return !_UsbDeviceConnection.ClaimInterface(UsbInterface, true)
                 ? throw new DeviceException("could not claim interface")
                 : Task.FromResult(true);
