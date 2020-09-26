@@ -169,24 +169,24 @@ namespace Usb.Net.Android
 
                 Logger.LogInformation("Interface count: {count}", _UsbDevice.InterfaceCount);
 
-                for (var x = 0; x < _UsbDevice.InterfaceCount; x++)
+                for (var interfaceNumber = 0; interfaceNumber < _UsbDevice.InterfaceCount; interfaceNumber++)
                 {
                     //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
-                    var usbInterface = _UsbDevice.GetInterface(x);
+                    var usbInterface = _UsbDevice.GetInterface(interfaceNumber);
 
                     var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, LoggerFactory.CreateLogger<AndroidUsbInterface>(), ReadBufferSizeProtected, WriteBufferSizeProtected);
 
-                    Logger.LogInformation("Interface found. Name: {name} Id: {id} Endpoint Count: {endpointCount} Interface Class: {interfaceclass} Interface Subclass: {interfacesubclass}", usbInterface.Name, usbInterface.Id, usbInterface.EndpointCount, usbInterface.InterfaceClass, usbInterface.InterfaceSubclass);
+                    Logger.LogInformation("Interface found. Id: {id} Endpoint Count: {endpointCount} Interface Class: {interfaceclass} Interface Subclass: {interfacesubclass} Name: {name}", usbInterface.Id, usbInterface.EndpointCount, usbInterface.InterfaceClass, usbInterface.InterfaceSubclass, usbInterface.Name);
 
                     UsbInterfaces.Add(androidUsbInterface);
 
-                    for (var y = 0; y < usbInterface.EndpointCount; y++)
+                    for (var endpointNumber = 0; endpointNumber < usbInterface.EndpointCount; endpointNumber++)
                     {
-                        var usbEndpoint = usbInterface.GetEndpoint(y);
+                        var usbEndpoint = usbInterface.GetEndpoint(endpointNumber);
 
                         if (usbEndpoint != null)
                         {
-                            var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, x, LoggerFactory.CreateLogger<AndroidUsbEndpoint>());
+                            var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, interfaceNumber, LoggerFactory.CreateLogger<AndroidUsbEndpoint>());
                             androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
                         }
                     }

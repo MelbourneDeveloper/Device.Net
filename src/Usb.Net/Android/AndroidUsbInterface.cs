@@ -42,12 +42,18 @@ namespace Usb.Net.Android
             {
                 try
                 {
-                    using (var logScope = Logger.BeginScope("UsbInterface: {usbInterface} Call: {call}", UsbInterface.Id, nameof(ReadAsync)))
+                    //TODO: validate here
+                    var endpoint = ((AndroidUsbEndpoint)ReadEndpoint).UsbEndpoint;
+
+                    using (var logScope = Logger.BeginScope(
+                        "UsbInterface: {usbInterface} Call: {call} Endpoint Id: {endpointId}",
+                        UsbInterface.Id,
+                        nameof(ReadAsync),
+                        endpoint.EndpointNumber))
                     {
 
                         var byteBuffer = ByteBuffer.Allocate((int)bufferLength);
                         var request = new UsbRequest();
-                        var endpoint = ((AndroidUsbEndpoint)ReadEndpoint).UsbEndpoint;
                         request.Initialize(_UsbDeviceConnection, endpoint);
 #pragma warning disable CS0618
                         request.Queue(byteBuffer, (int)bufferLength);

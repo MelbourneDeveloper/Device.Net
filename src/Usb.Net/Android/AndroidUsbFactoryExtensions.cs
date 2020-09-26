@@ -11,20 +11,42 @@ namespace Usb.Net.Android
 {
     public static class AndroidUsbFactoryExtensions
     {
+
         public static IDeviceFactory CreateAndroidUsbDeviceFactory(
-            this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
-            UsbManager usbManager,
-            Context context,
-            ILoggerFactory loggerFactory = null,
-            GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-            GetUsbInterfaceManager getUsbInterfaceManager = null,
-            ushort? readBufferSize = null,
-            ushort? writeBufferSize = null
-            )
+        FilterDeviceDefinition filterDeviceDefinition,
+        ILoggerFactory loggerFactory,
+        UsbManager usbManager,
+        Context context,
+        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+        GetUsbInterfaceManager getUsbInterfaceManager = null,
+        ushort? readBufferSize = null,
+        ushort? writeBufferSize = null
+        )
+        {
+            return CreateAndroidUsbDeviceFactory(
+                new List<FilterDeviceDefinition> { filterDeviceDefinition },
+                loggerFactory,
+                usbManager,
+                context,
+                getConnectedDeviceDefinitionsAsync,
+                getUsbInterfaceManager,
+                readBufferSize,
+                writeBufferSize);
+        }
+
+        public static IDeviceFactory CreateAndroidUsbDeviceFactory(
+        this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
+        ILoggerFactory loggerFactory,
+        UsbManager usbManager,
+        Context context,
+        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+        GetUsbInterfaceManager getUsbInterfaceManager = null,
+        ushort? readBufferSize = null,
+        ushort? writeBufferSize = null
+        )
         {
             if (usbManager == null) throw new ArgumentNullException(nameof(usbManager));
             if (context == null) throw new ArgumentNullException(nameof(context));
-
             loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
 
             if (getConnectedDeviceDefinitionsAsync == null)
