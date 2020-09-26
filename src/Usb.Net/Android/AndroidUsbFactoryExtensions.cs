@@ -14,9 +14,9 @@ namespace Usb.Net.Android
 
         public static IDeviceFactory CreateAndroidUsbDeviceFactory(
         FilterDeviceDefinition filterDeviceDefinition,
-        ILoggerFactory loggerFactory,
         UsbManager usbManager,
         Context context,
+        ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetUsbInterfaceManager getUsbInterfaceManager = null,
         ushort? readBufferSize = null,
@@ -25,9 +25,9 @@ namespace Usb.Net.Android
         {
             return CreateAndroidUsbDeviceFactory(
                 new List<FilterDeviceDefinition> { filterDeviceDefinition },
-                loggerFactory,
                 usbManager,
                 context,
+                loggerFactory,
                 getConnectedDeviceDefinitionsAsync,
                 getUsbInterfaceManager,
                 readBufferSize,
@@ -36,9 +36,9 @@ namespace Usb.Net.Android
 
         public static IDeviceFactory CreateAndroidUsbDeviceFactory(
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
-        ILoggerFactory loggerFactory,
         UsbManager usbManager,
         Context context,
+        ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetUsbInterfaceManager getUsbInterfaceManager = null,
         ushort? readBufferSize = null,

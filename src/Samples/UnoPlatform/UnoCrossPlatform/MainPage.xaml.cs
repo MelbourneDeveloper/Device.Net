@@ -52,7 +52,7 @@ namespace UnoCrossPlatform
 #if WINDOWS_UWP
                 .CreateUwpHidDeviceFactory(loggerFactory)
 #else
-                .CreateAndroidUsbDeviceFactory(loggerFactory, UsbManager, AppContext, writeBufferSize: 8, readBufferSize: 8)
+                .CreateAndroidUsbDeviceFactory(UsbManager, AppContext, loggerFactory, writeBufferSize: 8, readBufferSize: 8)
 #endif
                 .ToDeviceManager(loggerFactory)
                 .CreateDeviceDataStreamer(async (device) =>
