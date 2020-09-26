@@ -20,7 +20,7 @@ namespace Device.Net
             deviceManager.DeviceFactories.Add(newDeviceFactory);
         }
 
-        public static IDeviceManager ToDeviceManager(this IDeviceFactory deviceFactory, ILoggerFactory loggerFactory) => new DeviceManager(loggerFactory) { DeviceFactories = { deviceFactory } };
+        public static IDeviceManager ToDeviceManager(this IDeviceFactory deviceFactory, ILoggerFactory loggerFactory = null) => new DeviceManager(loggerFactory) { DeviceFactories = { deviceFactory } };
 
     }
 }
