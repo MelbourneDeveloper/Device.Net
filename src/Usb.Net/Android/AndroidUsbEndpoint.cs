@@ -33,7 +33,7 @@ namespace Usb.Net.Android
             UsbEndpoint = usbEndpoint;
             InterfaceNumber = interfaceNumber;
 
-            _logger.LogInformation("Endpoint found. Interface Number: {interfaceNumber} PipeId/Address {address} Direction: {direction} Type: {type}", interfaceNumber, usbEndpoint.Address, usbEndpoint.Direction, usbEndpoint.Type);
+            _logger.LogInformation("Endpoint found. Interface Number: {interfaceNumber} PipeId/Address {address} Direction: {direction} Type: {type} IsRead: {isRead} IsWrite: {isWrite}", interfaceNumber, usbEndpoint.Address, usbEndpoint.Direction, usbEndpoint.Type, IsRead, isWrite);
         }
     }
 }
