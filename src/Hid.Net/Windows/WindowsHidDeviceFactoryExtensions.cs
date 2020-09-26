@@ -2,6 +2,7 @@
 using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Hid.Net.Windows
     {
         public static IDeviceManager CreateWindowsHidDeviceManager(
         this FilterDeviceDefinition filterDeviceDefinition,
-        ILoggerFactory loggerFactory,
+        ILoggerFactory loggerFactory = null,
         IHidApiService hidApiService = null,
         Guid? classGuid = null,
         ushort? readBufferSize = null,
@@ -33,7 +34,7 @@ namespace Hid.Net.Windows
 
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
         this FilterDeviceDefinition filterDeviceDefinition,
-        ILoggerFactory loggerFactory,
+        ILoggerFactory loggerFactory = null,
         IHidApiService hidApiService = null,
         Guid? classGuid = null,
         ushort? readBufferSize = null,
@@ -53,14 +54,14 @@ namespace Hid.Net.Windows
 
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
             this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
-            ILoggerFactory loggerFactory,
+            ILoggerFactory loggerFactory = null,
             IHidApiService hidApiService = null,
             Guid? classGuid = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null,
             byte? defaultReportId = null)
         {
-            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+            loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
 
             var selectedHidApiService = hidApiService ?? new WindowsHidApiService(loggerFactory);
 
@@ -87,31 +88,33 @@ namespace Hid.Net.Windows
                 DeviceType.Hid);
         }
 
-        private static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, IHidApiService HidService, ILogger Logger)
+        private static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, IHidApiService HidService, ILogger logger)
         {
             IDisposable logScope = null;
 
             try
             {
-                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(GetDeviceDefinition));
+                logger = logger ?? NullLogger.Instance;
+
+                logScope = logger.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(GetDeviceDefinition));
 
                 using (var safeFileHandle = HidService.CreateReadConnection(deviceId, FileAccessRights.None))
                 {
                     if (safeFileHandle.IsInvalid) throw new DeviceException($"{nameof(HidService.CreateReadConnection)} call with Id of {deviceId} failed.");
 
-                    Logger?.LogDebug(Messages.InformationMessageFoundDevice);
+                    logger.LogDebug(Messages.InformationMessageFoundDevice);
 
                     return HidService.GetDeviceDefinition(deviceId, safeFileHandle);
                 }
             }
             catch (Exception ex)
             {
-                Logger?.LogError(ex, Messages.ErrorMessageCouldntGetDevice);
+                logger.LogError(ex, Messages.ErrorMessageCouldntGetDevice);
                 return null;
             }
             finally
             {
-                logScope?.Dispose();
+                logScope.Dispose();
             }
         }
     }

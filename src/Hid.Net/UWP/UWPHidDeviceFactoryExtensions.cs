@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace Hid.Net.UWP
 
         public static IDeviceFactory CreateUwpHidDeviceFactory(
         this FilterDeviceDefinition filterDeviceDefinitions,
-        ILoggerFactory loggerFactory,
+        ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetDevice getDevice = null,
         byte? defaultReportId = null) => CreateUwpHidDeviceFactory(new List<FilterDeviceDefinition> { filterDeviceDefinitions }, loggerFactory, getConnectedDeviceDefinitionsAsync, getDevice, defaultReportId);
@@ -25,12 +26,12 @@ namespace Hid.Net.UWP
         /// </summary>
         public static IDeviceFactory CreateUwpHidDeviceFactory(
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
-        ILoggerFactory loggerFactory,
+        ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetDevice getDevice = null,
         byte? defaultReportId = null)
         {
-            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+            loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
 
             if (getDevice == null) getDevice = async (c) => new UWPHidDevice(c, loggerFactory, defaultReportId);
 
@@ -44,7 +45,6 @@ namespace Hid.Net.UWP
             if (getConnectedDeviceDefinitionsAsync == null)
             {
                 var uwpHidDeviceEnumerator = new UwpDeviceEnumerator(
-                    loggerFactory,
                     aqs,
                     DeviceType.Hid,
                     async (deviceId) =>
@@ -59,7 +59,8 @@ namespace Hid.Net.UWP
 
                             return new ConnectionInfo { CanConnect = canConnect, UsagePage = hidDevice.UsagePage };
                         }
-                    });
+                    },
+                    loggerFactory);
 
                 getConnectedDeviceDefinitionsAsync = uwpHidDeviceEnumerator.GetConnectedDeviceDefinitionsAsync;
             }

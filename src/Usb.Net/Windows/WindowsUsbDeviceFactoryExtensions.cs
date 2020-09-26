@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace Usb.Net.Windows
     {
         public static IDeviceFactory CreateWindowsUsbDeviceFactory(
             this FilterDeviceDefinition filterDeviceDefinition,
-            ILoggerFactory loggerFactory,
+            ILoggerFactory loggerFactory = null,
             GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
             GetUsbInterfaceManager getUsbInterfaceManager = null,
             Guid? classGuid = null,
@@ -29,7 +30,7 @@ namespace Usb.Net.Windows
 
         public static IDeviceFactory CreateWindowsUsbDeviceFactory(
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
-        ILoggerFactory loggerFactory,
+        ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetUsbInterfaceManager getUsbInterfaceManager = null,
         Guid? classGuid = null,
@@ -37,6 +38,8 @@ namespace Usb.Net.Windows
         ushort? writeBufferSize = null
     )
         {
+            loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
+
             if (getConnectedDeviceDefinitionsAsync == null)
             {
                 var logger = loggerFactory.CreateLogger<WindowsDeviceEnumerator>();
@@ -62,7 +65,7 @@ namespace Usb.Net.Windows
                     writeBufferSize);
             }
 
-            return UsbDeviceFactoryExtensions.CreateUsbDeviceFactory(loggerFactory, getConnectedDeviceDefinitionsAsync, getUsbInterfaceManager);
+            return UsbDeviceFactoryExtensions.CreateUsbDeviceFactory(getConnectedDeviceDefinitionsAsync, getUsbInterfaceManager, loggerFactory);
         }
     }
 }

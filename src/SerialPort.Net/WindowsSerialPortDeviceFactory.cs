@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 #if NETSTANDARD
 using System.Runtime.InteropServices;
 using Device.Net.Exceptions;
@@ -23,9 +24,9 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsSerialPortDeviceFactory(ILoggerFactory loggerFactory)
+        public WindowsSerialPortDeviceFactory(ILoggerFactory loggerFactory = null)
         {
-            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
 
             //Note this loggerfactory may get shared with other factories of this type
             _logger = _loggerFactory.CreateLogger<WindowsSerialPortDeviceFactory>();
@@ -63,14 +64,14 @@ namespace SerialPort.Net.Windows
                         foreach (var valueName in valueNames)
                         {
                             var comPortName = key.GetValue(valueName);
-                            returnValue.Add(new ConnectedDeviceDefinition($@"\\.\{comPortName}") { Label = valueName });
+                            returnValue.Add(new ConnectedDeviceDefinition($@"\\.\{comPortName}") { Label = valueName, DeviceType = DeviceType.SerialPort });
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger?.LogError(ex, ex.Message);
+                _logger.LogError(ex, ex.Message);
             }
 
             if (!registryAvailable)

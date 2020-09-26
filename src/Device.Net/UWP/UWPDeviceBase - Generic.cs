@@ -1,5 +1,6 @@
 ﻿using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace Device.Net.UWP
         #region Constructor
         protected UWPDeviceBase(string deviceId, ILoggerFactory loggerFactory, ILogger logger) : base(deviceId, logger)
         {
-            LoggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+            LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
         }
         #endregion
 

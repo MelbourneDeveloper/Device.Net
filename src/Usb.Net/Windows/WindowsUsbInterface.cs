@@ -24,7 +24,12 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsUsbInterface(SafeFileHandle handle, ILogger logger, byte interfaceNumber, ushort? readBufferSize, ushort? writeBufferSzie) : base(logger, readBufferSize, writeBufferSzie)
+        public WindowsUsbInterface(
+            SafeFileHandle handle,
+            byte interfaceNumber,
+            ILogger logger = null,
+            ushort? readBufferSize = null,
+            ushort? writeBufferSzie = null) : base(logger, readBufferSize, writeBufferSzie)
         {
             _SafeFileHandle = handle;
             InterfaceNumber = interfaceNumber;

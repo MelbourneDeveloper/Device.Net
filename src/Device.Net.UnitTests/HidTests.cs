@@ -67,6 +67,7 @@ namespace Device.Net.UnitTests
 
             var loggerFactory = new Mock<ILoggerFactory>();
             var logger = new Mock<ILogger<WindowsHidDevice>>();
+            logger.Setup(l => l.BeginScope(It.IsAny<It.IsAnyType>())).Returns(new Mock<IDisposable>().Object);
 
             loggerFactory.Setup(f => f.CreateLogger(It.IsAny<string>())).Returns(logger.Object);
 

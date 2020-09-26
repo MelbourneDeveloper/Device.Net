@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -57,32 +58,28 @@ namespace Device.Net.Reactive
         /// <param name="notifyDeviceInitialized">Tells others that the device was initialized</param>
         /// <param name="notifyConnectedDevices">Tells others which devices are connected</param>
         /// <param name="notifyDeviceException"></param>
-        /// <param name="loggerFactory"></param>
         /// <param name="initializeDeviceAction"></param>
         /// <param name="getConnectedDevicesAsync"></param>
         /// <param name="getDevice"></param>
         /// <param name="pollMilliseconds"></param>
+        /// <param name="loggerFactory"></param>
         public ReactiveDeviceManager(
             DeviceNotify notifyDeviceInitialized,
             DevicesNotify notifyConnectedDevices,
             NotifyDeviceException notifyDeviceException,
-            ILoggerFactory loggerFactory,
             Func<IDevice, Task> initializeDeviceAction,
             GetConnectedDevicesAsync getConnectedDevicesAsync,
             GetDevice getDevice,
-            int pollMilliseconds
-            )
+            int pollMilliseconds,
+            ILoggerFactory loggerFactory = null)
         {
-
-            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
-
             _notifyDeviceInitialized = notifyDeviceInitialized ?? throw new ArgumentNullException(nameof(notifyDeviceInitialized));
             _notifyDeviceException = notifyDeviceException ?? throw new ArgumentNullException(nameof(notifyDeviceException));
             _notifyConnectedDevices = notifyConnectedDevices ?? throw new ArgumentNullException(nameof(notifyConnectedDevices));
             _getConnectedDevicesAsync = getConnectedDevicesAsync ?? throw new ArgumentNullException(nameof(getConnectedDevicesAsync));
             _getDevice = getDevice ?? throw new ArgumentNullException(nameof(getDevice));
 
-            _logger = loggerFactory.CreateLogger<ReactiveDeviceManager>();
+            _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<ReactiveDeviceManager>();
 
             _initializeDeviceAction = initializeDeviceAction;
             _pollMilliseconds = pollMilliseconds;

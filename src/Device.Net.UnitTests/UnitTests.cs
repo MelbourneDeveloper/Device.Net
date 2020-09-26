@@ -1,8 +1,6 @@
 #pragma warning disable IDE0055
 
-
 #if !NET45
-
 
 using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
@@ -14,6 +12,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+
+#if NETCOREAPP3_1
+using Hid.Net.Windows;
+using Usb.Net.Windows;
+using Usb.Net;
+#endif
+
 
 namespace Device.Net.UnitTests
 {
@@ -117,12 +122,15 @@ namespace Device.Net.UnitTests
                 actualCount++;
             });
 
+            _loggerMock.Setup(l => l.BeginScope(It.IsAny<It.IsAnyType>())).Returns(new Mock<IDisposable>().Object);
+
             var (hid, usb) = GetMockedFactories(isHidConnected, isUsbConnected, vid, pid);
 
 
             var deviceManager = new DeviceManager(_loggerFactory) { DeviceFactories = { hid.Object, usb.Object } };
 
             var connectedDeviceDefinition = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList().First();
+
 
 
             var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, _loggerFactory, _loggerMock.Object);
@@ -200,6 +208,18 @@ namespace Device.Net.UnitTests
 
             return (hidMock, usbMock);
         }
+
+#if NETCOREAPP3_1
+        //Check that we can construct objects without loggers
+        [TestMethod]
+        public void TestNullLoggers()
+        {
+            new UsbDevice("asd", new Mock<IUsbInterfaceManager>().Object);
+            new WindowsHidDevice("asd");
+            new WindowsUsbInterface(default, 0 );
+            new WindowsUsbInterfaceManager("asd");
+        }
+#endif
 
         [TestMethod]
         public async Task TestDeviceListenerAsync()

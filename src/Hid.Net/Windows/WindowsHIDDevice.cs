@@ -2,6 +2,7 @@
 using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
@@ -46,16 +47,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidDevice(string deviceId, ILoggerFactory loggerFactory) : this(deviceId, null, null, loggerFactory)
-        {
-        }
-
-        public WindowsHidDevice(string deviceId, ushort? writeBufferSize, ushort? readBufferSize, ILoggerFactory loggerFactory) : this(deviceId, writeBufferSize, readBufferSize, loggerFactory, null, null)
-        {
-
-        }
-
-        public WindowsHidDevice(string deviceId, ushort? writeBufferSize = null, ushort? readBufferSize = null, ILoggerFactory loggerFactory = null, IHidApiService hidService = null, byte? defaultReportId = null) : base(deviceId, loggerFactory, loggerFactory?.CreateLogger<WindowsHidDevice>())
+        public WindowsHidDevice(string deviceId, ushort? writeBufferSize = null, ushort? readBufferSize = null, ILoggerFactory loggerFactory = null, IHidApiService hidService = null, byte? defaultReportId = null) : base(deviceId, loggerFactory, (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidDevice>())
         {
             _WriteBufferSize = writeBufferSize;
             _ReadBufferSize = readBufferSize;
@@ -71,7 +63,7 @@ namespace Hid.Net.Windows
 
             try
             {
-                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(Initialize));
+                logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(Initialize));
 
                 Close();
 
@@ -92,7 +84,7 @@ namespace Hid.Net.Windows
 
                 if (IsReadOnly.Value)
                 {
-                    Logger?.LogWarning(Messages.WarningMessageOpeningInReadonlyMode, DeviceId);
+                    Logger.LogWarning(Messages.WarningMessageOpeningInReadonlyMode, DeviceId);
                 }
 
                 ConnectedDeviceDefinition = HidService.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
@@ -109,11 +101,11 @@ namespace Hid.Net.Windows
 
                 if (_ReadFileStream.CanRead)
                 {
-                    Logger?.LogInformation(Messages.SuccessMessageReadFileStreamOpened);
+                    Logger.LogInformation(Messages.SuccessMessageReadFileStreamOpened);
                 }
                 else
                 {
-                    Logger?.LogWarning(Messages.WarningMessageReadFileStreamCantRead);
+                    Logger.LogWarning(Messages.WarningMessageReadFileStreamCantRead);
                 }
 
                 if (!IsReadOnly.Value)
@@ -128,23 +120,23 @@ namespace Hid.Net.Windows
 
                     if (_WriteFileStream.CanWrite)
                     {
-                        Logger?.LogInformation(Messages.SuccessMessageWriteFileStreamOpened);
+                        Logger.LogInformation(Messages.SuccessMessageWriteFileStreamOpened);
                     }
                     else
                     {
-                        Logger?.LogWarning(Messages.WarningMessageWriteFileStreamCantWrite);
+                        Logger.LogWarning(Messages.WarningMessageWriteFileStreamCantWrite);
                     }
 
                 }
             }
             catch (Exception ex)
             {
-                Logger?.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
+                Logger.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
                 throw;
             }
             finally
             {
-                logScope?.Dispose();
+                logScope.Dispose();
             }
 
             return true;
@@ -180,7 +172,7 @@ namespace Hid.Net.Windows
             }
             catch (Exception ex)
             {
-                Logger?.LogError(ex, Messages.ErrorMessageCantClose, DeviceId, nameof(WindowsHidDevice));
+                Logger.LogError(ex, Messages.ErrorMessageCantClose, DeviceId, nameof(WindowsHidDevice));
             }
 
             _IsClosing = false;
@@ -232,12 +224,12 @@ namespace Hid.Net.Windows
             }
             catch (OperationCanceledException oce)
             {
-                Logger?.LogError(oce, Messages.ErrorMessageOperationCanceled);
+                Logger.LogError(oce, Messages.ErrorMessageOperationCanceled);
                 throw;
             }
             catch (Exception ex)
             {
-                Logger?.LogError(ex, Messages.ErrorMessageRead);
+                Logger.LogError(ex, Messages.ErrorMessageRead);
                 throw new IOException(Messages.ErrorMessageRead, ex);
             }
 
@@ -256,7 +248,7 @@ namespace Hid.Net.Windows
 
             try
             {
-                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteReportAsync));
+                logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteReportAsync));
 
                 if (IsReadOnly.HasValue && IsReadOnly.Value)
                 {
@@ -303,12 +295,12 @@ namespace Hid.Net.Windows
             }
             catch (Exception ex)
             {
-                Logger?.LogError(ex, Messages.WriteErrorMessage);
+                Logger.LogError(ex, Messages.WriteErrorMessage);
                 throw;
             }
             finally
             {
-                logScope?.Dispose();
+                logScope.Dispose();
             }
         }
         #endregion

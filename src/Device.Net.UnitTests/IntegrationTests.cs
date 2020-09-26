@@ -1,6 +1,5 @@
 #if !NET45
 
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
@@ -19,19 +18,19 @@ namespace Device.Net.UnitTests
 {
     public static class GetFactoryExtensions
     {
-        public static IDeviceFactory GetUsbDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition, ILoggerFactory loggerFactory) =>
+        public static IDeviceFactory GetUsbDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition) =>
 #if !WINDOWS_UWP
-            filterDeviceDefinition.CreateWindowsUsbDeviceFactory(loggerFactory);
+            filterDeviceDefinition.CreateWindowsUsbDeviceFactory();
 #else
-            filterDeviceDefinition.CreateUwpUsbDeviceFactory(loggerFactory);
+            filterDeviceDefinition.CreateUwpUsbDeviceFactory();
 #endif
 
 
-        public static IDeviceFactory GetHidDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition, ILoggerFactory loggerFactory, byte? defultReportId = null) =>
+        public static IDeviceFactory GetHidDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition, byte? defultReportId = null) =>
 #if !WINDOWS_UWP
-            filterDeviceDefinition.CreateWindowsHidDeviceFactory(loggerFactory, defaultReportId: defultReportId);
+            filterDeviceDefinition.CreateWindowsHidDeviceFactory(defaultReportId: defultReportId);
 #else
-            filterDeviceDefinition.CreateUwpHidDeviceFactory(loggerFactory, defaultReportId: defultReportId);
+            filterDeviceDefinition.CreateUwpHidDeviceFactory(defaultReportId: defultReportId);
 #endif
     }
 
@@ -39,21 +38,6 @@ namespace Device.Net.UnitTests
     public class IntegrationTests
 
     {
-        #region Fields
-        private ILoggerFactory _loggerFactory;
-        #endregion
-
-        #region Setup
-        [TestInitialize]
-        public void Setup()
-        {
-            //Note: creating a LoggerFactory like this is easier than creating a mock
-            _loggerFactory = LoggerFactory.Create((builder) =>
-            {
-                _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
-            });
-        }
-        #endregion
 
         #region Tests
 #if !WINDOWS_UWP
@@ -61,7 +45,7 @@ namespace Device.Net.UnitTests
         public async Task TestConnectToSTMDFUMode()
         {
             const string deviceID = @"USB\VID_0483&PID_DF11\00000008FFFF";
-            var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID, _loggerFactory, null, null), _loggerFactory);
+            var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID));
             await windowsUsbDevice.InitializeAsync();
         }
 #endif
@@ -69,25 +53,25 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition { VendorId = 0x1209, ProductId = 0x53C1, Label = "Trezor One Firmware 1.7.x" }
-            .GetUsbDeviceFactory(_loggerFactory)
+            .GetUsbDeviceFactory()
         );
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition { VendorId = 0x534C, ProductId = 0x0001, Label = "Trezor One Firmware 1.6.x", UsagePage = 65280 }
-            .GetHidDeviceFactory(_loggerFactory, 0)
+            .GetHidDeviceFactory(0)
             );
 
         [TestMethod]
         public Task TestWriteAndReadFromKeepKeyUsb() => TestWriteAndReadFromTrezor(
         new FilterDeviceDefinition { VendorId = 0x2B24, ProductId = 0x2 }
-            .GetUsbDeviceFactory(_loggerFactory)
+            .GetUsbDeviceFactory()
            );
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorModelTUsb() => TestWriteAndReadFromTrezor(
         new FilterDeviceDefinition { VendorId = 0x1209, ProductId = 0x53c1 }
-            .GetUsbDeviceFactory(_loggerFactory)
+            .GetUsbDeviceFactory()
             );
 
         private async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64)
@@ -99,7 +83,7 @@ namespace Device.Net.UnitTests
             request[2] = 0x23;
 
             var integrationTester = new IntegrationTester(
-                deviceFactory, _loggerFactory);
+                deviceFactory);
             await integrationTester.TestAsync(request, AssertTrezorResult, expectedDataLength);
         }
 
@@ -112,7 +96,7 @@ namespace Device.Net.UnitTests
             var filterDeviceDefinition = new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 };
 
             var integrationTester = new IntegrationTester(
-                filterDeviceDefinition.GetHidDeviceFactory(_loggerFactory), _loggerFactory);
+                filterDeviceDefinition.GetHidDeviceFactory());
             await integrationTester.TestAsync(request, async (result, device) =>
             {
                 Assert.IsTrue(device.IsInitialized);
@@ -154,7 +138,7 @@ namespace Device.Net.UnitTests
             };
 
             var integrationTester = new IntegrationTester(
-                filterDeviceDefinition.GetHidDeviceFactory(_loggerFactory), _loggerFactory);
+                filterDeviceDefinition.GetHidDeviceFactory());
             await integrationTester.TestAsync(request, async (result, device) =>
              {
                  Assert.AreEqual(64, result.Data.Length);

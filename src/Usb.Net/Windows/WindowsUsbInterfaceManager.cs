@@ -28,7 +28,11 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsUsbInterfaceManager(string deviceId, ILoggerFactory loggerFactory, ushort? readBufferLength, ushort? writeBufferLength) : base(loggerFactory)
+        public WindowsUsbInterfaceManager(
+            string deviceId,
+            ILoggerFactory loggerFactory = null,
+            ushort? readBufferLength = null,
+            ushort? writeBufferLength = null) : base(loggerFactory)
         {
             ReadBufferSizeProtected = readBufferLength;
             WriteBufferSizeProtected = writeBufferLength;
@@ -43,7 +47,7 @@ namespace Usb.Net.Windows
 
             try
             {
-                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(Initialize));
+                logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(Initialize));
 
                 Close();
 
@@ -63,7 +67,7 @@ namespace Usb.Net.Windows
                     if (errorCode > 0) throw new ApiException($"Device handle no good. Error code: {errorCode}");
                 }
 
-                Logger?.LogInformation(Messages.SuccessMessageGotWriteAndReadHandle);
+                Logger.LogInformation(Messages.SuccessMessageGotWriteAndReadHandle);
 
 #pragma warning disable CA2000 //We need to hold on to this handle
                 var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
@@ -115,12 +119,12 @@ namespace Usb.Net.Windows
             }
             catch (Exception ex)
             {
-                Logger?.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
+                Logger.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
                 throw;
             }
             finally
             {
-                logScope?.Dispose();
+                logScope.Dispose();
             }
         }
 
@@ -131,7 +135,7 @@ namespace Usb.Net.Windows
             //TODO: Where is the logger/tracer?
             var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
 
-            var retVal = new WindowsUsbInterface(interfaceHandle, Logger, interfaceDescriptor.bInterfaceNumber, ReadBufferSizeProtected, WriteBufferSizeProtected);
+            var retVal = new WindowsUsbInterface(interfaceHandle, interfaceDescriptor.bInterfaceNumber, Logger, ReadBufferSizeProtected, WriteBufferSizeProtected);
             WindowsDeviceBase.HandleError(isSuccess, "Couldn't query interface");
 
             for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)

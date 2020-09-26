@@ -2,6 +2,7 @@
 using Device.Net.Exceptions;
 using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -43,15 +44,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPHidDevice(ILoggerFactory loggerFactory) : this(null, loggerFactory)
-        {
-        }
-
-        public UWPHidDevice(string deviceId) : this(deviceId, null)
-        {
-        }
-
-        public UWPHidDevice(string deviceId, ILoggerFactory loggerFactory, byte? defaultReportId = null) : base(deviceId, loggerFactory, loggerFactory.CreateLogger<UWPHidDevice>())
+        public UWPHidDevice(string deviceId, ILoggerFactory loggerFactory = null, byte? defaultReportId = null) : base(deviceId, loggerFactory, (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UWPHidDevice>())
         {
             DefaultReportId = defaultReportId;
         }

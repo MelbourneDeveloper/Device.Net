@@ -1,6 +1,7 @@
 using Device.Net;
 using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,9 +24,9 @@ namespace Usb.Net
         #endregion
 
         #region Constructor
-        public UsbInterfaceManager(ILoggerFactory loggerFactory)
+        public UsbInterfaceManager(ILoggerFactory loggerFactory = null)
         {
-            LoggerFactory = loggerFactory;
+            LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             Logger = LoggerFactory.CreateLogger<UsbInterfaceManager>();
         }
         #endregion
@@ -43,7 +44,7 @@ namespace Usb.Net
             ReadInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptReadEndpoint != null);
             WriteInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptWriteEndpoint != null);
 
-            Logger?.LogInformation("Defaults: Read interface: {readInterface} Write interface {writeInterface} Read PipeId: {readPipeId} Write PipeId: {writePipeId}",
+            Logger.LogInformation("Defaults: Read interface: {readInterface} Write interface {writeInterface} Read PipeId: {readPipeId} Write PipeId: {writePipeId}",
                 ReadUsbInterface?.InterfaceNumber,
                 WriteUsbInterface?.InterfaceNumber,
                 ReadUsbInterface?.ReadEndpoint?.PipeId,

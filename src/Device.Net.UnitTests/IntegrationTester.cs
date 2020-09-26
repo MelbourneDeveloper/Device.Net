@@ -1,6 +1,7 @@
 ﻿#if !NET45
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
@@ -16,11 +17,11 @@ namespace Device.Net.UnitTests
         public IntegrationTester(
             IDeviceFactory deviceFactory,
             //TODO: Mock this
-            ILoggerFactory loggerFactory
+            ILoggerFactory loggerFactory = null
             )
         {
-            _deviceFactory = deviceFactory;
-            _loggerFactory = loggerFactory;
+            _deviceFactory = deviceFactory ?? throw new ArgumentNullException(nameof(deviceFactory));
+            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
         }
 
         public async Task TestAsync(byte[] writeData, Func<ReadResult, IDevice, Task> assertFunc, int expectedDataLength)

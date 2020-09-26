@@ -2,6 +2,8 @@
 using Android.Hardware.Usb;
 using Device.Net;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -43,6 +45,10 @@ namespace Usb.Net.Android
         ushort? writeBufferSize = null
         )
         {
+            if (usbManager == null) throw new ArgumentNullException(nameof(usbManager));
+            if (context == null) throw new ArgumentNullException(nameof(context));
+            loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
+
             if (getConnectedDeviceDefinitionsAsync == null)
             {
                 getConnectedDeviceDefinitionsAsync = async () =>
@@ -71,7 +77,7 @@ namespace Usb.Net.Android
                     );
             }
 
-            return UsbDeviceFactoryExtensions.CreateUsbDeviceFactory(loggerFactory, getConnectedDeviceDefinitionsAsync, getUsbInterfaceManager);
+            return UsbDeviceFactoryExtensions.CreateUsbDeviceFactory(getConnectedDeviceDefinitionsAsync, getUsbInterfaceManager, loggerFactory);
         }
     }
 }

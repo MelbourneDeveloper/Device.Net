@@ -1,6 +1,5 @@
 ﻿using Device.Net;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading.Tasks;
 
 namespace Usb.Net
@@ -10,12 +9,10 @@ namespace Usb.Net
     public static class UsbDeviceFactoryExtensions
     {
         public static IDeviceFactory CreateUsbDeviceFactory(
-        ILoggerFactory loggerFactory,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync,
-        GetUsbInterfaceManager getUsbInterfaceManager)
-        => loggerFactory == null
-            ? throw new ArgumentNullException(nameof(loggerFactory))
-            :
+        GetUsbInterfaceManager getUsbInterfaceManager,
+        ILoggerFactory loggerFactory = null)
+        =>
             new DeviceFactory(
             loggerFactory,
             getConnectedDeviceDefinitionsAsync,
