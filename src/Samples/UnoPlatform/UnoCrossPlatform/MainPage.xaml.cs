@@ -63,7 +63,7 @@ namespace UnoCrossPlatform
                     {
                         var data = await device.WriteAndReadAsync(new byte[8] { 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
 
-                        var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
+                        var temperatureTimesOneHundred = (data.Data[3] & 0xFF) + (data.Data[2] << 8);
 
                         var temperatureCelsius = Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
 
