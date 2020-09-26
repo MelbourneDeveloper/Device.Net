@@ -4,6 +4,7 @@ using Device.Net;
 using Microsoft.Extensions.Logging;
 using Device.Net.Reactive;
 using System.Collections.Generic;
+using Usb.Net;
 
 #if WINDOWS_UWP
 using Hid.Net.UWP;
@@ -51,7 +52,7 @@ namespace UnoCrossPlatform
 #if WINDOWS_UWP
                 .CreateUwpHidDeviceFactory(loggerFactory)
 #else
-                .CreateAndroidUsbDeviceFactory(loggerFactory, UsbManager, AppContext, writeBufferSize: 9, readBufferSize: 9)
+                .CreateAndroidUsbDeviceFactory(loggerFactory, UsbManager, AppContext, writeBufferSize: 8, readBufferSize: 8)
 #endif
                 .ToDeviceManager(loggerFactory)
                 .CreateDeviceDataStreamer(async (device) =>
@@ -60,7 +61,7 @@ namespace UnoCrossPlatform
 
                     try
                     {
-                        var data = await device.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
+                        var data = await device.WriteAndReadAsync(new byte[8] { 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
 
                         var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
 
@@ -80,7 +81,19 @@ namespace UnoCrossPlatform
                         TheTextBlock.Text = display;
                     });
 
-                }).Start();
+                }
+                , async (d) =>
+                 {
+                     await d.InitializeAsync();
+
+                     var usbDevice = (IUsbDevice)d;
+
+                     usbDevice.UsbInterfaceManager.WriteUsbInterface = usbDevice.UsbInterfaceManager.UsbInterfaces[1];
+                     usbDevice.UsbInterfaceManager.ReadUsbInterface = usbDevice.UsbInterfaceManager.UsbInterfaces[1];
+                     usbDevice.UsbInterfaceManager.ReadUsbInterface.ReadEndpoint = usbDevice.UsbInterfaceManager.ReadUsbInterface.UsbInterfaceEndpoints[0];
+
+                 }
+                ).Start();
         }
     }
 }

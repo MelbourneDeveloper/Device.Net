@@ -17,18 +17,21 @@ namespace Device.Net.Reactive
         private IDevice _currentDevice;
         private readonly TimeSpan? _interval;
         private readonly ILogger _logger;
+        private readonly Func<IDevice, Task> _initializeFunc;
 
         public DeviceDataStreamer(
             ProcessData processData,
             IDeviceManager deviceManager,
             TimeSpan? interval = null,
-            ILoggerFactory loggerFactory = null
-            )
+            ILoggerFactory loggerFactory = null,
+            Func<IDevice, Task> initializeFunc = null
+          )
         {
             _processData = processData;
             _deviceManager = deviceManager;
             _interval = interval ?? new TimeSpan(0, 0, 1);
             _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<DeviceDataStreamer>();
+            _initializeFunc = initializeFunc ?? new Func<IDevice, Task>((d) => d.InitializeAsync());
         }
 
         public DeviceDataStreamer Start()
@@ -54,7 +57,7 @@ namespace Device.Net.Reactive
                             }
 
                             _currentDevice = await _deviceManager.GetDevice(firstConnectedDevice);
-                            await _currentDevice.InitializeAsync();
+                            await _initializeFunc(_currentDevice);
                         }
 
                         await _processData(_currentDevice);
