@@ -213,6 +213,8 @@ namespace Device.Net.UnitTests
                 usbMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync()).Returns(
                     Task.FromResult<IReadOnlyCollection<ConnectedDeviceDefinition>>(
                         result));
+
+                //TODO: Shouldn't this set up GetDevice?
             }
 
             return (hidMock, usbMock);
@@ -272,25 +274,6 @@ namespace Device.Net.UnitTests
         /// Dummy logger factory for now
         /// </summary>
         private readonly ILoggerFactory _loggerFactory = LoggerFactory.Create((builder) => { });
-
-        [TestMethod]
-        public void TestListenerDeviceFactoriesNotRegisteredException()
-        {
-
-            var deviceManager = new Mock<IDeviceManager>();
-
-            try
-            {
-                var deviceListner = new DeviceListener(deviceManager.Object, 1000, _loggerFactory);
-                deviceListner.Start();
-            }
-            catch (DeviceFactoriesNotRegisteredException)
-            {
-                return;
-            }
-
-            Assert.Fail("The call was not stopped");
-        }
 
         #region Exceptions
         [TestMethod]

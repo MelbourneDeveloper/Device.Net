@@ -30,7 +30,13 @@ namespace Device.Net
         {
             _loggerFactory = loggerFactory ?? new NullLoggerFactory();
             _logger = _loggerFactory.CreateLogger<DeviceManager>();
-            DeviceFactories = deviceFactories;
+            DeviceFactories = deviceFactories ?? throw new ArgumentNullException(nameof(deviceFactories));
+
+            if (deviceFactories.Count == 0)
+            {
+                throw new InvalidOperationException("You must specify at least one Device Factory");
+            }
+
         }
         #endregion
 

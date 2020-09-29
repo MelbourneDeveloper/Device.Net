@@ -50,10 +50,6 @@ namespace Device.Net
 
             DeviceManager = deviceManager ?? throw new ArgumentNullException(nameof(deviceManager));
 
-            if (deviceManager.DeviceFactories == null) throw new DeviceFactoriesNotRegisteredException();
-
-            if (deviceManager.DeviceFactories.Count == 0) throw new DeviceFactoriesNotRegisteredException();
-
             if (!pollMilliseconds.HasValue) return;
 
             _PollTimer = new timer(pollMilliseconds.Value);
