@@ -45,7 +45,7 @@ namespace UnoCrossPlatform
                 _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
             });
 
-            var filterDeviceDefinitions = new List<FilterDeviceDefinition> { new FilterDeviceDefinition { VendorId = 16701, ProductId = 8455, UsagePage = 65280 } };
+            var filterDeviceDefinitions = new List<FilterDeviceDefinition> { new FilterDeviceDefinition(vendorId: 16701, productId: 8455, usagePage: 65280) };
 
             var deviceDataStreamer =
             filterDeviceDefinitions

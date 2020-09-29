@@ -18,14 +18,14 @@ namespace Usb.Net.Sample
         //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
         public static readonly List<FilterDeviceDefinition> HidDeviceDefinitions = new List<FilterDeviceDefinition>
         {
-            new FilterDeviceDefinition{ VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x", UsagePage=65280 }
+            new FilterDeviceDefinition( vendorId: 0x534C, productId:0x0001, label:"Trezor One Firmware 1.6.x", usagePage:65280 )
         };
 
         public static readonly List<FilterDeviceDefinition> UsbDeviceDefinitions = new List<FilterDeviceDefinition>
         {
-            new FilterDeviceDefinition{ VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x (Android Only)" },
-            new FilterDeviceDefinition{ VendorId= 0x1209, ProductId=0x53C1, Label="Trezor One Firmware 1.7.x" },
-            new FilterDeviceDefinition{ VendorId= 0x1209, ProductId=0x53C0, Label="Model T" }
+            new FilterDeviceDefinition( vendorId: 0x534C, productId:0x0001, label:"Trezor One Firmware 1.6.x (Android Only)" ),
+            new FilterDeviceDefinition( vendorId: 0x1209, productId:0x53C1, label:"Trezor One Firmware 1.7.x" ),
+            new FilterDeviceDefinition( vendorId: 0x1209, productId:0x53C0, label:"Model T" )
         };
         #endregion
 

@@ -100,7 +100,7 @@ namespace Usb.Net.WindowsSample
             using var subject = new Subject<decimal>();
 
             using var deviceDataStreamer =
-                new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 }.
+                new FilterDeviceDefinition(vendorId: 0x413d, productId: 0x2107, usagePage: 65280).
                 CreateWindowsHidDeviceManager(_loggerFactory).
                 CreateDeviceDataStreamer(async (device) =>
                 {

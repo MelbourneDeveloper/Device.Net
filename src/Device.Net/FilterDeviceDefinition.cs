@@ -2,21 +2,33 @@
 {
     public sealed class FilterDeviceDefinition
     {
-        public uint? VendorId { get; set; }
+        public FilterDeviceDefinition(
+            uint? vendorId = null,
+            uint? productId = null,
+            ushort? usagePage = null,
+            string label = null)
+        {
+            VendorId = vendorId;
+            ProductId = productId;
+            UsagePage = usagePage;
+            Label = label;
+        }
+
+        public uint? VendorId { get; }
 
         /// <summary>
         /// Product Id
         /// </summary>
-        public uint? ProductId { get; set; }
+        public uint? ProductId { get; }
 
         /// <summary>
         /// Used to further filter down device definitions on some platforms
         /// </summary>
-        public ushort? UsagePage { get; set; }
+        public ushort? UsagePage { get; }
 
         /// <summary>
         /// Not used for filtering. Only used to give a meaningful name to the filter that is carried on to the device definition
         /// </summary>
-        public string Label { get; set; }
+        public string Label { get; }
     }
 }

@@ -52,25 +52,25 @@ namespace Device.Net.UnitTests
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(
-            new FilterDeviceDefinition { VendorId = 0x1209, ProductId = 0x53C1, Label = "Trezor One Firmware 1.7.x" }
+            new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53C1, label: "Trezor One Firmware 1.7.x")
             .GetUsbDeviceFactory()
         );
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(
-            new FilterDeviceDefinition { VendorId = 0x534C, ProductId = 0x0001, Label = "Trezor One Firmware 1.6.x", UsagePage = 65280 }
+            new FilterDeviceDefinition(vendorId: 0x534C, productId: 0x0001, label: "Trezor One Firmware 1.6.x", usagePage: 65280)
             .GetHidDeviceFactory(0)
             );
 
         [TestMethod]
         public Task TestWriteAndReadFromKeepKeyUsb() => TestWriteAndReadFromTrezor(
-        new FilterDeviceDefinition { VendorId = 0x2B24, ProductId = 0x2 }
+        new FilterDeviceDefinition(vendorId: 0x2B24, productId: 0x2)
             .GetUsbDeviceFactory()
            );
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorModelTUsb() => TestWriteAndReadFromTrezor(
-        new FilterDeviceDefinition { VendorId = 0x1209, ProductId = 0x53c1 }
+        new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53c1)
             .GetUsbDeviceFactory()
             );
 
@@ -93,7 +93,7 @@ namespace Device.Net.UnitTests
             //Send the request part of the Message Contract
             var request = new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 };
 
-            var filterDeviceDefinition = new FilterDeviceDefinition { VendorId = 0x413d, ProductId = 0x2107, UsagePage = 65280 };
+            var filterDeviceDefinition = new FilterDeviceDefinition(vendorId: 0x413d, productId: 0x2107, usagePage: 65280);
 
             var integrationTester = new IntegrationTester(
                 filterDeviceDefinition.GetHidDeviceFactory());
@@ -131,11 +131,7 @@ namespace Device.Net.UnitTests
             request[3] = 1;
             request[4] = 1;
 
-            var filterDeviceDefinition = new FilterDeviceDefinition
-            {
-                ProductId = 4112,
-                VendorId = 10741
-            };
+            var filterDeviceDefinition = new FilterDeviceDefinition(productId: 4112, vendorId: 10741);
 
             var integrationTester = new IntegrationTester(
                 filterDeviceDefinition.GetHidDeviceFactory());
