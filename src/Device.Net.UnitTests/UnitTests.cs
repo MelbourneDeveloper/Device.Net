@@ -180,28 +180,39 @@ namespace Device.Net.UnitTests
             var hidMock = new Mock<IDeviceFactory>();
             var usbMock = new Mock<IDeviceFactory>();
 
-            if (isHidConnected && ((!vid.HasValue && !pid.HasValue) || (vid==1 && pid ==1)))
+            if (isHidConnected)
             {
-                hidMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync()).Returns(
-                    Task.FromResult<IReadOnlyCollection<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> { new ConnectedDeviceDefinition("123") 
+                var result = new List<ConnectedDeviceDefinition>();
+
+                if((!vid.HasValue && !pid.HasValue) || (vid == 1 && pid == 1))
+                {
+                    result.Add(new ConnectedDeviceDefinition("123")
                     {
                         ProductId = 1,
                         VendorId = 1
-                    } }));
+                    });
+                }
+
+                hidMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync()).Returns(
+                    Task.FromResult<IReadOnlyCollection<ConnectedDeviceDefinition>>(result));
 
 
                 hidMock.Setup(f => f.GetDevice(It.IsAny<ConnectedDeviceDefinition>())).Returns(
                 Task.FromResult<IDevice>( new MockHidDevice("Asd",_LoggerFactoryMock.Object,_loggerMock.Object)));
             }
 
-            if (isUsbConnected && ((!vid.HasValue && !pid.HasValue) || (vid == 2 && pid == 2)))
+            if (isUsbConnected)
             {
+                var result =new List<ConnectedDeviceDefinition>();
+
+                if ((!vid.HasValue && !pid.HasValue) || (vid == 2 && pid == 2))
+                {
+                    result.Add(new ConnectedDeviceDefinition("321"){    ProductId = 2,VendorId = 2});
+                }
+
                 usbMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync()).Returns(
-                    Task.FromResult<IReadOnlyCollection<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> { new ConnectedDeviceDefinition("321") 
-                    {
-                        ProductId = 2,
-                        VendorId = 2
-                    } }));
+                    Task.FromResult<IReadOnlyCollection<ConnectedDeviceDefinition>>(
+                        result));
             }
 
             return (hidMock, usbMock);
