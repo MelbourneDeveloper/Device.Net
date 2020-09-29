@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Device.Net
 {
-    public delegate Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync();
+    public delegate Task<IReadOnlyCollection<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync();
     public delegate Guid GetClassGuid();
     public delegate ConnectedDeviceDefinition GetDeviceDefinition(string deviceId);
     public delegate Task<IDevice> GetDevice(string deviceId);
@@ -46,7 +46,7 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync() => _getConnectedDevicesAsync();
+        public Task<IReadOnlyCollection<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync() => _getConnectedDevicesAsync();
 
         public Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition) => deviceDefinition == null ? throw new ArgumentNullException(nameof(deviceDefinition)) : _getDevice(deviceDefinition.DeviceId);
         #endregion

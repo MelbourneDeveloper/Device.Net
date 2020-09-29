@@ -30,9 +30,9 @@ namespace Device.Net.Windows
             _isMatch = isMatch;
         }
 
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
+        public async Task<IReadOnlyCollection<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
-            return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(async () =>
+            return await Task.Run<IReadOnlyCollection<ConnectedDeviceDefinition>>(async () =>
             {
                 IDisposable loggerScope = null;
 
@@ -40,7 +40,7 @@ namespace Device.Net.Windows
                 {
                     loggerScope = Logger.BeginScope("Calling " + nameof(GetConnectedDeviceDefinitionsAsync));
 
-                    var deviceDefinitions = new Collection<ConnectedDeviceDefinition>();
+                    var deviceDefinitions = new List<ConnectedDeviceDefinition>();
                     var spDeviceInterfaceData = new SpDeviceInterfaceData();
                     var spDeviceInfoData = new SpDeviceInfoData();
                     var spDeviceInterfaceDetailData = new SpDeviceInterfaceDetailData();
@@ -123,7 +123,7 @@ namespace Device.Net.Windows
 
                     APICalls.SetupDiDestroyDeviceInfoList(devicesHandle);
 
-                    return deviceDefinitions;
+                    return new ReadOnlyCollection<ConnectedDeviceDefinition>(deviceDefinitions);
                 }
                 catch (Exception ex)
                 {

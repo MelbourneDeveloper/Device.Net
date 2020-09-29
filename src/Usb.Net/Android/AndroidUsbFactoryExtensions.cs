@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Usb.Net.Android
@@ -53,6 +54,8 @@ namespace Usb.Net.Android
             {
                 getConnectedDeviceDefinitionsAsync = async () =>
 
+                new ReadOnlyCollection<ConnectedDeviceDefinition>(
+
                      usbManager.DeviceList.Select(kvp => kvp.Value).Where(d
                      =>
                          filterDeviceDefinitions.FirstOrDefault(f
@@ -61,7 +64,9 @@ namespace Usb.Net.Android
                             (!f.ProductId.HasValue || f.ProductId.Value == d.ProductId)
                         ) != null
 
-                    ).Select(AndroidUsbInterfaceManager.GetAndroidDeviceDefinition);
+                    ).Select(AndroidUsbInterfaceManager.GetAndroidDeviceDefinition).ToList()
+
+                    );
             }
 
             if (getUsbInterfaceManager == null)

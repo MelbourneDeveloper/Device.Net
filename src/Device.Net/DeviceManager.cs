@@ -19,20 +19,23 @@ namespace Device.Net
 
         #region Public Properties
         public const string ObsoleteMessage = "This method will soon be removed. Create an instance of DeviceManager and register factories there";
-        public List<IDeviceFactory> DeviceFactories { get; } = new List<IDeviceFactory>();
+        public IReadOnlyCollection<IDeviceFactory> DeviceFactories { get; }
         public bool IsInitialized => DeviceFactories.Count > 0;
         #endregion
 
         #region Constructor
-        public DeviceManager(ILoggerFactory loggerFactory = null)
+        public DeviceManager(
+            IReadOnlyCollection<IDeviceFactory> deviceFactories,
+            ILoggerFactory loggerFactory = null)
         {
             _loggerFactory = loggerFactory ?? new NullLoggerFactory();
             _logger = _loggerFactory.CreateLogger<DeviceManager>();
+            DeviceFactories = deviceFactories;
         }
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
+        public async Task<IReadOnlyCollection<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
             if (DeviceFactories.Count == 0) throw new DeviceFactoriesNotRegisteredException();
 

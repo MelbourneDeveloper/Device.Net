@@ -84,7 +84,7 @@ namespace Device.Net.UnitTests
         public async Task TestWithMatchedFilterAsync(bool isHidConnected, bool isUsbConnected, int expectedCount, uint vid, uint pid)
         {
             var (hid, usb) = GetMockedFactories(isHidConnected, isUsbConnected, vid, pid);
-            var deviceManager = new DeviceManager(_loggerFactory) { DeviceFactories = { hid.Object, usb.Object } };
+            var deviceManager = new List<IDeviceFactory> { hid.Object, usb.Object }.ToDeviceManager();
 
             var connectedDeviceDefinitions = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList();
 
@@ -127,11 +127,9 @@ namespace Device.Net.UnitTests
             var (hid, usb) = GetMockedFactories(isHidConnected, isUsbConnected, vid, pid);
 
 
-            var deviceManager = new DeviceManager(_loggerFactory) { DeviceFactories = { hid.Object, usb.Object } };
+            var deviceManager = new List<IDeviceFactory> { hid.Object, usb.Object }.ToDeviceManager();
 
             var connectedDeviceDefinition = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList().First();
-
-
 
             var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, _loggerFactory, _loggerMock.Object);
 
@@ -170,7 +168,7 @@ namespace Device.Net.UnitTests
         {
             var (hidMock, usbMock) = GetMockedFactories(isHidConnected, isUsbConnected, null, null);
 
-            var deviceManager = new DeviceManager(_loggerFactory) { DeviceFactories = { hidMock.Object, usbMock.Object } };
+            var deviceManager =new List<IDeviceFactory> { hidMock.Object, usbMock.Object } .ToDeviceManager(_loggerFactory);
 
             var connectedDeviceDefinitions = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
@@ -185,7 +183,7 @@ namespace Device.Net.UnitTests
             if (isHidConnected && ((!vid.HasValue && !pid.HasValue) || (vid==1 && pid ==1)))
             {
                 hidMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync()).Returns(
-                    Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> { new ConnectedDeviceDefinition("123") 
+                    Task.FromResult<IReadOnlyCollection<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> { new ConnectedDeviceDefinition("123") 
                     {
                         ProductId = 1,
                         VendorId = 1
@@ -199,7 +197,7 @@ namespace Device.Net.UnitTests
             if (isUsbConnected && ((!vid.HasValue && !pid.HasValue) || (vid == 2 && pid == 2)))
             {
                 usbMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync()).Returns(
-                    Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> { new ConnectedDeviceDefinition("321") 
+                    Task.FromResult<IReadOnlyCollection<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> { new ConnectedDeviceDefinition("321") 
                     {
                         ProductId = 2,
                         VendorId = 2
@@ -244,7 +242,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestDeviceFactoriesNotRegisteredException()
         {
-            var deviceManager = new DeviceManager(_loggerFactory);
+            var deviceManager = new DeviceManager(new List<IDeviceFactory>(), _loggerFactory);
 
             try
             {
@@ -289,7 +287,7 @@ namespace Device.Net.UnitTests
         {
             try
             {
-                var deviceManager = new DeviceManager(_LoggerFactoryMock.Object);
+                var deviceManager = new DeviceManager(new List<IDeviceFactory>(), _LoggerFactoryMock.Object);
                 var device = deviceManager.GetDevice(new ConnectedDeviceDefinition("a"));
             }
             catch (DeviceException dex)
@@ -329,13 +327,11 @@ namespace Device.Net.UnitTests
         #endregion
 
         #region Helpers
-        private async Task<bool> ListenForDeviceAsync(IEnumerable<IDeviceFactory> deviceFactories)
+        private async Task<bool> ListenForDeviceAsync(IReadOnlyCollection<IDeviceFactory> deviceFactories)
         {
             var listenTaskCompletionSource = new TaskCompletionSource<bool>();
 
-            var deviceManager = new DeviceManager(_loggerFactory) {  };
-
-            deviceManager.DeviceFactories.AddRange(deviceFactories);
+            var deviceManager = new DeviceManager(deviceFactories, _loggerFactory);
 
             var deviceListener = new DeviceListener(
                 deviceManager,

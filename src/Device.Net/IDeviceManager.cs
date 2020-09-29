@@ -5,9 +5,8 @@ namespace Device.Net
 {
     public interface IDeviceManager
     {
-        List<IDeviceFactory> DeviceFactories { get; }
-        Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync();
+        IReadOnlyCollection<IDeviceFactory> DeviceFactories { get; }
+        Task<IReadOnlyCollection<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync();
         Task<IDevice> GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition);
-        bool IsInitialized { get; }
     }
 }

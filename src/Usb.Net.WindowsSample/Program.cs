@@ -5,6 +5,7 @@ using Device.Net;
 using Microsoft.Extensions.Logging;
 using System.Reactive.Subjects;
 using System.Reactive.Linq;
+using System.Collections.Generic;
 
 #if !LIBUSB
 using Hid.Net.Windows;
@@ -33,15 +34,17 @@ namespace Usb.Net.WindowsSample
                 builder.AddDebug();
             });
 
-            _DeviceManager = new DeviceManager(_loggerFactory);
 
             //Register the factories for creating Usb devices. This only needs to be done once.
 #if LIBUSB
             _DeviceManager.RegisterDeviceFactory(new LibUsbUsbDeviceFactory(_loggerFactory));
 #else
-            _DeviceManager.RegisterDeviceFactory(TrezorExample.UsbDeviceDefinitions.CreateWindowsUsbDeviceFactory(_loggerFactory));
-            _DeviceManager.RegisterDeviceFactory(TrezorExample.HidDeviceDefinitions.CreateWindowsHidDeviceFactory(_loggerFactory));
-            _DeviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(_loggerFactory));
+            _DeviceManager = new List<IDeviceFactory>
+            {
+                TrezorExample.UsbDeviceDefinitions.CreateWindowsUsbDeviceFactory(_loggerFactory),
+                TrezorExample.HidDeviceDefinitions.CreateWindowsHidDeviceFactory(_loggerFactory),
+                new WindowsSerialPortDeviceFactory(_loggerFactory)
+            }.ToDeviceManager(_loggerFactory);
 #endif
 
             _DeviceConnectionExample = new TrezorExample(_DeviceManager, _loggerFactory);

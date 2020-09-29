@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -37,7 +38,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
+        public async Task<IReadOnlyCollection<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
             var deviceInformationCollection = aqsFilter != null
                 ? await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask()
@@ -59,7 +60,7 @@ namespace Device.Net.UWP
                 }
             }
 
-            return deviceDefinitionList;
+            return new ReadOnlyCollection<ConnectedDeviceDefinition>(deviceDefinitionList);
         }
 
         private async Task<ConnectionInfo> TestConnection(string deviceId)
