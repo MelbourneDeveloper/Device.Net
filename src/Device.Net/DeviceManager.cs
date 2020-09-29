@@ -43,8 +43,6 @@ namespace Device.Net
         #region Public Methods
         public async Task<IReadOnlyCollection<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
-            if (DeviceFactories.Count == 0) throw new DeviceFactoriesNotRegisteredException();
-
             var retVal = new List<ConnectedDeviceDefinition>();
 
             foreach (var deviceFactory in DeviceFactories)

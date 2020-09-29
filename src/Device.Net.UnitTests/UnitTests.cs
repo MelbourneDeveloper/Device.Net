@@ -255,13 +255,12 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestDeviceFactoriesNotRegisteredException()
         {
-            var deviceManager = new DeviceManager(new List<IDeviceFactory>(), _loggerFactory);
 
             try
             {
-                await deviceManager.GetConnectedDeviceDefinitionsAsync();
+                var deviceManager = new DeviceManager(new List<IDeviceFactory>(), _loggerFactory);
             }
-            catch (DeviceFactoriesNotRegisteredException)
+            catch (InvalidOperationException)
             {
                 return;
             }
