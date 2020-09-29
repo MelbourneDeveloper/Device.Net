@@ -25,12 +25,12 @@ namespace Usb.Net.AndroidSample
         #region Constructor
         public MainActivity()
         {
-            var loggerFactory = LoggerFactory.Create((builder) =>
+            _LoggerFactory = LoggerFactory.Create((builder) =>
             {
                 builder.AddDebug();
             });
 
-            _DeviceManager = new DeviceManager(loggerFactory);
+            _DeviceManager = new DeviceManager(_LoggerFactory);
             _TrezorExample = new TrezorExample(_DeviceManager, _LoggerFactory);
         }
         #endregion
