@@ -280,7 +280,7 @@ namespace Device.Net.UnitTests
         {
             try
             {
-                var deviceManager = new DeviceManager(new List<IDeviceFactory>(), _LoggerFactoryMock.Object);
+                var deviceManager = new DeviceManager(new List<IDeviceFactory> { new Mock<IDeviceFactory>().Object }, _LoggerFactoryMock.Object);
                 var device = deviceManager.GetDevice(new ConnectedDeviceDefinition("a"));
             }
             catch (DeviceException dex)
