@@ -66,7 +66,7 @@ namespace Usb.Net.Android
 
             if (getUsbInterfaceManager == null)
             {
-                getUsbInterfaceManager = async (a) => new AndroidUsbInterfaceManager(
+                getUsbInterfaceManager = async a => new AndroidUsbInterfaceManager(
                     usbManager,
                     context,
                     //TODO: throw a validation message

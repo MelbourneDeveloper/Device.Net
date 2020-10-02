@@ -48,7 +48,7 @@ namespace Usb.Net.UWP
                 var uwpHidDeviceEnumerator = new UwpDeviceEnumerator(
                     aqs,
                     DeviceType.Usb,
-                    async (d) => new ConnectionInfo { CanConnect = true },
+                    async d => new ConnectionInfo { CanConnect = true },
                     loggerFactory);
 
                 getConnectedDeviceDefinitionsAsync = uwpHidDeviceEnumerator.GetConnectedDeviceDefinitionsAsync;
@@ -56,7 +56,7 @@ namespace Usb.Net.UWP
 
             if (getUsbInterfaceManager == null)
             {
-                getUsbInterfaceManager = async (d) =>
+                getUsbInterfaceManager = async d =>
                     new UWPUsbInterfaceManager(
                     //TODO: no idea if this is OK...
                     new ConnectedDeviceDefinition(d),

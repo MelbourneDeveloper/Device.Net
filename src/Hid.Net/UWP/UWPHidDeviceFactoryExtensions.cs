@@ -33,7 +33,7 @@ namespace Hid.Net.UWP
         {
             loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
 
-            if (getDevice == null) getDevice = async (c) => new UWPHidDevice(c, loggerFactory, defaultReportId);
+            if (getDevice == null) getDevice = async c => new UWPHidDevice(c, loggerFactory, defaultReportId);
 
             var firstDevice = filterDeviceDefinitions.First();
 
@@ -47,7 +47,7 @@ namespace Hid.Net.UWP
                 var uwpHidDeviceEnumerator = new UwpDeviceEnumerator(
                     aqs,
                     DeviceType.Hid,
-                    async (deviceId) =>
+                    async deviceId =>
                     {
                         using (var hidDevice = await UWPHidDevice.GetHidDevice(deviceId).AsTask())
                         {

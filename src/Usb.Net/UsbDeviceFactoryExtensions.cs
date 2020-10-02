@@ -16,7 +16,7 @@ namespace Usb.Net
             new DeviceFactory(
             loggerFactory,
             getConnectedDeviceDefinitionsAsync,
-            async (d) =>
+            async d =>
             {
                 var usbInterfaceManager = await getUsbInterfaceManager(d);
                 return new UsbDevice(d, usbInterfaceManager, loggerFactory);

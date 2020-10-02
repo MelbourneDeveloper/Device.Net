@@ -47,16 +47,16 @@ namespace Usb.Net.Windows
                 var uwpHidDeviceEnumerator = new WindowsDeviceEnumerator(
                     logger,
                     classGuid ?? WindowsDeviceConstants.WinUSBGuid,
-                    (d) => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(d, DeviceType.Usb, logger),
-                    async (c) =>
-                    filterDeviceDefinitions.FirstOrDefault((f) => DeviceManager.IsDefinitionMatch(f, c, DeviceType.Usb)) != null);
+                    d => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(d, DeviceType.Usb, logger),
+                    async c =>
+                    filterDeviceDefinitions.FirstOrDefault(f => DeviceManager.IsDefinitionMatch(f, c, DeviceType.Usb)) != null);
 
                 getConnectedDeviceDefinitionsAsync = uwpHidDeviceEnumerator.GetConnectedDeviceDefinitionsAsync;
             }
 
             if (getUsbInterfaceManager == null)
             {
-                getUsbInterfaceManager = async (d) =>
+                getUsbInterfaceManager = async d =>
                     new WindowsUsbInterfaceManager(
                     //TODO: no idea if this is OK...
                     d,

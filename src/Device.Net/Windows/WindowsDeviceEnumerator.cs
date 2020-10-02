@@ -34,11 +34,10 @@ namespace Device.Net.Windows
         {
             return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(async () =>
             {
-                IDisposable loggerScope = null;
+                using var loggerScope = Logger.BeginScope("Calling " + nameof(GetConnectedDeviceDefinitionsAsync));
 
                 try
                 {
-                    loggerScope = Logger.BeginScope("Calling " + nameof(GetConnectedDeviceDefinitionsAsync));
 
                     var deviceDefinitions = new Collection<ConnectedDeviceDefinition>();
                     var spDeviceInterfaceData = new SpDeviceInterfaceData();
@@ -51,9 +50,11 @@ namespace Device.Net.Windows
 
                     var copyOfClassGuid = new Guid(_classGuid.ToString());
 
-                    Logger.LogDebug("About to call {call} for class Guid {guidString}. Flags: {flags}", nameof(APICalls.SetupDiGetClassDevs), _classGuid.ToString(), flags);
+                    Logger.LogDebug("About to call {call} for class Guid {guidString}. Flags: {flags}",
+                        nameof(APICalls.SetupDiGetClassDevs), _classGuid.ToString(), flags);
 
-                    var devicesHandle = APICalls.SetupDiGetClassDevs(ref copyOfClassGuid, IntPtr.Zero, IntPtr.Zero, flags);
+                    var devicesHandle =
+                        APICalls.SetupDiGetClassDevs(ref copyOfClassGuid, IntPtr.Zero, IntPtr.Zero, flags);
 
                     spDeviceInterfaceDetailData.CbSize = IntPtr.Size == 8 ? 8 : 4 + Marshal.SystemDefaultCharSize;
 
@@ -65,46 +66,58 @@ namespace Device.Net.Windows
                         {
                             i++;
 
-                            var isSuccess = APICalls.SetupDiEnumDeviceInterfaces(devicesHandle, IntPtr.Zero, ref copyOfClassGuid, (uint)i, ref spDeviceInterfaceData);
+                            var isSuccess = APICalls.SetupDiEnumDeviceInterfaces(devicesHandle, IntPtr.Zero,
+                                ref copyOfClassGuid, (uint)i, ref spDeviceInterfaceData);
                             if (!isSuccess)
                             {
                                 var errorCode = Marshal.GetLastWin32Error();
 
                                 if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
                                 {
-                                    Logger.LogDebug("The call to " + nameof(APICalls.SetupDiEnumDeviceInterfaces) + "  returned ERROR_NO_MORE_ITEMS");
+                                    Logger.LogDebug("The call to " + nameof(APICalls.SetupDiEnumDeviceInterfaces) +
+                                                    "  returned ERROR_NO_MORE_ITEMS");
                                     break;
                                 }
 
                                 if (errorCode > 0)
                                 {
-                                    Logger.LogWarning("{call} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {index}. The error code was {errorCode}.", nameof(APICalls.SetupDiEnumDeviceInterfaces), i, errorCode);
+                                    Logger.LogWarning(
+                                        "{call} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {index}. The error code was {errorCode}.",
+                                        nameof(APICalls.SetupDiEnumDeviceInterfaces), i, errorCode);
                                 }
                             }
 
-                            isSuccess = APICalls.SetupDiGetDeviceInterfaceDetail(devicesHandle, ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _, ref spDeviceInfoData);
+                            isSuccess = APICalls.SetupDiGetDeviceInterfaceDetail(devicesHandle,
+                                ref spDeviceInterfaceData, ref spDeviceInterfaceDetailData, 256, out _,
+                                ref spDeviceInfoData);
                             if (!isSuccess)
                             {
                                 var errorCode = Marshal.GetLastWin32Error();
 
                                 if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
                                 {
-                                    Logger.LogDebug("The call to {call} returned ERROR_NO_MORE_ITEMS", new object[] { nameof(APICalls.SetupDiEnumDeviceInterfaces) });
+                                    Logger.LogDebug("The call to {call} returned ERROR_NO_MORE_ITEMS",
+                                        new object[] { nameof(APICalls.SetupDiEnumDeviceInterfaces) });
                                     //TODO: This probably can't happen but leaving this here because there was some strange behaviour
                                     break;
                                 }
 
                                 if (errorCode > 0)
                                 {
-                                    Logger.LogWarning("{nameof(APICalls.SetupDiGetDeviceInterfaceDetail)} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {i}. The error code was {errorCode}.", nameof(APICalls.SetupDiEnumDeviceInterfaces), i, errorCode);
+                                    Logger.LogWarning(
+                                        "{nameof(APICalls.SetupDiGetDeviceInterfaceDetail)} called successfully but a device was skipped while enumerating because something went wrong. The device was at index {i}. The error code was {errorCode}.",
+                                        nameof(APICalls.SetupDiEnumDeviceInterfaces), i, errorCode);
                                 }
                             }
 
-                            var connectedDeviceDefinition = _getDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
+                            var connectedDeviceDefinition =
+                                _getDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
 
                             if (connectedDeviceDefinition == null)
                             {
-                                Logger.LogWarning("Device with path {devicePath} was skipped. Area: {area} See previous logs.", spDeviceInterfaceDetailData.DevicePath, GetType().Name);
+                                Logger.LogWarning(
+                                    "Device with path {devicePath} was skipped. Area: {area} See previous logs.",
+                                    spDeviceInterfaceDetailData.DevicePath, GetType().Name);
                                 continue;
                             }
 
@@ -129,10 +142,6 @@ namespace Device.Net.Windows
                 {
                     Logger.LogError(ex, "Error calling " + nameof(GetConnectedDeviceDefinitionsAsync));
                     throw;
-                }
-                finally
-                {
-                    loggerScope.Dispose();
                 }
             });
         }

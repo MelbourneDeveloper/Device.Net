@@ -69,15 +69,15 @@ namespace Hid.Net.Windows
             var windowsDeviceEnumerator = new WindowsDeviceEnumerator(
                 loggerFactory.CreateLogger<WindowsDeviceEnumerator>(),
                 classGuid ?? selectedHidApiService.GetHidGuid(),
-                (d) => GetDeviceDefinition(d, selectedHidApiService, loggerFactory.CreateLogger(nameof(WindowsHidDeviceFactoryExtensions))),
-                async (c) =>
-                    filterDeviceDefinitions.FirstOrDefault((f) => DeviceManager.IsDefinitionMatch(f, c, DeviceType.Hid)) != null
+                d => GetDeviceDefinition(d, selectedHidApiService, loggerFactory.CreateLogger(nameof(WindowsHidDeviceFactoryExtensions))),
+                async c =>
+                    filterDeviceDefinitions.FirstOrDefault(f => DeviceManager.IsDefinitionMatch(f, c, DeviceType.Hid)) != null
                 );
 
             return new DeviceFactory(
                 loggerFactory,
                 windowsDeviceEnumerator.GetConnectedDeviceDefinitionsAsync,
-                async (c) => new WindowsHidDevice
+                async c => new WindowsHidDevice
                 (
                     c,
                     loggerFactory: loggerFactory,
