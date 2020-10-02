@@ -34,7 +34,13 @@ namespace Device.Net.UnitTests
 
         private static readonly Mock<ILogger> _loggerMock = new Mock<ILogger>();
         private static readonly Mock<ILoggerFactory> _LoggerFactoryMock = new Mock<ILoggerFactory>();
-        //private static readonly IDeviceManager _DeviceManager = new DeviceManager(_LoggerFactoryMock.Object);
+
+        /// <summary>
+        /// Dummy logger factory for now
+        /// TODO: remove this because the factory is no longer a required parameter
+        /// </summary>
+        private readonly ILoggerFactory _loggerFactory = LoggerFactory.Create((builder) => { });
+
 
         public static void CheckLogMessageText(Mock<ILogger> loggerMock, string containsText, LogLevel logLevel, Times times)
         {
@@ -84,7 +90,7 @@ namespace Device.Net.UnitTests
         public async Task TestWithMatchedFilterAsync(bool isHidConnected, bool isUsbConnected, int expectedCount, uint vid, uint pid)
         {
             var (hid, usb) = GetMockedFactories(isHidConnected, isUsbConnected, vid, pid);
-            var deviceManager = new DeviceManager(_loggerFactory) { DeviceFactories = { hid.Object, usb.Object } };
+            var deviceManager = new List<IDeviceFactory> { hid.Object, usb.Object }.ToDeviceManager();
 
             var connectedDeviceDefinitions = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList();
 
@@ -127,11 +133,9 @@ namespace Device.Net.UnitTests
             var (hid, usb) = GetMockedFactories(isHidConnected, isUsbConnected, vid, pid);
 
 
-            var deviceManager = new DeviceManager(_loggerFactory) { DeviceFactories = { hid.Object, usb.Object } };
+            var deviceManager = new List<IDeviceFactory> { hid.Object, usb.Object }.ToDeviceManager();
 
             var connectedDeviceDefinition = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList().First();
-
-
 
             var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, _loggerFactory, _loggerMock.Object);
 
@@ -170,7 +174,7 @@ namespace Device.Net.UnitTests
         {
             var (hidMock, usbMock) = GetMockedFactories(isHidConnected, isUsbConnected, null, null);
 
-            var deviceManager = new DeviceManager(_loggerFactory) { DeviceFactories = { hidMock.Object, usbMock.Object } };
+            var deviceManager =new List<IDeviceFactory> { hidMock.Object, usbMock.Object } .ToDeviceManager(_loggerFactory);
 
             var connectedDeviceDefinitions = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
@@ -244,13 +248,12 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestDeviceFactoriesNotRegisteredException()
         {
-            var deviceManager = new DeviceManager(_loggerFactory);
 
             try
             {
-                await deviceManager.GetConnectedDeviceDefinitionsAsync();
+                var deviceManager = new DeviceManager(new List<IDeviceFactory>(), _loggerFactory);
             }
-            catch (DeviceFactoriesNotRegisteredException)
+            catch (InvalidOperationException)
             {
                 return;
             }
@@ -259,38 +262,14 @@ namespace Device.Net.UnitTests
         }
         #endregion
 
-        /// <summary>
-        /// Dummy logger factory for now
-        /// </summary>
-        private readonly ILoggerFactory _loggerFactory = LoggerFactory.Create((builder) => { });
-
-        [TestMethod]
-        public void TestListenerDeviceFactoriesNotRegisteredException()
-        {
-
-            var deviceManager = new Mock<IDeviceManager>();
-
-            try
-            {
-                var deviceListner = new DeviceListener(deviceManager.Object, 1000, _loggerFactory);
-                deviceListner.Start();
-            }
-            catch (DeviceFactoriesNotRegisteredException)
-            {
-                return;
-            }
-
-            Assert.Fail("The call was not stopped");
-        }
-
         #region Exceptions
         [TestMethod]
-        public void TestDeviceException()
+        public async Task TestDeviceException()
         {
             try
             {
-                var deviceManager = new DeviceManager(_LoggerFactoryMock.Object);
-                var device = deviceManager.GetDevice(new ConnectedDeviceDefinition("a"));
+                var deviceManager = new DeviceManager(new List<IDeviceFactory> { new Mock<IDeviceFactory>().Object }, _LoggerFactoryMock.Object);
+                var device = await deviceManager.GetDevice(new ConnectedDeviceDefinition("a"));
             }
             catch (DeviceException dex)
             {
@@ -329,13 +308,11 @@ namespace Device.Net.UnitTests
         #endregion
 
         #region Helpers
-        private async Task<bool> ListenForDeviceAsync(IEnumerable<IDeviceFactory> deviceFactories)
+        private async Task<bool> ListenForDeviceAsync(IReadOnlyCollection<IDeviceFactory> deviceFactories)
         {
             var listenTaskCompletionSource = new TaskCompletionSource<bool>();
 
-            var deviceManager = new DeviceManager(_loggerFactory) {  };
-
-            deviceManager.DeviceFactories.AddRange(deviceFactories);
+            var deviceManager = new DeviceManager(deviceFactories, _loggerFactory);
 
             var deviceListener = new DeviceListener(
                 deviceManager,

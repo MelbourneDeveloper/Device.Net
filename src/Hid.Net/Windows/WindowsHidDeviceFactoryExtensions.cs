@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Hid.Net.Windows
@@ -29,7 +30,7 @@ namespace Hid.Net.Windows
                 writeBufferSize
                 );
 
-            return new DeviceManager(loggerFactory) { DeviceFactories = { factory } };
+            return new DeviceManager(new ReadOnlyCollection<IDeviceFactory>(new List<IDeviceFactory> { factory }), loggerFactory);
         }
 
         public static IDeviceFactory CreateWindowsHidDeviceFactory(

@@ -1,26 +1,20 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Device.Net
 {
     public static class DeviceExtensions
     {
-        /// <summary>
-        /// Register the factory for enumerating devices.
-        /// </summary>
-        public static void RegisterDeviceFactory(this IDeviceManager deviceManager, IDeviceFactory newDeviceFactory)
-        {
-            if (deviceManager == null) throw new ArgumentNullException(nameof(deviceManager));
+        public static IDeviceManager ToDeviceManager(this IDeviceFactory deviceFactory, ILoggerFactory loggerFactory = null)
+             =>
+            deviceFactory == null ? throw new ArgumentNullException(nameof(deviceFactory)) :
+            new DeviceManager(new ReadOnlyCollection<IDeviceFactory>(new List<IDeviceFactory> { deviceFactory }), loggerFactory);
 
-            foreach (var deviceFactory in deviceManager.DeviceFactories)
-            {
-                if (ReferenceEquals(deviceFactory, newDeviceFactory)) return;
-            }
-
-            deviceManager.DeviceFactories.Add(newDeviceFactory);
-        }
-
-        public static IDeviceManager ToDeviceManager(this IDeviceFactory deviceFactory, ILoggerFactory loggerFactory = null) => new DeviceManager(loggerFactory) { DeviceFactories = { deviceFactory } };
+        public static IDeviceManager ToDeviceManager(this IList<IDeviceFactory> deviceFactories, ILoggerFactory loggerFactory = null)
+            => deviceFactories == null ? throw new ArgumentNullException(nameof(deviceFactories)) :
+            new DeviceManager(new ReadOnlyCollection<IDeviceFactory>(deviceFactories), loggerFactory);
 
     }
 }

@@ -19,23 +19,30 @@ namespace Device.Net
 
         #region Public Properties
         public const string ObsoleteMessage = "This method will soon be removed. Create an instance of DeviceManager and register factories there";
-        public List<IDeviceFactory> DeviceFactories { get; } = new List<IDeviceFactory>();
+        public IReadOnlyCollection<IDeviceFactory> DeviceFactories { get; }
         public bool IsInitialized => DeviceFactories.Count > 0;
         #endregion
 
         #region Constructor
-        public DeviceManager(ILoggerFactory loggerFactory = null)
+        public DeviceManager(
+            IReadOnlyCollection<IDeviceFactory> deviceFactories,
+            ILoggerFactory loggerFactory = null)
         {
             _loggerFactory = loggerFactory ?? new NullLoggerFactory();
             _logger = _loggerFactory.CreateLogger<DeviceManager>();
+            DeviceFactories = deviceFactories ?? throw new ArgumentNullException(nameof(deviceFactories));
+
+            if (deviceFactories.Count == 0)
+            {
+                throw new InvalidOperationException("You must specify at least one Device Factory");
+            }
+
         }
         #endregion
 
         #region Public Methods
         public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
-            if (DeviceFactories.Count == 0) throw new DeviceFactoriesNotRegisteredException();
-
             var retVal = new List<ConnectedDeviceDefinition>();
 
             foreach (var deviceFactory in DeviceFactories)
@@ -58,13 +65,18 @@ namespace Device.Net
         }
 
         //TODO: Duplicate code here...
-        public Task<IDevice> GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition)
+        public async Task<IDevice> GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition)
         {
             if (connectedDeviceDefinition == null) throw new ArgumentNullException(nameof(connectedDeviceDefinition));
 
             foreach (var deviceFactory in DeviceFactories.Where(deviceFactory => !connectedDeviceDefinition.DeviceType.HasValue || (deviceFactory.DeviceType == connectedDeviceDefinition.DeviceType)))
             {
-                return deviceFactory.GetDevice(connectedDeviceDefinition);
+                //TODO: This doesn't distinguish between the device not existing, and the factory not being able to deal with the device type...
+                //Still undecided on how to handle this
+
+                var device = await deviceFactory.GetDevice(connectedDeviceDefinition);
+
+                if (device != null) return device;
             }
 
             throw new DeviceException(Messages.ErrorMessageCouldntGetDevice);

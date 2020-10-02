@@ -26,8 +26,7 @@ namespace Device.Net.UnitTests
 
         public async Task TestAsync(byte[] writeData, Func<ReadResult, IDevice, Task> assertFunc, int expectedDataLength)
         {
-            var deviceManager = new DeviceManager(_loggerFactory);
-            deviceManager.DeviceFactories.Add(_deviceFactory);
+            var deviceManager = _deviceFactory.ToDeviceManager(_loggerFactory);
 
             var devices = await deviceManager.GetConnectedDeviceDefinitionsAsync();
 
