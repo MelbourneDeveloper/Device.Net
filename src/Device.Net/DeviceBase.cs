@@ -30,7 +30,10 @@ namespace Device.Net
         #endregion
 
         #region Constructor
-        protected DeviceBase(string deviceId, ILoggerFactory loggerFactory, ILogger logger)
+        protected DeviceBase(
+            string deviceId,
+            ILoggerFactory loggerFactory = null,
+            ILogger logger = null)
         {
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
             Logger = logger ?? NullLogger.Instance;
