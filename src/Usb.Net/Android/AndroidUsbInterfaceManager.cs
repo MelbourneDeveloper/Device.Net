@@ -1,4 +1,4 @@
-﻿using Android.Content;
+using Android.Content;
 using Android.Hardware.Usb;
 using Device.Net;
 using Device.Net.Exceptions;
@@ -115,7 +115,11 @@ namespace Usb.Net.Android
 
             var taskCompletionSource = new TaskCompletionSource<bool?>();
 
-            var usbPermissionBroadcastReceiver = new UsbPermissionBroadcastReceiver(UsbManager, _UsbDevice, AndroidContext);
+            var usbPermissionBroadcastReceiver = new UsbPermissionBroadcastReceiver(
+                UsbManager,
+                _UsbDevice,
+                AndroidContext,
+                LoggerFactory.CreateLogger<UsbPermissionBroadcastReceiver>());
             usbPermissionBroadcastReceiver.Received += (sender, eventArgs) =>
             {
                 taskCompletionSource.SetResult(usbPermissionBroadcastReceiver.IsPermissionGranted);
