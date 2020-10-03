@@ -246,7 +246,7 @@ namespace Hid.Net.Windows
 
                     if (IsReadOnly.HasValue && IsReadOnly.Value)
                     {
-                        throw new ValidationException($"This device was opened in Read Only mode.");
+                        throw new ValidationException("This device was opened in Read Only mode.");
                     }
 
                     if (data == null) throw new ArgumentNullException(nameof(data));

@@ -24,7 +24,7 @@ namespace Usb.Net
         #endregion
 
         #region Constructor
-        protected UsbInterfaceManager(ILoggerFactory loggerFactory = null)
+        public UsbInterfaceManager(ILoggerFactory loggerFactory = null)
         {
             LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             Logger = LoggerFactory.CreateLogger<UsbInterfaceManager>();
@@ -32,7 +32,7 @@ namespace Usb.Net
         #endregion
 
         #region Protected Methods
-        protected void RegisterDefaultInterfaces()
+        public void RegisterDefaultInterfaces()
         {
             foreach (var usbInterface in UsbInterfaces)
             {

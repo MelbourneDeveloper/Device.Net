@@ -96,8 +96,7 @@ namespace Device.Net.Windows
 
                                 if (errorCode == APICalls.ERROR_NO_MORE_ITEMS)
                                 {
-                                    Logger.LogDebug("The call to {call} returned ERROR_NO_MORE_ITEMS",
-                                        new object[] { nameof(APICalls.SetupDiEnumDeviceInterfaces) });
+                                    Logger.LogDebug("The call to {call} returned ERROR_NO_MORE_ITEMS", nameof(APICalls.SetupDiEnumDeviceInterfaces));
                                     //TODO: This probably can't happen but leaving this here because there was some strange behaviour
                                     break;
                                 }
