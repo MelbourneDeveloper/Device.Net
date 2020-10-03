@@ -54,12 +54,10 @@ namespace Hid.Net.UWP
         public override async Task InitializeAsync()
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
-            IDisposable loggerScope = null;
+            using var loggerScope = Logger?.BeginScope("DeviceId: {deviceId} Region: {region}", DeviceId, nameof(UWPHidDevice));
 
             try
             {
-                loggerScope = Logger?.BeginScope("DeviceId: {deviceId} Region: {region}", DeviceId, nameof(UWPHidDevice));
-
                 if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
                 Logger?.LogDebug(Messages.InformationMessageInitializingDevice);
@@ -79,10 +77,6 @@ namespace Hid.Net.UWP
             {
                 Logger?.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
                 throw;
-            }
-            finally
-            {
-                loggerScope?.Dispose();
             }
         }
 
@@ -194,12 +188,10 @@ namespace Hid.Net.UWP
         {
             await _WriteAndReadLock.WaitAsync();
 
-            IDisposable logScope = null;
+            using var logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteAndReadAsync));
 
             try
             {
-                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteAndReadAsync));
-
                 await WriteAsync(writeBuffer, cancellationToken);
                 var retVal = await ReadAsync(cancellationToken);
 
@@ -213,7 +205,6 @@ namespace Hid.Net.UWP
             }
             finally
             {
-                logScope?.Dispose();
                 _WriteAndReadLock.Release();
             }
         }

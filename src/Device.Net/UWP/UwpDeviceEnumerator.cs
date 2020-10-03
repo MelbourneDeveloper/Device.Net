@@ -64,12 +64,11 @@ namespace Device.Net.UWP
 
         private async Task<ConnectionInfo> TestConnection(string deviceId)
         {
-            IDisposable logScope = null;
+            using var logScope = _logger?.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(TestConnection));
+
             try
             {
                 await _TestConnectionSemaphore.WaitAsync();
-
-                logScope = _logger?.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(TestConnection));
 
                 if (_ConnectionTestedDeviceIds.TryGetValue(deviceId, out var connectionInfo)) return connectionInfo;
 
@@ -86,7 +85,6 @@ namespace Device.Net.UWP
             }
             finally
             {
-                logScope?.Dispose();
                 _TestConnectionSemaphore.Release();
             }
         }

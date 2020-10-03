@@ -132,11 +132,10 @@ namespace Usb.Net.Android
 
         public async Task InitializeAsync()
         {
-            IDisposable logScope = null;
+            using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceNumberId, nameof(InitializeAsync));
 
             try
             {
-                logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceNumberId, nameof(InitializeAsync));
 
                 if (disposed) throw new DeviceException(Messages.DeviceDisposedErrorMessage);
 
@@ -209,7 +208,6 @@ namespace Usb.Net.Android
             }
             finally
             {
-                logScope.Dispose();
                 _InitializingSemaphoreSlim.Release();
             }
         }

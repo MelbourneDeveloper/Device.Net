@@ -94,12 +94,10 @@ namespace Usb.Net.UWP
 
             if (data.Length > WriteBufferSize) throw new ValidationException(Messages.ErrorMessageBufferSizeTooLarge);
 
-            IDisposable logScope = null;
+            using var logScope = Logger?.BeginScope("Interface number: {interfaceNumber} Call: {call}", UsbInterface.InterfaceNumber, nameof(WriteAsync));
 
             try
             {
-                logScope = Logger?.BeginScope("Interface number: {interfaceNumber} Call: {call}", UsbInterface.InterfaceNumber, nameof(WriteAsync));
-
                 var buffer = data.AsBuffer();
 
                 uint count = 0;
@@ -134,10 +132,6 @@ namespace Usb.Net.UWP
             {
                 Logger?.LogError(Messages.WarningMessageWritingToInterrupt);
                 throw;
-            }
-            finally
-            {
-                logScope?.Dispose();
             }
         }
         #endregion

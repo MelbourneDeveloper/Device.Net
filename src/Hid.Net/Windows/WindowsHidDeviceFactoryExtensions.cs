@@ -91,31 +91,24 @@ namespace Hid.Net.Windows
 
         private static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, IHidApiService HidService, ILogger logger)
         {
-            IDisposable logScope = null;
+            logger ??= NullLogger.Instance;
+
+            using var logScope = logger.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(GetDeviceDefinition));
 
             try
             {
-                logger = logger ?? NullLogger.Instance;
+                using var safeFileHandle = HidService.CreateReadConnection(deviceId, FileAccessRights.None);
 
-                logScope = logger.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(GetDeviceDefinition));
+                if (safeFileHandle.IsInvalid) throw new DeviceException($"{nameof(HidService.CreateReadConnection)} call with Id of {deviceId} failed.");
 
-                using (var safeFileHandle = HidService.CreateReadConnection(deviceId, FileAccessRights.None))
-                {
-                    if (safeFileHandle.IsInvalid) throw new DeviceException($"{nameof(HidService.CreateReadConnection)} call with Id of {deviceId} failed.");
+                logger.LogDebug(Messages.InformationMessageFoundDevice);
 
-                    logger.LogDebug(Messages.InformationMessageFoundDevice);
-
-                    return HidService.GetDeviceDefinition(deviceId, safeFileHandle);
-                }
+                return HidService.GetDeviceDefinition(deviceId, safeFileHandle);
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, Messages.ErrorMessageCouldntGetDevice);
                 return null;
-            }
-            finally
-            {
-                logScope.Dispose();
             }
         }
     }

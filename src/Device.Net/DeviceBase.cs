@@ -57,11 +57,10 @@ namespace Device.Net
 
             await _WriteAndReadLock.WaitAsync(cancellationToken);
 
-            IDisposable logScope = null;
+            using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call} Write Buffer Length: {writeBufferLength}", DeviceId, nameof(WriteAndReadAsync), writeBuffer.Length);
 
             try
             {
-                logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call} Write Buffer Length: {writeBufferLength}", DeviceId, nameof(WriteAndReadAsync), writeBuffer.Length);
                 await WriteAsync(writeBuffer, cancellationToken);
                 var retVal = await ReadAsync(cancellationToken);
                 Logger.LogInformation(Messages.SuccessMessageWriteAndReadCalled);
@@ -74,7 +73,6 @@ namespace Device.Net
             }
             finally
             {
-                logScope.Dispose();
                 _WriteAndReadLock.Release();
             }
         }

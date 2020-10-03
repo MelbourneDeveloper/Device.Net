@@ -28,7 +28,7 @@ namespace Device.Net.UnitTests
 
         public static IDeviceFactory GetHidDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition, byte? defultReportId = null) =>
 #if !WINDOWS_UWP
-            filterDeviceDefinition.CreateWindowsHidDeviceFactory(defaultReportId: defultReportId);
+            filterDeviceDefinition.CreateWindowsHidDeviceFactory(defaultReportId: null);
 #else
             filterDeviceDefinition.CreateUwpHidDeviceFactory(defaultReportId: defultReportId);
 #endif
