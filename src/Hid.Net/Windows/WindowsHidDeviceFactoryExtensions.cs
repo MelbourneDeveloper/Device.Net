@@ -62,7 +62,7 @@ namespace Hid.Net.Windows
             ushort? writeBufferSize = null,
             byte? defaultReportId = null)
         {
-            loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
+            loggerFactory ??= NullLoggerFactory.Instance;
 
             var selectedHidApiService = hidApiService ?? new WindowsHidApiService(loggerFactory);
 

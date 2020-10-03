@@ -59,80 +59,79 @@ namespace Hid.Net.Windows
         #region Private Methods
         private void Initialize()
         {
-            using (var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(Initialize)))
+            using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(Initialize));
+
+            try
             {
-                try
+                Close();
+
+                if (string.IsNullOrEmpty(DeviceId))
                 {
-                    Close();
-
-                    if (string.IsNullOrEmpty(DeviceId))
-                    {
-                        throw new ValidationException(
-                            $"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
-                    }
-
-                    _ReadSafeFileHandle = HidService.CreateReadConnection(DeviceId, FileAccessRights.GenericRead);
-                    _WriteSafeFileHandle = HidService.CreateWriteConnection(DeviceId);
-
-                    if (_ReadSafeFileHandle.IsInvalid)
-                    {
-                        throw new ApiException(Messages.ErrorMessageCantOpenRead);
-                    }
-
-                    IsReadOnly = _WriteSafeFileHandle.IsInvalid;
-
-                    if (IsReadOnly.Value)
-                    {
-                        Logger.LogWarning(Messages.WarningMessageOpeningInReadonlyMode, DeviceId);
-                    }
-
-                    ConnectedDeviceDefinition = HidService.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
-
-                    var readBufferSize = ReadBufferSize;
-                    var writeBufferSize = WriteBufferSize;
-
-                    if (readBufferSize == 0)
-                    {
-                        throw new ValidationException(
-                            $"{nameof(ReadBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an InputReportByteLength of 0. Please specify this argument in the constructor");
-                    }
-
-                    _ReadFileStream = HidService.OpenRead(_ReadSafeFileHandle, readBufferSize);
-
-                    if (_ReadFileStream.CanRead)
-                    {
-                        Logger.LogInformation(Messages.SuccessMessageReadFileStreamOpened);
-                    }
-                    else
-                    {
-                        Logger.LogWarning(Messages.WarningMessageReadFileStreamCantRead);
-                    }
-
-                    if (IsReadOnly.Value) return;
-
-                    if (writeBufferSize == 0)
-                    {
-                        throw new ValidationException(
-                            $"{nameof(WriteBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an OutputReportByteLength of 0. Please specify this argument in the constructor");
-                    }
-
-                    //Don't open if this is a read only connection
-                    _WriteFileStream = HidService.OpenWrite(_WriteSafeFileHandle, writeBufferSize);
-
-                    if (_WriteFileStream.CanWrite)
-                    {
-                        Logger.LogInformation(Messages.SuccessMessageWriteFileStreamOpened);
-                    }
-                    else
-                    {
-                        Logger.LogWarning(Messages.WarningMessageWriteFileStreamCantWrite);
-                    }
+                    throw new ValidationException(
+                        $"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
                 }
-                catch (Exception ex)
+
+                _ReadSafeFileHandle = HidService.CreateReadConnection(DeviceId, FileAccessRights.GenericRead);
+                _WriteSafeFileHandle = HidService.CreateWriteConnection(DeviceId);
+
+                if (_ReadSafeFileHandle.IsInvalid)
                 {
-                    Logger.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
-                    throw;
+                    throw new ApiException(Messages.ErrorMessageCantOpenRead);
                 }
+
+                IsReadOnly = _WriteSafeFileHandle.IsInvalid;
+
+                if (IsReadOnly.Value)
+                {
+                    Logger.LogWarning(Messages.WarningMessageOpeningInReadonlyMode, DeviceId);
+                }
+
+                ConnectedDeviceDefinition = HidService.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
+
+                var readBufferSize = ReadBufferSize;
+                var writeBufferSize = WriteBufferSize;
+
+                if (readBufferSize == 0)
+                {
+                    throw new ValidationException(
+                        $"{nameof(ReadBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an InputReportByteLength of 0. Please specify this argument in the constructor");
+                }
+
+                _ReadFileStream = HidService.OpenRead(_ReadSafeFileHandle, readBufferSize);
+
+                if (_ReadFileStream.CanRead)
+                {
+                    Logger.LogInformation(Messages.SuccessMessageReadFileStreamOpened);
+                }
+                else
+                {
+                    Logger.LogWarning(Messages.WarningMessageReadFileStreamCantRead);
+                }
+
+                if (IsReadOnly.Value) return;
+
+                if (writeBufferSize == 0)
+                {
+                    throw new ValidationException(
+                        $"{nameof(WriteBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an OutputReportByteLength of 0. Please specify this argument in the constructor");
+                }
+
+                //Don't open if this is a read only connection
+                _WriteFileStream = HidService.OpenWrite(_WriteSafeFileHandle, writeBufferSize);
+
+                if (_WriteFileStream.CanWrite)
+                {
+                    Logger.LogInformation(Messages.SuccessMessageWriteFileStreamOpened);
+                }
+                else
+                {
+                    Logger.LogWarning(Messages.WarningMessageWriteFileStreamCantWrite);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
+                throw;
             }
         }
         #endregion
@@ -238,64 +237,62 @@ namespace Hid.Net.Windows
 
         public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
-            using (var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteReportAsync)))
+            using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteReportAsync));
+
+            try
             {
 
-                try
+                if (IsReadOnly.HasValue && IsReadOnly.Value)
                 {
+                    throw new ValidationException("This device was opened in Read Only mode.");
+                }
 
-                    if (IsReadOnly.HasValue && IsReadOnly.Value)
-                    {
-                        throw new ValidationException("This device was opened in Read Only mode.");
-                    }
+                if (data == null) throw new ArgumentNullException(nameof(data));
 
-                    if (data == null) throw new ArgumentNullException(nameof(data));
+                if (_WriteFileStream == null)
+                {
+                    throw new NotInitializedException("The device has not been initialized");
+                }
 
-                    if (_WriteFileStream == null)
-                    {
-                        throw new NotInitializedException("The device has not been initialized");
-                    }
+                byte[] bytes;
+                if (reportId.HasValue)
+                {
+                    //Copy the data to a new array that is one byte larger and shif the data to the right by 1
+                    bytes = new byte[WriteBufferSize];
+                    Array.Copy(data, 0, bytes, 1, data.Length);
+                    //Put the report Id at the first index
+                    bytes[0] = reportId.Value;
+                }
+                else
+                {
+                    bytes = data;
+                }
 
-                    byte[] bytes;
-                    if (reportId.HasValue)
+                if (_WriteFileStream.CanWrite)
+                {
+                    try
                     {
-                        //Copy the data to a new array that is one byte larger and shif the data to the right by 1
-                        bytes = new byte[WriteBufferSize];
-                        Array.Copy(data, 0, bytes, 1, data.Length);
-                        //Put the report Id at the first index
-                        bytes[0] = reportId.Value;
+                        await _WriteFileStream.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
+                        Logger.LogTrace(new Trace(true, bytes));
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        bytes = data;
-                    }
-
-                    if (_WriteFileStream.CanWrite)
-                    {
-                        try
-                        {
-                            await _WriteFileStream.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
-                            Logger.LogTrace(new Trace(true, bytes));
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new IOException(Messages.WriteErrorMessage, ex);
-                        }
-                    }
-                    else
-                    {
-                        throw new IOException("The file stream cannot be written to");
+                        throw new IOException(Messages.WriteErrorMessage, ex);
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    Logger.LogError(ex, Messages.WriteErrorMessage);
-                    throw;
+                    throw new IOException("The file stream cannot be written to");
                 }
-                finally
-                {
-                    logScope.Dispose();
-                }
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, Messages.WriteErrorMessage);
+                throw;
+            }
+            finally
+            {
+                logScope.Dispose();
             }
         }
         #endregion

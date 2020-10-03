@@ -47,7 +47,7 @@ namespace Usb.Net.Android
         {
             if (usbManager == null) throw new ArgumentNullException(nameof(usbManager));
             if (context == null) throw new ArgumentNullException(nameof(context));
-            loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
+            loggerFactory ??= NullLoggerFactory.Instance;
 
             if (getConnectedDeviceDefinitionsAsync == null)
             {

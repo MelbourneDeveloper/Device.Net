@@ -31,7 +31,7 @@ namespace Hid.Net.UWP
         GetDevice getDevice = null,
         byte? defaultReportId = null)
         {
-            loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
+            loggerFactory ??= NullLoggerFactory.Instance;
 
             if (getDevice == null) getDevice = async c => new UWPHidDevice(c, loggerFactory, defaultReportId);
 

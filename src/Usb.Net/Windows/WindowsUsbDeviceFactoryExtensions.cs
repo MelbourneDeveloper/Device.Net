@@ -38,7 +38,7 @@ namespace Usb.Net.Windows
         ushort? writeBufferSize = null
     )
         {
-            loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
+            loggerFactory ??= NullLoggerFactory.Instance;
 
             if (getConnectedDeviceDefinitionsAsync == null)
             {
