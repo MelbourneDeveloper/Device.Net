@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using Usb.Net.Sample;
 using Device.Net;
 using Microsoft.Extensions.Logging;
-using System.Reactive.Subjects;
 using System.Reactive.Linq;
 using System.Collections.Generic;
 
 #if !LIBUSB
+using System.Reactive.Subjects;
 using Hid.Net.Windows;
 using SerialPort.Net.Windows;
 using Usb.Net.Windows;
@@ -37,7 +37,10 @@ namespace Usb.Net.WindowsSample
 
             //Register the factories for creating Usb devices. This only needs to be done once.
 #if LIBUSB
-            _DeviceManager.RegisterDeviceFactory(new LibUsbUsbDeviceFactory(_loggerFactory));
+            _DeviceManager = new List<IDeviceFactory>
+            {
+                TrezorExample.UsbDeviceDefinitions.CreateLibUsbDeviceFactory(_loggerFactory)
+            }.ToDeviceManager(_loggerFactory);
 #else
             _DeviceManager = new List<IDeviceFactory>
             {
@@ -96,7 +99,8 @@ namespace Usb.Net.WindowsSample
             }
         }
 
-#pragma warning disable CA2000 
+#if !LIBUSB
+#pragma warning disable CA2000
 
         private static async Task DisplayTemperature()
         {
@@ -128,7 +132,8 @@ namespace Usb.Net.WindowsSample
             }
         }
 
-#pragma warning restore CA2000 
+#pragma warning restore CA2000
+#endif
 
         #endregion
 

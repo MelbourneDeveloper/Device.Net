@@ -11,44 +11,43 @@ namespace Device.Net.LibUsb
     public static class LibUsbFactoryExtensions
     {
         public static IDeviceFactory CreateLibUsbDeviceFactory(
-            this FilterDeviceDefinition filterDeviceDefinition,
+            this IReadOnlyList<FilterDeviceDefinition> filterDeviceDefinitions,
             ILoggerFactory loggerFactory = null,
             int? timeout = null)
         {
             return new DeviceFactory(
                 loggerFactory,
-                () => GetConnectedDeviceDefinitionsAsync(filterDeviceDefinition),
+                () => GetConnectedDeviceDefinitionsAsync(filterDeviceDefinitions),
                 async c => new LibUsbDevice(GetDevice(c), timeout ?? 1000),
                 DeviceType.Usb);
         }
 
-        public static async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
+        public static async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(IReadOnlyList<FilterDeviceDefinition> filterDeviceDefinitions)
         {
             return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(() =>
            {
                IEnumerable<UsbRegistry> devices = UsbDevice.AllDevices;
 
-               if (deviceDefinition == null)
-               {
-                   return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath)
+               return filterDeviceDefinitions == null || filterDeviceDefinitions.Count == 0
+                   ? devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath)
                    {
                        VendorId = (uint)usbRegistry.Vid,
                        ProductId = (uint)usbRegistry.Pid,
                        DeviceType = DeviceType.Usb
-                   }).ToList();
-               }
-
-               if (deviceDefinition.VendorId.HasValue)
+                   }).ToList()
+                   : devices
+               .Where(d => filterDeviceDefinitions.FirstOrDefault(f
+                   =>
+                   (f.VendorId == null || f.VendorId == d.Vid) &&
+                   (f.ProductId == null || f.ProductId == d.Pid)
+                   )
+               != null)
+               .Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath)
                {
-                   devices = devices.Where(d => d.Vid == deviceDefinition.VendorId.Value);
-               }
-
-               if (deviceDefinition.ProductId.HasValue)
-               {
-                   devices = devices.Where(d => d.Pid == deviceDefinition.ProductId.Value);
-               }
-
-               return devices.Select(usbRegistry => new ConnectedDeviceDefinition(usbRegistry.DevicePath) { VendorId = (uint)usbRegistry.Vid, ProductId = (uint)usbRegistry.Pid, DeviceType = DeviceType.Usb }).ToList();
+                   VendorId = (uint)usbRegistry.Vid,
+                   ProductId = (uint)usbRegistry.Pid,
+                   DeviceType = DeviceType.Usb
+               }).ToList();
            });
         }
 
@@ -65,3 +64,4 @@ namespace Device.Net.LibUsb
         }
     }
 }
+
