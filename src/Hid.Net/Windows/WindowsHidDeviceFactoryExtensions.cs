@@ -79,7 +79,7 @@ namespace Hid.Net.Windows
                 windowsDeviceEnumerator.GetConnectedDeviceDefinitionsAsync,
                 async c => new WindowsHidDevice
                 (
-                    c,
+                    c.DeviceId,
                     loggerFactory: loggerFactory,
                     hidService: selectedHidApiService,
                     readBufferSize: readBufferSize,

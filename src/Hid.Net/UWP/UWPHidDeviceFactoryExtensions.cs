@@ -33,7 +33,7 @@ namespace Hid.Net.UWP
         {
             loggerFactory ??= NullLoggerFactory.Instance;
 
-            if (getDevice == null) getDevice = async c => new UWPHidDevice(c, loggerFactory, defaultReportId);
+            if (getDevice == null) getDevice = async c => new UWPHidDevice(c.DeviceId, loggerFactory, defaultReportId);
 
             var firstDevice = filterDeviceDefinitions.First();
 
@@ -49,16 +49,15 @@ namespace Hid.Net.UWP
                     DeviceType.Hid,
                     async deviceId =>
                     {
-                        using (var hidDevice = await UWPHidDevice.GetHidDevice(deviceId).AsTask())
-                        {
-                            var canConnect = hidDevice != null;
+                        using var hidDevice = await UWPHidDevice.GetHidDevice(deviceId).AsTask();
 
-                            if (!canConnect) return new ConnectionInfo { CanConnect = false };
+                        var canConnect = hidDevice != null;
 
-                            logger?.LogInformation("Testing device connection. Id: {deviceId}. Can connect: {canConnect}", deviceId, canConnect);
+                        if (!canConnect) return new ConnectionInfo { CanConnect = false };
 
-                            return new ConnectionInfo { CanConnect = canConnect, UsagePage = hidDevice.UsagePage };
-                        }
+                        logger?.LogInformation("Testing device connection. Id: {deviceId}. Can connect: {canConnect}", deviceId, canConnect);
+
+                        return new ConnectionInfo { CanConnect = canConnect, UsagePage = hidDevice.UsagePage };
                     },
                     loggerFactory);
 
