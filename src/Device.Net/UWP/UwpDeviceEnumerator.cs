@@ -53,9 +53,14 @@ namespace Device.Net.UWP
                 var connectionInformation = await TestConnection(deviceDef.DeviceId);
                 if (connectionInformation.CanConnect)
                 {
-                    deviceDef.UsagePage = connectionInformation.UsagePage;
-
-                    deviceDefinitionList.Add(deviceDef);
+                    deviceDefinitionList.Add(
+                        new ConnectedDeviceDefinition(
+                            deviceDef.DeviceId,
+                            _deviceType,
+                            usagePage: connectionInformation.UsagePage,
+                            vendorId: deviceDef.VendorId,
+                            productId: deviceDef.ProductId
+                            ));
                 }
             }
 
