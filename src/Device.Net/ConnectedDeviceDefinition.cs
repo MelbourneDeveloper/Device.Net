@@ -86,6 +86,7 @@ namespace Device.Net
             string manufacturer = null,
             string serialNumber = null,
             ushort? usage = null,
+            ushort? usagePage = null,
             ushort? versionNumber = null,
             int? writeBufferSize = null,
             int? readBufferSize = null
@@ -104,6 +105,7 @@ namespace Device.Net
             Manufacturer = manufacturer;
             SerialNumber = serialNumber;
             Usage = usage;
+            UsagePage = usagePage;
             VersionNumber = versionNumber;
             WriteBufferSize = writeBufferSize;
             ReadBufferSize = readBufferSize;

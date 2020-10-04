@@ -69,7 +69,7 @@ namespace Device.Net
         {
             if (connectedDeviceDefinition == null) throw new ArgumentNullException(nameof(connectedDeviceDefinition));
 
-            foreach (var deviceFactory in DeviceFactories.Where(deviceFactory => !connectedDeviceDefinition.DeviceType.HasValue || deviceFactory.DeviceType == connectedDeviceDefinition.DeviceType))
+            foreach (var deviceFactory in DeviceFactories.Where(deviceFactory => deviceFactory.DeviceType == connectedDeviceDefinition.DeviceType))
             {
                 //TODO: This doesn't distinguish between the device not existing, and the factory not being able to deal with the device type...
                 //Still undecided on how to handle this

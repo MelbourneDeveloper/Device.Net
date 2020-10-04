@@ -104,7 +104,7 @@ namespace Usb.Net.UWP
 
         public Task WriteAsync(byte[] data) => WriteUsbInterface.WriteAsync(data);
 
-        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync() => Task.FromResult(ConnectedDeviceDefinition);
+        public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync() => Task.FromResult(ConnectedDeviceDefinition);
         #endregion
     }
 }

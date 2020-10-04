@@ -67,20 +67,20 @@ namespace Hid.Net.Windows
             var serialNumber = GetSerialNumber(safeFileHandle);
             var product = GetProduct(safeFileHandle);
 
-            return new ConnectedDeviceDefinition(deviceId)
-            {
-                WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
-                ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,
-                Manufacturer = manufacturer,
-                ProductName = product,
-                ProductId = (ushort)hidAttributes.ProductId,
-                SerialNumber = serialNumber,
-                Usage = hidCollectionCapabilities.Usage,
-                UsagePage = hidCollectionCapabilities.UsagePage,
-                VendorId = (ushort)hidAttributes.VendorId,
-                VersionNumber = (ushort)hidAttributes.VersionNumber,
-                DeviceType = DeviceType.Hid
-            };
+            return new ConnectedDeviceDefinition(
+                deviceId, 
+                DeviceType.Hid,
+                writeBufferSize: hidCollectionCapabilities.OutputReportByteLength,
+                readBufferSize: hidCollectionCapabilities.InputReportByteLength,
+                manufacturer: manufacturer,
+                productName: product,
+                productId: (ushort)hidAttributes.ProductId,
+                serialNumber: serialNumber,
+                usage: hidCollectionCapabilities.Usage,
+                usagePage: hidCollectionCapabilities.UsagePage,
+                vendorId: (ushort)hidAttributes.VendorId,
+                versionNumber: (ushort)hidAttributes.VersionNumber)
+            ;
         }
 
         public string GetManufacturer(SafeFileHandle safeFileHandle) => GetHidString(safeFileHandle, HidD_GetManufacturerString, Logger);

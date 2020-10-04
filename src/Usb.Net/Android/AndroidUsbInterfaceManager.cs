@@ -218,18 +218,18 @@ namespace Usb.Net.Android
 
             var deviceId = usbDevice.DeviceId.ToString(Helpers.ParsingCulture);
 
-            return new ConnectedDeviceDefinition(deviceId)
-            {
-                ProductName = usbDevice.ProductName,
-                Manufacturer = usbDevice.ManufacturerName,
-                SerialNumber = usbDevice.SerialNumber,
-                ProductId = (uint)usbDevice.ProductId,
-                VendorId = (uint)usbDevice.VendorId,
-                DeviceType = DeviceType.Usb
-            };
+            return new ConnectedDeviceDefinition(
+                deviceId,
+                DeviceType.Usb,
+                productName: usbDevice.ProductName,
+                manufacturer: usbDevice.ManufacturerName,
+                serialNumber: usbDevice.SerialNumber,
+                productId: (uint)usbDevice.ProductId,
+                vendorId: (uint)usbDevice.VendorId
+            );
         }
 
-        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync() => Task.Run<ConnectedDeviceDefinitionBase>(() => GetAndroidDeviceDefinition(_UsbDevice));
+        public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync() => Task.Run(() => GetAndroidDeviceDefinition(_UsbDevice));
         #endregion
 
         #region Finalizer

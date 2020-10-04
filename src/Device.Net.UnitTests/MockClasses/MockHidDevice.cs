@@ -10,7 +10,13 @@ namespace Device.Net.UnitTests
 
         public MockHidDevice(string deviceId, ILoggerFactory loggerFactory, ILogger logger) : base(deviceId, loggerFactory, logger)
         {
-            ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId) { ProductId = ProductId, VendorId = VendorId, DeviceType = DeviceType.Hid };
+            ConnectedDeviceDefinition = new ConnectedDeviceDefinition
+                (
+                DeviceId,
+                DeviceType.Hid,
+                productId: ProductId,
+                vendorId: VendorId
+                );
         }
     }
 }

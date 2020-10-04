@@ -56,10 +56,10 @@ namespace Usb.Net.UWP
 
             if (getUsbInterfaceManager == null)
             {
-                getUsbInterfaceManager = async d =>
+                getUsbInterfaceManager = async deviceId =>
                     new UWPUsbInterfaceManager(
                     //TODO: no idea if this is OK...
-                    new ConnectedDeviceDefinition(d),
+                    new ConnectedDeviceDefinition(deviceId, DeviceType.Usb),
                     loggerFactory,
                     readBufferSize,
                     writeBufferSize);

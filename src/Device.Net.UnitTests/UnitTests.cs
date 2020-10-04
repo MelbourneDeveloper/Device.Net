@@ -189,11 +189,13 @@ namespace Device.Net.UnitTests
             if (isHidConnected && ((!vid.HasValue && !pid.HasValue) || (vid==1 && pid ==1)))
             {
                 hidMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync()).Returns(
-                    Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> { new ConnectedDeviceDefinition("123") 
-                    {
-                        ProductId = 1,
-                        VendorId = 1
-                    } }));
+                    Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> {
+                     new ConnectedDeviceDefinition(
+                        "123", 
+                        DeviceType.Hid,
+                        productId : 1,
+                        vendorId : 1
+                    ) }));
 
 
                 hidMock.Setup(f => f.GetDevice(It.IsAny<ConnectedDeviceDefinition>())).Returns(
@@ -203,11 +205,14 @@ namespace Device.Net.UnitTests
             if (isUsbConnected && ((!vid.HasValue && !pid.HasValue) || (vid == 2 && pid == 2)))
             {
                 usbMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync()).Returns(
-                    Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> { new ConnectedDeviceDefinition("321") 
-                    {
-                        ProductId = 2,
-                        VendorId = 2
-                    } }));
+                    Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> {
+                    new ConnectedDeviceDefinition
+                    (
+                        "321",
+                        DeviceType.Usb,
+                        productId : 2,
+                        vendorId : 2
+                    )}));
             }
 
             return (hidMock, usbMock);
