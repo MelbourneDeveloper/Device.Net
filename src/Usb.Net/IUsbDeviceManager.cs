@@ -21,6 +21,6 @@ namespace Usb.Net
         /// <summary>
         /// TODO: This shouldn't be here. Don't use this
         /// </summary>
-        Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync();
+        Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync();
     }
 }

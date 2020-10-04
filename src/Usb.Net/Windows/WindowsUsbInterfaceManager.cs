@@ -55,7 +55,7 @@ namespace Usb.Net.Windows
                     if (string.IsNullOrEmpty(DeviceId))
                     {
                         throw new ValidationException(
-                            $"{nameof(DeviceDefinitionBase)} must be specified before {nameof(InitializeAsync)} can be called.");
+                            $"{nameof(ConnectedDeviceDefinition)} must be specified before {nameof(InitializeAsync)} can be called.");
                     }
 
                     _DeviceHandle = APICalls.CreateFile(DeviceId,
@@ -156,17 +156,18 @@ namespace Usb.Net.Windows
         #region Public Methods
         public static ConnectedDeviceDefinition GetDeviceDefinition(SafeFileHandle defaultInterfaceHandle, string deviceId, ILogger logger)
         {
-            var deviceDefinition = new ConnectedDeviceDefinition(deviceId) { DeviceType = DeviceType.Usb };
-
             var bufferLength = (uint)Marshal.SizeOf(typeof(USB_DEVICE_DESCRIPTOR));
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
             var isSuccess2 = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, WinUsbApiCalls.EnglishLanguageID, out var _UsbDeviceDescriptor, bufferLength, out var lengthTransferred);
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
             WindowsDeviceBase.HandleError(isSuccess2, "Couldn't get device descriptor");
 
+            string productName = null;
+            string serialNumber = null;
+
             if (_UsbDeviceDescriptor.iProduct > 0)
             {
-                deviceDefinition.ProductName = WinUsbApiCalls.GetDescriptor(
+                productName = WinUsbApiCalls.GetDescriptor(
                     defaultInterfaceHandle,
                     _UsbDeviceDescriptor.iProduct,
                     "Couldn't get product name",
@@ -175,7 +176,7 @@ namespace Usb.Net.Windows
 
             if (_UsbDeviceDescriptor.iSerialNumber > 0)
             {
-                deviceDefinition.SerialNumber = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle,
+                serialNumber = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle,
                                                                              _UsbDeviceDescriptor.iSerialNumber,
                                                                              "Couldn't get serial number",
                                                                              logger);
@@ -195,7 +196,13 @@ namespace Usb.Net.Windows
             deviceDefinition.WriteBufferSize = _UsbDeviceDescriptor.bMaxPacketSize0;
             deviceDefinition.ReadBufferSize = _UsbDeviceDescriptor.bMaxPacketSize0;
 
-            return deviceDefinition;
+            return new ConnectedDeviceDefinition(
+                deviceId,
+                DeviceType.Usb,
+                productName: productName,
+                serialNumber: serialNumber
+                );
+
         }
 
         public void Close()
@@ -225,12 +232,12 @@ namespace Usb.Net.Windows
 
         public async Task InitializeAsync() => await Task.Run(Initialize);
 
-        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync()
+        public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync()
         {
             if (_DeviceHandle == null) throw new NotInitializedException();
 
             //TODO: Is this right?
-            return Task.Run<ConnectedDeviceDefinitionBase>(() => { return DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(DeviceId, DeviceType.Usb, Logger); });
+            return Task.Run(() => { return DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(DeviceId, DeviceType.Usb, Logger); });
         }
         #endregion
     }

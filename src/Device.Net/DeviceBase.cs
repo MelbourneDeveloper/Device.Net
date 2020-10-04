@@ -25,7 +25,7 @@ namespace Device.Net
         #endregion
 
         #region Public Properties
-        public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; set; }
+        public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; set; }
         public string DeviceId { get; }
         #endregion
 
