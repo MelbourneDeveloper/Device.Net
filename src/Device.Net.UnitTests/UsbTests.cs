@@ -40,7 +40,7 @@ namespace Device.Net.UnitTests
             await InitializeDevice();
 
             Assert.IsNotNull(_UsbDevice.ConnectedDeviceDefinition);
-            Assert.AreEqual(deviceId, ((ConnectedDeviceDefinition)_UsbDevice.ConnectedDeviceDefinition).DeviceId);
+            Assert.AreEqual(deviceId, _UsbDevice.ConnectedDeviceDefinition.DeviceId);
         }
 
         [TestMethod]
@@ -159,7 +159,7 @@ namespace Device.Net.UnitTests
             usbInterface.ReadAsync(3).ReturnsForAnyArgs(testreadpacket);
 
             //TODO: Probably shouldn't be relying on this method
-            usbInterfaceManager.GetConnectedDeviceDefinitionAsync().ReturnsForAnyArgs(new ConnectedDeviceDefinition(deviceId) { });
+            usbInterfaceManager.GetConnectedDeviceDefinitionAsync().ReturnsForAnyArgs(new ConnectedDeviceDefinition(deviceId, DeviceType.Usb));
 
             _UsbDevice = new UsbDevice(deviceId, usbInterfaceManager, _loggerFactory);
 

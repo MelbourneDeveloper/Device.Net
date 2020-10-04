@@ -55,7 +55,8 @@ namespace Device.Net.UnitTests
             var validSafeFileHandle = new SafeFileHandle((IntPtr)100, true);
             hidService.CreateReadConnection("", Windows.FileAccessRights.None).ReturnsForAnyArgs(validSafeFileHandle);
             hidService.CreateWriteConnection("").ReturnsForAnyArgs(!isReadonly ? validSafeFileHandle : invalidSafeFileHandle);
-            hidService.GetDeviceDefinition(deviceId, validSafeFileHandle).ReturnsForAnyArgs(new ConnectedDeviceDefinition(deviceId) { ReadBufferSize = 64, WriteBufferSize = 64 });
+            hidService.GetDeviceDefinition(deviceId, validSafeFileHandle).ReturnsForAnyArgs(
+                new ConnectedDeviceDefinition(deviceId, DeviceType.Hid, readBufferSize: 64, writeBufferSize: 64));
 
             var readStream = Substitute.For<Stream>();
             readStream.CanRead.ReturnsForAnyArgs(true);
