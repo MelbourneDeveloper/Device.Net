@@ -92,7 +92,7 @@ namespace Device.Net
 
             var vendorIdPasses = !filterDevice.VendorId.HasValue || filterDevice.VendorId == actualDevice.VendorId;
             var productIdPasses = !filterDevice.ProductId.HasValue || filterDevice.ProductId == actualDevice.ProductId;
-            var deviceTypePasses = !actualDevice.DeviceType.HasValue || actualDevice.DeviceType == deviceType;
+            var deviceTypePasses = actualDevice.DeviceType == deviceType;
             var usagePagePasses = !filterDevice.UsagePage.HasValue || filterDevice.UsagePage == actualDevice.UsagePage;
 
             var returnValue =

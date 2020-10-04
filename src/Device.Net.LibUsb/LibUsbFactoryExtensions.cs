@@ -24,18 +24,16 @@ namespace Device.Net.LibUsb
 
         public static async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(IReadOnlyList<FilterDeviceDefinition> filterDeviceDefinitions)
         {
-            return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(() =>
+            return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(
+                () =>
            {
                IEnumerable<UsbRegistry> devices = UsbDevice.AllDevices;
 
                return filterDeviceDefinitions == null || filterDeviceDefinitions.Count == 0
                    ? devices.Select(usbRegistry
-                   => new ConnectedDeviceDefinition(
-                       usbRegistry.DevicePath,
-                       DeviceType.Usb,
-                       vendorId: (uint)usbRegistry.Vid,
-                       productId: (uint)usbRegistry.Pid)
-                   }).ToList()
+                   =>
+                   new ConnectedDeviceDefinition(usbRegistry.DevicePath, DeviceType.Usb, vendorId: (uint)usbRegistry.Vid, productId: (uint)usbRegistry.Pid)
+                   ).ToList()
                    : devices
                .Where(d => filterDeviceDefinitions.FirstOrDefault(f
                    =>
@@ -50,20 +48,20 @@ namespace Device.Net.LibUsb
                    productId: (uint)usbRegistry.Pid,
                    deviceType: DeviceType.Usb
                )).ToList();
-        });
+           });
         }
 
-    public static UsbDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
-    {
-        if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
+        public static UsbDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
+        {
+            if (deviceDefinition == null) throw new ArgumentNullException(nameof(deviceDefinition));
 #pragma warning disable CA2208
-        if (deviceDefinition.VendorId == null) throw new ArgumentNullException(nameof(ConnectedDeviceDefinition.VendorId));
-        if (deviceDefinition.ProductId == null) throw new ArgumentNullException(nameof(ConnectedDeviceDefinition.ProductId));
+            if (deviceDefinition.VendorId == null) throw new ArgumentNullException(nameof(ConnectedDeviceDefinition.VendorId));
+            if (deviceDefinition.ProductId == null) throw new ArgumentNullException(nameof(ConnectedDeviceDefinition.ProductId));
 #pragma warning restore CA2208
 
-        var usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value, (int)deviceDefinition.ProductId.Value);
-        return UsbDevice.OpenUsbDevice(usbDeviceFinder);
+            var usbDeviceFinder = new UsbDeviceFinder((int)deviceDefinition.VendorId.Value, (int)deviceDefinition.ProductId.Value);
+            return UsbDevice.OpenUsbDevice(usbDeviceFinder);
+        }
     }
-}
 }
 

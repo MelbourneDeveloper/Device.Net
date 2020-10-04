@@ -43,92 +43,91 @@ namespace Usb.Net.Windows
         #region Private Methods
         private void Initialize()
         {
-            using (var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(Initialize)))
+            using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(Initialize));
+
+            try
             {
-                try
+
+                Close();
+
+                int errorCode;
+
+                if (string.IsNullOrEmpty(DeviceId))
                 {
+                    throw new ValidationException(
+                        $"{nameof(ConnectedDeviceDefinition)} must be specified before {nameof(InitializeAsync)} can be called.");
+                }
 
-                    Close();
+                _DeviceHandle = APICalls.CreateFile(DeviceId,
+                    FileAccessRights.GenericWrite | FileAccessRights.GenericRead,
+                    APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting,
+                    APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
 
-                    int errorCode;
+                if (_DeviceHandle.IsInvalid)
+                {
+                    //TODO: is error code useful here?
+                    errorCode = Marshal.GetLastWin32Error();
+                    if (errorCode > 0) throw new ApiException($"Device handle no good. Error code: {errorCode}");
+                }
 
-                    if (string.IsNullOrEmpty(DeviceId))
-                    {
-                        throw new ValidationException(
-                            $"{nameof(ConnectedDeviceDefinition)} must be specified before {nameof(InitializeAsync)} can be called.");
-                    }
-
-                    _DeviceHandle = APICalls.CreateFile(DeviceId,
-                        FileAccessRights.GenericWrite | FileAccessRights.GenericRead,
-                        APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting,
-                        APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
-
-                    if (_DeviceHandle.IsInvalid)
-                    {
-                        //TODO: is error code useful here?
-                        errorCode = Marshal.GetLastWin32Error();
-                        if (errorCode > 0) throw new ApiException($"Device handle no good. Error code: {errorCode}");
-                    }
-
-                    Logger.LogInformation(Messages.SuccessMessageGotWriteAndReadHandle);
+                Logger.LogInformation(Messages.SuccessMessageGotWriteAndReadHandle);
 
 #pragma warning disable CA2000 //We need to hold on to this handle
-                    var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
+                var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
 #pragma warning restore CA2000
-                    WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorMessageCouldntIntializeDevice);
+                WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorMessageCouldntIntializeDevice);
 
-                    var connectedDeviceDefinition = GetDeviceDefinition(defaultInterfaceHandle, DeviceId, Logger);
+                var connectedDeviceDefinition = GetDeviceDefinition(defaultInterfaceHandle, DeviceId, Logger);
 
-                    if (!WriteBufferSizeProtected.HasValue)
-                    {
-                        if (!connectedDeviceDefinition.WriteBufferSize.HasValue)
-                            throw new ValidationException("Write buffer size not specified");
-                        WriteBufferSizeProtected = (ushort)connectedDeviceDefinition.WriteBufferSize.Value;
-                    }
-
-                    if (!ReadBufferSizeProtected.HasValue)
-                    {
-                        if (!connectedDeviceDefinition.ReadBufferSize.HasValue)
-                            throw new ValidationException("Read buffer size not specified");
-                        ReadBufferSizeProtected = (ushort)connectedDeviceDefinition.ReadBufferSize.Value;
-                    }
-
-                    //Get the first (default) interface
-#pragma warning disable CA2000 //Ths should be disposed later
-                    var defaultInterface = GetInterface(defaultInterfaceHandle);
-
-                    UsbInterfaces.Add(defaultInterface);
-
-                    byte i = 0;
-                    while (true)
-                    {
-                        isSuccess = WinUsbApiCalls.WinUsb_GetAssociatedInterface(defaultInterfaceHandle, i,
-                            out var interfacePointer);
-                        if (!isSuccess)
-                        {
-                            errorCode = Marshal.GetLastWin32Error();
-                            if (errorCode == APICalls.ERROR_NO_MORE_ITEMS) break;
-
-                            throw new ApiException(
-                                $"Could not enumerate interfaces for device. Error code: {errorCode}");
-                        }
-
-                        var associatedInterface = GetInterface(interfacePointer);
-
-                        //TODO: this is bad design. The handler should be taking care of this
-                        UsbInterfaces.Add(associatedInterface);
-
-                        i++;
-                    }
-
-                    RegisterDefaultInterfaces();
-#pragma warning restore CA2000
-                }
-                catch (Exception ex)
+                if (!WriteBufferSizeProtected.HasValue)
                 {
-                    Logger.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
-                    throw;
+                    if (!connectedDeviceDefinition.WriteBufferSize.HasValue)
+                        throw new ValidationException("Write buffer size not specified");
+                    WriteBufferSizeProtected = (ushort)connectedDeviceDefinition.WriteBufferSize.Value;
                 }
+
+                if (!ReadBufferSizeProtected.HasValue)
+                {
+                    if (!connectedDeviceDefinition.ReadBufferSize.HasValue)
+                        throw new ValidationException("Read buffer size not specified");
+                    ReadBufferSizeProtected = (ushort)connectedDeviceDefinition.ReadBufferSize.Value;
+                }
+
+                //Get the first (default) interface
+#pragma warning disable CA2000 //Ths should be disposed later
+                var defaultInterface = GetInterface(defaultInterfaceHandle);
+
+                UsbInterfaces.Add(defaultInterface);
+
+                byte i = 0;
+                while (true)
+                {
+                    isSuccess = WinUsbApiCalls.WinUsb_GetAssociatedInterface(defaultInterfaceHandle, i,
+                        out var interfacePointer);
+                    if (!isSuccess)
+                    {
+                        errorCode = Marshal.GetLastWin32Error();
+                        if (errorCode == APICalls.ERROR_NO_MORE_ITEMS) break;
+
+                        throw new ApiException(
+                            $"Could not enumerate interfaces for device. Error code: {errorCode}");
+                    }
+
+                    var associatedInterface = GetInterface(interfacePointer);
+
+                    //TODO: this is bad design. The handler should be taking care of this
+                    UsbInterfaces.Add(associatedInterface);
+
+                    i++;
+                }
+
+                RegisterDefaultInterfaces();
+#pragma warning restore CA2000
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
+                throw;
             }
         }
 

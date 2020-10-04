@@ -122,7 +122,7 @@ namespace Device.Net
                 (logger ?? NullLogger.Instance).LogError(ex, "Error {errorMessage} Area: {area}", ex.Message, nameof(GetDeviceDefinitionFromWindowsDeviceId));
             }
 
-            return new ConnectedDeviceDefinition(deviceId) { DeviceType = deviceType, VendorId = vid, ProductId = pid };
+            return new ConnectedDeviceDefinition(deviceId, deviceType, vendorId: vid, productId: pid);
         }
         #endregion
 

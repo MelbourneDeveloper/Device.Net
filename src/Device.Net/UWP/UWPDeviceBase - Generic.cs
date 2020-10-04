@@ -17,7 +17,7 @@ namespace Device.Net.UWP
 
         #region Protected Properties
         protected T ConnectedDevice { get; private set; }
-        public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; protected set; }
+        public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; protected set; }
         protected ILoggerFactory LoggerFactory { get; private set; }
         #endregion
 
