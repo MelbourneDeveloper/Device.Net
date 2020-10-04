@@ -164,6 +164,7 @@ namespace Usb.Net.Windows
 
             string productName = null;
             string serialNumber = null;
+            string manufacturer = null;
 
             if (_UsbDeviceDescriptor.iProduct > 0)
             {
@@ -176,33 +177,33 @@ namespace Usb.Net.Windows
 
             if (_UsbDeviceDescriptor.iSerialNumber > 0)
             {
-                serialNumber = WinUsbApiCalls.GetDescriptor(defaultInterfaceHandle,
-                                                                             _UsbDeviceDescriptor.iSerialNumber,
-                                                                             "Couldn't get serial number",
-                                                                             logger);
+                serialNumber = WinUsbApiCalls.GetDescriptor(
+                    defaultInterfaceHandle,
+                    _UsbDeviceDescriptor.iSerialNumber,
+                    "Couldn't get serial number",
+                    logger);
             }
 
             if (_UsbDeviceDescriptor.iManufacturer > 0)
             {
-                deviceDefinition.Manufacturer = WinUsbApiCalls.GetDescriptor(
+                manufacturer = WinUsbApiCalls.GetDescriptor(
                     defaultInterfaceHandle,
                     _UsbDeviceDescriptor.iManufacturer,
                     "Couldn't get manufacturer",
                     logger);
             }
 
-            deviceDefinition.VendorId = _UsbDeviceDescriptor.idVendor;
-            deviceDefinition.ProductId = _UsbDeviceDescriptor.idProduct;
-            deviceDefinition.WriteBufferSize = _UsbDeviceDescriptor.bMaxPacketSize0;
-            deviceDefinition.ReadBufferSize = _UsbDeviceDescriptor.bMaxPacketSize0;
-
             return new ConnectedDeviceDefinition(
                 deviceId,
                 DeviceType.Usb,
                 productName: productName,
-                serialNumber: serialNumber
+                serialNumber: serialNumber,
+                manufacturer: manufacturer,
+                vendorId: _UsbDeviceDescriptor.idVendor,
+                productId: _UsbDeviceDescriptor.idProduct,
+                writeBufferSize: _UsbDeviceDescriptor.bMaxPacketSize0,
+                readBufferSize: _UsbDeviceDescriptor.bMaxPacketSize0
                 );
-
         }
 
         public void Close()
