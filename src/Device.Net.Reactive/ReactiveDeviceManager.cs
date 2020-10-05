@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -38,7 +37,7 @@ namespace Device.Net.Reactive
         /// </summary>
         public bool FilterMiddleMessages { get; set; }
 
-        public IObservable<IReadOnlyCollection<ConnectedDevice>> ConnectedDevicesObservable { get; }
+        public IObservable<IReadOnlyCollection<ConnectedDeviceDefinition>> ConnectedDevicesObservable { get; }
 
         public IDevice SelectedDevice
         {
@@ -46,7 +45,7 @@ namespace Device.Net.Reactive
             private set
             {
                 _selectedDevice = value;
-                _notifyDeviceInitialized(value != null ? new ConnectedDevice { DeviceId = value.DeviceId } : null);
+                _notifyDeviceInitialized(value.ConnectedDeviceDefinition);
             }
         }
         #endregion
@@ -94,8 +93,7 @@ namespace Device.Net.Reactive
                 while (!isDisposed)
                 {
                     var devices = await _getConnectedDevicesAsync();
-                    var lists = devices.Select(d => new ConnectedDevice { DeviceId = d.DeviceId }).ToList();
-                    _notifyConnectedDevices(lists);
+                    _notifyConnectedDevices(devices);
                     await Task.Delay(TimeSpan.FromMilliseconds(_pollMilliseconds));
                 }
             });
@@ -124,7 +122,7 @@ namespace Device.Net.Reactive
 
                 if (ex is IOException)
                 {
-                    _notifyDeviceException(new ConnectedDevice { DeviceId = SelectedDevice?.DeviceId }, ex);
+                    _notifyDeviceException(SelectedDevice?.ConnectedDeviceDefinition, ex);
                     //The exception was an IO exception so disconnect the device
                     //The listener should reconnect
 
@@ -182,7 +180,7 @@ namespace Device.Net.Reactive
         #endregion
 
         #region Private Methods
-        private async Task InitializeDeviceAsync(ConnectedDevice connectedDevice)
+        private async Task InitializeDeviceAsync(ConnectedDeviceDefinition connectedDevice)
         {
             try
             {
@@ -192,7 +190,7 @@ namespace Device.Net.Reactive
                     return;
                 }
 
-                var device = await _getDevice(connectedDevice.DeviceId);
+                var device = await _getDevice(connectedDevice);
                 await _initializeDeviceAction(device);
 
                 _logger.LogInformation("Device initialized {deviceId}", connectedDevice.DeviceId);
