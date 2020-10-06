@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Device.Net.Reactive
+namespace Device.Net
 {
 
     public delegate Task ProcessData(IDevice device);

@@ -5,10 +5,12 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
-    <Description>A cross platform USB library written in C#</Description>
-    <Version>3.1.0</Version>
-    <AssemblyVersion>3.1.0.0</AssemblyVersion>
-    <FileVersion>3.1.0.0</FileVersion>
+    <Description>A cross platform USB library written in C#
+
+Alpha version. Please use 3.x for a stable release</Description>
+    <Version>4.0.0-alpha</Version>
+    <AssemblyVersion>4.0.0.0</AssemblyVersion>
+    <FileVersion>4.0.0.0</FileVersion>
     <Authors>Christian Findlay</Authors>
     <Copyright>Copyright (c) 2020 Christian Findlay</Copyright>
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
@@ -16,7 +18,8 @@
     <LangVersion>8</LangVersion>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <NoWarn>1701;1702;NU5125</NoWarn>    
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>      
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>    
+    <PackageReleaseNotes>Alpha version. Please use 3.x for a stable release</PackageReleaseNotes>      
   </PropertyGroup>
 
   <Choose>
