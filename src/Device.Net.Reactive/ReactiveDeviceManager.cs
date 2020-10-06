@@ -107,7 +107,7 @@ namespace Device.Net.Reactive
 
         public async Task<TResponse> WriteAndReadAsync<TResponse>(IRequest request, Func<byte[], TResponse> convertFunc)
         {
-            if (SelectedDevice == null) throw new InvalidOperationException("No device selected and initialized");
+            if (SelectedDevice == null) return default;
 
             try
             {
