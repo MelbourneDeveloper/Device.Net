@@ -221,9 +221,9 @@ namespace Usb.Net.Android
             return new ConnectedDeviceDefinition(
                 deviceId,
                 DeviceType.Usb,
-                productName: usbDevice.ProductName,
-                manufacturer: usbDevice.ManufacturerName,
-                serialNumber: usbDevice.SerialNumber,
+                //productName: usbDevice.ProductName,
+                //manufacturer: usbDevice.ManufacturerName,
+                //serialNumber: usbDevice.SerialNumber,
                 productId: (uint)usbDevice.ProductId,
                 vendorId: (uint)usbDevice.VendorId
             );
