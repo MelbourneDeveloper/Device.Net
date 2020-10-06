@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace Device.Net
 {
@@ -15,6 +16,15 @@ namespace Device.Net
         public static IDeviceManager ToDeviceManager(this IList<IDeviceFactory> deviceFactories, ILoggerFactory loggerFactory = null)
             => deviceFactories == null ? throw new ArgumentNullException(nameof(deviceFactories)) :
             new DeviceManager(new ReadOnlyCollection<IDeviceFactory>(deviceFactories), loggerFactory);
+
+        public static DeviceDataStreamer CreateDeviceDataStreamer(
+    this IDeviceManager deviceManager,
+    ProcessData processData,
+    Func<IDevice, Task> initializeFunc = null) =>
+    new DeviceDataStreamer(
+        processData,
+        deviceManager,
+        initializeFunc: initializeFunc);
 
     }
 }
