@@ -4,7 +4,6 @@ using Android.Content;
 using Android.Hardware.Usb;
 using Flutnet;
 using Flutnet.Interop.Embedding.Engine;
-using FlutnetThermometer.ServiceLibrary;
 using FlutnetThermometer.Services;
 
 namespace FlutnetThermometer
@@ -53,9 +52,13 @@ namespace FlutnetThermometer
                 //
                 FlutnetRuntime.Init("TRIAL-APP-KEY");
 
-                // Register the thermometer service for andorid
-                //FlutnetRuntime.RegisterPlatformService(new ThermometerServiceDroid((UsbManager)GetSystemService(UsbService), AppContext), "thermometer_service");
+                //
+                // Register the USB service in the flutnet runtime
+                //
+                FlutnetRuntime.RegisterPlatformService(new ThermometerServiceDroid((UsbManager)AppContext.GetSystemService(Context.UsbService), AppContext), "thermometer_service");
+
                 Initialized = true;
+
             }
             catch (Exception e)
             {
