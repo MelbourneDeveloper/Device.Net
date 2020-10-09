@@ -22,5 +22,5 @@
 
 ## Screenshots
 
-<img src="github_assets/app.jpg" height="600">
+<img src="app.jpg" height="600">
 
