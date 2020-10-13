@@ -141,6 +141,9 @@ namespace Device.Net.Reactive
 
         public void QueueRequest(IRequest request)
         {
+            //If ther is no device selected just eat up the messages
+            if (SelectedDevice == null) return;
+
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             _queuedRequests.Enqueue(request);
@@ -187,6 +190,7 @@ namespace Device.Net.Reactive
                 if (connectedDevice == null)
                 {
                     _logger.LogInformation("Initialize requested but device was null");
+                    SelectedDevice = null;
                     return;
                 }
 
