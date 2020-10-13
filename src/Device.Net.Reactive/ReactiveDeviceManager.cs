@@ -45,7 +45,7 @@ namespace Device.Net.Reactive
             private set
             {
                 _selectedDevice = value;
-                _notifyDeviceInitialized(value.ConnectedDeviceDefinition);
+                _notifyDeviceInitialized(value?.ConnectedDeviceDefinition);
             }
         }
         #endregion
