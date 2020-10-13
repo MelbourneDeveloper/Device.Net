@@ -33,7 +33,7 @@ namespace Hid.Net.UWP
         {
             loggerFactory ??= NullLoggerFactory.Instance;
 
-            if (getDevice == null) getDevice = async c => new UWPHidDevice(c.DeviceId, loggerFactory, defaultReportId);
+            if (getDevice == null) getDevice = async c => new UWPHidDevice(c, loggerFactory, defaultReportId);
 
             var firstDevice = filterDeviceDefinitions.First();
 
