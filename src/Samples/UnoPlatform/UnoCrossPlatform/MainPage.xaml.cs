@@ -2,7 +2,6 @@
 using System;
 using Device.Net;
 using Microsoft.Extensions.Logging;
-using Device.Net.Reactive;
 using System.Collections.Generic;
 using Usb.Net;
 

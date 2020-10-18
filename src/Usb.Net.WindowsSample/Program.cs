@@ -11,7 +11,6 @@ using System.Reactive.Subjects;
 using Hid.Net.Windows;
 using SerialPort.Net.Windows;
 using Usb.Net.Windows;
-using Device.Net.Reactive;
 #else
 using Device.Net.LibUsb;
 #endif
