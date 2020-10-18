@@ -24,6 +24,8 @@ namespace FlutnetThermometer
     ]
     [MetaData("io.flutter.embedding.android.NormalTheme", Resource = "@style/AppTheme")]
     [MetaData("io.flutter.embedding.android.SplashScreenDrawable", Resource = "@drawable/launch_background")]
+    [IntentFilter(new[] { UsbManager.ActionUsbDeviceAttached })]
+    [MetaData(UsbManager.ActionUsbDeviceAttached, Resource = "@xml/device_filter")]
     public class MainActivity : FlutterActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)

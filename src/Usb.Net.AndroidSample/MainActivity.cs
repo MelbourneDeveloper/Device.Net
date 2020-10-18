@@ -14,6 +14,8 @@ using Usb.Net.Sample;
 namespace Usb.Net.AndroidSample
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
+    [IntentFilter(new[] { UsbManager.ActionUsbDeviceAttached })]
+    [MetaData(UsbManager.ActionUsbDeviceAttached, Resource = "@xml/device_filter")]
     public class MainActivity : AppCompatActivity
     {
         #region Fields
@@ -82,11 +84,6 @@ namespace Usb.Net.AndroidSample
                 _TrezorExample.TrezorDisconnected += TrezorExample_TrezorDisconnected;
                 _TrezorExample.TrezorInitialized += TrezorExample_TrezorInitialized;
                 _TrezorExample.StartListening();
-
-                //var attachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
-                //var detachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
-                //RegisterReceiver(attachedReceiver, new IntentFilter(UsbManager.ActionUsbDeviceAttached));
-                //RegisterReceiver(detachedReceiver, new IntentFilter(UsbManager.ActionUsbDeviceDetached));
 
                 DisplayMessage("Waiting for device...");
             }

@@ -28,6 +28,8 @@ namespace FlutnetThermometer.Services
                 {
                     try
                     {
+                        //https://github.com/WozSoftware/Woz.TEMPer/blob/dcd0b49d67ac39d10c3759519050915816c2cd93/Woz.TEMPer/Sensors/TEMPerV14.cs#L15
+
                         var data = await device.WriteAndReadAsync(new byte[8] { 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
 
                         var temperatureTimesOneHundred = (data.Data[3] & 0xFF) + (data.Data[2] << 8);
