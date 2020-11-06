@@ -86,7 +86,9 @@ namespace Usb.Net.Windows
             //TODO: convert from ISetupPacket to WINUSB_SETUP_PACKET
             var winSetupPacket = new WINUSB_SETUP_PACKET();
             uint bytesWritten = 0;
-            var buffer = Array.Empty<byte>();
+#pragma warning disable CA1825 
+            var buffer = new byte[0] { };
+#pragma warning restore CA1825 
 
             WinUsbApiCalls.WinUsb_ControlTransfer(_SafeFileHandle.DangerousGetHandle(), winSetupPacket, buffer, (uint)buffer.Length, ref bytesWritten, IntPtr.Zero); //last pointer is overlapped structure for async operations
             return bytesWritten;

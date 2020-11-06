@@ -21,12 +21,6 @@ namespace Device.Net
         /// </summary>
         Task WriteAsync(byte[] data, CancellationToken cancellationToken = default);
 
-        //TODO: Device.Net does not understand ISetupPacket, so currently using Object
-        uint SendControlOutTransfer(object setupPacket, byte[] buffer); //TODO: setup packet is defined differently between libUsb and WinUsb (also possibly convert to async)
-
-        //TODO: Device.Net does not understand ISetupPacket, so currently using Object
-        uint SendControlInTransfer(object setupPacket); //TODO: setup packet is defined differently between libUsb and WinUsb (also possibly convert to async)
-
         /// <summary>
         /// Close any existing connections and reinitialize the device. 
         /// </summary>

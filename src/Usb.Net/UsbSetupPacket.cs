@@ -1,6 +1,6 @@
 ﻿namespace Usb.Net
 {
-    public class UsbSetupPacket
+    public class UsbSetupPacket : ISetupPacket
     {
         /// <summary>
         /// Creates a UsbSetupPacket object.

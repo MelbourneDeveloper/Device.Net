@@ -143,6 +143,9 @@ namespace Usb.Net.Android
                 ? throw new DeviceException("could not claim interface")
                 : Task.FromResult(true);
         }
+
+        public uint SendControlOutTransfer(ISetupPacket setupPacket, byte[] buffer) => throw new NotImplementedException();
+        public uint SendControlInTransfer(ISetupPacket setupPacket) => throw new NotImplementedException();
         #endregion
     }
 }

@@ -142,6 +142,9 @@ namespace Usb.Net.UWP
             if (disposedValue) return;
             disposedValue = true;
         }
+
+        public uint SendControlOutTransfer(ISetupPacket setupPacket, byte[] buffer) => throw new NotImplementedException();
+        public uint SendControlInTransfer(ISetupPacket setupPacket) => throw new NotImplementedException();
         #endregion
     }
 }

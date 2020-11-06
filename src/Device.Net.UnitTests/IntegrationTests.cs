@@ -59,6 +59,34 @@ namespace Device.Net.UnitTests
             var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID));
             await windowsUsbDevice.InitializeAsync();
         }
+
+        [TestMethod]
+        public async Task TestConnectToSTMDFUMode2()
+        {
+            const string deviceID = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
+            var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID));
+            await windowsUsbDevice.InitializeAsync();
+
+            const byte DFU_GETSTATUS = 0x03;
+            var buffer = new byte[6];
+
+            var setupPacket = new UsbSetupPacket
+            {
+                RequestType = new UsbControlRequestType
+                {
+                    Direction = UsbTransferDirection.In,
+                    Recipient = UsbControlRecipient.Device, //probably not correct, needs verifying
+                    ControlTransferType = UsbControlTransferType.Class,
+                },
+                Request = DFU_GETSTATUS,
+                Length = (uint)buffer.Length
+            };
+
+            _ = windowsUsbDevice.SendControlOutTransfer(setupPacket, buffer);
+
+            //Assert that the response part meets the specification
+            Assert.IsTrue(new byte[] { 0x02 }.Equals(buffer[4]));
+        }
 #endif
 
         [TestMethod]
