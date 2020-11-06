@@ -130,7 +130,7 @@ namespace Usb.Net.UWP
             }
             catch (Exception ex)
             {
-                Logger?.LogError(Messages.WarningMessageWritingToInterrupt);
+                Logger?.LogError(ex, Messages.WarningMessageWritingToInterrupt);
                 throw;
             }
         }

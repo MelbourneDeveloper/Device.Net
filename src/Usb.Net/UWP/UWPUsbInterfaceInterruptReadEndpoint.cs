@@ -114,7 +114,7 @@ namespace Usb.Net.UWP
                 _logger.LogDebug(Messages.DebugMessageLockReleased);
 
                 //Cancel the completion source if the token is canceled
-                using (cancellationToken.Register(() => { _ReadChunkTaskCompletionSource.TrySetCanceled(); }))
+                using (cancellationToken.Register(() => _ReadChunkTaskCompletionSource.TrySetCanceled()))
                 {
                     await _ReadChunkTaskCompletionSource.Task;
                 }

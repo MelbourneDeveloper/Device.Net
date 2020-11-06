@@ -6,9 +6,6 @@ namespace Device.Net
     {
         public IDevice Device { get; }
 
-        public DeviceEventArgs(IDevice device)
-        {
-            Device = device;
-        }
+        public DeviceEventArgs(IDevice device) => Device = device;
     }
 }

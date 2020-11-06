@@ -68,7 +68,7 @@ namespace Hid.Net.Windows
             var product = GetProduct(safeFileHandle);
 
             return new ConnectedDeviceDefinition(
-                deviceId, 
+                deviceId,
                 DeviceType.Hid,
                 writeBufferSize: hidCollectionCapabilities.OutputReportByteLength,
                 readBufferSize: hidCollectionCapabilities.InputReportByteLength,

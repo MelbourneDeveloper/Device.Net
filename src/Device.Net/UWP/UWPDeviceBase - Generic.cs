@@ -27,10 +27,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Constructor
-        protected UWPDeviceBase(string deviceId, ILoggerFactory loggerFactory, ILogger logger) : base(deviceId, logger)
-        {
-            LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
-        }
+        protected UWPDeviceBase(string deviceId, ILoggerFactory loggerFactory, ILogger logger) : base(deviceId, logger) => LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
         #endregion
 
         #region Protected Methods
@@ -72,7 +69,7 @@ namespace Device.Net.UWP
             ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
 
             //Cancel the completion source if the token is canceled
-            using (cancellationToken.Register(() => { ReadChunkTaskCompletionSource.TrySetCanceled(); }))
+            using (cancellationToken.Register(() => ReadChunkTaskCompletionSource.TrySetCanceled()))
             {
                 await ReadChunkTaskCompletionSource.Task;
             }

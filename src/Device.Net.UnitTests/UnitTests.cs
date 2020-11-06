@@ -123,10 +123,7 @@ namespace Device.Net.UnitTests
             It.IsAny<EventId>(),
             It.IsAny<It.IsAnyType>(),
             It.IsAny<Exception>(),
-            (Func<It.IsAnyType, Exception, string>)It.IsAny<object>())).Callback(() => 
-            {
-                actualCount++;
-            });
+            (Func<It.IsAnyType, Exception, string>)It.IsAny<object>())).Callback(() => actualCount++);
 
             _loggerMock.Setup(l => l.BeginScope(It.IsAny<It.IsAnyType>())).Returns(new Mock<IDisposable>().Object);
 
@@ -294,7 +291,7 @@ namespace Device.Net.UnitTests
                 var cancellationTokenSource = new CancellationTokenSource();
 
                 var task1 = device.WriteAndReadAsync(new byte[] { 1, 2, 3 }, cancellationTokenSource.Token);
-                var task2 = Task.Run(() => { cancellationTokenSource.Cancel(); });
+                var task2 = Task.Run(() => cancellationTokenSource.Cancel());
 
                 await Task.WhenAll(new Task[] { task1, task2 });
             }
@@ -303,7 +300,7 @@ namespace Device.Net.UnitTests
                 Assert.AreEqual(Messages.ErrorMessageOperationCanceled, oce.Message);
                 return;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Assert.Fail();
             }

@@ -1,9 +1,9 @@
 ﻿
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System.Threading.Tasks;
 using Usb.Net;
-using Microsoft.Extensions.Logging;
 #if !WINDOWS_UWP
 using Usb.Net.Windows;
 using Device.Net.Exceptions;
@@ -23,14 +23,9 @@ namespace Device.Net.UnitTests
         #endregion
 
 #if !NET45
-        public UsbTests()
-        {
+        public UsbTests() =>
             //Easier than mocking at this point...
-            _loggerFactory = LoggerFactory.Create((builder) =>
-            {
-                _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
-            });
-        }
+            _loggerFactory = LoggerFactory.Create((builder) => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 #endif
 
         #region Tests
