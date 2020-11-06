@@ -120,10 +120,7 @@ namespace Usb.Net.Android
                 _UsbDevice,
                 AndroidContext,
                 LoggerFactory.CreateLogger<UsbPermissionBroadcastReceiver>());
-            usbPermissionBroadcastReceiver.Received += (sender, eventArgs) =>
-            {
-                taskCompletionSource.SetResult(usbPermissionBroadcastReceiver.IsPermissionGranted);
-            };
+            usbPermissionBroadcastReceiver.Received += (sender, eventArgs) => taskCompletionSource.SetResult(usbPermissionBroadcastReceiver.IsPermissionGranted);
 
             usbPermissionBroadcastReceiver.Register();
 

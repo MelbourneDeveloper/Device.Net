@@ -76,14 +76,14 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Public Methods
-        public Task InitializeAsync() => Task.Run(() => { Initialize(); });
+        public Task InitializeAsync() => Task.Run(() => Initialize());
 
         private int Write(byte[] data) => data == null ? 0 : ApiService.AWriteFile(_ReadSafeFileHandle, data, data.Length, out var bytesWritten, 0) ? bytesWritten : -1;
 
         public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             ValidateConnection();
-            return Task.Run(() => { Write(data); }, cancellationToken);
+            return Task.Run(() => Write(data), cancellationToken);
         }
 
         public override Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)

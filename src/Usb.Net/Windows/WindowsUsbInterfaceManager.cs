@@ -237,7 +237,7 @@ namespace Usb.Net.Windows
             if (_DeviceHandle == null) throw new NotInitializedException();
 
             //TODO: Is this right?
-            return Task.Run(() => { return DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(DeviceId, DeviceType.Usb, Logger); });
+            return Task.Run(() => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(DeviceId, DeviceType.Usb, Logger));
         }
         #endregion
     }

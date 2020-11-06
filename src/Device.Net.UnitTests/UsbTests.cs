@@ -25,10 +25,7 @@ namespace Device.Net.UnitTests
 #if !NET45
         public UsbTests() =>
             //Easier than mocking at this point...
-            _loggerFactory = LoggerFactory.Create((builder) =>
-            {
-                _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
-            });
+            _loggerFactory = LoggerFactory.Create((builder) => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 #endif
 
         #region Tests

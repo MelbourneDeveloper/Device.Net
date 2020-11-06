@@ -39,10 +39,7 @@ namespace UnoCrossPlatform
         {
             Loaded -= MainPage_Loaded;
 
-            var loggerFactory = LoggerFactory.Create((builder) =>
-            {
-                _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
-            });
+            var loggerFactory = LoggerFactory.Create((builder) => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 
             var filterDeviceDefinitions = new List<FilterDeviceDefinition> { new FilterDeviceDefinition(vendorId: 16701, productId: 8455, usagePage: 65280) };
 
@@ -77,10 +74,7 @@ namespace UnoCrossPlatform
 
                     if (display == null) return;
 
-                    _ = DispatchingExtensions.RunOnDispatcher(() =>
-                    {
-                        TheTextBlock.Text = display;
-                    });
+                    _ = DispatchingExtensions.RunOnDispatcher(() => TheTextBlock.Text = display);
 
                 }
                 //Note this breaks UWP
