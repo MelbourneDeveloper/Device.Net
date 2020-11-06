@@ -4,11 +4,11 @@ using LibUsbDotNet.LudnMonoLibUsb;
 using LibUsbDotNet.Main;
 using LibUsbDotNet.WinUsb;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Device.Net.LibUsb
 {

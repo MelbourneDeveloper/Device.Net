@@ -1,7 +1,7 @@
-using System;
 using Android.Hardware.Usb;
 using Android.Runtime;
 using Com.Nostra13.Universalimageloader.Core;
+using System;
 using Windows.UI.Xaml.Media;
 
 namespace UnoCrossPlatform.Droid

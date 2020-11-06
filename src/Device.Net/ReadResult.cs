@@ -15,16 +15,11 @@ namespace Device.Net
         #endregion
 
         #region Conversion Operators
-        public static implicit operator byte[](ReadResult readResult)
-        {
-            return readResult.Data;
-        }
+        public static implicit operator byte[](ReadResult readResult) => readResult.Data;
 
-        public static implicit operator ReadResult(byte[] data)
-        {
+        public static implicit operator ReadResult(byte[] data) =>
             //TODO: This is a bit dodgy... It's breaking a code rule
-            return data == null ? throw new ArgumentNullException(nameof(data)) : new ReadResult(data, (uint)data.Length);
-        }
+            data == null ? throw new ArgumentNullException(nameof(data)) : new ReadResult(data, (uint)data.Length);
         #endregion
 
         #region Constructor

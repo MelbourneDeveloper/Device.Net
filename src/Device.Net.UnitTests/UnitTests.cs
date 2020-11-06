@@ -300,7 +300,7 @@ namespace Device.Net.UnitTests
                 Assert.AreEqual(Messages.ErrorMessageOperationCanceled, oce.Message);
                 return;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Assert.Fail();
             }

@@ -11,11 +11,11 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class IntegrationTestsSerialPort
     {
-        #region Fields
+#region Fields
         private static WindowsSerialPortDeviceFactory windowsSerialPortDeviceFactory;
-        #endregion
+#endregion
 
-        #region Tests
+#region Tests
         [TestMethod]
         public async Task ConnectedTestReadAsync() => await ReadAsync();
 
@@ -85,9 +85,9 @@ namespace Device.Net.UnitTests
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
             Assert.IsTrue(connectedDeviceDefinitions.Count == 1);
         }
-        #endregion
+#endregion
 
-        #region Helpers
+#region Helpers
         private async Task<List<ConnectedDeviceDefinition>> GetConnectedDevicesAsync()
         {
             if (windowsSerialPortDeviceFactory == null)
@@ -107,7 +107,7 @@ namespace Device.Net.UnitTests
             var range = result.Data.ToList().GetRange(0, 10);
             Assert.IsFalse(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }.SequenceEqual(range));
         }
-        #endregion
+#endregion
     }
 }
 
