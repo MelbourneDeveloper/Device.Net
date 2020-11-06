@@ -6,8 +6,8 @@ namespace Usb.Net
     {
         IUsbInterfaceManager UsbInterfaceManager { get; }
 
-        uint SendControlOutTransfer(object setupPacket, byte[] buffer);
+        uint SendControlOutTransfer(ISetupPacket setupPacket, byte[] buffer);
 
-        uint SendControlInTransfer(object setupPacket);
+        uint SendControlInTransfer(ISetupPacket setupPacket);
     }
 }
