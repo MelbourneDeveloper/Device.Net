@@ -89,8 +89,9 @@ namespace Device.Net
             ushort? usagePage = null,
             ushort? versionNumber = null,
             int? writeBufferSize = null,
-            int? readBufferSize = null
-            )
+            int? readBufferSize = null,
+            string label = null
+           )
         {
             if (string.IsNullOrEmpty(deviceId))
             {
@@ -109,6 +110,7 @@ namespace Device.Net
             VersionNumber = versionNumber;
             WriteBufferSize = writeBufferSize;
             ReadBufferSize = readBufferSize;
+            Label = label;
         }
         #endregion
     }

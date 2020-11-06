@@ -13,10 +13,7 @@ namespace Device.Net.Windows
         #endregion
 
         #region Constructor
-        protected ApiService(ILogger logger = null)
-        {
-            Logger = logger ?? NullLogger.Instance;
-        }
+        public ApiService(ILogger logger = null) => Logger = logger ?? NullLogger.Instance;
         #endregion
 
         #region Implementation

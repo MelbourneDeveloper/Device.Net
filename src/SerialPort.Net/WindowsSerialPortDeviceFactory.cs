@@ -64,7 +64,7 @@ namespace SerialPort.Net.Windows
                         foreach (var valueName in valueNames)
                         {
                             var comPortName = key.GetValue(valueName);
-                            returnValue.Add(new ConnectedDeviceDefinition($@"\\.\{comPortName}") { Label = valueName, DeviceType = DeviceType.SerialPort });
+                            returnValue.Add(new ConnectedDeviceDefinition($@"\\.\{comPortName}", DeviceType.SerialPort, label: valueName));
                         }
                     }
                 }
@@ -83,7 +83,7 @@ namespace SerialPort.Net.Windows
                     using (var serialPortDevice = new WindowsSerialPortDevice(portName))
                     {
                         await serialPortDevice.InitializeAsync();
-                        if (serialPortDevice.IsInitialized) returnValue.Add(new ConnectedDeviceDefinition(portName));
+                        if (serialPortDevice.IsInitialized) returnValue.Add(new ConnectedDeviceDefinition(portName, DeviceType.SerialPort));
                     }
                 }
             }

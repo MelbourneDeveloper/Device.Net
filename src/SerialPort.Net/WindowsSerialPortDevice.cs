@@ -53,7 +53,7 @@ namespace SerialPort.Net.Windows
         {
             ApiService = apiService ?? throw new ArgumentNullException(nameof(apiService));
 
-            ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId);
+            ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId, DeviceType.SerialPort);
 
             if ((byteSize == 5 && stopBits == StopBits.Two) || (stopBits == StopBits.OnePointFive && byteSize > 5))
                 throw new ArgumentException(Messages.ErrorInvalidByteSizeAndStopBitsCombo);
