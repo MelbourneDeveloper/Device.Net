@@ -9,9 +9,6 @@ namespace UnoCrossPlatform
     /// </summary>
     public sealed partial class DontDeleteMe : Page
     {
-        public DontDeleteMe()
-        {
-            InitializeComponent();
-        }
+        public DontDeleteMe() => InitializeComponent();
     }
 }

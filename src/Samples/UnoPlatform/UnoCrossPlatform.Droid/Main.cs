@@ -15,10 +15,7 @@ namespace UnoCrossPlatform.Droid
     public class Application : Windows.UI.Xaml.NativeApplication
     {
         public Application(IntPtr javaReference, JniHandleOwnership transfer)
-            : base(() => new App(), javaReference, transfer)
-        {
-            ConfigureUniversalImageLoader();
-        }
+            : base(() => new App(), javaReference, transfer) => ConfigureUniversalImageLoader();
 
         private void ConfigureUniversalImageLoader()
         {

@@ -23,14 +23,12 @@ namespace Device.Net.UnitTests
         #endregion
 
 #if !NET45
-        public UsbTests()
-        {
+        public UsbTests() =>
             //Easier than mocking at this point...
             _loggerFactory = LoggerFactory.Create((builder) =>
             {
                 _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
             });
-        }
 #endif
 
         #region Tests

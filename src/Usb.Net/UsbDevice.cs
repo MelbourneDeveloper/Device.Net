@@ -35,10 +35,7 @@ namespace Usb.Net
             ILoggerFactory loggerFactory = null) : base(
                 deviceId,
                 loggerFactory,
-                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UsbDevice>())
-        {
-            UsbInterfaceManager = usbInterfaceManager ?? throw new ArgumentNullException(nameof(usbInterfaceManager));
-        }
+                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UsbDevice>()) => UsbInterfaceManager = usbInterfaceManager ?? throw new ArgumentNullException(nameof(usbInterfaceManager));
         #endregion
 
         #region Private Methods
