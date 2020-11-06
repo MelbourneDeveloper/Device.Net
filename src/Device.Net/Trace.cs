@@ -1,4 +1,5 @@
-﻿namespace Device.Net
+﻿// ReSharper disable MemberCanBePrivate.Global
+namespace Device.Net
 {
     public class Trace
     {

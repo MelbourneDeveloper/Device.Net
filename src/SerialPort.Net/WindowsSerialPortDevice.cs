@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
@@ -22,6 +23,7 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Public Properties
+        //public DeviceType DeviceType => DeviceType.SerialPort;
         public override bool IsInitialized => _ReadSafeFileHandle != null && !_ReadSafeFileHandle.IsInvalid;
         /// <summary>
         /// TODO: No need to implement this. The property probably shouldn't exist at the base level
@@ -36,11 +38,22 @@ namespace SerialPort.Net.Windows
         {
         }
 
-        public WindowsSerialPortDevice(string deviceId, IApiService apiService, int baudRate, StopBits stopBits, Parity parity, byte byteSize, ushort readBufferSize, ILogger logger) : base(deviceId, logger)
+        public WindowsSerialPortDevice(
+            string deviceId,
+            IApiService apiService,
+            int baudRate,
+            StopBits stopBits,
+            Parity parity,
+            byte byteSize,
+            ushort readBufferSize,
+            ILoggerFactory loggerFactory = null) : base(
+                deviceId,
+                loggerFactory,
+                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsSerialPortDevice>())
         {
             ApiService = apiService ?? throw new ArgumentNullException(nameof(apiService));
 
-            ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId);
+            ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId, DeviceType.SerialPort);
 
             if ((byteSize == 5 && stopBits == StopBits.Two) || (stopBits == StopBits.OnePointFive && byteSize > 5))
                 throw new ArgumentException(Messages.ErrorInvalidByteSizeAndStopBitsCombo);

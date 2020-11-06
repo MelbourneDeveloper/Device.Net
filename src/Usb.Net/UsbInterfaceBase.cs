@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +41,7 @@ namespace Usb.Net
                 _ReadEndpoint = value;
 
 #pragma warning disable CA1062 // Validate arguments of public methods
-                Logger?.LogInformation("ReadEndpoint set to pipeid {pipeid}", value?.PipeId);
+                Logger.LogInformation("ReadEndpoint set to pipeid {pipeid}", value?.PipeId);
 #pragma warning restore CA1062 // Validate arguments of public methods
 
             }
@@ -54,7 +55,7 @@ namespace Usb.Net
                 if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
                 _WriteEndpoint = value;
 #pragma warning disable CA1062 // Validate arguments of public methods
-                Logger?.LogInformation("WriteEndpoint set to pipeid {pipeid}", value?.PipeId);
+                Logger.LogInformation("WriteEndpoint set to pipeid {pipeid}", value?.PipeId);
 #pragma warning restore CA1062 // Validate arguments of public methods
             }
         }
@@ -94,13 +95,13 @@ namespace Usb.Net
             if (ReadEndpoint == null && InterruptReadEndpoint != null)
             {
                 ReadEndpoint = InterruptReadEndpoint;
-                Logger?.LogWarning(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, true) + " Interface # : {interfaceNumber} IsRead: {isRead} Region: {region}", InterfaceNumber, true, nameof(UsbInterfaceBase));
+                Logger.LogWarning(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, true) + " Interface # : {interfaceNumber} IsRead: {isRead} Region: {region}", InterfaceNumber, true, nameof(UsbInterfaceBase));
             }
 
             if (WriteEndpoint == null && InterruptWriteEndpoint != null)
             {
                 WriteEndpoint = InterruptWriteEndpoint;
-                Logger?.LogWarning(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, false) + " Interface # : {interfaceNumber} IsRead: {isRead} Region: {region}", InterfaceNumber, false, nameof(UsbInterfaceBase));
+                Logger.LogWarning(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, false) + " Interface # : {interfaceNumber} IsRead: {isRead} Region: {region}", InterfaceNumber, false, nameof(UsbInterfaceBase));
             }
         }
 
@@ -117,9 +118,9 @@ namespace Usb.Net
         #endregion
 
         #region Constructor
-        protected UsbInterfaceBase(ILogger logger, ushort? readBufferSize, ushort? writeBufferSize)
+        protected UsbInterfaceBase(ILogger logger = null, ushort? readBufferSize = null, ushort? writeBufferSize = null)
         {
-            Logger = logger;
+            Logger = logger ?? NullLogger.Instance;
             _ReadBufferSize = readBufferSize;
             _WriteBufferSize = writeBufferSize;
         }

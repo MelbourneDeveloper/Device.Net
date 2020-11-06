@@ -1,6 +1,7 @@
 using Device.Net;
 using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,10 +23,19 @@ namespace Usb.Net
         #endregion
 
         #region Constructor
-        /// <summary>
-        /// TODO: Remove the tracer from the constructor. This will get passed to the handler so there's no need for it on the device itself.
-        /// </summary>
-        public UsbDevice(string deviceId, IUsbInterfaceManager usbInterfaceManager, ILogger logger) : base(deviceId, logger)
+        public UsbDevice(
+            string deviceId,
+            IUsbInterfaceManager usbInterfaceManager) : this(deviceId, usbInterfaceManager, null)
+        {
+        }
+
+        public UsbDevice(
+            string deviceId,
+            IUsbInterfaceManager usbInterfaceManager,
+            ILoggerFactory loggerFactory = null) : base(
+                deviceId,
+                loggerFactory,
+                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UsbDevice>())
         {
             UsbInterfaceManager = usbInterfaceManager ?? throw new ArgumentNullException(nameof(usbInterfaceManager));
         }

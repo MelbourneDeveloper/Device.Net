@@ -1,5 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using static Usb.Net.Windows.WinUsbApiCalls;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
 
 namespace Usb.Net.Windows
 {

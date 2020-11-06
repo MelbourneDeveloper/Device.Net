@@ -2,6 +2,6 @@
 {
     public class DeviceSelectedArgs
     {
-        public ConnectedDevice ConnectedDevice { get; set; }
+        public ConnectedDeviceDefinition ConnectedDevice { get; set; }
     }
 }

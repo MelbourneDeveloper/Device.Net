@@ -2,6 +2,7 @@
 using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
@@ -21,7 +22,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidApiService(ILoggerFactory loggerFactory) : base(loggerFactory?.CreateLogger<WindowsHidApiService>())
+        public WindowsHidApiService(ILoggerFactory loggerFactory) : base((loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidApiService>())
         {
         }
         #endregion
@@ -66,20 +67,20 @@ namespace Hid.Net.Windows
             var serialNumber = GetSerialNumber(safeFileHandle);
             var product = GetProduct(safeFileHandle);
 
-            return new ConnectedDeviceDefinition(deviceId)
-            {
-                WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
-                ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,
-                Manufacturer = manufacturer,
-                ProductName = product,
-                ProductId = (ushort)hidAttributes.ProductId,
-                SerialNumber = serialNumber,
-                Usage = hidCollectionCapabilities.Usage,
-                UsagePage = hidCollectionCapabilities.UsagePage,
-                VendorId = (ushort)hidAttributes.VendorId,
-                VersionNumber = (ushort)hidAttributes.VersionNumber,
-                DeviceType = DeviceType.Hid
-            };
+            return new ConnectedDeviceDefinition(
+                deviceId, 
+                DeviceType.Hid,
+                writeBufferSize: hidCollectionCapabilities.OutputReportByteLength,
+                readBufferSize: hidCollectionCapabilities.InputReportByteLength,
+                manufacturer: manufacturer,
+                productName: product,
+                productId: (ushort)hidAttributes.ProductId,
+                serialNumber: serialNumber,
+                usage: hidCollectionCapabilities.Usage,
+                usagePage: hidCollectionCapabilities.UsagePage,
+                vendorId: (ushort)hidAttributes.VendorId,
+                versionNumber: (ushort)hidAttributes.VersionNumber)
+            ;
         }
 
         public string GetManufacturer(SafeFileHandle safeFileHandle) => GetHidString(safeFileHandle, HidD_GetManufacturerString, Logger);
@@ -140,7 +141,7 @@ namespace Hid.Net.Windows
                 var isSuccess = getString(safeFileHandle, pointerToBuffer, 126);
                 if (!isSuccess)
                 {
-                    logger?.LogWarning(Messages.ErrorMessagesCouldntGetHidString, "", nameof(GetHidString), callMemberName);
+                    logger.LogWarning(Messages.ErrorMessagesCouldntGetHidString, "", nameof(GetHidString), callMemberName);
                 }
                 var text = Marshal.PtrToStringAuto(pointerToBuffer);
                 Marshal.FreeHGlobal(pointerToBuffer);
@@ -148,7 +149,7 @@ namespace Hid.Net.Windows
             }
             catch (Exception ex)
             {
-                logger?.LogError(ex, Messages.ErrorMessagesCouldntGetHidString, ex.Message, nameof(GetHidString), callMemberName);
+                logger.LogError(ex, Messages.ErrorMessagesCouldntGetHidString, ex.Message, nameof(GetHidString), callMemberName);
                 return null;
             }
             finally

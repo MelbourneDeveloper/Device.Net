@@ -25,8 +25,12 @@ namespace Usb.Net.UWP
         public override string ToString() => InterfaceNumber.ToString();
         #endregion
 
-        #region Public Methods
-        public UWPUsbInterface(windowsUsbInterface usbInterface, ILogger logger, ushort? readBuffersize, ushort? writeBufferSize) : base(logger, readBuffersize, writeBufferSize)
+        #region Constructor
+        public UWPUsbInterface(
+            windowsUsbInterface usbInterface,
+            ILogger logger = null,
+            ushort? readBuffersize = null,
+            ushort? writeBufferSize = null) : base(logger, readBuffersize, writeBufferSize)
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
 
@@ -60,7 +64,9 @@ namespace Usb.Net.UWP
 
             //TODO: Why does not UWP not support Control Transfer?
         }
+        #endregion
 
+        #region Public Methods
         public async Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
         {
             IBuffer buffer;
@@ -88,12 +94,10 @@ namespace Usb.Net.UWP
 
             if (data.Length > WriteBufferSize) throw new ValidationException(Messages.ErrorMessageBufferSizeTooLarge);
 
-            IDisposable logScope = null;
+            using var logScope = Logger?.BeginScope("Interface number: {interfaceNumber} Call: {call}", UsbInterface.InterfaceNumber, nameof(WriteAsync));
 
             try
             {
-                logScope = Logger?.BeginScope("Interface number: {interfaceNumber} Call: {call}", UsbInterface.InterfaceNumber, nameof(WriteAsync));
-
                 var buffer = data.AsBuffer();
 
                 uint count = 0;
@@ -128,10 +132,6 @@ namespace Usb.Net.UWP
             {
                 Logger?.LogError(Messages.WarningMessageWritingToInterrupt);
                 throw;
-            }
-            finally
-            {
-                logScope?.Dispose();
             }
         }
         #endregion

@@ -1,5 +1,8 @@
-﻿using Device.Net.Exceptions;
+﻿
+
+using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +13,7 @@ using timer = System.Timers.Timer;
 
 namespace Device.Net
 {
+
     public sealed class DeviceListener : IDeviceListener
     {
         #region Fields
@@ -21,11 +25,10 @@ namespace Device.Net
         /// <summary>
         /// This is the list of Devices by their filter definition. Note this is not actually keyed by the connected definition.
         /// </summary>
-        private readonly Dictionary<FilterDeviceDefinition, IDevice> _CreatedDevicesByDefinition = new Dictionary<FilterDeviceDefinition, IDevice>();
+        private readonly Dictionary<string, IDevice> _CreatedDevicesByDefinition = new Dictionary<string, IDevice>();
         #endregion
 
         #region Public Properties
-        public List<FilterDeviceDefinition> FilterDeviceDefinitions { get; } = new List<FilterDeviceDefinition>();
         public IDeviceManager DeviceManager { get; }
         #endregion
 
@@ -38,19 +41,15 @@ namespace Device.Net
         /// <summary>
         /// Handles connecting to and disconnecting from a set of potential devices by their definition
         /// </summary>
-        /// <param name="filterDeviceDefinitions">Device definitions to connect to and disconnect from</param>
-        /// <param name="pollMilliseconds">Poll interval in milliseconds, or null if checking is called externally</param>
         public DeviceListener(
             IDeviceManager deviceManager,
-            IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
             int? pollMilliseconds,
             ILoggerFactory loggerFactory)
         {
-            _logger = loggerFactory?.CreateLogger<DeviceListener>();
+            _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<DeviceListener>();
 
             DeviceManager = deviceManager ?? throw new ArgumentNullException(nameof(deviceManager));
 
-            FilterDeviceDefinitions.AddRange(filterDeviceDefinitions);
             if (!pollMilliseconds.HasValue) return;
 
             _PollTimer = new timer(pollMilliseconds.Value);
@@ -78,8 +77,6 @@ namespace Device.Net
                 throw new ValidationException(Messages.ErrorMessagePollingNotEnabled);
             }
 
-            if (!DeviceManager.IsInitialized) throw new DeviceFactoriesNotRegisteredException();
-
             _PollTimer.Start();
         }
 
@@ -90,37 +87,37 @@ namespace Device.Net
                 if (_IsDisposed) return;
                 await _ListenSemaphoreSlim.WaitAsync();
 
-                var connectedDeviceDefinitions = new List<ConnectedDeviceDefinition>();
-                foreach (var deviceDefinition in FilterDeviceDefinitions)
-                {
-                    connectedDeviceDefinitions.AddRange(await DeviceManager.GetConnectedDeviceDefinitionsAsync(deviceDefinition));
-                }
+                var connectedDeviceDefinitions = await DeviceManager.GetConnectedDeviceDefinitionsAsync();
 
                 //Iterate through connected devices
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                 {
-                    var deviceDefinition = FilterDeviceDefinitions.FirstOrDefault(d => Net.DeviceManager.IsDefinitionMatch(d, connectedDeviceDefinition));
-
-                    if (deviceDefinition == null) continue;
-
                     //TODO: What to do if there are multiple?
 
                     IDevice device = null;
-                    if (_CreatedDevicesByDefinition.ContainsKey(deviceDefinition))
+                    if (_CreatedDevicesByDefinition.ContainsKey(connectedDeviceDefinition.DeviceId))
                     {
-                        device = _CreatedDevicesByDefinition[deviceDefinition];
+                        device = _CreatedDevicesByDefinition[connectedDeviceDefinition.DeviceId];
                     }
 
                     if (device == null)
                     {
                         //Need to use the connected device def here instead of the filter version because the filter version won't have the id or any details
-                        device = DeviceManager.GetDevice(connectedDeviceDefinition);
-                        _CreatedDevicesByDefinition.Add(deviceDefinition, device);
+                        device = await DeviceManager.GetDevice(connectedDeviceDefinition);
+
+                        if (device == null)
+                        {
+                            _logger.LogWarning("A connected device with id {deviceId} was detected but the factory didn't create an instance of it. Bad stuff is going to happen now.", connectedDeviceDefinition.DeviceId);
+                        }
+                        else
+                        {
+                            _CreatedDevicesByDefinition.Add(connectedDeviceDefinition.DeviceId, device);
+                        }
                     }
 
                     if (device.IsInitialized) continue;
 
-                    _logger?.LogDebug("Attempting to initialize with DeviceId of {deviceId}", device.DeviceId);
+                    _logger.LogDebug("Attempting to initialize with DeviceId of {deviceId}", device.DeviceId);
 
                     //The device is not initialized so initialize it
                     await device.InitializeAsync();
@@ -128,17 +125,17 @@ namespace Device.Net
                     //Let listeners know a registered device was initialized
                     DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
 
-                    _logger?.LogDebug(Messages.InformationMessageDeviceConnected, device.DeviceId);
+                    _logger.LogDebug(Messages.InformationMessageDeviceConnected, device.DeviceId);
                 }
 
-                var removeDefs = new List<FilterDeviceDefinition>();
+                var removeDeviceIds = new List<string>();
 
                 //Iterate through registered devices
-                foreach (var filteredDeviceDefinitionKey in _CreatedDevicesByDefinition.Keys)
+                foreach (var deviceId in _CreatedDevicesByDefinition.Keys)
                 {
-                    var device = _CreatedDevicesByDefinition[filteredDeviceDefinitionKey];
+                    var device = _CreatedDevicesByDefinition[deviceId];
 
-                    if (connectedDeviceDefinitions.Any(cdd => Net.DeviceManager.IsDefinitionMatch(filteredDeviceDefinitionKey, cdd))) continue;
+                    if (connectedDeviceDefinitions.Any(cdd => cdd.DeviceId == deviceId)) continue;
 
                     if (!device.IsInitialized) continue;
 
@@ -149,17 +146,17 @@ namespace Device.Net
                     //The device is no longer connected so close it
                     device.Close();
 
-                    removeDefs.Add(filteredDeviceDefinitionKey);
+                    removeDeviceIds.Add(deviceId);
 
-                    _logger?.LogDebug(Messages.InformationMessageDeviceListenerDisconnected);
+                    _logger.LogDebug(Messages.InformationMessageDeviceListenerDisconnected);
                 }
 
-                foreach (var removeDef in removeDefs)
+                foreach (var deviceId in removeDeviceIds)
                 {
-                    _CreatedDevicesByDefinition.Remove(removeDef);
+                    _CreatedDevicesByDefinition.Remove(deviceId);
                 }
 
-                _logger?.LogDebug(Messages.InformationMessageDeviceListenerPollingComplete);
+                _logger.LogDebug(Messages.InformationMessageDeviceListenerPollingComplete);
 
             }
 #pragma warning disable CA1031 // Do not catch general exception types
@@ -167,7 +164,7 @@ namespace Device.Net
 #pragma warning restore CA1031 // Do not catch general exception types
             {
                 //Log and move on
-                _logger?.LogError(ex, Messages.ErrorMessagePollingError);
+                _logger.LogError(ex, Messages.ErrorMessagePollingError);
 
                 //TODO: What else to do here?
             }
@@ -212,4 +209,7 @@ namespace Device.Net
         }
         #endregion
     }
+
+
 }
+

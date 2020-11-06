@@ -1,6 +1,6 @@
-using Microsoft.Extensions.Logging;
+#if !NET45
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using SerialPort.Net.Windows;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +13,6 @@ namespace Device.Net.UnitTests
     {
         #region Fields
         private static WindowsSerialPortDeviceFactory windowsSerialPortDeviceFactory;
-        private readonly Mock<ILoggerFactory> _loggerFactoryMock = new Mock<ILoggerFactory>();
         #endregion
 
         #region Tests
@@ -47,12 +46,10 @@ namespace Device.Net.UnitTests
         public async Task ConnectedTestEnumerateAndConnectAsync()
         {
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
-            Assert.IsTrue(connectedDeviceDefinitions.Count > 1);
-            using (var serialPortDevice = windowsSerialPortDeviceFactory.GetDevice(connectedDeviceDefinitions[1]))
-            {
-                await serialPortDevice.InitializeAsync();
-                Assert.IsTrue(serialPortDevice.IsInitialized);
-            }
+            Assert.IsTrue(connectedDeviceDefinitions.Count > 0);
+            using var serialPortDevice = await windowsSerialPortDeviceFactory.GetDevice(connectedDeviceDefinitions[0]);
+            await serialPortDevice.InitializeAsync();
+            Assert.IsTrue(serialPortDevice.IsInitialized);
         }
 
         [TestMethod]
@@ -61,35 +58,25 @@ namespace Device.Net.UnitTests
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
-            var deviceManager = new DeviceManager(_loggerFactoryMock.Object);
-            deviceManager.DeviceFactories.Add(windowsSerialPortDeviceFactory);
-            var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.SerialPort } });
+            var deviceManager = windowsSerialPortDeviceFactory.ToDeviceManager();
+            var devices = await deviceManager.GetConnectedDeviceDefinitionsAsync();
 
             foreach (var device in devices)
             {
-                device.Dispose();
+                Assert.AreEqual(DeviceType.SerialPort, device.DeviceType);
             }
 
-            Assert.IsTrue(devices.Count > 1);
+            Assert.IsTrue(devices.Count() > 0);
         }
 
         [TestMethod]
         public async Task ConnectedTestGetDevicesSingletonAsync()
         {
-            var deviceManager = new DeviceManager(_loggerFactoryMock.Object);
-            deviceManager.RegisterDeviceFactory(new WindowsSerialPortDeviceFactory(null));
-#pragma warning disable IDE0059 // Unnecessary assignment of a value
-            var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
-#pragma warning restore IDE0059 // Unnecessary assignment of a value
+            var deviceManager = new WindowsSerialPortDeviceFactory().ToDeviceManager();
 
-            var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition> { new FilterDeviceDefinition { DeviceType = DeviceType.SerialPort } });
+            var devices = await deviceManager.GetConnectedDeviceDefinitionsAsync();
 
-            foreach (var device in devices)
-            {
-                device.Dispose();
-            }
-
-            Assert.IsTrue(devices.Count > 1);
+            Assert.IsTrue(devices.Count() > 0);
         }
 
         [TestMethod]
@@ -98,52 +85,30 @@ namespace Device.Net.UnitTests
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
             Assert.IsTrue(connectedDeviceDefinitions.Count == 1);
         }
-
-        [TestMethod]
-        public async Task TestWriteAndReadFromTrezorUsb()
-        {
-            var deviceManager = new DeviceManager(_loggerFactoryMock.Object);
-            deviceManager.DeviceFactories.Add(windowsSerialPortDeviceFactory);
-            var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition>
-            {
-                new FilterDeviceDefinition
-                {
-                    DeviceType= DeviceType.Usb,
-                    VendorId= 0x1209,
-                    ProductId=0x53C1,
-                    //This does not affect the filtering
-                    Label="Trezor One Firmware 1.7.x"
-                },
-            });
-
-            var trezorDevice = devices.FirstOrDefault();
-
-            Assert.IsNotNull(trezorDevice);
-        }
         #endregion
 
         #region Helpers
-        private static async Task<List<ConnectedDeviceDefinition>> GetConnectedDevicesAsync()
+        private async Task<List<ConnectedDeviceDefinition>> GetConnectedDevicesAsync()
         {
             if (windowsSerialPortDeviceFactory == null)
             {
-                windowsSerialPortDeviceFactory = new WindowsSerialPortDeviceFactory(null);
+                windowsSerialPortDeviceFactory = new WindowsSerialPortDeviceFactory();
             }
 
-            return (await windowsSerialPortDeviceFactory.GetConnectedDeviceDefinitionsAsync(null)).ToList();
+            return (await windowsSerialPortDeviceFactory.GetConnectedDeviceDefinitionsAsync()).ToList();
         }
 
         private static async Task ReadAsync()
         {
-            using (var serialPortDevice = new WindowsSerialPortDevice(@"\\.\COM3"))
-            {
-                await serialPortDevice.InitializeAsync();
-                var result = await serialPortDevice.ReadAsync();
-                Assert.IsTrue(result.Data.Length > 0);
-                var range = result.Data.ToList().GetRange(0, 10);
-                Assert.IsFalse(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }.SequenceEqual(range));
-            }
+            using var serialPortDevice = new WindowsSerialPortDevice(@"\\.\COM1");
+            await serialPortDevice.InitializeAsync();
+            var result = await serialPortDevice.ReadAsync();
+            Assert.IsTrue(result.Data.Length > 0);
+            var range = result.Data.ToList().GetRange(0, 10);
+            Assert.IsFalse(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }.SequenceEqual(range));
         }
         #endregion
     }
 }
+
+#endif

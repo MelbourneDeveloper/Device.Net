@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 #if NETSTANDARD
 using System.Runtime.InteropServices;
 using Device.Net.Exceptions;
@@ -23,9 +24,9 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsSerialPortDeviceFactory(ILoggerFactory loggerFactory)
+        public WindowsSerialPortDeviceFactory(ILoggerFactory loggerFactory = null)
         {
-            _loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+            _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
 
             //Note this loggerfactory may get shared with other factories of this type
             _logger = _loggerFactory.CreateLogger<WindowsSerialPortDeviceFactory>();
@@ -33,7 +34,7 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(FilterDeviceDefinition deviceDefinition)
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
 #if NETSTANDARD
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -63,14 +64,14 @@ namespace SerialPort.Net.Windows
                         foreach (var valueName in valueNames)
                         {
                             var comPortName = key.GetValue(valueName);
-                            returnValue.Add(new ConnectedDeviceDefinition($@"\\.\{comPortName}") { Label = valueName });
+                            returnValue.Add(new ConnectedDeviceDefinition($@"\\.\{comPortName}", DeviceType.SerialPort, label: valueName));
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger?.LogError(ex, ex.Message);
+                _logger.LogError(ex, ex.Message);
             }
 
             if (!registryAvailable)
@@ -82,7 +83,7 @@ namespace SerialPort.Net.Windows
                     using (var serialPortDevice = new WindowsSerialPortDevice(portName))
                     {
                         await serialPortDevice.InitializeAsync();
-                        if (serialPortDevice.IsInitialized) returnValue.Add(new ConnectedDeviceDefinition(portName));
+                        if (serialPortDevice.IsInitialized) returnValue.Add(new ConnectedDeviceDefinition(portName, DeviceType.SerialPort));
                     }
                 }
             }
@@ -90,11 +91,13 @@ namespace SerialPort.Net.Windows
             return returnValue;
         }
 
-        public IDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
+        public Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
-            return deviceDefinition == null
+            var device = deviceDefinition == null
                 ? throw new ArgumentNullException(nameof(deviceDefinition))
                 : new WindowsSerialPortDevice(deviceDefinition.DeviceId);
+
+            return Task.FromResult<IDevice>(device);
         }
         #endregion
     }

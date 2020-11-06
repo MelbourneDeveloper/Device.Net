@@ -2,6 +2,7 @@
 using Device.Net.Exceptions;
 using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -42,20 +43,16 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPUsbInterfaceManager(ILoggerFactory loggerFactory) : this(null, loggerFactory, null, null)
-        {
-        }
-
-        public UWPUsbInterfaceManager(ConnectedDeviceDefinition deviceDefinition) : this(deviceDefinition, null, null, null)
-        {
-        }
-
-        public UWPUsbInterfaceManager(ConnectedDeviceDefinition connectedDeviceDefinition, ILoggerFactory loggerFactory, ushort? readBufferSzie, ushort? writeBufferSize) : base(connectedDeviceDefinition?.DeviceId, loggerFactory, loggerFactory.CreateLogger<UWPUsbInterfaceManager>())
+        public UWPUsbInterfaceManager(
+            ConnectedDeviceDefinition connectedDeviceDefinition,
+            ILoggerFactory loggerFactory = null,
+            ushort? readBufferSize = null,
+            ushort? writeBufferSize = null) : base(connectedDeviceDefinition?.DeviceId, loggerFactory, (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UWPUsbInterfaceManager>())
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             UsbInterfaceHandler = new UsbInterfaceManager(loggerFactory);
             _WriteBufferSize = writeBufferSize;
-            _ReadBufferSize = readBufferSzie;
+            _ReadBufferSize = readBufferSize;
         }
         #endregion
 
@@ -107,7 +104,7 @@ namespace Usb.Net.UWP
 
         public Task WriteAsync(byte[] data) => WriteUsbInterface.WriteAsync(data);
 
-        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync() => Task.FromResult(ConnectedDeviceDefinition);
+        public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync() => Task.FromResult(ConnectedDeviceDefinition);
         #endregion
     }
 }

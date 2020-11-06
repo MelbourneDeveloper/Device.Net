@@ -2,6 +2,7 @@
 using Device.Net.Exceptions;
 using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -23,8 +24,8 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Properties
-        public bool DataHasExtraByte { get; set; } = true;
-        public byte DefaultReportId { get; set; }
+        public bool DataHasExtraByte { get; set; }
+        public byte? DefaultReportId { get; }
         #endregion
 
         #region Public Override Properties
@@ -43,16 +44,10 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPHidDevice(ILoggerFactory loggerFactory) : this(null, loggerFactory)
+        public UWPHidDevice(ConnectedDeviceDefinition connectedDeviceDefinition, ILoggerFactory loggerFactory = null, byte? defaultReportId = null) : base(connectedDeviceDefinition.DeviceId, loggerFactory, (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UWPHidDevice>())
         {
-        }
-
-        public UWPHidDevice(string deviceId) : this(deviceId, null)
-        {
-        }
-
-        public UWPHidDevice(string deviceId, ILoggerFactory loggerFactory) : base(deviceId, loggerFactory, loggerFactory.CreateLogger<UWPHidDevice>())
-        {
+            ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
+            DefaultReportId = defaultReportId;
         }
         #endregion
 
@@ -60,12 +55,10 @@ namespace Hid.Net.UWP
         public override async Task InitializeAsync()
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
-            IDisposable loggerScope = null;
+            using var loggerScope = Logger?.BeginScope("DeviceId: {deviceId} Region: {region}", DeviceId, nameof(UWPHidDevice));
 
             try
             {
-                loggerScope = Logger?.BeginScope("DeviceId: {deviceId} Region: {region}", DeviceId, nameof(UWPHidDevice));
-
                 if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
                 Logger?.LogDebug(Messages.InformationMessageInitializingDevice);
@@ -85,10 +78,6 @@ namespace Hid.Net.UWP
             {
                 Logger?.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
                 throw;
-            }
-            finally
-            {
-                loggerScope?.Dispose();
             }
         }
 
@@ -120,7 +109,7 @@ namespace Hid.Net.UWP
             base.Dispose();
         }
 
-        public virtual Task WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, 0, cancellationToken);
+        public virtual Task WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
 
         public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
@@ -131,7 +120,7 @@ namespace Hid.Net.UWP
             {
                 bytes = new byte[data.Length + 1];
                 Array.Copy(data, 0, bytes, 1, data.Length);
-                bytes[0] = reportId ?? DefaultReportId;
+                bytes[0] = reportId.Value;
             }
             else
             {
@@ -200,12 +189,10 @@ namespace Hid.Net.UWP
         {
             await _WriteAndReadLock.WaitAsync();
 
-            IDisposable logScope = null;
+            using var logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteAndReadAsync));
 
             try
             {
-                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteAndReadAsync));
-
                 await WriteAsync(writeBuffer, cancellationToken);
                 var retVal = await ReadAsync(cancellationToken);
 
@@ -219,7 +206,6 @@ namespace Hid.Net.UWP
             }
             finally
             {
-                logScope?.Dispose();
                 _WriteAndReadLock.Release();
             }
         }

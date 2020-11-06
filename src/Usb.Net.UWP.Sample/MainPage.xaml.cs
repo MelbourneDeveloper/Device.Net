@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Hid.Net.UWP;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Usb.Net.Sample;
 using Windows.UI;
@@ -33,18 +34,18 @@ namespace Usb.Net.UWP.Sample
                 builder.AddDebug();
             });
 
-            _DeviceManager = new DeviceManager(loggerFactory);
+            _DeviceManager = new List<IDeviceFactory>
+            {
+                //Register the factory for creating Usb devices. This only needs to be done once.
+                TrezorExample.HidDeviceDefinitions.CreateUwpHidDeviceFactory(loggerFactory),
+                //Register the factory for creating Hid devices. This only needs to be done once.
+                TrezorExample.UsbDeviceDefinitions.CreateUwpUsbDeviceFactory(loggerFactory)
+            }.ToDeviceManager(loggerFactory);
 
             _DeviceConnectionExample = new TrezorExample(_DeviceManager, loggerFactory);
 
             _DeviceConnectionExample.TrezorInitialized += DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += DeviceConnectionExample_TrezorDisconnected;
-
-            //Register the factory for creating Usb devices. This only needs to be done once.
-            _DeviceManager.RegisterDeviceFactory(new UWPUsbDeviceFactory(loggerFactory));
-
-            //Register the factory for creating Hid devices. This only needs to be done once.
-            _DeviceManager.RegisterDeviceFactory(new UWPHidDeviceFactory(loggerFactory));
 
             //Create the example
             _DeviceConnectionExample = new TrezorExample(_DeviceManager, loggerFactory);
