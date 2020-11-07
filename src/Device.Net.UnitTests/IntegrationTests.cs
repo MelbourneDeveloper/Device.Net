@@ -67,20 +67,13 @@ namespace Device.Net.UnitTests
             var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID));
             await windowsUsbDevice.InitializeAsync();
 
+            const int DFU_RequestType = 0x21;  // '2' => Class request ; '1' => to interface
             const byte DFU_GETSTATUS = 0x03;
-            var buffer = new byte[6];
+            var buffer = new byte[6] { 0, 0, 0, 0, 0, 0 };
 
             var setupPacket = new WINUSB_SETUP_PACKET
             {
-
-                //RequestType = new UsbControlRequestType
-                //{
-                //    Direction = UsbTransferDirection.In,
-                //    Recipient = UsbControlRecipient.Device, //probably not correct, needs verifying
-                //    ControlTransferType = UsbControlTransferType.Class,
-                //},
-
-                RequestType = (byte)UsbTransferDirection.In,
+                RequestType = DFU_RequestType,
                 Request = DFU_GETSTATUS,
                 Length = (ushort)buffer.Length
             };
