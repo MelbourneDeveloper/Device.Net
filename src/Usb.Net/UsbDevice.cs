@@ -64,10 +64,10 @@ namespace Usb.Net
         }
 
         //TODO: public Task<uint> SendControlOutTransferAsync(UsbSetupPacket setupPacket, IBuffer buffer);
-        public uint SendControlOutTransfer(ISetupPacket setupPacket, byte[] buffer) => UsbInterfaceManager.SendControlOutTransfer(setupPacket, buffer);
+        public uint SendControlOutTransfer(WINUSB_SETUP_PACKET setupPacket, byte[] buffer) => UsbInterfaceManager.SendControlOutTransfer(setupPacket, buffer);
 
         //TODO: public Task<uint> SendControlInTransferAsync(UsbSetupPacket setupPacket);
-        public uint SendControlInTransfer(ISetupPacket setupPacket) => UsbInterfaceManager.SendControlInTransfer(setupPacket);
+        public uint SendControlInTransfer(WINUSB_SETUP_PACKET setupPacket) => UsbInterfaceManager.SendControlInTransfer(setupPacket);
 
         public void Close()
         {

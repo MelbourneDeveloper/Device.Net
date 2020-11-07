@@ -2,7 +2,7 @@
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 
-namespace Usb.Net.Windows
+namespace Usb.Net
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
 #pragma warning disable CA1815 // Override equals and operator equals on value types

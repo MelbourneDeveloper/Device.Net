@@ -244,11 +244,8 @@ namespace Usb.Net.Windows
         //TODO: WINUSB_SETUP_PACKET not exposed
 #pragma warning disable CA1801 // Review unused parameters
 #pragma warning disable IDE0060 // Remove unused parameter
-        public uint SendControlOutTransfer(ISetupPacket setupPacket, byte[] buffer)
+        public uint SendControlOutTransfer(WINUSB_SETUP_PACKET winSetupPacket, byte[] buffer)
         {
-            //TODO: convert from ISetupPacket to WINUSB_SETUP_PACKET
-            var winSetupPacket = new WINUSB_SETUP_PACKET();
-
             uint bytesWritten = 0;
 
             if (buffer != null && buffer.Length > 0)
@@ -264,12 +261,10 @@ namespace Usb.Net.Windows
 
         //TODO: make async?
         //TODO: WINUSB_SETUP_PACKET not exposed
-        public uint SendControlInTransfer(ISetupPacket setupPacket)
+        public uint SendControlInTransfer(WINUSB_SETUP_PACKET winSetupPacket)
 #pragma warning restore CA1801 // Review unused parameters
 #pragma warning restore IDE0060 // Remove unused parameter
         {
-            //TODO: convert from ISetupPacket to WINUSB_SETUP_PACKET
-            var winSetupPacket = new WINUSB_SETUP_PACKET();
             uint bytesWritten = 0;
 #pragma warning disable CA1825 
             var buffer = new byte[0] { };

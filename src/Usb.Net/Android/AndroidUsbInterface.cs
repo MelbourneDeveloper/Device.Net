@@ -138,8 +138,10 @@ namespace Usb.Net.Android
                 : Task.FromResult(true);
         }
 
-        public uint SendControlOutTransfer(ISetupPacket setupPacket, byte[] buffer) => throw new NotImplementedException();
-        public uint SendControlInTransfer(ISetupPacket setupPacket) => throw new NotImplementedException();
+#pragma warning disable IDE0060 // Remove unused parameter
+        public uint SendControlOutTransfer(WINUSB_SETUP_PACKET setupPacket, byte[] buffer) => throw new NotImplementedException();
+        public uint SendControlInTransfer(WINUSB_SETUP_PACKET setupPacket) => throw new NotImplementedException();
+#pragma warning restore IDE0060 // Remove unused parameter
         #endregion
     }
 }

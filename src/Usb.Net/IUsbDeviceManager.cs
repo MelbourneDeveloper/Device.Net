@@ -22,7 +22,7 @@ namespace Usb.Net
         /// TODO: This shouldn't be here. Don't use this
         /// </summary>
         Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync();
-        uint SendControlInTransfer(ISetupPacket setupPacket);
-        uint SendControlOutTransfer(ISetupPacket setupPacket, byte[] buffer);
+        uint SendControlInTransfer(WINUSB_SETUP_PACKET setupPacket);
+        uint SendControlOutTransfer(WINUSB_SETUP_PACKET setupPacket, byte[] buffer);
     }
 }
