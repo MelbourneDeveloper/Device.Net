@@ -239,6 +239,41 @@ namespace Usb.Net.Windows
             //TODO: Is this right?
             return Task.Run(() => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(DeviceId, DeviceType.Usb, Logger));
         }
+
+        //TODO: make async?
+        //TODO: WINUSB_SETUP_PACKET not exposed
+        public uint SendControlOutTransfer(ISetupPacket setupPacket, byte[] buffer)
+        {
+            //TODO: convert from ISetupPacket to WINUSB_SETUP_PACKET
+            var winSetupPacket = new WINUSB_SETUP_PACKET();
+
+            uint bytesWritten = 0;
+
+            if (buffer != null && buffer.Length > 0)
+            {
+                WinUsbApiCalls.WinUsb_ControlTransfer(_DeviceHandle.DangerousGetHandle(), winSetupPacket, buffer, (uint)buffer.Length, ref bytesWritten, IntPtr.Zero); //last pointer is overlapped structure for async operations
+            }
+            else
+            {
+                throw new Exception("Buffer must not be empty");
+            }
+            return bytesWritten;
+        }
+
+        //TODO: make async?
+        //TODO: WINUSB_SETUP_PACKET not exposed
+        public uint SendControlInTransfer(ISetupPacket setupPacket)
+        {
+            //TODO: convert from ISetupPacket to WINUSB_SETUP_PACKET
+            var winSetupPacket = new WINUSB_SETUP_PACKET();
+            uint bytesWritten = 0;
+#pragma warning disable CA1825 
+            var buffer = new byte[0] { };
+#pragma warning restore CA1825 
+
+            WinUsbApiCalls.WinUsb_ControlTransfer(_DeviceHandle.DangerousGetHandle(), winSetupPacket, buffer, (uint)buffer.Length, ref bytesWritten, IntPtr.Zero); //last pointer is overlapped structure for async operations
+            return bytesWritten;
+        }
         #endregion
     }
 }
