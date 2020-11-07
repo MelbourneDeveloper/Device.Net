@@ -227,6 +227,8 @@ namespace Usb.Net.Android
         }
 
         public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync() => Task.Run(() => GetAndroidDeviceDefinition(_UsbDevice));
+        public uint SendControlInTransfer(ISetupPacket setupPacket) => throw new NotImplementedException();
+        public uint SendControlOutTransfer(ISetupPacket setupPacket, byte[] buffer) => throw new NotImplementedException();
         #endregion
 
         #region Finalizer

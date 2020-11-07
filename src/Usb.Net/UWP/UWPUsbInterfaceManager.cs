@@ -105,6 +105,8 @@ namespace Usb.Net.UWP
         public Task WriteAsync(byte[] data) => WriteUsbInterface.WriteAsync(data);
 
         public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync() => Task.FromResult(ConnectedDeviceDefinition);
+        public uint SendControlInTransfer(ISetupPacket setupPacket) => throw new NotImplementedException();
+        public uint SendControlOutTransfer(ISetupPacket setupPacket, byte[] buffer) => throw new NotImplementedException();
         #endregion
     }
 }
