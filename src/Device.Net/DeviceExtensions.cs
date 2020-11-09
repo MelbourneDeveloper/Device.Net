@@ -13,12 +13,12 @@ namespace Device.Net
             new DeviceManager(new ReadOnlyCollection<IDeviceFactory>(deviceFactories), loggerFactory);
 
         public static DeviceDataStreamer CreateDeviceDataStreamer(
-    this IDeviceFactory deviceManager,
+    this IDeviceFactory deviceFactory,
     ProcessData processData,
     Func<IDevice, Task> initializeFunc = null) =>
     new DeviceDataStreamer(
         processData,
-        deviceManager,
+        deviceFactory,
         initializeFunc: initializeFunc);
     }
 }

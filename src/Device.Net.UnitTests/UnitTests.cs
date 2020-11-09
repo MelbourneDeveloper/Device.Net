@@ -171,9 +171,9 @@ namespace Device.Net.UnitTests
         {
             var (hidMock, usbMock) = GetMockedFactories(isHidConnected, isUsbConnected, null, null);
 
-            var deviceManager =new List<IDeviceFactory> { hidMock.Object, usbMock.Object } .Aggregate(_loggerFactory);
+            var deviceFactories =new List<IDeviceFactory> { hidMock.Object, usbMock.Object } .Aggregate(_loggerFactory);
 
-            var connectedDeviceDefinitions = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList();
+            var connectedDeviceDefinitions = (await deviceFactories.GetConnectedDeviceDefinitionsAsync()).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
             Assert.AreEqual(expectedCount, connectedDeviceDefinitions.Count);
         }
