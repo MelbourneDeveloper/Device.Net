@@ -90,7 +90,7 @@ namespace Device.Net.UnitTests
         public async Task TestWithMatchedFilterAsync(bool isHidConnected, bool isUsbConnected, int expectedCount, uint vid, uint pid)
         {
             var (hid, usb) = GetMockedFactories(isHidConnected, isUsbConnected, vid, pid);
-            var deviceManager = new List<IDeviceFactory> { hid.Object, usb.Object }.ToDeviceManager();
+            var deviceManager = new List<IDeviceFactory> { hid.Object, usb.Object }.Aggregate();
 
             var connectedDeviceDefinitions = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList();
 
@@ -130,7 +130,7 @@ namespace Device.Net.UnitTests
             var (hid, usb) = GetMockedFactories(isHidConnected, isUsbConnected, vid, pid);
 
 
-            var deviceManager = new List<IDeviceFactory> { hid.Object, usb.Object }.ToDeviceManager();
+            var deviceManager = new List<IDeviceFactory> { hid.Object, usb.Object }.Aggregate();
 
             var connectedDeviceDefinition = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList().First();
 
@@ -171,7 +171,7 @@ namespace Device.Net.UnitTests
         {
             var (hidMock, usbMock) = GetMockedFactories(isHidConnected, isUsbConnected, null, null);
 
-            var deviceManager =new List<IDeviceFactory> { hidMock.Object, usbMock.Object } .ToDeviceManager(_loggerFactory);
+            var deviceManager =new List<IDeviceFactory> { hidMock.Object, usbMock.Object } .Aggregate(_loggerFactory);
 
             var connectedDeviceDefinitions = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);

@@ -29,7 +29,7 @@ namespace Device.Net
         #endregion
 
         #region Public Properties
-        public IDeviceManager DeviceManager { get; }
+        public IDeviceFactory DeviceManager { get; }
         #endregion
 
         #region Events
@@ -42,7 +42,7 @@ namespace Device.Net
         /// Handles connecting to and disconnecting from a set of potential devices by their definition
         /// </summary>
         public DeviceListener(
-            IDeviceManager deviceManager,
+            IDeviceFactory deviceManager,
             int? pollMilliseconds,
             ILoggerFactory loggerFactory)
         {

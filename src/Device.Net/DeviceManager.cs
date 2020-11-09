@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Device.Net
 {
-    public class DeviceManager : IDeviceManager
+    public class DeviceManager : IDeviceFactory
     {
         //TODO: Put logging in here
 
@@ -21,6 +21,8 @@ namespace Device.Net
         public const string ObsoleteMessage = "This method will soon be removed. Create an instance of DeviceManager and register factories there";
         public IReadOnlyCollection<IDeviceFactory> DeviceFactories { get; }
         public bool IsInitialized => DeviceFactories.Count > 0;
+
+        public IEnumerable<DeviceType> SupportedDeviceTypes => DeviceFactories.SelectMany(df => df.SupportedDeviceTypes).Distinct();
         #endregion
 
         #region Constructor

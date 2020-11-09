@@ -13,7 +13,7 @@ namespace Device.Net
     {
         private bool _isRunning;
         private readonly ProcessData _processData;
-        private readonly IDeviceManager _deviceManager;
+        private readonly IDeviceFactory _deviceManager;
         private IDevice _currentDevice;
         private readonly TimeSpan? _interval;
         private readonly ILogger _logger;
@@ -21,7 +21,7 @@ namespace Device.Net
 
         public DeviceDataStreamer(
             ProcessData processData,
-            IDeviceManager deviceManager,
+            IDeviceFactory deviceManager,
             TimeSpan? interval = null,
             ILoggerFactory loggerFactory = null,
             Func<IDevice, Task> initializeFunc = null

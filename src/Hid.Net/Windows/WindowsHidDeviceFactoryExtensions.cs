@@ -13,7 +13,7 @@ namespace Hid.Net.Windows
 
     public static class WindowsHidDeviceFactoryExtensions
     {
-        public static IDeviceManager CreateWindowsHidDeviceManager(
+        public static IDeviceFactory CreateWindowsHidDeviceManager(
         this FilterDeviceDefinition filterDeviceDefinition,
         ILoggerFactory loggerFactory = null,
         IHidApiService hidApiService = null,

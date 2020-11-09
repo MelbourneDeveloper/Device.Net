@@ -5,7 +5,6 @@ using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Device.Net;
 using Microsoft.Extensions.Logging;
 using System;
 using Usb.Net.Android;
@@ -73,8 +72,7 @@ namespace Usb.Net.AndroidSample
                 var loggerFactory = LoggerFactory.Create((builder) => builder.AddDebug());
 
                 var deviceManager = TrezorExample.UsbDeviceDefinitions
-                    .CreateAndroidUsbDeviceFactory(usbManager, base.ApplicationContext, loggerFactory: loggerFactory)
-                    .ToDeviceManager(loggerFactory);
+                    .CreateAndroidUsbDeviceFactory(usbManager, base.ApplicationContext, loggerFactory: loggerFactory);
 
                 _TrezorExample = new TrezorExample(deviceManager, loggerFactory);
 

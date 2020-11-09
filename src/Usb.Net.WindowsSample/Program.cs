@@ -21,7 +21,7 @@ namespace Usb.Net.WindowsSample
     {
         #region Fields
         private static ILoggerFactory _loggerFactory;
-        private static IDeviceManager _DeviceManager;
+        private static IDeviceFactory _DeviceManager;
         private static TrezorExample _DeviceConnectionExample;
         #endregion
 
@@ -36,14 +36,14 @@ namespace Usb.Net.WindowsSample
             _DeviceManager = new List<IDeviceFactory>
             {
                 TrezorExample.UsbDeviceDefinitions.CreateLibUsbDeviceFactory(_loggerFactory)
-            }.ToDeviceManager(_loggerFactory);
+            }.Aggregate(_loggerFactory);
 #else
             _DeviceManager = new List<IDeviceFactory>
             {
                 TrezorExample.UsbDeviceDefinitions.CreateWindowsUsbDeviceFactory(_loggerFactory),
                 TrezorExample.HidDeviceDefinitions.CreateWindowsHidDeviceFactory(_loggerFactory),
                 new WindowsSerialPortDeviceFactory(_loggerFactory)
-            }.ToDeviceManager(_loggerFactory);
+            }.Aggregate(_loggerFactory);
 #endif
 
             _DeviceConnectionExample = new TrezorExample(_DeviceManager, _loggerFactory);

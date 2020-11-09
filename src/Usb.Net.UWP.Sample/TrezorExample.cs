@@ -36,12 +36,12 @@ namespace Usb.Net.Sample
 
         #region Public Properties
         public IDevice TrezorDevice { get; private set; }
-        public IDeviceManager DeviceManager { get; }
+        public IDeviceFactory DeviceManager { get; }
         public DeviceListener DeviceListener { get; }
         #endregion
 
         #region Constructor
-        public TrezorExample(IDeviceManager deviceManager, ILoggerFactory loggerFactory)
+        public TrezorExample(IDeviceFactory deviceManager, ILoggerFactory loggerFactory)
         {
             DeviceManager = deviceManager;
             DeviceListener = new DeviceListener(deviceManager, PollMilliseconds, loggerFactory);
