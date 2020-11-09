@@ -86,7 +86,7 @@ namespace Hid.Net.Windows
                     writeBufferSize: writeBufferSize,
                     defaultReportId: defaultReportId
                 ),
-                DeviceType.Hid);
+                new ReadOnlyCollection<DeviceType>(new List<DeviceType> { DeviceType.Hid }));
         }
 
         private static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, IHidApiService HidService, ILogger logger)

@@ -1,5 +1,7 @@
 ﻿using Device.Net;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace Usb.Net
@@ -21,7 +23,8 @@ namespace Usb.Net
                 var usbInterfaceManager = await getUsbInterfaceManager(d.DeviceId);
                 return new UsbDevice(d.DeviceId, usbInterfaceManager, loggerFactory);
             },
-            DeviceType.Usb);
+            new ReadOnlyCollection<DeviceType>(new List<DeviceType> { DeviceType.Usb })
+            );
     }
 }
 

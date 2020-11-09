@@ -23,7 +23,7 @@ namespace Device.Net
         #endregion
 
         #region Public  Properties
-        public DeviceType DeviceType { get; }
+        public IEnumerable<DeviceType> SupportedDeviceTypes { get; }
         #endregion
 
         #region Constructor
@@ -34,14 +34,14 @@ namespace Device.Net
             ILoggerFactory loggerFactory,
             GetConnectedDeviceDefinitionsAsync getConnectedDevicesAsync,
             GetDevice getDevice,
-            DeviceType deviceType
+            IEnumerable<DeviceType> supportedDeviceTypes
             )
         {
             _getConnectedDevicesAsync = getConnectedDevicesAsync ?? throw new ArgumentNullException(nameof(getConnectedDevicesAsync));
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _logger = _loggerFactory.CreateLogger<DeviceFactory>();
             _getDevice = getDevice;
-            DeviceType = deviceType;
+            SupportedDeviceTypes = supportedDeviceTypes;
         }
         #endregion
 

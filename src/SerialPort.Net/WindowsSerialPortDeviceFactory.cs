@@ -5,6 +5,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 #if NETSTANDARD
 using System.Runtime.InteropServices;
 using Device.Net.Exceptions;
@@ -20,7 +21,7 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Public Properties
-        public DeviceType DeviceType => DeviceType.SerialPort;
+        public IEnumerable<DeviceType> SupportedDeviceTypes { get; } = new ReadOnlyCollection<DeviceType>(new List<DeviceType> { DeviceType.SerialPort });
         #endregion
 
         #region Constructor

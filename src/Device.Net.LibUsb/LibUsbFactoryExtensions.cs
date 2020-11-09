@@ -3,6 +3,7 @@ using LibUsbDotNet.Main;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,7 +20,7 @@ namespace Device.Net.LibUsb
                 loggerFactory,
                 () => GetConnectedDeviceDefinitionsAsync(filterDeviceDefinitions),
                 async c => new LibUsbDevice(GetDevice(c), timeout ?? 1000),
-                DeviceType.Usb);
+                new ReadOnlyCollection<DeviceType>(new List<DeviceType> { DeviceType.Usb }));
         }
 
         public static async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(IReadOnlyList<FilterDeviceDefinition> filterDeviceDefinitions)

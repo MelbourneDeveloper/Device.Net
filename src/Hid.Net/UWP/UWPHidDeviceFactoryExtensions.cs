@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Hid.Net.UWP
@@ -68,7 +69,8 @@ namespace Hid.Net.UWP
                 loggerFactory,
                 getConnectedDeviceDefinitionsAsync,
                 getDevice,
-                DeviceType.Hid);
+                new ReadOnlyCollection<DeviceType>(new List<DeviceType> { DeviceType.Hid })
+                );
         }
     }
 }
