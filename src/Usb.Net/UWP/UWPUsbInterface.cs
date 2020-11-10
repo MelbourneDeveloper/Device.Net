@@ -144,7 +144,7 @@ namespace Usb.Net.UWP
         }
 
 #pragma warning disable IDE0060 // Remove unused parameter
-        public uint SendControlOutTransfer(SetupPacket setupPacket, byte[] buffer) => throw new NotImplementedException();
+        public Task<ReadResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer) => throw new NotImplementedException();
 #pragma warning restore IDE0060 // Remove unused parameter
         #endregion
     }

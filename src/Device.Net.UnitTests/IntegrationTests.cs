@@ -100,10 +100,10 @@ namespace Device.Net.UnitTests
             //    Index = 0
             //};
 
-            _ = windowsUsbDevice.SendControlOutTransfer(setupPacket, buffer);
+            var result = await windowsUsbDevice.SendControlTransferAsync(setupPacket, buffer);
 
             //Assert that the response part meets the specification
-            Assert.IsTrue(new byte[] { 0x02 }.Equals(buffer[6]));
+            Assert.IsTrue(new byte[] { 0x02 }.Equals(result.Data));
         }
 #endif
 
@@ -161,15 +161,15 @@ namespace Device.Net.UnitTests
                 var temperatureTimesOneHundred = (result.Data[4] & 0xFF) + (result.Data[3] << 8);
                 var temp = Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
 
-        //I think my room should pretty much always be between these temperatures
-        Assert.IsTrue(temp > 10 && temp < 35);
+                //I think my room should pretty much always be between these temperatures
+                Assert.IsTrue(temp > 10 && temp < 35);
 
 #if WINDOWS_UWP
                 var windowsHidDevice = (UWPHidDevice)device;
 #else
                 var windowsHidDevice = (WindowsHidDevice)device;
-        //TODO: Share these with UWP
-        Assert.AreEqual(9, device.ConnectedDeviceDefinition.ReadBufferSize);
+                //TODO: Share these with UWP
+                Assert.AreEqual(9, device.ConnectedDeviceDefinition.ReadBufferSize);
                 Assert.AreEqual(9, device.ConnectedDeviceDefinition.WriteBufferSize);
                 Assert.AreEqual(9, windowsHidDevice.ReadBufferSize);
                 Assert.AreEqual(9, windowsHidDevice.WriteBufferSize);
@@ -202,8 +202,8 @@ namespace Device.Net.UnitTests
                  var windowsHidDevice = (UWPHidDevice)device;
 #else
                  var windowsHidDevice = (WindowsHidDevice)device;
-         //TODO: share this with UWP
-         Assert.AreEqual(DeviceType.Hid, device.ConnectedDeviceDefinition.DeviceType);
+                 //TODO: share this with UWP
+                 Assert.AreEqual(DeviceType.Hid, device.ConnectedDeviceDefinition.DeviceType);
                  Assert.AreEqual("AirNetix", device.ConnectedDeviceDefinition.Manufacturer);
                  Assert.AreEqual(filterDeviceDefinition.ProductId, device.ConnectedDeviceDefinition.ProductId);
                  Assert.AreEqual(filterDeviceDefinition.VendorId, device.ConnectedDeviceDefinition.VendorId);

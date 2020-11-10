@@ -26,6 +26,6 @@ namespace Usb.Net
         /// TODO
         /// </summary>
         void RegisterDefaultEndpoints();
-        uint SendControlOutTransfer(SetupPacket setupPacket, byte[] buffer);
+        Task<ReadResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer);
     }
 }

@@ -71,19 +71,24 @@ namespace Usb.Net.Windows
             GC.SuppressFinalize(this);
         }
 
-        public uint SendControlOutTransfer(SetupPacket setupPacket, byte[] buffer)
+        public Task<ReadResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer)
         {
-            uint bytesWritten = 0;
+            return buffer == null || buffer.Length == 0
+                ? throw new InvalidOperationException("I need a buffer")
+                : Task.Run(() =>
+            {
+                uint bytesWritten = 0;
 
-            if (buffer != null && buffer.Length > 0)
-            {
-                WinUsbApiCalls.WinUsb_ControlTransfer(_SafeFileHandle.DangerousGetHandle(), setupPacket.ToWindowsSetupPacket(), buffer, (uint)buffer.Length, ref bytesWritten, IntPtr.Zero); //last pointer is overlapped structure for async operations
-            }
-            else
-            {
-                throw new Exception("Buffer must not be empty");
-            }
-            return bytesWritten;
+                var isSuccess = WinUsbApiCalls.WinUsb_ControlTransfer(_SafeFileHandle.DangerousGetHandle(), setupPacket.ToWindowsSetupPacket(), buffer, (uint)buffer.Length, ref bytesWritten, IntPtr.Zero);
+
+                if (!isSuccess)
+                {
+                    WindowsDeviceBase.HandleError(isSuccess, "Couldn't do a control transfer");
+                }
+
+                return new ReadResult(buffer, bytesWritten);
+
+            });
         }
 
         #endregion
