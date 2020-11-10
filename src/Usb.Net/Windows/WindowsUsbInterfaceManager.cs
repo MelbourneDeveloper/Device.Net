@@ -4,6 +4,7 @@ using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32.SafeHandles;
 using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -242,7 +243,9 @@ namespace Usb.Net.Windows
 
         //TODO: make async?
         //TODO: WINUSB_SETUP_PACKET not exposed
-        public uint SendControlOutTransfer(WINUSB_SETUP_PACKET winSetupPacket, byte[] buffer) => UsbInterfaces[0].SendControlOutTransfer(winSetupPacket, buffer);
+        //https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-control-transfer#about-the-default-endpoint
+        public uint SendControlOutTransfer(WINUSB_SETUP_PACKET winSetupPacket, byte[] buffer)
+            => (ReadUsbInterface ?? UsbInterfaces.FirstOrDefault() ?? throw new Exception("There are no interfaces to send a control transfer to")).SendControlOutTransfer(winSetupPacket, buffer);
 
         public uint SendControlInTransfer(WINUSB_SETUP_PACKET winSetupPacket) => throw new NotImplementedException();
         #endregion
