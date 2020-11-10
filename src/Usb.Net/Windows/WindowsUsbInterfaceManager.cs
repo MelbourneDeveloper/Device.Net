@@ -267,8 +267,10 @@ namespace Usb.Net.Windows
         {
             uint bytesWritten = 0;
 #pragma warning disable CA1825 
-            var buffer = new byte[0] { };
+            //var buffer = new byte[0] { };
 #pragma warning restore CA1825 
+
+            var buffer = new byte[6];
 
             WinUsbApiCalls.WinUsb_ControlTransfer(_DeviceHandle.DangerousGetHandle(), winSetupPacket, buffer, (uint)buffer.Length, ref bytesWritten, IntPtr.Zero); //last pointer is overlapped structure for async operations
             return bytesWritten;

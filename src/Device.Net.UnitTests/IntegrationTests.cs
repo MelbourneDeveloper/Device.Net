@@ -67,18 +67,19 @@ namespace Device.Net.UnitTests
             var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID));
             await windowsUsbDevice.InitializeAsync();
 
+            const int USB_DIR_IN = 128;       //0x80
             const int DFU_RequestType = 0x21;  // '2' => Class request ; '1' => to interface
             const byte DFU_GETSTATUS = 0x03;
             var buffer = new byte[6] { 0, 0, 0, 0, 0, 0 };
 
             var setupPacket = new WINUSB_SETUP_PACKET
             {
-                RequestType = DFU_RequestType,
+                RequestType = DFU_RequestType | USB_DIR_IN,
                 Request = DFU_GETSTATUS,
                 Length = (ushort)buffer.Length
             };
 
-            _ = windowsUsbDevice.SendControlOutTransfer(setupPacket, buffer);
+            _ = windowsUsbDevice.SendControlInTransfer(setupPacket);
 
             //Assert that the response part meets the specification
             Assert.IsTrue(new byte[] { 0x02 }.Equals(buffer[4]));
