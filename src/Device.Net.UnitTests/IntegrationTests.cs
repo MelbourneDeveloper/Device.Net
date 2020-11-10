@@ -70,8 +70,9 @@ namespace Device.Net.UnitTests
             const int USB_DIR_IN = 128;       //0x80
             const int DFU_RequestType = 0x21;  // '2' => Class request ; '1' => to interface
             const byte DFU_GETSTATUS = 0x03;
-            var buffer = new byte[6] { 0, 0, 0, 0, 0, 0 };
+            var buffer = new byte[6];
 
+            //Get status? Is this correct?
             var setupPacket = new WINUSB_SETUP_PACKET
             {
                 RequestType = DFU_RequestType | USB_DIR_IN,
@@ -81,10 +82,30 @@ namespace Device.Net.UnitTests
                 Value = 0
             };
 
+            //According to Florian get status
+            //var setupPacket = new WINUSB_SETUP_PACKET
+            //{
+            //    RequestType = 161,
+            //    Request = 3,
+            //    Length = (ushort)buffer.Length,
+            //    Value = 0,
+            //    Index = 0
+            //};
+
+            //// DFU CLEAR SETUP PACKET
+            //var setupPacket = new WINUSB_SETUP_PACKET
+            //{
+            //    RequestType = 33,
+            //    Request = 4,
+            //    Length = 0,
+            //    Value = 2,
+            //    Index = 0
+            //};
+
             _ = windowsUsbDevice.SendControlOutTransfer(setupPacket, buffer);
 
             //Assert that the response part meets the specification
-            Assert.IsTrue(new byte[] { 0x02 }.Equals(buffer[4]));
+            Assert.IsTrue(new byte[] { 0x02 }.Equals(buffer[6]));
         }
 #endif
 
