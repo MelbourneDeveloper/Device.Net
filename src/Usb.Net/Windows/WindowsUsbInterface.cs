@@ -71,7 +71,7 @@ namespace Usb.Net.Windows
             GC.SuppressFinalize(this);
         }
 
-        public Task<ReadResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer)
+        public Task<ReadResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
         {
             return buffer == null || buffer.Length == 0
                 ? throw new InvalidOperationException("I need a buffer")
@@ -88,7 +88,7 @@ namespace Usb.Net.Windows
 
                 return new ReadResult(buffer, bytesWritten);
 
-            });
+            }, cancellationToken);
         }
 
         #endregion
