@@ -3,7 +3,6 @@ using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -100,13 +99,5 @@ namespace Usb.Net
             Dispose();
         }
         #endregion
-    }
-
-    public static class UsbDeviceExtensions
-    {
-        public static uint SendControlOutTransfer(this IUsbDevice usbDevice, SetupPacket setupPacket, byte[] buffer)
-        {
-            usbDevice.UsbInterfaceManager.UsbInterfaces[0].SendControlOutTransfer(setupPacket, buffer);
-        }
     }
 }
