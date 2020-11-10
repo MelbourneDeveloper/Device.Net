@@ -26,6 +26,12 @@ namespace Usb.Net
         /// TODO
         /// </summary>
         void RegisterDefaultEndpoints();
+
+        /// <summary>
+        /// TODO: Remove the buffer parameter?
+        /// Can we just create the buffer in the method?
+        /// Or, do we sometimes need to send data here?
+        /// </summary>
         Task<ReadResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer);
     }
 }
