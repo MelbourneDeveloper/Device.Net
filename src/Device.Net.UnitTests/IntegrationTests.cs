@@ -76,10 +76,12 @@ namespace Device.Net.UnitTests
             {
                 RequestType = DFU_RequestType | USB_DIR_IN,
                 Request = DFU_GETSTATUS,
-                Length = (ushort)buffer.Length
+                Length = (ushort)buffer.Length,
+                Index = 0,
+                Value = 0
             };
 
-            _ = windowsUsbDevice.SendControlInTransfer(setupPacket);
+            _ = windowsUsbDevice.SendControlOutTransfer(setupPacket, buffer);
 
             //Assert that the response part meets the specification
             Assert.IsTrue(new byte[] { 0x02 }.Equals(buffer[4]));

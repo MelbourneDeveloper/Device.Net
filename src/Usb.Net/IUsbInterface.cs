@@ -26,5 +26,6 @@ namespace Usb.Net
         /// TODO
         /// </summary>
         void RegisterDefaultEndpoints();
+        uint SendControlOutTransfer(WINUSB_SETUP_PACKET winSetupPacket, byte[] buffer);
     }
 }

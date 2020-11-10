@@ -242,39 +242,9 @@ namespace Usb.Net.Windows
 
         //TODO: make async?
         //TODO: WINUSB_SETUP_PACKET not exposed
-#pragma warning disable CA1801 // Review unused parameters
-#pragma warning disable IDE0060 // Remove unused parameter
-        public uint SendControlOutTransfer(WINUSB_SETUP_PACKET winSetupPacket, byte[] buffer)
-        {
-            uint bytesWritten = 0;
+        public uint SendControlOutTransfer(WINUSB_SETUP_PACKET winSetupPacket, byte[] buffer) => UsbInterfaces[0].SendControlOutTransfer(winSetupPacket, buffer);
 
-            if (buffer != null && buffer.Length > 0)
-            {
-                WinUsbApiCalls.WinUsb_ControlTransfer(_DeviceHandle.DangerousGetHandle(), winSetupPacket, buffer, (uint)buffer.Length, ref bytesWritten, IntPtr.Zero); //last pointer is overlapped structure for async operations
-            }
-            else
-            {
-                throw new Exception("Buffer must not be empty");
-            }
-            return bytesWritten;
-        }
-
-        //TODO: make async?
-        //TODO: WINUSB_SETUP_PACKET not exposed
-        public uint SendControlInTransfer(WINUSB_SETUP_PACKET winSetupPacket)
-#pragma warning restore CA1801 // Review unused parameters
-#pragma warning restore IDE0060 // Remove unused parameter
-        {
-            uint bytesWritten = 0;
-#pragma warning disable CA1825 
-            //var buffer = new byte[0] { };
-#pragma warning restore CA1825 
-
-            var buffer = new byte[6];
-
-            WinUsbApiCalls.WinUsb_ControlTransfer(_DeviceHandle.DangerousGetHandle(), winSetupPacket, buffer, (uint)buffer.Length, ref bytesWritten, IntPtr.Zero); //last pointer is overlapped structure for async operations
-            return bytesWritten;
-        }
+        public uint SendControlInTransfer(WINUSB_SETUP_PACKET winSetupPacket) => throw new NotImplementedException();
         #endregion
     }
 }

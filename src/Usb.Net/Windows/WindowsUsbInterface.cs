@@ -70,6 +70,22 @@ namespace Usb.Net.Windows
 
             GC.SuppressFinalize(this);
         }
+
+        public uint SendControlOutTransfer(WINUSB_SETUP_PACKET winSetupPacket, byte[] buffer)
+        {
+            uint bytesWritten = 0;
+
+            if (buffer != null && buffer.Length > 0)
+            {
+                WinUsbApiCalls.WinUsb_ControlTransfer(_SafeFileHandle.DangerousGetHandle(), winSetupPacket, buffer, (uint)buffer.Length, ref bytesWritten, IntPtr.Zero); //last pointer is overlapped structure for async operations
+            }
+            else
+            {
+                throw new Exception("Buffer must not be empty");
+            }
+            return bytesWritten;
+        }
+
         #endregion
     }
 }
