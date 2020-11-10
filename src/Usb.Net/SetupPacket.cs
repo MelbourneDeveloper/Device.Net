@@ -15,9 +15,9 @@
             (
          byte requestType,
          byte request,
-         ushort value,
-         ushort index,
-         ushort length
+         ushort value = 0,
+         ushort index = 0,
+         ushort length = 0
             )
         {
             RequestType = requestType;

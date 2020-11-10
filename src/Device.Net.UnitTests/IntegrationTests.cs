@@ -73,14 +73,12 @@ namespace Device.Net.UnitTests
             var buffer = new byte[6];
 
             //Get status? Is this correct?
-            var setupPacket = new WINUSB_SETUP_PACKET
-            {
-                RequestType = DFU_RequestType | USB_DIR_IN,
-                Request = DFU_GETSTATUS,
-                Length = (ushort)buffer.Length,
-                Index = 0,
-                Value = 0
-            };
+            var setupPacket = new SetupPacket
+            (
+                requestType: DFU_RequestType | USB_DIR_IN,
+                request: DFU_GETSTATUS,
+                length: (ushort)buffer.Length
+            );
 
             //According to Florian get status
             //var setupPacket = new WINUSB_SETUP_PACKET
@@ -163,15 +161,15 @@ namespace Device.Net.UnitTests
                 var temperatureTimesOneHundred = (result.Data[4] & 0xFF) + (result.Data[3] << 8);
                 var temp = Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
 
-                //I think my room should pretty much always be between these temperatures
-                Assert.IsTrue(temp > 10 && temp < 35);
+        //I think my room should pretty much always be between these temperatures
+        Assert.IsTrue(temp > 10 && temp < 35);
 
 #if WINDOWS_UWP
                 var windowsHidDevice = (UWPHidDevice)device;
 #else
                 var windowsHidDevice = (WindowsHidDevice)device;
-                //TODO: Share these with UWP
-                Assert.AreEqual(9, device.ConnectedDeviceDefinition.ReadBufferSize);
+        //TODO: Share these with UWP
+        Assert.AreEqual(9, device.ConnectedDeviceDefinition.ReadBufferSize);
                 Assert.AreEqual(9, device.ConnectedDeviceDefinition.WriteBufferSize);
                 Assert.AreEqual(9, windowsHidDevice.ReadBufferSize);
                 Assert.AreEqual(9, windowsHidDevice.WriteBufferSize);
@@ -204,8 +202,8 @@ namespace Device.Net.UnitTests
                  var windowsHidDevice = (UWPHidDevice)device;
 #else
                  var windowsHidDevice = (WindowsHidDevice)device;
-                 //TODO: share this with UWP
-                 Assert.AreEqual(DeviceType.Hid, device.ConnectedDeviceDefinition.DeviceType);
+         //TODO: share this with UWP
+         Assert.AreEqual(DeviceType.Hid, device.ConnectedDeviceDefinition.DeviceType);
                  Assert.AreEqual("AirNetix", device.ConnectedDeviceDefinition.Manufacturer);
                  Assert.AreEqual(filterDeviceDefinition.ProductId, device.ConnectedDeviceDefinition.ProductId);
                  Assert.AreEqual(filterDeviceDefinition.VendorId, device.ConnectedDeviceDefinition.VendorId);

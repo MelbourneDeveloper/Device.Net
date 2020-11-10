@@ -3,6 +3,7 @@ using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -63,12 +64,6 @@ namespace Usb.Net
                 : UsbInterfaceManager.WriteUsbInterface.WriteAsync(data, cancellationToken);
         }
 
-        //TODO: public Task<uint> SendControlOutTransferAsync(UsbSetupPacket setupPacket, IBuffer buffer);
-        public uint SendControlOutTransfer(WINUSB_SETUP_PACKET setupPacket, byte[] buffer) => UsbInterfaceManager.SendControlOutTransfer(setupPacket, buffer);
-
-        //TODO: public Task<uint> SendControlInTransferAsync(UsbSetupPacket setupPacket);
-        public uint SendControlInTransfer(WINUSB_SETUP_PACKET setupPacket) => UsbInterfaceManager.SendControlInTransfer(setupPacket);
-
         public void Close()
         {
             if (_IsClosing) return;
@@ -105,5 +100,13 @@ namespace Usb.Net
             Dispose();
         }
         #endregion
+    }
+
+    public static class UsbDeviceExtensions
+    {
+        public static uint SendControlOutTransfer(this IUsbDevice usbDevice, SetupPacket setupPacket, byte[] buffer)
+        {
+            usbDevice.UsbInterfaceManager.UsbInterfaces[0].SendControlOutTransfer(setupPacket, buffer);
+        }
     }
 }
