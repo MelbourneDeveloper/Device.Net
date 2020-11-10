@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace Device.Net.LibUsb
 {
+    /// <summary>
+    /// TODO: Convert this device in to a proper USB device
+    /// </summary>
     public class LibUsbDevice : DeviceBase, IDevice
     {
         #region Fields
@@ -151,18 +154,6 @@ namespace Device.Net.LibUsb
             {
                 _WriteAndReadLock.Release();
             }
-        }
-
-        //TODO: make async?
-        //TODO: setupPacket not exposed
-        public uint SendControlOutTransfer(UsbSetupPacket setupPacket, byte[] buffer)
-        {
-            if (buffer != null && buffer.Length > 0)
-            {
-                UsbDevice.ControlTransfer(ref setupPacket, buffer, buffer.Length, out var length);
-                return (uint)length;
-            }
-            return 0;
         }
 
         //TODO: make async?
