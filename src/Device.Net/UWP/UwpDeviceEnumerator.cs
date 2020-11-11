@@ -11,7 +11,7 @@ namespace Device.Net.UWP
 {
     public delegate Task<ConnectionInfo> TestConnection(string deviceId);
 
-    public class UwpDeviceEnumerator
+    public class UwpDeviceEnumerator : IDisposable
     {
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger _logger;
@@ -93,6 +93,7 @@ namespace Device.Net.UWP
                 _TestConnectionSemaphore.Release();
             }
         }
+        public void Dispose() => _TestConnectionSemaphore.Dispose();
         #endregion
     }
 }

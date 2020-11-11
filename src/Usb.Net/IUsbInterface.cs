@@ -28,10 +28,12 @@ namespace Usb.Net
         void RegisterDefaultEndpoints();
 
         /// <summary>
+        /// https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-control-transfer
+        /// https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/how-to-send-a-usb-control-transfer--uwp-app-
         /// TODO: Remove the buffer parameter?
         /// Can we just create the buffer in the method?
         /// Or, do we sometimes need to send data here?
         /// </summary>
-        Task<ReadResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default);
+        Task<ReadResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default);
     }
 }

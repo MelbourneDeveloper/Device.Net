@@ -59,3 +59,9 @@ dotnet_diagnostic.IDE0074.severity = warning
 
 
 dotnet_diagnostic.CA1010.severity = suggestion
+
+# CA1816: Dispose methods should call SuppressFinalize
+dotnet_diagnostic.CA1816.severity = suggestion
+
+# CA1065: Do not raise exceptions in unexpected locations
+dotnet_diagnostic.CA1065.severity = warning
