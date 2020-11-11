@@ -59,3 +59,9 @@ dotnet_diagnostic.IDE0074.severity = warning
 
 
 dotnet_diagnostic.CA1010.severity = suggestion
+
+# CA1816: Dispose methods should call SuppressFinalize
+dotnet_diagnostic.CA1816.severity = warning
+
+# IDE0021: Use block body for constructors
+csharp_style_expression_bodied_constructors = true:error

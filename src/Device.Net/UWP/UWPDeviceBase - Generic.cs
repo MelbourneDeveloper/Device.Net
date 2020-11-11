@@ -31,10 +31,10 @@ namespace Device.Net.UWP
         #endregion
 
         #region Protected Methods
-        protected async Task GetDeviceAsync(string id)
+        protected async Task GetDeviceAsync(string id, CancellationToken cancellationToken = default)
         {
             var asyncOperation = FromIdAsync(id);
-            var task = asyncOperation.AsTask();
+            var task = asyncOperation.AsTask(cancellationToken);
             ConnectedDevice = await task;
         }
         #endregion

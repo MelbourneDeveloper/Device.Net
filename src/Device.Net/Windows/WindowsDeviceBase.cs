@@ -1,6 +1,7 @@
 ﻿using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net.Windows
@@ -27,7 +28,7 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Methods
-        public abstract Task InitializeAsync();
+        public abstract Task InitializeAsync(CancellationToken cancellationToken = default);
         #endregion
 
         #region Public Static Methods

@@ -52,7 +52,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Private Methods
-        public override async Task InitializeAsync()
+        public override async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
             using var loggerScope = Logger?.BeginScope("DeviceId: {deviceId} Region: {region}", DeviceId, nameof(UWPHidDevice));
@@ -63,7 +63,7 @@ namespace Hid.Net.UWP
 
                 Logger?.LogDebug(Messages.InformationMessageInitializingDevice);
 
-                await GetDeviceAsync(DeviceId);
+                await GetDeviceAsync(DeviceId, cancellationToken);
 
                 if (ConnectedDevice != null)
                 {
