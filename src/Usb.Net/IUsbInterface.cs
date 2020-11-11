@@ -18,6 +18,8 @@ namespace Usb.Net
         ushort WriteBufferSize { get; }
         Task WriteAsync(byte[] data, CancellationToken cancellationToken = default);
         Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default);
+        uint SendControlOutTransfer(ISetupPacket setupPacket, byte[] buffer); //TODO: setup packet is defined differently between libUsb and WinUsb (also possibly convert to async)
+        uint SendControlInTransfer(ISetupPacket setupPacket); //TODO: setup packet is defined differently between libUsb and WinUsb (also possibly convert to async)
         byte InterfaceNumber { get; }
         Task ClaimInterface();
 

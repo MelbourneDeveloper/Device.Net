@@ -153,6 +153,27 @@ namespace Device.Net.LibUsb
             }
         }
 
+        //TODO: make async?
+        //TODO: setupPacket not exposed
+        public uint SendControlOutTransfer(UsbSetupPacket setupPacket, byte[] buffer)
+        {
+            if (buffer != null && buffer.Length > 0)
+            {
+                UsbDevice.ControlTransfer(ref setupPacket, buffer, buffer.Length, out var length);
+                return (uint)length;
+            }
+            return 0;
+        }
+
+        //TODO: make async?
+        //TODO: setupPacket not exposed
+        public uint SendControlInTransfer(UsbSetupPacket setupPacket)
+        {
+            var buffer = Array.Empty<byte>();
+            UsbDevice.ControlTransfer(ref setupPacket, buffer, buffer.Length, out var length);
+            return (uint)length;
+        }
+
         #endregion
 
         #region Public Static Methods
