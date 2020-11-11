@@ -70,14 +70,14 @@ namespace Device.Net.UnitTests
             const int USB_DIR_IN = 128;       //0x80
             const int DFU_RequestType = 0x21;  // '2' => Class request ; '1' => to interface
             const byte DFU_GETSTATUS = 0x03;
-            var buffer = new byte[6];
+            //var buffer = new byte[6];
 
             //Get status? Is this correct?
             var setupPacket = new SetupPacket
             (
                 requestType: DFU_RequestType | USB_DIR_IN,
                 request: DFU_GETSTATUS,
-                length: (ushort)buffer.Length
+                length: 6
             );
 
             //According to Florian get status
@@ -100,7 +100,7 @@ namespace Device.Net.UnitTests
             //    Index = 0
             //};
 
-            var result = await windowsUsbDevice.SendControlTransferAsync(setupPacket, buffer);
+            var result = await windowsUsbDevice.SendControlTransferAsync(setupPacket);
 
             //Assert that the response part meets the specification
             Assert.IsTrue(new byte[] { 0x02 }.Equals(result.Data));
