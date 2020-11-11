@@ -59,6 +59,63 @@ namespace Device.Net.UnitTests
             var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID));
             await windowsUsbDevice.InitializeAsync();
         }
+
+        [TestMethod]
+        public async Task TestConnectToSTMDFUMode2()
+        {
+            const string deviceID = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
+            var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID));
+            await windowsUsbDevice.InitializeAsync();
+
+            const byte DFU_GETSTATUS = 0x03;
+            const byte DFU_CLEARSTATUS = 0x04;
+
+            const byte STATE_DFU_IDLE = 0x02;
+
+            // setup packet to send a DFU Clear Status command
+            var setupPacket = new SetupPacket
+            (
+                requestType: new UsbDeviceRequestType(
+                    RequestDirection.In,
+                    RequestType.Class,
+                    RequestRecipient.Interface),
+                request: DFU_CLEARSTATUS,
+                length: 0
+            );
+
+            // send control transfer, no need to check the return
+            _ = await windowsUsbDevice.SendControlTransferAsync(setupPacket);
+
+            // setup packet to send a DFU GetStatus command
+            setupPacket = new SetupPacket
+            (
+                requestType: new UsbDeviceRequestType(
+                    RequestDirection.In,
+                    RequestType.Class,
+                    RequestRecipient.Interface),
+                request: DFU_GETSTATUS,
+                length: 6
+            );
+
+            var dfuStatus = new TransferResult();
+
+            // because the device is not always able to reply, may take a couple of attempts to get one
+            for (var attempt = 0; attempt < 3; attempt++)
+            {
+                dfuStatus = await windowsUsbDevice.SendControlTransferAsync(setupPacket);
+
+                if (dfuStatus.BytesTransferred == 0)
+                {
+                    // wait for a little while before the next attempt
+                    await Task.Delay(250);
+                }
+            }
+
+            // Assert that the received buffer has the requested lenght ADN that DFU State (at position 4) is STATE_DFU_IDLE
+            Assert.IsTrue(
+                dfuStatus.BytesTransferred == setupPacket.Length &&
+                dfuStatus.Data[4] == STATE_DFU_IDLE);
+        }
 #endif
 
         [TestMethod]
@@ -176,7 +233,7 @@ namespace Device.Net.UnitTests
         #endregion
 
         #region Private Methods
-        private static Task AssertTrezorResult(ReadResult responseData, IDevice device)
+        private static Task AssertTrezorResult(TransferResult responseData, IDevice device)
         {
             //Specify the response part of the Message Contract
             var expectedResult = new byte[] { 63, 35, 35 };

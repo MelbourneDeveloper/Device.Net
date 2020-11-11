@@ -174,7 +174,7 @@ namespace Hid.Net.UWP
             return new ReadReport(reportId, bytes);
         }
 
-        public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
+        public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             var data = (await ReadReportAsync(cancellationToken)).Data;
             Logger.LogTrace(new Trace(false, data));
@@ -185,7 +185,7 @@ namespace Hid.Net.UWP
         #region Public Static Methods
         public static IAsyncOperation<HidDevice> GetHidDevice(string id) => HidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
 
-        public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
+        public async Task<TransferResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
         {
             await _WriteAndReadLock.WaitAsync();
 

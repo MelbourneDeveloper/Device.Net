@@ -102,7 +102,7 @@ namespace Usb.Net.Android
             _IsClosing = false;
         }
 
-        public Task<ReadResult> ReadAsync() => ReadUsbInterface.ReadAsync(ReadBufferSize);
+        public Task<TransferResult> ReadAsync() => ReadUsbInterface.ReadAsync(ReadBufferSize);
 
         public Task WriteAsync(byte[] data) => WriteUsbInterface.WriteAsync(data);
 

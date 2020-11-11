@@ -86,7 +86,7 @@ namespace SerialPort.Net.Windows
             return Task.Run(() => Write(data), cancellationToken);
         }
 
-        public override Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
+        public override Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             ValidateConnection();
 
@@ -94,7 +94,7 @@ namespace SerialPort.Net.Windows
             {
                 var buffer = new byte[_ReadBufferSize];
                 var bytesRead = Read(buffer);
-                return new ReadResult(buffer, bytesRead);
+                return new TransferResult(buffer, bytesRead);
             }, cancellationToken);
         }
 
