@@ -1,9 +1,12 @@
 ﻿namespace Usb.Net
 {
     /// <summary>
-    /// Defines constants that indicate the type of USB control transfer: standard, class, or vendor.
+    /// Defines the type of USB device request.
     /// </summary>
-    public enum UsbControlTransferType
+    /// <remarks>
+    /// See 9.3 of the Universal Serial Bus (USB) specification (<see cref="www.usb.org"/>)
+    /// </remarks>
+    public enum RequestType
     {
         /// <summary>
         /// Indicates a class-specific USB control request described by a specific device class specification.

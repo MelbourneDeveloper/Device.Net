@@ -134,6 +134,11 @@ namespace Usb.Net.UWP
                 throw;
             }
         }
+
+#pragma warning disable IDE0060 // Remove unused parameter
+        public Task<ControlTransferResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+#pragma warning restore IDE0060 // Remove unused parameter
+
         #endregion
 
         #region IDisposable Support
@@ -142,10 +147,6 @@ namespace Usb.Net.UWP
             if (disposedValue) return;
             disposedValue = true;
         }
-
-#pragma warning disable IDE0060 // Remove unused parameter
-        public Task<ReadResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default) => throw new NotImplementedException();
-#pragma warning restore IDE0060 // Remove unused parameter
         #endregion
     }
 }

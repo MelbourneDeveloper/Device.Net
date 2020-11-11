@@ -10,7 +10,7 @@ namespace Usb.Net.Windows
                 Index = setupPacket.Length,
                 Length = setupPacket.Length,
                 Request = setupPacket.Request,
-                RequestType = setupPacket.RequestType,
+                RequestType = setupPacket.RequestType.ToByte(),
                 Value = setupPacket.Value
             };
     }

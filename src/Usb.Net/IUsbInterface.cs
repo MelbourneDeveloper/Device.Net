@@ -34,6 +34,6 @@ namespace Usb.Net
         /// Can we just create the buffer in the method?
         /// Or, do we sometimes need to send data here?
         /// </summary>
-        Task<ReadResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default);
+        Task<ControlTransferResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default);
     }
 }

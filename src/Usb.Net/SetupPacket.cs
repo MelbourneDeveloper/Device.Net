@@ -2,8 +2,14 @@
 {
     public class SetupPacket
     {
+        /// <summary>
+        /// Size of <see cref="SetupPacket"/> to be used in byte arrays.
+        /// </summary>
+        // this is the "byte" size of the properties below 
+        public const int SetupPacketSize = 1 + 1 + 2 + 2 + 2;
+
         #region Public Properties
-        public byte RequestType { get; }
+        public UsbDeviceRequestType RequestType { get; }
         public byte Request { get; }
         public ushort Value { get; }
         public ushort Index { get; }
@@ -11,14 +17,12 @@
         #endregion
 
         #region Constructors
-        public SetupPacket
-            (
-         byte requestType,
-         byte request,
-         ushort value = 0,
-         ushort index = 0,
-         ushort length = 0
-            )
+        public SetupPacket(
+            UsbDeviceRequestType requestType,
+            byte request,
+            ushort value = 0,
+            ushort index = 0,
+            ushort length = 0)
         {
             RequestType = requestType;
             Request = request;
