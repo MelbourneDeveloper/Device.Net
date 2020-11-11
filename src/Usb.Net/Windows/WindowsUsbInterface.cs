@@ -59,39 +59,6 @@ namespace Usb.Net.Windows
             }, cancellationToken);
         }
 
-        //TODO: make async?
-        //TODO: WINUSB_SETUP_PACKET not exposed
-        public uint SendControlOutTransfer(ISetupPacket setupPacket, byte[] buffer)
-        {
-            //TODO: convert from ISetupPacket to WINUSB_SETUP_PACKET
-            var winSetupPacket = new WINUSB_SETUP_PACKET();
-
-            uint bytesWritten = 0;
-
-            if (buffer != null && buffer.Length > 0)
-            {
-                WinUsbApiCalls.WinUsb_ControlTransfer(_SafeFileHandle.DangerousGetHandle(), winSetupPacket, buffer, (uint)buffer.Length, ref bytesWritten, IntPtr.Zero); //last pointer is overlapped structure for async operations
-            }
-            else
-            {
-                throw new Exception("Buffer must not be empty");
-            }
-            return bytesWritten;
-        }
-
-        //TODO: make async?
-        //TODO: WINUSB_SETUP_PACKET not exposed
-        public uint SendControlInTransfer(ISetupPacket setupPacket)
-        {
-            //TODO: convert from ISetupPacket to WINUSB_SETUP_PACKET
-            var winSetupPacket = new WINUSB_SETUP_PACKET();
-            uint bytesWritten = 0;
-            var buffer = Array.Empty<byte>();
-
-            WinUsbApiCalls.WinUsb_ControlTransfer(_SafeFileHandle.DangerousGetHandle(), winSetupPacket, buffer, (uint)buffer.Length, ref bytesWritten, IntPtr.Zero); //last pointer is overlapped structure for async operations
-            return bytesWritten;
-        }
-
         public void Dispose()
         {
             if (_IsDisposed) return;
