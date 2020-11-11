@@ -37,7 +37,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Methods
-        public async Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
+        public async Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
         {
             return await Task.Run(() =>
             {
@@ -45,7 +45,7 @@ namespace Usb.Net.Windows
                 var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_SafeFileHandle, ReadEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't read data");
                 Logger.LogTrace(new Trace(false, bytes));
-                return new ReadResult(bytes, bytesRead);
+                return new TransferResult(bytes, bytesRead);
             }, cancellationToken);
         }
 
@@ -71,36 +71,22 @@ namespace Usb.Net.Windows
             GC.SuppressFinalize(this);
         }
 
-        public Task<ControlTransferResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
+        public Task<TransferResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
         {
             return Task.Run(() =>
             {
-                var transferBuffer = Array.Empty<byte>();
+                var transferBuffer = new byte[setupPacket.Length];
 
                 uint bytesTransferred = 0;
 
                 if (setupPacket.Length > 0)
                 {
-                    // the request has data exchange
-                    // which direction?
-                    if (setupPacket.RequestType.Direction == RequestDirection.In)
+                    if (setupPacket.RequestType.Direction == RequestDirection.Out)
                     {
-                        // data is to be received
-                        // create buffer of the appropriate size
-                        transferBuffer = new byte[setupPacket.Length];
-                    }
-                    else
-                    {
-                        // data is to be sent
-                        // TODO
-                        transferBuffer = new byte[SetupPacket.SetupPacketSize + setupPacket.Length];
-                        // check buffer == null
+                        ////Make a copy so we don't mess with the array passed in
+                        Array.Copy(buffer, transferBuffer, buffer.Length);
                     }
                 }
-
-                ////Make a copy so we don't mess with the array passed in
-                //var bufferCopy = new byte[buffer.Length];
-                //Array.Copy(buffer, bufferCopy, buffer.Length);
 
                 var isSuccess = WinUsbApiCalls.WinUsb_ControlTransfer(_SafeFileHandle.DangerousGetHandle(), setupPacket.ToWindowsSetupPacket(), transferBuffer, (uint)transferBuffer.Length, ref bytesTransferred, IntPtr.Zero);
 
@@ -109,21 +95,7 @@ namespace Usb.Net.Windows
                     WindowsDeviceBase.HandleError(isSuccess, "Couldn't do a control transfer");
                 }
 
-
-                /* Unmerged change from project 'Usb.Net (net45)'
-                Before:
-                                return new ReadResult(buffer, bytesWritten);
-                After:
-                                return new Device.Net.ReadResult(buffer, bytesWritten);
-                */
-
-                /* Unmerged change from project 'Usb.Net (net45)'
-                Before:
-                                return new ControlTransferResult(receiveBuffer, bytesTransferred);
-                After:
-                                return new Device.Net.ControlTransferResult(receiveBuffer, bytesTransferred);
-                */
-                return new ControlTransferResult(bytesTransferred, transferBuffer);
+                return new TransferResult(transferBuffer, bytesTransferred);
 
             }, cancellationToken);
         }

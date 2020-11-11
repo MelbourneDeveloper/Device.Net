@@ -106,7 +106,7 @@ namespace Device.Net.LibUsb
             });
         }
 
-        public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
+        public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             await _WriteAndReadLock.WaitAsync(cancellationToken);
 

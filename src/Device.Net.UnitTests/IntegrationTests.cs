@@ -97,7 +97,7 @@ namespace Device.Net.UnitTests
                 length: 6
             );
 
-            var dfuStatus = new ControlTransferResult();
+            var dfuStatus = new TransferResult();
 
             // because the device is not always able to reply, may take a couple of attempts to get one
             for (var attempt = 0; attempt < 3; attempt++)
@@ -233,7 +233,7 @@ namespace Device.Net.UnitTests
         #endregion
 
         #region Private Methods
-        private static Task AssertTrezorResult(ReadResult responseData, IDevice device)
+        private static Task AssertTrezorResult(TransferResult responseData, IDevice device)
         {
             //Specify the response part of the Message Contract
             var expectedResult = new byte[] { 63, 35, 35 };

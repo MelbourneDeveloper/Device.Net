@@ -17,7 +17,7 @@ namespace Usb.Net
         ushort ReadBufferSize { get; }
         ushort WriteBufferSize { get; }
         Task WriteAsync(byte[] data, CancellationToken cancellationToken = default);
-        Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default);
+        Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default);
         byte InterfaceNumber { get; }
         Task ClaimInterface();
 
@@ -34,6 +34,6 @@ namespace Usb.Net
         /// Can we just create the buffer in the method?
         /// Or, do we sometimes need to send data here?
         /// </summary>
-        Task<ControlTransferResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default);
+        Task<TransferResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default);
     }
 }

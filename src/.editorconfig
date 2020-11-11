@@ -68,3 +68,6 @@ dotnet_diagnostic.CA1065.severity = warning
 
 # IDE0023: Use block body for operators
 csharp_style_expression_bodied_operators = true:error
+
+# IDE0021: Use block body for constructors
+csharp_style_expression_bodied_constructors = true:error

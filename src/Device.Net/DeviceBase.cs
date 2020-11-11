@@ -44,14 +44,14 @@ namespace Device.Net
         #region Public Abstract Methods
         //TODO: Why are these here?
 
-        public abstract Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default);
+        public abstract Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default);
         public abstract Task WriteAsync(byte[] data, CancellationToken cancellationToken = default);
         #endregion
 
         #region Public Methods
         public virtual Task Flush(CancellationToken cancellationToken = default) => throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
 
-        public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
+        public async Task<TransferResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
         {
             if (writeBuffer == null) throw new ArgumentNullException(nameof(writeBuffer));
 
