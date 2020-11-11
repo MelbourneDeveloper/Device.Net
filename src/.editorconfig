@@ -65,3 +65,6 @@ dotnet_diagnostic.CA1816.severity = suggestion
 
 # CA1065: Do not raise exceptions in unexpected locations
 dotnet_diagnostic.CA1065.severity = warning
+
+# IDE0023: Use block body for operators
+csharp_style_expression_bodied_operators = true:error
