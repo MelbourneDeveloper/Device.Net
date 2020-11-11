@@ -67,43 +67,54 @@ namespace Device.Net.UnitTests
             var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID));
             await windowsUsbDevice.InitializeAsync();
 
-            const int USB_DIR_IN = 128;       //0x80
-            const int DFU_RequestType = 0x21;  // '2' => Class request ; '1' => to interface
             const byte DFU_GETSTATUS = 0x03;
-            //var buffer = new byte[6];
+            const byte DFU_CLEARSTATUS = 0x04;
 
-            //Get status? Is this correct?
+            const byte STATE_DFU_IDLE = 0x02;
+
+            // setup packet to send a DFU Clear Status command
             var setupPacket = new SetupPacket
             (
-                requestType: DFU_RequestType | USB_DIR_IN,
+                requestType: new UsbDeviceRequestType(
+                    RequestDirection.In,
+                    RequestType.Class,
+                    RequestRecipient.Interface),
+                request: DFU_CLEARSTATUS,
+                length: 0
+            );
+
+            // send control transfer, no need to check the return
+            _ = await windowsUsbDevice.SendControlTransferAsync(setupPacket);
+
+            // setup packet to send a DFU GetStatus command
+            setupPacket = new SetupPacket
+            (
+                requestType: new UsbDeviceRequestType(
+                    RequestDirection.In,
+                    RequestType.Class,
+                    RequestRecipient.Interface),
                 request: DFU_GETSTATUS,
                 length: 6
             );
 
-            //According to Florian get status
-            //var setupPacket = new WINUSB_SETUP_PACKET
-            //{
-            //    RequestType = 161,
-            //    Request = 3,
-            //    Length = (ushort)buffer.Length,
-            //    Value = 0,
-            //    Index = 0
-            //};
+            var dfuStatus = new ControlTransferResult();
 
-            //// DFU CLEAR SETUP PACKET
-            //var setupPacket = new WINUSB_SETUP_PACKET
-            //{
-            //    RequestType = 33,
-            //    Request = 4,
-            //    Length = 0,
-            //    Value = 2,
-            //    Index = 0
-            //};
+            // because the device is not always able to reply, may take a couple of attempts to get one
+            for (var attempt = 0; attempt < 3; attempt++)
+            {
+                dfuStatus = await windowsUsbDevice.SendControlTransferAsync(setupPacket);
 
-            var result = await windowsUsbDevice.SendControlTransferAsync(setupPacket);
+                if (dfuStatus.BytesTransferred == 0)
+                {
+                    // wait for a little while before the next attempt
+                    await Task.Delay(250);
+                }
+            }
 
-            //Assert that the response part meets the specification
-            Assert.IsTrue(new byte[] { 0x02 }.Equals(result.Data));
+            // Assert that the received buffer has the requested lenght ADN that DFU State (at position 4) is STATE_DFU_IDLE
+            Assert.IsTrue(
+                dfuStatus.BytesTransferred == setupPacket.Length &&
+                dfuStatus.Data[4] == STATE_DFU_IDLE);
         }
 #endif
 
