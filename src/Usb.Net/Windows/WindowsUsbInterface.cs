@@ -73,7 +73,9 @@ namespace Usb.Net.Windows
 
         public Task<TransferResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
         {
-            return Task.Run(() =>
+            return setupPacket == null
+                ? throw new ArgumentNullException(nameof(setupPacket)) :
+            Task.Run(() =>
             {
                 var transferBuffer = new byte[setupPacket.Length];
 
@@ -95,7 +97,9 @@ namespace Usb.Net.Windows
                     WindowsDeviceBase.HandleError(isSuccess, "Couldn't do a control transfer");
                 }
 
-                return new TransferResult(transferBuffer, bytesTransferred);
+                return bytesTransferred != setupPacket.Length && setupPacket.RequestType.Direction == RequestDirection.In
+                    ? throw new ControlTransferException($"Requested {setupPacket.Length} bytes but received {bytesTransferred}")
+                    : new TransferResult(transferBuffer, bytesTransferred);
 
             }, cancellationToken);
         }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Device.Net
+﻿namespace Device.Net
 {
 #pragma warning disable CA1815 // Override equals and operator equals on value types
     public readonly struct TransferResult
@@ -17,13 +15,10 @@ namespace Device.Net
         #endregion
 
         #region Conversion Operators
-#pragma warning disable CA2225 // Operator overloads have named alternates
         public static implicit operator byte[](TransferResult TransferResult) => TransferResult.Data;
 
         public static implicit operator TransferResult(byte[] data) =>
-            //TODO: This is a bit dodgy... It's breaking a code rule
-            data == null ? throw new ArgumentNullException(nameof(data)) : new TransferResult(data, (uint)data.Length);
-#pragma warning restore CA2225 // Operator overloads have named alternates
+            new TransferResult(data, data != null ? (uint)data.Length : 0);
         #endregion
 
         #region Constructor

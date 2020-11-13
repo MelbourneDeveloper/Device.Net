@@ -4,6 +4,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Polly;
+using Device.Net.Exceptions;
 
 #if !WINDOWS_UWP
 using Hid.Net.Windows;
@@ -69,11 +71,10 @@ namespace Device.Net.UnitTests
 
             const byte DFU_GETSTATUS = 0x03;
             const byte DFU_CLEARSTATUS = 0x04;
-
             const byte STATE_DFU_IDLE = 0x02;
 
             // setup packet to send a DFU Clear Status command
-            var setupPacket = new SetupPacket
+            var clearStatusSetupPacket = new SetupPacket
             (
                 requestType: new UsbDeviceRequestType(
                     RequestDirection.In,
@@ -83,11 +84,8 @@ namespace Device.Net.UnitTests
                 length: 0
             );
 
-            // send control transfer, no need to check the return
-            _ = await windowsUsbDevice.SendControlTransferAsync(setupPacket);
-
             // setup packet to send a DFU GetStatus command
-            setupPacket = new SetupPacket
+            var getStatusSetupPacket = new SetupPacket
             (
                 requestType: new UsbDeviceRequestType(
                     RequestDirection.In,
@@ -97,24 +95,27 @@ namespace Device.Net.UnitTests
                 length: 6
             );
 
-            var dfuStatus = new TransferResult();
+            TransferResult dfuStatus = null;
 
             // because the device is not always able to reply, may take a couple of attempts to get one
-            for (var attempt = 0; attempt < 3; attempt++)
+            var retryPolicy = Policy
+                .Handle<ApiException>()
+                .Or<ControlTransferException>()
+                .Or<AssertFailedException>()
+                .WaitAndRetryAsync(2, i => TimeSpan.FromMilliseconds(200));
+
+            await retryPolicy.ExecuteAsync(async () =>
             {
-                dfuStatus = await windowsUsbDevice.SendControlTransferAsync(setupPacket);
+                // send control transfer, no need to check the return
+                _ = await windowsUsbDevice.SendControlTransferAsync(clearStatusSetupPacket);
 
-                if (dfuStatus.BytesTransferred == 0)
-                {
-                    // wait for a little while before the next attempt
-                    await Task.Delay(250);
-                }
-            }
+                dfuStatus = await windowsUsbDevice.SendControlTransferAsync(getStatusSetupPacket);
 
-            // Assert that the received buffer has the requested lenght ADN that DFU State (at position 4) is STATE_DFU_IDLE
-            Assert.IsTrue(
-                dfuStatus.BytesTransferred == setupPacket.Length &&
-                dfuStatus.Data[4] == STATE_DFU_IDLE);
+                // Assert that the received buffer has the requested lenght ADN that DFU State (at position 4) is STATE_DFU_IDLE
+                Assert.IsTrue(
+                    dfuStatus.BytesTransferred == getStatusSetupPacket.Length &&
+                    dfuStatus.Data[4] == STATE_DFU_IDLE);
+            });
         }
 #endif
 
