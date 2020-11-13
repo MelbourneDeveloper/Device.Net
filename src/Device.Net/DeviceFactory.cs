@@ -13,17 +13,14 @@ namespace Device.Net
 
     public sealed class DeviceFactory : IDeviceFactory
     {
-        #region Protected Properties
+        #region Fields
 #pragma warning disable IDE0052 // Remove unread private members
         private readonly ILogger _logger;
 #pragma warning restore IDE0052 // Remove unread private members
         private readonly ILoggerFactory _loggerFactory;
         private readonly GetConnectedDeviceDefinitionsAsync _getConnectedDevicesAsync;
         private readonly GetDevice _getDevice;
-        #endregion
-
-        #region Public  Properties
-        public IEnumerable<DeviceType> SupportedDeviceTypes { get; }
+        private readonly Func<ConnectedDeviceDefinition, Task<bool>> _supportsDevice;
         #endregion
 
         #region Constructor
@@ -34,20 +31,20 @@ namespace Device.Net
             ILoggerFactory loggerFactory,
             GetConnectedDeviceDefinitionsAsync getConnectedDevicesAsync,
             GetDevice getDevice,
-            IEnumerable<DeviceType> supportedDeviceTypes
+            Func<ConnectedDeviceDefinition, Task<bool>> supportsDevice
             )
         {
             _getConnectedDevicesAsync = getConnectedDevicesAsync ?? throw new ArgumentNullException(nameof(getConnectedDevicesAsync));
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _logger = _loggerFactory.CreateLogger<DeviceFactory>();
             _getDevice = getDevice;
-            SupportedDeviceTypes = supportedDeviceTypes;
+            _supportsDevice = supportsDevice ?? throw new ArgumentNullException(nameof(supportsDevice));
         }
         #endregion
 
         #region Public Methods
+        public Task<bool> SupportsDevice(ConnectedDeviceDefinition deviceDefinition) => _supportsDevice(deviceDefinition);
         public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync() => _getConnectedDevicesAsync();
-
         public Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition) => deviceDefinition == null ? throw new ArgumentNullException(nameof(deviceDefinition)) : _getDevice(deviceDefinition);
         #endregion
     }

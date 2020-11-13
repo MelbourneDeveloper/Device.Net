@@ -7,6 +7,6 @@ namespace Device.Net
     {
         Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync();
         Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition);
-        IEnumerable<DeviceType> SupportedDeviceTypes { get; }
+        Task<bool> SupportsDevice(ConnectedDeviceDefinition deviceDefinition);
     }
 }
