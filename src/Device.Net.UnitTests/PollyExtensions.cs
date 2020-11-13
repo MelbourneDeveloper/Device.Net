@@ -19,7 +19,11 @@ namespace Device.Net.UnitTests
     {
         private const byte DFU_CLEARSTATUS = 0x04;
 
-        public static Task PerformControlTransferWithRetry(this IUsbDevice usbDevice, Func<Task> func, int retryCount = 3, int sleepDurationMilliseconds = 250)
+        public static Task PerformControlTransferWithRetry(
+            this IUsbDevice usbDevice,
+            Func<Task> func,
+            int retryCount = 3,
+            int sleepDurationMilliseconds = 250)
         {
             var clearStatusSetupPacket = new SetupPacket
             (

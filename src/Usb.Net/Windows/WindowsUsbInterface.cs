@@ -95,7 +95,12 @@ namespace Usb.Net.Windows
                         }
                     }
 
-                    var isSuccess = WinUsbApiCalls.WinUsb_ControlTransfer(_SafeFileHandle.DangerousGetHandle(), setupPacket.ToWindowsSetupPacket(), transferBuffer, (uint)transferBuffer.Length, ref bytesTransferred, IntPtr.Zero);
+                    var isSuccess = WinUsbApiCalls.WinUsb_ControlTransfer(_SafeFileHandle.DangerousGetHandle(),
+                        setupPacket.ToWindowsSetupPacket(),
+                        transferBuffer,
+                        (uint)transferBuffer.Length,
+                        ref bytesTransferred,
+                        IntPtr.Zero);
 
                     if (isSuccess)
                     {
