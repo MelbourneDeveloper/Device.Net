@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace Device.Net.LibUsb
 {
+    /// <summary>
+    /// TODO: Convert this device in to a proper USB device
+    /// </summary>
     public class LibUsbDevice : DeviceBase, IDevice
     {
         #region Fields
@@ -103,7 +106,7 @@ namespace Device.Net.LibUsb
             });
         }
 
-        public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
+        public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             await _WriteAndReadLock.WaitAsync(cancellationToken);
 
@@ -151,6 +154,15 @@ namespace Device.Net.LibUsb
             {
                 _WriteAndReadLock.Release();
             }
+        }
+
+        //TODO: make async?
+        //TODO: setupPacket not exposed
+        public uint SendControlInTransfer(UsbSetupPacket setupPacket)
+        {
+            var buffer = Array.Empty<byte>();
+            UsbDevice.ControlTransfer(ref setupPacket, buffer, buffer.Length, out var length);
+            return (uint)length;
         }
 
         #endregion

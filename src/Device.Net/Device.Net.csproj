@@ -68,4 +68,10 @@ Alpha version. Please use 3.x for a stable release</Description>
 	  </PackageReference>    
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Reference Include="Windows.Foundation.FoundationContract">
+	    <HintPath>C:\Program Files (x86)\Windows Kits\10\References\10.0.17134.0\Windows.Foundation.FoundationContract\3.0.0.0\Windows.Foundation.FoundationContract.winmd</HintPath>
+	  </Reference>
+	</ItemGroup>
+
 </Project>

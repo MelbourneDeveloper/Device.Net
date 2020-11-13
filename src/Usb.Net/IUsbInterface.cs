@@ -17,7 +17,7 @@ namespace Usb.Net
         ushort ReadBufferSize { get; }
         ushort WriteBufferSize { get; }
         Task WriteAsync(byte[] data, CancellationToken cancellationToken = default);
-        Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default);
+        Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default);
         byte InterfaceNumber { get; }
         Task ClaimInterface();
 
@@ -26,5 +26,12 @@ namespace Usb.Net
         /// TODO
         /// </summary>
         void RegisterDefaultEndpoints();
+
+        /// <summary>
+        /// Performs a USB Control Transfer
+        /// https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-control-transfer
+        /// https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/how-to-send-a-usb-control-transfer--uwp-app-
+        /// </summary>
+        Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default);
     }
 }

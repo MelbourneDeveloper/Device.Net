@@ -4,6 +4,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 #if !WINDOWS_UWP
 using Hid.Net.Windows;
@@ -16,28 +19,11 @@ using Hid.Net.UWP;
 
 namespace Device.Net.UnitTests
 {
-    public static class GetFactoryExtensions
-    {
-        public static IDeviceFactory GetUsbDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition) =>
-#if !WINDOWS_UWP
-            filterDeviceDefinition.CreateWindowsUsbDeviceFactory();
-#else
-            filterDeviceDefinition.CreateUwpUsbDeviceFactory();
-#endif
-
-
-        public static IDeviceFactory GetHidDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition, byte? defultReportId = null) =>
-#if !WINDOWS_UWP
-            filterDeviceDefinition.CreateWindowsHidDeviceFactory(defaultReportId: defultReportId);
-#else
-            filterDeviceDefinition.CreateUwpHidDeviceFactory(defaultReportId: defultReportId);
-#endif
-    }
-
     [TestClass]
     public class IntegrationTests
 
     {
+        private ILoggerFactory loggerFactory;
 
         #region Tests
 #if !WINDOWS_UWP
@@ -59,6 +45,38 @@ namespace Device.Net.UnitTests
             var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID));
             await windowsUsbDevice.InitializeAsync();
         }
+
+        [TestMethod]
+        public async Task TestSTMDFUModeGetControlTransfer()
+        {
+            const string deviceID = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
+            var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID, loggerFactory: loggerFactory));
+            await windowsUsbDevice.InitializeAsync();
+
+            const byte DFU_GETSTATUS = 0x03;
+            const byte STATE_DFU_IDLE = 0x02;
+
+            var getStatusSetupPacket = new SetupPacket
+            (
+                requestType: new UsbDeviceRequestType(
+                    RequestDirection.In,
+                    RequestType.Class,
+                    RequestRecipient.Interface),
+                request: DFU_GETSTATUS,
+                length: 6
+            );
+
+            await windowsUsbDevice.PerformControlTransferWithRetry(async () =>
+            {
+                var dfuStatus = await windowsUsbDevice.PerformControlTransferAsync(getStatusSetupPacket);
+
+                // Assert that the received buffer has the requested lenght ADN that DFU State (at position 4) is STATE_DFU_IDLE
+                Assert.IsTrue(
+                    dfuStatus.BytesTransferred == getStatusSetupPacket.Length &&
+                    dfuStatus.Data[4] == STATE_DFU_IDLE);
+            });
+        }
+
 #endif
 
         [TestMethod]
@@ -175,8 +193,27 @@ namespace Device.Net.UnitTests
         }
         #endregion
 
+        #region Setup
+        [TestInitialize]
+        public void Setup()
+        {
+            var hostBuilder = Host.CreateDefaultBuilder().
+            ConfigureLogging((builderContext, loggingBuilder) =>
+            {
+                loggingBuilder.SetMinimumLevel(LogLevel.Trace);
+                loggingBuilder.AddConsole((options) =>
+                {
+                    //This displays arguments from the scope
+                    options.IncludeScopes = true;
+                });
+            });
+            var host = hostBuilder.Build();
+            loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
+        }
+        #endregion
+
         #region Private Methods
-        private static Task AssertTrezorResult(ReadResult responseData, IDevice device)
+        private static Task AssertTrezorResult(TransferResult responseData, IDevice device)
         {
             //Specify the response part of the Message Contract
             var expectedResult = new byte[] { 63, 35, 35 };

@@ -42,8 +42,8 @@ namespace Device.Net.UnitTests
         public async Task TestRead()
         {
             await InitializeDevice();
-            var readResult = await _UsbDevice.ReadAsync();
-            Assert.AreEqual(readResult.Data, testreadpacket);
+            var TransferResult = await _UsbDevice.ReadAsync();
+            Assert.AreEqual(TransferResult.Data, testreadpacket);
         }
 
 #if !WINDOWS_UWP

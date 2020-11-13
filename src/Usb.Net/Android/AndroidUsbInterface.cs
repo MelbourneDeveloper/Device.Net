@@ -36,7 +36,7 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Methods
-        public async Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
+        public async Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
         {
             return await Task.Run(async () =>
             {
@@ -60,7 +60,7 @@ namespace Usb.Net.Android
 
                     //TODO: Get the actual length of the data read instead of just returning the length of the array
 
-                    var buffers = new ReadResult(new byte[bufferLength], bufferLength);
+                    var buffers = new TransferResult(new byte[bufferLength], bufferLength);
 
                     byteBuffer.Rewind();
 
@@ -137,6 +137,10 @@ namespace Usb.Net.Android
                 ? throw new DeviceException("could not claim interface")
                 : Task.FromResult(true);
         }
+
+#pragma warning disable IDE0060 // Remove unused parameter
+        public Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+#pragma warning restore IDE0060 // Remove unused parameter
         #endregion
     }
 }

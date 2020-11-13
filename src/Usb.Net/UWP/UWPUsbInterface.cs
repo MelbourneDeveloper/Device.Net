@@ -67,7 +67,7 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Methods
-        public async Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
+        public async Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
         {
             IBuffer buffer;
 
@@ -79,7 +79,7 @@ namespace Usb.Net.UWP
             else
             {
                 return InterruptReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe
-                    ? (ReadResult)await usbInterruptInPipe.ReadAsync(cancellationToken)
+                    ? (TransferResult)await usbInterruptInPipe.ReadAsync(cancellationToken)
                     : throw new DeviceException(Messages.ErrorMessageReadEndpointNotRecognized);
             }
 
@@ -134,6 +134,11 @@ namespace Usb.Net.UWP
                 throw;
             }
         }
+
+#pragma warning disable IDE0060 // Remove unused parameter
+        public Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+#pragma warning restore IDE0060 // Remove unused parameter
+
         #endregion
 
         #region IDisposable Support

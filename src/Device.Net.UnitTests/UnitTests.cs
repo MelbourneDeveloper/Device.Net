@@ -136,7 +136,7 @@ namespace Device.Net.UnitTests
 
             var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, _loggerFactory, _loggerMock.Object);
 
-            var writeAndReadTasks = new List<Task<ReadResult>>();
+            var writeAndReadTasks = new List<Task<TransferResult>>();
 
 
             const int count = 10;
