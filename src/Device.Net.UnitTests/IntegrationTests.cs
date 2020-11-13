@@ -4,8 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Polly;
-using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,28 +19,11 @@ using Hid.Net.UWP;
 
 namespace Device.Net.UnitTests
 {
-    public static class GetFactoryExtensions
-    {
-        public static IDeviceFactory GetUsbDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition) =>
-#if !WINDOWS_UWP
-            filterDeviceDefinition.CreateWindowsUsbDeviceFactory();
-#else
-            filterDeviceDefinition.CreateUwpUsbDeviceFactory();
-#endif
-
-
-        public static IDeviceFactory GetHidDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition, byte? defultReportId = null) =>
-#if !WINDOWS_UWP
-            filterDeviceDefinition.CreateWindowsHidDeviceFactory(defaultReportId: defultReportId);
-#else
-            filterDeviceDefinition.CreateUwpHidDeviceFactory(defaultReportId: defultReportId);
-#endif
-    }
-
     [TestClass]
     public class IntegrationTests
 
     {
+        private ILoggerFactory loggerFactory;
 
         #region Tests
 #if !WINDOWS_UWP
@@ -68,19 +49,6 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestSTMDFUModeGetControlTransfer()
         {
-            var hostBuilder = Host.CreateDefaultBuilder().
-            ConfigureLogging((builderContext, loggingBuilder) =>
-            {
-                loggingBuilder.SetMinimumLevel(LogLevel.Trace);
-                loggingBuilder.AddConsole((options) =>
-                {
-                    //This displays arguments from the scope
-                    options.IncludeScopes = true;
-                });
-            });
-            var host = hostBuilder.Build();
-            var loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
-
             const string deviceID = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
             var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID, loggerFactory: loggerFactory));
             await windowsUsbDevice.InitializeAsync();
@@ -108,6 +76,7 @@ namespace Device.Net.UnitTests
                     dfuStatus.Data[4] == STATE_DFU_IDLE);
             });
         }
+
 #endif
 
         [TestMethod]
@@ -224,6 +193,25 @@ namespace Device.Net.UnitTests
         }
         #endregion
 
+        #region Setup
+        [TestInitialize]
+        public void Setup()
+        {
+            var hostBuilder = Host.CreateDefaultBuilder().
+            ConfigureLogging((builderContext, loggingBuilder) =>
+            {
+                loggingBuilder.SetMinimumLevel(LogLevel.Trace);
+                loggingBuilder.AddConsole((options) =>
+                {
+                    //This displays arguments from the scope
+                    options.IncludeScopes = true;
+                });
+            });
+            var host = hostBuilder.Build();
+            loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
+        }
+        #endregion
+
         #region Private Methods
         private static Task AssertTrezorResult(TransferResult responseData, IDevice device)
         {
@@ -236,34 +224,6 @@ namespace Device.Net.UnitTests
             return Task.FromResult(true);
         }
         #endregion
-    }
-
-    public static class PollyExtensions
-    {
-        private const byte DFU_CLEARSTATUS = 0x04;
-
-        public static Task PerformControlTransferWithRetry(this IUsbDevice usbDevice, Func<Task> func, int retryCount = 3, int sleepDurationMilliseconds = 250)
-        {
-            var clearStatusSetupPacket = new SetupPacket
-            (
-                requestType: new UsbDeviceRequestType(
-                    RequestDirection.In,
-                    RequestType.Class,
-                    RequestRecipient.Interface),
-                request: DFU_CLEARSTATUS,
-                length: 0
-            );
-
-            usbDevice.PerformControlTransferAsync(clearStatusSetupPacket);
-
-            var retryPolicy = Policy
-                .Handle<ApiException>()
-                .Or<ControlTransferException>()
-                .Or<AssertFailedException>()
-                .WaitAndRetryAsync(retryCount, i => TimeSpan.FromMilliseconds(sleepDurationMilliseconds));
-
-            return retryPolicy.ExecuteAsync(func);
-        }
     }
 }
 

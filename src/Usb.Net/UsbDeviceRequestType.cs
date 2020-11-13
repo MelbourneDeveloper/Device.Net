@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace Usb.Net
 {
     public class UsbDeviceRequestType
