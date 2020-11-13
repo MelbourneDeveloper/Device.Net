@@ -139,7 +139,7 @@ namespace Usb.Net.Android
         }
 
 #pragma warning disable IDE0060 // Remove unused parameter
-        public Task<TransferResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+        public Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default) => throw new NotImplementedException();
 #pragma warning restore IDE0060 // Remove unused parameter
         #endregion
     }

@@ -6,6 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Polly;
 using Device.Net.Exceptions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 #if !WINDOWS_UWP
 using Hid.Net.Windows;
@@ -65,8 +68,21 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestSTMDFUModeGetControlTransfer()
         {
+            var hostBuilder = Host.CreateDefaultBuilder().
+            ConfigureLogging((builderContext, loggingBuilder) =>
+            {
+                loggingBuilder.SetMinimumLevel(LogLevel.Trace);
+                loggingBuilder.AddConsole((options) =>
+                {
+                    //This displays arguments from the scope
+                    options.IncludeScopes = true;
+                });
+            });
+            var host = hostBuilder.Build();
+            var loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
+
             const string deviceID = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
-            var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID));
+            var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID, loggerFactory: loggerFactory));
             await windowsUsbDevice.InitializeAsync();
 
             const byte DFU_GETSTATUS = 0x03;
@@ -82,16 +98,15 @@ namespace Device.Net.UnitTests
                 length: 6
             );
 
-            await new Func<Task>(async () =>
+            await windowsUsbDevice.PerformControlTransferWithRetry(async () =>
             {
-                var dfuStatus = await windowsUsbDevice.SendControlTransferAsync(getStatusSetupPacket);
+                var dfuStatus = await windowsUsbDevice.PerformControlTransferAsync(getStatusSetupPacket);
 
                 // Assert that the received buffer has the requested lenght ADN that DFU State (at position 4) is STATE_DFU_IDLE
                 Assert.IsTrue(
                     dfuStatus.BytesTransferred == getStatusSetupPacket.Length &&
                     dfuStatus.Data[4] == STATE_DFU_IDLE);
-
-            }).PerformControlTransferWithRetry();
+            });
         }
 #endif
 
@@ -227,7 +242,7 @@ namespace Device.Net.UnitTests
     {
         private const byte DFU_CLEARSTATUS = 0x04;
 
-        public static Task PerformControlTransferWithRetry(this Func<Task> func, int retryCount = 3, int sleepDurationMilliseconds = 250)
+        public static Task PerformControlTransferWithRetry(this IUsbDevice usbDevice, Func<Task> func, int retryCount = 3, int sleepDurationMilliseconds = 250)
         {
             var clearStatusSetupPacket = new SetupPacket
             (
@@ -239,6 +254,7 @@ namespace Device.Net.UnitTests
                 length: 0
             );
 
+            usbDevice.PerformControlTransferAsync(clearStatusSetupPacket);
 
             var retryPolicy = Policy
                 .Handle<ApiException>()

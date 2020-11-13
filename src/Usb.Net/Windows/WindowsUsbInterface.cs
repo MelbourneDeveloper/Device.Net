@@ -71,7 +71,7 @@ namespace Usb.Net.Windows
             GC.SuppressFinalize(this);
         }
 
-        public Task<TransferResult> SendControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
+        public Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
         {
             return setupPacket == null
                 ? throw new ArgumentNullException(nameof(setupPacket)) :
@@ -112,7 +112,7 @@ namespace Usb.Net.Windows
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError(ex, $"Error on {nameof(SendControlTransferAsync)}");
+                    Logger.LogError(ex, $"Error on {nameof(PerformControlTransferAsync)}");
 
                     throw;
                 }
