@@ -77,29 +77,45 @@ namespace Usb.Net.Windows
                 ? throw new ArgumentNullException(nameof(setupPacket)) :
             Task.Run(() =>
             {
-                var transferBuffer = new byte[setupPacket.Length];
+                using var scope = Logger.BeginScope("Perfoming Control Transfer {setupPacket}", setupPacket);
 
-                uint bytesTransferred = 0;
-
-                if (setupPacket.Length > 0)
+                try
                 {
-                    if (setupPacket.RequestType.Direction == RequestDirection.Out)
+
+                    var transferBuffer = new byte[setupPacket.Length];
+
+                    uint bytesTransferred = 0;
+
+                    if (setupPacket.Length > 0)
                     {
-                        ////Make a copy so we don't mess with the array passed in
-                        Array.Copy(buffer, transferBuffer, buffer.Length);
+                        if (setupPacket.RequestType.Direction == RequestDirection.Out)
+                        {
+                            ////Make a copy so we don't mess with the array passed in
+                            Array.Copy(buffer, transferBuffer, buffer.Length);
+                        }
                     }
+
+                    var isSuccess = WinUsbApiCalls.WinUsb_ControlTransfer(_SafeFileHandle.DangerousGetHandle(), setupPacket.ToWindowsSetupPacket(), transferBuffer, (uint)transferBuffer.Length, ref bytesTransferred, IntPtr.Zero);
+
+                    if (isSuccess)
+                    {
+                        Logger.LogTrace(new Trace(setupPacket.RequestType.Direction == RequestDirection.Out, transferBuffer));
+                    }
+                    else
+                    {
+                        WindowsDeviceBase.HandleError(isSuccess, "Couldn't do a control transfer");
+                    }
+
+                    return bytesTransferred != setupPacket.Length && setupPacket.RequestType.Direction == RequestDirection.In
+                        ? throw new ControlTransferException($"Requested {setupPacket.Length} bytes but received {bytesTransferred}")
+                        : new TransferResult(transferBuffer, bytesTransferred);
                 }
-
-                var isSuccess = WinUsbApiCalls.WinUsb_ControlTransfer(_SafeFileHandle.DangerousGetHandle(), setupPacket.ToWindowsSetupPacket(), transferBuffer, (uint)transferBuffer.Length, ref bytesTransferred, IntPtr.Zero);
-
-                if (!isSuccess)
+                catch (Exception ex)
                 {
-                    WindowsDeviceBase.HandleError(isSuccess, "Couldn't do a control transfer");
-                }
+                    Logger.LogError(ex, $"Error on {nameof(SendControlTransferAsync)}");
 
-                return bytesTransferred != setupPacket.Length && setupPacket.RequestType.Direction == RequestDirection.In
-                    ? throw new ControlTransferException($"Requested {setupPacket.Length} bytes but received {bytesTransferred}")
-                    : new TransferResult(transferBuffer, bytesTransferred);
+                    throw;
+                }
 
             }, cancellationToken);
         }

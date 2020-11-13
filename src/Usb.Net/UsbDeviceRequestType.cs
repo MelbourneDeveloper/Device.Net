@@ -36,5 +36,7 @@ namespace Usb.Net
             ((byte)Type << 5) +
             (byte)Recipient);
         }
+
+        public override string ToString() => $"RequestType: {Type} RequestDirection: {Direction} RequestRecipient: {Recipient}";
     }
 }

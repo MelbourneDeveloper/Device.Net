@@ -32,5 +32,6 @@
         }
         #endregion
 
+        public override string ToString() => $"RequestType: {RequestType} Request: {Request} Value: {Value} Index: {Index} Length: {Length}";
     }
 }
