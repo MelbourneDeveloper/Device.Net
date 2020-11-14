@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
@@ -86,7 +87,7 @@ namespace Hid.Net.Windows
                     writeBufferSize: writeBufferSize,
                     defaultReportId: defaultReportId
                 ),
-                new ReadOnlyCollection<DeviceType>(new List<DeviceType> { DeviceType.Hid }));
+                (c) => Task.FromResult(c.DeviceType == DeviceType.Hid));
         }
 
         private static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, IHidApiService HidService, ILogger logger)
