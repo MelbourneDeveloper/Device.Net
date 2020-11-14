@@ -84,9 +84,9 @@ namespace Usb.Net.Android
             }, cancellationToken);
         }
 
-        public async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+        public async Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
-            if (data == null) throw new NotImplementedException();
+            if (data == null) throw new ArgumentNullException(nameof(data));
 
             await Task.Run(async () =>
             {
@@ -109,6 +109,10 @@ namespace Usb.Net.Android
 #pragma warning restore CS0618
 
                     await _UsbDeviceConnection.RequestWaitAsync();
+
+                    //TODO: It's not clear if there is a way to count the number of bytes transferred here. This is a bug in a sense...
+
+                    return data.Length;
 
                     Logger.LogTrace(new Trace(true, data), $"Write endpoint: {endpoint.Address}");
                 }

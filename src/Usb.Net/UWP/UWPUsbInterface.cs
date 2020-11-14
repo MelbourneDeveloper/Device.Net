@@ -86,7 +86,7 @@ namespace Usb.Net.UWP
             return buffer.ToArray();
         }
 
-        public async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+        public async Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
             //TODO: It might not be the case that Initialize has not been called. Better error message here please.
@@ -127,6 +127,8 @@ namespace Usb.Net.UWP
                 {
                     throw new IOException(Messages.GetErrorMessageInvalidWriteLength(data.Length, count));
                 }
+
+                return count;
             }
             catch (Exception ex)
             {

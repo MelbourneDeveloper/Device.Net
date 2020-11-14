@@ -16,7 +16,7 @@ namespace Usb.Net
         //TODO: Remove these. They should come from the endpoint... or be specified there
         ushort ReadBufferSize { get; }
         ushort WriteBufferSize { get; }
-        Task WriteAsync(byte[] data, CancellationToken cancellationToken = default);
+        Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default);
         Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default);
         byte InterfaceNumber { get; }
         Task ClaimInterface();
