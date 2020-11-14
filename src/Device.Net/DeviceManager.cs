@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Device.Net
@@ -67,23 +66,15 @@ namespace Device.Net
             return retVal;
         }
 
-        //TODO: Duplicate code here...
         public async Task<IDevice> GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition)
-        {
-            if (connectedDeviceDefinition == null) throw new ArgumentNullException(nameof(connectedDeviceDefinition));
-
-            foreach (var deviceFactory in DeviceFactories.Where(deviceFactory => deviceFactory.SupportedDeviceTypes.Contains(connectedDeviceDefinition.DeviceType)))
-            {
-                //TODO: This doesn't distinguish between the device not existing, and the factory not being able to deal with the device type...
-                //Still undecided on how to handle this
-
-                var device = await deviceFactory.GetDevice(connectedDeviceDefinition);
-
-                if (device != null) return device;
-            }
-
-            throw new DeviceException(Messages.ErrorMessageCouldntGetDevice);
-        }
+            =>
+            connectedDeviceDefinition == null ? throw new ArgumentNullException(nameof(connectedDeviceDefinition)) :
+            await
+            (
+                await DeviceFactories.FirstOrDefaultAsync(f => f.SupportsDevice(connectedDeviceDefinition))
+            )
+            .GetDevice(connectedDeviceDefinition)
+            ?? throw new DeviceException($"No factories support the device {connectedDeviceDefinition}");
         #endregion
 
         #region Public Static Methods

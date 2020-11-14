@@ -105,7 +105,11 @@ namespace Device.Net
         #endregion
 
         #region Public Static Methods
-        public static ConnectedDeviceDefinition GetDeviceDefinitionFromWindowsDeviceId(string deviceId, DeviceType deviceType, ILogger logger)
+        public static ConnectedDeviceDefinition GetDeviceDefinitionFromWindowsDeviceId(
+            string deviceId,
+            DeviceType deviceType,
+            ILogger logger,
+            Guid? classGuid = null)
         {
             uint? vid = null;
             uint? pid = null;
@@ -122,7 +126,7 @@ namespace Device.Net
                 (logger ?? NullLogger.Instance).LogError(ex, "Error {errorMessage} Area: {area}", ex.Message, nameof(GetDeviceDefinitionFromWindowsDeviceId));
             }
 
-            return new ConnectedDeviceDefinition(deviceId, deviceType, vendorId: vid, productId: pid);
+            return new ConnectedDeviceDefinition(deviceId, deviceType, vendorId: vid, productId: pid, classGuid: classGuid);
         }
         #endregion
 

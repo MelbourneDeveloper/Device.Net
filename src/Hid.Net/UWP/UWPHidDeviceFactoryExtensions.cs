@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Hid.Net.UWP
@@ -30,7 +29,8 @@ namespace Hid.Net.UWP
         ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetDevice getDevice = null,
-        byte? defaultReportId = null)
+        byte? defaultReportId = null,
+        Guid? classGuid = null)
         {
             loggerFactory ??= NullLoggerFactory.Instance;
 
@@ -69,7 +69,7 @@ namespace Hid.Net.UWP
                 loggerFactory,
                 getConnectedDeviceDefinitionsAsync,
                 getDevice,
-                new ReadOnlyCollection<DeviceType>(new List<DeviceType> { DeviceType.Hid })
+                async (c) => c.DeviceType == DeviceType.Usb && (classGuid == null || classGuid.Value == c.ClassGuid)
                 );
         }
     }
