@@ -26,9 +26,9 @@ namespace Usb.Net
         #endregion
 
         #region Public Properties
-        public ushort ReadBufferSize => _ReadBufferSize ?? (ReadEndpoint != null ? ReadEndpoint.MaxPacketSize : throw new NotImplementedException());
+        public ushort ReadBufferSize => _ReadBufferSize ?? ReadEndpoint?.MaxPacketSize ?? throw new NotImplementedException();
 
-        public ushort WriteBufferSize => _WriteBufferSize ?? (WriteEndpoint != null ? WriteEndpoint.MaxPacketSize : throw new NotImplementedException());
+        public ushort WriteBufferSize => _WriteBufferSize ?? WriteEndpoint?.MaxPacketSize ?? throw new NotImplementedException();
 
         public IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints { get; } = new List<IUsbInterfaceEndpoint>();
 
@@ -98,13 +98,11 @@ namespace Usb.Net
                 Logger.LogWarning(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, true) + " Interface # : {interfaceNumber} IsRead: {isRead} Region: {region}", InterfaceNumber, true, nameof(UsbInterfaceBase));
             }
 
-            if (WriteEndpoint == null && InterruptWriteEndpoint != null)
-            {
-                WriteEndpoint = InterruptWriteEndpoint;
-                Logger.LogWarning(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, false) + " Interface # : {interfaceNumber} IsRead: {isRead} Region: {region}", InterfaceNumber, false, nameof(UsbInterfaceBase));
-            }
-        }
+            if (WriteEndpoint != null || InterruptWriteEndpoint == null) return;
 
+            WriteEndpoint = InterruptWriteEndpoint;
+            Logger.LogWarning(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, false) + " Interface # : {interfaceNumber} IsRead: {isRead} Region: {region}", InterfaceNumber, false, nameof(UsbInterfaceBase));
+        }
 
         /// <summary>
         /// Note: some platforms require a call to be made to claim the interface. This is currently only for Android but may change

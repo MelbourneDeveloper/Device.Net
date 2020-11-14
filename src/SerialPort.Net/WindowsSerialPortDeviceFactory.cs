@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 #if NETSTANDARD
 using System.Runtime.InteropServices;
@@ -61,11 +62,7 @@ namespace SerialPort.Net.Windows
 
                         var valueNames = key.GetValueNames();
 
-                        foreach (var valueName in valueNames)
-                        {
-                            var comPortName = key.GetValue(valueName);
-                            returnValue.Add(new ConnectedDeviceDefinition($@"\\.\{comPortName}", DeviceType.SerialPort, label: valueName));
-                        }
+                        returnValue.AddRange(from valueName in valueNames let comPortName = key.GetValue(valueName) select new ConnectedDeviceDefinition($@"\\.\{comPortName}", DeviceType.SerialPort, label: valueName));
                     }
                 }
             }
@@ -74,17 +71,16 @@ namespace SerialPort.Net.Windows
                 _logger.LogError(ex, ex.Message);
             }
 
-            if (!registryAvailable)
+            if (registryAvailable) return returnValue;
+
+            //We can't look at the registry so try connecting to the devices
+            for (var i = 0; i < 9; i++)
             {
-                //We can't look at the registry so try connecting to the devices
-                for (var i = 0; i < 9; i++)
+                var portName = $@"\\.\COM{i}";
+                using (var serialPortDevice = new WindowsSerialPortDevice(portName))
                 {
-                    var portName = $@"\\.\COM{i}";
-                    using (var serialPortDevice = new WindowsSerialPortDevice(portName))
-                    {
-                        await serialPortDevice.InitializeAsync();
-                        if (serialPortDevice.IsInitialized) returnValue.Add(new ConnectedDeviceDefinition(portName, DeviceType.SerialPort));
-                    }
+                    await serialPortDevice.InitializeAsync();
+                    if (serialPortDevice.IsInitialized) returnValue.Add(new ConnectedDeviceDefinition(portName, DeviceType.SerialPort));
                 }
             }
 

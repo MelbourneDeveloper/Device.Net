@@ -120,16 +120,15 @@ namespace Device.Net.Reactive
             {
                 _logger.LogError(ex, ex.Message);
 
-                if (ex is IOException)
-                {
-                    _notifyDeviceException(SelectedDevice?.ConnectedDeviceDefinition, ex);
-                    //The exception was an IO exception so disconnect the device
-                    //The listener should reconnect
+                if (!(ex is IOException)) throw;
 
-                    SelectedDevice.Dispose();
+                _notifyDeviceException(SelectedDevice?.ConnectedDeviceDefinition, ex);
+                //The exception was an IO exception so disconnect the device
+                //The listener should reconnect
 
-                    SelectedDevice = null;
-                }
+                SelectedDevice.Dispose();
+
+                SelectedDevice = null;
 
                 throw;
             }

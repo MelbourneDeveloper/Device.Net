@@ -1,4 +1,7 @@
-﻿using Device.Net.Windows;
+﻿// ReSharper disable UnusedMember.Global
+// ReSharper disable InconsistentNaming
+
+using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;

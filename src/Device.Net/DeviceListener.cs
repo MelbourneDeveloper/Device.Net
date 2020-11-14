@@ -87,7 +87,7 @@ namespace Device.Net
                 if (_IsDisposed) return;
                 await _ListenSemaphoreSlim.WaitAsync();
 
-                var connectedDeviceDefinitions = await DeviceManager.GetConnectedDeviceDefinitionsAsync();
+                var connectedDeviceDefinitions = (await DeviceManager.GetConnectedDeviceDefinitionsAsync()).ToList();
 
                 //Iterate through connected devices
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
@@ -114,8 +114,10 @@ namespace Device.Net
                             _CreatedDevicesByDefinition.Add(connectedDeviceDefinition.DeviceId, device);
                         }
                     }
-
-                    if (device.IsInitialized) continue;
+                    else
+                    {
+                        if (device.IsInitialized) continue;
+                    }
 
                     _logger.LogDebug("Attempting to initialize with DeviceId of {deviceId}", device.DeviceId);
 

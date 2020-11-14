@@ -76,7 +76,7 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Public Methods
-        public Task InitializeAsync() => Task.Run(() => Initialize());
+        public Task InitializeAsync() => Task.Run(Initialize);
 
         private int Write(byte[] data) => data == null ? 0 : ApiService.AWriteFile(_ReadSafeFileHandle, data, data.Length, out var bytesWritten, 0) ? bytesWritten : -1;
 
