@@ -84,11 +84,11 @@ namespace Usb.Net.Android
             }, cancellationToken);
         }
 
-        public async Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+        public Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
-            await Task.Run(async () =>
+            return Task.Run(async () =>
             {
                 try
                 {
@@ -99,7 +99,6 @@ namespace Usb.Net.Android
 
                     using var logScope = Logger.BeginScope("UsbInterface: {usbInterface} Endpoint: {endpoint} Call: {call} Data Length: {writeLength}", UsbInterface.Id, endpoint.Address, nameof(WriteAsync), data.Length);
                     Logger.LogInformation("Before Write UsbInterface: {usbInterface} Endpoint: {endpoint} Call: {call} Data Length: {writeLength}", UsbInterface.Id, endpoint.Address, nameof(WriteAsync), data.Length);
-
 
                     request.Initialize(_UsbDeviceConnection, endpoint);
                     var byteBuffer = ByteBuffer.Wrap(data);
@@ -112,7 +111,7 @@ namespace Usb.Net.Android
 
                     //TODO: It's not clear if there is a way to count the number of bytes transferred here. This is a bug in a sense...
 
-                    return data.Length;
+                    return (uint)data.Length;
 
                     Logger.LogTrace(new Trace(true, data), $"Write endpoint: {endpoint.Address}");
                 }
