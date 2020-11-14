@@ -102,15 +102,9 @@ namespace Usb.Net.Windows
                         ref bytesTransferred,
                         IntPtr.Zero);
 
-                    if (isSuccess)
-                    {
-                        Logger.LogTrace(new Trace(setupPacket.RequestType.Direction == RequestDirection.Out, transferBuffer));
-                    }
-                    else
-                    {
-                        WindowsDeviceBase.HandleError(isSuccess, "Couldn't do a control transfer");
-                    }
+                    WindowsDeviceBase.HandleError(isSuccess, "Couldn't do a control transfer");
 
+                    Logger.LogTrace(new Trace(setupPacket.RequestType.Direction == RequestDirection.Out, transferBuffer));
                     Logger.LogInformation("Control Transfer complete {setupPacket}", setupPacket);
 
                     return bytesTransferred != setupPacket.Length && setupPacket.RequestType.Direction == RequestDirection.In
