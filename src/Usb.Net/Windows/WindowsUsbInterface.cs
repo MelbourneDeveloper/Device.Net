@@ -111,6 +111,8 @@ namespace Usb.Net.Windows
                         WindowsDeviceBase.HandleError(isSuccess, "Couldn't do a control transfer");
                     }
 
+                    Logger.LogInformation("Control Transfer complete {setupPacket}", setupPacket);
+
                     return bytesTransferred != setupPacket.Length && setupPacket.RequestType.Direction == RequestDirection.In
                         ? throw new ControlTransferException($"Requested {setupPacket.Length} bytes but received {bytesTransferred}")
                         : new TransferResult(transferBuffer, bytesTransferred);
