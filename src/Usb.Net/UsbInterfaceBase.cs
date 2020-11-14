@@ -34,7 +34,7 @@ namespace Usb.Net
 
         public IUsbInterfaceEndpoint ReadEndpoint
         {
-            get => _ReadEndpoint ?? (_ReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead && !p.IsInterrupt));
+            get => _ReadEndpoint ??= UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead && !p.IsInterrupt);
             set
             {
                 if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
@@ -49,7 +49,7 @@ namespace Usb.Net
 
         public IUsbInterfaceEndpoint WriteEndpoint
         {
-            get => _WriteEndpoint ?? (_WriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite && !p.IsInterrupt));
+            get => _WriteEndpoint ??= UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite && !p.IsInterrupt);
             set
             {
                 if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
@@ -62,7 +62,7 @@ namespace Usb.Net
 
         public IUsbInterfaceEndpoint InterruptWriteEndpoint
         {
-            get => _WriteInterruptEndpoint ?? (_WriteInterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt && p.IsWrite));
+            get => _WriteInterruptEndpoint ??= UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt && p.IsWrite);
             set
             {
                 if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
@@ -72,7 +72,7 @@ namespace Usb.Net
 
         public IUsbInterfaceEndpoint InterruptReadEndpoint
         {
-            get => _ReadInterruptEndpoint ?? (_ReadInterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt && p.IsRead));
+            get => _ReadInterruptEndpoint ??= UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt && p.IsRead);
             set
             {
                 if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
