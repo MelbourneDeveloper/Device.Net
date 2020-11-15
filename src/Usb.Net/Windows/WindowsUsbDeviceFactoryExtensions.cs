@@ -54,16 +54,13 @@ namespace Usb.Net.Windows
                 getConnectedDeviceDefinitionsAsync = uwpHidDeviceEnumerator.GetConnectedDeviceDefinitionsAsync;
             }
 
-            if (getUsbInterfaceManager == null)
-            {
-                getUsbInterfaceManager = async d =>
-                    new WindowsUsbInterfaceManager(
+            getUsbInterfaceManager ??= async d =>
+                new WindowsUsbInterfaceManager(
                     //TODO: no idea if this is OK...
                     d,
                     loggerFactory,
                     readBufferSize,
                     writeBufferSize);
-            }
 
             return UsbDeviceFactoryExtensions.CreateUsbDeviceFactory(getConnectedDeviceDefinitionsAsync, getUsbInterfaceManager, loggerFactory);
         }

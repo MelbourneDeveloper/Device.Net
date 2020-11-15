@@ -45,7 +45,7 @@ namespace Device.Net
         //TODO: Why are these here?
 
         public abstract Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default);
-        public abstract Task WriteAsync(byte[] data, CancellationToken cancellationToken = default);
+        public abstract Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default);
         #endregion
 
         #region Public Methods

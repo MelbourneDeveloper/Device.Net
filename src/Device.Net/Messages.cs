@@ -1,4 +1,5 @@
-﻿namespace Device.Net
+﻿// ReSharper disable UnusedMember.Global
+namespace Device.Net
 {
     public static class Messages
     {

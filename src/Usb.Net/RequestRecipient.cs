@@ -1,4 +1,7 @@
-﻿namespace Usb.Net
+﻿// ReSharper disable UnusedMember.Global
+// ReSharper disable InconsistentNaming
+
+namespace Usb.Net
 {
     /// <summary>
     /// Defines constants that indicate the recipient of a USB control transfer. 

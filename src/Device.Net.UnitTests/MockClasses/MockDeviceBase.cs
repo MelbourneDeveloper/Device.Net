@@ -51,7 +51,7 @@ namespace Device.Net.UnitTests
             return data;
         }
 
-        public override async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+        public override async Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             LastWrittenBuffer = data;
             Logger.LogTrace(new Trace(true, data));
@@ -61,6 +61,8 @@ namespace Device.Net.UnitTests
                 await Task.Delay(1);
                 if (cancellationToken.IsCancellationRequested) throw new OperationCanceledException(Messages.ErrorMessageOperationCanceled);
             }
+
+            return (uint)data.Length;
         }
     }
 }

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 namespace Device.Net
 {
     public delegate Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync();
-    public delegate Guid GetClassGuid();
     public delegate ConnectedDeviceDefinition GetDeviceDefinition(string deviceId);
     public delegate Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceId);
 

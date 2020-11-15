@@ -109,9 +109,9 @@ namespace Hid.Net.UWP
             base.Dispose();
         }
 
-        public virtual Task WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
+        public virtual Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
 
-        public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
+        public async Task<uint> WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
@@ -144,6 +144,8 @@ namespace Hid.Net.UWP
                     Logger?.LogError(Messages.GetErrorMessageInvalidWriteLength(bytes.Length, count) + "{length} {count}", bytes.Length, count, GetType().Name);
                     throw new IOException(Messages.GetErrorMessageInvalidWriteLength(bytes.Length, count));
                 }
+
+                return count;
             }
             catch (ArgumentException ex)
             {

@@ -19,7 +19,7 @@ namespace Device.Net
         /// <summary>
         /// Write a page of data. Warning: this is not thread safe. WriteAndReadAsync() should be preferred.
         /// </summary>
-        Task WriteAsync(byte[] data, CancellationToken cancellationToken = default);
+        Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Close any existing connections and reinitialize the device. 

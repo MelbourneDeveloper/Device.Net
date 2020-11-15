@@ -49,15 +49,20 @@ namespace Usb.Net.Windows
             }, cancellationToken);
         }
 
-        public async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
-        {
-            await Task.Run(() =>
+        public Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+            => Task.Run(async () =>
             {
-                var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_SafeFileHandle, WriteEndpoint.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
+                var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(
+                    _SafeFileHandle,
+                    WriteEndpoint.PipeId,
+                    data,
+                    (uint)data.Length,
+                    out var bytesWritten,
+                    IntPtr.Zero);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't write data");
                 Logger.LogTrace(new Trace(true, data));
+                return bytesWritten;
             }, cancellationToken);
-        }
 
         public void Dispose()
         {
@@ -102,14 +107,10 @@ namespace Usb.Net.Windows
                         ref bytesTransferred,
                         IntPtr.Zero);
 
-                    if (isSuccess)
-                    {
-                        Logger.LogTrace(new Trace(setupPacket.RequestType.Direction == RequestDirection.Out, transferBuffer));
-                    }
-                    else
-                    {
-                        WindowsDeviceBase.HandleError(isSuccess, "Couldn't do a control transfer");
-                    }
+                    WindowsDeviceBase.HandleError(isSuccess, "Couldn't do a control transfer");
+
+                    Logger.LogTrace(new Trace(setupPacket.RequestType.Direction == RequestDirection.Out, transferBuffer));
+                    Logger.LogInformation("Control Transfer complete {setupPacket}", setupPacket);
 
                     return bytesTransferred != setupPacket.Length && setupPacket.RequestType.Direction == RequestDirection.In
                         ? throw new ControlTransferException($"Requested {setupPacket.Length} bytes but received {bytesTransferred}")
