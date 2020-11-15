@@ -67,14 +67,18 @@ namespace Device.Net
         }
 
         public async Task<IDevice> GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition)
-            =>
-            connectedDeviceDefinition == null ? throw new ArgumentNullException(nameof(connectedDeviceDefinition)) :
-            await
-            (
-                await DeviceFactories.FirstOrDefaultAsync(f => f.SupportsDevice(connectedDeviceDefinition))
-            )
-            .GetDevice(connectedDeviceDefinition)
-            ?? throw new DeviceException($"No factories support the device {connectedDeviceDefinition}");
+        {
+            if (connectedDeviceDefinition == null) throw new ArgumentNullException(nameof(connectedDeviceDefinition));
+
+            var deviceFactory = await DeviceFactories.FirstOrDefaultAsync(f => f.SupportsDevice(connectedDeviceDefinition));
+
+            if (deviceFactory == null)
+            {
+                throw new DeviceException(Messages.ErrorMessageCouldntGetDevice);
+            }
+
+            return await deviceFactory.GetDevice(connectedDeviceDefinition);
+        }
         #endregion
 
         #region Public Static Methods

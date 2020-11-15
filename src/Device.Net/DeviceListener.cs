@@ -87,7 +87,7 @@ namespace Device.Net
                 if (_IsDisposed) return;
                 await _ListenSemaphoreSlim.WaitAsync();
 
-                var connectedDeviceDefinitions = (await DeviceManager.GetConnectedDeviceDefinitionsAsync()).ToList();
+                var connectedDeviceDefinitions = (await DeviceFactory.GetConnectedDeviceDefinitionsAsync()).ToList();
 
                 //Iterate through connected devices
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)

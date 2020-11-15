@@ -198,8 +198,7 @@ namespace Device.Net.UnitTests
                 hidMock.Setup(f => f.GetDevice(It.IsAny<ConnectedDeviceDefinition>())).Returns(
                 Task.FromResult<IDevice>( new MockHidDevice("Asd",_LoggerFactoryMock.Object,_loggerMock.Object)));
 
-                //OOhhh
-                hidMock.Setup(f => f.SupportsDevice()).Returns(new List<DeviceType> { DeviceType.Hid });
+                hidMock.Setup(f => f.SupportsDevice(It.IsAny<ConnectedDeviceDefinition>())).Returns(async () => isHidConnected);
             }
 
             if (isUsbConnected && ((!vid.HasValue && !pid.HasValue) || (vid == 2 && pid == 2)))
@@ -215,7 +214,7 @@ namespace Device.Net.UnitTests
                     )}));
 
                 //ooohhh
-                usbMock.Setup(f => f.SupportsDevice).Returns(new List<DeviceType> { DeviceType.Usb });
+                hidMock.Setup(f => f.SupportsDevice(It.IsAny<ConnectedDeviceDefinition>())).Returns(async () => isUsbConnected);
             }
 
             return (hidMock, usbMock);
