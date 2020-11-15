@@ -49,15 +49,20 @@ namespace Usb.Net.Windows
             }, cancellationToken);
         }
 
-        public async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
-        {
-            await Task.Run(() =>
+        public Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+            => Task.Run(async () =>
             {
-                var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_SafeFileHandle, WriteEndpoint.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
+                var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(
+                    _SafeFileHandle,
+                    WriteEndpoint.PipeId,
+                    data,
+                    (uint)data.Length,
+                    out var bytesWritten,
+                    IntPtr.Zero);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't write data");
                 Logger.LogTrace(new Trace(true, data));
+                return bytesWritten;
             }, cancellationToken);
-        }
 
         public void Dispose()
         {
