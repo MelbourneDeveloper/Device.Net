@@ -93,8 +93,10 @@ namespace Usb.Net.WindowsSample
                 case 3:
 
                     await DisplayTemperature();
-
-                    break;
+                    while (true)
+                    {
+                        await Task.Delay(1000);
+                    }
 #endif
                 default:
                     Console.WriteLine("That's not an option");
@@ -107,13 +109,15 @@ namespace Usb.Net.WindowsSample
 
         private static async Task DisplayTemperature()
         {
-            var temperDevice = await
-               new FilterDeviceDefinition(vendorId: 0x413d, productId: 0x2107, usagePage: 65280).
-               CreateWindowsHidDeviceManager(_loggerFactory).ConnectFirstAsync();
+            //Connect to the device
+            var temperDevice = await new FilterDeviceDefinition(vendorId: 0x413d, productId: 0x2107, usagePage: 65280)
+                .CreateWindowsHidDeviceManager(_loggerFactory)
+                .ConnectFirstAsync();
 
+            //Create a hot decimal observable
             var observable =
                      Observable
-                         .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(.5))
+                         .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(.1))
                          .Select(_ => new Func<Task<decimal>>(async () =>
                          {
                              var data = await temperDevice.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
@@ -123,19 +127,17 @@ namespace Usb.Net.WindowsSample
 
                          )).Publish();
 
+            //Connect the observable
             observable.Connect();
 
-            //Only write the value when the temperatur changes
-            var subscription = observable.Subscribe(async (t) =>
+            var subscription = observable
+                //Only write the value when the temperature changes
+                //.Distinct()
+                .Subscribe(async (t) =>
             {
                 var temperature = await t();
                 Console.WriteLine($"Temperature is {temperature}");
             });
-
-            while (true)
-            {
-                await Task.Delay(1000);
-            }
         }
 
 #pragma warning restore CA2000
