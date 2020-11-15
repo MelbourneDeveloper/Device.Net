@@ -92,6 +92,7 @@ namespace Usb.Net.WindowsSample
 #if !LIBUSB
                 case 3:
 
+                    Console.Clear();
                     await DisplayTemperature();
                     while (true)
                     {
@@ -109,7 +110,7 @@ namespace Usb.Net.WindowsSample
 
         private static async Task DisplayTemperature()
         {
-            //Connect to the device
+            //Connect to the device by product id and vendor id
             var temperDevice = await new FilterDeviceDefinition(vendorId: 0x413d, productId: 0x2107, usagePage: 65280)
                 .CreateWindowsHidDeviceManager(_loggerFactory)
                 .ConnectFirstAsync();
@@ -118,26 +119,24 @@ namespace Usb.Net.WindowsSample
             var observable =
                      Observable
                          .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(.1))
-                         .Select(_ => new Func<Task<decimal>>(async () =>
+                         .Select(_ => new Func<decimal>(() =>
                          {
-                             var data = await temperDevice.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
+                             //Get the temperature from the device
+                             var data = temperDevice.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 }).Result;
                              var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
                              return Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
-                         }
-
-                         )).Publish();
+                         })()).Publish();
 
             //Connect the observable
             observable.Connect();
 
             var subscription = observable
                 //Only write the value when the temperature changes
-                //.Distinct()
-                .Subscribe(async (t) =>
-            {
-                var temperature = await t();
-                Console.WriteLine($"Temperature is {temperature}");
-            });
+                .Distinct()
+                .Subscribe((t) =>
+                   {
+                       Console.WriteLine($"Temperature is {t}");
+                   });
         }
 
 #pragma warning restore CA2000
