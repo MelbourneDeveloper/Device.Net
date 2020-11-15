@@ -121,6 +121,8 @@ namespace Usb.Net.WindowsSample
                          .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(.1))
                          .Select(_ => new Func<decimal>(() =>
                          {
+                             //https://github.com/WozSoftware/Woz.TEMPer/blob/dcd0b49d67ac39d10c3759519050915816c2cd93/Woz.TEMPer/Sensors/TEMPerV14.cs#L15
+
                              //Get the temperature from the device
                              var data = temperDevice.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 }).Result;
                              var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
