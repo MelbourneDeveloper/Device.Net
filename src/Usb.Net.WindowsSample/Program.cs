@@ -21,32 +21,37 @@ namespace Usb.Net.WindowsSample
     {
         #region Fields
         private static ILoggerFactory _loggerFactory;
-        private static IDeviceFactory _DeviceManager;
+        private static IDeviceFactory _trezorFactories;
+
+        private static readonly IDeviceFactory _allFactories = new WindowsSerialPortDeviceFactory(_loggerFactory)
+                .Aggregate(WindowsUsbDeviceFactoryExtensions.CreateWindowsUsbDeviceFactory(_loggerFactory))
+                .Aggregate(WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(_loggerFactory));
+
         private static TrezorExample _DeviceConnectionExample;
         #endregion
 
         #region Main
-        private static void Main()
+        private static async Task Main()
         {
             _loggerFactory = LoggerFactory.Create((builder) => builder.AddDebug());
 
 
             //Register the factories for creating Usb devices. This only needs to be done once.
 #if LIBUSB
-            _DeviceManager = new List<IDeviceFactory>
+            _trezorFactories = new List<IDeviceFactory>
             {
                 TrezorExample.UsbDeviceDefinitions.CreateLibUsbDeviceFactory(_loggerFactory)
             }.Aggregate(_loggerFactory);
 #else
-            _DeviceManager = new List<IDeviceFactory>
+            _trezorFactories = new List<IDeviceFactory>
             {
                 TrezorExample.UsbDeviceDefinitions.CreateWindowsUsbDeviceFactory(_loggerFactory),
                 TrezorExample.HidDeviceDefinitions.CreateWindowsHidDeviceFactory(_loggerFactory),
-                new WindowsSerialPortDeviceFactory(_loggerFactory)
             }.Aggregate(_loggerFactory);
+
 #endif
 
-            _DeviceConnectionExample = new TrezorExample(_DeviceManager, _loggerFactory);
+            _DeviceConnectionExample = new TrezorExample(_trezorFactories, _loggerFactory);
             _DeviceConnectionExample.TrezorInitialized += DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += DeviceConnectionExample_TrezorDisconnected;
 
@@ -163,7 +168,7 @@ namespace Usb.Net.WindowsSample
             {
                 Console.Clear();
 
-                var devices = await _DeviceManager.GetConnectedDeviceDefinitionsAsync();
+                var devices = await _allFactories.GetConnectedDeviceDefinitionsAsync();
                 Console.WriteLine("Currently connected devices: ");
                 foreach (var device in devices)
                 {

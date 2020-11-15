@@ -12,14 +12,22 @@ namespace Device.Net
             => deviceFactories == null ? throw new ArgumentNullException(nameof(deviceFactories)) :
             new DeviceManager(new ReadOnlyCollection<IDeviceFactory>(deviceFactories), loggerFactory);
 
+
+        public static IDeviceFactory Aggregate(this IDeviceFactory deviceFactory, IDeviceFactory newDeviceFactory, ILoggerFactory loggerFactory = null)
+            => deviceFactory == null ? throw new ArgumentNullException(nameof(deviceFactory)) :
+            new DeviceManager(
+                new ReadOnlyCollection<IDeviceFactory>(
+                    new ReadOnlyCollection<IDeviceFactory>(
+                        new List<IDeviceFactory> { deviceFactory, newDeviceFactory })), loggerFactory);
+
         public static DeviceDataStreamer CreateDeviceDataStreamer(
-    this IDeviceFactory deviceFactory,
-    ProcessData processData,
-    Func<IDevice, Task> initializeFunc = null) =>
-    new DeviceDataStreamer(
-        processData,
-        deviceFactory,
-        initializeFunc: initializeFunc);
+            this IDeviceFactory deviceFactory,
+            ProcessData processData,
+            Func<IDevice, Task> initializeFunc = null) =>
+            new DeviceDataStreamer(
+                processData,
+                deviceFactory,
+                initializeFunc: initializeFunc);
 
         public static bool IsDefinitionMatch(this FilterDeviceDefinition filterDevice, ConnectedDeviceDefinition actualDevice, DeviceType deviceType)
         {

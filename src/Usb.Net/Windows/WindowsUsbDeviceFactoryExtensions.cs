@@ -11,6 +11,23 @@ namespace Usb.Net.Windows
 
     public static class WindowsUsbDeviceFactoryExtensions
     {
+
+        public static IDeviceFactory CreateWindowsUsbDeviceFactory(
+            ILoggerFactory loggerFactory = null,
+            GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+            GetUsbInterfaceManager getUsbInterfaceManager = null,
+            Guid? classGuid = null,
+            ushort? readBufferSize = null,
+            ushort? writeBufferSize = null
+        ) => CreateWindowsUsbDeviceFactory(
+            new List<FilterDeviceDefinition>(),
+            loggerFactory,
+            getConnectedDeviceDefinitionsAsync,
+            getUsbInterfaceManager,
+            classGuid,
+            readBufferSize,
+            writeBufferSize);
+
         public static IDeviceFactory CreateWindowsUsbDeviceFactory(
             this FilterDeviceDefinition filterDeviceDefinition,
             ILoggerFactory loggerFactory = null,

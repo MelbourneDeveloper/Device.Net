@@ -1,4 +1,4 @@
-﻿using Device.Net;
+using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
@@ -14,6 +14,23 @@ namespace Hid.Net.Windows
 
     public static class WindowsHidDeviceFactoryExtensions
     {
+        public static IDeviceFactory CreateWindowsHidDeviceFactory(
+        ILoggerFactory loggerFactory = null,
+        IHidApiService hidApiService = null,
+        Guid? classGuid = null,
+        ushort? readBufferSize = null,
+        ushort? writeBufferSize = null)
+        {
+            return CreateWindowsHidDeviceFactory(
+                new ReadOnlyCollection<FilterDeviceDefinition>(new List<FilterDeviceDefinition>()),
+                loggerFactory,
+                hidApiService,
+                classGuid,
+                readBufferSize,
+                writeBufferSize
+                );
+        }
+
         public static IDeviceFactory CreateWindowsHidDeviceManager(
         this FilterDeviceDefinition filterDeviceDefinition,
         ILoggerFactory loggerFactory = null,
