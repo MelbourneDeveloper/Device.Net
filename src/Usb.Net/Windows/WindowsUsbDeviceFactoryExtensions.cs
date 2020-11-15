@@ -49,7 +49,7 @@ namespace Usb.Net.Windows
                     classGuid ?? WindowsDeviceConstants.WinUSBGuid,
                     d => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(d, DeviceType.Usb, logger),
                     async c =>
-                    filterDeviceDefinitions.FirstOrDefault(f => DeviceManager.IsDefinitionMatch(f, c, DeviceType.Usb)) != null);
+                    filterDeviceDefinitions.FirstOrDefault(f => f.IsDefinitionMatch(c, DeviceType.Usb)) != null);
 
                 getConnectedDeviceDefinitionsAsync = uwpHidDeviceEnumerator.GetConnectedDeviceDefinitionsAsync;
             }
