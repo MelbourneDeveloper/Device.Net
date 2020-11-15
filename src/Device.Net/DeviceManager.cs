@@ -59,6 +59,8 @@ namespace Device.Net
                 }
                 catch (Exception ex)
                 {
+                    //TODO: We probably want to remove this. If a factory crashes, we probably don't want to swallow the error
+
                     _logger.LogError(ex, "Error calling " + nameof(GetConnectedDeviceDefinitionsAsync));
                 }
             }
