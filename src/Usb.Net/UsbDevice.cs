@@ -56,7 +56,7 @@ namespace Usb.Net
                 : await UsbInterfaceManager.ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
         }
 
-        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+        public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             return UsbInterfaceManager.WriteUsbInterface == null
                 ? throw new DeviceException(Messages.ErrorMessageNoWriteInterfaceSpecified)

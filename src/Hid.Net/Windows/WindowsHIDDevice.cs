@@ -233,9 +233,9 @@ namespace Hid.Net.Windows
             return new ReadReport(reportId, retVal);
         }
 
-        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
+        public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
 
-        public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
+        public async Task<uint> WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
             using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteReportAsync));
 
@@ -284,15 +284,13 @@ namespace Hid.Net.Windows
                 {
                     throw new IOException("The file stream cannot be written to");
                 }
+
+                return (uint)bytes.Length;
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, Messages.WriteErrorMessage);
                 throw;
-            }
-            finally
-            {
-                logScope.Dispose();
             }
         }
         #endregion
