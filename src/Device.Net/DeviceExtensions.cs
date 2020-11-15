@@ -39,12 +39,14 @@ namespace Device.Net
             var productIdPasses = !filterDevice.ProductId.HasValue || filterDevice.ProductId == actualDevice.ProductId;
             var deviceTypePasses = actualDevice.DeviceType == deviceType;
             var usagePagePasses = !filterDevice.UsagePage.HasValue || filterDevice.UsagePage == actualDevice.UsagePage;
+            var classGuidPasses = !filterDevice.ClassGuid.HasValue || filterDevice.ClassGuid == actualDevice.ClassGuid;
 
             var returnValue =
                 vendorIdPasses &&
                 productIdPasses &&
                 deviceTypePasses &&
-                usagePagePasses;
+                usagePagePasses &&
+                classGuidPasses;
 
             return returnValue;
         }
