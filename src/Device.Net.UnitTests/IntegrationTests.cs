@@ -40,6 +40,16 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
+        public async Task TestFindSTMDFUModeWithFactory2()
+        {
+            var device = await new FilterDeviceDefinition(0x0483, 0xdf11)
+                .CreateWindowsUsbDeviceFactory(classGuid: WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE)
+                .GetFirstDeviceAsync();
+
+            await device.InitializeAsync();
+        }
+
+        [TestMethod]
         public async Task TestConnectToSTMDFUMode()
         {
             const string deviceID = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
