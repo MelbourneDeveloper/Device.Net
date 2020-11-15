@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System.Reactive.Linq;
 using System.Collections.Generic;
 using System.Linq;
+using SerialPort.Net.Windows;
 
 #if !LIBUSB
 using System.Reactive.Subjects;
@@ -23,7 +24,9 @@ namespace Usb.Net.WindowsSample
         private static ILoggerFactory _loggerFactory;
         private static IDeviceFactory _trezorFactories;
 
-        private static readonly IDeviceFactory _allFactories = WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(_loggerFactory);
+        private static readonly IDeviceFactory _allFactories = new WindowsSerialPortDeviceFactory(_loggerFactory)
+                .Aggregate(WindowsUsbDeviceFactoryExtensions.CreateWindowsUsbDeviceFactory(_loggerFactory))
+                .Aggregate(WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(_loggerFactory));
 
         private static TrezorExample _DeviceConnectionExample;
         #endregion
@@ -169,7 +172,11 @@ namespace Usb.Net.WindowsSample
                 var devices = await _allFactories.GetConnectedDeviceDefinitionsAsync();
 
                 Console.WriteLine("Currently connected devices:\r\n");
-                Console.WriteLine(string.Join("\r\n", devices.OrderBy(d => d.Manufacturer).ThenBy(d => d.ProductName).Select(d => $"{d.Manufacturer} - {d.ProductName} {d.DeviceType}\r\nDevice Path: {d.DeviceId}\r\nVendor: {d.VendorId} Product Id: {d.ProductId}\r\n")));
+                Console.WriteLine(string.Join("\r\n",
+                    devices
+                    .OrderBy(d => d.Manufacturer)
+                    .ThenBy(d => d.ProductName)
+                    .Select(d => $"{d.Manufacturer} - {d.ProductName} ({d.DeviceType})\r\nDevice Path: {d.DeviceId}\r\nVendor: {d.VendorId} Product Id: {d.ProductId}\r\n")));
 
                 Console.WriteLine("Console sample. This sample demonstrates either writing to the first found connected device, or listening for a device and then writing to it. If you listen for the device, you will be able to connect and disconnect multiple times. This represents how users may actually use the device.");
                 Console.WriteLine();

@@ -55,6 +55,8 @@ namespace Usb.Net.Windows
         ushort? writeBufferSize = null
     )
         {
+            if (filterDeviceDefinitions == null) throw new ArgumentNullException(nameof(filterDeviceDefinitions));
+
             loggerFactory ??= NullLoggerFactory.Instance;
 
             if (getConnectedDeviceDefinitionsAsync == null)
@@ -66,7 +68,7 @@ namespace Usb.Net.Windows
                     classGuid ?? WindowsDeviceConstants.WinUSBGuid,
                     (d, guid) => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(d, DeviceType.Usb, logger, guid),
                     async c =>
-                    filterDeviceDefinitions.FirstOrDefault(f => f.IsDefinitionMatch(c, DeviceType.Usb)) != null);
+                    !filterDeviceDefinitions.Any() || filterDeviceDefinitions.FirstOrDefault(f => f.IsDefinitionMatch(c, DeviceType.Usb)) != null);
 
                 getConnectedDeviceDefinitionsAsync = uwpHidDeviceEnumerator.GetConnectedDeviceDefinitionsAsync;
             }
