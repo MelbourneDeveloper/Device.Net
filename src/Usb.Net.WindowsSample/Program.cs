@@ -5,6 +5,7 @@ using Device.Net;
 using Microsoft.Extensions.Logging;
 using System.Reactive.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 #if !LIBUSB
 using System.Reactive.Subjects;
@@ -166,12 +167,9 @@ namespace Usb.Net.WindowsSample
                 Console.Clear();
 
                 var devices = await _allFactories.GetConnectedDeviceDefinitionsAsync();
-                Console.WriteLine("Currently connected devices: ");
-                foreach (var device in devices)
-                {
-                    Console.WriteLine(device.DeviceId);
-                }
-                Console.WriteLine();
+
+                Console.WriteLine("Currently connected devices:\r\n");
+                Console.WriteLine(string.Join("\r\n", devices.OrderBy(d => d.Manufacturer).ThenBy(d => d.ProductName).Select(d => $"{d.Manufacturer} - {d.ProductName} {d.DeviceType}\r\nDevice Path: {d.DeviceId}\r\nVendor: {d.VendorId} Product Id: {d.ProductId}\r\n")));
 
                 Console.WriteLine("Console sample. This sample demonstrates either writing to the first found connected device, or listening for a device and then writing to it. If you listen for the device, you will be able to connect and disconnect multiple times. This represents how users may actually use the device.");
                 Console.WriteLine();
