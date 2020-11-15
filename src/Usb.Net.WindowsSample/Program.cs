@@ -9,7 +9,6 @@ using System.Collections.Generic;
 #if !LIBUSB
 using System.Reactive.Subjects;
 using Hid.Net.Windows;
-using SerialPort.Net.Windows;
 using Usb.Net.Windows;
 #else
 using Device.Net.LibUsb;
@@ -23,9 +22,7 @@ namespace Usb.Net.WindowsSample
         private static ILoggerFactory _loggerFactory;
         private static IDeviceFactory _trezorFactories;
 
-        private static readonly IDeviceFactory _allFactories = new WindowsSerialPortDeviceFactory(_loggerFactory)
-                .Aggregate(WindowsUsbDeviceFactoryExtensions.CreateWindowsUsbDeviceFactory(_loggerFactory))
-                .Aggregate(WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(_loggerFactory));
+        private static readonly IDeviceFactory _allFactories = WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(_loggerFactory);
 
         private static TrezorExample _DeviceConnectionExample;
         #endregion

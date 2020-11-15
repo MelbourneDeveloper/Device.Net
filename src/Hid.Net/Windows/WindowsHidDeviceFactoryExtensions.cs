@@ -80,6 +80,8 @@ namespace Hid.Net.Windows
             ushort? writeBufferSize = null,
             byte? defaultReportId = null)
         {
+            if (filterDeviceDefinitions == null) throw new ArgumentNullException(nameof(filterDeviceDefinitions));
+
             loggerFactory ??= NullLoggerFactory.Instance;
 
             var selectedHidApiService = hidApiService ?? new WindowsHidApiService(loggerFactory);
@@ -91,7 +93,7 @@ namespace Hid.Net.Windows
                 classGuid.Value,
                 (d, guid) => GetDeviceDefinition(d, selectedHidApiService, loggerFactory.CreateLogger(nameof(WindowsHidDeviceFactoryExtensions))),
                 async c =>
-                    filterDeviceDefinitions.FirstOrDefault(f => f.IsDefinitionMatch(c, DeviceType.Hid)) != null
+                    !filterDeviceDefinitions.Any() || filterDeviceDefinitions.FirstOrDefault(f => f.IsDefinitionMatch(c, DeviceType.Hid)) != null
                 );
 
             return new DeviceFactory(
