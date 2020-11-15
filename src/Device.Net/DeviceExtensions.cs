@@ -56,5 +56,12 @@ namespace Device.Net
             await deviceFactory.GetDevice(await (await deviceFactory.GetConnectedDeviceDefinitionsAsync()).FirstOrDefaultAsync())
             : throw new ArgumentNullException(nameof(deviceFactory));
 
+        public static async Task<IDevice> ConnectFirstAsync(this IDeviceFactory deviceFactory)
+        {
+            var device = await GetFirstDeviceAsync(deviceFactory);
+            await device.InitializeAsync();
+            return device;
+        }
+
     }
 }

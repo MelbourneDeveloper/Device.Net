@@ -107,27 +107,30 @@ namespace Usb.Net.WindowsSample
 
         private static async Task DisplayTemperature()
         {
-            using var subject = new Subject<decimal>();
+            var temperDevice = await
+               new FilterDeviceDefinition(vendorId: 0x413d, productId: 0x2107, usagePage: 65280).
+               CreateWindowsHidDeviceManager(_loggerFactory).ConnectFirstAsync();
 
-            using var deviceDataStreamer =
-                new FilterDeviceDefinition(vendorId: 0x413d, productId: 0x2107, usagePage: 65280).
-                CreateWindowsHidDeviceManager(_loggerFactory).
-                CreateDeviceDataStreamer(async (device) =>
-                {
-                    //https://github.com/WozSoftware/Woz.TEMPer/blob/dcd0b49d67ac39d10c3759519050915816c2cd93/Woz.TEMPer/Sensors/TEMPerV14.cs#L15
+            var observable =
+                     Observable
+                         .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(.5))
+                         .Select(_ => new Func<Task<decimal>>(async () =>
+                         {
+                             var data = await temperDevice.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
+                             var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
+                             return Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
+                         }
 
-                    var data = await device.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 });
+                         )).Publish();
 
-                    var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
-
-                    subject.OnNext(Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven));
-
-                    //Note it would probably be a good idea to call OnError on the subject so that subscribers can know about errors, but it
-                    //seems as though this unsubscribes them...
-                }).Start();
+            observable.Connect();
 
             //Only write the value when the temperatur changes
-            var subscription = subject.Distinct().Subscribe((t) => Console.WriteLine($"Temperature is {t}"));
+            var subscription = observable.Subscribe(async (t) =>
+            {
+                var temperature = await t();
+                Console.WriteLine($"Temperature is {temperature}");
+            });
 
             while (true)
             {

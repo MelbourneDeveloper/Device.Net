@@ -31,6 +31,8 @@ namespace Hid.Net.Windows
                 );
         }
 
+        //TODO: this is named incorrectly. This needs to be fixed
+
         public static IDeviceFactory CreateWindowsHidDeviceManager(
         this FilterDeviceDefinition filterDeviceDefinition,
         ILoggerFactory loggerFactory = null,
