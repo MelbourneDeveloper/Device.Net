@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Usb.Net.Windows
@@ -44,6 +45,19 @@ namespace Usb.Net.Windows
             classGuid,
             readBufferSize,
             writeBufferSize);
+
+        public static IDeviceFactory CreateWindowsUsbDeviceFactory(
+            this IDeviceFactory deviceFactory,
+            ILoggerFactory loggerFactory = null,
+            GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+            GetUsbInterfaceManager getUsbInterfaceManager = null,
+            Guid? classGuid = null,
+            ushort? readBufferSize = null,
+            ushort? writeBufferSize = null
+        ) => new DeviceManager(new ReadOnlyCollection<IDeviceFactory>(new List<IDeviceFactory> { deviceFactory }), loggerFactory)
+            .Aggregate(
+                CreateWindowsUsbDeviceFactory(loggerFactory, getConnectedDeviceDefinitionsAsync, getUsbInterfaceManager, classGuid, readBufferSize, writeBufferSize)
+                );
 
         public static IDeviceFactory CreateWindowsUsbDeviceFactory(
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,

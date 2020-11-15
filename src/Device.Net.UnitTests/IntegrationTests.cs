@@ -31,6 +31,7 @@ namespace Device.Net.UnitTests
         public async Task TestFindSTMDFUModeWithFactory()
         {
             var deviceFactory = new FilterDeviceDefinition(0x0483, 0xdf11)
+                .CreateWindowsUsbDeviceFactory()
                 .CreateWindowsUsbDeviceFactory(classGuid: WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE);
 
             var devices = await deviceFactory.GetConnectedDeviceDefinitionsAsync();
