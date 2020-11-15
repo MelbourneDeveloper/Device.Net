@@ -110,7 +110,7 @@ namespace Device.Net.Windows
                             }
 
                             var connectedDeviceDefinition =
-                                _getDeviceDefinition(spDeviceInterfaceDetailData.DevicePath);
+                                _getDeviceDefinition(spDeviceInterfaceDetailData.DevicePath, copyOfClassGuid);
 
                             if (connectedDeviceDefinition == null)
                             {

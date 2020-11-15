@@ -47,7 +47,7 @@ namespace Usb.Net.Windows
                 var uwpHidDeviceEnumerator = new WindowsDeviceEnumerator(
                     logger,
                     classGuid ?? WindowsDeviceConstants.WinUSBGuid,
-                    d => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(d, DeviceType.Usb, logger),
+                    (d, guid) => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(d, DeviceType.Usb, logger, guid),
                     async c =>
                     filterDeviceDefinitions.FirstOrDefault(f => f.IsDefinitionMatch(c, DeviceType.Usb)) != null);
 

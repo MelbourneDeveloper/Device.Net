@@ -79,7 +79,8 @@ namespace Hid.Net.Windows
                 usage: hidCollectionCapabilities.Usage,
                 usagePage: hidCollectionCapabilities.UsagePage,
                 vendorId: (ushort)hidAttributes.VendorId,
-                versionNumber: (ushort)hidAttributes.VersionNumber)
+                versionNumber: (ushort)hidAttributes.VersionNumber,
+                classGuid: GetHidGuid());
             ;
         }
 
