@@ -116,13 +116,19 @@ namespace Usb.Net.WindowsSample
                 .ConnectFirstAsync()
                 .ConfigureAwait(false);
 
-            //TODO: this should be added to a CompositeDisposable
-            Observable
+            //Create the observable
+            var observable = Observable
                 .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(.1))
                 .SelectMany(_ => Observable.FromAsync(() => temperDevice.WriteAndReadAsync(new byte[] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 })))
                 .Select(data => (data.Data[4] & 0xFF) + (data.Data[3] << 8))
-                .Select(temperatureTimesOneHundred => Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven))
-                .Subscribe(t => Console.WriteLine($"Temperature is {t}"));
+                //Only display the temperature when it changes
+                .Distinct()
+                .Select(temperatureTimesOneHundred => Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven));
+
+            //Subscribe to the observable
+            observable.Subscribe(t => Console.WriteLine($"Temperature is {t}"));
+
+            //Note: in a real scenario, we would dispose of the subscription afterwards. This method runs forever.
         }
 
 #pragma warning restore CA2000
