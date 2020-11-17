@@ -113,32 +113,16 @@ namespace Usb.Net.WindowsSample
             //Connect to the device by product id and vendor id
             var temperDevice = await new FilterDeviceDefinition(vendorId: 0x413d, productId: 0x2107, usagePage: 65280)
                 .CreateWindowsHidDeviceManager(_loggerFactory)
-                .ConnectFirstAsync();
+                .ConnectFirstAsync()
+                .ConfigureAwait(false);
 
-            //Create a hot decimal observable
-            var observable =
-                     Observable
-                         .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(.1))
-                         .Select(_ => new Func<decimal>(() =>
-                         {
-                             //https://github.com/WozSoftware/Woz.TEMPer/blob/dcd0b49d67ac39d10c3759519050915816c2cd93/Woz.TEMPer/Sensors/TEMPerV14.cs#L15
-
-                             //Get the temperature from the device
-                             var data = temperDevice.WriteAndReadAsync(new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 }).Result;
-                             var temperatureTimesOneHundred = (data.Data[4] & 0xFF) + (data.Data[3] << 8);
-                             return Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
-                         })()).Publish();
-
-            //Connect the observable
-            observable.Connect();
-
-            var subscription = observable
-                //Only write the value when the temperature changes
-                .Distinct()
-                .Subscribe((t) =>
-                   {
-                       Console.WriteLine($"Temperature is {t}");
-                   });
+            //TODO: this should be added to a CompositeDisposable
+            Observable
+                .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(.1))
+                .SelectMany(_ => Observable.FromAsync(() => temperDevice.WriteAndReadAsync(new byte[] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 })))
+                .Select(data => (data.Data[4] & 0xFF) + (data.Data[3] << 8))
+                .Select(temperatureTimesOneHundred => Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven))
+                .Subscribe(t => Console.WriteLine($"Temperature is {t}"));
         }
 
 #pragma warning restore CA2000
@@ -213,5 +197,6 @@ namespace Usb.Net.WindowsSample
 
         private static void DisplayWaitMessage() => Console.WriteLine("Waiting for device to be plugged in...");
         #endregion
+
     }
 }
