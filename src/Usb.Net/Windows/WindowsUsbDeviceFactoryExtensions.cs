@@ -47,19 +47,6 @@ namespace Usb.Net.Windows
             writeBufferSize);
 
         public static IDeviceFactory CreateWindowsUsbDeviceFactory(
-            this IDeviceFactory deviceFactory,
-            ILoggerFactory loggerFactory = null,
-            GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-            GetUsbInterfaceManager getUsbInterfaceManager = null,
-            Guid? classGuid = null,
-            ushort? readBufferSize = null,
-            ushort? writeBufferSize = null
-        ) => new DeviceManager(new ReadOnlyCollection<IDeviceFactory>(new List<IDeviceFactory> { deviceFactory }), loggerFactory)
-            .Aggregate(
-                CreateWindowsUsbDeviceFactory(loggerFactory, getConnectedDeviceDefinitionsAsync, getUsbInterfaceManager, classGuid, readBufferSize, writeBufferSize)
-                );
-
-        public static IDeviceFactory CreateWindowsUsbDeviceFactory(
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
         ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
