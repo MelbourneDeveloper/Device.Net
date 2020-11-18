@@ -129,13 +129,13 @@ namespace Device.Net.LibUsb
             }
         }
 
-        public override async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+        public override async Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             await _WriteAndReadLock.WaitAsync(cancellationToken);
 
             try
             {
-                await Task.Run(() =>
+                return await Task.Run(() =>
                 {
                     var errorCode = _UsbEndpointWriter.Write(data, Timeout, out var bytesWritten);
                     if (errorCode == ErrorCode.Ok || errorCode == ErrorCode.Success)
@@ -148,6 +148,9 @@ namespace Device.Net.LibUsb
                         Logger?.LogError(message + " {errorCode}", errorCode);
                         throw new IOException(message);
                     }
+
+                    return (uint)bytesWritten;
+
                 }, cancellationToken);
             }
             finally
