@@ -1,23 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="MSBuild.Sdk.Extras/2.0.54">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net45;MonoAndroid90;monoandroid10.0;uap10.0.16299</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
-    <Description>A cross platform USB library written in C#</Description>
-    <Version>3.1.0</Version>
-    <AssemblyVersion>3.1.0.0</AssemblyVersion>
-    <FileVersion>3.1.0.0</FileVersion>
+    <Description>A cross platform USB library written in C#
+
+Alpha version. Please use 3.x for a stable release</Description>
+    <Version>4.0.1-alpha</Version>
+    <AssemblyVersion>4.0.1.0</AssemblyVersion>
+    <FileVersion>4.0.1.0</FileVersion>
     <Authors>Christian Findlay</Authors>
-    <Copyright>Copyright (c) 2019 Christian Findlay</Copyright>
+    <Copyright>Copyright (c) 2020 Christian Findlay</Copyright>
     <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
     <PackageTags>USB Hid Android C#</PackageTags>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8</LangVersion>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>    
     <NoWarn>1701;1702;NU5125</NoWarn>    
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>      
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>    
+    <PackageReleaseNotes>Alpha version. Please use 3.x for a stable release</PackageReleaseNotes>      
   </PropertyGroup>
 
   <Choose>
@@ -36,9 +38,9 @@
   </Choose>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.3">
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
@@ -48,7 +50,24 @@
       <PackagePath></PackagePath>
     </None>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
-    <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />    
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0' And '$(TargetFramework)' != 'net45'">
+    <Compile Remove="Windows\**" />
+    <EmbeddedResource Remove="Windows\**" />
+    <None Remove="Windows\**" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'uap10.0.16299'">
+    <Compile Remove="UWP\**" />
+    <EmbeddedResource Remove="UWP\**" />
+    <None Remove="UWP\**" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'MonoAndroid90' And '$(TargetFramework)' != 'monoandroid10.0'">
+    <Compile Remove="Android\**" />
+    <EmbeddedResource Remove="Android\**" />
+    <None Remove="Android\**" />
   </ItemGroup>
 
 </Project>

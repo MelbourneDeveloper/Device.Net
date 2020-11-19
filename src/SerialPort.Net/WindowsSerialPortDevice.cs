@@ -1,8 +1,11 @@
 ﻿using Device.Net;
 using Device.Net.Windows;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SerialPort.Net.Windows
@@ -20,6 +23,7 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Public Properties
+        //public DeviceType DeviceType => DeviceType.SerialPort;
         public override bool IsInitialized => _ReadSafeFileHandle != null && !_ReadSafeFileHandle.IsInvalid;
         /// <summary>
         /// TODO: No need to implement this. The property probably shouldn't exist at the base level
@@ -30,15 +34,26 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsSerialPortDevice(string deviceId) : this(deviceId, new ApiService(null), 9600, StopBits.One, Parity.None, 8, 1024, null, null)
+        public WindowsSerialPortDevice(string deviceId) : this(deviceId, new ApiService(null), 9600, StopBits.One, Parity.None, 8, 1024, null)
         {
         }
 
-        public WindowsSerialPortDevice(string deviceId, IApiService apiService, int baudRate, StopBits stopBits, Parity parity, byte byteSize, ushort readBufferSize, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
+        public WindowsSerialPortDevice(
+            string deviceId,
+            IApiService apiService,
+            int baudRate,
+            StopBits stopBits,
+            Parity parity,
+            byte byteSize,
+            ushort readBufferSize,
+            ILoggerFactory loggerFactory = null) : base(
+                deviceId,
+                loggerFactory,
+                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsSerialPortDevice>())
         {
             ApiService = apiService ?? throw new ArgumentNullException(nameof(apiService));
 
-            ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId);
+            ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId, DeviceType.SerialPort);
 
             if ((byteSize == 5 && stopBits == StopBits.Two) || (stopBits == StopBits.OnePointFive && byteSize > 5))
                 throw new ArgumentException(Messages.ErrorInvalidByteSizeAndStopBitsCombo);
@@ -61,23 +76,17 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Public Methods
-        public Task InitializeAsync()
-        {
-            return Task.Run(() => { Initialize(); });
-        }
+        public Task InitializeAsync() => Task.Run(Initialize);
 
-        private int Write(byte[] data)
-        {
-            return data == null ? 0 : ApiService.AWriteFile(_ReadSafeFileHandle, data, data.Length, out var bytesWritten, 0) ? bytesWritten : -1;
-        }
+        private uint Write(byte[] data) => data == null ? 0 : ApiService.AWriteFile(_ReadSafeFileHandle, data, data.Length, out var bytesWritten, 0) ? (uint)bytesWritten : 0;
 
-        public override Task WriteAsync(byte[] data)
+        public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             ValidateConnection();
-            return Task.Run(() => { Write(data); });
+            return Task.Run(() => Write(data), cancellationToken);
         }
 
-        public override Task<ReadResult> ReadAsync()
+        public override Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             ValidateConnection();
 
@@ -85,15 +94,16 @@ namespace SerialPort.Net.Windows
             {
                 var buffer = new byte[_ReadBufferSize];
                 var bytesRead = Read(buffer);
-                return new ReadResult(buffer, bytesRead);
-            });
+                return new TransferResult(buffer, bytesRead);
+            }, cancellationToken);
         }
 
-        public override Task Flush()
+        public override Task Flush(CancellationToken cancellationToken = default)
         {
             ValidateConnection();
 
-            return Task.Run(() => ApiService.APurgeComm(_ReadSafeFileHandle, APICalls.PURGE_RXCLEAR | APICalls.PURGE_TXCLEAR));
+            return Task.Run(() => ApiService.APurgeComm(_ReadSafeFileHandle, APICalls.PURGE_RXCLEAR | APICalls.PURGE_TXCLEAR),
+                cancellationToken);
         }
 
         public override void Dispose()
@@ -110,10 +120,7 @@ namespace SerialPort.Net.Windows
             base.Dispose();
         }
 
-        public void Close()
-        {
-            Dispose();
-        }
+        public void Close() => Dispose();
         #endregion
 
         #region Private Methods
@@ -137,6 +144,7 @@ namespace SerialPort.Net.Windows
             dcb.fAbortOnError = 0;
 
             dcb.fParity = 1;
+#pragma warning disable IDE0010 // Add missing cases
             switch (_Parity)
             {
                 case Parity.Even:
@@ -170,6 +178,7 @@ namespace SerialPort.Net.Windows
                 default:
                     throw new ArgumentException(Messages.ErrorMessageStopBitsMustBeSpecified);
             }
+#pragma warning restore IDE0010 // Add missing cases
 
             isSuccess = ApiService.ASetCommState(_ReadSafeFileHandle, ref dcb);
             WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorCouldNotSetCommState);
@@ -189,9 +198,9 @@ namespace SerialPort.Net.Windows
 
         private uint Read(byte[] data)
         {
-            if (ApiService.AReadFile(_ReadSafeFileHandle, data, data.Length, out var bytesRead, 0)) return bytesRead;
-
-            throw new IOException(Messages.ErrorMessageRead);
+            return ApiService.AReadFile(_ReadSafeFileHandle, data, data.Length, out var bytesRead, 0)
+                ? bytesRead
+                : throw new IOException(Messages.ErrorMessageRead);
         }
 
         private void ValidateConnection()

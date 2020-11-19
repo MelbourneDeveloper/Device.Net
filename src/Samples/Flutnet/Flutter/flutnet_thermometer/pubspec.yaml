@@ -1,0 +1,24 @@
+name: flutnet_thermometer
+description: A new flutter module project.
+version: 1.0.0+1
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^0.1.3
+  flutter_thermometer: ^1.0.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutnet_thermometer_bridge:
+    path: ../flutnet_thermometer_bridge
+flutter:
+  uses-material-design: true
+  assets:
+   - assets/
+  module:
+    androidX: true
+    androidPackage: com.flutnet.flutnet_thermometer
+    iosBundleIdentifier: com.flutnet.flutnetThermometer
+...

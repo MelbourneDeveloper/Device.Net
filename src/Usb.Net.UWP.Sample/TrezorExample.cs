@@ -1,4 +1,5 @@
 ﻿using Device.Net;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,18 +10,22 @@ namespace Usb.Net.Sample
     internal sealed class TrezorExample : IDisposable
     {
         #region Fields
-#if(LIBUSB)
+#if LIBUSB
         private const int PollMilliseconds = 6000;
 #else
         private const int PollMilliseconds = 3000;
 #endif
         //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
-        private readonly List<FilterDeviceDefinition> _DeviceDefinitions = new List<FilterDeviceDefinition>
+        public static readonly List<FilterDeviceDefinition> HidDeviceDefinitions = new List<FilterDeviceDefinition>
         {
-            new FilterDeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x", UsagePage=65280 },
-            new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x (Android Only)" },
-            new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, Label="Trezor One Firmware 1.7.x" },
-            new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C0, Label="Model T" }
+            new FilterDeviceDefinition( vendorId: 0x534C, productId:0x0001, label:"Trezor One Firmware 1.6.x", usagePage:65280 )
+        };
+
+        public static readonly List<FilterDeviceDefinition> UsbDeviceDefinitions = new List<FilterDeviceDefinition>
+        {
+            new FilterDeviceDefinition( vendorId: 0x534C, productId:0x0001, label:"Trezor One Firmware 1.6.x (Android Only)" ),
+            new FilterDeviceDefinition( vendorId: 0x1209, productId:0x53C1, label:"Trezor One Firmware 1.7.x" ),
+            new FilterDeviceDefinition( vendorId: 0x1209, productId:0x53C0, label:"Model T" )
         };
         #endregion
 
@@ -31,13 +36,15 @@ namespace Usb.Net.Sample
 
         #region Public Properties
         public IDevice TrezorDevice { get; private set; }
-        public  DeviceListener DeviceListener { get;  }
+        public IDeviceFactory DeviceManager { get; }
+        public DeviceListener DeviceListener { get; }
         #endregion
 
         #region Constructor
-        public TrezorExample()
+        public TrezorExample(IDeviceFactory deviceManager, ILoggerFactory loggerFactory)
         {
-            DeviceListener = new DeviceListener(_DeviceDefinitions, PollMilliseconds) { Logger = new DebugLogger() };
+            DeviceManager = deviceManager;
+            DeviceListener = new DeviceListener(deviceManager, PollMilliseconds, loggerFactory);
         }
         #endregion
 
@@ -67,8 +74,9 @@ namespace Usb.Net.Sample
         public async Task InitializeTrezorAsync()
         {
             //Get the first available device and connect to it
-            var devices = await DeviceManager.Current.GetDevicesAsync(_DeviceDefinitions);
-            TrezorDevice = devices.FirstOrDefault();
+            var devices = await DeviceListener.DeviceFactory.GetConnectedDeviceDefinitionsAsync();
+            var firstConnectedDeviceDefinition = devices.FirstOrDefault();
+            TrezorDevice = await DeviceListener.DeviceFactory.GetDevice(firstConnectedDeviceDefinition);
 
             if (TrezorDevice == null) throw new Exception("There were no devices found");
 
@@ -84,8 +92,7 @@ namespace Usb.Net.Sample
             writeBuffer[2] = 0x23;
 
             //Write the data to the device
-            var readResult = await TrezorDevice.WriteAndReadAsync(writeBuffer);
-            return readResult;
+            return await TrezorDevice.WriteAndReadAsync(writeBuffer);
         }
 
         public void Dispose()

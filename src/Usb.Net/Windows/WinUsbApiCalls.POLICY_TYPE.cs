@@ -1,4 +1,6 @@
-﻿namespace Usb.Net.Windows
+﻿// ReSharper disable UnusedMember.Global
+// ReSharper disable InconsistentNaming
+namespace Usb.Net.Windows
 {
     internal enum POLICY_TYPE
     {

@@ -69,45 +69,61 @@ namespace Device.Net.LibUsb
                 {
                     foreach (var usbInterfaceInfo in usbConfigInfo.InterfaceInfoList)
                     {
-                        //Create an interface stub. LibUsbDotNet doesn't seem to allow for multiple interfaces? Or at least not allow for listing them
-                        var dummyInterface = new UsbInterface(Logger, Tracer, null, null, Timeout, usbInterfaceInfo.Descriptor.InterfaceID);
+                        //Create an interface.
+                        var usbInterface = new UsbInterface(Logger, Tracer, null, null, Timeout, usbInterfaceInfo.Descriptor.InterfaceID);
 
-                        UsbInterfaces.Add(dummyInterface);
+                        UsbInterfaces.Add(usbInterface);
 
-                        if (ReadUsbInterface == null) ReadUsbInterface = dummyInterface;
-                        if (WriteUsbInterface == null) WriteUsbInterface = dummyInterface;
+                        if (base.ReadUsbInterface == null) base.ReadUsbInterface = usbInterface;
+                        if (base.WriteUsbInterface == null) base.WriteUsbInterface = usbInterface;
 
-                        for (var i = 0; i < usbInterfaceInfo.EndpointInfoList.Count; i++)
+                        //Write endpoint
+                        var usbEndpointWriter = UsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
+                        var writeBufferSize = _WriteBufferSize ?? (ushort)64;
+                        var writeEndpoint = new WriteEndpoint(usbEndpointWriter, writeBufferSize);
+                        usbInterface.UsbInterfaceEndpoints.Add(writeEndpoint);
+                        if (usbInterface.WriteEndpoint == null) usbInterface.WriteEndpoint = writeEndpoint;
+
+                        //Read endpoint
+                         var usbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
+                        var readBufferSize = _ReadBufferSize ?? (ushort)64;
+                        var readEndpoint = new ReadEndpoint(usbEndpointReader, readBufferSize);
+                        usbInterface.UsbInterfaceEndpoints.Add(readEndpoint);
+                        if (usbInterface.ReadEndpoint == null) usbInterface.ReadEndpoint = readEndpoint;
+
+                        //int endpointCount = usbInterfaceInfo.EndpointInfoList.Count;
+
+                        /*
+                        for (var i = 0; i < endpointCount; i++)
                         {
                             var usbEndpointInfo = usbInterfaceInfo.EndpointInfoList[i];
 
-                            var IsWrite = (usbEndpointInfo.Descriptor.EndpointID & 128) == 0;
-                            var IsRead = (usbEndpointInfo.Descriptor.EndpointID & 128) != 0;
+                            //var IsWrite = (usbEndpointInfo.Descriptor.EndpointID & 128) == 0;
+                            //var IsRead = (usbEndpointInfo.Descriptor.EndpointID & 128) != 0;
 
-                            if (IsWrite)
-                            {
-                                //Write endpoint
-                                var id = usbEndpointInfo.Descriptor.EndpointID ^ 128;
-                                //var writeEndpointID = (WriteEndpointID)Enum.Parse(typeof(WriteEndpointID), $"Ep{id.ToString().PadLeft(2, '0')}");
-                                var usbEndpointWriter = UsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
-                                var writeBufferSize = _WriteBufferSize ?? (ushort)usbEndpointInfo.Descriptor.MaxPacketSize;
-                                var writeEndpoint = new WriteEndpoint(usbEndpointWriter, writeBufferSize);
-                                dummyInterface.UsbInterfaceEndpoints.Add(writeEndpoint);
-                                if (dummyInterface.WriteEndpoint == null) dummyInterface.WriteEndpoint = writeEndpoint;
-                            }
-                            else
-                            {
-                                //Read endpoint
-                                var id = usbEndpointInfo.Descriptor.EndpointID ^ 1;
-                                //var readEndpointID = (ReadEndpointID)Enum.Parse(typeof(ReadEndpointID), $"Ep{id.ToString().PadLeft(2, '0')}");
-                                var usbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
-                                var readBufferSize = _ReadBufferSize ?? (ushort)usbEndpointInfo.Descriptor.MaxPacketSize;
-                                var readEndpoint = new ReadEndpoint(usbEndpointReader, readBufferSize);
-                                dummyInterface.UsbInterfaceEndpoints.Add(readEndpoint);
-                                if (dummyInterface.ReadEndpoint == null) dummyInterface.ReadEndpoint = readEndpoint;
-                            }
+                            //Write endpoint
+                            //var id = usbEndpointInfo.Descriptor.EndpointID ^ 128;
+                            //var writeEndpointID = (WriteEndpointID)Enum.Parse(typeof(WriteEndpointID), $"Ep{id.ToString().PadLeft(2, '0')}");
+                            var usbEndpointWriter = UsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
+                            var writeBufferSize = _WriteBufferSize ?? (ushort)usbEndpointInfo.Descriptor.MaxPacketSize;
+                            var writeEndpoint = new WriteEndpoint(usbEndpointWriter, writeBufferSize);
+                            usbInterface.UsbInterfaceEndpoints.Add(writeEndpoint);
+                            if (usbInterface.WriteEndpoint == null) usbInterface.WriteEndpoint = writeEndpoint;
+
+                            //Read endpoint
+                            //var id = usbEndpointInfo.Descriptor.EndpointID ^ 1;
+                            //var readEndpointID = (ReadEndpointID)Enum.Parse(typeof(ReadEndpointID), $"Ep{id.ToString().PadLeft(2, '0')}");
+                            var usbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
+                            var readBufferSize = _ReadBufferSize ?? (ushort)usbEndpointInfo.Descriptor.MaxPacketSize;
+                            var readEndpoint = new ReadEndpoint(usbEndpointReader, readBufferSize);
+                            usbInterface.UsbInterfaceEndpoints.Add(readEndpoint);
+                            if (usbInterface.ReadEndpoint == null) usbInterface.ReadEndpoint = readEndpoint;
                         }
+                        */
                     }
+
+                    ReadUsbInterface = UsbInterfaces[0];
+                    WriteUsbInterface = UsbInterfaces[0];
                 }
 
                 IsInitialized = true;

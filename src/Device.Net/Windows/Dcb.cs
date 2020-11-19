@@ -1,4 +1,6 @@
 ﻿using System.Runtime.InteropServices;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
 
 namespace Device.Net.Windows
 {
@@ -6,7 +8,9 @@ namespace Device.Net.Windows
     /// Defines the control setting for a serial communications device.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
+#pragma warning disable CA1815 // Override equals and operator equals on value types
     public struct Dcb
+#pragma warning restore CA1815 // Override equals and operator equals on value types
     {
 #pragma warning disable CA1051 
         public int DCBlength;

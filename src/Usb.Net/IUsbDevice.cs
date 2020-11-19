@@ -4,6 +4,6 @@ namespace Usb.Net
 {
     public interface IUsbDevice : IDevice
     {
-         IUsbInterfaceManager UsbInterfaceManager { get; }
+        IUsbInterfaceManager UsbInterfaceManager { get; }
     }
 }
