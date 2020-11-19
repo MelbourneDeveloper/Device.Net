@@ -5,11 +5,10 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Usb.Net
 {
-    public abstract class UsbInterfaceManager : IDisposable
+    public class UsbInterfaceManager : IDisposable
     {
         #region Fields
         private bool disposed;
@@ -32,19 +31,9 @@ namespace Usb.Net
         }
         #endregion
 
-        public async Task InitializeAsync()
-        {
-            await InitializeProtectedAsync();
-            RegisterDefaultInterfaces();
-        }
-
-        protected abstract Task InitializeProtectedAsync();
-
         #region Protected Methods
-        private void RegisterDefaultInterfaces()
+        public void RegisterDefaultInterfaces()
         {
-            if (UsbInterfaces == null) return;
-
             foreach (var usbInterface in UsbInterfaces)
             {
                 usbInterface.RegisterDefaultEndpoints();

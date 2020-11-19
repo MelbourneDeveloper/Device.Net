@@ -41,10 +41,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Protected Overrides
-        protected override async Task InitializeProtectedAsync()
-        {
-            await Task.Run(Initialize);
-        }
+        protected override async Task InitializeProtectedAsync() => await Task.Run(Initialize);
         #endregion
 
         #region Private Methods
