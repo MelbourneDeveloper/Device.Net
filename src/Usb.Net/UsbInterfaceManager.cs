@@ -65,7 +65,7 @@ namespace Usb.Net
             }
         }
 
-        public virtual IUsbInterface WriteUsbInterface
+        public IUsbInterface WriteUsbInterface
         {
             get => _WriteUsbInterface;
             set
@@ -75,7 +75,7 @@ namespace Usb.Net
             }
         }
 
-        public virtual IUsbInterface ReadInterruptUsbInterface
+        public IUsbInterface ReadInterruptUsbInterface
         {
             get => _ReadInterruptUsbInterface;
             set
@@ -85,7 +85,7 @@ namespace Usb.Net
             }
         }
 
-        public virtual IUsbInterface WriteInterruptUsbInterface
+        public IUsbInterface WriteInterruptUsbInterface
         {
             get => _WriteInterruptUsbInterface;
             set

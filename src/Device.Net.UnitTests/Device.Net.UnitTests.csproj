@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="LibUsbDotNet" Version="2.2.29" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="Moq" Version="4.14.5" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />
@@ -17,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Device.Net.LibUsb\Device.Net.LibUsb.csproj" />
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
     <ProjectReference Include="..\Hid.Net\Hid.Net.csproj" />
     <ProjectReference Include="..\SerialPort.Net\SerialPort.Net.csproj" />
