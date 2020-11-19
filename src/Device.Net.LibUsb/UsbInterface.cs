@@ -1,5 +1,6 @@
 ﻿using LibUsbDotNet.Main;
 using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,11 +11,19 @@ namespace Device.Net.LibUsb
     public class UsbInterface : UsbInterfaceBase, IUsbInterface
     {
         private readonly byte _interfaceId;
+        private readonly LibUsbDotNet.UsbDevice _usbDevice;
 
         public int Timeout { get; set; }
 
-        public UsbInterface(ILogger logger, ushort? readBufferSize, ushort? writeBufferSize, int timeout, byte interfaceId) : base(logger, readBufferSize, writeBufferSize)
+        public UsbInterface(
+            LibUsbDotNet.UsbDevice usbDevice,
+            byte interfaceId,
+            ushort? readBufferSize = null,
+            ushort? writeBufferSize = null,
+            ILogger logger = null,
+            int timeout = 1000) : base(logger, readBufferSize, writeBufferSize)
         {
+            _usbDevice = usbDevice ?? throw new ArgumentNullException(nameof(usbDevice));
             Timeout = timeout;
             _interfaceId = interfaceId;
         }
@@ -55,6 +64,23 @@ namespace Device.Net.LibUsb
                     throw new IOException(message);
                 }
             }, cancellationToken);
+        }
+
+        public Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default)
+        {
+            if (setupPacket == null) throw new ArgumentNullException(nameof(setupPacket));
+            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+
+            var sp = new UsbSetupPacket(
+                (byte)setupPacket.RequestType.Type,
+                setupPacket.Request,
+                setupPacket.Value,
+                setupPacket.Index,
+                setupPacket.Length);
+
+            var isSuccess = _usbDevice.ControlTransfer(ref sp, buffer, buffer.Length, out var length);
+
+            return !isSuccess ? throw new ControlTransferException("LibUsb says no") : Task.FromResult(new TransferResult(buffer, (uint)length));
         }
     }
 }

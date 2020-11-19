@@ -17,8 +17,8 @@ namespace Device.Net.LibUsb
         private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         private bool disposed;
 
-        private ushort? _WriteBufferSize { get; }
-        private ushort? _ReadBufferSize { get; }
+        private ushort? _writeBufferSize { get; }
+        private ushort? _readBufferSize { get; }
         #endregion
 
         #region Public Properties
@@ -37,8 +37,8 @@ namespace Device.Net.LibUsb
             UsbDevice = usbDevice;
             Timeout = timeout;
 
-            _WriteBufferSize = writeBufferSize;
-            _ReadBufferSize = readBufferSize;
+            _writeBufferSize = writeBufferSize;
+            _readBufferSize = readBufferSize;
         }
         #endregion
 
@@ -71,7 +71,7 @@ namespace Device.Net.LibUsb
                     foreach (var usbInterfaceInfo in usbConfigInfo.InterfaceInfoList)
                     {
                         //Create an interface.
-                        var usbInterface = new UsbInterface(Logger, Tracer, null, null, Timeout, usbInterfaceInfo.Descriptor.InterfaceID);
+                        var usbInterface = new UsbInterface(Timeout, Tracer, null, Logger, null, usbInterfaceInfo.Descriptor.InterfaceID);
 
                         UsbInterfaces.Add(usbInterface);
 
@@ -80,14 +80,14 @@ namespace Device.Net.LibUsb
 
                         //Write endpoint
                         var usbEndpointWriter = UsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
-                        var writeBufferSize = _WriteBufferSize ?? (ushort)64;
+                        var writeBufferSize = _writeBufferSize ?? (ushort)64;
                         var writeEndpoint = new WriteEndpoint(usbEndpointWriter, writeBufferSize);
                         usbInterface.UsbInterfaceEndpoints.Add(writeEndpoint);
                         if (usbInterface.WriteEndpoint == null) usbInterface.WriteEndpoint = writeEndpoint;
 
                         //Read endpoint
                         var usbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
-                        var readBufferSize = _ReadBufferSize ?? (ushort)64;
+                        var readBufferSize = _readBufferSize ?? (ushort)64;
                         var readEndpoint = new ReadEndpoint(usbEndpointReader, readBufferSize);
                         usbInterface.UsbInterfaceEndpoints.Add(readEndpoint);
                         if (usbInterface.ReadEndpoint == null) usbInterface.ReadEndpoint = readEndpoint;
