@@ -1,5 +1,6 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,7 +11,11 @@ namespace Device.Net
         #region Fields
         private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         private bool disposed;
-        private string _LogRegion;
+        #endregion
+
+        #region Protected Properties
+        protected ILogger Logger { get; }
+        protected ILoggerFactory LoggerFactory { get; }
         #endregion
 
         #region Public Abstract Properties
@@ -20,82 +25,50 @@ namespace Device.Net
         #endregion
 
         #region Public Properties
-        public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; set; }
+        public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; set; }
         public string DeviceId { get; }
-        public ILogger Logger { get; }
-        public ITracer Tracer { get; }
         #endregion
 
         #region Constructor
-        protected DeviceBase(string deviceId, ILogger logger, ITracer tracer)
+        protected DeviceBase(
+            string deviceId,
+            ILoggerFactory loggerFactory = null,
+            ILogger logger = null)
         {
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
-            Tracer = tracer;
-            Logger = logger;
-        }
-        #endregion
-
-        #region Private Methods
-        private void Log(string message, string region, Exception ex, LogLevel logLevel)
-        {
-            Logger?.Log(message, region, ex, logLevel);
-        }
-
-        private void Log(string message, Exception ex, LogLevel logLevel, [CallerMemberName] string callMemberName = null)
-        {
-            if (_LogRegion == null)
-            {
-                _LogRegion = GetType().Name;
-            }
-
-            Log(message, $"{_LogRegion} - {callMemberName}", ex, logLevel);
-        }
-        #endregion
-
-        #region Protected Methods
-        protected void Log(string message, [CallerMemberName] string callMemberName = null)
-        {
-            Log(message, null, LogLevel.Information, callMemberName);
-        }
-
-        protected void Log(string message, Exception ex, [CallerMemberName] string callMemberName = null)
-        {
-            Log(message, ex, LogLevel.Error, callMemberName);
-        }
-
-        protected void Log(string message, LogLevel logLevel, [CallerMemberName] string callMemberName = null)
-        {
-            Log(message, null, logLevel, callMemberName);
+            Logger = logger ?? NullLogger.Instance;
+            LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
         }
         #endregion
 
         #region Public Abstract Methods
         //TODO: Why are these here?
 
-        public abstract Task<ReadResult> ReadAsync();
-        public abstract Task WriteAsync(byte[] data);
+        public abstract Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default);
+        public abstract Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default);
         #endregion
 
         #region Public Methods
-        public virtual Task Flush()
-        {
-            throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
-        }
+        public virtual Task Flush(CancellationToken cancellationToken = default) => throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
 
-        public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer)
+        public async Task<TransferResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
         {
-            await _WriteAndReadLock.WaitAsync();
+            if (writeBuffer == null) throw new ArgumentNullException(nameof(writeBuffer));
+
+            await _WriteAndReadLock.WaitAsync(cancellationToken);
+
+            using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call} Write Buffer Length: {writeBufferLength}", DeviceId, nameof(WriteAndReadAsync), writeBuffer.Length);
 
             try
             {
-                await WriteAsync(writeBuffer);
-                var retVal = await ReadAsync();
-                Log(Messages.SuccessMessageWriteAndReadCalled);
+                await WriteAsync(writeBuffer, cancellationToken);
+                var retVal = await ReadAsync(cancellationToken);
+                Logger.LogInformation(Messages.SuccessMessageWriteAndReadCalled);
                 return retVal;
             }
             catch (Exception ex)
             {
-                Log(Messages.ErrorMessageReadWrite, ex);
+                Logger.LogError(ex, Messages.ErrorMessageReadWrite);
                 throw;
             }
             finally
@@ -128,6 +101,50 @@ namespace Device.Net
             _WriteAndReadLock.Dispose();
 
             GC.SuppressFinalize(this);
+        }
+        #endregion
+
+        #region Public Static Methods
+        public static ConnectedDeviceDefinition GetDeviceDefinitionFromWindowsDeviceId(
+            string deviceId,
+            DeviceType deviceType,
+            ILogger logger,
+            Guid? classGuid = null)
+        {
+            uint? vid = null;
+            uint? pid = null;
+            try
+            {
+                vid = GetNumberFromDeviceId(deviceId, "vid_");
+                pid = GetNumberFromDeviceId(deviceId, "pid_");
+            }
+#pragma warning disable CA1031 
+            catch (Exception ex)
+#pragma warning restore CA1031 
+            {
+                //If anything goes wrong here, log it and move on. 
+                (logger ?? NullLogger.Instance).LogError(ex, "Error {errorMessage} Area: {area}", ex.Message, nameof(GetDeviceDefinitionFromWindowsDeviceId));
+            }
+
+            return new ConnectedDeviceDefinition(deviceId, deviceType, vendorId: vid, productId: pid, classGuid: classGuid);
+        }
+        #endregion
+
+        #region Private Static Methods
+        private static uint GetNumberFromDeviceId(string deviceId, string searchString)
+        {
+            if (deviceId == null) throw new ArgumentNullException(nameof(deviceId));
+
+            var indexOfSearchString = deviceId.IndexOf(searchString, StringComparison.OrdinalIgnoreCase);
+            string hexString = null;
+            if (indexOfSearchString > -1)
+            {
+                hexString = deviceId.Substring(indexOfSearchString + searchString.Length, 4);
+            }
+#pragma warning disable CA1305 // Specify IFormatProvider
+            var numberAsInteger = uint.Parse(hexString, System.Globalization.NumberStyles.HexNumber);
+#pragma warning restore CA1305 // Specify IFormatProvider
+            return numberAsInteger;
         }
         #endregion
 

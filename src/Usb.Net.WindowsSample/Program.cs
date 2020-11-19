@@ -1,13 +1,17 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Usb.Net.Sample;
 using Device.Net;
-
-#if (!LIBUSB)
-using Usb.Net.Windows;
-using Hid.Net.Windows;
+using Microsoft.Extensions.Logging;
+using System.Reactive.Linq;
+using System.Collections.Generic;
+using System.Linq;
 using SerialPort.Net.Windows;
+
+#if !LIBUSB
+using System.Reactive.Subjects;
+using Hid.Net.Windows;
+using Usb.Net.Windows;
 #else
 using Device.Net.LibUsb;
 #endif
@@ -17,32 +21,43 @@ namespace Usb.Net.WindowsSample
     internal class Program
     {
         #region Fields
-        private static readonly TrezorExample _DeviceConnectionExample = new TrezorExample();
-        /// <summary>
-        /// TODO: Test these!
-        /// </summary>
-        private static readonly DebugLogger Logger = new DebugLogger();
-        private static readonly DebugTracer Tracer = new DebugTracer();
+        private static ILoggerFactory _loggerFactory;
+        private static IDeviceFactory _trezorFactories;
+
+        private static readonly IDeviceFactory _allFactories = new WindowsSerialPortDeviceFactory(_loggerFactory)
+                .Aggregate(WindowsUsbDeviceFactoryExtensions.CreateWindowsUsbDeviceFactory(_loggerFactory))
+                .Aggregate(WindowsUsbDeviceFactoryExtensions.CreateWindowsUsbDeviceFactory(_loggerFactory, classGuid: WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE))
+                .Aggregate(WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(_loggerFactory));
+
+        private static TrezorExample _DeviceConnectionExample;
         #endregion
 
         #region Main
-        private static void Main(string[] args)
+        private static async Task Main()
         {
-            //Register the factory for creating Usb devices. This only needs to be done once.
-#if (LIBUSB)
-            LibUsbUsbDeviceFactory.Register(Logger, Tracer);
+            _loggerFactory = LoggerFactory.Create((builder) => builder.AddDebug());
+
+
+            //Register the factories for creating Usb devices. This only needs to be done once.
+#if LIBUSB
+            _trezorFactories = new List<IDeviceFactory>
+            {
+                TrezorExample.UsbDeviceDefinitions.CreateLibUsbDeviceFactory(_loggerFactory)
+            }.Aggregate(_loggerFactory);
 #else
-            WindowsUsbDeviceFactory.Register(Logger, Tracer);
-            WindowsHidDeviceFactory.Register(Logger, Tracer);
-            WindowsSerialPortDeviceFactory.Register(Logger, Tracer);
+            _trezorFactories = new List<IDeviceFactory>
+            {
+                TrezorExample.UsbDeviceDefinitions.CreateWindowsUsbDeviceFactory(_loggerFactory),
+                TrezorExample.HidDeviceDefinitions.CreateWindowsHidDeviceFactory(_loggerFactory),
+            }.Aggregate(_loggerFactory);
+
 #endif
 
-            _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
-            _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
+            _DeviceConnectionExample = new TrezorExample(_trezorFactories, _loggerFactory);
+            _DeviceConnectionExample.TrezorInitialized += DeviceConnectionExample_TrezorInitialized;
+            _DeviceConnectionExample.TrezorDisconnected += DeviceConnectionExample_TrezorDisconnected;
 
-            Go();
-
-            new ManualResetEvent(false).WaitOne();
+            Go().Wait();
         }
 
         private static async Task Go()
@@ -74,19 +89,62 @@ namespace Usb.Net.WindowsSample
                     DisplayWaitMessage();
                     _DeviceConnectionExample.StartListening();
                     break;
+#if !LIBUSB
+                case 3:
+
+                    Console.Clear();
+                    await DisplayTemperature();
+                    while (true)
+                    {
+                        await Task.Delay(1000);
+                    }
+#endif
+                default:
+                    Console.WriteLine("That's not an option");
+                    break;
             }
         }
+
+#if !LIBUSB
+#pragma warning disable CA2000
+
+        private static async Task DisplayTemperature()
+        {
+            //Connect to the device by product id and vendor id
+            var temperDevice = await new FilterDeviceDefinition(vendorId: 0x413d, productId: 0x2107, usagePage: 65280)
+                .CreateWindowsHidDeviceManager(_loggerFactory)
+                .ConnectFirstAsync()
+                .ConfigureAwait(false);
+
+            //Create the observable
+            var observable = Observable
+                .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(.1))
+                .SelectMany(_ => Observable.FromAsync(() => temperDevice.WriteAndReadAsync(new byte[] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 })))
+                .Select(data => (data.Data[4] & 0xFF) + (data.Data[3] << 8))
+                //Only display the temperature when it changes
+                .Distinct()
+                .Select(temperatureTimesOneHundred => Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven));
+
+            //Subscribe to the observable
+            observable.Subscribe(t => Console.WriteLine($"Temperature is {t}"));
+
+            //Note: in a real scenario, we would dispose of the subscription afterwards. This method runs forever.
+        }
+
+#pragma warning restore CA2000
+#endif
+
         #endregion
 
         #region Event Handlers
-        private static void _DeviceConnectionExample_TrezorDisconnected(object sender, EventArgs e)
+        private static void DeviceConnectionExample_TrezorDisconnected(object sender, EventArgs e)
         {
             Console.Clear();
             Console.WriteLine("Disconnected.");
             DisplayWaitMessage();
         }
 
-        private static async void _DeviceConnectionExample_TrezorInitialized(object sender, EventArgs e)
+        private static async void DeviceConnectionExample_TrezorInitialized(object sender, EventArgs e)
         {
             try
             {
@@ -102,27 +160,30 @@ namespace Usb.Net.WindowsSample
         #endregion
 
         #region Private Methods
-        private async static Task<int> Menu()
+        private static async Task<int> Menu()
         {
             while (true)
             {
                 Console.Clear();
 
-                var devices = await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null);
-                Console.WriteLine("Currently connected devices: ");
-                foreach (var device in devices)
-                {
-                    Console.WriteLine(device.DeviceId);
-                }
-                Console.WriteLine();
+                var devices = await _allFactories.GetConnectedDeviceDefinitionsAsync();
+
+                Console.WriteLine("Currently connected devices:\r\n");
+                Console.WriteLine(string.Join("\r\n",
+                    devices
+                    .OrderBy(d => d.Manufacturer)
+                    .ThenBy(d => d.ProductName)
+                    .Select(d => $"{d.Manufacturer} - {d.ProductName} ({d.DeviceType} - {d.ClassGuid})\r\nDevice Path: {d.DeviceId}\r\nVendor: {d.VendorId} Product Id: {d.ProductId}\r\n")));
 
                 Console.WriteLine("Console sample. This sample demonstrates either writing to the first found connected device, or listening for a device and then writing to it. If you listen for the device, you will be able to connect and disconnect multiple times. This represents how users may actually use the device.");
                 Console.WriteLine();
                 Console.WriteLine("1. Write To Connected Device");
                 Console.WriteLine("2. Listen For Device");
+                Console.WriteLine("3. Temperature Monitor (Observer Design Pattern - https://docs.microsoft.com/en-us/dotnet/standard/events/how-to-implement-a-provider#example)");
                 var consoleKey = Console.ReadKey();
                 if (consoleKey.KeyChar == '1') return 1;
                 if (consoleKey.KeyChar == '2') return 2;
+                if (consoleKey.KeyChar == '3') return 3;
             }
         }
 
@@ -140,10 +201,8 @@ namespace Usb.Net.WindowsSample
             Console.ReadKey();
         }
 
-        private static void DisplayWaitMessage()
-        {
-            Console.WriteLine("Waiting for device to be plugged in...");
-        }
+        private static void DisplayWaitMessage() => Console.WriteLine("Waiting for device to be plugged in...");
         #endregion
+
     }
 }

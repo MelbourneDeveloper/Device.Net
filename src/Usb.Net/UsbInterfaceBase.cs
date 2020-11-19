@@ -1,5 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.Exceptions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,59 +21,48 @@ namespace Usb.Net
         public abstract byte InterfaceNumber { get; }
         #endregion
 
+        #region Protected Properties
+        protected ILogger Logger { get; }
+        #endregion
+
         #region Public Properties
-        public ILogger Logger { get; }
-        public ITracer Tracer { get; }
+        public ushort ReadBufferSize => _ReadBufferSize ?? ReadEndpoint?.MaxPacketSize ?? throw new NotImplementedException();
 
-        public ushort ReadBufferSize
-        {
-            get
-            {
-                if (_ReadBufferSize.HasValue) return _ReadBufferSize.Value;
-
-                if (ReadEndpoint != null) return ReadEndpoint.MaxPacketSize;
-
-                throw new NotImplementedException();
-            }
-        }
-
-        public ushort WriteBufferSize
-        {
-            get
-            {
-                if (_WriteBufferSize.HasValue) return _WriteBufferSize.Value;
-
-                if (WriteEndpoint != null) return WriteEndpoint.MaxPacketSize;
-
-                throw new NotImplementedException();
-            }
-        }
+        public ushort WriteBufferSize => _WriteBufferSize ?? WriteEndpoint?.MaxPacketSize ?? throw new NotImplementedException();
 
         public IList<IUsbInterfaceEndpoint> UsbInterfaceEndpoints { get; } = new List<IUsbInterfaceEndpoint>();
 
         public IUsbInterfaceEndpoint ReadEndpoint
         {
-            get => _ReadEndpoint ?? (_ReadEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead && !p.IsInterrupt));
+            get => _ReadEndpoint ??= UsbInterfaceEndpoints.FirstOrDefault(p => p.IsRead && !p.IsInterrupt);
             set
             {
-                if (value!=null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
+                if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
                 _ReadEndpoint = value;
+
+#pragma warning disable CA1062 // Validate arguments of public methods
+                Logger.LogInformation("ReadEndpoint set to pipeid {pipeid}", value?.PipeId);
+#pragma warning restore CA1062 // Validate arguments of public methods
+
             }
         }
 
         public IUsbInterfaceEndpoint WriteEndpoint
         {
-            get => _WriteEndpoint ?? (_WriteEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite && !p.IsInterrupt));
+            get => _WriteEndpoint ??= UsbInterfaceEndpoints.FirstOrDefault(p => p.IsWrite && !p.IsInterrupt);
             set
             {
                 if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
                 _WriteEndpoint = value;
+#pragma warning disable CA1062 // Validate arguments of public methods
+                Logger.LogInformation("WriteEndpoint set to pipeid {pipeid}", value?.PipeId);
+#pragma warning restore CA1062 // Validate arguments of public methods
             }
         }
 
         public IUsbInterfaceEndpoint InterruptWriteEndpoint
         {
-            get => _WriteInterruptEndpoint ?? (_WriteInterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt && p.IsWrite));
+            get => _WriteInterruptEndpoint ??= UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt && p.IsWrite);
             set
             {
                 if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
@@ -81,7 +72,7 @@ namespace Usb.Net
 
         public IUsbInterfaceEndpoint InterruptReadEndpoint
         {
-            get => _ReadInterruptEndpoint ?? (_ReadInterruptEndpoint = UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt && p.IsRead));
+            get => _ReadInterruptEndpoint ??= UsbInterfaceEndpoints.FirstOrDefault(p => p.IsInterrupt && p.IsRead);
             set
             {
                 if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
@@ -104,16 +95,14 @@ namespace Usb.Net
             if (ReadEndpoint == null && InterruptReadEndpoint != null)
             {
                 ReadEndpoint = InterruptReadEndpoint;
-                Logger.Log(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, true), nameof(UsbInterfaceBase), null, LogLevel.Warning);
+                Logger.LogWarning(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, true) + " Interface # : {interfaceNumber} IsRead: {isRead} Region: {region}", InterfaceNumber, true, nameof(UsbInterfaceBase));
             }
 
-            if (WriteEndpoint == null && InterruptWriteEndpoint != null)
-            {
-                WriteEndpoint = InterruptWriteEndpoint;
-                Logger.Log(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, false), nameof(UsbInterfaceBase), null, LogLevel.Warning);
-            }
+            if (WriteEndpoint != null || InterruptWriteEndpoint == null) return;
+
+            WriteEndpoint = InterruptWriteEndpoint;
+            Logger.LogWarning(Messages.GetErrorMessageNoBulkPipe(InterfaceNumber, false) + " Interface # : {interfaceNumber} IsRead: {isRead} Region: {region}", InterfaceNumber, false, nameof(UsbInterfaceBase));
         }
-
 
         /// <summary>
         /// Note: some platforms require a call to be made to claim the interface. This is currently only for Android but may change
@@ -127,10 +116,9 @@ namespace Usb.Net
         #endregion
 
         #region Constructor
-        protected UsbInterfaceBase(ILogger logger, ITracer tracer, ushort? readBufferSize, ushort? writeBufferSize)
+        protected UsbInterfaceBase(ILogger logger = null, ushort? readBufferSize = null, ushort? writeBufferSize = null)
         {
-            Tracer = tracer;
-            Logger = logger;
+            Logger = logger ?? NullLogger.Instance;
             _ReadBufferSize = readBufferSize;
             _WriteBufferSize = writeBufferSize;
         }

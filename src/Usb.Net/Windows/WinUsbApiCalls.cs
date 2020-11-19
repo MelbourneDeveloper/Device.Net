@@ -1,4 +1,9 @@
-﻿using Device.Net.Windows;
+﻿// ReSharper disable UnusedMember.Global
+// ReSharper disable InconsistentNaming
+
+using Device.Net.Windows;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
@@ -60,13 +65,22 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Methods
-        public static string GetDescriptor(SafeFileHandle defaultInterfaceHandle, byte index, string errorMessage)
+        public static string GetDescriptor(SafeFileHandle defaultInterfaceHandle, byte index, string errorMessage, ILogger logger)
         {
+            logger ??= NullLogger.Instance;
+
             var buffer = new byte[256];
             var isSuccess = WinUsb_GetDescriptor(defaultInterfaceHandle, USB_STRING_DESCRIPTOR_TYPE, index, EnglishLanguageID, buffer, (uint)buffer.Length, out var transfered);
-            WindowsDeviceBase.HandleError(isSuccess, errorMessage);
-            var descriptor = new string(Encoding.Unicode.GetChars(buffer, 2, (int)transfered));
-            return descriptor.Substring(0, descriptor.Length - 1);
+            if (WindowsDeviceBase.HandleError(isSuccess, errorMessage, false) != 0)
+            {
+                logger.LogWarning(errorMessage);
+                return null;
+            }
+            else
+            {
+                var descriptor = new string(Encoding.Unicode.GetChars(buffer, 2, (int)transfered));
+                return descriptor.Substring(0, descriptor.Length - 1);
+            }
         }
         #endregion
     }

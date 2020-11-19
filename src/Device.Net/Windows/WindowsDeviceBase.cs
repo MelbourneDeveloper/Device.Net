@@ -1,4 +1,5 @@
 ﻿using Device.Net.Exceptions;
+using Microsoft.Extensions.Logging;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -14,7 +15,13 @@ namespace Device.Net.Windows
         #endregion
 
         #region Constructor
-        protected WindowsDeviceBase(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
+        protected WindowsDeviceBase(
+            string deviceId,
+            ILoggerFactory loggerFactory,
+            ILogger logger) : base(
+                deviceId,
+                loggerFactory,
+                logger)
         {
         }
         #endregion
@@ -24,15 +31,13 @@ namespace Device.Net.Windows
         #endregion
 
         #region Public Static Methods
-        public static void HandleError(bool isSuccess, string message)
+        public static int HandleError(bool isSuccess, string message, bool throwException = true)
         {
-            if (isSuccess) return;
+            if (isSuccess) return 0;
             var errorCode = Marshal.GetLastWin32Error();
 
             //TODO: Loggin
-            if (errorCode == 0) return;
-
-            throw new ApiException($"{message}. Error code: {errorCode}");
+            return errorCode == 0 ? 0 : throwException ? throw new ApiException($"{message}. Error code: {errorCode}") : errorCode;
         }
         #endregion
     }

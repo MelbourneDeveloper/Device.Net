@@ -1,4 +1,4 @@
-﻿using Device.Net;
+using Device.Net;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,11 +15,12 @@ namespace Usb.Net
         /// </summary>
         IUsbInterface WriteUsbInterface { get; set; }
 
+        //TODO: This should be a read only collection
         IList<IUsbInterface> UsbInterfaces { get; }
 
         /// <summary>
         /// TODO: This shouldn't be here. Don't use this
         /// </summary>
-        Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync();
+        Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync();
     }
 }

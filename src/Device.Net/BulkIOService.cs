@@ -11,7 +11,7 @@ namespace Device.Net
     public class BulkIOService
     {
         #region Public Properties
-        public IDevice Device { get;  }
+        public IDevice Device { get; }
         public int ReadBufferSize { get; }
         #endregion
 

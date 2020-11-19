@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests
 {
@@ -11,7 +14,7 @@ namespace Device.Net.UnitTests
 
         public override bool IsInitialized => _IsInitialized;
 
-        protected MockDeviceBase(string deviceId, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
+        protected MockDeviceBase(string deviceId, ILoggerFactory loggerFactory, ILogger logger) : base(deviceId, loggerFactory, logger)
         {
 
         }
@@ -28,23 +31,38 @@ namespace Device.Net.UnitTests
 
         private byte[] LastWrittenBuffer;
 
-        public override async Task<ReadResult> ReadAsync()
+        public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             if (LastWrittenBuffer != null)
             {
-                Tracer.Trace(false, LastWrittenBuffer);
+                Logger.LogTrace(new Trace(false, LastWrittenBuffer));
                 return LastWrittenBuffer;
             }
             var data = new byte[] { 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            Tracer.Trace(false, data);
-            return await Task.FromResult(data);
+            Logger.LogTrace(new Trace(false, data));
+
+            //Simulate IO delay and wait for a cancellation
+            for (var i = 0; i < 10; i++)
+            {
+                await Task.Delay(1);
+                if (cancellationToken.IsCancellationRequested) throw new OperationCanceledException(Messages.ErrorMessageOperationCanceled);
+            }
+
+            return data;
         }
 
-        public override Task WriteAsync(byte[] data)
+        public override async Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             LastWrittenBuffer = data;
-            Tracer.Trace(true, data);
-            return Task.FromResult(true);
+            Logger.LogTrace(new Trace(true, data));
+            //Simulate IO delay and wait for a cancellation
+            for (var i = 0; i < 10; i++)
+            {
+                await Task.Delay(1);
+                if (cancellationToken.IsCancellationRequested) throw new OperationCanceledException(Messages.ErrorMessageOperationCanceled);
+            }
+
+            return (uint)data.Length;
         }
     }
 }
