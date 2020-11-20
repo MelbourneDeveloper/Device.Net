@@ -9,7 +9,6 @@ using System.Linq;
 using SerialPort.Net.Windows;
 
 #if !LIBUSB
-using System.Reactive.Subjects;
 using Hid.Net.Windows;
 using Usb.Net.Windows;
 #else

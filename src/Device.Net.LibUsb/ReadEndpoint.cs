@@ -1,5 +1,4 @@
-﻿using System;
-using LibUsbDotNet;
+﻿using LibUsbDotNet;
 using Usb.Net;
 
 namespace Device.Net.LibUsb
