@@ -14,9 +14,9 @@ namespace Device.Net.LibUsb
             if (maxPacketSize.HasValue) MaxPacketSize = maxPacketSize.Value;
         }
 
-        public bool IsRead => true;
+        public bool IsRead => false;
 
-        public bool IsWrite => false;
+        public bool IsWrite => true;
 
         public bool IsInterrupt => false;
 

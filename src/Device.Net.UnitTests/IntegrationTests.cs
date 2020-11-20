@@ -84,49 +84,22 @@ namespace Device.Net.UnitTests
         public async Task TestSTMDFUModePerformControlTransferSend()
         {
             const string deviceID = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
-            var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID, loggerFactory: loggerFactory));
-            await windowsUsbDevice.InitializeAsync();
+            var stmDfuDevice = new UsbDevice(deviceID,
+                new WindowsUsbInterfaceManager(deviceID, loggerFactory: loggerFactory)
+                );
+            await stmDfuDevice.InitializeAsync();
 
-            ////////////////////////////////////////////////////////////
-            // required to perform a DFU Clear Status request beforehand
-            await windowsUsbDevice.ClearStatusAsync();
+            await PerformStmDfTest(stmDfuDevice);
+        }
 
-            // this sequence aims to test the "send data to device" using the Control Transfer
-            // executes a DFU "Set Address Pointer" command through the DFU DNLOAD request
-            ////////////////////////////////////
-            // 1st step: send DFU_DNLOAD request
-            var dfuRequestResult = await windowsUsbDevice.PerformControlTransferWithRetry(()
-                => windowsUsbDevice.SendDownloadRequestAsync());
+        [TestMethod]
+        public async Task TestSTMDFUModeLibUsbPerformControlTransferSend()
+        {
+            var stmDfuDevice = (UsbDevice)await new FilterDeviceDefinition(0x0483, 0xdf11)
+                .CreateLibUsbDeviceFactory(loggerFactory)
+                .ConnectFirstAsync();
 
-            // Assert that the bytes transfered match the buffer lenght
-            Assert.IsTrue(dfuRequestResult.BytesTransferred == StmDfuExtensions.DownloadRequestLength);
-
-            ///////////////////////////////////////
-            // 2nd step: send DFU_GETSTATUS request
-            dfuRequestResult = await windowsUsbDevice.PerformControlTransferWithRetry(()
-                => windowsUsbDevice.GetStatusAsync());
-
-            // Assert that the received buffer has the requested lenght 
-            Assert.IsTrue(dfuRequestResult.BytesTransferred == StmDfuExtensions.GetStatusPacketLength);
-
-            // check DFU status
-            Assert.IsTrue(dfuRequestResult.Data[4] != STATE_DFU_IDLE);
-
-            ///////////////////////////////////////////////////////////////
-            // 3rd step: send new DFU_GETSTATUS request to check execution
-            dfuRequestResult = await windowsUsbDevice.PerformControlTransferWithRetry(
-                () => windowsUsbDevice.GetStatusAsync()
-            );
-
-            // Assert that the received buffer has the requested lenght 
-            Assert.IsTrue(dfuRequestResult.BytesTransferred == StmDfuExtensions.GetStatusPacketLength);
-
-            // check DFU status
-            // status has to be different from STATUS_errTARGET
-            // state has to be different from STATE_DFU_ERROR
-            Assert.IsTrue(
-                dfuRequestResult.Data[0] != STATUS_errTARGET &&
-                dfuRequestResult.Data[4] != STATE_DFU_ERROR);
+            await PerformStmDfTest(stmDfuDevice);
         }
 #endif
 
@@ -273,6 +246,50 @@ namespace Device.Net.UnitTests
         #endregion
 
         #region Private Methods
+        private static async Task PerformStmDfTest(UsbDevice stmDfuDevice)
+        {
+            ////////////////////////////////////////////////////////////
+            // required to perform a DFU Clear Status request beforehand
+            await stmDfuDevice.ClearStatusAsync();
+
+            // this sequence aims to test the "send data to device" using the Control Transfer
+            // executes a DFU "Set Address Pointer" command through the DFU DNLOAD request
+            ////////////////////////////////////
+            // 1st step: send DFU_DNLOAD request
+            var dfuRequestResult = await stmDfuDevice.PerformControlTransferWithRetry(()
+                => stmDfuDevice.SendDownloadRequestAsync());
+
+            // Assert that the bytes transfered match the buffer lenght
+            Assert.IsTrue(dfuRequestResult.BytesTransferred == StmDfuExtensions.DownloadRequestLength);
+
+            ///////////////////////////////////////
+            // 2nd step: send DFU_GETSTATUS request
+            dfuRequestResult = await stmDfuDevice.PerformControlTransferWithRetry(()
+                => stmDfuDevice.GetStatusAsync());
+
+            // Assert that the received buffer has the requested lenght 
+            Assert.IsTrue(dfuRequestResult.BytesTransferred == StmDfuExtensions.GetStatusPacketLength);
+
+            // check DFU status
+            Assert.IsTrue(dfuRequestResult.Data[4] != STATE_DFU_IDLE);
+
+            ///////////////////////////////////////////////////////////////
+            // 3rd step: send new DFU_GETSTATUS request to check execution
+            dfuRequestResult = await stmDfuDevice.PerformControlTransferWithRetry(
+                () => stmDfuDevice.GetStatusAsync()
+            );
+
+            // Assert that the received buffer has the requested lenght 
+            Assert.IsTrue(dfuRequestResult.BytesTransferred == StmDfuExtensions.GetStatusPacketLength);
+
+            // check DFU status
+            // status has to be different from STATUS_errTARGET
+            // state has to be different from STATE_DFU_ERROR
+            Assert.IsTrue(
+                dfuRequestResult.Data[0] != STATUS_errTARGET &&
+                dfuRequestResult.Data[4] != STATE_DFU_ERROR);
+        }
+
         private static Task AssertTrezorResult(TransferResult responseData, IDevice device)
         {
             //Specify the response part of the Message Contract

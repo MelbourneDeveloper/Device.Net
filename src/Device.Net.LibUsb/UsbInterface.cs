@@ -69,7 +69,7 @@ namespace Device.Net.LibUsb
         public Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default)
         {
             if (setupPacket == null) throw new ArgumentNullException(nameof(setupPacket));
-            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+            buffer ??= new byte[setupPacket.Length];
 
             var sp = new UsbSetupPacket(
                 (byte)setupPacket.RequestType.Type,
