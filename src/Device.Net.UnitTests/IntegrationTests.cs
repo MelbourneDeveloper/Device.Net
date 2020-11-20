@@ -87,13 +87,14 @@ namespace Device.Net.UnitTests
             var stmDfuDevice = new UsbDevice(deviceID,
                 new WindowsUsbInterfaceManager(deviceID, loggerFactory: loggerFactory)
                 );
+
             await stmDfuDevice.InitializeAsync();
 
             await PerformStmDfTest(stmDfuDevice);
         }
 
         [TestMethod]
-        public async Task TestSTMDFUModePerformControlTransferSend_DefaultGuid()
+        public async Task TestSTMDFUModePerformControlTransferSend_DefaultGuid_WinUSBGuid()
         {
             var stmDfuDevice = await new FilterDeviceDefinition(0x0483, 0xdf11)
                 .CreateWindowsUsbDeviceFactory(loggerFactory)
@@ -103,7 +104,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestSTMDFUModePerformControlTransferSendZadig()
+        public async Task TestSTMDFUModePerformControlTransferSend_Zadig()
         {
             //This is the Zadig driver on my machine apparently...
             const string deviceID = @"\\\\?\\usb#vid_0483&pid_df11#00000008ffff#{f1e6f51b-72ea-43e1-b267-30056cd69e81}";
@@ -116,7 +117,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestSTMDFUModeLibUsbPerformControlTransferSend()
+        public async Task TestSTMDFUModePerformControlTransferSend_LibUsb()
         {
             var stmDfuDevice = await new FilterDeviceDefinition(0x0483, 0xdf11)
                 .CreateLibUsbDeviceFactory(loggerFactory)
