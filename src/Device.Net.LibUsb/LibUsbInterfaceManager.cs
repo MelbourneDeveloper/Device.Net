@@ -16,7 +16,6 @@ namespace Device.Net.LibUsb
         #region Fields
         private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         private bool disposed;
-
         private ushort? _writeBufferSize { get; }
         private ushort? _readBufferSize { get; }
         #endregion
@@ -32,7 +31,12 @@ namespace Device.Net.LibUsb
         #endregion
 
         #region Constructor
-        public LibUsbInterfaceManager(UsbDevice usbDevice, int timeout, ILogger logger, ushort? writeBufferSize, ushort? readBufferSize) : base(logger, tracer)
+        public LibUsbInterfaceManager(
+            UsbDevice usbDevice,
+            int timeout,
+            ILoggerFactory loggerFactory,
+            ushort? writeBufferSize,
+            ushort? readBufferSize) : base(loggerFactory)
         {
             UsbDevice = usbDevice;
             Timeout = timeout;
@@ -43,7 +47,7 @@ namespace Device.Net.LibUsb
         #endregion
 
         #region Protected Overrides
-        protected override async Task InitializeProtectedAsync()
+        public async Task InitializeAsync()
         {
             if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
@@ -71,7 +75,7 @@ namespace Device.Net.LibUsb
                     foreach (var usbInterfaceInfo in usbConfigInfo.InterfaceInfoList)
                     {
                         //Create an interface.
-                        var usbInterface = new UsbInterface(Timeout, Tracer, null, Logger, null, usbInterfaceInfo.Descriptor.InterfaceID);
+                        var usbInterface = new UsbInterface(UsbDevice, usbInterfaceInfo.Descriptor.InterfaceID, null, null, Logger, Timeout);
 
                         UsbInterfaces.Add(usbInterface);
 
@@ -80,14 +84,14 @@ namespace Device.Net.LibUsb
 
                         //Write endpoint
                         var usbEndpointWriter = UsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
-                        var writeBufferSize = _writeBufferSize ?? (ushort)64;
+                        var writeBufferSize = _writeBufferSize ?? 64;
                         var writeEndpoint = new WriteEndpoint(usbEndpointWriter, writeBufferSize);
                         usbInterface.UsbInterfaceEndpoints.Add(writeEndpoint);
                         if (usbInterface.WriteEndpoint == null) usbInterface.WriteEndpoint = writeEndpoint;
 
                         //Read endpoint
                         var usbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
-                        var readBufferSize = _readBufferSize ?? (ushort)64;
+                        var readBufferSize = _readBufferSize ?? 64;
                         var readEndpoint = new ReadEndpoint(usbEndpointReader, readBufferSize);
                         usbInterface.UsbInterfaceEndpoints.Add(readEndpoint);
                         if (usbInterface.ReadEndpoint == null) usbInterface.ReadEndpoint = readEndpoint;
@@ -180,9 +184,15 @@ namespace Device.Net.LibUsb
         #endregion
 
         #region Public Static Methods
-        public static int GetVendorId(UsbDevice usbDevice) => usbDevice is MonoUsbDevice monoUsbDevice ? monoUsbDevice.Profile.DeviceDescriptor.VendorID : usbDevice.UsbRegistryInfo.Vid;
+        public static int GetVendorId(UsbDevice usbDevice)
+            => usbDevice == null ? throw new ArgumentNullException(nameof(usbDevice)) :
+            usbDevice is MonoUsbDevice monoUsbDevice ? monoUsbDevice.Profile.DeviceDescriptor.VendorID
+            : usbDevice.UsbRegistryInfo.Vid;
 
-        public static int GetProductId(UsbDevice usbDevice) => usbDevice is MonoUsbDevice monoUsbDevice ? monoUsbDevice.Profile.DeviceDescriptor.ProductID : usbDevice.UsbRegistryInfo.Pid;
+        public static int GetProductId(UsbDevice usbDevice)
+            => usbDevice == null ? throw new ArgumentNullException(nameof(usbDevice)) :
+            usbDevice is MonoUsbDevice monoUsbDevice ? monoUsbDevice.Profile.DeviceDescriptor.ProductID
+            : usbDevice.UsbRegistryInfo.Pid;
 
         public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync()
         {
@@ -195,7 +205,12 @@ namespace Device.Net.LibUsb
                 return Task.FromResult(result);
             }
 
-            return Task.FromResult(new ConnectedDeviceDefinition(UsbDevice.DevicePath) { });
+            //TODO: Return more information
+            return Task.FromResult(new ConnectedDeviceDefinition(
+                UsbDevice.DevicePath,
+                DeviceType.Usb,
+                (uint)GetVendorId(UsbDevice),
+                (uint)GetProductId(UsbDevice)));
         }
         #endregion
     }
