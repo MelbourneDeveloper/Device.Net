@@ -71,3 +71,6 @@ csharp_style_expression_bodied_operators = true:error
 
 # IDE0021: Use block body for constructors
 csharp_style_expression_bodied_constructors = true:error
+
+# IDE1006: Naming Styles
+dotnet_diagnostic.IDE1006.severity = suggestion

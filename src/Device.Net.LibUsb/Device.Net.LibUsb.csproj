@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Version>3.1.0</Version>
+    <LangVersion>8</LangVersion>
     <Authors>Christian Findlay</Authors>
     <Company>Christian Findlay</Company>
     <Product>Device.Net.LibUsb</Product>
@@ -47,6 +48,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
+    <ProjectReference Include="..\Usb.Net\Usb.Net.csproj" />
   </ItemGroup>
 
   <ItemGroup>
