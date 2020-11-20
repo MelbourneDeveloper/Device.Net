@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Device.Net.LibUsb;
 
 #if !WINDOWS_UWP
 using Hid.Net.Windows;
@@ -152,6 +153,15 @@ namespace Device.Net.UnitTests
         new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53c1)
             .GetUsbDeviceFactory()
             );
+
+#if !NET45
+
+        [TestMethod]
+        public Task TestWriteAndReadFromTrezorLibUsb() => TestWriteAndReadFromTrezor(
+            new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53C1, label: "Trezor One Firmware 1.7.x")
+            .CreateLibUsbDeviceFactory(loggerFactory)
+        );
+#endif
 
         private async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64)
         {

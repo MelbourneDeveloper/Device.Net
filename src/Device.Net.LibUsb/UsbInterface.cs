@@ -59,8 +59,8 @@ namespace Device.Net.LibUsb
                 }
                 else
                 {
-                    var message = $"Error. Write error code: {errorCode}";
-                    Logger.LogError(message, GetType().Name, null, LogLevel.Error);
+                    var message = "Error. Write error code: {errorCode}";
+                    Logger.LogError(new Exception(message), message, errorCode);
                     throw new IOException(message);
                 }
             }, cancellationToken);

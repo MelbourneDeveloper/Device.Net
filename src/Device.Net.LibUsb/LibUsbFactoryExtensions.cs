@@ -3,6 +3,7 @@ using LibUsbDotNet.Main;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +12,24 @@ namespace Device.Net.LibUsb
     public static class LibUsbFactoryExtensions
     {
         public static IDeviceFactory CreateLibUsbDeviceFactory(
+            this FilterDeviceDefinition filterDeviceDefinition,
+            ILoggerFactory loggerFactory = null,
+            int? timeout = null,
+            ushort? writeBufferSize = null,
+            ushort? readBufferSize = null,
+            Func<ConnectedDeviceDefinition, Task<bool>> supportsDevice = null
+            )
+             => CreateLibUsbDeviceFactory
+                    (
+                        new ReadOnlyCollection<FilterDeviceDefinition>(new List<FilterDeviceDefinition> { filterDeviceDefinition }),
+                        loggerFactory,
+                        timeout,
+                        writeBufferSize,
+                        readBufferSize,
+                        supportsDevice
+                 );
+
+        public static IDeviceFactory CreateLibUsbDeviceFactory(
             this IReadOnlyList<FilterDeviceDefinition> filterDeviceDefinitions,
             ILoggerFactory loggerFactory = null,
             int? timeout = null,
@@ -18,8 +37,7 @@ namespace Device.Net.LibUsb
             ushort? readBufferSize = null,
             Func<ConnectedDeviceDefinition, Task<bool>> supportsDevice = null
             )
-        {
-            return new DeviceFactory(
+             => new DeviceFactory(
                 loggerFactory,
                 () => GetConnectedDeviceDefinitionsAsync(filterDeviceDefinitions),
                 async c =>
@@ -34,7 +52,6 @@ namespace Device.Net.LibUsb
                         supportsDevice ??
                         new Func<ConnectedDeviceDefinition, Task<bool>>((c) => Task.FromResult(c.DeviceType == DeviceType.Usb))
             );
-        }
 
         public static async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(IReadOnlyList<FilterDeviceDefinition> filterDeviceDefinitions)
         {
