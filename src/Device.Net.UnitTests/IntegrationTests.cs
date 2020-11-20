@@ -53,7 +53,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestConnectToSTMDFUMode()
+        public async Task TestConnectToSTMDFUMode_GUID_DEVINTERFACE_USB_DEVICE()
         {
             const string deviceID = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
             var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID));
@@ -61,7 +61,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestSTMDFUModePerformControlTransferReceive()
+        public async Task TestSTMDFUModePerformControlTransferReceive_GUID_DEVINTERFACE_USB_DEVICE()
         {
             const string deviceID = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
             var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID, loggerFactory: loggerFactory));
@@ -81,7 +81,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestSTMDFUModePerformControlTransferSend()
+        public async Task TestSTMDFUModePerformControlTransferSend_GUID_DEVINTERFACE_USB_DEVICE()
         {
             const string deviceID = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
             var stmDfuDevice = new UsbDevice(deviceID,
@@ -93,13 +93,36 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
+        public async Task TestSTMDFUModePerformControlTransferSend_DefaultGuid()
+        {
+            var stmDfuDevice = await new FilterDeviceDefinition(0x0483, 0xdf11)
+                .CreateWindowsUsbDeviceFactory(loggerFactory)
+                .ConnectFirstAsync();
+
+            await PerformStmDfTest((IUsbDevice)stmDfuDevice);
+        }
+
+        [TestMethod]
+        public async Task TestSTMDFUModePerformControlTransferSendZadig()
+        {
+            //This is the Zadig driver on my machine apparently...
+            const string deviceID = @"\\\\?\\usb#vid_0483&pid_df11#00000008ffff#{f1e6f51b-72ea-43e1-b267-30056cd69e81}";
+            var stmDfuDevice = new UsbDevice(deviceID,
+                new WindowsUsbInterfaceManager(deviceID, loggerFactory: loggerFactory)
+                );
+            await stmDfuDevice.InitializeAsync();
+
+            await PerformStmDfTest(stmDfuDevice);
+        }
+
+        [TestMethod]
         public async Task TestSTMDFUModeLibUsbPerformControlTransferSend()
         {
-            var stmDfuDevice = (UsbDevice)await new FilterDeviceDefinition(0x0483, 0xdf11)
+            var stmDfuDevice = await new FilterDeviceDefinition(0x0483, 0xdf11)
                 .CreateLibUsbDeviceFactory(loggerFactory)
                 .ConnectFirstAsync();
 
-            await PerformStmDfTest(stmDfuDevice);
+            await PerformStmDfTest((IUsbDevice)stmDfuDevice);
         }
 #endif
 
@@ -246,7 +269,7 @@ namespace Device.Net.UnitTests
         #endregion
 
         #region Private Methods
-        private static async Task PerformStmDfTest(UsbDevice stmDfuDevice)
+        private static async Task PerformStmDfTest(IUsbDevice stmDfuDevice)
         {
             ////////////////////////////////////////////////////////////
             // required to perform a DFU Clear Status request beforehand
