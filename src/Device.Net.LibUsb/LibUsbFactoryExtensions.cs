@@ -13,13 +13,27 @@ namespace Device.Net.LibUsb
         public static IDeviceFactory CreateLibUsbDeviceFactory(
             this IReadOnlyList<FilterDeviceDefinition> filterDeviceDefinitions,
             ILoggerFactory loggerFactory = null,
-            int? timeout = null)
+            int? timeout = null,
+            ushort? writeBufferSize = null,
+            ushort? readBufferSize = null,
+            Func<ConnectedDeviceDefinition, Task<bool>> supportsDevice = null
+            )
         {
             return new DeviceFactory(
                 loggerFactory,
                 () => GetConnectedDeviceDefinitionsAsync(filterDeviceDefinitions),
-                async c => new LibUsbDevice(GetDevice(c), timeout ?? 1000),
-                (c) => Task.FromResult(c.DeviceType == DeviceType.Hid));
+                async c =>
+                new Usb.Net.UsbDevice(
+                    c.DeviceId,
+                    new LibUsbInterfaceManager(
+                        GetDevice(c),
+                        timeout ?? 1000,
+                        loggerFactory,
+                        writeBufferSize,
+                        readBufferSize), loggerFactory),
+                        supportsDevice ??
+                        new Func<ConnectedDeviceDefinition, Task<bool>>((c) => Task.FromResult(c.DeviceType == DeviceType.Usb))
+            );
         }
 
         public static async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(IReadOnlyList<FilterDeviceDefinition> filterDeviceDefinitions)
