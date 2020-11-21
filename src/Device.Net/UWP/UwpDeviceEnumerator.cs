@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -64,7 +65,7 @@ namespace Device.Net.UWP
                 }
             }
 
-            return deviceDefinitionList;
+            return new ReadOnlyCollection<ConnectedDeviceDefinition>(deviceDefinitionList);
         }
 
         private async Task<ConnectionInfo> TestConnection(string deviceId, CancellationToken cancellationToken = default)

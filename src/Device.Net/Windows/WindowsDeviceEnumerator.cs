@@ -39,7 +39,7 @@ namespace Device.Net.Windows
                 try
                 {
 
-                    var deviceDefinitions = new Collection<ConnectedDeviceDefinition>();
+                    var deviceDefinitions = new List<ConnectedDeviceDefinition>();
                     var spDeviceInterfaceData = new SpDeviceInterfaceData();
                     var spDeviceInfoData = new SpDeviceInfoData();
                     var spDeviceInterfaceDetailData = new SpDeviceInterfaceDetailData();
@@ -135,7 +135,7 @@ namespace Device.Net.Windows
 
                     APICalls.SetupDiDestroyDeviceInfoList(devicesHandle);
 
-                    return deviceDefinitions;
+                    return new ReadOnlyCollection<ConnectedDeviceDefinition>(deviceDefinitions);
                 }
                 catch (Exception ex)
                 {

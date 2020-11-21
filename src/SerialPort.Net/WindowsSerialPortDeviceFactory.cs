@@ -88,7 +88,7 @@ namespace SerialPort.Net.Windows
                 }
             }
 
-            return returnValue;
+            return new ReadOnlyCollection<ConnectedDeviceDefinition>(returnValue);
         }
 
         public Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default)
