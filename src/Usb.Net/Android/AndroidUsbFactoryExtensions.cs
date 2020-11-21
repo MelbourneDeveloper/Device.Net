@@ -54,33 +54,25 @@ namespace Usb.Net.Android
             {
                 getConnectedDeviceDefinitionsAsync = (cancellationToken) =>
 
-               Task.FromResult(
-
-<<<<<<< HEAD
-                new ReadOnlyCollection<ConnectedDeviceDefinition>(
-
-                     usbManager.DeviceList.Select(kvp => kvp.Value).Where(d
-                     =>
-                         filterDeviceDefinitions.FirstOrDefault(f
-                            =>
-                            (!f.VendorId.HasValue || f.VendorId.Value == d.VendorId) &&
-                            (!f.ProductId.HasValue || f.ProductId.Value == d.ProductId)
-                        ) != null
-
-                    ).Select(AndroidUsbInterfaceManager.GetAndroidDeviceDefinition).ToList()
-
-                    );
-=======
-                    usbManager.DeviceList.Select(kvp => kvp.Value).Where(d
-                    =>
-                        filterDeviceDefinitions.FirstOrDefault(f
-                           =>
-                           (!f.VendorId.HasValue || f.VendorId.Value == d.VendorId) &&
-                           (!f.ProductId.HasValue || f.ProductId.Value == d.ProductId)
-                       ) != null
-
-                   ).Select(AndroidUsbInterfaceManager.GetAndroidDeviceDefinition));
->>>>>>> develop
+               Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>
+               (
+                    new ReadOnlyCollection<ConnectedDeviceDefinition>
+                    (
+                        usbManager.DeviceList.Select(kvp => kvp.Value)
+                        .Where
+                        (
+                            d =>
+                            filterDeviceDefinitions.FirstOrDefault
+                            (
+                                f =>
+                                (!f.VendorId.HasValue || f.VendorId.Value == d.VendorId) &&
+                                (!f.ProductId.HasValue || f.ProductId.Value == d.ProductId)
+                            ) != null
+                        )
+                        .Select(AndroidUsbInterfaceManager.GetAndroidDeviceDefinition)
+                        .ToList()
+                    )
+                );
             }
 
             if (getUsbInterfaceManager == null)
