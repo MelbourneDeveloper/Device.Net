@@ -25,7 +25,7 @@ namespace Usb.Net.Android
         )
         {
             return CreateAndroidUsbDeviceFactory(
-                new List<FilterDeviceDefinition> { filterDeviceDefinition },
+                new ReadOnlyCollection<FilterDeviceDefinition>(new List<FilterDeviceDefinition> { filterDeviceDefinition }),
                 usbManager,
                 context,
                 loggerFactory,

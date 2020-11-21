@@ -64,7 +64,7 @@ namespace Hid.Net.Windows
         byte? defaultReportId = null)
         {
             return CreateWindowsHidDeviceFactory(
-                new List<FilterDeviceDefinition> { filterDeviceDefinition },
+                new ReadOnlyCollection<FilterDeviceDefinition>(new List<FilterDeviceDefinition> { filterDeviceDefinition }),
                 loggerFactory,
                 hidApiService,
                 classGuid,
