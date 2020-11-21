@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net
@@ -8,7 +9,7 @@ namespace Device.Net
         ushort WriteBufferSize { get; }
         ushort ReadBufferSize { get; }
         bool IsInitialized { get; }
-        Task InitializeAsync();
+        Task InitializeAsync(CancellationToken cancellationToken = default);
         void Close();
     }
 }

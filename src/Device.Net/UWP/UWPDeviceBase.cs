@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net.UWP
@@ -40,7 +41,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Abstract Methods
-        public abstract Task InitializeAsync();
+        public abstract Task InitializeAsync(CancellationToken cancellationToken = default);
         #endregion
 
         #region Constructor

@@ -23,7 +23,7 @@ namespace Device.Net.UnitTests
         {
         }
 
-        public Task InitializeAsync()
+        public Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             _IsInitialized = true;
             return Task.FromResult(true);

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Usb.Net.Windows
@@ -230,14 +231,14 @@ namespace Usb.Net.Windows
             GC.SuppressFinalize(this);
         }
 
-        public async Task InitializeAsync() => await Task.Run(Initialize);
+        public async Task InitializeAsync(CancellationToken cancellationToken = default) => await Task.Run(Initialize, cancellationToken);
 
-        public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync()
+        public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync(CancellationToken cancellationToken = default)
         {
             if (_DeviceHandle == null) throw new NotInitializedException();
 
             //TODO: Is this right?
-            return Task.Run(() => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(DeviceId, DeviceType.Usb, Logger));
+            return Task.Run(() => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(DeviceId, DeviceType.Usb, Logger), cancellationToken);
         }
         #endregion
     }

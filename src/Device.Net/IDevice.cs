@@ -24,7 +24,7 @@ namespace Device.Net
         /// <summary>
         /// Close any existing connections and reinitialize the device. 
         /// </summary>
-        Task InitializeAsync();
+        Task InitializeAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Write a page of data and then wait for the device to return a page. If the implementation derives from DeviceBase, this method is thread safe.

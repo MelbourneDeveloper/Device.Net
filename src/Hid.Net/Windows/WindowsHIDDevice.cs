@@ -184,11 +184,11 @@ namespace Hid.Net.Windows
             base.Dispose();
         }
 
-        public override async Task InitializeAsync()
+        public override async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
-            await Task.Run(Initialize);
+            await Task.Run(Initialize, cancellationToken);
         }
 
 

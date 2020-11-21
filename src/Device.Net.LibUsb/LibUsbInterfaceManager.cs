@@ -47,7 +47,7 @@ namespace Device.Net.LibUsb
         #endregion
 
         #region Protected Overrides
-        public async Task InitializeAsync()
+        public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
@@ -132,7 +132,7 @@ namespace Device.Net.LibUsb
                 }
 
                 IsInitialized = true;
-            });
+            }, cancellationToken);
         }
         #endregion
 
@@ -194,7 +194,7 @@ namespace Device.Net.LibUsb
             usbDevice is MonoUsbDevice monoUsbDevice ? monoUsbDevice.Profile.DeviceDescriptor.ProductID
             : usbDevice.UsbRegistryInfo.Pid;
 
-        public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync()
+        public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync(CancellationToken cancellationToken = default)
         {
             //TODO: this isn't very nice
 

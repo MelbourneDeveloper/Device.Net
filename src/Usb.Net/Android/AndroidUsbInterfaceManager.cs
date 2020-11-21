@@ -106,97 +106,78 @@ namespace Usb.Net.Android
 
         public Task WriteAsync(byte[] data) => WriteUsbInterface.WriteAsync(data);
 
-        #endregion
-
-        #region Private  Methods
-        private Task<bool?> RequestPermissionAsync()
+        public Task InitializeAsync(CancellationToken cancellationToken = default)
         {
-            Logger.LogInformation("Requesting USB permission");
+            if (disposed) throw new DeviceException(Messages.DeviceDisposedErrorMessage);
 
-            var taskCompletionSource = new TaskCompletionSource<bool?>();
-
-            var usbPermissionBroadcastReceiver = new UsbPermissionBroadcastReceiver(
-                UsbManager,
-                _UsbDevice,
-                AndroidContext,
-                LoggerFactory.CreateLogger<UsbPermissionBroadcastReceiver>());
-            usbPermissionBroadcastReceiver.Received += (sender, eventArgs) => taskCompletionSource.SetResult(usbPermissionBroadcastReceiver.IsPermissionGranted);
-
-            usbPermissionBroadcastReceiver.Register();
-
-            return taskCompletionSource.Task;
-        }
-
-        public async Task InitializeAsync()
-        {
             using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceNumberId, nameof(InitializeAsync));
 
             try
             {
-
-                if (disposed) throw new DeviceException(Messages.DeviceDisposedErrorMessage);
-
-                await _InitializingSemaphoreSlim.WaitAsync();
-
-                Close();
-
-                _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceNumberId);
-
-                if (_UsbDevice == null)
+                return Task.Run(async () =>
                 {
-                    throw new DeviceException($"The device {DeviceNumberId} is not connected to the system");
-                }
+                    await _InitializingSemaphoreSlim.WaitAsync();
 
-                Logger.LogInformation("Found device: {deviceName} Id: {deviceId}", _UsbDevice.DeviceName, _UsbDevice.DeviceId);
+                    Close();
 
-                var isPermissionGranted = await RequestPermissionAsync();
-                if (!isPermissionGranted.HasValue)
-                {
-                    throw new DeviceException("User did not respond to permission request");
-                }
+                    _UsbDevice = UsbManager.DeviceList.Select(d => d.Value).FirstOrDefault(d => d.DeviceId == DeviceNumberId);
 
-                if (!isPermissionGranted.Value)
-                {
-                    throw new DeviceException("The user did not give the permission to access the device");
-                }
-
-                _UsbDeviceConnection = UsbManager.OpenDevice(_UsbDevice);
-
-                if (_UsbDeviceConnection == null)
-                {
-                    throw new DeviceException("could not open connection");
-                }
-
-                Logger.LogInformation("Interface count: {count}", _UsbDevice.InterfaceCount);
-
-                for (var interfaceNumber = 0; interfaceNumber < _UsbDevice.InterfaceCount; interfaceNumber++)
-                {
-                    //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
-                    var usbInterface = _UsbDevice.GetInterface(interfaceNumber);
-
-                    var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, LoggerFactory.CreateLogger<AndroidUsbInterface>(), ReadBufferSizeProtected, WriteBufferSizeProtected);
-
-                    Logger.LogInformation("Interface found. Id: {id} Endpoint Count: {endpointCount} Interface Class: {interfaceclass} Interface Subclass: {interfacesubclass} Name: {name}", usbInterface.Id, usbInterface.EndpointCount, usbInterface.InterfaceClass, usbInterface.InterfaceSubclass, usbInterface.Name);
-
-                    UsbInterfaces.Add(androidUsbInterface);
-
-                    for (var endpointNumber = 0; endpointNumber < usbInterface.EndpointCount; endpointNumber++)
+                    if (_UsbDevice == null)
                     {
-                        var usbEndpoint = usbInterface.GetEndpoint(endpointNumber);
-
-                        if (usbEndpoint != null)
-                        {
-                            var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, interfaceNumber, LoggerFactory.CreateLogger<AndroidUsbEndpoint>());
-                            androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
-                        }
+                        throw new DeviceException($"The device {DeviceNumberId} is not connected to the system");
                     }
 
-                    await androidUsbInterface.ClaimInterface();
-                }
+                    Logger.LogInformation("Found device: {deviceName} Id: {deviceId}", _UsbDevice.DeviceName, _UsbDevice.DeviceId);
 
-                RegisterDefaultInterfaces();
+                    var isPermissionGranted = await RequestPermissionAsync();
+                    if (!isPermissionGranted.HasValue)
+                    {
+                        throw new DeviceException("User did not respond to permission request");
+                    }
 
-                Logger.LogInformation("Device initialized successfully.");
+                    if (!isPermissionGranted.Value)
+                    {
+                        throw new DeviceException("The user did not give the permission to access the device");
+                    }
+
+                    _UsbDeviceConnection = UsbManager.OpenDevice(_UsbDevice);
+
+                    if (_UsbDeviceConnection == null)
+                    {
+                        throw new DeviceException("could not open connection");
+                    }
+
+                    Logger.LogInformation("Interface count: {count}", _UsbDevice.InterfaceCount);
+
+                    for (var interfaceNumber = 0; interfaceNumber < _UsbDevice.InterfaceCount; interfaceNumber++)
+                    {
+                        //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
+                        var usbInterface = _UsbDevice.GetInterface(interfaceNumber);
+
+                        var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, LoggerFactory.CreateLogger<AndroidUsbInterface>(), ReadBufferSizeProtected, WriteBufferSizeProtected);
+
+                        Logger.LogInformation("Interface found. Id: {id} Endpoint Count: {endpointCount} Interface Class: {interfaceclass} Interface Subclass: {interfacesubclass} Name: {name}", usbInterface.Id, usbInterface.EndpointCount, usbInterface.InterfaceClass, usbInterface.InterfaceSubclass, usbInterface.Name);
+
+                        UsbInterfaces.Add(androidUsbInterface);
+
+                        for (var endpointNumber = 0; endpointNumber < usbInterface.EndpointCount; endpointNumber++)
+                        {
+                            var usbEndpoint = usbInterface.GetEndpoint(endpointNumber);
+
+                            if (usbEndpoint != null)
+                            {
+                                var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, interfaceNumber, LoggerFactory.CreateLogger<AndroidUsbEndpoint>());
+                                androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
+                            }
+                        }
+
+                        await androidUsbInterface.ClaimInterface();
+                    }
+
+                    RegisterDefaultInterfaces();
+
+                    Logger.LogInformation("Device initialized successfully.");
+                }, cancellationToken);
             }
             catch (Exception ex)
             {
@@ -218,6 +199,7 @@ namespace Usb.Net.Android
             return new ConnectedDeviceDefinition(
                 deviceId,
                 DeviceType.Usb,
+                //TODO: Put these back when it is safe to do so
                 //productName: usbDevice.ProductName,
                 //manufacturer: usbDevice.ManufacturerName,
                 //serialNumber: usbDevice.SerialNumber,
@@ -226,7 +208,27 @@ namespace Usb.Net.Android
             );
         }
 
-        public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync() => Task.Run(() => GetAndroidDeviceDefinition(_UsbDevice));
+        public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync(CancellationToken cancellationToken = default) => Task.Run(() => GetAndroidDeviceDefinition(_UsbDevice), cancellationToken);
+        #endregion
+
+        #region Private  Methods
+        private Task<bool?> RequestPermissionAsync()
+        {
+            Logger.LogInformation("Requesting USB permission");
+
+            var taskCompletionSource = new TaskCompletionSource<bool?>();
+
+            var usbPermissionBroadcastReceiver = new UsbPermissionBroadcastReceiver(
+                UsbManager,
+                _UsbDevice,
+                AndroidContext,
+                LoggerFactory.CreateLogger<UsbPermissionBroadcastReceiver>());
+            usbPermissionBroadcastReceiver.Received += (sender, eventArgs) => taskCompletionSource.SetResult(usbPermissionBroadcastReceiver.IsPermissionGranted);
+
+            usbPermissionBroadcastReceiver.Register();
+
+            return taskCompletionSource.Task;
+        }
         #endregion
 
         #region Finalizer
