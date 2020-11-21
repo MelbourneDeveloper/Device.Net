@@ -93,7 +93,6 @@ namespace Device.Net.UWP
                 _TestConnectionSemaphore.Release();
             }
         }
-
         public void Dispose() => _TestConnectionSemaphore.Dispose();
         #endregion
     }

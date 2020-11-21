@@ -1,4 +1,4 @@
-﻿using Device.Net;
+using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
@@ -7,13 +7,33 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
 
     public static class WindowsHidDeviceFactoryExtensions
     {
-        public static IDeviceManager CreateWindowsHidDeviceManager(
+        public static IDeviceFactory CreateWindowsHidDeviceFactory(
+        ILoggerFactory loggerFactory = null,
+        IHidApiService hidApiService = null,
+        Guid? classGuid = null,
+        ushort? readBufferSize = null,
+        ushort? writeBufferSize = null)
+        {
+            return CreateWindowsHidDeviceFactory(
+                new ReadOnlyCollection<FilterDeviceDefinition>(new List<FilterDeviceDefinition>()),
+                loggerFactory,
+                hidApiService,
+                classGuid,
+                readBufferSize,
+                writeBufferSize
+                );
+        }
+
+        //TODO: this is named incorrectly. This needs to be fixed
+
+        public static IDeviceFactory CreateWindowsHidDeviceManager(
         this FilterDeviceDefinition filterDeviceDefinition,
         ILoggerFactory loggerFactory = null,
         IHidApiService hidApiService = null,
@@ -62,16 +82,20 @@ namespace Hid.Net.Windows
             ushort? writeBufferSize = null,
             byte? defaultReportId = null)
         {
+            if (filterDeviceDefinitions == null) throw new ArgumentNullException(nameof(filterDeviceDefinitions));
+
             loggerFactory ??= NullLoggerFactory.Instance;
 
             var selectedHidApiService = hidApiService ?? new WindowsHidApiService(loggerFactory);
 
+            classGuid ??= selectedHidApiService.GetHidGuid();
+
             var windowsDeviceEnumerator = new WindowsDeviceEnumerator(
                 loggerFactory.CreateLogger<WindowsDeviceEnumerator>(),
-                classGuid ?? selectedHidApiService.GetHidGuid(),
-                d => GetDeviceDefinition(d, selectedHidApiService, loggerFactory.CreateLogger(nameof(WindowsHidDeviceFactoryExtensions))),
+                classGuid.Value,
+                (d, guid) => GetDeviceDefinition(d, selectedHidApiService, loggerFactory.CreateLogger(nameof(WindowsHidDeviceFactoryExtensions))),
                 async c =>
-                    filterDeviceDefinitions.FirstOrDefault(f => DeviceManager.IsDefinitionMatch(f, c, DeviceType.Hid)) != null
+                    !filterDeviceDefinitions.Any() || filterDeviceDefinitions.FirstOrDefault(f => f.IsDefinitionMatch(c, DeviceType.Hid)) != null
                 );
 
             return new DeviceFactory(
@@ -86,7 +110,7 @@ namespace Hid.Net.Windows
                     writeBufferSize: writeBufferSize,
                     defaultReportId: defaultReportId
                 ),
-                DeviceType.Hid);
+                (c) => Task.FromResult(c.DeviceType == DeviceType.Hid));
         }
 
         private static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, IHidApiService HidService, ILogger logger)

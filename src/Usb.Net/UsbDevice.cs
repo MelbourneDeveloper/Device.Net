@@ -49,14 +49,14 @@ namespace Usb.Net
             ConnectedDeviceDefinition = await UsbInterfaceManager.GetConnectedDeviceDefinitionAsync();
         }
 
-        public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
+        public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             return UsbInterfaceManager.ReadUsbInterface == null
                 ? throw new DeviceException(Messages.ErrorMessageNoReadInterfaceSpecified)
                 : await UsbInterfaceManager.ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
         }
 
-        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+        public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             return UsbInterfaceManager.WriteUsbInterface == null
                 ? throw new DeviceException(Messages.ErrorMessageNoWriteInterfaceSpecified)

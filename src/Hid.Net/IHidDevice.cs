@@ -7,7 +7,7 @@ namespace Hid.Net
     public interface IHidDevice : IDevice
     {
         Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default);
-        Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default);
+        Task<uint> WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default);
         byte? DefaultReportId { get; }
     }
 }

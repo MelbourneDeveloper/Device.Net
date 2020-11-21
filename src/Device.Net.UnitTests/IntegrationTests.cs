@@ -4,6 +4,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Device.Net.LibUsb;
 
 #if !WINDOWS_UWP
 using Hid.Net.Windows;
@@ -16,28 +20,14 @@ using Hid.Net.UWP;
 
 namespace Device.Net.UnitTests
 {
-    public static class GetFactoryExtensions
-    {
-        public static IDeviceFactory GetUsbDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition) =>
-#if !WINDOWS_UWP
-            filterDeviceDefinition.CreateWindowsUsbDeviceFactory();
-#else
-            filterDeviceDefinition.CreateUwpUsbDeviceFactory();
-#endif
-
-
-        public static IDeviceFactory GetHidDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition, byte? defultReportId = null) =>
-#if !WINDOWS_UWP
-            filterDeviceDefinition.CreateWindowsHidDeviceFactory(defaultReportId: defultReportId);
-#else
-            filterDeviceDefinition.CreateUwpHidDeviceFactory(defaultReportId: defultReportId);
-#endif
-    }
-
     [TestClass]
     public class IntegrationTests
-
     {
+        private const byte STATE_DFU_IDLE = 0x02;
+        private const byte STATE_DFU_ERROR = 0x0A;
+        private const byte STATUS_errTARGET = 0x01;
+
+        private ILoggerFactory loggerFactory;
 
         #region Tests
 #if !WINDOWS_UWP
@@ -53,11 +43,87 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestConnectToSTMDFUMode()
+        public async Task TestFindSTMDFUModeWithFactory2()
+        {
+            var device = await new FilterDeviceDefinition(0x0483, 0xdf11)
+                .CreateWindowsUsbDeviceFactory(classGuid: WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE)
+                .GetFirstDeviceAsync();
+
+            await device.InitializeAsync();
+        }
+
+        [TestMethod]
+        public async Task TestConnectToSTMDFUMode_GUID_DEVINTERFACE_USB_DEVICE()
         {
             const string deviceID = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
             var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID));
             await windowsUsbDevice.InitializeAsync();
+        }
+
+        [TestMethod]
+        public async Task TestSTMDFUModePerformControlTransferReceive_GUID_DEVINTERFACE_USB_DEVICE()
+        {
+            const string deviceID = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
+            var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID, loggerFactory: loggerFactory));
+            await windowsUsbDevice.InitializeAsync();
+
+            await windowsUsbDevice.ClearStatusAsync();
+
+            var dfuStatus = await windowsUsbDevice.PerformControlTransferWithRetry(
+                () => windowsUsbDevice.GetStatusAsync());
+
+            //TODO: This sometimes fails. Perhaps it should be part of the retry?
+
+            // Assert that the received buffer has the requested lenght ADN that DFU State (at position 4) is STATE_DFU_IDLE
+            Assert.IsTrue(
+                dfuStatus.BytesTransferred == StmDfuExtensions.GetStatusPacketLength &&
+                dfuStatus.Data[4] == STATE_DFU_IDLE);
+        }
+
+        [TestMethod]
+        public async Task TestSTMDFUModePerformControlTransferSend_GUID_DEVINTERFACE_USB_DEVICE()
+        {
+            const string deviceID = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
+            var stmDfuDevice = new UsbDevice(deviceID,
+                new WindowsUsbInterfaceManager(deviceID, loggerFactory: loggerFactory)
+                );
+
+            await stmDfuDevice.InitializeAsync();
+
+            await PerformStmDfTest(stmDfuDevice);
+        }
+
+        [TestMethod]
+        public async Task TestSTMDFUModePerformControlTransferSend_DefaultGuid_WinUSBGuid()
+        {
+            var stmDfuDevice = await new FilterDeviceDefinition(0x0483, 0xdf11)
+                .CreateWindowsUsbDeviceFactory(loggerFactory)
+                .ConnectFirstAsync();
+
+            await PerformStmDfTest((IUsbDevice)stmDfuDevice);
+        }
+
+        [TestMethod]
+        public async Task TestSTMDFUModePerformControlTransferSend_Zadig()
+        {
+            //This is the Zadig driver on my machine apparently...
+            const string deviceID = @"\\\\?\\usb#vid_0483&pid_df11#00000008ffff#{f1e6f51b-72ea-43e1-b267-30056cd69e81}";
+            var stmDfuDevice = new UsbDevice(deviceID,
+                new WindowsUsbInterfaceManager(deviceID, loggerFactory: loggerFactory)
+                );
+            await stmDfuDevice.InitializeAsync();
+
+            await PerformStmDfTest(stmDfuDevice);
+        }
+
+        [TestMethod]
+        public async Task TestSTMDFUModePerformControlTransferSend_LibUsb()
+        {
+            var stmDfuDevice = await new FilterDeviceDefinition(0x0483, 0xdf11)
+                .CreateLibUsbDeviceFactory(loggerFactory)
+                .ConnectFirstAsync();
+
+            await PerformStmDfTest((IUsbDevice)stmDfuDevice);
         }
 #endif
 
@@ -84,6 +150,15 @@ namespace Device.Net.UnitTests
         new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53c1)
             .GetUsbDeviceFactory()
             );
+
+#if !NET45
+
+        [TestMethod]
+        public Task TestWriteAndReadFromTrezorLibUsb() => TestWriteAndReadFromTrezor(
+            new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53C1, label: "Trezor One Firmware 1.7.x")
+            .CreateLibUsbDeviceFactory(loggerFactory)
+        );
+#endif
 
         private async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64)
         {
@@ -175,8 +250,71 @@ namespace Device.Net.UnitTests
         }
         #endregion
 
+        #region Setup
+        [TestInitialize]
+        public void Setup()
+        {
+            var hostBuilder = Host.CreateDefaultBuilder().
+            ConfigureLogging((builderContext, loggingBuilder) =>
+            {
+                loggingBuilder.SetMinimumLevel(LogLevel.Trace);
+                loggingBuilder.AddConsole((options) =>
+                {
+                    //This displays arguments from the scope
+                    options.IncludeScopes = true;
+                });
+            });
+            var host = hostBuilder.Build();
+            loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
+        }
+        #endregion
+
         #region Private Methods
-        private static Task AssertTrezorResult(ReadResult responseData, IDevice device)
+        private static async Task PerformStmDfTest(IUsbDevice stmDfuDevice)
+        {
+            ////////////////////////////////////////////////////////////
+            // required to perform a DFU Clear Status request beforehand
+            await stmDfuDevice.ClearStatusAsync();
+
+            // this sequence aims to test the "send data to device" using the Control Transfer
+            // executes a DFU "Set Address Pointer" command through the DFU DNLOAD request
+            ////////////////////////////////////
+            // 1st step: send DFU_DNLOAD request
+            var dfuRequestResult = await stmDfuDevice.PerformControlTransferWithRetry(()
+                => stmDfuDevice.SendDownloadRequestAsync());
+
+            // Assert that the bytes transfered match the buffer lenght
+            Assert.IsTrue(dfuRequestResult.BytesTransferred == StmDfuExtensions.DownloadRequestLength);
+
+            ///////////////////////////////////////
+            // 2nd step: send DFU_GETSTATUS request
+            dfuRequestResult = await stmDfuDevice.PerformControlTransferWithRetry(()
+                => stmDfuDevice.GetStatusAsync());
+
+            // Assert that the received buffer has the requested lenght 
+            Assert.IsTrue(dfuRequestResult.BytesTransferred == StmDfuExtensions.GetStatusPacketLength);
+
+            // check DFU status
+            Assert.IsTrue(dfuRequestResult.Data[4] != STATE_DFU_IDLE);
+
+            ///////////////////////////////////////////////////////////////
+            // 3rd step: send new DFU_GETSTATUS request to check execution
+            dfuRequestResult = await stmDfuDevice.PerformControlTransferWithRetry(
+                () => stmDfuDevice.GetStatusAsync()
+            );
+
+            // Assert that the received buffer has the requested lenght 
+            Assert.IsTrue(dfuRequestResult.BytesTransferred == StmDfuExtensions.GetStatusPacketLength);
+
+            // check DFU status
+            // status has to be different from STATUS_errTARGET
+            // state has to be different from STATE_DFU_ERROR
+            Assert.IsTrue(
+                dfuRequestResult.Data[0] != STATUS_errTARGET &&
+                dfuRequestResult.Data[4] != STATE_DFU_ERROR);
+        }
+
+        private static Task AssertTrezorResult(TransferResult responseData, IDevice device)
         {
             //Specify the response part of the Message Contract
             var expectedResult = new byte[] { 63, 35, 35 };

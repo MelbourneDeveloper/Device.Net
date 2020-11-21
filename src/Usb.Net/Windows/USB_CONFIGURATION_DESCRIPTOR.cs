@@ -1,6 +1,8 @@
-﻿using System.Runtime.InteropServices;
-// ReSharper disable MemberCanBePrivate.Global
+﻿// ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable FieldCanBeMadeReadOnly.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable InconsistentNaming
+using System.Runtime.InteropServices;
 
 namespace Usb.Net.Windows
 {

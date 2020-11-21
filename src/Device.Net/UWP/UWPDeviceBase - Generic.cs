@@ -44,7 +44,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Overrides
-        public virtual async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             if (IsReading)
             {

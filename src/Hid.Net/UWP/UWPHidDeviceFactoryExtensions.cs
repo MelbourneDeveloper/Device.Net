@@ -29,7 +29,8 @@ namespace Hid.Net.UWP
         ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetDevice getDevice = null,
-        byte? defaultReportId = null)
+        byte? defaultReportId = null,
+        Guid? classGuid = null)
         {
             loggerFactory ??= NullLoggerFactory.Instance;
 
@@ -68,7 +69,8 @@ namespace Hid.Net.UWP
                 loggerFactory,
                 getConnectedDeviceDefinitionsAsync,
                 getDevice,
-                DeviceType.Hid);
+                async (c) => c.DeviceType == DeviceType.Usb && (classGuid == null || classGuid.Value == c.ClassGuid)
+                );
         }
     }
 }

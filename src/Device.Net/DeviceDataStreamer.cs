@@ -13,7 +13,7 @@ namespace Device.Net
     {
         private bool _isRunning;
         private readonly ProcessData _processData;
-        private readonly IDeviceManager _deviceManager;
+        private readonly IDeviceFactory _deviceFactory;
         private IDevice _currentDevice;
         private readonly TimeSpan? _interval;
         private readonly ILogger _logger;
@@ -21,14 +21,14 @@ namespace Device.Net
 
         public DeviceDataStreamer(
             ProcessData processData,
-            IDeviceManager deviceManager,
+            IDeviceFactory deviceFactory,
             TimeSpan? interval = null,
             ILoggerFactory loggerFactory = null,
             Func<IDevice, Task> initializeFunc = null
           )
         {
             _processData = processData;
-            _deviceManager = deviceManager;
+            _deviceFactory = deviceFactory;
             _interval = interval ?? new TimeSpan(0, 0, 1);
             _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<DeviceDataStreamer>();
             _initializeFunc = initializeFunc ?? new Func<IDevice, Task>((d) => d.InitializeAsync());
@@ -48,7 +48,7 @@ namespace Device.Net
                     {
                         if (_currentDevice == null)
                         {
-                            var connectedDevices = await _deviceManager.GetConnectedDeviceDefinitionsAsync();
+                            var connectedDevices = await _deviceFactory.GetConnectedDeviceDefinitionsAsync();
                             var firstConnectedDevice = connectedDevices.FirstOrDefault();
 
                             if (firstConnectedDevice == null)
@@ -56,7 +56,7 @@ namespace Device.Net
                                 continue;
                             }
 
-                            _currentDevice = await _deviceManager.GetDevice(firstConnectedDevice);
+                            _currentDevice = await _deviceFactory.GetDevice(firstConnectedDevice);
                             await _initializeFunc(_currentDevice);
                         }
 

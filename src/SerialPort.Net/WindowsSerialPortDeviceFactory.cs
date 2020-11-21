@@ -4,7 +4,9 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 #if NETSTANDARD
 using System.Runtime.InteropServices;
 using Device.Net.Exceptions;
@@ -20,7 +22,7 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Public Properties
-        public DeviceType DeviceType => DeviceType.SerialPort;
+        public IEnumerable<DeviceType> SupportedDeviceTypes { get; } = new ReadOnlyCollection<DeviceType>(new List<DeviceType> { DeviceType.SerialPort });
         #endregion
 
         #region Constructor
@@ -34,6 +36,8 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Public Methods
+
+
         public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
 #if NETSTANDARD
@@ -61,11 +65,7 @@ namespace SerialPort.Net.Windows
 
                         var valueNames = key.GetValueNames();
 
-                        foreach (var valueName in valueNames)
-                        {
-                            var comPortName = key.GetValue(valueName);
-                            returnValue.Add(new ConnectedDeviceDefinition($@"\\.\{comPortName}", DeviceType.SerialPort, label: valueName));
-                        }
+                        returnValue.AddRange(from valueName in valueNames let comPortName = key.GetValue(valueName) select new ConnectedDeviceDefinition($@"\\.\{comPortName}", DeviceType.SerialPort, label: valueName));
                     }
                 }
             }
@@ -74,17 +74,16 @@ namespace SerialPort.Net.Windows
                 _logger.LogError(ex, ex.Message);
             }
 
-            if (!registryAvailable)
+            if (registryAvailable) return returnValue;
+
+            //We can't look at the registry so try connecting to the devices
+            for (var i = 0; i < 9; i++)
             {
-                //We can't look at the registry so try connecting to the devices
-                for (var i = 0; i < 9; i++)
+                var portName = $@"\\.\COM{i}";
+                using (var serialPortDevice = new WindowsSerialPortDevice(portName))
                 {
-                    var portName = $@"\\.\COM{i}";
-                    using (var serialPortDevice = new WindowsSerialPortDevice(portName))
-                    {
-                        await serialPortDevice.InitializeAsync();
-                        if (serialPortDevice.IsInitialized) returnValue.Add(new ConnectedDeviceDefinition(portName, DeviceType.SerialPort));
-                    }
+                    await serialPortDevice.InitializeAsync();
+                    if (serialPortDevice.IsInitialized) returnValue.Add(new ConnectedDeviceDefinition(portName, DeviceType.SerialPort));
                 }
             }
 
@@ -92,13 +91,14 @@ namespace SerialPort.Net.Windows
         }
 
         public Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition)
-        {
-            var device = deviceDefinition == null
+             => Task.FromResult<IDevice>(deviceDefinition == null
                 ? throw new ArgumentNullException(nameof(deviceDefinition))
-                : new WindowsSerialPortDevice(deviceDefinition.DeviceId);
+                : new WindowsSerialPortDevice(deviceDefinition.DeviceId));
 
-            return Task.FromResult<IDevice>(device);
-        }
+        public Task<bool> SupportsDevice(ConnectedDeviceDefinition deviceDefinition)
+            => deviceDefinition != null ? Task.FromResult(deviceDefinition.DeviceType == DeviceType.SerialPort) :
+            throw new ArgumentNullException(nameof(deviceDefinition));
+
         #endregion
     }
 }

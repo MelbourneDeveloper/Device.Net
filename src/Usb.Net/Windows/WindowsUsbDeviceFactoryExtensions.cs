@@ -11,6 +11,23 @@ namespace Usb.Net.Windows
 
     public static class WindowsUsbDeviceFactoryExtensions
     {
+
+        public static IDeviceFactory CreateWindowsUsbDeviceFactory(
+            ILoggerFactory loggerFactory = null,
+            GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+            GetUsbInterfaceManager getUsbInterfaceManager = null,
+            Guid? classGuid = null,
+            ushort? readBufferSize = null,
+            ushort? writeBufferSize = null
+        ) => CreateWindowsUsbDeviceFactory(
+            new List<FilterDeviceDefinition>(),
+            loggerFactory,
+            getConnectedDeviceDefinitionsAsync,
+            getUsbInterfaceManager,
+            classGuid,
+            readBufferSize,
+            writeBufferSize);
+
         public static IDeviceFactory CreateWindowsUsbDeviceFactory(
             this FilterDeviceDefinition filterDeviceDefinition,
             ILoggerFactory loggerFactory = null,
@@ -38,6 +55,8 @@ namespace Usb.Net.Windows
         ushort? writeBufferSize = null
     )
         {
+            if (filterDeviceDefinitions == null) throw new ArgumentNullException(nameof(filterDeviceDefinitions));
+
             loggerFactory ??= NullLoggerFactory.Instance;
 
             if (getConnectedDeviceDefinitionsAsync == null)
@@ -47,23 +66,20 @@ namespace Usb.Net.Windows
                 var uwpHidDeviceEnumerator = new WindowsDeviceEnumerator(
                     logger,
                     classGuid ?? WindowsDeviceConstants.WinUSBGuid,
-                    d => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(d, DeviceType.Usb, logger),
+                    (d, guid) => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(d, DeviceType.Usb, logger, guid),
                     async c =>
-                    filterDeviceDefinitions.FirstOrDefault(f => DeviceManager.IsDefinitionMatch(f, c, DeviceType.Usb)) != null);
+                    !filterDeviceDefinitions.Any() || filterDeviceDefinitions.FirstOrDefault(f => f.IsDefinitionMatch(c, DeviceType.Usb)) != null);
 
                 getConnectedDeviceDefinitionsAsync = uwpHidDeviceEnumerator.GetConnectedDeviceDefinitionsAsync;
             }
 
-            if (getUsbInterfaceManager == null)
-            {
-                getUsbInterfaceManager = async d =>
-                    new WindowsUsbInterfaceManager(
+            getUsbInterfaceManager ??= async d =>
+                new WindowsUsbInterfaceManager(
                     //TODO: no idea if this is OK...
                     d,
                     loggerFactory,
                     readBufferSize,
                     writeBufferSize);
-            }
 
             return UsbDeviceFactoryExtensions.CreateUsbDeviceFactory(getConnectedDeviceDefinitionsAsync, getUsbInterfaceManager, loggerFactory);
         }

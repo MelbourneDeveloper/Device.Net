@@ -50,7 +50,6 @@ namespace UnoCrossPlatform
 #else
                 .CreateAndroidUsbDeviceFactory(UsbManager, AppContext, loggerFactory, writeBufferSize: 8, readBufferSize: 8)
 #endif
-                .ToDeviceManager(loggerFactory)
                 .CreateDeviceDataStreamer(async (device) =>
                 {
                     string display = null;

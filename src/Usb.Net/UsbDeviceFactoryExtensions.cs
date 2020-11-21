@@ -1,5 +1,6 @@
 ﻿using Device.Net;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 
 namespace Usb.Net
@@ -11,7 +12,8 @@ namespace Usb.Net
         public static IDeviceFactory CreateUsbDeviceFactory(
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync,
         GetUsbInterfaceManager getUsbInterfaceManager,
-        ILoggerFactory loggerFactory = null)
+        ILoggerFactory loggerFactory = null,
+        Guid? classGuid = null)
         =>
             new DeviceFactory(
             loggerFactory,
@@ -21,7 +23,9 @@ namespace Usb.Net
                 var usbInterfaceManager = await getUsbInterfaceManager(d.DeviceId);
                 return new UsbDevice(d.DeviceId, usbInterfaceManager, loggerFactory);
             },
-            DeviceType.Usb);
+            //Support the device if the factory doesn't filter on class guid, or the filter matches the device
+            async (c) => c.DeviceType == DeviceType.Usb && (classGuid == null || classGuid.Value == c.ClassGuid)
+            );
     }
 }
 

@@ -20,6 +20,8 @@ namespace Device.Net
         /// </summary>
         public DeviceType DeviceType { get; }
 
+        public Guid? ClassGuid { get; }
+
         /// <summary>
         /// Vendor ID
         /// </summary>
@@ -90,7 +92,8 @@ namespace Device.Net
             ushort? versionNumber = null,
             int? writeBufferSize = null,
             int? readBufferSize = null,
-            string label = null
+            string label = null,
+            Guid? classGuid = null
            )
         {
             if (string.IsNullOrEmpty(deviceId))
@@ -98,6 +101,7 @@ namespace Device.Net
                 throw new ArgumentNullException(nameof(deviceId));
             }
 
+            ClassGuid = classGuid;
             DeviceId = deviceId;
             VendorId = vendorId;
             ProductId = productId;

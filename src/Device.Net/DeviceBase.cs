@@ -44,14 +44,14 @@ namespace Device.Net
         #region Public Abstract Methods
         //TODO: Why are these here?
 
-        public abstract Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default);
-        public abstract Task WriteAsync(byte[] data, CancellationToken cancellationToken = default);
+        public abstract Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default);
+        public abstract Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default);
         #endregion
 
         #region Public Methods
         public virtual Task Flush(CancellationToken cancellationToken = default) => throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
 
-        public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
+        public async Task<TransferResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
         {
             if (writeBuffer == null) throw new ArgumentNullException(nameof(writeBuffer));
 
@@ -105,7 +105,11 @@ namespace Device.Net
         #endregion
 
         #region Public Static Methods
-        public static ConnectedDeviceDefinition GetDeviceDefinitionFromWindowsDeviceId(string deviceId, DeviceType deviceType, ILogger logger)
+        public static ConnectedDeviceDefinition GetDeviceDefinitionFromWindowsDeviceId(
+            string deviceId,
+            DeviceType deviceType,
+            ILogger logger,
+            Guid? classGuid = null)
         {
             uint? vid = null;
             uint? pid = null;
@@ -122,7 +126,7 @@ namespace Device.Net
                 (logger ?? NullLogger.Instance).LogError(ex, "Error {errorMessage} Area: {area}", ex.Message, nameof(GetDeviceDefinitionFromWindowsDeviceId));
             }
 
-            return new ConnectedDeviceDefinition(deviceId, deviceType, vendorId: vid, productId: pid);
+            return new ConnectedDeviceDefinition(deviceId, deviceType, vendorId: vid, productId: pid, classGuid: classGuid);
         }
         #endregion
 

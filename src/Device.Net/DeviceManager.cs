@@ -3,12 +3,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Device.Net
 {
-    public class DeviceManager : IDeviceManager
+
+    public class DeviceManager : IDeviceFactory
     {
         //TODO: Put logging in here
 
@@ -41,6 +41,8 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
+        public async Task<bool> SupportsDevice(ConnectedDeviceDefinition deviceDefinition) => (await DeviceFactories.FirstOrDefaultAsync(async d => await d.SupportsDevice(deviceDefinition))) != null;
+
         public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
             var retVal = new List<ConnectedDeviceDefinition>();
@@ -57,6 +59,8 @@ namespace Device.Net
                 }
                 catch (Exception ex)
                 {
+                    //TODO: We probably want to remove this. If a factory crashes, we probably don't want to swallow the error
+
                     _logger.LogError(ex, "Error calling " + nameof(GetConnectedDeviceDefinitionsAsync));
                 }
             }
@@ -64,45 +68,12 @@ namespace Device.Net
             return retVal;
         }
 
-        //TODO: Duplicate code here...
         public async Task<IDevice> GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition)
-        {
-            if (connectedDeviceDefinition == null) throw new ArgumentNullException(nameof(connectedDeviceDefinition));
+             => connectedDeviceDefinition == null ? throw new ArgumentNullException(nameof(connectedDeviceDefinition)) :
+            await ((await DeviceFactories.FirstOrDefaultAsync(f => f.SupportsDevice(connectedDeviceDefinition)))
+            ?? throw new DeviceException(Messages.ErrorMessageCouldntGetDevice))
+            .GetDevice(connectedDeviceDefinition);
 
-            foreach (var deviceFactory in DeviceFactories.Where(deviceFactory => deviceFactory.DeviceType == connectedDeviceDefinition.DeviceType))
-            {
-                //TODO: This doesn't distinguish between the device not existing, and the factory not being able to deal with the device type...
-                //Still undecided on how to handle this
-
-                var device = await deviceFactory.GetDevice(connectedDeviceDefinition);
-
-                if (device != null) return device;
-            }
-
-            throw new DeviceException(Messages.ErrorMessageCouldntGetDevice);
-        }
-        #endregion
-
-        #region Public Static Methods
-        public static bool IsDefinitionMatch(FilterDeviceDefinition filterDevice, ConnectedDeviceDefinition actualDevice, DeviceType deviceType)
-        {
-            if (actualDevice == null) throw new ArgumentNullException(nameof(actualDevice));
-
-            if (filterDevice == null) return true;
-
-            var vendorIdPasses = !filterDevice.VendorId.HasValue || filterDevice.VendorId == actualDevice.VendorId;
-            var productIdPasses = !filterDevice.ProductId.HasValue || filterDevice.ProductId == actualDevice.ProductId;
-            var deviceTypePasses = actualDevice.DeviceType == deviceType;
-            var usagePagePasses = !filterDevice.UsagePage.HasValue || filterDevice.UsagePage == actualDevice.UsagePage;
-
-            var returnValue =
-                vendorIdPasses &&
-                productIdPasses &&
-                deviceTypePasses &&
-                usagePagePasses;
-
-            return returnValue;
-        }
         #endregion
     }
 }

@@ -61,7 +61,16 @@ dotnet_diagnostic.IDE0074.severity = warning
 dotnet_diagnostic.CA1010.severity = suggestion
 
 # CA1816: Dispose methods should call SuppressFinalize
-dotnet_diagnostic.CA1816.severity = warning
+dotnet_diagnostic.CA1816.severity = suggestion
+
+# CA1065: Do not raise exceptions in unexpected locations
+dotnet_diagnostic.CA1065.severity = warning
+
+# IDE0023: Use block body for operators
+csharp_style_expression_bodied_operators = true:error
 
 # IDE0021: Use block body for constructors
 csharp_style_expression_bodied_constructors = true:error
+
+# IDE1006: Naming Styles
+dotnet_diagnostic.IDE1006.severity = suggestion
