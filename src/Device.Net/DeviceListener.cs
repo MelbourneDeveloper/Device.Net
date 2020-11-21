@@ -29,7 +29,7 @@ namespace Device.Net
         #endregion
 
         #region Public Properties
-        public IDeviceManager DeviceManager { get; }
+        public IDeviceFactory DeviceFactory { get; }
         #endregion
 
         #region Events
@@ -42,13 +42,13 @@ namespace Device.Net
         /// Handles connecting to and disconnecting from a set of potential devices by their definition
         /// </summary>
         public DeviceListener(
-            IDeviceManager deviceManager,
+            IDeviceFactory deviceFactory,
             int? pollMilliseconds,
             ILoggerFactory loggerFactory)
         {
             _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<DeviceListener>();
 
-            DeviceManager = deviceManager ?? throw new ArgumentNullException(nameof(deviceManager));
+            DeviceFactory = deviceFactory ?? throw new ArgumentNullException(nameof(deviceFactory));
 
             if (!pollMilliseconds.HasValue) return;
 
@@ -80,14 +80,14 @@ namespace Device.Net
             _PollTimer.Start();
         }
 
-        public async Task CheckForDevicesAsync()
+        public async Task CheckForDevicesAsync(CancellationToken cancellationToken = default)
         {
             try
             {
                 if (_IsDisposed) return;
-                await _ListenSemaphoreSlim.WaitAsync();
+                await _ListenSemaphoreSlim.WaitAsync(cancellationToken);
 
-                var connectedDeviceDefinitions = await DeviceManager.GetConnectedDeviceDefinitionsAsync();
+                var connectedDeviceDefinitions = (await DeviceFactory.GetConnectedDeviceDefinitionsAsync(cancellationToken)).ToList();
 
                 //Iterate through connected devices
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
@@ -103,7 +103,7 @@ namespace Device.Net
                     if (device == null)
                     {
                         //Need to use the connected device def here instead of the filter version because the filter version won't have the id or any details
-                        device = await DeviceManager.GetDevice(connectedDeviceDefinition);
+                        device = await DeviceFactory.GetDeviceAsync(connectedDeviceDefinition, cancellationToken);
 
                         if (device == null)
                         {
@@ -114,13 +114,15 @@ namespace Device.Net
                             _CreatedDevicesByDefinition.Add(connectedDeviceDefinition.DeviceId, device);
                         }
                     }
-
-                    if (device.IsInitialized) continue;
+                    else
+                    {
+                        if (device.IsInitialized) continue;
+                    }
 
                     _logger.LogDebug("Attempting to initialize with DeviceId of {deviceId}", device.DeviceId);
 
                     //The device is not initialized so initialize it
-                    await device.InitializeAsync();
+                    await device.InitializeAsync(cancellationToken);
 
                     //Let listeners know a registered device was initialized
                     DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));

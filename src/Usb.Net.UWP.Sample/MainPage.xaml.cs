@@ -20,7 +20,7 @@ namespace Usb.Net.UWP.Sample
     public sealed partial class MainPage : Page
     {
         #region Fields
-        private readonly IDeviceManager _DeviceManager;
+        private readonly IDeviceFactory _DeviceManager;
         private readonly TrezorExample _DeviceConnectionExample;
         #endregion
 
@@ -29,10 +29,7 @@ namespace Usb.Net.UWP.Sample
         {
             InitializeComponent();
 
-            var loggerFactory = LoggerFactory.Create((builder) =>
-            {
-                builder.AddDebug();
-            });
+            var loggerFactory = LoggerFactory.Create((builder) => builder.AddDebug());
 
             _DeviceManager = new List<IDeviceFactory>
             {
@@ -40,7 +37,7 @@ namespace Usb.Net.UWP.Sample
                 TrezorExample.HidDeviceDefinitions.CreateUwpHidDeviceFactory(loggerFactory),
                 //Register the factory for creating Hid devices. This only needs to be done once.
                 TrezorExample.UsbDeviceDefinitions.CreateUwpUsbDeviceFactory(loggerFactory)
-            }.ToDeviceManager(loggerFactory);
+            }.Aggregate(loggerFactory);
 
             _DeviceConnectionExample = new TrezorExample(_DeviceManager, loggerFactory);
 

@@ -36,8 +36,8 @@ namespace Hid.Net.Windows
 
         #region Public Overrides
         public override bool IsInitialized => _ReadSafeFileHandle != null && !_ReadSafeFileHandle.IsInvalid;
-        public override ushort WriteBufferSize => _WriteBufferSize ?? (ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value);
-        public override ushort ReadBufferSize => _ReadBufferSize ?? (ConnectedDeviceDefinition == null ? (ushort)0 : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value);
+        public override ushort WriteBufferSize => _WriteBufferSize ?? (ConnectedDeviceDefinition == null ? 0 : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value);
+        public override ushort ReadBufferSize => _ReadBufferSize ?? (ConnectedDeviceDefinition == null ? 0 : (ushort)ConnectedDeviceDefinition.ReadBufferSize.Value);
         public bool? IsReadOnly { get; private set; }
         #endregion
 
@@ -57,19 +57,18 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Private Methods
-        private bool Initialize()
+        private void Initialize()
         {
-            IDisposable logScope = null;
+            using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(Initialize));
 
             try
             {
-                logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(Initialize));
-
                 Close();
 
                 if (string.IsNullOrEmpty(DeviceId))
                 {
-                    throw new ValidationException($"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
+                    throw new ValidationException(
+                        $"{nameof(DeviceId)} must be specified before {nameof(Initialize)} can be called.");
                 }
 
                 _ReadSafeFileHandle = HidService.CreateReadConnection(DeviceId, FileAccessRights.GenericRead);
@@ -94,7 +93,8 @@ namespace Hid.Net.Windows
 
                 if (readBufferSize == 0)
                 {
-                    throw new ValidationException($"{nameof(ReadBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an InputReportByteLength of 0. Please specify this argument in the constructor");
+                    throw new ValidationException(
+                        $"{nameof(ReadBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an InputReportByteLength of 0. Please specify this argument in the constructor");
                 }
 
                 _ReadFileStream = HidService.OpenRead(_ReadSafeFileHandle, readBufferSize);
@@ -108,25 +108,24 @@ namespace Hid.Net.Windows
                     Logger.LogWarning(Messages.WarningMessageReadFileStreamCantRead);
                 }
 
-                if (!IsReadOnly.Value)
+                if (IsReadOnly.Value) return;
+
+                if (writeBufferSize == 0)
                 {
-                    if (writeBufferSize == 0)
-                    {
-                        throw new ValidationException($"{nameof(WriteBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an OutputReportByteLength of 0. Please specify this argument in the constructor");
-                    }
+                    throw new ValidationException(
+                        $"{nameof(WriteBufferSize)} must be specified. HidD_GetAttributes may have failed or returned an OutputReportByteLength of 0. Please specify this argument in the constructor");
+                }
 
-                    //Don't open if this is a read only connection
-                    _WriteFileStream = HidService.OpenWrite(_WriteSafeFileHandle, writeBufferSize);
+                //Don't open if this is a read only connection
+                _WriteFileStream = HidService.OpenWrite(_WriteSafeFileHandle, writeBufferSize);
 
-                    if (_WriteFileStream.CanWrite)
-                    {
-                        Logger.LogInformation(Messages.SuccessMessageWriteFileStreamOpened);
-                    }
-                    else
-                    {
-                        Logger.LogWarning(Messages.WarningMessageWriteFileStreamCantWrite);
-                    }
-
+                if (_WriteFileStream.CanWrite)
+                {
+                    Logger.LogInformation(Messages.SuccessMessageWriteFileStreamOpened);
+                }
+                else
+                {
+                    Logger.LogWarning(Messages.WarningMessageWriteFileStreamCantWrite);
                 }
             }
             catch (Exception ex)
@@ -134,12 +133,6 @@ namespace Hid.Net.Windows
                 Logger.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
                 throw;
             }
-            finally
-            {
-                logScope.Dispose();
-            }
-
-            return true;
         }
         #endregion
 
@@ -191,16 +184,16 @@ namespace Hid.Net.Windows
             base.Dispose();
         }
 
-        public override async Task InitializeAsync()
+        public override async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
-            await Task.Run(() => Initialize());
+            await Task.Run(Initialize, cancellationToken);
         }
 
 
 
-        public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
+        public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             var data = (await ReadReportAsync(cancellationToken)).Data;
             Logger.LogTrace(new Trace(false, data));
@@ -240,19 +233,18 @@ namespace Hid.Net.Windows
             return new ReadReport(reportId, retVal);
         }
 
-        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
+        public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
 
-        public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
+        public async Task<uint> WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
-            IDisposable logScope = null;
+            using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteReportAsync));
 
             try
             {
-                logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteReportAsync));
 
                 if (IsReadOnly.HasValue && IsReadOnly.Value)
                 {
-                    throw new ValidationException($"This device was opened in Read Only mode.");
+                    throw new ValidationException("This device was opened in Read Only mode.");
                 }
 
                 if (data == null) throw new ArgumentNullException(nameof(data));
@@ -292,15 +284,13 @@ namespace Hid.Net.Windows
                 {
                     throw new IOException("The file stream cannot be written to");
                 }
+
+                return (uint)bytes.Length;
             }
             catch (Exception ex)
             {
                 Logger.LogError(ex, Messages.WriteErrorMessage);
                 throw;
-            }
-            finally
-            {
-                logScope.Dispose();
             }
         }
         #endregion

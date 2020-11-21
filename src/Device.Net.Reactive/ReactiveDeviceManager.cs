@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,7 +28,7 @@ namespace Device.Net.Reactive
         private bool isDisposed;
         private readonly int _pollMilliseconds;
         private readonly GetConnectedDevicesAsync _getConnectedDevicesAsync;
-        private readonly GetDevice _getDevice;
+        private readonly GetDeviceAsync _getDevice;
         #endregion
 
         #region Public Properties
@@ -38,7 +37,7 @@ namespace Device.Net.Reactive
         /// </summary>
         public bool FilterMiddleMessages { get; set; }
 
-        public IObservable<IReadOnlyCollection<ConnectedDevice>> ConnectedDevicesObservable { get; }
+        public IObservable<IReadOnlyCollection<ConnectedDeviceDefinition>> ConnectedDevicesObservable { get; }
 
         public IDevice SelectedDevice
         {
@@ -46,7 +45,7 @@ namespace Device.Net.Reactive
             private set
             {
                 _selectedDevice = value;
-                _notifyDeviceInitialized(value != null ? new ConnectedDevice { DeviceId = value.DeviceId } : null);
+                _notifyDeviceInitialized(value?.ConnectedDeviceDefinition);
             }
         }
         #endregion
@@ -69,7 +68,7 @@ namespace Device.Net.Reactive
             NotifyDeviceException notifyDeviceException,
             Func<IDevice, Task> initializeDeviceAction,
             GetConnectedDevicesAsync getConnectedDevicesAsync,
-            GetDevice getDevice,
+            GetDeviceAsync getDevice,
             int pollMilliseconds,
             ILoggerFactory loggerFactory = null)
         {
@@ -94,8 +93,7 @@ namespace Device.Net.Reactive
                 while (!isDisposed)
                 {
                     var devices = await _getConnectedDevicesAsync();
-                    var lists = devices.Select(d => new ConnectedDevice { DeviceId = d.DeviceId }).ToList();
-                    _notifyConnectedDevices(lists);
+                    _notifyConnectedDevices(devices);
                     await Task.Delay(TimeSpan.FromMilliseconds(_pollMilliseconds));
                 }
             });
@@ -109,7 +107,7 @@ namespace Device.Net.Reactive
 
         public async Task<TResponse> WriteAndReadAsync<TResponse>(IRequest request, Func<byte[], TResponse> convertFunc)
         {
-            if (SelectedDevice == null) throw new InvalidOperationException("No device selected and initialized");
+            if (SelectedDevice == null) return default;
 
             try
             {
@@ -122,16 +120,15 @@ namespace Device.Net.Reactive
             {
                 _logger.LogError(ex, ex.Message);
 
-                if (ex is IOException)
-                {
-                    _notifyDeviceException(new ConnectedDevice { DeviceId = SelectedDevice?.DeviceId }, ex);
-                    //The exception was an IO exception so disconnect the device
-                    //The listener should reconnect
+                if (!(ex is IOException)) throw;
 
-                    SelectedDevice.Dispose();
+                _notifyDeviceException(SelectedDevice?.ConnectedDeviceDefinition, ex);
+                //The exception was an IO exception so disconnect the device
+                //The listener should reconnect
 
-                    SelectedDevice = null;
-                }
+                SelectedDevice.Dispose();
+
+                SelectedDevice = null;
 
                 throw;
             }
@@ -143,6 +140,9 @@ namespace Device.Net.Reactive
 
         public void QueueRequest(IRequest request)
         {
+            //If ther is no device selected just eat up the messages
+            if (SelectedDevice == null) return;
+
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             _queuedRequests.Enqueue(request);
@@ -182,17 +182,18 @@ namespace Device.Net.Reactive
         #endregion
 
         #region Private Methods
-        private async Task InitializeDeviceAsync(ConnectedDevice connectedDevice)
+        private async Task InitializeDeviceAsync(ConnectedDeviceDefinition connectedDevice)
         {
             try
             {
                 if (connectedDevice == null)
                 {
                     _logger.LogInformation("Initialize requested but device was null");
+                    SelectedDevice = null;
                     return;
                 }
 
-                var device = await _getDevice(connectedDevice.DeviceId);
+                var device = await _getDevice(connectedDevice);
                 await _initializeDeviceAction(device);
 
                 _logger.LogInformation("Device initialized {deviceId}", connectedDevice.DeviceId);

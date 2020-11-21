@@ -35,10 +35,7 @@ namespace Usb.Net
             ILoggerFactory loggerFactory = null) : base(
                 deviceId,
                 loggerFactory,
-                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UsbDevice>())
-        {
-            UsbInterfaceManager = usbInterfaceManager ?? throw new ArgumentNullException(nameof(usbInterfaceManager));
-        }
+                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UsbDevice>()) => UsbInterfaceManager = usbInterfaceManager ?? throw new ArgumentNullException(nameof(usbInterfaceManager));
         #endregion
 
         #region Private Methods
@@ -46,20 +43,20 @@ namespace Usb.Net
         #endregion
 
         #region Public Methods
-        public async Task InitializeAsync()
+        public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
-            await UsbInterfaceManager.InitializeAsync();
-            ConnectedDeviceDefinition = await UsbInterfaceManager.GetConnectedDeviceDefinitionAsync();
+            await UsbInterfaceManager.InitializeAsync(cancellationToken);
+            ConnectedDeviceDefinition = await UsbInterfaceManager.GetConnectedDeviceDefinitionAsync(cancellationToken);
         }
 
-        public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
+        public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             return UsbInterfaceManager.ReadUsbInterface == null
                 ? throw new DeviceException(Messages.ErrorMessageNoReadInterfaceSpecified)
                 : await UsbInterfaceManager.ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
         }
 
-        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+        public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             return UsbInterfaceManager.WriteUsbInterface == null
                 ? throw new DeviceException(Messages.ErrorMessageNoWriteInterfaceSpecified)

@@ -1,9 +1,9 @@
 ﻿
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
 using System.Threading.Tasks;
 using Usb.Net;
-using Microsoft.Extensions.Logging;
 #if !WINDOWS_UWP
 using Usb.Net.Windows;
 using Device.Net.Exceptions;
@@ -23,14 +23,9 @@ namespace Device.Net.UnitTests
         #endregion
 
 #if !NET45
-        public UsbTests()
-        {
+        public UsbTests() =>
             //Easier than mocking at this point...
-            _loggerFactory = LoggerFactory.Create((builder) =>
-            {
-                _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
-            });
-        }
+            _loggerFactory = LoggerFactory.Create((builder) => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 #endif
 
         #region Tests
@@ -40,15 +35,15 @@ namespace Device.Net.UnitTests
             await InitializeDevice();
 
             Assert.IsNotNull(_UsbDevice.ConnectedDeviceDefinition);
-            Assert.AreEqual(deviceId, ((ConnectedDeviceDefinition)_UsbDevice.ConnectedDeviceDefinition).DeviceId);
+            Assert.AreEqual(deviceId, _UsbDevice.ConnectedDeviceDefinition.DeviceId);
         }
 
         [TestMethod]
         public async Task TestRead()
         {
             await InitializeDevice();
-            var readResult = await _UsbDevice.ReadAsync();
-            Assert.AreEqual(readResult.Data, testreadpacket);
+            var TransferResult = await _UsbDevice.ReadAsync();
+            Assert.AreEqual(TransferResult.Data, testreadpacket);
         }
 
 #if !WINDOWS_UWP
@@ -159,7 +154,7 @@ namespace Device.Net.UnitTests
             usbInterface.ReadAsync(3).ReturnsForAnyArgs(testreadpacket);
 
             //TODO: Probably shouldn't be relying on this method
-            usbInterfaceManager.GetConnectedDeviceDefinitionAsync().ReturnsForAnyArgs(new ConnectedDeviceDefinition(deviceId) { });
+            usbInterfaceManager.GetConnectedDeviceDefinitionAsync().ReturnsForAnyArgs(new ConnectedDeviceDefinition(deviceId, DeviceType.Usb));
 
             _UsbDevice = new UsbDevice(deviceId, usbInterfaceManager, _loggerFactory);
 

@@ -44,27 +44,26 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPHidDevice(string deviceId, ILoggerFactory loggerFactory = null, byte? defaultReportId = null) : base(deviceId, loggerFactory, (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UWPHidDevice>())
+        public UWPHidDevice(ConnectedDeviceDefinition connectedDeviceDefinition, ILoggerFactory loggerFactory = null, byte? defaultReportId = null) : base(connectedDeviceDefinition.DeviceId, loggerFactory, (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UWPHidDevice>())
         {
+            ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             DefaultReportId = defaultReportId;
         }
         #endregion
 
         #region Private Methods
-        public override async Task InitializeAsync()
+        public override async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
-            IDisposable loggerScope = null;
+            using var loggerScope = Logger?.BeginScope("DeviceId: {deviceId} Region: {region}", DeviceId, nameof(UWPHidDevice));
 
             try
             {
-                loggerScope = Logger?.BeginScope("DeviceId: {deviceId} Region: {region}", DeviceId, nameof(UWPHidDevice));
-
                 if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
                 Logger?.LogDebug(Messages.InformationMessageInitializingDevice);
 
-                await GetDeviceAsync(DeviceId);
+                await GetDeviceAsync(DeviceId, cancellationToken);
 
                 if (ConnectedDevice != null)
                 {
@@ -79,10 +78,6 @@ namespace Hid.Net.UWP
             {
                 Logger?.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
                 throw;
-            }
-            finally
-            {
-                loggerScope?.Dispose();
             }
         }
 
@@ -114,9 +109,9 @@ namespace Hid.Net.UWP
             base.Dispose();
         }
 
-        public virtual Task WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
+        public virtual Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
 
-        public async Task WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
+        public async Task<uint> WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
@@ -149,6 +144,8 @@ namespace Hid.Net.UWP
                     Logger?.LogError(Messages.GetErrorMessageInvalidWriteLength(bytes.Length, count) + "{length} {count}", bytes.Length, count, GetType().Name);
                     throw new IOException(Messages.GetErrorMessageInvalidWriteLength(bytes.Length, count));
                 }
+
+                return count;
             }
             catch (ArgumentException ex)
             {
@@ -179,7 +176,7 @@ namespace Hid.Net.UWP
             return new ReadReport(reportId, bytes);
         }
 
-        public override async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
+        public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             var data = (await ReadReportAsync(cancellationToken)).Data;
             Logger.LogTrace(new Trace(false, data));
@@ -190,16 +187,14 @@ namespace Hid.Net.UWP
         #region Public Static Methods
         public static IAsyncOperation<HidDevice> GetHidDevice(string id) => HidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
 
-        public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
+        public async Task<TransferResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
         {
             await _WriteAndReadLock.WaitAsync();
 
-            IDisposable logScope = null;
+            using var logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteAndReadAsync));
 
             try
             {
-                logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteAndReadAsync));
-
                 await WriteAsync(writeBuffer, cancellationToken);
                 var retVal = await ReadAsync(cancellationToken);
 
@@ -213,7 +208,6 @@ namespace Hid.Net.UWP
             }
             finally
             {
-                logScope?.Dispose();
                 _WriteAndReadLock.Release();
             }
         }

@@ -17,7 +17,7 @@ namespace Device.Net.UWP
 
         #region Protected Properties
         protected T ConnectedDevice { get; private set; }
-        public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; protected set; }
+        public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; protected set; }
         protected ILoggerFactory LoggerFactory { get; private set; }
         #endregion
 
@@ -27,17 +27,14 @@ namespace Device.Net.UWP
         #endregion
 
         #region Constructor
-        protected UWPDeviceBase(string deviceId, ILoggerFactory loggerFactory, ILogger logger) : base(deviceId, logger)
-        {
-            LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
-        }
+        protected UWPDeviceBase(string deviceId, ILoggerFactory loggerFactory, ILogger logger) : base(deviceId, logger) => LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
         #endregion
 
         #region Protected Methods
-        protected async Task GetDeviceAsync(string id)
+        protected async Task GetDeviceAsync(string id, CancellationToken cancellationToken = default)
         {
             var asyncOperation = FromIdAsync(id);
-            var task = asyncOperation.AsTask();
+            var task = asyncOperation.AsTask(cancellationToken);
             ConnectedDevice = await task;
         }
         #endregion
@@ -47,7 +44,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Overrides
-        public virtual async Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             if (IsReading)
             {
@@ -72,7 +69,7 @@ namespace Device.Net.UWP
             ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
 
             //Cancel the completion source if the token is canceled
-            using (cancellationToken.Register(() => { ReadChunkTaskCompletionSource.TrySetCanceled(); }))
+            using (cancellationToken.Register(() => ReadChunkTaskCompletionSource.TrySetCanceled()))
             {
                 await ReadChunkTaskCompletionSource.Task;
             }

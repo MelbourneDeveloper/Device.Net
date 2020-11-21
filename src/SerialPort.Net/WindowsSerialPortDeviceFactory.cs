@@ -1,10 +1,13 @@
 ﻿using Device.Net;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
+using System.Collections.ObjectModel;
+using System.Threading;
 #if NETSTANDARD
 using System.Runtime.InteropServices;
 using Device.Net.Exceptions;
@@ -20,7 +23,7 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Public Properties
-        public DeviceType DeviceType => DeviceType.SerialPort;
+        public IEnumerable<DeviceType> SupportedDeviceTypes { get; } = new ReadOnlyCollection<DeviceType>(new List<DeviceType> { DeviceType.SerialPort });
         #endregion
 
         #region Constructor
@@ -34,7 +37,9 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
+
+
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default)
         {
 #if NETSTANDARD
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -61,11 +66,7 @@ namespace SerialPort.Net.Windows
 
                         var valueNames = key.GetValueNames();
 
-                        foreach (var valueName in valueNames)
-                        {
-                            var comPortName = key.GetValue(valueName);
-                            returnValue.Add(new ConnectedDeviceDefinition($@"\\.\{comPortName}") { Label = valueName, DeviceType = DeviceType.SerialPort });
-                        }
+                        returnValue.AddRange(from valueName in valueNames let comPortName = key.GetValue(valueName) select new ConnectedDeviceDefinition($@"\\.\{comPortName}", DeviceType.SerialPort, label: valueName));
                     }
                 }
             }
@@ -74,31 +75,31 @@ namespace SerialPort.Net.Windows
                 _logger.LogError(ex, ex.Message);
             }
 
-            if (!registryAvailable)
+            if (registryAvailable) return returnValue;
+
+            //We can't look at the registry so try connecting to the devices
+            for (var i = 0; i < 9; i++)
             {
-                //We can't look at the registry so try connecting to the devices
-                for (var i = 0; i < 9; i++)
+                var portName = $@"\\.\COM{i}";
+                using (var serialPortDevice = new WindowsSerialPortDevice(portName))
                 {
-                    var portName = $@"\\.\COM{i}";
-                    using (var serialPortDevice = new WindowsSerialPortDevice(portName))
-                    {
-                        await serialPortDevice.InitializeAsync();
-                        if (serialPortDevice.IsInitialized) returnValue.Add(new ConnectedDeviceDefinition(portName));
-                    }
+                    await serialPortDevice.InitializeAsync(cancellationToken);
+                    if (serialPortDevice.IsInitialized) returnValue.Add(new ConnectedDeviceDefinition(portName, DeviceType.SerialPort));
                 }
             }
 
             return returnValue;
         }
 
-        public Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition)
-        {
-            var device = deviceDefinition == null
+        public Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default)
+             => Task.FromResult<IDevice>(deviceDefinition == null
                 ? throw new ArgumentNullException(nameof(deviceDefinition))
-                : new WindowsSerialPortDevice(deviceDefinition.DeviceId);
+                : new WindowsSerialPortDevice(deviceDefinition.DeviceId));
 
-            return Task.FromResult<IDevice>(device);
-        }
+        public Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default)
+            => deviceDefinition != null ? Task.FromResult(deviceDefinition.DeviceType == DeviceType.SerialPort) :
+            throw new ArgumentNullException(nameof(deviceDefinition));
+
         #endregion
     }
 }

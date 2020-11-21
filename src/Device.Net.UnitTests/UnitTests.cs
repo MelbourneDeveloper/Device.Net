@@ -34,7 +34,13 @@ namespace Device.Net.UnitTests
 
         private static readonly Mock<ILogger> _loggerMock = new Mock<ILogger>();
         private static readonly Mock<ILoggerFactory> _LoggerFactoryMock = new Mock<ILoggerFactory>();
-        //private static readonly IDeviceManager _DeviceManager = new DeviceManager(_LoggerFactoryMock.Object);
+
+        /// <summary>
+        /// Dummy logger factory for now
+        /// TODO: remove this because the factory is no longer a required parameter
+        /// </summary>
+        private readonly ILoggerFactory _loggerFactory = LoggerFactory.Create((builder) => { });
+
 
         public static void CheckLogMessageText(Mock<ILogger> loggerMock, string containsText, LogLevel logLevel, Times times)
         {
@@ -84,7 +90,7 @@ namespace Device.Net.UnitTests
         public async Task TestWithMatchedFilterAsync(bool isHidConnected, bool isUsbConnected, int expectedCount, uint vid, uint pid)
         {
             var (hid, usb) = GetMockedFactories(isHidConnected, isUsbConnected, vid, pid);
-            var deviceManager = new List<IDeviceFactory> { hid.Object, usb.Object }.ToDeviceManager();
+            var deviceManager = new List<IDeviceFactory> { hid.Object, usb.Object }.Aggregate();
 
             var connectedDeviceDefinitions = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList();
 
@@ -92,7 +98,7 @@ namespace Device.Net.UnitTests
             {
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                 {
-                    _ = deviceManager.GetDevice(connectedDeviceDefinition);
+                    _ = deviceManager.GetDeviceAsync(connectedDeviceDefinition);
 
                     //TODO: put stuff here
                 }
@@ -117,23 +123,20 @@ namespace Device.Net.UnitTests
             It.IsAny<EventId>(),
             It.IsAny<It.IsAnyType>(),
             It.IsAny<Exception>(),
-            (Func<It.IsAnyType, Exception, string>)It.IsAny<object>())).Callback(() => 
-            {
-                actualCount++;
-            });
+            (Func<It.IsAnyType, Exception, string>)It.IsAny<object>())).Callback(() => actualCount++);
 
             _loggerMock.Setup(l => l.BeginScope(It.IsAny<It.IsAnyType>())).Returns(new Mock<IDisposable>().Object);
 
             var (hid, usb) = GetMockedFactories(isHidConnected, isUsbConnected, vid, pid);
 
 
-            var deviceManager = new List<IDeviceFactory> { hid.Object, usb.Object }.ToDeviceManager();
+            var deviceManager = new List<IDeviceFactory> { hid.Object, usb.Object }.Aggregate();
 
             var connectedDeviceDefinition = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList().First();
 
             var mockHidDevice = new MockHidDevice(connectedDeviceDefinition.DeviceId, _loggerFactory, _loggerMock.Object);
 
-            var writeAndReadTasks = new List<Task<ReadResult>>();
+            var writeAndReadTasks = new List<Task<TransferResult>>();
 
 
             const int count = 10;
@@ -168,9 +171,9 @@ namespace Device.Net.UnitTests
         {
             var (hidMock, usbMock) = GetMockedFactories(isHidConnected, isUsbConnected, null, null);
 
-            var deviceManager =new List<IDeviceFactory> { hidMock.Object, usbMock.Object } .ToDeviceManager(_loggerFactory);
+            var deviceFactories =new List<IDeviceFactory> { hidMock.Object, usbMock.Object } .Aggregate(_loggerFactory);
 
-            var connectedDeviceDefinitions = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList();
+            var connectedDeviceDefinitions = (await deviceFactories.GetConnectedDeviceDefinitionsAsync()).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
             Assert.AreEqual(expectedCount, connectedDeviceDefinitions.Count);
         }
@@ -182,39 +185,38 @@ namespace Device.Net.UnitTests
 
             if (isHidConnected)
             {
-                var result = new List<ConnectedDeviceDefinition>();
-
-                if((!vid.HasValue && !pid.HasValue) || (vid == 1 && pid == 1))
-                {
-                    result.Add(new ConnectedDeviceDefinition("123")
-                    {
-                        ProductId = 1,
-                        VendorId = 1
-                    });
-                }
+                hidMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync(It.IsAny<CancellationToken>())).Returns(
+                    Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> {
+                     new ConnectedDeviceDefinition(
+                        "123", 
+                        DeviceType.Hid,
+                        productId : 1,
+                        vendorId : 1
+                    ) }));
 
                 hidMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync()).Returns(
                     Task.FromResult<IReadOnlyCollection<ConnectedDeviceDefinition>>(result));
 
-
-                hidMock.Setup(f => f.GetDevice(It.IsAny<ConnectedDeviceDefinition>())).Returns(
+                hidMock.Setup(f => f.GetDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).Returns(
                 Task.FromResult<IDevice>( new MockHidDevice("Asd",_LoggerFactoryMock.Object,_loggerMock.Object)));
+
+                hidMock.Setup(f => f.SupportsDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).Returns(async () => isHidConnected);
             }
 
             if (isUsbConnected)
             {
-                var result =new List<ConnectedDeviceDefinition>();
+                usbMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync(It.IsAny<CancellationToken>())).Returns(
+                    Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> {
+                    new ConnectedDeviceDefinition
+                    (
+                        "321",
+                        DeviceType.Usb,
+                        productId : 2,
+                        vendorId : 2
+                    )}));
 
-                if ((!vid.HasValue && !pid.HasValue) || (vid == 2 && pid == 2))
-                {
-                    result.Add(new ConnectedDeviceDefinition("321"){    ProductId = 2,VendorId = 2});
-                }
-
-                usbMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync()).Returns(
-                    Task.FromResult<IReadOnlyCollection<ConnectedDeviceDefinition>>(
-                        result));
-
-                //TODO: Shouldn't this set up GetDevice?
+                //ooohhh
+                hidMock.Setup(f => f.SupportsDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).Returns( () => Task.FromResult( isUsbConnected));
             }
 
             return (hidMock, usbMock);
@@ -269,19 +271,14 @@ namespace Device.Net.UnitTests
         }
         #endregion
 
-        /// <summary>
-        /// Dummy logger factory for now
-        /// </summary>
-        private readonly ILoggerFactory _loggerFactory = LoggerFactory.Create((builder) => { });
-
         #region Exceptions
         [TestMethod]
-        public void TestDeviceException()
+        public async Task TestDeviceException()
         {
             try
             {
                 var deviceManager = new DeviceManager(new List<IDeviceFactory> { new Mock<IDeviceFactory>().Object }, _LoggerFactoryMock.Object);
-                var device = deviceManager.GetDevice(new ConnectedDeviceDefinition("a"));
+                var device = await deviceManager.GetDeviceAsync(new ConnectedDeviceDefinition("a", DeviceType.Hid));
             }
             catch (DeviceException dex)
             {
@@ -301,7 +298,7 @@ namespace Device.Net.UnitTests
                 var cancellationTokenSource = new CancellationTokenSource();
 
                 var task1 = device.WriteAndReadAsync(new byte[] { 1, 2, 3 }, cancellationTokenSource.Token);
-                var task2 = Task.Run(() => { cancellationTokenSource.Cancel(); });
+                var task2 = Task.Run(() => cancellationTokenSource.Cancel());
 
                 await Task.WhenAll(new Task[] { task1, task2 });
             }
@@ -310,7 +307,7 @@ namespace Device.Net.UnitTests
                 Assert.AreEqual(Messages.ErrorMessageOperationCanceled, oce.Message);
                 return;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Assert.Fail();
             }

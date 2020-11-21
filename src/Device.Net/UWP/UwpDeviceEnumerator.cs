@@ -10,9 +10,9 @@ using wde = Windows.Devices.Enumeration;
 
 namespace Device.Net.UWP
 {
-    public delegate Task<ConnectionInfo> TestConnection(string deviceId);
+    public delegate Task<ConnectionInfo> TestConnection(string deviceId, CancellationToken cancellationToken = default);
 
-    public class UwpDeviceEnumerator
+    public class UwpDeviceEnumerator : IDisposable
     {
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger _logger;
@@ -38,7 +38,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Methods
-        public async Task<IReadOnlyCollection<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default)
         {
             var deviceInformationCollection = aqsFilter != null
                 ? await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask()
@@ -51,30 +51,34 @@ namespace Device.Net.UWP
 
             foreach (var deviceDef in deviceDefinitions)
             {
-                var connectionInformation = await TestConnection(deviceDef.DeviceId);
+                var connectionInformation = await TestConnection(deviceDef.DeviceId, cancellationToken);
                 if (connectionInformation.CanConnect)
                 {
-                    deviceDef.UsagePage = connectionInformation.UsagePage;
-
-                    deviceDefinitionList.Add(deviceDef);
+                    deviceDefinitionList.Add(
+                        new ConnectedDeviceDefinition(
+                            deviceDef.DeviceId,
+                            _deviceType,
+                            usagePage: connectionInformation.UsagePage,
+                            vendorId: deviceDef.VendorId,
+                            productId: deviceDef.ProductId
+                            ));
                 }
             }
 
             return new ReadOnlyCollection<ConnectedDeviceDefinition>(deviceDefinitionList);
         }
 
-        private async Task<ConnectionInfo> TestConnection(string deviceId)
+        private async Task<ConnectionInfo> TestConnection(string deviceId, CancellationToken cancellationToken = default)
         {
-            IDisposable logScope = null;
+            using var logScope = _logger?.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(TestConnection));
+
             try
             {
-                await _TestConnectionSemaphore.WaitAsync();
-
-                logScope = _logger?.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(TestConnection));
+                await _TestConnectionSemaphore.WaitAsync(cancellationToken);
 
                 if (_ConnectionTestedDeviceIds.TryGetValue(deviceId, out var connectionInfo)) return connectionInfo;
 
-                connectionInfo = await _testConnection(deviceId);
+                connectionInfo = await _testConnection(deviceId, cancellationToken);
 
                 _ConnectionTestedDeviceIds.Add(deviceId, connectionInfo);
 
@@ -87,10 +91,10 @@ namespace Device.Net.UWP
             }
             finally
             {
-                logScope?.Dispose();
                 _TestConnectionSemaphore.Release();
             }
         }
+        public void Dispose() => _TestConnectionSemaphore.Dispose();
         #endregion
     }
 }

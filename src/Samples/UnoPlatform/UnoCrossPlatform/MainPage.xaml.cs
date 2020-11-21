@@ -2,7 +2,6 @@
 using System;
 using Device.Net;
 using Microsoft.Extensions.Logging;
-using Device.Net.Reactive;
 using System.Collections.Generic;
 using Usb.Net;
 
@@ -40,10 +39,7 @@ namespace UnoCrossPlatform
         {
             Loaded -= MainPage_Loaded;
 
-            var loggerFactory = LoggerFactory.Create((builder) =>
-            {
-                _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
-            });
+            var loggerFactory = LoggerFactory.Create((builder) => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 
             var filterDeviceDefinitions = new List<FilterDeviceDefinition> { new FilterDeviceDefinition(vendorId: 16701, productId: 8455, usagePage: 65280) };
 
@@ -54,7 +50,6 @@ namespace UnoCrossPlatform
 #else
                 .CreateAndroidUsbDeviceFactory(UsbManager, AppContext, loggerFactory, writeBufferSize: 8, readBufferSize: 8)
 #endif
-                .ToDeviceManager(loggerFactory)
                 .CreateDeviceDataStreamer(async (device) =>
                 {
                     string display = null;
@@ -78,10 +73,7 @@ namespace UnoCrossPlatform
 
                     if (display == null) return;
 
-                    _ = DispatchingExtensions.RunOnDispatcher(() =>
-                    {
-                        TheTextBlock.Text = display;
-                    });
+                    _ = DispatchingExtensions.RunOnDispatcher(() => TheTextBlock.Text = display);
 
                 }
                 //Note this breaks UWP

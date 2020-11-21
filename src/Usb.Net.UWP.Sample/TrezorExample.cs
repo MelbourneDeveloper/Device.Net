@@ -36,12 +36,12 @@ namespace Usb.Net.Sample
 
         #region Public Properties
         public IDevice TrezorDevice { get; private set; }
-        public IDeviceManager DeviceManager { get; }
+        public IDeviceFactory DeviceManager { get; }
         public DeviceListener DeviceListener { get; }
         #endregion
 
         #region Constructor
-        public TrezorExample(IDeviceManager deviceManager, ILoggerFactory loggerFactory)
+        public TrezorExample(IDeviceFactory deviceManager, ILoggerFactory loggerFactory)
         {
             DeviceManager = deviceManager;
             DeviceListener = new DeviceListener(deviceManager, PollMilliseconds, loggerFactory);
@@ -74,9 +74,9 @@ namespace Usb.Net.Sample
         public async Task InitializeTrezorAsync()
         {
             //Get the first available device and connect to it
-            var devices = await DeviceListener.DeviceManager.GetConnectedDeviceDefinitionsAsync();
+            var devices = await DeviceListener.DeviceFactory.GetConnectedDeviceDefinitionsAsync();
             var firstConnectedDeviceDefinition = devices.FirstOrDefault();
-            TrezorDevice = await DeviceListener.DeviceManager.GetDevice(firstConnectedDeviceDefinition);
+            TrezorDevice = await DeviceListener.DeviceFactory.GetDeviceAsync(firstConnectedDeviceDefinition);
 
             if (TrezorDevice == null) throw new Exception("There were no devices found");
 

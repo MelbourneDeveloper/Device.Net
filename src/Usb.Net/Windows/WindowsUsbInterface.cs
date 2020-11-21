@@ -37,7 +37,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Methods
-        public async Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
+        public async Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
         {
             return await Task.Run(() =>
             {
@@ -45,19 +45,24 @@ namespace Usb.Net.Windows
                 var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_SafeFileHandle, ReadEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't read data");
                 Logger.LogTrace(new Trace(false, bytes));
-                return new ReadResult(bytes, bytesRead);
+                return new TransferResult(bytes, bytesRead);
             }, cancellationToken);
         }
 
-        public async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
-        {
-            await Task.Run(() =>
+        public Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+            => Task.Run(async () =>
             {
-                var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(_SafeFileHandle, WriteEndpoint.PipeId, data, (uint)data.Length, out var bytesWritten, IntPtr.Zero);
+                var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(
+                    _SafeFileHandle,
+                    WriteEndpoint.PipeId,
+                    data,
+                    (uint)data.Length,
+                    out var bytesWritten,
+                    IntPtr.Zero);
                 WindowsDeviceBase.HandleError(isSuccess, "Couldn't write data");
                 Logger.LogTrace(new Trace(true, data));
+                return bytesWritten;
             }, cancellationToken);
-        }
 
         public void Dispose()
         {
@@ -70,6 +75,57 @@ namespace Usb.Net.Windows
 
             GC.SuppressFinalize(this);
         }
+
+        public Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
+        {
+            return setupPacket == null
+                ? throw new ArgumentNullException(nameof(setupPacket)) :
+            Task.Run(() =>
+            {
+                using var scope = Logger.BeginScope("Perfoming Control Transfer {setupPacket}", setupPacket);
+
+                try
+                {
+
+                    var transferBuffer = new byte[setupPacket.Length];
+
+                    uint bytesTransferred = 0;
+
+                    if (setupPacket.Length > 0)
+                    {
+                        if (setupPacket.RequestType.Direction == RequestDirection.Out)
+                        {
+                            ////Make a copy so we don't mess with the array passed in
+                            Array.Copy(buffer, transferBuffer, buffer.Length);
+                        }
+                    }
+
+                    var isSuccess = WinUsbApiCalls.WinUsb_ControlTransfer(_SafeFileHandle.DangerousGetHandle(),
+                        setupPacket.ToWindowsSetupPacket(),
+                        transferBuffer,
+                        (uint)transferBuffer.Length,
+                        ref bytesTransferred,
+                        IntPtr.Zero);
+
+                    WindowsDeviceBase.HandleError(isSuccess, "Couldn't do a control transfer");
+
+                    Logger.LogTrace(new Trace(setupPacket.RequestType.Direction == RequestDirection.Out, transferBuffer));
+                    Logger.LogInformation("Control Transfer complete {setupPacket}", setupPacket);
+
+                    return bytesTransferred != setupPacket.Length && setupPacket.RequestType.Direction == RequestDirection.In
+                        ? throw new ControlTransferException($"Requested {setupPacket.Length} bytes but received {bytesTransferred}")
+                        : new TransferResult(transferBuffer, bytesTransferred);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError(ex, $"Error on {nameof(PerformControlTransferAsync)}");
+
+                    throw;
+                }
+
+            }, cancellationToken);
+        }
+
         #endregion
     }
 }

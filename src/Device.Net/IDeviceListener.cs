@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net
@@ -8,7 +9,7 @@ namespace Device.Net
         event EventHandler<DeviceEventArgs> DeviceDisconnected;
         event EventHandler<DeviceEventArgs> DeviceInitialized;
 
-        Task CheckForDevicesAsync();
+        Task CheckForDevicesAsync(CancellationToken cancellationToken = default);
         void Start();
 #pragma warning disable CA1716 // Identifiers should not match keywords
         void Stop();

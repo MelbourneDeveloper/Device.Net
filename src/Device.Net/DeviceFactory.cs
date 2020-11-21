@@ -2,28 +2,25 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net
 {
-    public delegate Task<IReadOnlyCollection<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync();
-    public delegate Guid GetClassGuid();
-    public delegate ConnectedDeviceDefinition GetDeviceDefinition(string deviceId);
-    public delegate Task<IDevice> GetDevice(string deviceId);
+    public delegate Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default);
+    public delegate ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, Guid classGuid);
+    public delegate Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition deviceId, CancellationToken cancellationToken = default);
 
     public sealed class DeviceFactory : IDeviceFactory
     {
-        #region Protected Properties
+        #region Fields
 #pragma warning disable IDE0052 // Remove unread private members
         private readonly ILogger _logger;
 #pragma warning restore IDE0052 // Remove unread private members
         private readonly ILoggerFactory _loggerFactory;
         private readonly GetConnectedDeviceDefinitionsAsync _getConnectedDevicesAsync;
-        private readonly GetDevice _getDevice;
-        #endregion
-
-        #region Public  Properties
-        public DeviceType DeviceType { get; }
+        private readonly GetDeviceAsync _getDevice;
+        private readonly Func<ConnectedDeviceDefinition, CancellationToken, Task<bool>> _supportsDevice;
         #endregion
 
         #region Constructor
@@ -33,22 +30,22 @@ namespace Device.Net
 
             ILoggerFactory loggerFactory,
             GetConnectedDeviceDefinitionsAsync getConnectedDevicesAsync,
-            GetDevice getDevice,
-            DeviceType deviceType
+            GetDeviceAsync getDevice,
+            Func<ConnectedDeviceDefinition, CancellationToken, Task<bool>> supportsDevice
             )
         {
             _getConnectedDevicesAsync = getConnectedDevicesAsync ?? throw new ArgumentNullException(nameof(getConnectedDevicesAsync));
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _logger = _loggerFactory.CreateLogger<DeviceFactory>();
             _getDevice = getDevice;
-            DeviceType = deviceType;
+            _supportsDevice = supportsDevice ?? throw new ArgumentNullException(nameof(supportsDevice));
         }
         #endregion
 
         #region Public Methods
-        public Task<IReadOnlyCollection<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync() => _getConnectedDevicesAsync();
-
-        public Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition) => deviceDefinition == null ? throw new ArgumentNullException(nameof(deviceDefinition)) : _getDevice(deviceDefinition.DeviceId);
+        public Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default) => _supportsDevice(deviceDefinition, cancellationToken);
+        public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default) => _getConnectedDevicesAsync(cancellationToken);
+        public Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default) => deviceDefinition == null ? throw new ArgumentNullException(nameof(deviceDefinition)) : _getDevice(deviceDefinition, cancellationToken);
         #endregion
     }
 }

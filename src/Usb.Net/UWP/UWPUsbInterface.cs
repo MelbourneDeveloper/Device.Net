@@ -67,7 +67,7 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Methods
-        public async Task<ReadResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
+        public async Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
         {
             IBuffer buffer;
 
@@ -79,14 +79,14 @@ namespace Usb.Net.UWP
             else
             {
                 return InterruptReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe
-                    ? (ReadResult)await usbInterruptInPipe.ReadAsync(cancellationToken)
+                    ? (TransferResult)await usbInterruptInPipe.ReadAsync(cancellationToken)
                     : throw new DeviceException(Messages.ErrorMessageReadEndpointNotRecognized);
             }
 
             return buffer.ToArray();
         }
 
-        public async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+        public async Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
             //TODO: It might not be the case that Initialize has not been called. Better error message here please.
@@ -94,12 +94,10 @@ namespace Usb.Net.UWP
 
             if (data.Length > WriteBufferSize) throw new ValidationException(Messages.ErrorMessageBufferSizeTooLarge);
 
-            IDisposable logScope = null;
+            using var logScope = Logger?.BeginScope("Interface number: {interfaceNumber} Call: {call}", UsbInterface.InterfaceNumber, nameof(WriteAsync));
 
             try
             {
-                logScope = Logger?.BeginScope("Interface number: {interfaceNumber} Call: {call}", UsbInterface.InterfaceNumber, nameof(WriteAsync));
-
                 var buffer = data.AsBuffer();
 
                 uint count = 0;
@@ -129,17 +127,20 @@ namespace Usb.Net.UWP
                 {
                     throw new IOException(Messages.GetErrorMessageInvalidWriteLength(data.Length, count));
                 }
+
+                return count;
             }
             catch (Exception ex)
             {
-                Logger?.LogError(Messages.WarningMessageWritingToInterrupt);
+                Logger?.LogError(ex, Messages.WarningMessageWritingToInterrupt);
                 throw;
             }
-            finally
-            {
-                logScope?.Dispose();
-            }
         }
+
+#pragma warning disable IDE0060 // Remove unused parameter
+        public Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default) => throw new NotImplementedException();
+#pragma warning restore IDE0060 // Remove unused parameter
+
         #endregion
 
         #region IDisposable Support

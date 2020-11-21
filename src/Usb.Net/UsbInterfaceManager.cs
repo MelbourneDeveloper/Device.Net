@@ -20,7 +20,7 @@ namespace Usb.Net
 
         #region Protected Properties
         protected ILogger Logger { get; }
-        protected ILoggerFactory LoggerFactory { get; private set; }
+        protected ILoggerFactory LoggerFactory { get; }
         #endregion
 
         #region Constructor

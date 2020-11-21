@@ -5,7 +5,6 @@ using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Device.Net;
 using Microsoft.Extensions.Logging;
 using System;
 using Usb.Net.Android;
@@ -14,23 +13,17 @@ using Usb.Net.Sample;
 namespace Usb.Net.AndroidSample
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
+    [IntentFilter(new[] { UsbManager.ActionUsbDeviceAttached })]
+    [MetaData(UsbManager.ActionUsbDeviceAttached, Resource = "@xml/device_filter")]
     public class MainActivity : AppCompatActivity
     {
         #region Fields
-        private readonly TrezorExample _TrezorExample;
-        private IDeviceManager _DeviceManager;
-        private readonly ILoggerFactory _LoggerFactory;
+        private TrezorExample _TrezorExample;
         #endregion
 
         #region Constructor
         public MainActivity()
         {
-            _LoggerFactory = LoggerFactory.Create((builder) =>
-            {
-                builder.AddDebug();
-            });
-
-            _TrezorExample = new TrezorExample(_DeviceManager, _LoggerFactory);
         }
         #endregion
 
@@ -76,18 +69,16 @@ namespace Usb.Net.AndroidSample
             {
                 if (!(GetSystemService(UsbService) is UsbManager usbManager)) throw new Exception("UsbManager is null");
 
-                _DeviceManager = TrezorExample.UsbDeviceDefinitions
-                    .CreateAndroidUsbDeviceFactory(usbManager, base.ApplicationContext, loggerFactory: _LoggerFactory)
-                    .ToDeviceManager(_LoggerFactory);
+                var loggerFactory = LoggerFactory.Create((builder) => builder.AddDebug());
+
+                var deviceManager = TrezorExample.UsbDeviceDefinitions
+                    .CreateAndroidUsbDeviceFactory(usbManager, base.ApplicationContext, loggerFactory: loggerFactory);
+
+                _TrezorExample = new TrezorExample(deviceManager, loggerFactory);
 
                 _TrezorExample.TrezorDisconnected += TrezorExample_TrezorDisconnected;
                 _TrezorExample.TrezorInitialized += TrezorExample_TrezorInitialized;
                 _TrezorExample.StartListening();
-
-                //var attachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
-                //var detachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
-                //RegisterReceiver(attachedReceiver, new IntentFilter(UsbManager.ActionUsbDeviceAttached));
-                //RegisterReceiver(detachedReceiver, new IntentFilter(UsbManager.ActionUsbDeviceDetached));
 
                 DisplayMessage("Waiting for device...");
             }

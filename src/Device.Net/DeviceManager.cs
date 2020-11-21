@@ -3,12 +3,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net
 {
-    public class DeviceManager : IDeviceManager
+
+    public class DeviceManager : IDeviceFactory
     {
         //TODO: Put logging in here
 
@@ -41,7 +42,9 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public async Task<IReadOnlyCollection<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
+        public async Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default) => (await DeviceFactories.FirstOrDefaultAsync(async d => await d.SupportsDeviceAsync(deviceDefinition, cancellationToken), cancellationToken)) != null;
+
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default)
         {
             var retVal = new List<ConnectedDeviceDefinition>();
 
@@ -50,13 +53,15 @@ namespace Device.Net
                 try
                 {
                     //TODO: Do this in parallel?
-                    var factoryResults = await deviceFactory.GetConnectedDeviceDefinitionsAsync();
+                    var factoryResults = await deviceFactory.GetConnectedDeviceDefinitionsAsync(cancellationToken);
                     retVal.AddRange(factoryResults);
 
                     _logger.LogDebug("Called " + nameof(GetConnectedDeviceDefinitionsAsync) + " on " + deviceFactory.GetType().Name);
                 }
                 catch (Exception ex)
                 {
+                    //TODO: We probably want to remove this. If a factory crashes, we probably don't want to swallow the error
+
                     _logger.LogError(ex, "Error calling " + nameof(GetConnectedDeviceDefinitionsAsync));
                 }
             }
@@ -64,40 +69,12 @@ namespace Device.Net
             return retVal;
         }
 
-        //TODO: Duplicate code here...
-        public Task<IDevice> GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition)
-        {
-            if (connectedDeviceDefinition == null) throw new ArgumentNullException(nameof(connectedDeviceDefinition));
+        public async Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition, CancellationToken cancellationToken = default)
+             => connectedDeviceDefinition == null ? throw new ArgumentNullException(nameof(connectedDeviceDefinition)) :
+            await ((await DeviceFactories.FirstOrDefaultAsync(f => f.SupportsDeviceAsync(connectedDeviceDefinition), cancellationToken))
+            ?? throw new DeviceException(Messages.ErrorMessageCouldntGetDevice))
+            .GetDeviceAsync(connectedDeviceDefinition, cancellationToken);
 
-            foreach (var deviceFactory in DeviceFactories.Where(deviceFactory => !connectedDeviceDefinition.DeviceType.HasValue || (deviceFactory.DeviceType == connectedDeviceDefinition.DeviceType)))
-            {
-                return deviceFactory.GetDevice(connectedDeviceDefinition);
-            }
-
-            throw new DeviceException(Messages.ErrorMessageCouldntGetDevice);
-        }
-        #endregion
-
-        #region Public Static Methods
-        public static bool IsDefinitionMatch(FilterDeviceDefinition filterDevice, ConnectedDeviceDefinition actualDevice, DeviceType deviceType)
-        {
-            if (actualDevice == null) throw new ArgumentNullException(nameof(actualDevice));
-
-            if (filterDevice == null) return true;
-
-            var vendorIdPasses = !filterDevice.VendorId.HasValue || filterDevice.VendorId == actualDevice.VendorId;
-            var productIdPasses = !filterDevice.ProductId.HasValue || filterDevice.ProductId == actualDevice.ProductId;
-            var deviceTypePasses = !actualDevice.DeviceType.HasValue || actualDevice.DeviceType == deviceType;
-            var usagePagePasses = !filterDevice.UsagePage.HasValue || filterDevice.UsagePage == actualDevice.UsagePage;
-
-            var returnValue =
-                vendorIdPasses &&
-                productIdPasses &&
-                deviceTypePasses &&
-                usagePagePasses;
-
-            return returnValue;
-        }
         #endregion
     }
 }

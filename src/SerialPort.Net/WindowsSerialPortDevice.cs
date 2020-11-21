@@ -53,7 +53,7 @@ namespace SerialPort.Net.Windows
         {
             ApiService = apiService ?? throw new ArgumentNullException(nameof(apiService));
 
-            ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId);
+            ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId, DeviceType.SerialPort);
 
             if ((byteSize == 5 && stopBits == StopBits.Two) || (stopBits == StopBits.OnePointFive && byteSize > 5))
                 throw new ArgumentException(Messages.ErrorInvalidByteSizeAndStopBitsCombo);
@@ -76,17 +76,17 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Public Methods
-        public Task InitializeAsync() => Task.Run(() => { Initialize(); });
+        public Task InitializeAsync(CancellationToken cancellationToken = default) => Task.Run(Initialize, cancellationToken);
 
-        private int Write(byte[] data) => data == null ? 0 : ApiService.AWriteFile(_ReadSafeFileHandle, data, data.Length, out var bytesWritten, 0) ? bytesWritten : -1;
+        private uint Write(byte[] data) => data == null ? 0 : ApiService.AWriteFile(_ReadSafeFileHandle, data, data.Length, out var bytesWritten, 0) ? (uint)bytesWritten : 0;
 
-        public override Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+        public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             ValidateConnection();
-            return Task.Run(() => { Write(data); }, cancellationToken);
+            return Task.Run(() => Write(data), cancellationToken);
         }
 
-        public override Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default)
+        public override Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             ValidateConnection();
 
@@ -94,7 +94,7 @@ namespace SerialPort.Net.Windows
             {
                 var buffer = new byte[_ReadBufferSize];
                 var bytesRead = Read(buffer);
-                return new ReadResult(buffer, bytesRead);
+                return new TransferResult(buffer, bytesRead);
             }, cancellationToken);
         }
 

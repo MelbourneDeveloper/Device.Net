@@ -47,7 +47,7 @@ namespace Device.Net.UnitTests
         {
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
             Assert.IsTrue(connectedDeviceDefinitions.Count > 0);
-            using var serialPortDevice = await windowsSerialPortDeviceFactory.GetDevice(connectedDeviceDefinitions[0]);
+            using var serialPortDevice = await windowsSerialPortDeviceFactory.GetDeviceAsync(connectedDeviceDefinitions[0]);
             await serialPortDevice.InitializeAsync();
             Assert.IsTrue(serialPortDevice.IsInitialized);
         }
@@ -58,8 +58,7 @@ namespace Device.Net.UnitTests
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
-            var deviceManager = windowsSerialPortDeviceFactory.ToDeviceManager();
-            var devices = await deviceManager.GetConnectedDeviceDefinitionsAsync();
+            var devices = await windowsSerialPortDeviceFactory.GetConnectedDeviceDefinitionsAsync();
 
             foreach (var device in devices)
             {
@@ -72,7 +71,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task ConnectedTestGetDevicesSingletonAsync()
         {
-            var deviceManager = new WindowsSerialPortDeviceFactory().ToDeviceManager();
+            var deviceManager = new WindowsSerialPortDeviceFactory();
 
             var devices = await deviceManager.GetConnectedDeviceDefinitionsAsync();
 

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using windowsUsbDevice = Windows.Devices.Usb.UsbDevice;
@@ -57,11 +58,11 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Private Methods
-        public override async Task InitializeAsync()
+        public override async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
-            await GetDeviceAsync(DeviceId);
+            await GetDeviceAsync(DeviceId, cancellationToken);
 
             if (ConnectedDevice != null)
             {
@@ -104,7 +105,7 @@ namespace Usb.Net.UWP
 
         public Task WriteAsync(byte[] data) => WriteUsbInterface.WriteAsync(data);
 
-        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync() => Task.FromResult(ConnectedDeviceDefinition);
+        public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync(CancellationToken cancellationToken = default) => Task.FromResult(ConnectedDeviceDefinition);
         #endregion
     }
 }

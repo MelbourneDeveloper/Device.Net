@@ -76,12 +76,10 @@ namespace Usb.Net.UWP
 
         public async Task<byte[]> ReadAsync(CancellationToken cancellationToken = default)
         {
-            IDisposable logScope = null;
+            using var logScope = _logger.BeginScope("Endpoint descriptor: {endpointDescriptor} Call: {call}", UsbInterruptInPipe.EndpointDescriptor?.ToString(), nameof(ReadAsync));
 
             try
             {
-                logScope = _logger.BeginScope("Endpoint descriptor: {endpointDescriptor} Call: {call}", UsbInterruptInPipe.EndpointDescriptor?.ToString(), nameof(ReadAsync));
-
                 await _ReadLock.WaitAsync();
 
                 byte[] retVal = null;
@@ -116,7 +114,7 @@ namespace Usb.Net.UWP
                 _logger.LogDebug(Messages.DebugMessageLockReleased);
 
                 //Cancel the completion source if the token is canceled
-                using (cancellationToken.Register(() => { _ReadChunkTaskCompletionSource.TrySetCanceled(); }))
+                using (cancellationToken.Register(() => _ReadChunkTaskCompletionSource.TrySetCanceled()))
                 {
                     await _ReadChunkTaskCompletionSource.Task;
                 }
@@ -130,7 +128,6 @@ namespace Usb.Net.UWP
             }
             finally
             {
-                logScope.Dispose();
                 _ReadLock.Release();
             }
         }

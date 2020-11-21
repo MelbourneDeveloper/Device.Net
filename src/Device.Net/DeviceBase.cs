@@ -25,12 +25,15 @@ namespace Device.Net
         #endregion
 
         #region Public Properties
-        public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition { get; set; }
+        public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; set; }
         public string DeviceId { get; }
         #endregion
 
         #region Constructor
-        protected DeviceBase(string deviceId, ILoggerFactory loggerFactory, ILogger logger)
+        protected DeviceBase(
+            string deviceId,
+            ILoggerFactory loggerFactory = null,
+            ILogger logger = null)
         {
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
             Logger = logger ?? NullLogger.Instance;
@@ -41,24 +44,23 @@ namespace Device.Net
         #region Public Abstract Methods
         //TODO: Why are these here?
 
-        public abstract Task<ReadResult> ReadAsync(CancellationToken cancellationToken = default);
-        public abstract Task WriteAsync(byte[] data, CancellationToken cancellationToken = default);
+        public abstract Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default);
+        public abstract Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default);
         #endregion
 
         #region Public Methods
         public virtual Task Flush(CancellationToken cancellationToken = default) => throw new NotImplementedException(Messages.ErrorMessageFlushNotImplemented);
 
-        public async Task<ReadResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
+        public async Task<TransferResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
         {
             if (writeBuffer == null) throw new ArgumentNullException(nameof(writeBuffer));
 
             await _WriteAndReadLock.WaitAsync(cancellationToken);
 
-            IDisposable logScope = null;
+            using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call} Write Buffer Length: {writeBufferLength}", DeviceId, nameof(WriteAndReadAsync), writeBuffer.Length);
 
             try
             {
-                logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call} Write Buffer Length: {writeBufferLength}", DeviceId, nameof(WriteAndReadAsync), writeBuffer.Length);
                 await WriteAsync(writeBuffer, cancellationToken);
                 var retVal = await ReadAsync(cancellationToken);
                 Logger.LogInformation(Messages.SuccessMessageWriteAndReadCalled);
@@ -71,7 +73,6 @@ namespace Device.Net
             }
             finally
             {
-                logScope.Dispose();
                 _WriteAndReadLock.Release();
             }
         }
@@ -104,7 +105,11 @@ namespace Device.Net
         #endregion
 
         #region Public Static Methods
-        public static ConnectedDeviceDefinition GetDeviceDefinitionFromWindowsDeviceId(string deviceId, DeviceType deviceType, ILogger logger)
+        public static ConnectedDeviceDefinition GetDeviceDefinitionFromWindowsDeviceId(
+            string deviceId,
+            DeviceType deviceType,
+            ILogger logger,
+            Guid? classGuid = null)
         {
             uint? vid = null;
             uint? pid = null;
@@ -121,7 +126,7 @@ namespace Device.Net
                 (logger ?? NullLogger.Instance).LogError(ex, "Error {errorMessage} Area: {area}", ex.Message, nameof(GetDeviceDefinitionFromWindowsDeviceId));
             }
 
-            return new ConnectedDeviceDefinition(deviceId) { DeviceType = deviceType, VendorId = vid, ProductId = pid };
+            return new ConnectedDeviceDefinition(deviceId, deviceType, vendorId: vid, productId: pid, classGuid: classGuid);
         }
         #endregion
 

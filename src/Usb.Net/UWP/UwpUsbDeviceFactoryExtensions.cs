@@ -3,6 +3,7 @@ using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Usb.Net.UWP
 {
@@ -48,7 +49,7 @@ namespace Usb.Net.UWP
                 var uwpHidDeviceEnumerator = new UwpDeviceEnumerator(
                     aqs,
                     DeviceType.Usb,
-                    async (d) => new ConnectionInfo { CanConnect = true },
+                    (d, cancellationToken) => Task.FromResult(new ConnectionInfo { CanConnect = true }),
                     loggerFactory);
 
                 getConnectedDeviceDefinitionsAsync = uwpHidDeviceEnumerator.GetConnectedDeviceDefinitionsAsync;
@@ -56,13 +57,14 @@ namespace Usb.Net.UWP
 
             if (getUsbInterfaceManager == null)
             {
-                getUsbInterfaceManager = async (d) =>
+                getUsbInterfaceManager = (deviceId, cancellationToken) =>
+                Task.FromResult<IUsbInterfaceManager>(
                     new UWPUsbInterfaceManager(
                     //TODO: no idea if this is OK...
-                    new ConnectedDeviceDefinition(d),
+                    new ConnectedDeviceDefinition(deviceId, DeviceType.Usb),
                     loggerFactory,
                     readBufferSize,
-                    writeBufferSize);
+                    writeBufferSize));
             }
 
             return UsbDeviceFactoryExtensions.CreateUsbDeviceFactory(getConnectedDeviceDefinitionsAsync, getUsbInterfaceManager, loggerFactory);
