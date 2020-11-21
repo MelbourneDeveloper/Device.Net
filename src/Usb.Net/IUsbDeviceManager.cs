@@ -1,5 +1,6 @@
 using Device.Net;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Usb.Net
@@ -21,6 +22,6 @@ namespace Usb.Net
         /// <summary>
         /// TODO: This shouldn't be here. Don't use this
         /// </summary>
-        Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync();
+        Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync(CancellationToken cancellationToken = default);
     }
 }
