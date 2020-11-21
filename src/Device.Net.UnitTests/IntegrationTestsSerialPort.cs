@@ -47,7 +47,7 @@ namespace Device.Net.UnitTests
         {
             var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
             Assert.IsTrue(connectedDeviceDefinitions.Count > 0);
-            using var serialPortDevice = await windowsSerialPortDeviceFactory.GetDevice(connectedDeviceDefinitions[0]);
+            using var serialPortDevice = await windowsSerialPortDeviceFactory.GetDeviceAsync(connectedDeviceDefinitions[0]);
             await serialPortDevice.InitializeAsync();
             Assert.IsTrue(serialPortDevice.IsInitialized);
         }

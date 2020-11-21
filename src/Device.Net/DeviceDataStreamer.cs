@@ -56,7 +56,7 @@ namespace Device.Net
                                 continue;
                             }
 
-                            _currentDevice = await _deviceFactory.GetDevice(firstConnectedDevice);
+                            _currentDevice = await _deviceFactory.GetDeviceAsync(firstConnectedDevice);
                             await _initializeFunc(_currentDevice);
                         }
 

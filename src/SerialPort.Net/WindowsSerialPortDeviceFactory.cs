@@ -90,12 +90,12 @@ namespace SerialPort.Net.Windows
             return returnValue;
         }
 
-        public Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition)
+        public Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition deviceDefinition)
              => Task.FromResult<IDevice>(deviceDefinition == null
                 ? throw new ArgumentNullException(nameof(deviceDefinition))
                 : new WindowsSerialPortDevice(deviceDefinition.DeviceId));
 
-        public Task<bool> SupportsDevice(ConnectedDeviceDefinition deviceDefinition)
+        public Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition)
             => deviceDefinition != null ? Task.FromResult(deviceDefinition.DeviceType == DeviceType.SerialPort) :
             throw new ArgumentNullException(nameof(deviceDefinition));
 

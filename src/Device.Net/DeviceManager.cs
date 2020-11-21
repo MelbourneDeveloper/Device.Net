@@ -41,7 +41,7 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public async Task<bool> SupportsDevice(ConnectedDeviceDefinition deviceDefinition) => (await DeviceFactories.FirstOrDefaultAsync(async d => await d.SupportsDevice(deviceDefinition))) != null;
+        public async Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition) => (await DeviceFactories.FirstOrDefaultAsync(async d => await d.SupportsDeviceAsync(deviceDefinition))) != null;
 
         public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
         {
@@ -68,11 +68,11 @@ namespace Device.Net
             return retVal;
         }
 
-        public async Task<IDevice> GetDevice(ConnectedDeviceDefinition connectedDeviceDefinition)
+        public async Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition)
              => connectedDeviceDefinition == null ? throw new ArgumentNullException(nameof(connectedDeviceDefinition)) :
-            await ((await DeviceFactories.FirstOrDefaultAsync(f => f.SupportsDevice(connectedDeviceDefinition)))
+            await ((await DeviceFactories.FirstOrDefaultAsync(f => f.SupportsDeviceAsync(connectedDeviceDefinition)))
             ?? throw new DeviceException(Messages.ErrorMessageCouldntGetDevice))
-            .GetDevice(connectedDeviceDefinition);
+            .GetDeviceAsync(connectedDeviceDefinition);
 
         #endregion
     }

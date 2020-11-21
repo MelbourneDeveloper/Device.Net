@@ -42,9 +42,9 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public Task<bool> SupportsDevice(ConnectedDeviceDefinition deviceDefinition) => _supportsDevice(deviceDefinition);
+        public Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition) => _supportsDevice(deviceDefinition);
         public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync() => _getConnectedDevicesAsync();
-        public Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition) => deviceDefinition == null ? throw new ArgumentNullException(nameof(deviceDefinition)) : _getDevice(deviceDefinition);
+        public Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition deviceDefinition) => deviceDefinition == null ? throw new ArgumentNullException(nameof(deviceDefinition)) : _getDevice(deviceDefinition);
         #endregion
     }
 }

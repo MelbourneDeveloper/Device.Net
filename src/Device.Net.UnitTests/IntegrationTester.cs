@@ -24,7 +24,7 @@ namespace Device.Net.UnitTests
             //Ensure that it gets picked up
             Assert.IsNotNull(deviceDefinition);
 
-            var device = await _deviceFactory.GetDevice(deviceDefinition);
+            var device = await _deviceFactory.GetDeviceAsync(deviceDefinition);
 
             //Initialize the device
             await device.InitializeAsync();

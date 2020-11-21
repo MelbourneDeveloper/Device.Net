@@ -6,7 +6,7 @@ namespace Device.Net
     public interface IDeviceFactory
     {
         Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync();
-        Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceDefinition);
-        Task<bool> SupportsDevice(ConnectedDeviceDefinition deviceDefinition);
+        Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition deviceDefinition);
+        Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition);
     }
 }

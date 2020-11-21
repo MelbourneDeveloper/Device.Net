@@ -98,7 +98,7 @@ namespace Device.Net.UnitTests
             {
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                 {
-                    _ = deviceManager.GetDevice(connectedDeviceDefinition);
+                    _ = deviceManager.GetDeviceAsync(connectedDeviceDefinition);
 
                     //TODO: put stuff here
                 }
@@ -195,10 +195,10 @@ namespace Device.Net.UnitTests
                     ) }));
 
 
-                hidMock.Setup(f => f.GetDevice(It.IsAny<ConnectedDeviceDefinition>())).Returns(
+                hidMock.Setup(f => f.GetDeviceAsync(It.IsAny<ConnectedDeviceDefinition>())).Returns(
                 Task.FromResult<IDevice>( new MockHidDevice("Asd",_LoggerFactoryMock.Object,_loggerMock.Object)));
 
-                hidMock.Setup(f => f.SupportsDevice(It.IsAny<ConnectedDeviceDefinition>())).Returns(async () => isHidConnected);
+                hidMock.Setup(f => f.SupportsDeviceAsync(It.IsAny<ConnectedDeviceDefinition>())).Returns(async () => isHidConnected);
             }
 
             if (isUsbConnected && ((!vid.HasValue && !pid.HasValue) || (vid == 2 && pid == 2)))
@@ -214,7 +214,7 @@ namespace Device.Net.UnitTests
                     )}));
 
                 //ooohhh
-                hidMock.Setup(f => f.SupportsDevice(It.IsAny<ConnectedDeviceDefinition>())).Returns(async () => isUsbConnected);
+                hidMock.Setup(f => f.SupportsDeviceAsync(It.IsAny<ConnectedDeviceDefinition>())).Returns(async () => isUsbConnected);
             }
 
             return (hidMock, usbMock);
@@ -276,7 +276,7 @@ namespace Device.Net.UnitTests
             try
             {
                 var deviceManager = new DeviceManager(new List<IDeviceFactory> { new Mock<IDeviceFactory>().Object }, _LoggerFactoryMock.Object);
-                var device = await deviceManager.GetDevice(new ConnectedDeviceDefinition("a", DeviceType.Hid));
+                var device = await deviceManager.GetDeviceAsync(new ConnectedDeviceDefinition("a", DeviceType.Hid));
             }
             catch (DeviceException dex)
             {

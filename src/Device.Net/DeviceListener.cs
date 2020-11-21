@@ -103,7 +103,7 @@ namespace Device.Net
                     if (device == null)
                     {
                         //Need to use the connected device def here instead of the filter version because the filter version won't have the id or any details
-                        device = await DeviceFactory.GetDevice(connectedDeviceDefinition);
+                        device = await DeviceFactory.GetDeviceAsync(connectedDeviceDefinition);
 
                         if (device == null)
                         {
