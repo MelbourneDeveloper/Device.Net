@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
@@ -94,14 +95,13 @@ namespace Hid.Net.Windows
                 loggerFactory.CreateLogger<WindowsDeviceEnumerator>(),
                 classGuid.Value,
                 (d, guid) => GetDeviceDefinition(d, selectedHidApiService, loggerFactory.CreateLogger(nameof(WindowsHidDeviceFactoryExtensions))),
-                async c =>
-                    !filterDeviceDefinitions.Any() || filterDeviceDefinitions.FirstOrDefault(f => f.IsDefinitionMatch(c, DeviceType.Hid)) != null
+                c => Task.FromResult(!filterDeviceDefinitions.Any() || filterDeviceDefinitions.FirstOrDefault(f => f.IsDefinitionMatch(c, DeviceType.Hid)) != null)
                 );
 
             return new DeviceFactory(
                 loggerFactory,
                 windowsDeviceEnumerator.GetConnectedDeviceDefinitionsAsync,
-                async c => new WindowsHidDevice
+                (c, cancellationToken) => Task.FromResult<IDevice>(new WindowsHidDevice
                 (
                     c.DeviceId,
                     loggerFactory: loggerFactory,
@@ -109,8 +109,8 @@ namespace Hid.Net.Windows
                     readBufferSize: readBufferSize,
                     writeBufferSize: writeBufferSize,
                     defaultReportId: defaultReportId
-                ),
-                (c) => Task.FromResult(c.DeviceType == DeviceType.Hid));
+                )),
+                (c, cancellationToken) => Task.FromResult(c.DeviceType == DeviceType.Hid));
         }
 
         private static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, IHidApiService HidService, ILogger logger)

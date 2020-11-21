@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Usb.Net.Windows
 {
@@ -67,19 +68,23 @@ namespace Usb.Net.Windows
                     logger,
                     classGuid ?? WindowsDeviceConstants.WinUSBGuid,
                     (d, guid) => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(d, DeviceType.Usb, logger, guid),
-                    async c =>
-                    !filterDeviceDefinitions.Any() || filterDeviceDefinitions.FirstOrDefault(f => f.IsDefinitionMatch(c, DeviceType.Usb)) != null);
+                    c =>
+                    Task.FromResult(!filterDeviceDefinitions.Any() || filterDeviceDefinitions.FirstOrDefault(f => f.IsDefinitionMatch(c, DeviceType.Usb)) != null));
 
                 getConnectedDeviceDefinitionsAsync = uwpHidDeviceEnumerator.GetConnectedDeviceDefinitionsAsync;
             }
 
-            getUsbInterfaceManager ??= async d =>
-                new WindowsUsbInterfaceManager(
-                    //TODO: no idea if this is OK...
-                    d,
-                    loggerFactory,
-                    readBufferSize,
-                    writeBufferSize);
+            getUsbInterfaceManager ??=
+                    (d, cancellationToken) =>
+                    Task.FromResult<IUsbInterfaceManager>(new WindowsUsbInterfaceManager
+                    (
+                       //TODO: no idea if this is OK...
+                       d,
+                       loggerFactory,
+                       readBufferSize,
+                       writeBufferSize
+                     )
+                );
 
             return UsbDeviceFactoryExtensions.CreateUsbDeviceFactory(getConnectedDeviceDefinitionsAsync, getUsbInterfaceManager, loggerFactory);
         }

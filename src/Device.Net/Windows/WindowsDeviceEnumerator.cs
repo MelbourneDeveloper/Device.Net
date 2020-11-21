@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net.Windows
@@ -30,9 +31,8 @@ namespace Device.Net.Windows
             _isMatch = isMatch;
         }
 
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
-        {
-            return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(async () =>
+        public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default)
+            => Task.Run<IEnumerable<ConnectedDeviceDefinition>>(async () =>
             {
                 using var loggerScope = Logger.BeginScope("Calling " + nameof(GetConnectedDeviceDefinitionsAsync));
 
@@ -142,7 +142,7 @@ namespace Device.Net.Windows
                     Logger.LogError(ex, "Error calling " + nameof(GetConnectedDeviceDefinitionsAsync));
                     throw;
                 }
-            });
-        }
+            }, cancellationToken);
+
     }
 }

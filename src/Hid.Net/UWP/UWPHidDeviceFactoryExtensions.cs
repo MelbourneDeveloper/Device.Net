@@ -5,6 +5,8 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Hid.Net.UWP
 {
@@ -18,7 +20,7 @@ namespace Hid.Net.UWP
         this FilterDeviceDefinition filterDeviceDefinitions,
         ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-        GetDevice getDevice = null,
+        GetDeviceAsync getDevice = null,
         byte? defaultReportId = null) => CreateUwpHidDeviceFactory(new List<FilterDeviceDefinition> { filterDeviceDefinitions }, loggerFactory, getConnectedDeviceDefinitionsAsync, getDevice, defaultReportId);
 
         /// <summary>
@@ -28,13 +30,13 @@ namespace Hid.Net.UWP
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
         ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-        GetDevice getDevice = null,
+        GetDeviceAsync getDevice = null,
         byte? defaultReportId = null,
         Guid? classGuid = null)
         {
             loggerFactory ??= NullLoggerFactory.Instance;
 
-            if (getDevice == null) getDevice = async c => new UWPHidDevice(c, loggerFactory, defaultReportId);
+            if (getDevice == null) getDevice = (c, cancellationToken) => Task.FromResult<IDevice>(new UWPHidDevice(c, loggerFactory, defaultReportId));
 
             var firstDevice = filterDeviceDefinitions.First();
 
@@ -48,9 +50,9 @@ namespace Hid.Net.UWP
                 var uwpHidDeviceEnumerator = new UwpDeviceEnumerator(
                     aqs,
                     DeviceType.Hid,
-                    async deviceId =>
+                    async (deviceId, cancellationToken) =>
                     {
-                        using var hidDevice = await UWPHidDevice.GetHidDevice(deviceId).AsTask();
+                        using var hidDevice = await UWPHidDevice.GetHidDevice(deviceId).AsTask(cancellationToken);
 
                         var canConnect = hidDevice != null;
 
@@ -69,7 +71,7 @@ namespace Hid.Net.UWP
                 loggerFactory,
                 getConnectedDeviceDefinitionsAsync,
                 getDevice,
-                async (c) => c.DeviceType == DeviceType.Usb && (classGuid == null || classGuid.Value == c.ClassGuid)
+                (c, cancellationToken) => Task.FromResult(c.DeviceType == DeviceType.Usb && (classGuid == null || classGuid.Value == c.ClassGuid))
                 );
         }
     }

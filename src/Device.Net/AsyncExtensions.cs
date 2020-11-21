@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net
@@ -11,7 +12,7 @@ namespace Device.Net
         /// <summary>
         /// TODO: Why do I need to do this? Why doesn't linq have this?
         /// </summary>
-        public static async Task<T> FirstOrDefaultAsync<T>(this IEnumerable<T> enumerable, Func<T, Task<bool>> predicate = null)
+        public static async Task<T> FirstOrDefaultAsync<T>(this IEnumerable<T> enumerable, Func<T, Task<bool>> predicate = null, CancellationToken cancellationToken = default)
         {
             if (enumerable == null) throw new ArgumentNullException(nameof(enumerable));
 
@@ -19,6 +20,8 @@ namespace Device.Net
 
             foreach (var item in enumerable)
             {
+                if (cancellationToken.IsCancellationRequested) return default;
+
                 if (await predicate(item))
                 {
                     return item;

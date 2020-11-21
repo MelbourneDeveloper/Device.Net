@@ -2,13 +2,14 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net
 {
-    public delegate Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync();
+    public delegate Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default);
     public delegate ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, Guid classGuid);
-    public delegate Task<IDevice> GetDevice(ConnectedDeviceDefinition deviceId);
+    public delegate Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition deviceId, CancellationToken cancellationToken = default);
 
     public sealed class DeviceFactory : IDeviceFactory
     {
@@ -18,8 +19,8 @@ namespace Device.Net
 #pragma warning restore IDE0052 // Remove unread private members
         private readonly ILoggerFactory _loggerFactory;
         private readonly GetConnectedDeviceDefinitionsAsync _getConnectedDevicesAsync;
-        private readonly GetDevice _getDevice;
-        private readonly Func<ConnectedDeviceDefinition, Task<bool>> _supportsDevice;
+        private readonly GetDeviceAsync _getDevice;
+        private readonly Func<ConnectedDeviceDefinition, CancellationToken, Task<bool>> _supportsDevice;
         #endregion
 
         #region Constructor
@@ -29,8 +30,8 @@ namespace Device.Net
 
             ILoggerFactory loggerFactory,
             GetConnectedDeviceDefinitionsAsync getConnectedDevicesAsync,
-            GetDevice getDevice,
-            Func<ConnectedDeviceDefinition, Task<bool>> supportsDevice
+            GetDeviceAsync getDevice,
+            Func<ConnectedDeviceDefinition, CancellationToken, Task<bool>> supportsDevice
             )
         {
             _getConnectedDevicesAsync = getConnectedDevicesAsync ?? throw new ArgumentNullException(nameof(getConnectedDevicesAsync));
@@ -42,9 +43,9 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition) => _supportsDevice(deviceDefinition);
-        public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync() => _getConnectedDevicesAsync();
-        public Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition deviceDefinition) => deviceDefinition == null ? throw new ArgumentNullException(nameof(deviceDefinition)) : _getDevice(deviceDefinition);
+        public Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default) => _supportsDevice(deviceDefinition, cancellationToken);
+        public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default) => _getConnectedDevicesAsync(cancellationToken);
+        public Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default) => deviceDefinition == null ? throw new ArgumentNullException(nameof(deviceDefinition)) : _getDevice(deviceDefinition, cancellationToken);
         #endregion
     }
 }

@@ -80,14 +80,14 @@ namespace Device.Net
             _PollTimer.Start();
         }
 
-        public async Task CheckForDevicesAsync()
+        public async Task CheckForDevicesAsync(CancellationToken cancellationToken = default)
         {
             try
             {
                 if (_IsDisposed) return;
-                await _ListenSemaphoreSlim.WaitAsync();
+                await _ListenSemaphoreSlim.WaitAsync(cancellationToken);
 
-                var connectedDeviceDefinitions = (await DeviceFactory.GetConnectedDeviceDefinitionsAsync()).ToList();
+                var connectedDeviceDefinitions = (await DeviceFactory.GetConnectedDeviceDefinitionsAsync(cancellationToken)).ToList();
 
                 //Iterate through connected devices
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
@@ -103,7 +103,7 @@ namespace Device.Net
                     if (device == null)
                     {
                         //Need to use the connected device def here instead of the filter version because the filter version won't have the id or any details
-                        device = await DeviceFactory.GetDeviceAsync(connectedDeviceDefinition);
+                        device = await DeviceFactory.GetDeviceAsync(connectedDeviceDefinition, cancellationToken);
 
                         if (device == null)
                         {
@@ -122,7 +122,7 @@ namespace Device.Net
                     _logger.LogDebug("Attempting to initialize with DeviceId of {deviceId}", device.DeviceId);
 
                     //The device is not initialized so initialize it
-                    await device.InitializeAsync();
+                    await device.InitializeAsync(cancellationToken);
 
                     //Let listeners know a registered device was initialized
                     DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));

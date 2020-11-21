@@ -28,7 +28,7 @@ namespace Device.Net.Reactive
         private bool isDisposed;
         private readonly int _pollMilliseconds;
         private readonly GetConnectedDevicesAsync _getConnectedDevicesAsync;
-        private readonly GetDevice _getDevice;
+        private readonly GetDeviceAsync _getDevice;
         #endregion
 
         #region Public Properties
@@ -68,7 +68,7 @@ namespace Device.Net.Reactive
             NotifyDeviceException notifyDeviceException,
             Func<IDevice, Task> initializeDeviceAction,
             GetConnectedDevicesAsync getConnectedDevicesAsync,
-            GetDevice getDevice,
+            GetDeviceAsync getDevice,
             int pollMilliseconds,
             ILoggerFactory loggerFactory = null)
         {

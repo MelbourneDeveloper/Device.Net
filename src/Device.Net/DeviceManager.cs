@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net
@@ -41,9 +42,9 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public async Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition) => (await DeviceFactories.FirstOrDefaultAsync(async d => await d.SupportsDeviceAsync(deviceDefinition))) != null;
+        public async Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default) => (await DeviceFactories.FirstOrDefaultAsync(async d => await d.SupportsDeviceAsync(deviceDefinition, cancellationToken), cancellationToken)) != null;
 
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default)
         {
             var retVal = new List<ConnectedDeviceDefinition>();
 
@@ -52,7 +53,7 @@ namespace Device.Net
                 try
                 {
                     //TODO: Do this in parallel?
-                    var factoryResults = await deviceFactory.GetConnectedDeviceDefinitionsAsync();
+                    var factoryResults = await deviceFactory.GetConnectedDeviceDefinitionsAsync(cancellationToken);
                     retVal.AddRange(factoryResults);
 
                     _logger.LogDebug("Called " + nameof(GetConnectedDeviceDefinitionsAsync) + " on " + deviceFactory.GetType().Name);
@@ -68,11 +69,11 @@ namespace Device.Net
             return retVal;
         }
 
-        public async Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition)
+        public async Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition, CancellationToken cancellationToken = default)
              => connectedDeviceDefinition == null ? throw new ArgumentNullException(nameof(connectedDeviceDefinition)) :
-            await ((await DeviceFactories.FirstOrDefaultAsync(f => f.SupportsDeviceAsync(connectedDeviceDefinition)))
+            await ((await DeviceFactories.FirstOrDefaultAsync(f => f.SupportsDeviceAsync(connectedDeviceDefinition), cancellationToken))
             ?? throw new DeviceException(Messages.ErrorMessageCouldntGetDevice))
-            .GetDeviceAsync(connectedDeviceDefinition);
+            .GetDeviceAsync(connectedDeviceDefinition, cancellationToken);
 
         #endregion
     }

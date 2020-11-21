@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net.LibUsb
@@ -17,7 +18,7 @@ namespace Device.Net.LibUsb
             int? timeout = null,
             ushort? writeBufferSize = null,
             ushort? readBufferSize = null,
-            Func<ConnectedDeviceDefinition, Task<bool>> supportsDevice = null
+            Func<ConnectedDeviceDefinition, CancellationToken, Task<bool>> supportsDevice = null
             )
              => CreateLibUsbDeviceFactory
                     (
@@ -35,25 +36,32 @@ namespace Device.Net.LibUsb
             int? timeout = null,
             ushort? writeBufferSize = null,
             ushort? readBufferSize = null,
-            Func<ConnectedDeviceDefinition, Task<bool>> supportsDevice = null
+            Func<ConnectedDeviceDefinition, CancellationToken, Task<bool>> supportsDevice = null
             )
              => new DeviceFactory(
                 loggerFactory,
-                () => GetConnectedDeviceDefinitionsAsync(filterDeviceDefinitions),
-                async c =>
-                new Usb.Net.UsbDevice(
-                    c.DeviceId,
-                    new LibUsbInterfaceManager(
-                        GetDevice(c),
-                        timeout ?? 1000,
-                        loggerFactory,
-                        writeBufferSize,
-                        readBufferSize), loggerFactory),
-                        supportsDevice ??
-                        new Func<ConnectedDeviceDefinition, Task<bool>>((c) => Task.FromResult(c.DeviceType == DeviceType.Usb))
+                (cancellationToken) => GetConnectedDeviceDefinitionsAsync(filterDeviceDefinitions, cancellationToken),
+                (c, cancellationToken) =>
+                Task.FromResult<IDevice>(
+                    new Usb.Net.UsbDevice
+                    (
+                        c.DeviceId,
+                        new LibUsbInterfaceManager(
+                            GetDevice(c),
+                            timeout ?? 1000,
+                            loggerFactory,
+                            writeBufferSize,
+                            readBufferSize), loggerFactory
+                    )
+                ),
+                supportsDevice ??
+                new Func<ConnectedDeviceDefinition, CancellationToken, Task<bool>>((c, cancellationToken) => Task.FromResult(c.DeviceType == DeviceType.Usb)
+                )
             );
 
-        public static async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(IReadOnlyList<FilterDeviceDefinition> filterDeviceDefinitions)
+        public static async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(
+            IReadOnlyList<FilterDeviceDefinition> filterDeviceDefinitions,
+            CancellationToken cancellationToken = default)
         {
             return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(
                 () =>
@@ -79,7 +87,7 @@ namespace Device.Net.LibUsb
                    productId: (uint)usbRegistry.Pid,
                    deviceType: DeviceType.Usb
                )).ToList();
-           });
+           }, cancellationToken);
         }
 
         public static UsbDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)

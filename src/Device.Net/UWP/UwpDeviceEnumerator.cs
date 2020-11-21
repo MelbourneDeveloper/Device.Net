@@ -9,7 +9,7 @@ using wde = Windows.Devices.Enumeration;
 
 namespace Device.Net.UWP
 {
-    public delegate Task<ConnectionInfo> TestConnection(string deviceId);
+    public delegate Task<ConnectionInfo> TestConnection(string deviceId, CancellationToken cancellationToken = default);
 
     public class UwpDeviceEnumerator : IDisposable
     {
@@ -37,7 +37,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Methods
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default)
         {
             var deviceInformationCollection = aqsFilter != null
                 ? await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask()
@@ -50,7 +50,7 @@ namespace Device.Net.UWP
 
             foreach (var deviceDef in deviceDefinitions)
             {
-                var connectionInformation = await TestConnection(deviceDef.DeviceId);
+                var connectionInformation = await TestConnection(deviceDef.DeviceId, cancellationToken);
                 if (connectionInformation.CanConnect)
                 {
                     deviceDefinitionList.Add(
@@ -67,17 +67,17 @@ namespace Device.Net.UWP
             return deviceDefinitionList;
         }
 
-        private async Task<ConnectionInfo> TestConnection(string deviceId)
+        private async Task<ConnectionInfo> TestConnection(string deviceId, CancellationToken cancellationToken = default)
         {
             using var logScope = _logger?.BeginScope("DeviceId: {deviceId} Call: {call}", deviceId, nameof(TestConnection));
 
             try
             {
-                await _TestConnectionSemaphore.WaitAsync();
+                await _TestConnectionSemaphore.WaitAsync(cancellationToken);
 
                 if (_ConnectionTestedDeviceIds.TryGetValue(deviceId, out var connectionInfo)) return connectionInfo;
 
-                connectionInfo = await _testConnection(deviceId);
+                connectionInfo = await _testConnection(deviceId, cancellationToken);
 
                 _ConnectionTestedDeviceIds.Add(deviceId, connectionInfo);
 

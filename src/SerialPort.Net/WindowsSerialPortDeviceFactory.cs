@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Threading;
 #if NETSTANDARD
 using System.Runtime.InteropServices;
 using Device.Net.Exceptions;
@@ -38,7 +39,7 @@ namespace SerialPort.Net.Windows
         #region Public Methods
 
 
-        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync()
+        public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default)
         {
 #if NETSTANDARD
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -82,7 +83,7 @@ namespace SerialPort.Net.Windows
                 var portName = $@"\\.\COM{i}";
                 using (var serialPortDevice = new WindowsSerialPortDevice(portName))
                 {
-                    await serialPortDevice.InitializeAsync();
+                    await serialPortDevice.InitializeAsync(cancellationToken);
                     if (serialPortDevice.IsInitialized) returnValue.Add(new ConnectedDeviceDefinition(portName, DeviceType.SerialPort));
                 }
             }
@@ -90,12 +91,12 @@ namespace SerialPort.Net.Windows
             return returnValue;
         }
 
-        public Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition deviceDefinition)
+        public Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default)
              => Task.FromResult<IDevice>(deviceDefinition == null
                 ? throw new ArgumentNullException(nameof(deviceDefinition))
                 : new WindowsSerialPortDevice(deviceDefinition.DeviceId));
 
-        public Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition)
+        public Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default)
             => deviceDefinition != null ? Task.FromResult(deviceDefinition.DeviceType == DeviceType.SerialPort) :
             throw new ArgumentNullException(nameof(deviceDefinition));
 
