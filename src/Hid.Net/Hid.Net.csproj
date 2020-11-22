@@ -49,6 +49,10 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</De
     <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <DocumentationFile>C:\Code\AirNetix\Device.Net\src\Hid.Net\Hid.Net.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
       <PrivateAssets>all</PrivateAssets>

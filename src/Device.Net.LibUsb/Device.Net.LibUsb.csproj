@@ -19,6 +19,10 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <DocumentationFile>C:\Code\AirNetix\Device.Net\src\Device.Net.LibUsb\Device.Net.LibUsb.xml</DocumentationFile>
+  </PropertyGroup>
+
   <Choose>
     <When Condition=" '$(Configuration)'=='Debug' ">
       <PropertyGroup>

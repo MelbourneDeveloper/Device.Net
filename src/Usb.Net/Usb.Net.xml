@@ -1,0 +1,145 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Usb.Net</name>
+    </assembly>
+    <members>
+        <member name="P:Usb.Net.IUsbInterfaceManager.ReadUsbInterface">
+            <summary>
+            Usb interface for reading from the device. Note: this will default to the first read Bulk interface. If this is incorrect, inspect the UsbInterfaces property.
+            </summary>
+        </member>
+        <member name="P:Usb.Net.IUsbInterfaceManager.WriteUsbInterface">
+            <summary>
+            Usb interface for writing to the device. Note: this will default to the first write Bulk interface. If this is incorrect, inspect the UsbInterfaces property.
+            </summary>
+        </member>
+        <member name="M:Usb.Net.IUsbInterfaceManager.GetConnectedDeviceDefinitionAsync(System.Threading.CancellationToken)">
+            <summary>
+            TODO: This shouldn't be here. Don't use this
+            </summary>
+        </member>
+        <member name="M:Usb.Net.IUsbInterface.RegisterDefaultEndpoints">
+            <summary>
+            This is for internal use and should need to be called. This will probably be removed in future versions.
+            TODO
+            </summary>
+        </member>
+        <member name="M:Usb.Net.IUsbInterface.PerformControlTransferAsync(Usb.Net.SetupPacket,System.Byte[],System.Threading.CancellationToken)">
+            <summary>
+            Performs a USB Control Transfer
+            https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-control-transfer
+            https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/how-to-send-a-usb-control-transfer--uwp-app-
+            </summary>
+        </member>
+        <member name="T:Usb.Net.RequestDirection">
+            <summary>
+            Defines constants that indicate the direction of USB transfer: IN or OUT transfers.
+            </summary>
+            <remarks>
+            See 9.3 of the Universal Serial Bus (USB) specification (<see cref="!:www.usb.org"/>)
+            The direction of a USB transfer is determined from the host side and not the target USB device. 
+            In an IN transfer, data moves from the device to the host. In an OUT transfer, data moves from the host to the device.
+            </remarks>
+        </member>
+        <member name="F:Usb.Net.RequestDirection.In">
+            <summary>
+            Indicates an IN transfer from the device to the host.
+            </summary>
+        </member>
+        <member name="F:Usb.Net.RequestDirection.Out">
+            <summary>
+            Indicates an OUT transfer from the host to the device.
+            </summary>
+        </member>
+        <member name="T:Usb.Net.RequestRecipient">
+            <summary>
+            Defines constants that indicate the recipient of a USB control transfer. 
+            The recipient is defined in the setup packet of the control request.
+            </summary>
+            <remarks>
+            See Table 9.2 of section 9.3 of the Universal Serial Bus (USB) specification (<see cref="!:www.usb.org"/>)
+            </remarks>
+        </member>
+        <member name="F:Usb.Net.RequestRecipient.Device">
+            <summary>
+            The recipient of the control transfer is the device.
+            </summary>
+        </member>
+        <member name="F:Usb.Net.RequestRecipient.Interface">
+            <summary>
+            The recipient of the control transfer is the USB interface that is specified in the request.
+            </summary>
+        </member>
+        <member name="F:Usb.Net.RequestRecipient.Endpoint">
+            <summary>
+            The recipient of the control transfer is an endpoint.
+            </summary>
+        </member>
+        <member name="F:Usb.Net.RequestRecipient.Other">
+            <summary>
+            The recipient of the control transfer is other.
+            </summary>
+        </member>
+        <member name="T:Usb.Net.RequestType">
+            <summary>
+            Defines the type of USB device request.
+            </summary>
+            <remarks>
+            See 9.3 of the Universal Serial Bus (USB) specification (<see cref="!:www.usb.org"/>)
+            </remarks>
+        </member>
+        <member name="F:Usb.Net.RequestType.Class">
+            <summary>
+            Indicates a class-specific USB control request described by a specific device class specification.
+            </summary>
+        </member>
+        <member name="F:Usb.Net.RequestType.Standard">
+            <summary>
+            Indicates a standard USB control request that the app can send to obtain information about the device, its configurations, interfaces, and endpoints.
+            The standard requests are described in section 9.4 of the Universal Serial Bus(USB) specification(www.usb.org).
+            </summary>
+        </member>
+        <member name="F:Usb.Net.RequestType.Vendor">
+            <summary>
+            Indicates a vendor-specified USB control request and depends on the requests supported by the device.
+            </summary>
+        </member>
+        <member name="F:Usb.Net.SetupPacket.SetupPacketSize">
+            <summary>
+            Size of <see cref="T:Usb.Net.SetupPacket"/> to be used in byte arrays.
+            </summary>
+        </member>
+        <member name="P:Usb.Net.UsbDeviceRequestType.Type">
+            <summary>
+            Gets the type of the USB device request.
+            </summary>
+        </member>
+        <member name="P:Usb.Net.UsbDeviceRequestType.Direction">
+            <summary>
+            Gets the direction of the USB device request.
+            </summary>
+        </member>
+        <member name="P:Usb.Net.UsbDeviceRequestType.Recipient">
+            <summary>
+            Gets the direction of the USB device request.
+            </summary>
+        </member>
+        <member name="M:Usb.Net.UsbInterfaceBase.ClaimInterface">
+            <summary>
+            Note: some platforms require a call to be made to claim the interface. This is currently only for Android but may change
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Usb.Net.Windows.WindowsUsbInterface.InterfaceNumber">
+            <summary>
+            TODO: Make private?
+            </summary>
+        </member>
+        <member name="F:Usb.Net.Windows.WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE">
+            <summary>
+            Not sure where this constant is defined...
+            </summary>
+        </member>
+    </members>
+</doc>

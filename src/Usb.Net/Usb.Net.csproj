@@ -22,6 +22,10 @@ Alpha version. Please use 3.x for a stable release</Description>
     <PackageReleaseNotes>Alpha version. Please use 3.x for a stable release</PackageReleaseNotes>      
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <DocumentationFile>C:\Code\AirNetix\Device.Net\src\Usb.Net\Usb.Net.xml</DocumentationFile>
+  </PropertyGroup>
+
   <Choose>
     <When Condition=" '$(Configuration)'=='Debug' ">
       <PropertyGroup>

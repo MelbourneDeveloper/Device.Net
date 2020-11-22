@@ -5,7 +5,9 @@
         {
           "files": [
             "src/Device.Net/bin/Debug/netstandard2.0/Device.Net.dll",
-            "src/Usb.Net/bin/Debug/netstandard2.0/Usb.Net.dll"
+            "src/Usb.Net/bin/Debug/netstandard2.0/Usb.Net.dll",
+            "src/Hid.Net/bin/Debug/netstandard2.0/Hid.Net.dll",
+            "src/Device.Net.LibUsb/bin/Debug/netstandard2.0/Device.Net.LibUsb.dll"
           ],
           "src": "../"
         } 
