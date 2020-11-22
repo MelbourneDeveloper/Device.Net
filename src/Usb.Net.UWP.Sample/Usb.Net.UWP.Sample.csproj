@@ -139,13 +139,25 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Device.Net.UWP\Device.Net.UWP.csproj">
+      <Project>{9abe7012-a953-4a9f-8860-c877d8d6f687}</Project>
+      <Name>Device.Net.UWP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj">
       <Project>{aac55ee8-183b-487f-9e2c-08e14e7e4894}</Project>
       <Name>Device.Net</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Hid.Net.UWP\Hid.Net.UWP.csproj">
+      <Project>{bc1dad65-96a7-4772-873a-79895c7a3adf}</Project>
+      <Name>Hid.Net.UWP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Hid.Net\Hid.Net.csproj">
       <Project>{ecb44ddd-bbfa-459a-9c60-4f65a1014a48}</Project>
       <Name>Hid.Net</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Usb.Net.UWP\Usb.Net.UWP.csproj">
+      <Project>{e00509cb-46f2-4dee-abba-2514816afff4}</Project>
+      <Name>Usb.Net.UWP</Name>
     </ProjectReference>
     <ProjectReference Include="..\Usb.Net\Usb.Net.csproj">
       <Project>{a3248195-3edf-4fe6-b065-865f74d53b0b}</Project>

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Device.Net.LibUsb;
 
 #if !WINDOWS_UWP
+using Device.Net.LibUsb;
 using Hid.Net.Windows;
 using Usb.Net.Windows;
 using Usb.Net;

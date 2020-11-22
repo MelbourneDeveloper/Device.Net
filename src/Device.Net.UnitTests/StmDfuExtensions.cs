@@ -6,12 +6,11 @@ using Polly;
 using System;
 using System.Threading.Tasks;
 
-#if !WINDOWS_UWP
+
 using Usb.Net;
-#else
 using Usb.Net.UWP;
 using Hid.Net.UWP;
-#endif
+
 
 namespace Device.Net.UnitTests
 {
