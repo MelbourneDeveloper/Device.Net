@@ -1,0 +1,690 @@
+{
+  "homepages": [],
+  "source_base_path": "C:/Code/AirNetix/Device.Net/docs",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.AsyncExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.AsyncExtensions.html",
+          "hash": "0MTI+MFy0HSi/J3KQwLPfw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.BulkIOService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.BulkIOService.html",
+          "hash": "sEVgTEFmDdylsvyJ0jlocQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.ConnectedDeviceDefinition.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.ConnectedDeviceDefinition.html",
+          "hash": "xFWAiD7KLm191WssGm0hNA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.DeviceBase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.DeviceBase.html",
+          "hash": "ve1U+bcBtPX0j8jALAx3Ig=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.DeviceDataStreamer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.DeviceDataStreamer.html",
+          "hash": "fPx02voRXO4Mw5QJnVWP8A=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.DeviceEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.DeviceEventArgs.html",
+          "hash": "K7Q6qYhlbJrrNVUfW3sOCA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.DeviceExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.DeviceExtensions.html",
+          "hash": "KjofriBQBL/VZbLTTaW6Mg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.DeviceFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.DeviceFactory.html",
+          "hash": "34fdZtQYlTbhZr4AYzqkmw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.DeviceListener.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.DeviceListener.html",
+          "hash": "O94MaxV9NtZe+rrGKHjhiQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.DeviceManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.DeviceManager.html",
+          "hash": "Kn3z7Ibz6c+HnZOuDry4gQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.DeviceType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.DeviceType.html",
+          "hash": "aMYufLTsD0Kt38ENkuKHqQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Exceptions.ApiException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Exceptions.ApiException.html",
+          "hash": "DLhateyt9qb4As0HRv0vmw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Exceptions.AsyncException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Exceptions.AsyncException.html",
+          "hash": "J3FYn2+ba5/0bo5vB4MVcw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Exceptions.DeviceException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Exceptions.DeviceException.html",
+          "hash": "s5niOLxqW8OhaI/Ex2MBsQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Exceptions.DeviceFactoriesNotRegisteredException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Exceptions.DeviceFactoriesNotRegisteredException.html",
+          "hash": "hOd4jCQGnumA+ExZ3fpQlw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Exceptions.NotInitializedException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Exceptions.NotInitializedException.html",
+          "hash": "n7WOcJMKKcZO5zncvEtsbQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Exceptions.ValidationException.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Exceptions.ValidationException.html",
+          "hash": "3CYfd5HIjOKvniqXumoMFg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Exceptions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Exceptions.html",
+          "hash": "/Xpl3OJqXoDVYCwFAljcQQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.FilterDeviceDefinition.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.FilterDeviceDefinition.html",
+          "hash": "DbxegofADJfilzsl1PsWEQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.GetConnectedDeviceDefinitionsAsync.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.GetConnectedDeviceDefinitionsAsync.html",
+          "hash": "uGzb4jiaRNj/w6IAJB4l4w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.GetDeviceAsync.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.GetDeviceAsync.html",
+          "hash": "ZI7jwSZj/vTVpFTDaAwcgA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.GetDeviceDefinition.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.GetDeviceDefinition.html",
+          "hash": "QRbvz+Q8OiJi3QMjOybp7Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Helpers.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Helpers.html",
+          "hash": "5VTY8BEApqyzZyeC1RkxyA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.IDevice.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.IDevice.html",
+          "hash": "1OPR/Vw0jako6rCrnQyWkA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.IDeviceFactory.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.IDeviceFactory.html",
+          "hash": "HIz98jM2qztx+cBAEFrXTw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.IDeviceHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.IDeviceHandler.html",
+          "hash": "2Ye5oxGVoUgIUyIGYLvpiA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.IDeviceListener.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.IDeviceListener.html",
+          "hash": "lktuGqh1XeBINu0IFFat4Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.LoggingExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.LoggingExtensions.html",
+          "hash": "aImJTS5D+kowwahOLyDpJA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Messages.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Messages.html",
+          "hash": "Vn9++zywBs80I00GEfJZmQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.ProcessData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.ProcessData.html",
+          "hash": "FrJKuYAO1AuRTcPXrMyJTw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Trace.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Trace.html",
+          "hash": "+5BUfvUllBln7aOeCptHQg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.TransferResult.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.TransferResult.html",
+          "hash": "JFnRuOTnQm1J6EE3BuOsZA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Windows.APICalls.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Windows.APICalls.html",
+          "hash": "ZwEPap10WpkcrItplz4n5w=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Windows.ApiService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Windows.ApiService.html",
+          "hash": "K1HqOQxH5G4znZODFMCNQw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Windows.CommTimeouts.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Windows.CommTimeouts.html",
+          "hash": "HNHsqTtq3HoRHxFU2ON8Ng=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Windows.Dcb.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Windows.Dcb.html",
+          "hash": "AZTJ6ZU5Y1KU9o0+9D/utg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Windows.FileAccessRights.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Windows.FileAccessRights.html",
+          "hash": "WSokx4HezfnJXO765Hpxig=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Windows.IApiService.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Windows.IApiService.html",
+          "hash": "gYuhrDxzmQDUskzbR4BBtw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Windows.IsMatch.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Windows.IsMatch.html",
+          "hash": "QIqF+qs/GEt7Ojd99mNesg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Windows.SpDeviceInfoData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Windows.SpDeviceInfoData.html",
+          "hash": "q99QNpEfdu9tpURO+7OJDA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Windows.SpDeviceInterfaceData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Windows.SpDeviceInterfaceData.html",
+          "hash": "D/p31mCvZ64WLKMlaQgd8Q=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Windows.SpDeviceInterfaceDetailData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Windows.SpDeviceInterfaceDetailData.html",
+          "hash": "9TBPuwb8s6bnoViKWj7fug=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Windows.WindowsDeviceBase.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Windows.WindowsDeviceBase.html",
+          "hash": "DmfzqaCuHtIR70lXosf0Tg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Windows.WindowsDeviceEnumerator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Windows.WindowsDeviceEnumerator.html",
+          "hash": "aZ7IehkSu3Ct09sxmI7SeQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.Windows.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.Windows.html",
+          "hash": "qzCAszuDXFoU+vqFbw5Bfg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.WindowsDeviceConstants.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.WindowsDeviceConstants.html",
+          "hash": "V9bKgXd6V3kQHmZnaQBGlA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Device.Net.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Device.Net.html",
+          "hash": "uCs0da2EYECqES+aW0C2Yw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "2hbykBjTReaLES5oAinKZg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "f3okimPM2C4HcG4zI05IHQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/intro.html",
+          "hash": "mtNz2Hcp/8Ztc64CcdQr9A=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html",
+          "hash": "gB8AESyvNru97tzIZofEEg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "6hxUN4Ef1+FmY1G1ab7dpg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "+rHUkRZHZRi5gd1aTU6lJA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": true,
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 3,
+          "skipped_file_count": 3
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": true,
+          "incrementalPhase": "build",
+          "total_file_count": 47,
+          "skipped_file_count": 47
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": true,
+        "details": "Can support incremental post processing.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
