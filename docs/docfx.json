@@ -4,7 +4,7 @@
       "src": [
         {
           "files": [
-            "src/Device.Net/Device.Net.csproj"
+            "src/Device.Net/bin/Debug/netstandard2.0/Device.Net.dll"
           ],
           "src": "../"
         } 
