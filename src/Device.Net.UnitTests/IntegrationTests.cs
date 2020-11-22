@@ -5,16 +5,16 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+
+using Usb.Net;
 
 #if !WINDOWS_UWP
 using Device.Net.LibUsb;
 using Hid.Net.Windows;
 using Usb.Net.Windows;
-using Usb.Net;
+using Microsoft.Extensions.Hosting;
 #else
-using Usb.Net.UWP;
 using Hid.Net.UWP;
 #endif
 
@@ -125,7 +125,6 @@ namespace Device.Net.UnitTests
 
             await PerformStmDfTest((IUsbDevice)stmDfuDevice);
         }
-#endif
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(
@@ -150,8 +149,9 @@ namespace Device.Net.UnitTests
         new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53c1)
             .GetUsbDeviceFactory()
             );
+#endif
 
-#if !NET45
+#if NETCOREAPP3_1
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorLibUsb() => TestWriteAndReadFromTrezor(
@@ -182,7 +182,11 @@ namespace Device.Net.UnitTests
             var filterDeviceDefinition = new FilterDeviceDefinition(vendorId: 0x413d, productId: 0x2107, usagePage: 65280);
 
             var integrationTester = new IntegrationTester(
+#if WINDOWS_UWP
+                filterDeviceDefinition.CreateUwpHidDeviceFactory());
+#else
                 filterDeviceDefinition.GetHidDeviceFactory());
+#endif
             await integrationTester.TestAsync(request, async (result, device) =>
             {
                 Assert.IsTrue(device.IsInitialized);
@@ -220,7 +224,11 @@ namespace Device.Net.UnitTests
             var filterDeviceDefinition = new FilterDeviceDefinition(productId: 4112, vendorId: 10741);
 
             var integrationTester = new IntegrationTester(
+#if WINDOWS_UWP
+                filterDeviceDefinition.CreateUwpHidDeviceFactory());
+#else
                 filterDeviceDefinition.GetHidDeviceFactory());
+#endif
             await integrationTester.TestAsync(request, async (result, device) =>
              {
                  Assert.AreEqual(64, result.Data.Length);
@@ -248,9 +256,9 @@ namespace Device.Net.UnitTests
 #endif
              }, 64);
         }
-        #endregion
+#endregion
 
-        #region Setup
+#region Setup
         [TestInitialize]
         public void Setup()
         {
@@ -267,9 +275,9 @@ namespace Device.Net.UnitTests
             var host = hostBuilder.Build();
             loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
         }
-        #endregion
+#endregion
 
-        #region Private Methods
+#region Private Methods
         private static async Task PerformStmDfTest(IUsbDevice stmDfuDevice)
         {
             ////////////////////////////////////////////////////////////
@@ -324,7 +332,7 @@ namespace Device.Net.UnitTests
 
             return Task.FromResult(true);
         }
-        #endregion
+#endregion
     }
 }
 

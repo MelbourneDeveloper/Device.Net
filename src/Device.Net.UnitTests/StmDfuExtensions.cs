@@ -1,15 +1,10 @@
 ﻿#if !NET45
 
 using Device.Net.Exceptions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Polly;
 using System;
 using System.Threading.Tasks;
-
-
 using Usb.Net;
-using Usb.Net.UWP;
-using Hid.Net.UWP;
 
 
 namespace Device.Net.UnitTests
