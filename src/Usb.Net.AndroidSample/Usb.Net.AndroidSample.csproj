@@ -118,6 +118,10 @@
       <Project>{aac55ee8-183b-487f-9e2c-08e14e7e4894}</Project>
       <Name>Device.Net</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Usb.Net.Android\Usb.Net.Android.csproj">
+      <Project>{2230e90b-ae05-412f-8b83-e49627cd666e}</Project>
+      <Name>Usb.Net.Android</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Usb.Net\Usb.Net.csproj">
       <Project>{a3248195-3edf-4fe6-b065-865f74d53b0b}</Project>
       <Name>Usb.Net</Name>

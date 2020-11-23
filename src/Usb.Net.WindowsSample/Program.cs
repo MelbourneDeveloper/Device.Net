@@ -6,9 +6,9 @@ using Microsoft.Extensions.Logging;
 using System.Reactive.Linq;
 using System.Collections.Generic;
 using System.Linq;
-using SerialPort.Net.Windows;
 
 #if !LIBUSB
+using SerialPort.Net.Windows;
 using Hid.Net.Windows;
 using Usb.Net.Windows;
 #else
@@ -23,10 +23,12 @@ namespace Usb.Net.WindowsSample
         private static ILoggerFactory _loggerFactory;
         private static IDeviceFactory _trezorFactories;
 
+#if !LIBUSB
         private static readonly IDeviceFactory _allFactories = new WindowsSerialPortDeviceFactory(_loggerFactory)
                 .Aggregate(WindowsUsbDeviceFactoryExtensions.CreateWindowsUsbDeviceFactory(_loggerFactory))
                 .Aggregate(WindowsUsbDeviceFactoryExtensions.CreateWindowsUsbDeviceFactory(_loggerFactory, classGuid: WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE))
                 .Aggregate(WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(_loggerFactory));
+#endif
 
         private static TrezorExample _DeviceConnectionExample;
         #endregion
@@ -165,6 +167,7 @@ namespace Usb.Net.WindowsSample
             {
                 Console.Clear();
 
+#if !LIBUSB
                 var devices = await _allFactories.GetConnectedDeviceDefinitionsAsync();
 
                 Console.WriteLine("Currently connected devices:\r\n");
@@ -173,6 +176,7 @@ namespace Usb.Net.WindowsSample
                     .OrderBy(d => d.Manufacturer)
                     .ThenBy(d => d.ProductName)
                     .Select(d => $"{d.Manufacturer} - {d.ProductName} ({d.DeviceType} - {d.ClassGuid})\r\nDevice Path: {d.DeviceId}\r\nVendor: {d.VendorId} Product Id: {d.ProductId}\r\n")));
+#endif
 
                 Console.WriteLine("Console sample. This sample demonstrates either writing to the first found connected device, or listening for a device and then writing to it. If you listen for the device, you will be able to connect and disconnect multiple times. This represents how users may actually use the device.");
                 Console.WriteLine();
