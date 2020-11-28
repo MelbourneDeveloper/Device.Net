@@ -5,14 +5,13 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Usb.Net;
 
 #if !WINDOWS_UWP
 using Device.Net.LibUsb;
 using Hid.Net.Windows;
 using Usb.Net.Windows;
+using Device.Net.Windows;
 #else
 using Hid.Net.UWP;
 #endif
@@ -183,7 +182,7 @@ namespace Device.Net.UnitTests
 
             var integrationTester = new IntegrationTester(
 #if WINDOWS_UWP
-                filterDeviceDefinition.CreateUwpHidDeviceFactory());
+                filterDeviceDefinition.CreateUwpHidDeviceFactory(loggerFactory));
 #else
                 filterDeviceDefinition.GetHidDeviceFactory(loggerFactory));
 #endif
@@ -258,18 +257,12 @@ namespace Device.Net.UnitTests
         [TestInitialize]
         public void Setup()
         {
-            var hostBuilder = Host.CreateDefaultBuilder().
-            ConfigureLogging((builderContext, loggingBuilder) =>
+            loggerFactory = LoggerFactory.Create((builder) =>
             {
-                loggingBuilder.SetMinimumLevel(LogLevel.Trace);
-                loggingBuilder.AddConsole((options) =>
-                {
-                    //This displays arguments from the scope
-                    options.IncludeScopes = true;
-                });
+                _ = builder.AddConsole()
+                .AddDebug()
+                .SetMinimumLevel(LogLevel.Trace);
             });
-            var host = hostBuilder.Build();
-            loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
         }
         #endregion
 

@@ -9,11 +9,6 @@
             TODO: Why do I need to do this? Why doesn't linq have this?
             </summary>
         </member>
-        <member name="T:Device.Net.BulkIOService">
-            <summary>
-            Wraps a device and allows it to be used like a stream
-            </summary>
-        </member>
         <member name="T:Device.Net.ConnectedDeviceDefinition">
             <summary>
             Represents the definition of a device that has been physically connected and has a DeviceId

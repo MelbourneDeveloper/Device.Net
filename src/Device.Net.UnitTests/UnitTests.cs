@@ -118,14 +118,14 @@ namespace Device.Net.UnitTests
 
             var actualCount = 0;
 
-            _loggerMock.Setup(l => l.Log(
-            LogLevel.Trace,
-            It.IsAny<EventId>(),
-            It.IsAny<It.IsAnyType>(),
-            It.IsAny<Exception>(),
-            (Func<It.IsAnyType, Exception, string>)It.IsAny<object>())).Callback(() => actualCount++);
+            _ = _loggerMock.Setup(l => l.Log(
+              LogLevel.Trace,
+              It.IsAny<EventId>(),
+              It.IsAny<It.IsAnyType>(),
+              It.IsAny<Exception>(),
+              (Func<It.IsAnyType, Exception, string>)It.IsAny<object>())).Callback(() => actualCount++);
 
-            _loggerMock.Setup(l => l.BeginScope(It.IsAny<It.IsAnyType>())).Returns(new Mock<IDisposable>().Object);
+            _ = _loggerMock.Setup(l => l.BeginScope(It.IsAny<It.IsAnyType>())).Returns(new Mock<IDisposable>().Object);
 
             var (hid, usb) = GetMockedFactories(isHidConnected, isUsbConnected, vid, pid);
 
@@ -185,25 +185,25 @@ namespace Device.Net.UnitTests
 
             if (isHidConnected && ((!vid.HasValue && !pid.HasValue) || (vid==1 && pid ==1)))
             {
-                hidMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync(It.IsAny<CancellationToken>())).Returns(
+                _ = hidMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync(It.IsAny<CancellationToken>())).Returns(
                     Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> {
                      new ConnectedDeviceDefinition(
-                        "123", 
+                        "123",
                         DeviceType.Hid,
                         productId : 1,
                         vendorId : 1
                     ) }));
 
 
-                hidMock.Setup(f => f.GetDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).Returns(
-                Task.FromResult<IDevice>( new MockHidDevice("Asd",_LoggerFactoryMock.Object,_loggerMock.Object)));
+                _ = hidMock.Setup(f => f.GetDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).Returns(
+                Task.FromResult<IDevice>(new MockHidDevice("Asd", _LoggerFactoryMock.Object, _loggerMock.Object)));
 
-                hidMock.Setup(f => f.SupportsDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).Returns(async () => isHidConnected);
+                _ = hidMock.Setup(f => f.SupportsDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).Returns(async () => isHidConnected);
             }
 
             if (isUsbConnected && ((!vid.HasValue && !pid.HasValue) || (vid == 2 && pid == 2)))
             {
-                usbMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync(It.IsAny<CancellationToken>())).Returns(
+                _ = usbMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync(It.IsAny<CancellationToken>())).Returns(
                     Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> {
                     new ConnectedDeviceDefinition
                     (
@@ -214,7 +214,7 @@ namespace Device.Net.UnitTests
                     )}));
 
                 //ooohhh
-                hidMock.Setup(f => f.SupportsDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).Returns( () => Task.FromResult( isUsbConnected));
+                _ = hidMock.Setup(f => f.SupportsDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).Returns(() => Task.FromResult(isUsbConnected));
             }
 
             return (hidMock, usbMock);
