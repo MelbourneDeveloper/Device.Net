@@ -1,17 +1,19 @@
 ﻿
-using Hid.Net.Windows;
+using Usb.Net.UWP;
+using Hid.Net.UWP;
 using Microsoft.Extensions.Logging;
-using Usb.Net.Windows;
 
 namespace Device.Net.UnitTests
 {
     public static class GetFactoryExtensions
     {
         public static IDeviceFactory GetUsbDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition, ILoggerFactory loggerFactory) =>
-            filterDeviceDefinition.CreateWindowsUsbDeviceFactory(loggerFactory);
+
+            filterDeviceDefinition.CreateUwpUsbDeviceFactory(loggerFactory);
 
         public static IDeviceFactory GetHidDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition, ILoggerFactory loggerFactory, byte? defultReportId = null) =>
-            filterDeviceDefinition.CreateWindowsHidDeviceFactory(loggerFactory, defaultReportId: defultReportId);
+            filterDeviceDefinition.CreateUwpHidDeviceFactory(loggerFactory, defaultReportId: defultReportId);
+
     }
 }
 

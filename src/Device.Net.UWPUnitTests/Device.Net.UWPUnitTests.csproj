@@ -143,6 +143,7 @@
     <Compile Include="..\Device.Net.UnitTests\UsbTests.cs">
       <Link>UsbTests.cs</Link>
     </Compile>
+    <Compile Include="GetFactoryExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerialPortTests.cs" />
     <Compile Include="UnitTestApp.xaml.cs">

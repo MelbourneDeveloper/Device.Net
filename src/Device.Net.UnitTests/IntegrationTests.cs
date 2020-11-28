@@ -6,14 +6,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
-
+using Microsoft.Extensions.Hosting;
 using Usb.Net;
 
 #if !WINDOWS_UWP
 using Device.Net.LibUsb;
 using Hid.Net.Windows;
 using Usb.Net.Windows;
-using Microsoft.Extensions.Hosting;
 #else
 using Hid.Net.UWP;
 #endif
@@ -30,6 +29,7 @@ namespace Device.Net.UnitTests
         private ILoggerFactory loggerFactory;
 
         #region Tests
+
 #if !WINDOWS_UWP
         [TestMethod]
         public async Task TestFindSTMDFUModeWithFactory()
@@ -115,12 +115,13 @@ namespace Device.Net.UnitTests
 
             await PerformStmDfTest(stmDfuDevice);
         }
+#endif
 
         [TestMethod]
         public async Task TestSTMDFUModePerformControlTransferSend_LibUsb()
         {
             var stmDfuDevice = await new FilterDeviceDefinition(0x0483, 0xdf11)
-                .CreateLibUsbDeviceFactory(loggerFactory)
+                .GetUsbDeviceFactory(loggerFactory)
                 .ConnectFirstAsync();
 
             await PerformStmDfTest((IUsbDevice)stmDfuDevice);
@@ -129,27 +130,26 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53C1, label: "Trezor One Firmware 1.7.x")
-            .GetUsbDeviceFactory()
+            .GetUsbDeviceFactory(loggerFactory)
         );
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition(vendorId: 0x534C, productId: 0x0001, label: "Trezor One Firmware 1.6.x", usagePage: 65280)
-            .GetHidDeviceFactory(0)
+            .GetHidDeviceFactory(loggerFactory, 0)
             );
 
         [TestMethod]
         public Task TestWriteAndReadFromKeepKeyUsb() => TestWriteAndReadFromTrezor(
         new FilterDeviceDefinition(vendorId: 0x2B24, productId: 0x2)
-            .GetUsbDeviceFactory()
+            .GetUsbDeviceFactory(loggerFactory)
            );
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorModelTUsb() => TestWriteAndReadFromTrezor(
         new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53c1)
-            .GetUsbDeviceFactory()
+            .GetUsbDeviceFactory(loggerFactory)
             );
-#endif
 
 #if NETCOREAPP3_1
 
@@ -185,7 +185,7 @@ namespace Device.Net.UnitTests
 #if WINDOWS_UWP
                 filterDeviceDefinition.CreateUwpHidDeviceFactory());
 #else
-                filterDeviceDefinition.GetHidDeviceFactory());
+                filterDeviceDefinition.GetHidDeviceFactory(loggerFactory));
 #endif
             await integrationTester.TestAsync(request, async (result, device) =>
             {
@@ -223,12 +223,8 @@ namespace Device.Net.UnitTests
 
             var filterDeviceDefinition = new FilterDeviceDefinition(productId: 4112, vendorId: 10741);
 
-            var integrationTester = new IntegrationTester(
-#if WINDOWS_UWP
-                filterDeviceDefinition.CreateUwpHidDeviceFactory());
-#else
-                filterDeviceDefinition.GetHidDeviceFactory());
-#endif
+            var integrationTester = new IntegrationTester(filterDeviceDefinition.GetHidDeviceFactory(loggerFactory));
+
             await integrationTester.TestAsync(request, async (result, device) =>
              {
                  Assert.AreEqual(64, result.Data.Length);
@@ -256,9 +252,9 @@ namespace Device.Net.UnitTests
 #endif
              }, 64);
         }
-#endregion
+        #endregion
 
-#region Setup
+        #region Setup
         [TestInitialize]
         public void Setup()
         {
@@ -275,9 +271,9 @@ namespace Device.Net.UnitTests
             var host = hostBuilder.Build();
             loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
         }
-#endregion
+        #endregion
 
-#region Private Methods
+        #region Private Methods
         private static async Task PerformStmDfTest(IUsbDevice stmDfuDevice)
         {
             ////////////////////////////////////////////////////////////
@@ -332,7 +328,7 @@ namespace Device.Net.UnitTests
 
             return Task.FromResult(true);
         }
-#endregion
+        #endregion
     }
 }
 
