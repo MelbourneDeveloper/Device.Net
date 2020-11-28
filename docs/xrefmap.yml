@@ -29,83 +29,6 @@ references:
   fullName.vb: Device.Net.AsyncExtensions.FirstOrDefaultAsync(Of T)(System.Collections.Generic.IEnumerable(Of T), System.Func(Of T, System.Threading.Tasks.Task(Of System.Boolean)), System.Threading.CancellationToken)
   nameWithType: AsyncExtensions.FirstOrDefaultAsync<T>(IEnumerable<T>, Func<T, Task<Boolean>>, CancellationToken)
   nameWithType.vb: AsyncExtensions.FirstOrDefaultAsync(Of T)(IEnumerable(Of T), Func(Of T, Task(Of Boolean)), CancellationToken)
-- uid: Device.Net.BulkIOService
-  name: BulkIOService
-  href: api/Device.Net.BulkIOService.html
-  commentId: T:Device.Net.BulkIOService
-  fullName: Device.Net.BulkIOService
-  nameWithType: BulkIOService
-- uid: Device.Net.BulkIOService.#ctor(Device.Net.IDevice,System.Int32)
-  name: BulkIOService(IDevice, Int32)
-  href: api/Device.Net.BulkIOService.html#Device_Net_BulkIOService__ctor_Device_Net_IDevice_System_Int32_
-  commentId: M:Device.Net.BulkIOService.#ctor(Device.Net.IDevice,System.Int32)
-  fullName: Device.Net.BulkIOService.BulkIOService(Device.Net.IDevice, System.Int32)
-  nameWithType: BulkIOService.BulkIOService(IDevice, Int32)
-- uid: Device.Net.BulkIOService.#ctor*
-  name: BulkIOService
-  href: api/Device.Net.BulkIOService.html#Device_Net_BulkIOService__ctor_
-  commentId: Overload:Device.Net.BulkIOService.#ctor
-  isSpec: "True"
-  fullName: Device.Net.BulkIOService.BulkIOService
-  nameWithType: BulkIOService.BulkIOService
-- uid: Device.Net.BulkIOService.Device
-  name: Device
-  href: api/Device.Net.BulkIOService.html#Device_Net_BulkIOService_Device
-  commentId: P:Device.Net.BulkIOService.Device
-  fullName: Device.Net.BulkIOService.Device
-  nameWithType: BulkIOService.Device
-- uid: Device.Net.BulkIOService.Device*
-  name: Device
-  href: api/Device.Net.BulkIOService.html#Device_Net_BulkIOService_Device_
-  commentId: Overload:Device.Net.BulkIOService.Device
-  isSpec: "True"
-  fullName: Device.Net.BulkIOService.Device
-  nameWithType: BulkIOService.Device
-- uid: Device.Net.BulkIOService.ReadAsync(System.Byte[],System.Int32,System.Int32)
-  name: ReadAsync(Byte[], Int32, Int32)
-  href: api/Device.Net.BulkIOService.html#Device_Net_BulkIOService_ReadAsync_System_Byte___System_Int32_System_Int32_
-  commentId: M:Device.Net.BulkIOService.ReadAsync(System.Byte[],System.Int32,System.Int32)
-  name.vb: ReadAsync(Byte(), Int32, Int32)
-  fullName: Device.Net.BulkIOService.ReadAsync(System.Byte[], System.Int32, System.Int32)
-  fullName.vb: Device.Net.BulkIOService.ReadAsync(System.Byte(), System.Int32, System.Int32)
-  nameWithType: BulkIOService.ReadAsync(Byte[], Int32, Int32)
-  nameWithType.vb: BulkIOService.ReadAsync(Byte(), Int32, Int32)
-- uid: Device.Net.BulkIOService.ReadAsync*
-  name: ReadAsync
-  href: api/Device.Net.BulkIOService.html#Device_Net_BulkIOService_ReadAsync_
-  commentId: Overload:Device.Net.BulkIOService.ReadAsync
-  isSpec: "True"
-  fullName: Device.Net.BulkIOService.ReadAsync
-  nameWithType: BulkIOService.ReadAsync
-- uid: Device.Net.BulkIOService.ReadBufferSize
-  name: ReadBufferSize
-  href: api/Device.Net.BulkIOService.html#Device_Net_BulkIOService_ReadBufferSize
-  commentId: P:Device.Net.BulkIOService.ReadBufferSize
-  fullName: Device.Net.BulkIOService.ReadBufferSize
-  nameWithType: BulkIOService.ReadBufferSize
-- uid: Device.Net.BulkIOService.ReadBufferSize*
-  name: ReadBufferSize
-  href: api/Device.Net.BulkIOService.html#Device_Net_BulkIOService_ReadBufferSize_
-  commentId: Overload:Device.Net.BulkIOService.ReadBufferSize
-  isSpec: "True"
-  fullName: Device.Net.BulkIOService.ReadBufferSize
-  nameWithType: BulkIOService.ReadBufferSize
-- uid: Device.Net.BulkIOService.WriteAsync(System.Byte[],System.Int32,System.Int32)
-  name: WriteAsync(Byte[], Int32, Int32)
-  href: api/Device.Net.BulkIOService.html#Device_Net_BulkIOService_WriteAsync_System_Byte___System_Int32_System_Int32_
-  commentId: M:Device.Net.BulkIOService.WriteAsync(System.Byte[],System.Int32,System.Int32)
-  name.vb: WriteAsync(Byte(), Int32, Int32)
-  fullName: Device.Net.BulkIOService.WriteAsync(System.Byte[], System.Int32, System.Int32)
-  fullName.vb: Device.Net.BulkIOService.WriteAsync(System.Byte(), System.Int32, System.Int32)
-  nameWithType: BulkIOService.WriteAsync(Byte[], Int32, Int32)
-  nameWithType.vb: BulkIOService.WriteAsync(Byte(), Int32, Int32)
-- uid: Device.Net.BulkIOService.WriteAsync*
-  name: WriteAsync
-  href: api/Device.Net.BulkIOService.html#Device_Net_BulkIOService_WriteAsync_
-  commentId: Overload:Device.Net.BulkIOService.WriteAsync
-  isSpec: "True"
-  fullName: Device.Net.BulkIOService.WriteAsync
-  nameWithType: BulkIOService.WriteAsync
 - uid: Device.Net.ConnectedDeviceDefinition
   name: ConnectedDeviceDefinition
   href: api/Device.Net.ConnectedDeviceDefinition.html
@@ -1670,6 +1593,617 @@ references:
   isSpec: "True"
   fullName: Device.Net.IDeviceListener.Stop
   nameWithType: IDeviceListener.Stop
+- uid: Device.Net.LibUsb
+  name: Device.Net.LibUsb
+  href: api/Device.Net.LibUsb.html
+  commentId: N:Device.Net.LibUsb
+  fullName: Device.Net.LibUsb
+  nameWithType: Device.Net.LibUsb
+- uid: Device.Net.LibUsb.ExtensionMethods
+  name: ExtensionMethods
+  href: api/Device.Net.LibUsb.ExtensionMethods.html
+  commentId: T:Device.Net.LibUsb.ExtensionMethods
+  fullName: Device.Net.LibUsb.ExtensionMethods
+  nameWithType: ExtensionMethods
+- uid: Device.Net.LibUsb.ExtensionMethods.ToConnectedDevice(LibUsbDotNet.Main.UsbRegistry)
+  name: ToConnectedDevice(UsbRegistry)
+  href: api/Device.Net.LibUsb.ExtensionMethods.html#Device_Net_LibUsb_ExtensionMethods_ToConnectedDevice_LibUsbDotNet_Main_UsbRegistry_
+  commentId: M:Device.Net.LibUsb.ExtensionMethods.ToConnectedDevice(LibUsbDotNet.Main.UsbRegistry)
+  fullName: Device.Net.LibUsb.ExtensionMethods.ToConnectedDevice(LibUsbDotNet.Main.UsbRegistry)
+  nameWithType: ExtensionMethods.ToConnectedDevice(UsbRegistry)
+- uid: Device.Net.LibUsb.ExtensionMethods.ToConnectedDevice*
+  name: ToConnectedDevice
+  href: api/Device.Net.LibUsb.ExtensionMethods.html#Device_Net_LibUsb_ExtensionMethods_ToConnectedDevice_
+  commentId: Overload:Device.Net.LibUsb.ExtensionMethods.ToConnectedDevice
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.ExtensionMethods.ToConnectedDevice
+  nameWithType: ExtensionMethods.ToConnectedDevice
+- uid: Device.Net.LibUsb.LibUsbFactoryExtensions
+  name: LibUsbFactoryExtensions
+  href: api/Device.Net.LibUsb.LibUsbFactoryExtensions.html
+  commentId: T:Device.Net.LibUsb.LibUsbFactoryExtensions
+  fullName: Device.Net.LibUsb.LibUsbFactoryExtensions
+  nameWithType: LibUsbFactoryExtensions
+- uid: Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(Device.Net.FilterDeviceDefinition,Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.Int32},System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Device.Net.ConnectedDeviceDefinition,System.Threading.CancellationToken,System.Threading.Tasks.Task{System.Boolean}})
+  name: CreateLibUsbDeviceFactory(FilterDeviceDefinition, ILoggerFactory, Nullable<Int32>, Nullable<UInt16>, Nullable<UInt16>, Func<ConnectedDeviceDefinition, CancellationToken, Task<Boolean>>)
+  href: api/Device.Net.LibUsb.LibUsbFactoryExtensions.html#Device_Net_LibUsb_LibUsbFactoryExtensions_CreateLibUsbDeviceFactory_Device_Net_FilterDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Int32__System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Device_Net_ConnectedDeviceDefinition_System_Threading_CancellationToken_System_Threading_Tasks_Task_System_Boolean___
+  commentId: M:Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(Device.Net.FilterDeviceDefinition,Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.Int32},System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Device.Net.ConnectedDeviceDefinition,System.Threading.CancellationToken,System.Threading.Tasks.Task{System.Boolean}})
+  name.vb: CreateLibUsbDeviceFactory(FilterDeviceDefinition, ILoggerFactory, Nullable(Of Int32), Nullable(Of UInt16), Nullable(Of UInt16), Func(Of ConnectedDeviceDefinition, CancellationToken, Task(Of Boolean)))
+  fullName: Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(Device.Net.FilterDeviceDefinition, Microsoft.Extensions.Logging.ILoggerFactory, System.Nullable<System.Int32>, System.Nullable<System.UInt16>, System.Nullable<System.UInt16>, System.Func<Device.Net.ConnectedDeviceDefinition, System.Threading.CancellationToken, System.Threading.Tasks.Task<System.Boolean>>)
+  fullName.vb: Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(Device.Net.FilterDeviceDefinition, Microsoft.Extensions.Logging.ILoggerFactory, System.Nullable(Of System.Int32), System.Nullable(Of System.UInt16), System.Nullable(Of System.UInt16), System.Func(Of Device.Net.ConnectedDeviceDefinition, System.Threading.CancellationToken, System.Threading.Tasks.Task(Of System.Boolean)))
+  nameWithType: LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(FilterDeviceDefinition, ILoggerFactory, Nullable<Int32>, Nullable<UInt16>, Nullable<UInt16>, Func<ConnectedDeviceDefinition, CancellationToken, Task<Boolean>>)
+  nameWithType.vb: LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(FilterDeviceDefinition, ILoggerFactory, Nullable(Of Int32), Nullable(Of UInt16), Nullable(Of UInt16), Func(Of ConnectedDeviceDefinition, CancellationToken, Task(Of Boolean)))
+- uid: Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(System.Collections.Generic.IReadOnlyList{Device.Net.FilterDeviceDefinition},Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.Int32},System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Device.Net.ConnectedDeviceDefinition,System.Threading.CancellationToken,System.Threading.Tasks.Task{System.Boolean}})
+  name: CreateLibUsbDeviceFactory(IReadOnlyList<FilterDeviceDefinition>, ILoggerFactory, Nullable<Int32>, Nullable<UInt16>, Nullable<UInt16>, Func<ConnectedDeviceDefinition, CancellationToken, Task<Boolean>>)
+  href: api/Device.Net.LibUsb.LibUsbFactoryExtensions.html#Device_Net_LibUsb_LibUsbFactoryExtensions_CreateLibUsbDeviceFactory_System_Collections_Generic_IReadOnlyList_Device_Net_FilterDeviceDefinition__Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Int32__System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Device_Net_ConnectedDeviceDefinition_System_Threading_CancellationToken_System_Threading_Tasks_Task_System_Boolean___
+  commentId: M:Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(System.Collections.Generic.IReadOnlyList{Device.Net.FilterDeviceDefinition},Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.Int32},System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Device.Net.ConnectedDeviceDefinition,System.Threading.CancellationToken,System.Threading.Tasks.Task{System.Boolean}})
+  name.vb: CreateLibUsbDeviceFactory(IReadOnlyList(Of FilterDeviceDefinition), ILoggerFactory, Nullable(Of Int32), Nullable(Of UInt16), Nullable(Of UInt16), Func(Of ConnectedDeviceDefinition, CancellationToken, Task(Of Boolean)))
+  fullName: Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(System.Collections.Generic.IReadOnlyList<Device.Net.FilterDeviceDefinition>, Microsoft.Extensions.Logging.ILoggerFactory, System.Nullable<System.Int32>, System.Nullable<System.UInt16>, System.Nullable<System.UInt16>, System.Func<Device.Net.ConnectedDeviceDefinition, System.Threading.CancellationToken, System.Threading.Tasks.Task<System.Boolean>>)
+  fullName.vb: Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(System.Collections.Generic.IReadOnlyList(Of Device.Net.FilterDeviceDefinition), Microsoft.Extensions.Logging.ILoggerFactory, System.Nullable(Of System.Int32), System.Nullable(Of System.UInt16), System.Nullable(Of System.UInt16), System.Func(Of Device.Net.ConnectedDeviceDefinition, System.Threading.CancellationToken, System.Threading.Tasks.Task(Of System.Boolean)))
+  nameWithType: LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(IReadOnlyList<FilterDeviceDefinition>, ILoggerFactory, Nullable<Int32>, Nullable<UInt16>, Nullable<UInt16>, Func<ConnectedDeviceDefinition, CancellationToken, Task<Boolean>>)
+  nameWithType.vb: LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(IReadOnlyList(Of FilterDeviceDefinition), ILoggerFactory, Nullable(Of Int32), Nullable(Of UInt16), Nullable(Of UInt16), Func(Of ConnectedDeviceDefinition, CancellationToken, Task(Of Boolean)))
+- uid: Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory*
+  name: CreateLibUsbDeviceFactory
+  href: api/Device.Net.LibUsb.LibUsbFactoryExtensions.html#Device_Net_LibUsb_LibUsbFactoryExtensions_CreateLibUsbDeviceFactory_
+  commentId: Overload:Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory
+  nameWithType: LibUsbFactoryExtensions.CreateLibUsbDeviceFactory
+- uid: Device.Net.LibUsb.LibUsbFactoryExtensions.GetConnectedDeviceDefinitionsAsync(System.Collections.Generic.IReadOnlyList{Device.Net.FilterDeviceDefinition},System.Threading.CancellationToken)
+  name: GetConnectedDeviceDefinitionsAsync(IReadOnlyList<FilterDeviceDefinition>, CancellationToken)
+  href: api/Device.Net.LibUsb.LibUsbFactoryExtensions.html#Device_Net_LibUsb_LibUsbFactoryExtensions_GetConnectedDeviceDefinitionsAsync_System_Collections_Generic_IReadOnlyList_Device_Net_FilterDeviceDefinition__System_Threading_CancellationToken_
+  commentId: M:Device.Net.LibUsb.LibUsbFactoryExtensions.GetConnectedDeviceDefinitionsAsync(System.Collections.Generic.IReadOnlyList{Device.Net.FilterDeviceDefinition},System.Threading.CancellationToken)
+  name.vb: GetConnectedDeviceDefinitionsAsync(IReadOnlyList(Of FilterDeviceDefinition), CancellationToken)
+  fullName: Device.Net.LibUsb.LibUsbFactoryExtensions.GetConnectedDeviceDefinitionsAsync(System.Collections.Generic.IReadOnlyList<Device.Net.FilterDeviceDefinition>, System.Threading.CancellationToken)
+  fullName.vb: Device.Net.LibUsb.LibUsbFactoryExtensions.GetConnectedDeviceDefinitionsAsync(System.Collections.Generic.IReadOnlyList(Of Device.Net.FilterDeviceDefinition), System.Threading.CancellationToken)
+  nameWithType: LibUsbFactoryExtensions.GetConnectedDeviceDefinitionsAsync(IReadOnlyList<FilterDeviceDefinition>, CancellationToken)
+  nameWithType.vb: LibUsbFactoryExtensions.GetConnectedDeviceDefinitionsAsync(IReadOnlyList(Of FilterDeviceDefinition), CancellationToken)
+- uid: Device.Net.LibUsb.LibUsbFactoryExtensions.GetConnectedDeviceDefinitionsAsync*
+  name: GetConnectedDeviceDefinitionsAsync
+  href: api/Device.Net.LibUsb.LibUsbFactoryExtensions.html#Device_Net_LibUsb_LibUsbFactoryExtensions_GetConnectedDeviceDefinitionsAsync_
+  commentId: Overload:Device.Net.LibUsb.LibUsbFactoryExtensions.GetConnectedDeviceDefinitionsAsync
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbFactoryExtensions.GetConnectedDeviceDefinitionsAsync
+  nameWithType: LibUsbFactoryExtensions.GetConnectedDeviceDefinitionsAsync
+- uid: Device.Net.LibUsb.LibUsbFactoryExtensions.GetDevice(Device.Net.ConnectedDeviceDefinition)
+  name: GetDevice(ConnectedDeviceDefinition)
+  href: api/Device.Net.LibUsb.LibUsbFactoryExtensions.html#Device_Net_LibUsb_LibUsbFactoryExtensions_GetDevice_Device_Net_ConnectedDeviceDefinition_
+  commentId: M:Device.Net.LibUsb.LibUsbFactoryExtensions.GetDevice(Device.Net.ConnectedDeviceDefinition)
+  fullName: Device.Net.LibUsb.LibUsbFactoryExtensions.GetDevice(Device.Net.ConnectedDeviceDefinition)
+  nameWithType: LibUsbFactoryExtensions.GetDevice(ConnectedDeviceDefinition)
+- uid: Device.Net.LibUsb.LibUsbFactoryExtensions.GetDevice*
+  name: GetDevice
+  href: api/Device.Net.LibUsb.LibUsbFactoryExtensions.html#Device_Net_LibUsb_LibUsbFactoryExtensions_GetDevice_
+  commentId: Overload:Device.Net.LibUsb.LibUsbFactoryExtensions.GetDevice
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbFactoryExtensions.GetDevice
+  nameWithType: LibUsbFactoryExtensions.GetDevice
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager
+  name: LibUsbInterfaceManager
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html
+  commentId: T:Device.Net.LibUsb.LibUsbInterfaceManager
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager
+  nameWithType: LibUsbInterfaceManager
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.#ctor(LibUsbDotNet.UsbDevice,System.Int32,Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.UInt16},System.Nullable{System.UInt16})
+  name: LibUsbInterfaceManager(UsbDevice, Int32, ILoggerFactory, Nullable<UInt16>, Nullable<UInt16>)
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager__ctor_LibUsbDotNet_UsbDevice_System_Int32_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_UInt16__System_Nullable_System_UInt16__
+  commentId: M:Device.Net.LibUsb.LibUsbInterfaceManager.#ctor(LibUsbDotNet.UsbDevice,System.Int32,Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.UInt16},System.Nullable{System.UInt16})
+  name.vb: LibUsbInterfaceManager(UsbDevice, Int32, ILoggerFactory, Nullable(Of UInt16), Nullable(Of UInt16))
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.LibUsbInterfaceManager(LibUsbDotNet.UsbDevice, System.Int32, Microsoft.Extensions.Logging.ILoggerFactory, System.Nullable<System.UInt16>, System.Nullable<System.UInt16>)
+  fullName.vb: Device.Net.LibUsb.LibUsbInterfaceManager.LibUsbInterfaceManager(LibUsbDotNet.UsbDevice, System.Int32, Microsoft.Extensions.Logging.ILoggerFactory, System.Nullable(Of System.UInt16), System.Nullable(Of System.UInt16))
+  nameWithType: LibUsbInterfaceManager.LibUsbInterfaceManager(UsbDevice, Int32, ILoggerFactory, Nullable<UInt16>, Nullable<UInt16>)
+  nameWithType.vb: LibUsbInterfaceManager.LibUsbInterfaceManager(UsbDevice, Int32, ILoggerFactory, Nullable(Of UInt16), Nullable(Of UInt16))
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.#ctor*
+  name: LibUsbInterfaceManager
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager__ctor_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.#ctor
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.LibUsbInterfaceManager
+  nameWithType: LibUsbInterfaceManager.LibUsbInterfaceManager
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.Close
+  name: Close()
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_Close
+  commentId: M:Device.Net.LibUsb.LibUsbInterfaceManager.Close
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.Close()
+  nameWithType: LibUsbInterfaceManager.Close()
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.Close*
+  name: Close
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_Close_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.Close
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.Close
+  nameWithType: LibUsbInterfaceManager.Close
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.Dispose
+  name: Dispose()
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_Dispose
+  commentId: M:Device.Net.LibUsb.LibUsbInterfaceManager.Dispose
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.Dispose()
+  nameWithType: LibUsbInterfaceManager.Dispose()
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.Dispose*
+  name: Dispose
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_Dispose_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.Dispose
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.Dispose
+  nameWithType: LibUsbInterfaceManager.Dispose
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.GetConnectedDeviceDefinitionAsync(System.Threading.CancellationToken)
+  name: GetConnectedDeviceDefinitionAsync(CancellationToken)
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_GetConnectedDeviceDefinitionAsync_System_Threading_CancellationToken_
+  commentId: M:Device.Net.LibUsb.LibUsbInterfaceManager.GetConnectedDeviceDefinitionAsync(System.Threading.CancellationToken)
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.GetConnectedDeviceDefinitionAsync(System.Threading.CancellationToken)
+  nameWithType: LibUsbInterfaceManager.GetConnectedDeviceDefinitionAsync(CancellationToken)
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.GetConnectedDeviceDefinitionAsync*
+  name: GetConnectedDeviceDefinitionAsync
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_GetConnectedDeviceDefinitionAsync_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.GetConnectedDeviceDefinitionAsync
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.GetConnectedDeviceDefinitionAsync
+  nameWithType: LibUsbInterfaceManager.GetConnectedDeviceDefinitionAsync
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.GetProductId(LibUsbDotNet.UsbDevice)
+  name: GetProductId(UsbDevice)
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_GetProductId_LibUsbDotNet_UsbDevice_
+  commentId: M:Device.Net.LibUsb.LibUsbInterfaceManager.GetProductId(LibUsbDotNet.UsbDevice)
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.GetProductId(LibUsbDotNet.UsbDevice)
+  nameWithType: LibUsbInterfaceManager.GetProductId(UsbDevice)
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.GetProductId*
+  name: GetProductId
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_GetProductId_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.GetProductId
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.GetProductId
+  nameWithType: LibUsbInterfaceManager.GetProductId
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.GetVendorId(LibUsbDotNet.UsbDevice)
+  name: GetVendorId(UsbDevice)
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_GetVendorId_LibUsbDotNet_UsbDevice_
+  commentId: M:Device.Net.LibUsb.LibUsbInterfaceManager.GetVendorId(LibUsbDotNet.UsbDevice)
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.GetVendorId(LibUsbDotNet.UsbDevice)
+  nameWithType: LibUsbInterfaceManager.GetVendorId(UsbDevice)
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.GetVendorId*
+  name: GetVendorId
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_GetVendorId_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.GetVendorId
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.GetVendorId
+  nameWithType: LibUsbInterfaceManager.GetVendorId
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.InitializeAsync(System.Threading.CancellationToken)
+  name: InitializeAsync(CancellationToken)
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_InitializeAsync_System_Threading_CancellationToken_
+  commentId: M:Device.Net.LibUsb.LibUsbInterfaceManager.InitializeAsync(System.Threading.CancellationToken)
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.InitializeAsync(System.Threading.CancellationToken)
+  nameWithType: LibUsbInterfaceManager.InitializeAsync(CancellationToken)
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.InitializeAsync*
+  name: InitializeAsync
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_InitializeAsync_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.InitializeAsync
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.InitializeAsync
+  nameWithType: LibUsbInterfaceManager.InitializeAsync
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.IsInitialized
+  name: IsInitialized
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_IsInitialized
+  commentId: P:Device.Net.LibUsb.LibUsbInterfaceManager.IsInitialized
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.IsInitialized
+  nameWithType: LibUsbInterfaceManager.IsInitialized
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.IsInitialized*
+  name: IsInitialized
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_IsInitialized_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.IsInitialized
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.IsInitialized
+  nameWithType: LibUsbInterfaceManager.IsInitialized
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.ProductId
+  name: ProductId
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_ProductId
+  commentId: P:Device.Net.LibUsb.LibUsbInterfaceManager.ProductId
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.ProductId
+  nameWithType: LibUsbInterfaceManager.ProductId
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.ProductId*
+  name: ProductId
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_ProductId_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.ProductId
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.ProductId
+  nameWithType: LibUsbInterfaceManager.ProductId
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.ReadAsync
+  name: ReadAsync()
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_ReadAsync
+  commentId: M:Device.Net.LibUsb.LibUsbInterfaceManager.ReadAsync
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.ReadAsync()
+  nameWithType: LibUsbInterfaceManager.ReadAsync()
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.ReadAsync*
+  name: ReadAsync
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_ReadAsync_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.ReadAsync
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.ReadAsync
+  nameWithType: LibUsbInterfaceManager.ReadAsync
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.ReadBufferSize
+  name: ReadBufferSize
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_ReadBufferSize
+  commentId: P:Device.Net.LibUsb.LibUsbInterfaceManager.ReadBufferSize
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.ReadBufferSize
+  nameWithType: LibUsbInterfaceManager.ReadBufferSize
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.ReadBufferSize*
+  name: ReadBufferSize
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_ReadBufferSize_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.ReadBufferSize
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.ReadBufferSize
+  nameWithType: LibUsbInterfaceManager.ReadBufferSize
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.Timeout
+  name: Timeout
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_Timeout
+  commentId: P:Device.Net.LibUsb.LibUsbInterfaceManager.Timeout
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.Timeout
+  nameWithType: LibUsbInterfaceManager.Timeout
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.Timeout*
+  name: Timeout
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_Timeout_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.Timeout
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.Timeout
+  nameWithType: LibUsbInterfaceManager.Timeout
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.UsbDevice
+  name: UsbDevice
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_UsbDevice
+  commentId: P:Device.Net.LibUsb.LibUsbInterfaceManager.UsbDevice
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.UsbDevice
+  nameWithType: LibUsbInterfaceManager.UsbDevice
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.UsbDevice*
+  name: UsbDevice
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_UsbDevice_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.UsbDevice
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.UsbDevice
+  nameWithType: LibUsbInterfaceManager.UsbDevice
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.VendorId
+  name: VendorId
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_VendorId
+  commentId: P:Device.Net.LibUsb.LibUsbInterfaceManager.VendorId
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.VendorId
+  nameWithType: LibUsbInterfaceManager.VendorId
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.VendorId*
+  name: VendorId
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_VendorId_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.VendorId
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.VendorId
+  nameWithType: LibUsbInterfaceManager.VendorId
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.WriteAsync(System.Byte[])
+  name: WriteAsync(Byte[])
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_WriteAsync_System_Byte___
+  commentId: M:Device.Net.LibUsb.LibUsbInterfaceManager.WriteAsync(System.Byte[])
+  name.vb: WriteAsync(Byte())
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.WriteAsync(System.Byte[])
+  fullName.vb: Device.Net.LibUsb.LibUsbInterfaceManager.WriteAsync(System.Byte())
+  nameWithType: LibUsbInterfaceManager.WriteAsync(Byte[])
+  nameWithType.vb: LibUsbInterfaceManager.WriteAsync(Byte())
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.WriteAsync*
+  name: WriteAsync
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_WriteAsync_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.WriteAsync
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.WriteAsync
+  nameWithType: LibUsbInterfaceManager.WriteAsync
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.WriteBufferSize
+  name: WriteBufferSize
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_WriteBufferSize
+  commentId: P:Device.Net.LibUsb.LibUsbInterfaceManager.WriteBufferSize
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.WriteBufferSize
+  nameWithType: LibUsbInterfaceManager.WriteBufferSize
+- uid: Device.Net.LibUsb.LibUsbInterfaceManager.WriteBufferSize*
+  name: WriteBufferSize
+  href: api/Device.Net.LibUsb.LibUsbInterfaceManager.html#Device_Net_LibUsb_LibUsbInterfaceManager_WriteBufferSize_
+  commentId: Overload:Device.Net.LibUsb.LibUsbInterfaceManager.WriteBufferSize
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.LibUsbInterfaceManager.WriteBufferSize
+  nameWithType: LibUsbInterfaceManager.WriteBufferSize
+- uid: Device.Net.LibUsb.ReadEndpoint
+  name: ReadEndpoint
+  href: api/Device.Net.LibUsb.ReadEndpoint.html
+  commentId: T:Device.Net.LibUsb.ReadEndpoint
+  fullName: Device.Net.LibUsb.ReadEndpoint
+  nameWithType: ReadEndpoint
+- uid: Device.Net.LibUsb.ReadEndpoint.#ctor(LibUsbDotNet.UsbEndpointReader,System.Nullable{System.UInt16})
+  name: ReadEndpoint(UsbEndpointReader, Nullable<UInt16>)
+  href: api/Device.Net.LibUsb.ReadEndpoint.html#Device_Net_LibUsb_ReadEndpoint__ctor_LibUsbDotNet_UsbEndpointReader_System_Nullable_System_UInt16__
+  commentId: M:Device.Net.LibUsb.ReadEndpoint.#ctor(LibUsbDotNet.UsbEndpointReader,System.Nullable{System.UInt16})
+  name.vb: ReadEndpoint(UsbEndpointReader, Nullable(Of UInt16))
+  fullName: Device.Net.LibUsb.ReadEndpoint.ReadEndpoint(LibUsbDotNet.UsbEndpointReader, System.Nullable<System.UInt16>)
+  fullName.vb: Device.Net.LibUsb.ReadEndpoint.ReadEndpoint(LibUsbDotNet.UsbEndpointReader, System.Nullable(Of System.UInt16))
+  nameWithType: ReadEndpoint.ReadEndpoint(UsbEndpointReader, Nullable<UInt16>)
+  nameWithType.vb: ReadEndpoint.ReadEndpoint(UsbEndpointReader, Nullable(Of UInt16))
+- uid: Device.Net.LibUsb.ReadEndpoint.#ctor*
+  name: ReadEndpoint
+  href: api/Device.Net.LibUsb.ReadEndpoint.html#Device_Net_LibUsb_ReadEndpoint__ctor_
+  commentId: Overload:Device.Net.LibUsb.ReadEndpoint.#ctor
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.ReadEndpoint.ReadEndpoint
+  nameWithType: ReadEndpoint.ReadEndpoint
+- uid: Device.Net.LibUsb.ReadEndpoint.IsInterrupt
+  name: IsInterrupt
+  href: api/Device.Net.LibUsb.ReadEndpoint.html#Device_Net_LibUsb_ReadEndpoint_IsInterrupt
+  commentId: P:Device.Net.LibUsb.ReadEndpoint.IsInterrupt
+  fullName: Device.Net.LibUsb.ReadEndpoint.IsInterrupt
+  nameWithType: ReadEndpoint.IsInterrupt
+- uid: Device.Net.LibUsb.ReadEndpoint.IsInterrupt*
+  name: IsInterrupt
+  href: api/Device.Net.LibUsb.ReadEndpoint.html#Device_Net_LibUsb_ReadEndpoint_IsInterrupt_
+  commentId: Overload:Device.Net.LibUsb.ReadEndpoint.IsInterrupt
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.ReadEndpoint.IsInterrupt
+  nameWithType: ReadEndpoint.IsInterrupt
+- uid: Device.Net.LibUsb.ReadEndpoint.IsRead
+  name: IsRead
+  href: api/Device.Net.LibUsb.ReadEndpoint.html#Device_Net_LibUsb_ReadEndpoint_IsRead
+  commentId: P:Device.Net.LibUsb.ReadEndpoint.IsRead
+  fullName: Device.Net.LibUsb.ReadEndpoint.IsRead
+  nameWithType: ReadEndpoint.IsRead
+- uid: Device.Net.LibUsb.ReadEndpoint.IsRead*
+  name: IsRead
+  href: api/Device.Net.LibUsb.ReadEndpoint.html#Device_Net_LibUsb_ReadEndpoint_IsRead_
+  commentId: Overload:Device.Net.LibUsb.ReadEndpoint.IsRead
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.ReadEndpoint.IsRead
+  nameWithType: ReadEndpoint.IsRead
+- uid: Device.Net.LibUsb.ReadEndpoint.IsWrite
+  name: IsWrite
+  href: api/Device.Net.LibUsb.ReadEndpoint.html#Device_Net_LibUsb_ReadEndpoint_IsWrite
+  commentId: P:Device.Net.LibUsb.ReadEndpoint.IsWrite
+  fullName: Device.Net.LibUsb.ReadEndpoint.IsWrite
+  nameWithType: ReadEndpoint.IsWrite
+- uid: Device.Net.LibUsb.ReadEndpoint.IsWrite*
+  name: IsWrite
+  href: api/Device.Net.LibUsb.ReadEndpoint.html#Device_Net_LibUsb_ReadEndpoint_IsWrite_
+  commentId: Overload:Device.Net.LibUsb.ReadEndpoint.IsWrite
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.ReadEndpoint.IsWrite
+  nameWithType: ReadEndpoint.IsWrite
+- uid: Device.Net.LibUsb.ReadEndpoint.MaxPacketSize
+  name: MaxPacketSize
+  href: api/Device.Net.LibUsb.ReadEndpoint.html#Device_Net_LibUsb_ReadEndpoint_MaxPacketSize
+  commentId: P:Device.Net.LibUsb.ReadEndpoint.MaxPacketSize
+  fullName: Device.Net.LibUsb.ReadEndpoint.MaxPacketSize
+  nameWithType: ReadEndpoint.MaxPacketSize
+- uid: Device.Net.LibUsb.ReadEndpoint.MaxPacketSize*
+  name: MaxPacketSize
+  href: api/Device.Net.LibUsb.ReadEndpoint.html#Device_Net_LibUsb_ReadEndpoint_MaxPacketSize_
+  commentId: Overload:Device.Net.LibUsb.ReadEndpoint.MaxPacketSize
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.ReadEndpoint.MaxPacketSize
+  nameWithType: ReadEndpoint.MaxPacketSize
+- uid: Device.Net.LibUsb.ReadEndpoint.PipeId
+  name: PipeId
+  href: api/Device.Net.LibUsb.ReadEndpoint.html#Device_Net_LibUsb_ReadEndpoint_PipeId
+  commentId: P:Device.Net.LibUsb.ReadEndpoint.PipeId
+  fullName: Device.Net.LibUsb.ReadEndpoint.PipeId
+  nameWithType: ReadEndpoint.PipeId
+- uid: Device.Net.LibUsb.ReadEndpoint.PipeId*
+  name: PipeId
+  href: api/Device.Net.LibUsb.ReadEndpoint.html#Device_Net_LibUsb_ReadEndpoint_PipeId_
+  commentId: Overload:Device.Net.LibUsb.ReadEndpoint.PipeId
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.ReadEndpoint.PipeId
+  nameWithType: ReadEndpoint.PipeId
+- uid: Device.Net.LibUsb.ReadEndpoint.UsbEndpointReader
+  name: UsbEndpointReader
+  href: api/Device.Net.LibUsb.ReadEndpoint.html#Device_Net_LibUsb_ReadEndpoint_UsbEndpointReader
+  commentId: P:Device.Net.LibUsb.ReadEndpoint.UsbEndpointReader
+  fullName: Device.Net.LibUsb.ReadEndpoint.UsbEndpointReader
+  nameWithType: ReadEndpoint.UsbEndpointReader
+- uid: Device.Net.LibUsb.ReadEndpoint.UsbEndpointReader*
+  name: UsbEndpointReader
+  href: api/Device.Net.LibUsb.ReadEndpoint.html#Device_Net_LibUsb_ReadEndpoint_UsbEndpointReader_
+  commentId: Overload:Device.Net.LibUsb.ReadEndpoint.UsbEndpointReader
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.ReadEndpoint.UsbEndpointReader
+  nameWithType: ReadEndpoint.UsbEndpointReader
+- uid: Device.Net.LibUsb.UsbInterface
+  name: UsbInterface
+  href: api/Device.Net.LibUsb.UsbInterface.html
+  commentId: T:Device.Net.LibUsb.UsbInterface
+  fullName: Device.Net.LibUsb.UsbInterface
+  nameWithType: UsbInterface
+- uid: Device.Net.LibUsb.UsbInterface.#ctor(LibUsbDotNet.UsbDevice,System.Byte,System.Nullable{System.UInt16},System.Nullable{System.UInt16},Microsoft.Extensions.Logging.ILogger,System.Int32)
+  name: UsbInterface(UsbDevice, Byte, Nullable<UInt16>, Nullable<UInt16>, ILogger, Int32)
+  href: api/Device.Net.LibUsb.UsbInterface.html#Device_Net_LibUsb_UsbInterface__ctor_LibUsbDotNet_UsbDevice_System_Byte_System_Nullable_System_UInt16__System_Nullable_System_UInt16__Microsoft_Extensions_Logging_ILogger_System_Int32_
+  commentId: M:Device.Net.LibUsb.UsbInterface.#ctor(LibUsbDotNet.UsbDevice,System.Byte,System.Nullable{System.UInt16},System.Nullable{System.UInt16},Microsoft.Extensions.Logging.ILogger,System.Int32)
+  name.vb: UsbInterface(UsbDevice, Byte, Nullable(Of UInt16), Nullable(Of UInt16), ILogger, Int32)
+  fullName: Device.Net.LibUsb.UsbInterface.UsbInterface(LibUsbDotNet.UsbDevice, System.Byte, System.Nullable<System.UInt16>, System.Nullable<System.UInt16>, Microsoft.Extensions.Logging.ILogger, System.Int32)
+  fullName.vb: Device.Net.LibUsb.UsbInterface.UsbInterface(LibUsbDotNet.UsbDevice, System.Byte, System.Nullable(Of System.UInt16), System.Nullable(Of System.UInt16), Microsoft.Extensions.Logging.ILogger, System.Int32)
+  nameWithType: UsbInterface.UsbInterface(UsbDevice, Byte, Nullable<UInt16>, Nullable<UInt16>, ILogger, Int32)
+  nameWithType.vb: UsbInterface.UsbInterface(UsbDevice, Byte, Nullable(Of UInt16), Nullable(Of UInt16), ILogger, Int32)
+- uid: Device.Net.LibUsb.UsbInterface.#ctor*
+  name: UsbInterface
+  href: api/Device.Net.LibUsb.UsbInterface.html#Device_Net_LibUsb_UsbInterface__ctor_
+  commentId: Overload:Device.Net.LibUsb.UsbInterface.#ctor
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.UsbInterface.UsbInterface
+  nameWithType: UsbInterface.UsbInterface
+- uid: Device.Net.LibUsb.UsbInterface.Dispose
+  name: Dispose()
+  href: api/Device.Net.LibUsb.UsbInterface.html#Device_Net_LibUsb_UsbInterface_Dispose
+  commentId: M:Device.Net.LibUsb.UsbInterface.Dispose
+  fullName: Device.Net.LibUsb.UsbInterface.Dispose()
+  nameWithType: UsbInterface.Dispose()
+- uid: Device.Net.LibUsb.UsbInterface.Dispose*
+  name: Dispose
+  href: api/Device.Net.LibUsb.UsbInterface.html#Device_Net_LibUsb_UsbInterface_Dispose_
+  commentId: Overload:Device.Net.LibUsb.UsbInterface.Dispose
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.UsbInterface.Dispose
+  nameWithType: UsbInterface.Dispose
+- uid: Device.Net.LibUsb.UsbInterface.InterfaceNumber
+  name: InterfaceNumber
+  href: api/Device.Net.LibUsb.UsbInterface.html#Device_Net_LibUsb_UsbInterface_InterfaceNumber
+  commentId: P:Device.Net.LibUsb.UsbInterface.InterfaceNumber
+  fullName: Device.Net.LibUsb.UsbInterface.InterfaceNumber
+  nameWithType: UsbInterface.InterfaceNumber
+- uid: Device.Net.LibUsb.UsbInterface.InterfaceNumber*
+  name: InterfaceNumber
+  href: api/Device.Net.LibUsb.UsbInterface.html#Device_Net_LibUsb_UsbInterface_InterfaceNumber_
+  commentId: Overload:Device.Net.LibUsb.UsbInterface.InterfaceNumber
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.UsbInterface.InterfaceNumber
+  nameWithType: UsbInterface.InterfaceNumber
+- uid: Device.Net.LibUsb.UsbInterface.PerformControlTransferAsync(Usb.Net.SetupPacket,System.Byte[],System.Threading.CancellationToken)
+  name: PerformControlTransferAsync(SetupPacket, Byte[], CancellationToken)
+  href: api/Device.Net.LibUsb.UsbInterface.html#Device_Net_LibUsb_UsbInterface_PerformControlTransferAsync_Usb_Net_SetupPacket_System_Byte___System_Threading_CancellationToken_
+  commentId: M:Device.Net.LibUsb.UsbInterface.PerformControlTransferAsync(Usb.Net.SetupPacket,System.Byte[],System.Threading.CancellationToken)
+  name.vb: PerformControlTransferAsync(SetupPacket, Byte(), CancellationToken)
+  fullName: Device.Net.LibUsb.UsbInterface.PerformControlTransferAsync(Usb.Net.SetupPacket, System.Byte[], System.Threading.CancellationToken)
+  fullName.vb: Device.Net.LibUsb.UsbInterface.PerformControlTransferAsync(Usb.Net.SetupPacket, System.Byte(), System.Threading.CancellationToken)
+  nameWithType: UsbInterface.PerformControlTransferAsync(SetupPacket, Byte[], CancellationToken)
+  nameWithType.vb: UsbInterface.PerformControlTransferAsync(SetupPacket, Byte(), CancellationToken)
+- uid: Device.Net.LibUsb.UsbInterface.PerformControlTransferAsync*
+  name: PerformControlTransferAsync
+  href: api/Device.Net.LibUsb.UsbInterface.html#Device_Net_LibUsb_UsbInterface_PerformControlTransferAsync_
+  commentId: Overload:Device.Net.LibUsb.UsbInterface.PerformControlTransferAsync
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.UsbInterface.PerformControlTransferAsync
+  nameWithType: UsbInterface.PerformControlTransferAsync
+- uid: Device.Net.LibUsb.UsbInterface.ReadAsync(System.UInt32,System.Threading.CancellationToken)
+  name: ReadAsync(UInt32, CancellationToken)
+  href: api/Device.Net.LibUsb.UsbInterface.html#Device_Net_LibUsb_UsbInterface_ReadAsync_System_UInt32_System_Threading_CancellationToken_
+  commentId: M:Device.Net.LibUsb.UsbInterface.ReadAsync(System.UInt32,System.Threading.CancellationToken)
+  fullName: Device.Net.LibUsb.UsbInterface.ReadAsync(System.UInt32, System.Threading.CancellationToken)
+  nameWithType: UsbInterface.ReadAsync(UInt32, CancellationToken)
+- uid: Device.Net.LibUsb.UsbInterface.ReadAsync*
+  name: ReadAsync
+  href: api/Device.Net.LibUsb.UsbInterface.html#Device_Net_LibUsb_UsbInterface_ReadAsync_
+  commentId: Overload:Device.Net.LibUsb.UsbInterface.ReadAsync
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.UsbInterface.ReadAsync
+  nameWithType: UsbInterface.ReadAsync
+- uid: Device.Net.LibUsb.UsbInterface.Timeout
+  name: Timeout
+  href: api/Device.Net.LibUsb.UsbInterface.html#Device_Net_LibUsb_UsbInterface_Timeout
+  commentId: P:Device.Net.LibUsb.UsbInterface.Timeout
+  fullName: Device.Net.LibUsb.UsbInterface.Timeout
+  nameWithType: UsbInterface.Timeout
+- uid: Device.Net.LibUsb.UsbInterface.Timeout*
+  name: Timeout
+  href: api/Device.Net.LibUsb.UsbInterface.html#Device_Net_LibUsb_UsbInterface_Timeout_
+  commentId: Overload:Device.Net.LibUsb.UsbInterface.Timeout
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.UsbInterface.Timeout
+  nameWithType: UsbInterface.Timeout
+- uid: Device.Net.LibUsb.UsbInterface.WriteAsync(System.Byte[],System.Threading.CancellationToken)
+  name: WriteAsync(Byte[], CancellationToken)
+  href: api/Device.Net.LibUsb.UsbInterface.html#Device_Net_LibUsb_UsbInterface_WriteAsync_System_Byte___System_Threading_CancellationToken_
+  commentId: M:Device.Net.LibUsb.UsbInterface.WriteAsync(System.Byte[],System.Threading.CancellationToken)
+  name.vb: WriteAsync(Byte(), CancellationToken)
+  fullName: Device.Net.LibUsb.UsbInterface.WriteAsync(System.Byte[], System.Threading.CancellationToken)
+  fullName.vb: Device.Net.LibUsb.UsbInterface.WriteAsync(System.Byte(), System.Threading.CancellationToken)
+  nameWithType: UsbInterface.WriteAsync(Byte[], CancellationToken)
+  nameWithType.vb: UsbInterface.WriteAsync(Byte(), CancellationToken)
+- uid: Device.Net.LibUsb.UsbInterface.WriteAsync*
+  name: WriteAsync
+  href: api/Device.Net.LibUsb.UsbInterface.html#Device_Net_LibUsb_UsbInterface_WriteAsync_
+  commentId: Overload:Device.Net.LibUsb.UsbInterface.WriteAsync
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.UsbInterface.WriteAsync
+  nameWithType: UsbInterface.WriteAsync
+- uid: Device.Net.LibUsb.WriteEndpoint
+  name: WriteEndpoint
+  href: api/Device.Net.LibUsb.WriteEndpoint.html
+  commentId: T:Device.Net.LibUsb.WriteEndpoint
+  fullName: Device.Net.LibUsb.WriteEndpoint
+  nameWithType: WriteEndpoint
+- uid: Device.Net.LibUsb.WriteEndpoint.#ctor(LibUsbDotNet.UsbEndpointWriter,System.Nullable{System.UInt16})
+  name: WriteEndpoint(UsbEndpointWriter, Nullable<UInt16>)
+  href: api/Device.Net.LibUsb.WriteEndpoint.html#Device_Net_LibUsb_WriteEndpoint__ctor_LibUsbDotNet_UsbEndpointWriter_System_Nullable_System_UInt16__
+  commentId: M:Device.Net.LibUsb.WriteEndpoint.#ctor(LibUsbDotNet.UsbEndpointWriter,System.Nullable{System.UInt16})
+  name.vb: WriteEndpoint(UsbEndpointWriter, Nullable(Of UInt16))
+  fullName: Device.Net.LibUsb.WriteEndpoint.WriteEndpoint(LibUsbDotNet.UsbEndpointWriter, System.Nullable<System.UInt16>)
+  fullName.vb: Device.Net.LibUsb.WriteEndpoint.WriteEndpoint(LibUsbDotNet.UsbEndpointWriter, System.Nullable(Of System.UInt16))
+  nameWithType: WriteEndpoint.WriteEndpoint(UsbEndpointWriter, Nullable<UInt16>)
+  nameWithType.vb: WriteEndpoint.WriteEndpoint(UsbEndpointWriter, Nullable(Of UInt16))
+- uid: Device.Net.LibUsb.WriteEndpoint.#ctor*
+  name: WriteEndpoint
+  href: api/Device.Net.LibUsb.WriteEndpoint.html#Device_Net_LibUsb_WriteEndpoint__ctor_
+  commentId: Overload:Device.Net.LibUsb.WriteEndpoint.#ctor
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.WriteEndpoint.WriteEndpoint
+  nameWithType: WriteEndpoint.WriteEndpoint
+- uid: Device.Net.LibUsb.WriteEndpoint.IsInterrupt
+  name: IsInterrupt
+  href: api/Device.Net.LibUsb.WriteEndpoint.html#Device_Net_LibUsb_WriteEndpoint_IsInterrupt
+  commentId: P:Device.Net.LibUsb.WriteEndpoint.IsInterrupt
+  fullName: Device.Net.LibUsb.WriteEndpoint.IsInterrupt
+  nameWithType: WriteEndpoint.IsInterrupt
+- uid: Device.Net.LibUsb.WriteEndpoint.IsInterrupt*
+  name: IsInterrupt
+  href: api/Device.Net.LibUsb.WriteEndpoint.html#Device_Net_LibUsb_WriteEndpoint_IsInterrupt_
+  commentId: Overload:Device.Net.LibUsb.WriteEndpoint.IsInterrupt
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.WriteEndpoint.IsInterrupt
+  nameWithType: WriteEndpoint.IsInterrupt
+- uid: Device.Net.LibUsb.WriteEndpoint.IsRead
+  name: IsRead
+  href: api/Device.Net.LibUsb.WriteEndpoint.html#Device_Net_LibUsb_WriteEndpoint_IsRead
+  commentId: P:Device.Net.LibUsb.WriteEndpoint.IsRead
+  fullName: Device.Net.LibUsb.WriteEndpoint.IsRead
+  nameWithType: WriteEndpoint.IsRead
+- uid: Device.Net.LibUsb.WriteEndpoint.IsRead*
+  name: IsRead
+  href: api/Device.Net.LibUsb.WriteEndpoint.html#Device_Net_LibUsb_WriteEndpoint_IsRead_
+  commentId: Overload:Device.Net.LibUsb.WriteEndpoint.IsRead
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.WriteEndpoint.IsRead
+  nameWithType: WriteEndpoint.IsRead
+- uid: Device.Net.LibUsb.WriteEndpoint.IsWrite
+  name: IsWrite
+  href: api/Device.Net.LibUsb.WriteEndpoint.html#Device_Net_LibUsb_WriteEndpoint_IsWrite
+  commentId: P:Device.Net.LibUsb.WriteEndpoint.IsWrite
+  fullName: Device.Net.LibUsb.WriteEndpoint.IsWrite
+  nameWithType: WriteEndpoint.IsWrite
+- uid: Device.Net.LibUsb.WriteEndpoint.IsWrite*
+  name: IsWrite
+  href: api/Device.Net.LibUsb.WriteEndpoint.html#Device_Net_LibUsb_WriteEndpoint_IsWrite_
+  commentId: Overload:Device.Net.LibUsb.WriteEndpoint.IsWrite
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.WriteEndpoint.IsWrite
+  nameWithType: WriteEndpoint.IsWrite
+- uid: Device.Net.LibUsb.WriteEndpoint.MaxPacketSize
+  name: MaxPacketSize
+  href: api/Device.Net.LibUsb.WriteEndpoint.html#Device_Net_LibUsb_WriteEndpoint_MaxPacketSize
+  commentId: P:Device.Net.LibUsb.WriteEndpoint.MaxPacketSize
+  fullName: Device.Net.LibUsb.WriteEndpoint.MaxPacketSize
+  nameWithType: WriteEndpoint.MaxPacketSize
+- uid: Device.Net.LibUsb.WriteEndpoint.MaxPacketSize*
+  name: MaxPacketSize
+  href: api/Device.Net.LibUsb.WriteEndpoint.html#Device_Net_LibUsb_WriteEndpoint_MaxPacketSize_
+  commentId: Overload:Device.Net.LibUsb.WriteEndpoint.MaxPacketSize
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.WriteEndpoint.MaxPacketSize
+  nameWithType: WriteEndpoint.MaxPacketSize
+- uid: Device.Net.LibUsb.WriteEndpoint.PipeId
+  name: PipeId
+  href: api/Device.Net.LibUsb.WriteEndpoint.html#Device_Net_LibUsb_WriteEndpoint_PipeId
+  commentId: P:Device.Net.LibUsb.WriteEndpoint.PipeId
+  fullName: Device.Net.LibUsb.WriteEndpoint.PipeId
+  nameWithType: WriteEndpoint.PipeId
+- uid: Device.Net.LibUsb.WriteEndpoint.PipeId*
+  name: PipeId
+  href: api/Device.Net.LibUsb.WriteEndpoint.html#Device_Net_LibUsb_WriteEndpoint_PipeId_
+  commentId: Overload:Device.Net.LibUsb.WriteEndpoint.PipeId
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.WriteEndpoint.PipeId
+  nameWithType: WriteEndpoint.PipeId
+- uid: Device.Net.LibUsb.WriteEndpoint.UsbEndpointWriter
+  name: UsbEndpointWriter
+  href: api/Device.Net.LibUsb.WriteEndpoint.html#Device_Net_LibUsb_WriteEndpoint_UsbEndpointWriter
+  commentId: P:Device.Net.LibUsb.WriteEndpoint.UsbEndpointWriter
+  fullName: Device.Net.LibUsb.WriteEndpoint.UsbEndpointWriter
+  nameWithType: WriteEndpoint.UsbEndpointWriter
+- uid: Device.Net.LibUsb.WriteEndpoint.UsbEndpointWriter*
+  name: UsbEndpointWriter
+  href: api/Device.Net.LibUsb.WriteEndpoint.html#Device_Net_LibUsb_WriteEndpoint_UsbEndpointWriter_
+  commentId: Overload:Device.Net.LibUsb.WriteEndpoint.UsbEndpointWriter
+  isSpec: "True"
+  fullName: Device.Net.LibUsb.WriteEndpoint.UsbEndpointWriter
+  nameWithType: WriteEndpoint.UsbEndpointWriter
 - uid: Device.Net.LoggingExtensions
   name: LoggingExtensions
   href: api/Device.Net.LoggingExtensions.html

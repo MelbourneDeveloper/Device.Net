@@ -1,0 +1,761 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class LibUsbInterfaceManager
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class LibUsbInterfaceManager
+   ">
+    <meta name="generator" content="docfx 2.56.5.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager">
+  
+  
+  <h1 id="Device_Net_LibUsb_LibUsbInterfaceManager" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager" class="text-break">Class LibUsbInterfaceManager
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Usb.Net.UsbInterfaceManager.html">UsbInterfaceManager</a></div>
+    <div class="level2"><span class="xref">LibUsbInterfaceManager</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Usb.Net.IUsbInterfaceManager.html">IUsbInterfaceManager</a></div>
+    <div><a class="xref" href="Device.Net.IDeviceHandler.html">IDeviceHandler</a></div>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Usb.Net.UsbInterfaceManager.html#Usb_Net_UsbInterfaceManager_Logger">UsbInterfaceManager.Logger</a>
+    </div>
+    <div>
+      <a class="xref" href="Usb.Net.UsbInterfaceManager.html#Usb_Net_UsbInterfaceManager_LoggerFactory">UsbInterfaceManager.LoggerFactory</a>
+    </div>
+    <div>
+      <a class="xref" href="Usb.Net.UsbInterfaceManager.html#Usb_Net_UsbInterfaceManager_RegisterDefaultInterfaces">UsbInterfaceManager.RegisterDefaultInterfaces()</a>
+    </div>
+    <div>
+      <a class="xref" href="Usb.Net.UsbInterfaceManager.html#Usb_Net_UsbInterfaceManager_UsbInterfaces">UsbInterfaceManager.UsbInterfaces</a>
+    </div>
+    <div>
+      <a class="xref" href="Usb.Net.UsbInterfaceManager.html#Usb_Net_UsbInterfaceManager_ReadUsbInterface">UsbInterfaceManager.ReadUsbInterface</a>
+    </div>
+    <div>
+      <a class="xref" href="Usb.Net.UsbInterfaceManager.html#Usb_Net_UsbInterfaceManager_WriteUsbInterface">UsbInterfaceManager.WriteUsbInterface</a>
+    </div>
+    <div>
+      <a class="xref" href="Usb.Net.UsbInterfaceManager.html#Usb_Net_UsbInterfaceManager_ReadInterruptUsbInterface">UsbInterfaceManager.ReadInterruptUsbInterface</a>
+    </div>
+    <div>
+      <a class="xref" href="Usb.Net.UsbInterfaceManager.html#Usb_Net_UsbInterfaceManager_WriteInterruptUsbInterface">UsbInterfaceManager.WriteInterruptUsbInterface</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Device.Net.LibUsb.html">Device.Net.LibUsb</a></h6>
+  <h6><strong>Assembly</strong>: Device.Net.LibUsb.dll</h6>
+  <h5 id="Device_Net_LibUsb_LibUsbInterfaceManager_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class LibUsbInterfaceManager : UsbInterfaceManager, IUsbInterfaceManager, IDeviceHandler, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager__ctor_LibUsbDotNet_UsbDevice_System_Int32_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_UInt16__System_Nullable_System_UInt16__.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.%23ctor(LibUsbDotNet.UsbDevice%2CSystem.Int32%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Nullable%7BSystem.UInt16%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L34">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager__ctor_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.#ctor*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager__ctor_LibUsbDotNet_UsbDevice_System_Int32_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_UInt16__System_Nullable_System_UInt16__" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.#ctor(LibUsbDotNet.UsbDevice,System.Int32,Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.UInt16},System.Nullable{System.UInt16})">LibUsbInterfaceManager(UsbDevice, Int32, ILoggerFactory, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public LibUsbInterfaceManager(UsbDevice usbDevice, int timeout, ILoggerFactory loggerFactory, ushort? writeBufferSize, ushort? readBufferSize)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">LibUsbDotNet.UsbDevice</span></td>
+        <td><span class="parametername">usbDevice</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">timeout</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Microsoft.Extensions.Logging.ILoggerFactory</span></td>
+        <td><span class="parametername">loggerFactory</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.UInt16</span>&gt;</td>
+        <td><span class="parametername">writeBufferSize</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.UInt16</span>&gt;</td>
+        <td><span class="parametername">readBufferSize</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager_IsInitialized.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.IsInitialized%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L28">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager_IsInitialized_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.IsInitialized*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager_IsInitialized" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.IsInitialized">IsInitialized</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsInitialized { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager_ProductId.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.ProductId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L26">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager_ProductId_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.ProductId*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager_ProductId" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.ProductId">ProductId</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int ProductId { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager_ReadBufferSize.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.ReadBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L30">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager_ReadBufferSize_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.ReadBufferSize*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager_ReadBufferSize" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.ReadBufferSize">ReadBufferSize</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ushort ReadBufferSize { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager_Timeout.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.Timeout%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L27">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager_Timeout_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.Timeout*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager_Timeout" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.Timeout">Timeout</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Timeout { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager_UsbDevice.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.UsbDevice%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L24">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager_UsbDevice_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.UsbDevice*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager_UsbDevice" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.UsbDevice">UsbDevice</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UsbDevice UsbDevice { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">LibUsbDotNet.UsbDevice</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager_VendorId.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.VendorId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L25">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager_VendorId_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.VendorId*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager_VendorId" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.VendorId">VendorId</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int VendorId { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager_WriteBufferSize.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.WriteBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L29">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager_WriteBufferSize_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.WriteBufferSize*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager_WriteBufferSize" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.WriteBufferSize">WriteBufferSize</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ushort WriteBufferSize { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager_Close.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.Close%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L140">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager_Close_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.Close*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager_Close" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.Close">Close()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Close()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager_Dispose.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L142">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager_Dispose_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.Dispose*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager_Dispose" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Dispose()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Usb.Net.UsbInterfaceManager.html#Usb_Net_UsbInterfaceManager_Dispose">UsbInterfaceManager.Dispose()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager_GetConnectedDeviceDefinitionAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.GetConnectedDeviceDefinitionAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L197">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager_GetConnectedDeviceDefinitionAsync_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.GetConnectedDeviceDefinitionAsync*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager_GetConnectedDeviceDefinitionAsync_System_Threading_CancellationToken_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.GetConnectedDeviceDefinitionAsync(System.Threading.CancellationToken)">GetConnectedDeviceDefinitionAsync(CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;ConnectedDeviceDefinition&gt; GetConnectedDeviceDefinitionAsync(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.ConnectedDeviceDefinition.html">ConnectedDeviceDefinition</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager_GetProductId_LibUsbDotNet_UsbDevice_.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.GetProductId(LibUsbDotNet.UsbDevice)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L192">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager_GetProductId_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.GetProductId*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager_GetProductId_LibUsbDotNet_UsbDevice_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.GetProductId(LibUsbDotNet.UsbDevice)">GetProductId(UsbDevice)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int GetProductId(UsbDevice usbDevice)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">LibUsbDotNet.UsbDevice</span></td>
+        <td><span class="parametername">usbDevice</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager_GetVendorId_LibUsbDotNet_UsbDevice_.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.GetVendorId(LibUsbDotNet.UsbDevice)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L187">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager_GetVendorId_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.GetVendorId*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager_GetVendorId_LibUsbDotNet_UsbDevice_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.GetVendorId(LibUsbDotNet.UsbDevice)">GetVendorId(UsbDevice)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int GetVendorId(UsbDevice usbDevice)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">LibUsbDotNet.UsbDevice</span></td>
+        <td><span class="parametername">usbDevice</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager_InitializeAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.InitializeAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L50">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager_InitializeAsync_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.InitializeAsync*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager_InitializeAsync_System_Threading_CancellationToken_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.InitializeAsync(System.Threading.CancellationToken)">InitializeAsync(CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task InitializeAsync(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager_ReadAsync.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.ReadAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L156">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager_ReadAsync_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.ReadAsync*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager_ReadAsync" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.ReadAsync">ReadAsync()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;TransferResult&gt; ReadAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager_WriteAsync_System_Byte___.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager.WriteAsync(System.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L170">View Source</a>
+  </span>
+  <a id="Device_Net_LibUsb_LibUsbInterfaceManager_WriteAsync_" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.WriteAsync*"></a>
+  <h4 id="Device_Net_LibUsb_LibUsbInterfaceManager_WriteAsync_System_Byte___" data-uid="Device.Net.LibUsb.LibUsbInterfaceManager.WriteAsync(System.Byte[])">WriteAsync(Byte[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task WriteAsync(byte[] data)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">data</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Usb.Net.IUsbInterfaceManager.html">IUsbInterfaceManager</a>
+  </div>
+  <div>
+      <a class="xref" href="Device.Net.IDeviceHandler.html">IDeviceHandler</a>
+  </div>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbInterfaceManager.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbInterfaceManager%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbInterfaceManager.cs/#L14" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

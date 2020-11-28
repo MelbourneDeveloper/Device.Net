@@ -6,7 +6,8 @@
           "files": [
             "src/Device.Net/Device.Net.csproj",
             "src/Usb.Net/Usb.Net.csproj",
-            "src/Hid.Net/Hid.Net.csproj"    
+            "src/Hid.Net/Hid.Net.csproj",
+            "src/Device.Net.LibUsb/Device.Net.LibUsb.csproj"     
           ],
           "src": "../"
         }
