@@ -1,0 +1,510 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface IUsbInterface
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface IUsbInterface
+   ">
+    <meta name="generator" content="docfx 2.56.5.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Usb.Net.IUsbInterface">
+  
+  
+  <h1 id="Usb_Net_IUsbInterface" data-uid="Usb.Net.IUsbInterface" class="text-break">Interface IUsbInterface
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Usb.Net.html">Usb.Net</a></h6>
+  <h6><strong>Assembly</strong>: Usb.Net.dll</h6>
+  <h5 id="Usb_Net_IUsbInterface_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IUsbInterface : IDisposable</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  
+  
+  <a id="Usb_Net_IUsbInterface_InterfaceNumber_" data-uid="Usb.Net.IUsbInterface.InterfaceNumber*"></a>
+  <h4 id="Usb_Net_IUsbInterface_InterfaceNumber" data-uid="Usb.Net.IUsbInterface.InterfaceNumber">InterfaceNumber</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">byte InterfaceNumber { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Usb_Net_IUsbInterface_InterruptReadEndpoint_" data-uid="Usb.Net.IUsbInterface.InterruptReadEndpoint*"></a>
+  <h4 id="Usb_Net_IUsbInterface_InterruptReadEndpoint" data-uid="Usb.Net.IUsbInterface.InterruptReadEndpoint">InterruptReadEndpoint</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IUsbInterfaceEndpoint InterruptReadEndpoint { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Usb.Net.IUsbInterfaceEndpoint.html">IUsbInterfaceEndpoint</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Usb_Net_IUsbInterface_InterruptWriteEndpoint_" data-uid="Usb.Net.IUsbInterface.InterruptWriteEndpoint*"></a>
+  <h4 id="Usb_Net_IUsbInterface_InterruptWriteEndpoint" data-uid="Usb.Net.IUsbInterface.InterruptWriteEndpoint">InterruptWriteEndpoint</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IUsbInterfaceEndpoint InterruptWriteEndpoint { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Usb.Net.IUsbInterfaceEndpoint.html">IUsbInterfaceEndpoint</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Usb_Net_IUsbInterface_ReadBufferSize_" data-uid="Usb.Net.IUsbInterface.ReadBufferSize*"></a>
+  <h4 id="Usb_Net_IUsbInterface_ReadBufferSize" data-uid="Usb.Net.IUsbInterface.ReadBufferSize">ReadBufferSize</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ushort ReadBufferSize { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Usb_Net_IUsbInterface_ReadEndpoint_" data-uid="Usb.Net.IUsbInterface.ReadEndpoint*"></a>
+  <h4 id="Usb_Net_IUsbInterface_ReadEndpoint" data-uid="Usb.Net.IUsbInterface.ReadEndpoint">ReadEndpoint</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IUsbInterfaceEndpoint ReadEndpoint { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Usb.Net.IUsbInterfaceEndpoint.html">IUsbInterfaceEndpoint</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Usb_Net_IUsbInterface_UsbInterfaceEndpoints_" data-uid="Usb.Net.IUsbInterface.UsbInterfaceEndpoints*"></a>
+  <h4 id="Usb_Net_IUsbInterface_UsbInterfaceEndpoints" data-uid="Usb.Net.IUsbInterface.UsbInterfaceEndpoints">UsbInterfaceEndpoints</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IList&lt;IUsbInterfaceEndpoint&gt; UsbInterfaceEndpoints { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Usb.Net.IUsbInterfaceEndpoint.html">IUsbInterfaceEndpoint</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Usb_Net_IUsbInterface_WriteBufferSize_" data-uid="Usb.Net.IUsbInterface.WriteBufferSize*"></a>
+  <h4 id="Usb_Net_IUsbInterface_WriteBufferSize" data-uid="Usb.Net.IUsbInterface.WriteBufferSize">WriteBufferSize</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ushort WriteBufferSize { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Usb_Net_IUsbInterface_WriteEndpoint_" data-uid="Usb.Net.IUsbInterface.WriteEndpoint*"></a>
+  <h4 id="Usb_Net_IUsbInterface_WriteEndpoint" data-uid="Usb.Net.IUsbInterface.WriteEndpoint">WriteEndpoint</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IUsbInterfaceEndpoint WriteEndpoint { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Usb.Net.IUsbInterfaceEndpoint.html">IUsbInterfaceEndpoint</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  
+  
+  <a id="Usb_Net_IUsbInterface_ClaimInterface_" data-uid="Usb.Net.IUsbInterface.ClaimInterface*"></a>
+  <h4 id="Usb_Net_IUsbInterface_ClaimInterface" data-uid="Usb.Net.IUsbInterface.ClaimInterface">ClaimInterface()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task ClaimInterface()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Usb_Net_IUsbInterface_PerformControlTransferAsync_" data-uid="Usb.Net.IUsbInterface.PerformControlTransferAsync*"></a>
+  <h4 id="Usb_Net_IUsbInterface_PerformControlTransferAsync_Usb_Net_SetupPacket_System_Byte___System_Threading_CancellationToken_" data-uid="Usb.Net.IUsbInterface.PerformControlTransferAsync(Usb.Net.SetupPacket,System.Byte[],System.Threading.CancellationToken)">PerformControlTransferAsync(SetupPacket, Byte[], CancellationToken)</h4>
+  <div class="markdown level1 summary"><p>Performs a USB Control Transfer
+<a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-control-transfer">https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-control-transfer</a>
+<a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/how-to-send-a-usb-control-transfer--uwp-app-">https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/how-to-send-a-usb-control-transfer--uwp-app-</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TransferResult&gt; PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Usb.Net.SetupPacket.html">SetupPacket</a></td>
+        <td><span class="parametername">setupPacket</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">buffer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Usb_Net_IUsbInterface_ReadAsync_" data-uid="Usb.Net.IUsbInterface.ReadAsync*"></a>
+  <h4 id="Usb_Net_IUsbInterface_ReadAsync_System_UInt32_System_Threading_CancellationToken_" data-uid="Usb.Net.IUsbInterface.ReadAsync(System.UInt32,System.Threading.CancellationToken)">ReadAsync(UInt32, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TransferResult&gt; ReadAsync(uint bufferLength, CancellationToken cancellationToken = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td><span class="parametername">bufferLength</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Usb_Net_IUsbInterface_RegisterDefaultEndpoints_" data-uid="Usb.Net.IUsbInterface.RegisterDefaultEndpoints*"></a>
+  <h4 id="Usb_Net_IUsbInterface_RegisterDefaultEndpoints" data-uid="Usb.Net.IUsbInterface.RegisterDefaultEndpoints">RegisterDefaultEndpoints()</h4>
+  <div class="markdown level1 summary"><p>This is for internal use and should need to be called. This will probably be removed in future versions.
+TODO</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void RegisterDefaultEndpoints()</code></pre>
+  </div>
+  
+  
+  <a id="Usb_Net_IUsbInterface_WriteAsync_" data-uid="Usb.Net.IUsbInterface.WriteAsync*"></a>
+  <h4 id="Usb_Net_IUsbInterface_WriteAsync_System_Byte___System_Threading_CancellationToken_" data-uid="Usb.Net.IUsbInterface.WriteAsync(System.Byte[],System.Threading.CancellationToken)">WriteAsync(Byte[], CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;uint&gt; WriteAsync(byte[] data, CancellationToken cancellationToken = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">data</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.UInt32</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

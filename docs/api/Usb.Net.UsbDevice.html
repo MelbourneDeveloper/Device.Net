@@ -1,0 +1,618 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class UsbDevice
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class UsbDevice
+   ">
+    <meta name="generator" content="docfx 2.56.5.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Usb.Net.UsbDevice">
+  
+  
+  <h1 id="Usb_Net_UsbDevice" data-uid="Usb.Net.UsbDevice" class="text-break">Class UsbDevice
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Device.Net.DeviceBase.html">DeviceBase</a></div>
+    <div class="level2"><span class="xref">UsbDevice</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Usb.Net.IUsbDevice.html">IUsbDevice</a></div>
+    <div><a class="xref" href="Device.Net.IDevice.html">IDevice</a></div>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_Flush_System_Threading_CancellationToken_">DeviceBase.Flush(CancellationToken)</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_WriteAndReadAsync_System_Byte___System_Threading_CancellationToken_">DeviceBase.WriteAndReadAsync(Byte[], CancellationToken)</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_RemoveFirstByte_System_Byte___">DeviceBase.RemoveFirstByte(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_GetDeviceDefinitionFromWindowsDeviceId_System_String_Device_Net_DeviceType_Microsoft_Extensions_Logging_ILogger_System_Nullable_System_Guid__">DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(String, DeviceType, ILogger, Nullable&lt;Guid&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_Logger">DeviceBase.Logger</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_LoggerFactory">DeviceBase.LoggerFactory</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_ConnectedDeviceDefinition">DeviceBase.ConnectedDeviceDefinition</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_DeviceId">DeviceBase.DeviceId</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Usb.Net.html">Usb.Net</a></h6>
+  <h6><strong>Assembly</strong>: Usb.Net.dll</h6>
+  <h5 id="Usb_Net_UsbDevice_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class UsbDevice : DeviceBase, IUsbDevice, IDevice, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  
+  
+  <a id="Usb_Net_UsbDevice__ctor_" data-uid="Usb.Net.UsbDevice.#ctor*"></a>
+  <h4 id="Usb_Net_UsbDevice__ctor_System_String_Usb_Net_IUsbInterfaceManager_" data-uid="Usb.Net.UsbDevice.#ctor(System.String,Usb.Net.IUsbInterfaceManager)">UsbDevice(String, IUsbInterfaceManager)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UsbDevice(string deviceId, IUsbInterfaceManager usbInterfaceManager)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">deviceId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Usb.Net.IUsbInterfaceManager.html">IUsbInterfaceManager</a></td>
+        <td><span class="parametername">usbInterfaceManager</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Usb_Net_UsbDevice__ctor_" data-uid="Usb.Net.UsbDevice.#ctor*"></a>
+  <h4 id="Usb_Net_UsbDevice__ctor_System_String_Usb_Net_IUsbInterfaceManager_Microsoft_Extensions_Logging_ILoggerFactory_" data-uid="Usb.Net.UsbDevice.#ctor(System.String,Usb.Net.IUsbInterfaceManager,Microsoft.Extensions.Logging.ILoggerFactory)">UsbDevice(String, IUsbInterfaceManager, ILoggerFactory)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UsbDevice(string deviceId, IUsbInterfaceManager usbInterfaceManager, ILoggerFactory loggerFactory = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">deviceId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Usb.Net.IUsbInterfaceManager.html">IUsbInterfaceManager</a></td>
+        <td><span class="parametername">usbInterfaceManager</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Microsoft.Extensions.Logging.ILoggerFactory</span></td>
+        <td><span class="parametername">loggerFactory</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  
+  
+  <a id="Usb_Net_UsbDevice_IsInitialized_" data-uid="Usb.Net.UsbDevice.IsInitialized*"></a>
+  <h4 id="Usb_Net_UsbDevice_IsInitialized" data-uid="Usb.Net.UsbDevice.IsInitialized">IsInitialized</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool IsInitialized { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_IsInitialized">DeviceBase.IsInitialized</a></div>
+  
+  
+  <a id="Usb_Net_UsbDevice_ReadBufferSize_" data-uid="Usb.Net.UsbDevice.ReadBufferSize*"></a>
+  <h4 id="Usb_Net_UsbDevice_ReadBufferSize" data-uid="Usb.Net.UsbDevice.ReadBufferSize">ReadBufferSize</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override ushort ReadBufferSize { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_ReadBufferSize">DeviceBase.ReadBufferSize</a></div>
+  
+  
+  <a id="Usb_Net_UsbDevice_UsbInterfaceManager_" data-uid="Usb.Net.UsbDevice.UsbInterfaceManager*"></a>
+  <h4 id="Usb_Net_UsbDevice_UsbInterfaceManager" data-uid="Usb.Net.UsbDevice.UsbInterfaceManager">UsbInterfaceManager</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IUsbInterfaceManager UsbInterfaceManager { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Usb.Net.IUsbInterfaceManager.html">IUsbInterfaceManager</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Usb_Net_UsbDevice_WriteBufferSize_" data-uid="Usb.Net.UsbDevice.WriteBufferSize*"></a>
+  <h4 id="Usb_Net_UsbDevice_WriteBufferSize" data-uid="Usb.Net.UsbDevice.WriteBufferSize">WriteBufferSize</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override ushort WriteBufferSize { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_WriteBufferSize">DeviceBase.WriteBufferSize</a></div>
+  <h3 id="methods">Methods
+  </h3>
+  
+  
+  <a id="Usb_Net_UsbDevice_Close_" data-uid="Usb.Net.UsbDevice.Close*"></a>
+  <h4 id="Usb_Net_UsbDevice_Close" data-uid="Usb.Net.UsbDevice.Close">Close()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Close()</code></pre>
+  </div>
+  
+  
+  <a id="Usb_Net_UsbDevice_Dispose_" data-uid="Usb.Net.UsbDevice.Dispose*"></a>
+  <h4 id="Usb_Net_UsbDevice_Dispose" data-uid="Usb.Net.UsbDevice.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override sealed void Dispose()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_Dispose">DeviceBase.Dispose()</a></div>
+  
+  
+  <a id="Usb_Net_UsbDevice_Finalize_" data-uid="Usb.Net.UsbDevice.Finalize*"></a>
+  <h4 id="Usb_Net_UsbDevice_Finalize" data-uid="Usb.Net.UsbDevice.Finalize">Finalize()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Finalize()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_Finalize">DeviceBase.Finalize()</a></div>
+  
+  
+  <a id="Usb_Net_UsbDevice_InitializeAsync_" data-uid="Usb.Net.UsbDevice.InitializeAsync*"></a>
+  <h4 id="Usb_Net_UsbDevice_InitializeAsync_System_Threading_CancellationToken_" data-uid="Usb.Net.UsbDevice.InitializeAsync(System.Threading.CancellationToken)">InitializeAsync(CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task InitializeAsync(CancellationToken cancellationToken = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Usb_Net_UsbDevice_ReadAsync_" data-uid="Usb.Net.UsbDevice.ReadAsync*"></a>
+  <h4 id="Usb_Net_UsbDevice_ReadAsync_System_Threading_CancellationToken_" data-uid="Usb.Net.UsbDevice.ReadAsync(System.Threading.CancellationToken)">ReadAsync(CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task&lt;TransferResult&gt; ReadAsync(CancellationToken cancellationToken = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_ReadAsync_System_Threading_CancellationToken_">DeviceBase.ReadAsync(CancellationToken)</a></div>
+  
+  
+  <a id="Usb_Net_UsbDevice_WriteAsync_" data-uid="Usb.Net.UsbDevice.WriteAsync*"></a>
+  <h4 id="Usb_Net_UsbDevice_WriteAsync_System_Byte___System_Threading_CancellationToken_" data-uid="Usb.Net.UsbDevice.WriteAsync(System.Byte[],System.Threading.CancellationToken)">WriteAsync(Byte[], CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task&lt;uint&gt; WriteAsync(byte[] data, CancellationToken cancellationToken = null)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">data</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.UInt32</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_WriteAsync_System_Byte___System_Threading_CancellationToken_">DeviceBase.WriteAsync(Byte[], CancellationToken)</a></div>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  
+  
+  <a id="Usb_Net_UsbDevice_Device_Net_IDevice_get_ConnectedDeviceDefinition_" data-uid="Usb.Net.UsbDevice.Device#Net#IDevice#get_ConnectedDeviceDefinition*"></a>
+  <h4 id="Usb_Net_UsbDevice_Device_Net_IDevice_get_ConnectedDeviceDefinition" data-uid="Usb.Net.UsbDevice.Device#Net#IDevice#get_ConnectedDeviceDefinition">IDevice.get_ConnectedDeviceDefinition()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ConnectedDeviceDefinition IDevice.get_ConnectedDeviceDefinition()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Device.Net.ConnectedDeviceDefinition.html">ConnectedDeviceDefinition</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Usb_Net_UsbDevice_Device_Net_IDevice_get_DeviceId_" data-uid="Usb.Net.UsbDevice.Device#Net#IDevice#get_DeviceId*"></a>
+  <h4 id="Usb_Net_UsbDevice_Device_Net_IDevice_get_DeviceId" data-uid="Usb.Net.UsbDevice.Device#Net#IDevice#get_DeviceId">IDevice.get_DeviceId()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">string IDevice.get_DeviceId()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  
+  
+  <a id="Usb_Net_UsbDevice_Device_Net_IDevice_WriteAndReadAsync_" data-uid="Usb.Net.UsbDevice.Device#Net#IDevice#WriteAndReadAsync*"></a>
+  <h4 id="Usb_Net_UsbDevice_Device_Net_IDevice_WriteAndReadAsync_System_Byte___System_Threading_CancellationToken_" data-uid="Usb.Net.UsbDevice.Device#Net#IDevice#WriteAndReadAsync(System.Byte[],System.Threading.CancellationToken)">IDevice.WriteAndReadAsync(Byte[], CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task&lt;TransferResult&gt; IDevice.WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">writeBuffer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Usb.Net.IUsbDevice.html">IUsbDevice</a>
+  </div>
+  <div>
+      <a class="xref" href="Device.Net.IDevice.html">IDevice</a>
+  </div>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

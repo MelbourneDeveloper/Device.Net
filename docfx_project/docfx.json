@@ -5,12 +5,16 @@
         {
           "files": [
             "src/Device.Net/bin/Debug/netstandard2.0/Device.Net.dll",
+            "src/Device.Net.UWP/bin/Debug/Device.Net.UWP.dll",
             "src/Usb.Net/bin/Debug/netstandard2.0/Usb.Net.dll",
+            "src/Usb.Net.UWP/bin/Debug/Usb.Net.UWP.dll",            
             "src/Hid.Net/bin/Debug/netstandard2.0/Hid.Net.dll",
-            "src/Device.Net.LibUsb/bin/Debug/netstandard2.0/Device.Net.LibUsb.dll"
+            "src/Device.Net.LibUsb/bin/Debug/netstandard2.0/Device.Net.LibUsb.dll",
+            "src/Usb.Net.Android/bin/Debug/Usb.Net.Android.dll",
+            "src/Hid.Net.UWP/bin/Debug/Hid.Net.UWP.dll"
           ],
           "src": "../"
-        } 
+        }
       ],
       "dest": "api",
       "disableGitFeatures": false,
@@ -52,7 +56,7 @@
         ]
       }
     ],
-    "dest": "",
+    "dest": "_site",
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
