@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System.Reactive.Linq;
 using System.Collections.Generic;
 using System.Linq;
+using Device.Net.Windows;
 
 #if !LIBUSB
 using SerialPort.Net.Windows;
