@@ -5,9 +5,12 @@
         {
           "files": [
             "src/Device.Net/Device.Net.csproj",
+            "src/Device.Net.UWP/Device.Net.UWP.csproj",
             "src/Usb.Net/Usb.Net.csproj",
             "src/Usb.Net.Android/Usb.Net.Android.csproj",          
+            "src/Usb.Net.UWP/Usb.Net.UWP.csproj", 
             "src/Hid.Net/Hid.Net.csproj",
+            "src/Hid.Net.UWP/Hid.Net.UWP.csproj",
             "src/Device.Net.LibUsb/Device.Net.LibUsb.csproj"
           ],
           "src": "../"

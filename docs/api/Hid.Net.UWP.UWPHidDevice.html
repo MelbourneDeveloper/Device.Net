@@ -1,0 +1,853 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class UWPHidDevice
+   </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class UWPHidDevice
+   ">
+    <meta name="generator" content="docfx 2.56.5.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Hid.Net.UWP.UWPHidDevice">
+  
+  
+  <h1 id="Hid_Net_UWP_UWPHidDevice" data-uid="Hid.Net.UWP.UWPHidDevice" class="text-break">Class UWPHidDevice
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Device.Net.UWP.UWPDeviceBase.html">UWPDeviceBase</a></div>
+    <div class="level2"><a class="xref" href="Device.Net.UWP.UWPDeviceBase-1.html">UWPDeviceBase</a>&lt;<span class="xref">Windows.Devices.HumanInterfaceDevice.HidDevice</span>&gt;</div>
+    <div class="level3"><span class="xref">UWPHidDevice</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Device.Net.IDeviceHandler.html">IDeviceHandler</a></div>
+    <div><a class="xref" href="Hid.Net.IHidDevice.html">IHidDevice</a></div>
+    <div><a class="xref" href="Device.Net.IDevice.html">IDevice</a></div>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Device.Net.UWP.UWPDeviceBase-1.html#Device_Net_UWP_UWPDeviceBase_1_ConnectedDevice">UWPDeviceBase&lt;HidDevice&gt;.ConnectedDevice</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.UWP.UWPDeviceBase-1.html#Device_Net_UWP_UWPDeviceBase_1_ConnectedDeviceDefinition">UWPDeviceBase&lt;HidDevice&gt;.ConnectedDeviceDefinition</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.UWP.UWPDeviceBase-1.html#Device_Net_UWP_UWPDeviceBase_1_LoggerFactory">UWPDeviceBase&lt;HidDevice&gt;.LoggerFactory</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.UWP.UWPDeviceBase-1.html#Device_Net_UWP_UWPDeviceBase_1_GetDeviceAsync_System_String_System_Threading_CancellationToken_">UWPDeviceBase&lt;HidDevice&gt;.GetDeviceAsync(String, CancellationToken)</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.UWP.UWPDeviceBase-1.html#Device_Net_UWP_UWPDeviceBase_1_IsInitialized">UWPDeviceBase&lt;HidDevice&gt;.IsInitialized</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.UWP.UWPDeviceBase-1.html#Device_Net_UWP_UWPDeviceBase_1_Close">UWPDeviceBase&lt;HidDevice&gt;.Close()</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.UWP.UWPDeviceBase.html#Device_Net_UWP_UWPDeviceBase_IsReading">UWPDeviceBase.IsReading</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.UWP.UWPDeviceBase.html#Device_Net_UWP_UWPDeviceBase_ReadChunkTaskCompletionSource">UWPDeviceBase.ReadChunkTaskCompletionSource</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.UWP.UWPDeviceBase.html#Device_Net_UWP_UWPDeviceBase_Chunks">UWPDeviceBase.Chunks</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.UWP.UWPDeviceBase.html#Device_Net_UWP_UWPDeviceBase_Logger">UWPDeviceBase.Logger</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.UWP.UWPDeviceBase.html#Device_Net_UWP_UWPDeviceBase_DeviceId">UWPDeviceBase.DeviceId</a>
+    </div>
+    <div>
+      <a class="xref" href="Device.Net.UWP.UWPDeviceBase.html#Device_Net_UWP_UWPDeviceBase_HandleDataReceived_System_Byte___">UWPDeviceBase.HandleDataReceived(Byte[])</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Hid.Net.UWP.html">Hid.Net.UWP</a></h6>
+  <h6><strong>Assembly</strong>: Hid.Net.UWP.dll</h6>
+  <h5 id="Hid_Net_UWP_UWPHidDevice_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class UWPHidDevice : UWPDeviceBase&lt;HidDevice&gt;, IDeviceHandler, IHidDevice, IDevice, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice__ctor_Device_Net_ConnectedDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Byte__.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.%23ctor(Device.Net.ConnectedDeviceDefinition%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CSystem.Nullable%7BSystem.Byte%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L47">View Source</a>
+  </span>
+  <a id="Hid_Net_UWP_UWPHidDevice__ctor_" data-uid="Hid.Net.UWP.UWPHidDevice.#ctor*"></a>
+  <h4 id="Hid_Net_UWP_UWPHidDevice__ctor_Device_Net_ConnectedDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Byte__" data-uid="Hid.Net.UWP.UWPHidDevice.#ctor(Device.Net.ConnectedDeviceDefinition,Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.Byte})">UWPHidDevice(ConnectedDeviceDefinition, ILoggerFactory, Nullable&lt;Byte&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UWPHidDevice(ConnectedDeviceDefinition connectedDeviceDefinition, ILoggerFactory loggerFactory = null, byte? defaultReportId = default(byte? ))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Device.Net.ConnectedDeviceDefinition.html">ConnectedDeviceDefinition</a></td>
+        <td><span class="parametername">connectedDeviceDefinition</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Microsoft.Extensions.Logging.ILoggerFactory</span></td>
+        <td><span class="parametername">loggerFactory</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td><span class="parametername">defaultReportId</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_DataHasExtraByte.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.DataHasExtraByte%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L27">View Source</a>
+  </span>
+  <a id="Hid_Net_UWP_UWPHidDevice_DataHasExtraByte_" data-uid="Hid.Net.UWP.UWPHidDevice.DataHasExtraByte*"></a>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_DataHasExtraByte" data-uid="Hid.Net.UWP.UWPHidDevice.DataHasExtraByte">DataHasExtraByte</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool DataHasExtraByte { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_DefaultReportId.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.DefaultReportId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L28">View Source</a>
+  </span>
+  <a id="Hid_Net_UWP_UWPHidDevice_DefaultReportId_" data-uid="Hid.Net.UWP.UWPHidDevice.DefaultReportId*"></a>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_DefaultReportId" data-uid="Hid.Net.UWP.UWPHidDevice.DefaultReportId">DefaultReportId</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte? DefaultReportId { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_ReadBufferSize.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.ReadBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L39">View Source</a>
+  </span>
+  <a id="Hid_Net_UWP_UWPHidDevice_ReadBufferSize_" data-uid="Hid.Net.UWP.UWPHidDevice.ReadBufferSize*"></a>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_ReadBufferSize" data-uid="Hid.Net.UWP.UWPHidDevice.ReadBufferSize">ReadBufferSize</h4>
+  <div class="markdown level1 summary"><p>TODO: These vales are completely wrong and not being used anyway...</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override ushort ReadBufferSize { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Device.Net.UWP.UWPDeviceBase&lt;Windows.Devices.HumanInterfaceDevice.HidDevice&gt;.ReadBufferSize</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_WriteBufferSize.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.WriteBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L35">View Source</a>
+  </span>
+  <a id="Hid_Net_UWP_UWPHidDevice_WriteBufferSize_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteBufferSize*"></a>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_WriteBufferSize" data-uid="Hid.Net.UWP.UWPHidDevice.WriteBufferSize">WriteBufferSize</h4>
+  <div class="markdown level1 summary"><p>TODO: These vales are completely wrong and not being used anyway...</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override ushort WriteBufferSize { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Device.Net.UWP.UWPDeviceBase&lt;Windows.Devices.HumanInterfaceDevice.HidDevice&gt;.WriteBufferSize</span></div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_Dispose.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L102">View Source</a>
+  </span>
+  <a id="Hid_Net_UWP_UWPHidDevice_Dispose_" data-uid="Hid.Net.UWP.UWPHidDevice.Dispose*"></a>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_Dispose" data-uid="Hid.Net.UWP.UWPHidDevice.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Dispose()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Device.Net.UWP.UWPDeviceBase&lt;Windows.Devices.HumanInterfaceDevice.HidDevice&gt;.Dispose()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_Flush_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.Flush(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L215">View Source</a>
+  </span>
+  <a id="Hid_Net_UWP_UWPHidDevice_Flush_" data-uid="Hid.Net.UWP.UWPHidDevice.Flush*"></a>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_Flush_System_Threading_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.Flush(System.Threading.CancellationToken)">Flush(CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task Flush(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_FromIdAsync_System_String_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.FromIdAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L84">View Source</a>
+  </span>
+  <a id="Hid_Net_UWP_UWPHidDevice_FromIdAsync_" data-uid="Hid.Net.UWP.UWPHidDevice.FromIdAsync*"></a>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_FromIdAsync_System_String_" data-uid="Hid.Net.UWP.UWPHidDevice.FromIdAsync(System.String)">FromIdAsync(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override IAsyncOperation&lt;HidDevice&gt; FromIdAsync(string id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Windows.Foundation.IAsyncOperation</span>&lt;<span class="xref">Windows.Devices.HumanInterfaceDevice.HidDevice</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Device.Net.UWP.UWPDeviceBase&lt;Windows.Devices.HumanInterfaceDevice.HidDevice&gt;.FromIdAsync(System.String)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_GetHidDevice_System_String_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.GetHidDevice(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L188">View Source</a>
+  </span>
+  <a id="Hid_Net_UWP_UWPHidDevice_GetHidDevice_" data-uid="Hid.Net.UWP.UWPHidDevice.GetHidDevice*"></a>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_GetHidDevice_System_String_" data-uid="Hid.Net.UWP.UWPHidDevice.GetHidDevice(System.String)">GetHidDevice(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IAsyncOperation&lt;HidDevice&gt; GetHidDevice(string id)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">id</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Windows.Foundation.IAsyncOperation</span>&lt;<span class="xref">Windows.Devices.HumanInterfaceDevice.HidDevice</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_InitializeAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.InitializeAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L55">View Source</a>
+  </span>
+  <a id="Hid_Net_UWP_UWPHidDevice_InitializeAsync_" data-uid="Hid.Net.UWP.UWPHidDevice.InitializeAsync*"></a>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_InitializeAsync_System_Threading_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.InitializeAsync(System.Threading.CancellationToken)">InitializeAsync(CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task InitializeAsync(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Device.Net.UWP.UWPDeviceBase.html#Device_Net_UWP_UWPDeviceBase_InitializeAsync_System_Threading_CancellationToken_">UWPDeviceBase.InitializeAsync(CancellationToken)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_ReadAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.ReadAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L179">View Source</a>
+  </span>
+  <a id="Hid_Net_UWP_UWPHidDevice_ReadAsync_" data-uid="Hid.Net.UWP.UWPHidDevice.ReadAsync*"></a>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_ReadAsync_System_Threading_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.ReadAsync(System.Threading.CancellationToken)">ReadAsync(CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task&lt;TransferResult&gt; ReadAsync(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Device.Net.UWP.UWPDeviceBase&lt;Windows.Devices.HumanInterfaceDevice.HidDevice&gt;.ReadAsync(System.Threading.CancellationToken)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_ReadReportAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.ReadReportAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L165">View Source</a>
+  </span>
+  <a id="Hid_Net_UWP_UWPHidDevice_ReadReportAsync_" data-uid="Hid.Net.UWP.UWPHidDevice.ReadReportAsync*"></a>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_ReadReportAsync_System_Threading_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.ReadReportAsync(System.Threading.CancellationToken)">ReadReportAsync(CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;ReadReport&gt; ReadReportAsync(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Hid.Net.ReadReport.html">ReadReport</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_WriteAndReadAsync_System_Byte___System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.WriteAndReadAsync(System.Byte%5B%5D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L190">View Source</a>
+  </span>
+  <a id="Hid_Net_UWP_UWPHidDevice_WriteAndReadAsync_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteAndReadAsync*"></a>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_WriteAndReadAsync_System_Byte___System_Threading_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteAndReadAsync(System.Byte[],System.Threading.CancellationToken)">WriteAndReadAsync(Byte[], CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;TransferResult&gt; WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">writeBuffer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_WriteAsync_System_Byte___System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.WriteAsync(System.Byte%5B%5D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L112">View Source</a>
+  </span>
+  <a id="Hid_Net_UWP_UWPHidDevice_WriteAsync_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteAsync*"></a>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_WriteAsync_System_Byte___System_Threading_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteAsync(System.Byte[],System.Threading.CancellationToken)">WriteAsync(Byte[], CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Task&lt;uint&gt; WriteAsync(byte[] data, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">data</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.UInt32</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_WriteReportAsync_System_Byte___System_Nullable_System_Byte__System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.WriteReportAsync(System.Byte%5B%5D%2CSystem.Nullable%7BSystem.Byte%7D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L114">View Source</a>
+  </span>
+  <a id="Hid_Net_UWP_UWPHidDevice_WriteReportAsync_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteReportAsync*"></a>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_WriteReportAsync_System_Byte___System_Nullable_System_Byte__System_Threading_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteReportAsync(System.Byte[],System.Nullable{System.Byte},System.Threading.CancellationToken)">WriteReportAsync(Byte[], Nullable&lt;Byte&gt;, CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Task&lt;uint&gt; WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">data</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td><span class="parametername">reportId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.UInt32</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Device.Net.IDeviceHandler.html">IDeviceHandler</a>
+  </div>
+  <div>
+      <a class="xref" href="Hid.Net.IHidDevice.html">IHidDevice</a>
+  </div>
+  <div>
+      <a class="xref" href="Device.Net.IDevice.html">IDevice</a>
+  </div>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L19" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
