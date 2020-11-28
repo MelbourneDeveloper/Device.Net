@@ -84,16 +84,45 @@
     <h5>Implements</h5>
     <div><a class="xref" href="Device.Net.IDeviceFactory.html">IDeviceFactory</a></div>
   </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Device.Net.html">Device.Net</a></h6>
   <h6><strong>Assembly</strong>: Device.Net.dll</h6>
   <h5 id="Device_Net_DeviceFactory_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class DeviceFactory : Object, IDeviceFactory</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class DeviceFactory : IDeviceFactory</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_DeviceFactory__ctor_Microsoft_Extensions_Logging_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Device_Net_GetDeviceAsync_System_Func_Device_Net_ConnectedDeviceDefinition_System_Threading_CancellationToken_System_Threading_Tasks_Task_System_Boolean___.md&amp;value=---%0Auid%3A%20Device.Net.DeviceFactory.%23ctor(Microsoft.Extensions.Logging.ILoggerFactory%2CDevice.Net.GetConnectedDeviceDefinitionsAsync%2CDevice.Net.GetDeviceAsync%2CSystem.Func%7BDevice.Net.ConnectedDeviceDefinition%2CSystem.Threading.CancellationToken%2CSystem.Threading.Tasks.Task%7BSystem.Boolean%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/DeviceFactory.cs/#L29">View Source</a>
+  </span>
   <a id="Device_Net_DeviceFactory__ctor_" data-uid="Device.Net.DeviceFactory.#ctor*"></a>
   <h4 id="Device_Net_DeviceFactory__ctor_Microsoft_Extensions_Logging_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Device_Net_GetDeviceAsync_System_Func_Device_Net_ConnectedDeviceDefinition_System_Threading_CancellationToken_System_Threading_Tasks_Task_System_Boolean___" data-uid="Device.Net.DeviceFactory.#ctor(Microsoft.Extensions.Logging.ILoggerFactory,Device.Net.GetConnectedDeviceDefinitionsAsync,Device.Net.GetDeviceAsync,System.Func{Device.Net.ConnectedDeviceDefinition,System.Threading.CancellationToken,System.Threading.Tasks.Task{System.Boolean}})">DeviceFactory(ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Func&lt;ConnectedDeviceDefinition, CancellationToken, Task&lt;Boolean&gt;&gt;)</h4>
   <div class="markdown level1 summary"></div>
@@ -137,15 +166,20 @@
   </table>
   <h3 id="methods">Methods
   </h3>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_DeviceFactory_GetConnectedDeviceDefinitionsAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Device.Net.DeviceFactory.GetConnectedDeviceDefinitionsAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/DeviceFactory.cs/#L47">View Source</a>
+  </span>
   <a id="Device_Net_DeviceFactory_GetConnectedDeviceDefinitionsAsync_" data-uid="Device.Net.DeviceFactory.GetConnectedDeviceDefinitionsAsync*"></a>
   <h4 id="Device_Net_DeviceFactory_GetConnectedDeviceDefinitionsAsync_System_Threading_CancellationToken_" data-uid="Device.Net.DeviceFactory.GetConnectedDeviceDefinitionsAsync(System.Threading.CancellationToken)">GetConnectedDeviceDefinitionsAsync(CancellationToken)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;IEnumerable&lt;ConnectedDeviceDefinition&gt;&gt; GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;IEnumerable&lt;ConnectedDeviceDefinition&gt;&gt; GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -179,15 +213,20 @@
       </tr>
     </tbody>
   </table>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_DeviceFactory_GetDeviceAsync_Device_Net_ConnectedDeviceDefinition_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Device.Net.DeviceFactory.GetDeviceAsync(Device.Net.ConnectedDeviceDefinition%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/DeviceFactory.cs/#L48">View Source</a>
+  </span>
   <a id="Device_Net_DeviceFactory_GetDeviceAsync_" data-uid="Device.Net.DeviceFactory.GetDeviceAsync*"></a>
   <h4 id="Device_Net_DeviceFactory_GetDeviceAsync_Device_Net_ConnectedDeviceDefinition_System_Threading_CancellationToken_" data-uid="Device.Net.DeviceFactory.GetDeviceAsync(Device.Net.ConnectedDeviceDefinition,System.Threading.CancellationToken)">GetDeviceAsync(ConnectedDeviceDefinition, CancellationToken)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;IDevice&gt; GetDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;IDevice&gt; GetDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -226,15 +265,20 @@
       </tr>
     </tbody>
   </table>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_DeviceFactory_SupportsDeviceAsync_Device_Net_ConnectedDeviceDefinition_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Device.Net.DeviceFactory.SupportsDeviceAsync(Device.Net.ConnectedDeviceDefinition%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/DeviceFactory.cs/#L46">View Source</a>
+  </span>
   <a id="Device_Net_DeviceFactory_SupportsDeviceAsync_" data-uid="Device.Net.DeviceFactory.SupportsDeviceAsync*"></a>
   <h4 id="Device_Net_DeviceFactory_SupportsDeviceAsync_Device_Net_ConnectedDeviceDefinition_System_Threading_CancellationToken_" data-uid="Device.Net.DeviceFactory.SupportsDeviceAsync(Device.Net.ConnectedDeviceDefinition,System.Threading.CancellationToken)">SupportsDeviceAsync(ConnectedDeviceDefinition, CancellationToken)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;bool&gt; SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;bool&gt; SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -277,6 +321,19 @@
   <div>
       <a class="xref" href="Device.Net.IDeviceFactory.html">IDeviceFactory</a>
   </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Device.Net.DeviceExtensions.html#Device_Net_DeviceExtensions_Aggregate_Device_Net_IDeviceFactory_Device_Net_IDeviceFactory_Microsoft_Extensions_Logging_ILoggerFactory_">DeviceExtensions.Aggregate(IDeviceFactory, IDeviceFactory, ILoggerFactory)</a>
+  </div>
+  <div>
+      <a class="xref" href="Device.Net.DeviceExtensions.html#Device_Net_DeviceExtensions_CreateDeviceDataStreamer_Device_Net_IDeviceFactory_Device_Net_ProcessData_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__">DeviceExtensions.CreateDeviceDataStreamer(IDeviceFactory, ProcessData, Func&lt;IDevice, Task&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Device.Net.DeviceExtensions.html#Device_Net_DeviceExtensions_GetFirstDeviceAsync_Device_Net_IDeviceFactory_">DeviceExtensions.GetFirstDeviceAsync(IDeviceFactory)</a>
+  </div>
+  <div>
+      <a class="xref" href="Device.Net.DeviceExtensions.html#Device_Net_DeviceExtensions_ConnectFirstAsync_Device_Net_IDeviceFactory_">DeviceExtensions.ConnectFirstAsync(IDeviceFactory)</a>
+  </div>
 </article>
           </div>
           
@@ -284,6 +341,12 @@
             <div class="sideaffix">
               <div class="contribution">
                 <ul class="nav">
+                  <li>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_DeviceFactory.md&amp;value=---%0Auid%3A%20Device.Net.DeviceFactory%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/DeviceFactory.cs/#L14" class="contribution-link">View Source</a>
+                  </li>
                 </ul>
               </div>
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">

@@ -19,7 +19,8 @@ Alpha version. Please use 3.x for a stable release</Description>
     <NoWarn>NU5125</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageReleaseNotes>Alpha version. Please use 3.x for a stable release</PackageReleaseNotes>   
+    <PackageReleaseNotes>Alpha version. Please use 3.x for a stable release</PackageReleaseNotes>
+    <AssemblyOriginatorKeyFile>Device.Net.pfx</AssemblyOriginatorKeyFile>   
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">

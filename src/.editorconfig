@@ -16,7 +16,7 @@ csharp_style_var_elsewhere = true:error
 csharp_style_var_for_built_in_types = true:error
 
 # IDE0058: Expression value is never used
-csharp_style_unused_value_expression_statement_preference = discard_variable:suggestion
+csharp_style_unused_value_expression_statement_preference = discard_variable:warning
 
 # CA1303: Do not pass literals as localized parameters
 dotnet_diagnostic.CA1303.severity = suggestion
@@ -24,7 +24,7 @@ dotnet_diagnostic.CA1303.severity = suggestion
 
 
 
-dotnet_diagnostic.IDE0058.severity = suggestion
+dotnet_diagnostic.IDE0058.severity = warning
 
 # CA1063: Implement IDisposable Correctly
 dotnet_diagnostic.CA1063.severity = warning

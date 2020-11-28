@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class ProcessData
+    <title>Delegate ProcessData
    </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class ProcessData
+    <meta name="title" content="Delegate ProcessData
    ">
     <meta name="generator" content="docfx 2.56.5.0">
     
@@ -71,160 +71,15 @@
             <article class="content wrap" id="_content" data-uid="Device.Net.ProcessData">
   
   
-  <h1 id="Device_Net_ProcessData" data-uid="Device.Net.ProcessData" class="text-break">Class ProcessData
+  <h1 id="Device_Net_ProcessData" data-uid="Device.Net.ProcessData" class="text-break">Delegate ProcessData
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
-  <div class="inheritance">
-    <h5>Inheritance</h5>
-    <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">ProcessData</span></div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Device.Net.html">Device.Net</a></h6>
   <h6><strong>Assembly</strong>: Device.Net.dll</h6>
   <h5 id="Device_Net_ProcessData_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class ProcessData : MulticastDelegate</code></pre>
-  </div>
-  <h3 id="constructors">Constructors
-  </h3>
-  
-  
-  <a id="Device_Net_ProcessData__ctor_" data-uid="Device.Net.ProcessData.#ctor*"></a>
-  <h4 id="Device_Net_ProcessData__ctor_System_Object_System_IntPtr_" data-uid="Device.Net.ProcessData.#ctor(System.Object,System.IntPtr)">ProcessData(Object, IntPtr)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ProcessData(object object, IntPtr method)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">object</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.IntPtr</span></td>
-        <td><span class="parametername">method</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="methods">Methods
-  </h3>
-  
-  
-  <a id="Device_Net_ProcessData_BeginInvoke_" data-uid="Device.Net.ProcessData.BeginInvoke*"></a>
-  <h4 id="Device_Net_ProcessData_BeginInvoke_Device_Net_IDevice_System_AsyncCallback_System_Object_" data-uid="Device.Net.ProcessData.BeginInvoke(Device.Net.IDevice,System.AsyncCallback,System.Object)">BeginInvoke(IDevice, AsyncCallback, Object)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual IAsyncResult BeginInvoke(IDevice device, AsyncCallback callback, object object)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Device.Net.IDevice.html">IDevice</a></td>
-        <td><span class="parametername">device</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.AsyncCallback</span></td>
-        <td><span class="parametername">callback</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Object</span></td>
-        <td><span class="parametername">object</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.IAsyncResult</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Device_Net_ProcessData_EndInvoke_" data-uid="Device.Net.ProcessData.EndInvoke*"></a>
-  <h4 id="Device_Net_ProcessData_EndInvoke_System_IAsyncResult_" data-uid="Device.Net.ProcessData.EndInvoke(System.IAsyncResult)">EndInvoke(IAsyncResult)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual Task EndInvoke(IAsyncResult result)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.IAsyncResult</span></td>
-        <td><span class="parametername">result</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Threading.Tasks.Task</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  
-  
-  <a id="Device_Net_ProcessData_Invoke_" data-uid="Device.Net.ProcessData.Invoke*"></a>
-  <h4 id="Device_Net_ProcessData_Invoke_Device_Net_IDevice_" data-uid="Device.Net.ProcessData.Invoke(Device.Net.IDevice)">Invoke(IDevice)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual Task Invoke(IDevice device)</code></pre>
+    <pre><code class="lang-csharp hljs">public delegate Task ProcessData(IDevice device);</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -265,6 +120,12 @@
             <div class="sideaffix">
               <div class="contribution">
                 <ul class="nav">
+                  <li>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ProcessData.md&amp;value=---%0Auid%3A%20Device.Net.ProcessData%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/DeviceDataStreamer.cs/#L10" class="contribution-link">View Source</a>
+                  </li>
                 </ul>
               </div>
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">

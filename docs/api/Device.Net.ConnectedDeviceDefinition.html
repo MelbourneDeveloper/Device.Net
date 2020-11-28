@@ -81,23 +81,52 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">ConnectedDeviceDefinition</span></div>
   </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Device.Net.html">Device.Net</a></h6>
   <h6><strong>Assembly</strong>: Device.Net.dll</h6>
   <h5 id="Device_Net_ConnectedDeviceDefinition_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class ConnectedDeviceDefinition : Object</code></pre>
+    <pre><code class="lang-csharp hljs">public class ConnectedDeviceDefinition</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition__ctor_System_String_Device_Net_DeviceType_System_Nullable_System_UInt32__System_Nullable_System_UInt32__System_String_System_String_System_String_System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Nullable_System_Int32__System_Nullable_System_Int32__System_String_System_Nullable_System_Guid__.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition.%23ctor(System.String%2CDevice.Net.DeviceType%2CSystem.Nullable%7BSystem.UInt32%7D%2CSystem.Nullable%7BSystem.UInt32%7D%2CSystem.String%2CSystem.String%2CSystem.String%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Nullable%7BSystem.Int32%7D%2CSystem.Nullable%7BSystem.Int32%7D%2CSystem.String%2CSystem.Nullable%7BSystem.Guid%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L82">View Source</a>
+  </span>
   <a id="Device_Net_ConnectedDeviceDefinition__ctor_" data-uid="Device.Net.ConnectedDeviceDefinition.#ctor*"></a>
   <h4 id="Device_Net_ConnectedDeviceDefinition__ctor_System_String_Device_Net_DeviceType_System_Nullable_System_UInt32__System_Nullable_System_UInt32__System_String_System_String_System_String_System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Nullable_System_Int32__System_Nullable_System_Int32__System_String_System_Nullable_System_Guid__" data-uid="Device.Net.ConnectedDeviceDefinition.#ctor(System.String,Device.Net.DeviceType,System.Nullable{System.UInt32},System.Nullable{System.UInt32},System.String,System.String,System.String,System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Nullable{System.Guid})">ConnectedDeviceDefinition(String, DeviceType, Nullable&lt;UInt32&gt;, Nullable&lt;UInt32&gt;, String, String, String, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;, Nullable&lt;Int32&gt;, Nullable&lt;Int32&gt;, String, Nullable&lt;Guid&gt;)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ConnectedDeviceDefinition(string deviceId, DeviceType deviceType, Nullable&lt;uint&gt; vendorId = null, Nullable&lt;uint&gt; productId = null, string productName = null, string manufacturer = null, string serialNumber = null, Nullable&lt;ushort&gt; usage = null, Nullable&lt;ushort&gt; usagePage = null, Nullable&lt;ushort&gt; versionNumber = null, Nullable&lt;int&gt; writeBufferSize = null, Nullable&lt;int&gt; readBufferSize = null, string label = null, Nullable&lt;Guid&gt; classGuid = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public ConnectedDeviceDefinition(string deviceId, DeviceType deviceType, uint? vendorId = default(uint? ), uint? productId = default(uint? ), string productName = null, string manufacturer = null, string serialNumber = null, ushort? usage = default(ushort? ), ushort? usagePage = default(ushort? ), ushort? versionNumber = default(ushort? ), int? writeBufferSize = default(int? ), int? readBufferSize = default(int? ), string label = null, Guid? classGuid = default(Guid? ))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -183,15 +212,20 @@
   </table>
   <h3 id="properties">Properties
   </h3>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition_ClassGuid.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition.ClassGuid%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L23">View Source</a>
+  </span>
   <a id="Device_Net_ConnectedDeviceDefinition_ClassGuid_" data-uid="Device.Net.ConnectedDeviceDefinition.ClassGuid*"></a>
   <h4 id="Device_Net_ConnectedDeviceDefinition_ClassGuid" data-uid="Device.Net.ConnectedDeviceDefinition.ClassGuid">ClassGuid</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Nullable&lt;Guid&gt; ClassGuid { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public Guid? ClassGuid { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -208,8 +242,13 @@
       </tr>
     </tbody>
   </table>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition_DeviceId.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition.DeviceId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L16">View Source</a>
+  </span>
   <a id="Device_Net_ConnectedDeviceDefinition_DeviceId_" data-uid="Device.Net.ConnectedDeviceDefinition.DeviceId*"></a>
   <h4 id="Device_Net_ConnectedDeviceDefinition_DeviceId" data-uid="Device.Net.ConnectedDeviceDefinition.DeviceId">DeviceId</h4>
   <div class="markdown level1 summary"><p>The device Id or path specific to the platform for the device</p>
@@ -234,8 +273,13 @@
       </tr>
     </tbody>
   </table>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition_DeviceType.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition.DeviceType%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L21">View Source</a>
+  </span>
   <a id="Device_Net_ConnectedDeviceDefinition_DeviceType_" data-uid="Device.Net.ConnectedDeviceDefinition.DeviceType*"></a>
   <h4 id="Device_Net_ConnectedDeviceDefinition_DeviceType" data-uid="Device.Net.ConnectedDeviceDefinition.DeviceType">DeviceType</h4>
   <div class="markdown level1 summary"><p>The type of device interface</p>
@@ -260,8 +304,13 @@
       </tr>
     </tbody>
   </table>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition_Label.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition.Label%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L38">View Source</a>
+  </span>
   <a id="Device_Net_ConnectedDeviceDefinition_Label_" data-uid="Device.Net.ConnectedDeviceDefinition.Label*"></a>
   <h4 id="Device_Net_ConnectedDeviceDefinition_Label" data-uid="Device.Net.ConnectedDeviceDefinition.Label">Label</h4>
   <div class="markdown level1 summary"><p>Freeform tag to be used as needed</p>
@@ -286,8 +335,13 @@
       </tr>
     </tbody>
   </table>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition_Manufacturer.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition.Manufacturer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L53">View Source</a>
+  </span>
   <a id="Device_Net_ConnectedDeviceDefinition_Manufacturer_" data-uid="Device.Net.ConnectedDeviceDefinition.Manufacturer*"></a>
   <h4 id="Device_Net_ConnectedDeviceDefinition_Manufacturer" data-uid="Device.Net.ConnectedDeviceDefinition.Manufacturer">Manufacturer</h4>
   <div class="markdown level1 summary"><p>Name of the device's manufacturer</p>
@@ -312,8 +366,13 @@
       </tr>
     </tbody>
   </table>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition_ProductId.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition.ProductId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L33">View Source</a>
+  </span>
   <a id="Device_Net_ConnectedDeviceDefinition_ProductId_" data-uid="Device.Net.ConnectedDeviceDefinition.ProductId*"></a>
   <h4 id="Device_Net_ConnectedDeviceDefinition_ProductId" data-uid="Device.Net.ConnectedDeviceDefinition.ProductId">ProductId</h4>
   <div class="markdown level1 summary"><p>Product Id</p>
@@ -321,7 +380,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Nullable&lt;uint&gt; ProductId { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public uint? ProductId { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -338,8 +397,13 @@
       </tr>
     </tbody>
   </table>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition_ProductName.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition.ProductName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L48">View Source</a>
+  </span>
   <a id="Device_Net_ConnectedDeviceDefinition_ProductName_" data-uid="Device.Net.ConnectedDeviceDefinition.ProductName*"></a>
   <h4 id="Device_Net_ConnectedDeviceDefinition_ProductName" data-uid="Device.Net.ConnectedDeviceDefinition.ProductName">ProductName</h4>
   <div class="markdown level1 summary"><p>The name of the device product according to the Manufacturer</p>
@@ -364,8 +428,13 @@
       </tr>
     </tbody>
   </table>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition_ReadBufferSize.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition.ReadBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L78">View Source</a>
+  </span>
   <a id="Device_Net_ConnectedDeviceDefinition_ReadBufferSize_" data-uid="Device.Net.ConnectedDeviceDefinition.ReadBufferSize*"></a>
   <h4 id="Device_Net_ConnectedDeviceDefinition_ReadBufferSize" data-uid="Device.Net.ConnectedDeviceDefinition.ReadBufferSize">ReadBufferSize</h4>
   <div class="markdown level1 summary"><p>The maximum size of data to be read from the device</p>
@@ -373,7 +442,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Nullable&lt;int&gt; ReadBufferSize { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public int? ReadBufferSize { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -390,8 +459,13 @@
       </tr>
     </tbody>
   </table>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition_SerialNumber.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition.SerialNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L58">View Source</a>
+  </span>
   <a id="Device_Net_ConnectedDeviceDefinition_SerialNumber_" data-uid="Device.Net.ConnectedDeviceDefinition.SerialNumber*"></a>
   <h4 id="Device_Net_ConnectedDeviceDefinition_SerialNumber" data-uid="Device.Net.ConnectedDeviceDefinition.SerialNumber">SerialNumber</h4>
   <div class="markdown level1 summary"><p>Unique serial number of the physical device</p>
@@ -416,15 +490,20 @@
       </tr>
     </tbody>
   </table>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition_Usage.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition.Usage%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L63">View Source</a>
+  </span>
   <a id="Device_Net_ConnectedDeviceDefinition_Usage_" data-uid="Device.Net.ConnectedDeviceDefinition.Usage*"></a>
   <h4 id="Device_Net_ConnectedDeviceDefinition_Usage" data-uid="Device.Net.ConnectedDeviceDefinition.Usage">Usage</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Nullable&lt;ushort&gt; Usage { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public ushort? Usage { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -441,8 +520,13 @@
       </tr>
     </tbody>
   </table>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition_UsagePage.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition.UsagePage%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L43">View Source</a>
+  </span>
   <a id="Device_Net_ConnectedDeviceDefinition_UsagePage_" data-uid="Device.Net.ConnectedDeviceDefinition.UsagePage*"></a>
   <h4 id="Device_Net_ConnectedDeviceDefinition_UsagePage" data-uid="Device.Net.ConnectedDeviceDefinition.UsagePage">UsagePage</h4>
   <div class="markdown level1 summary"><p>Used to further filter down device definitions on some platforms</p>
@@ -450,7 +534,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Nullable&lt;ushort&gt; UsagePage { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public ushort? UsagePage { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -467,8 +551,13 @@
       </tr>
     </tbody>
   </table>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition_VendorId.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition.VendorId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L28">View Source</a>
+  </span>
   <a id="Device_Net_ConnectedDeviceDefinition_VendorId_" data-uid="Device.Net.ConnectedDeviceDefinition.VendorId*"></a>
   <h4 id="Device_Net_ConnectedDeviceDefinition_VendorId" data-uid="Device.Net.ConnectedDeviceDefinition.VendorId">VendorId</h4>
   <div class="markdown level1 summary"><p>Vendor ID</p>
@@ -476,7 +565,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Nullable&lt;uint&gt; VendorId { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public uint? VendorId { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -493,8 +582,13 @@
       </tr>
     </tbody>
   </table>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition_VersionNumber.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition.VersionNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L68">View Source</a>
+  </span>
   <a id="Device_Net_ConnectedDeviceDefinition_VersionNumber_" data-uid="Device.Net.ConnectedDeviceDefinition.VersionNumber*"></a>
   <h4 id="Device_Net_ConnectedDeviceDefinition_VersionNumber" data-uid="Device.Net.ConnectedDeviceDefinition.VersionNumber">VersionNumber</h4>
   <div class="markdown level1 summary"><p>Device version number</p>
@@ -502,7 +596,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Nullable&lt;ushort&gt; VersionNumber { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public ushort? VersionNumber { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -519,8 +613,13 @@
       </tr>
     </tbody>
   </table>
-  
-  
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition_WriteBufferSize.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition.WriteBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L73">View Source</a>
+  </span>
   <a id="Device_Net_ConnectedDeviceDefinition_WriteBufferSize_" data-uid="Device.Net.ConnectedDeviceDefinition.WriteBufferSize*"></a>
   <h4 id="Device_Net_ConnectedDeviceDefinition_WriteBufferSize" data-uid="Device.Net.ConnectedDeviceDefinition.WriteBufferSize">WriteBufferSize</h4>
   <div class="markdown level1 summary"><p>The maximum size of data to be written to the device</p>
@@ -528,7 +627,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Nullable&lt;int&gt; WriteBufferSize { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public int? WriteBufferSize { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -552,6 +651,12 @@
             <div class="sideaffix">
               <div class="contribution">
                 <ul class="nav">
+                  <li>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/ProjectsForEachPlatformUno/apiSpec/new?filename=Device_Net_ConnectedDeviceDefinition.md&amp;value=---%0Auid%3A%20Device.Net.ConnectedDeviceDefinition%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/ProjectsForEachPlatformUno/src/Device.Net/ConnectedDeviceDefinition.cs/#L9" class="contribution-link">View Source</a>
+                  </li>
                 </ul>
               </div>
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
