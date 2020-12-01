@@ -13,6 +13,10 @@
     <RootNamespace>FlutnetThermometer</RootNamespace>
     <AssemblyName>FlutnetThermometer</AssemblyName>
     <FileAlignment>512</FileAlignment>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -112,6 +116,11 @@
     <PackageReference Include="Flutnet.Interop.Android" Version="1.20.4" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
       <Version>3.1.7</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.SourceLink.GitHub">
+      <Version>1.0.0</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Usb.Net">
       <Version>4.0.1-alpha</Version>

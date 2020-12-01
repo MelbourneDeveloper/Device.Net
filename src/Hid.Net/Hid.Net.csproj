@@ -1,83 +1,91 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <Version>3.1.0</Version>
-    <LangVersion>9</LangVersion>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Copyright>Copyright (c) 2020 Christian Findlay</Copyright>
-    <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
-    <Description>Hid.Net
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+		<Version>3.1.0</Version>
+		<LangVersion>9</LangVersion>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<Copyright>Copyright (c) 2020 Christian Findlay</Copyright>
+		<PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
+		<Description>
+			Hid.Net
 
-Cross platform Hid (USB) library. 
-Enumerate Hid (USB) devices and read and write to/from them. 
-Supports .NET, Android, and UWP out of the box. Other platforms can be added</Description>
-    <PackageTags>Hid USB Android UWP Ledger Trezor C# MacOS Linux</PackageTags>
-    <AssemblyVersion>3.1.0.0</AssemblyVersion>
-    <FileVersion>3.1.0.0</FileVersion>
-    <Authors>Christian Findlay</Authors>
-    <Company>Christian Findlay</Company>
-    <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
-    <PackageId>Hid.Net</PackageId>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>  
-    <NoWarn>1701;1702;NU5125</NoWarn>      
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>    
-  </PropertyGroup>
+			Cross platform Hid (USB) library.
+			Enumerate Hid (USB) devices and read and write to/from them.
+			Supports .NET, Android, and UWP out of the box. Other platforms can be added
+		</Description>
+		<PackageTags>Hid USB Android UWP Ledger Trezor C# MacOS Linux</PackageTags>
+		<AssemblyVersion>3.1.0.0</AssemblyVersion>
+		<FileVersion>3.1.0.0</FileVersion>
+		<Authors>Christian Findlay</Authors>
+		<Company>Christian Findlay</Company>
+		<RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
+		<PackageId>Hid.Net</PackageId>
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+		<NoWarn>1701;1702;NU5125</NoWarn>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+	</PropertyGroup>
 
-  <Choose>
-    <When Condition=" '$(Configuration)'=='Debug' ">
-      <PropertyGroup>
-        <SignAssembly>false</SignAssembly>
-      </PropertyGroup>
-    </When>
-    <When Condition=" '$(Configuration)'=='Release' ">
-      <PropertyGroup>
-        <SignAssembly>true</SignAssembly>
-        <DelaySign>false</DelaySign>
-        <AssemblyOriginatorKeyFile>../Device.Net/Device.Net.pfx</AssemblyOriginatorKeyFile>
-      </PropertyGroup>
-    </When>
-  </Choose>
+	<Choose>
+		<When Condition=" '$(Configuration)'=='Debug' ">
+			<PropertyGroup>
+				<SignAssembly>false</SignAssembly>
+			</PropertyGroup>
+		</When>
+		<When Condition=" '$(Configuration)'=='Release' ">
+			<PropertyGroup>
+				<SignAssembly>true</SignAssembly>
+				<DelaySign>false</DelaySign>
+				<AssemblyOriginatorKeyFile>../Device.Net/Device.Net.pfx</AssemblyOriginatorKeyFile>
+			</PropertyGroup>
+		</When>
+	</Choose>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE;DEBUG;NETSTANDARD2_0;HIDNET</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>TRACE;DEBUG;NETSTANDARD2_0;HIDNET</DefineConstants>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>TRACE;RELEASE;NETSTANDARD2_0;HIDNET</DefineConstants>
-    <OutputPath>bin\Release\</OutputPath>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DefineConstants>TRACE;RELEASE;NETSTANDARD2_0;HIDNET</DefineConstants>
+		<OutputPath>bin\Release\</OutputPath>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-    <DocumentationFile>C:\Code\AirNetix\Device.Net\src\Hid.Net\Hid.Net.xml</DocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+		<DocumentationFile>C:\Code\AirNetix\Device.Net\src\Hid.Net\Hid.Net.xml</DocumentationFile>
+	</PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<ProjectReference Include="..\Device.Net\Device.Net.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
-  </ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0' And '$(TargetFramework)' != 'net45'">
+		<Compile Remove="Windows\**" />
+		<EmbeddedResource Remove="Windows\**" />
+		<None Remove="Windows\**" />
+	</ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0' And '$(TargetFramework)' != 'net45'">
-    <Compile Remove="Windows\**" />
-    <EmbeddedResource Remove="Windows\**" />
-    <None Remove="Windows\**" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' != 'uap10.0.16299'">
-    <Compile Remove="UWP\**" />
-    <EmbeddedResource Remove="UWP\**" />
-    <None Remove="UWP\**" />
-  </ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' != 'uap10.0.16299'">
+		<Compile Remove="UWP\**" />
+		<EmbeddedResource Remove="UWP\**" />
+		<None Remove="UWP\**" />
+	</ItemGroup>
 
 </Project>

@@ -13,6 +13,10 @@
     <RootNamespace>FlutnetThermometer.ModuleInterop</RootNamespace>
     <AssemblyName>FlutnetThermometer.ModuleInterop</AssemblyName>
     <FileAlignment>512</FileAlignment>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v10.0</TargetFrameworkVersion>
     <AndroidClassParser>class-parse</AndroidClassParser>
@@ -52,10 +56,14 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Additions\" />
-    <Folder Include="Jars\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Flutnet.Interop.Android" Version="1.20.4" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub">
+      <Version>1.0.0</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup Condition=" '$(Configuration)'=='Debug' ">
     <LibraryProjectZip Include="..\Flutter\flutnet_thermometer\build\host\outputs\repo\com\flutnet\flutnet_thermometer\flutter_debug\1.0\flutter_debug-1.0.aar">

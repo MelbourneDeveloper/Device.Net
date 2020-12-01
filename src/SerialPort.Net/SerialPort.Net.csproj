@@ -1,60 +1,66 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
-    <Description>A COM/Serial Port library written in C# with the backing of the Device.Net framework</Description>
-    <Version>3.1.0</Version>
-    <AssemblyVersion>3.1.0.0</AssemblyVersion>
-    <FileVersion>3.1.0.0</FileVersion>
-    <Authors>Christian Findlay</Authors>
-    <Copyright>Copyright (c) 2020 Christian Findlay</Copyright>
-    <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
-    <PackageTags>USB Hid Android C# Serial COM</PackageTags>
-    <LangVersion>7.3</LangVersion>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <NoWarn>1701;1702;NU5125</NoWarn>    
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>    
-    <PackageReleaseNotes>DeviceId issue fixed. See details: https://github.com/MelbourneDeveloper/Device.Net/projects/10</PackageReleaseNotes>      
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
+		<Description>A COM/Serial Port library written in C# with the backing of the Device.Net framework</Description>
+		<Version>3.1.0</Version>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<AssemblyVersion>3.1.0.0</AssemblyVersion>
+		<FileVersion>3.1.0.0</FileVersion>
+		<Authors>Christian Findlay</Authors>
+		<Copyright>Copyright (c) 2020 Christian Findlay</Copyright>
+		<RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
+		<PackageTags>USB Hid Android C# Serial COM</PackageTags>
+		<LangVersion>7.3</LangVersion>
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+		<NoWarn>1701;1702;NU5125</NoWarn>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageReleaseNotes>DeviceId issue fixed. See details: https://github.com/MelbourneDeveloper/Device.Net/projects/10</PackageReleaseNotes>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <DefineConstants>NETSTANDARD</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<DefineConstants>NETSTANDARD</DefineConstants>
+	</PropertyGroup>
 
-  <Choose>
-    <When Condition=" '$(Configuration)'=='Debug' ">
-      <PropertyGroup>
-        <SignAssembly>false</SignAssembly>
-      </PropertyGroup>
-    </When>
-    <When Condition=" '$(Configuration)'=='Release' ">
-      <PropertyGroup>
-        <SignAssembly>true</SignAssembly>
-        <DelaySign>false</DelaySign>
-        <AssemblyOriginatorKeyFile>../Device.Net/Device.Net.pfx</AssemblyOriginatorKeyFile>
-      </PropertyGroup>
-    </When>
-  </Choose>
+	<Choose>
+		<When Condition=" '$(Configuration)'=='Debug' ">
+			<PropertyGroup>
+				<SignAssembly>false</SignAssembly>
+			</PropertyGroup>
+		</When>
+		<When Condition=" '$(Configuration)'=='Release' ">
+			<PropertyGroup>
+				<SignAssembly>true</SignAssembly>
+				<DelaySign>false</DelaySign>
+				<AssemblyOriginatorKeyFile>../Device.Net/Device.Net.pfx</AssemblyOriginatorKeyFile>
+			</PropertyGroup>
+		</When>
+	</Choose>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>    
-    <PackageReference Include="Microsoft.Win32.Registry">
-      <Version>4.5.0</Version>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-    <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
-  </ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Win32.Registry">
+			<Version>4.5.0</Version>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+		<ProjectReference Include="..\Device.Net\Device.Net.csproj" />
+	</ItemGroup>
 
 </Project>
