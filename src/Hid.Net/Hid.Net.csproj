@@ -4,8 +4,6 @@
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
     <Version>2.7.0</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/MelbourneDeveloper/Device.Net/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>Christian Findlay</Copyright>
     <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
     <Description>Hid.Net
