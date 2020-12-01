@@ -22,7 +22,7 @@
     <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>      
+    <CodeAnalysisRuleSet>../Device.Net/CodeRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,8 +66,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />    
+    <None Include="../Device.Net/CodeRules.ruleset" Link="CodeRules.ruleset" />
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeQuality.Analyzers.2.6.3\analyzers\dotnet\cs\Humanizer.dll" />
