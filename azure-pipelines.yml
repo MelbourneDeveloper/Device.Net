@@ -13,4 +13,4 @@ steps:
 
 - task: MSBuild@1
   inputs:
-    solution: 'src/Device.Net/Device.NET.csproj'
+    solution: 'src/Device.Net/Device.Net.csproj'
