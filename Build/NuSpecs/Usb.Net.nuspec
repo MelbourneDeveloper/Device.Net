@@ -6,9 +6,6 @@
     <title>Usb.Net</title>
     <authors>Christian Findlay</authors>
     <owners>Christian Findlay</owners>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <license type="file">LICENSE</license>
-    <licenseUrl>https://aka.ms/deprecateLicenseUrl</licenseUrl>
     <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
     <description>A cross platform USB library written in C#</description>
     <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>    
