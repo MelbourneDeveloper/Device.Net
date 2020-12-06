@@ -123,11 +123,6 @@
             Provides helpers for all platforms. 
             </summary> 
         </member>
-        <member name="M:Device.Net.Helpers.SynchronizeWithCancellationToken``1(System.Threading.Tasks.Task{``0},System.Threading.CancellationToken,System.Int32)">
-            <summary>
-            Create an awaitable task that will return cancelled if the cancellation token requests cancellation
-            </summary>
-        </member>
         <member name="P:Device.Net.IDevice.IsInitialized">
             <summary>
             Whether or not the device has been successfully initialized
@@ -179,6 +174,18 @@
             </summary>
         </member>
         <member name="T:Device.Net.Windows.Dcb">
+            <summary>
+            Defines the control setting for a serial communications device.
+            </summary>
+        </member>
+        <member name="T:Device.Net.Windows.WindowsDeviceBase">
+            <summary>
+            This class remains untested
+            </summary>
+        </member>
+    </members>
+</doc>
+b">
             <summary>
             Defines the control setting for a serial communications device.
             </summary>

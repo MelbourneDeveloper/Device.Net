@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Device.Net</name>
+    </assembly>
+    <members>
+        <member name="M:Device.Net.AsyncExtensions.FirstOrDefaultAsync``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Threading.Tasks.Task{System.Boolean}},System.Threading.CancellationToken)">
+            <summary>
+            TODO: Why do I need to do this? Why doesn't linq have this?
+            </summary>
+        </member>
+        <member name="T:Device.Net.ConnectedDeviceDefinition">
+            <summary>
+            Represents the definition of a device that has been physically connected and has a DeviceId
+            </summary>
+        </member>
+        <member name="P:Device.Net.ConnectedDeviceDefinition.DeviceId">
+            <summary>
+            The device Id or path specific to the platform for the device
+            </summary>
+        </member>
+        <member name="P:Device.Net.ConnectedDeviceDefinition.DeviceType">
+            <summary>
+            The type of device interface
+            </summary>
+        </member>
+        <member name="P:Device.Net.ConnectedDeviceDefinition.VendorId">
+            <summary>
+            Vendor ID
+            </summary>
+        </member>
+        <member name="P:Device.Net.ConnectedDeviceDefinition.ProductId">
+            <summary>
+            Product Id
+            </summary>
+        </member>
+        <member name="P:Device.Net.ConnectedDeviceDefinition.Label">
+            <summary>
+            Freeform tag to be used as needed
+            </summary>
+        </member>
+        <member name="P:Device.Net.ConnectedDeviceDefinition.UsagePage">
+            <summary>
+            Used to further filter down device definitions on some platforms
+            </summary>
+        </member>
+        <member name="P:Device.Net.ConnectedDeviceDefinition.ProductName">
+            <summary>
+            The name of the device product according to the Manufacturer
+            </summary>
+        </member>
+        <member name="P:Device.Net.ConnectedDeviceDefinition.Manufacturer">
+            <summary>
+            Name of the device's manufacturer
+            </summary>
+        </member>
+        <member name="P:Device.Net.ConnectedDeviceDefinition.SerialNumber">
+            <summary>
+            Unique serial number of the physical device
+            </summary>
+        </member>
+        <member name="P:Device.Net.ConnectedDeviceDefinition.Usage">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Device.Net.ConnectedDeviceDefinition.VersionNumber">
+            <summary>
+            Device version number
+            </summary>
+        </member>
+        <member name="P:Device.Net.ConnectedDeviceDefinition.WriteBufferSize">
+            <summary>
+            The maximum size of data to be written to the device
+            </summary>
+        </member>
+        <member name="P:Device.Net.ConnectedDeviceDefinition.ReadBufferSize">
+            <summary>
+            The maximum size of data to be read from the device
+            </summary>
+        </member>
+        <member name="M:Device.Net.DeviceBase.RemoveFirstByte(System.Byte[])">
+            <summary> 
+            Many Hid devices on Windows have a buffer size that is one byte larger than the logical buffer size. For compatibility with other platforms etc. we need to remove the first byte. See DataHasExtraByte
+            </summary> 
+        </member>
+        <member name="M:Device.Net.DeviceFactory.#ctor(Microsoft.Extensions.Logging.ILoggerFactory,Device.Net.GetConnectedDeviceDefinitionsAsync,Device.Net.GetDeviceAsync,System.Func{Device.Net.ConnectedDeviceDefinition,System.Threading.CancellationToken,System.Threading.Tasks.Task{System.Boolean}})">
+            <param name="loggerFactory">The factory for creating new loggers for each device</param>
+            <param name="logger">The logger that this base class will use. The generic type should come from the inheriting class</param>
+        </member>
+        <member name="F:Device.Net.DeviceListener._CreatedDevicesByDefinition">
+            <summary>
+            This is the list of Devices by their filter definition. Note this is not actually keyed by the connected definition.
+            </summary>
+        </member>
+        <member name="M:Device.Net.DeviceListener.#ctor(Device.Net.IDeviceFactory,System.Nullable{System.Int32},Microsoft.Extensions.Logging.ILoggerFactory)">
+            <summary>
+            Handles connecting to and disconnecting from a set of potential devices by their definition
+            </summary>
+        </member>
+        <member name="M:Device.Net.DeviceListener.Start">
+            <summary>
+            Starts the polling for devices if polling is being used.
+            </summary>
+        </member>
+        <member name="P:Device.Net.FilterDeviceDefinition.ProductId">
+            <summary>
+            Product Id
+            </summary>
+        </member>
+        <member name="P:Device.Net.FilterDeviceDefinition.UsagePage">
+            <summary>
+            Used to further filter down device definitions on some platforms
+            </summary>
+        </member>
+        <member name="P:Device.Net.FilterDeviceDefinition.Label">
+            <summary>
+            Not used for filtering. Only used to give a meaningful name to the filter that is carried on to the device definition
+            </summary>
+        </member>
+        <member name="T:Device.Net.Helpers">
+            <summary> 
+            Provides helpers for all platforms. 
+            </summary> 
+        </member>
+        <member name="P:Device.Net.IDevice.IsInitialized">
+            <summary>
+            Whether or not the device has been successfully initialized
+            </summary>
+        </member>
+        <member name="M:Device.Net.IDevice.ReadAsync(System.Threading.CancellationToken)">
+            <summary>
+            Read a page of data. Warning: this is not thread safe. WriteAndReadAsync() should be preferred.
+            </summary>
+        </member>
+        <member name="M:Device.Net.IDevice.WriteAsync(System.Byte[],System.Threading.CancellationToken)">
+            <summary>
+            Write a page of data. Warning: this is not thread safe. WriteAndReadAsync() should be preferred.
+            </summary>
+        </member>
+        <member name="M:Device.Net.IDevice.InitializeAsync(System.Threading.CancellationToken)">
+            <summary>
+            Close any existing connections and reinitialize the device. 
+            </summary>
+        </member>
+        <member name="M:Device.Net.IDevice.WriteAndReadAsync(System.Byte[],System.Threading.CancellationToken)">
+            <summary>
+            Write a page of data and then wait for the device to return a page. If the implementation derives from DeviceBase, this method is thread safe.
+            </summary>
+        </member>
+        <member name="P:Device.Net.IDevice.DeviceId">
+            <summary>
+            Device unique OS level Id for the type of device. The device should have been constructed with this Id. It is used to initialize the device.
+            </summary>
+        </member>
+        <member name="P:Device.Net.IDevice.ConnectedDeviceDefinition">
+            <summary>
+            Information about the device. This information should be collected from initialization and will be null when before initialization or after disposal
+            </summary>
+        </member>
+        <member name="M:Device.Net.IDevice.Close">
+            <summary>
+            Closes the device, but allows for it to be reopened at a later point in time (as opposed to disposing)
+            </summary>
+        </member>
+        <member name="M:Device.Net.IDevice.Flush(System.Threading.CancellationToken)">
+            <summary>
+            Flushes the device. Note: Only available for serial port devices currently
+            </summary>
+        </member>
+        <member name="M:Device.Net.Windows.APICalls.SetupDiEnumDeviceInterfaces(System.IntPtr,System.IntPtr,System.Guid@,System.UInt32,Device.Net.Windows.SpDeviceInterfaceData@)">
+            <summary>
+            https://docs.microsoft.com/en-us/windows/desktop/api/setupapi/nf-setupapi-setupdienumdeviceinterfaces
+            </summary>
+        </member>
+        <member name="T:Device.Net.Windows.Dcb">
+            <summary>
+            Defines the control setting for a serial communications device.
+            </summary>
+        </member>
+        <member name="T:Device.Net.Windows.WindowsDeviceBase">
+            <summary>
+            This class remains untested
+            </summary>
+        </member>
+    </members>
+</doc>
+b">
+            <summary>
+            Defines the control setting for a serial communications device.
+            </summary>
+        </member>
+        <member name="T:Device.Net.Windows.WindowsDeviceBase">
+            <summary>
+            This class remains untested
+            </summary>
+        </member>
+    </members>
+</doc>

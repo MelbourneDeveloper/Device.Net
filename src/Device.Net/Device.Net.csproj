@@ -21,27 +21,10 @@ Alpha version. Please use 3.x for a stable release</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageReleaseNotes>Alpha version. Please use 3.x for a stable release</PackageReleaseNotes>
     <AssemblyOriginatorKeyFile>Device.Net.pfx</AssemblyOriginatorKeyFile>   
+    <SignAssembly>false</SignAssembly>    
+    <DocumentationFile>Device.Net.xml</DocumentationFile>  
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-    <DocumentationFile>C:\Code\AirNetix\Device.Net\src\Device.Net\Device.Net.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <Choose>
-    <When Condition=" '$(Configuration)'=='Debug' ">
-      <PropertyGroup>
-        <SignAssembly>false</SignAssembly>
-      </PropertyGroup>
-    </When>
-    <When Condition=" '$(Configuration)'=='Release' ">
-      <PropertyGroup>
-        <SignAssembly>true</SignAssembly>
-        <DelaySign>false</DelaySign>
-        <AssemblyOriginatorKeyFile>Device.Net.pfx</AssemblyOriginatorKeyFile>
-      </PropertyGroup>
-    </When>
-  </Choose>
-	
   <ItemGroup>
     <None Include="..\..\LICENSE">
       <Pack>True</Pack>
