@@ -17,6 +17,16 @@ steps:
     restoreSolution: 'src/Device.Net/Device.Net.csproj'
     feedsToUse: 'select'
 
+- task: NuGetCommand@2
+  inputs:
+    command: 'restore'
+    restoreSolution: 'src/Device.Net.UWP/Device.Net.UWP.csproj'
+    feedsToUse: 'select'
+
 - task: MSBuild@1
   inputs:
     solution: 'src/Device.Net/Device.Net.csproj'
+
+- task: MSBuild@1
+  inputs:
+    solution: 'src/Device.Net.UWP/Device.Net.UWP.csproj'
