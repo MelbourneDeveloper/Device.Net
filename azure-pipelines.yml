@@ -26,10 +26,12 @@ steps:
 - task: MSBuild@1
   inputs:
     solution: 'src/Device.Net/Device.Net.csproj'
+    configuration: 'Release'
 
 - task: MSBuild@1
   inputs:
     solution: 'src/Device.Net.UWP/Device.Net.UWP.csproj'
+    configuration: 'Release'
 
 - task: NuGetCommand@2
   inputs:
