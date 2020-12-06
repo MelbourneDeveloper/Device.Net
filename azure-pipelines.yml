@@ -27,3 +27,15 @@ steps:
     command: 'pack'
     packagesToPack: 'Build/NuSpecs/*.nuspec'
     versioningScheme: 'off'
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: 'a579837a-f36e-462f-8492-1a622b5cadb9/ee772268-03f0-4f97-a588-360cde838c29'
+
+- task: DocFxTask@0
+  inputs:
+    solution: 'src/Device.Net.Pipelines.sln'
+    nugetConfigPath: 'docfx_project\docfx.json'
