@@ -10,10 +10,12 @@ pool:
   vmImage: 'windows-latest'
 
 steps:
+
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-    projects: 'src/Device.Net/Device.Net.csproj,src/Usb.Net/Usb.Net.csproj'
-
+    projects: 
+      src/Device.Net/Device.Net.csproj
+      src/Usb.Net/Usb.Net.csproj
 
 
