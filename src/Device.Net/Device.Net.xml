@@ -185,15 +185,3 @@
         </member>
     </members>
 </doc>
-b">
-            <summary>
-            Defines the control setting for a serial communications device.
-            </summary>
-        </member>
-        <member name="T:Device.Net.Windows.WindowsDeviceBase">
-            <summary>
-            This class remains untested
-            </summary>
-        </member>
-    </members>
-</doc>
