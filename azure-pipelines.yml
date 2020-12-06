@@ -14,7 +14,6 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-    projects: 'src/Device.Net/Device.Net.csproj'
-
-
-
+    projects: |
+      src/Device.Net/Device.Net.csproj
+      src/Device.Net.UWP/Device.Net.UWP.csproj
