@@ -30,3 +30,9 @@ steps:
 - task: MSBuild@1
   inputs:
     solution: 'src/Device.Net.UWP/Device.Net.UWP.csproj'
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: 'Build/Device.Net'
+    versioningScheme: 'off'
