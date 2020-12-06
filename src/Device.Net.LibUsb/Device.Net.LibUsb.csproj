@@ -2,31 +2,11 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Version>3.1.0</Version>
+    <Version>4.0.2-alpha</Version>
     <LangVersion>8</LangVersion>
-    <Authors>Christian Findlay</Authors>
-    <Company>Christian Findlay</Company>
-    <Product>Device.Net.LibUsb</Product>
-    <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support</RepositoryUrl>
-    <PackageTags>Hid USB MacOS Linux C#</PackageTags>
-    <Description>Device.Net based library for USB access on Linux, MacOS and Windows. Use Usb.Net, and Hid.Net for Windows, UWP, and Android support. The base interfaces are the same so the code is compatible on all platforms.</Description>
     <NoWarn>1701;1702;CA1063</NoWarn>
-    <AssemblyVersion>3.1.0.0</AssemblyVersion>
-    <FileVersion>3.1.0.0</FileVersion>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <SignAssembly>false</SignAssembly>
+    <DocumentationFile>Device.Net.LibUsb.xml</DocumentationFile>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-    <DocumentationFile>C:\Code\AirNetix\Device.Net\src\Device.Net.LibUsb\Device.Net.LibUsb.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="LibUsbHidDeviceFactory.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="LibUsbDotNet" Version="2.2.29" />
@@ -39,13 +19,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
     <ProjectReference Include="..\Usb.Net\Usb.Net.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
   </ItemGroup>
 
 </Project>
