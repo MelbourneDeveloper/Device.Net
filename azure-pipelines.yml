@@ -19,3 +19,6 @@ steps:
       src/Hid.Net/Hid.Net.csproj
 
 
+- task: MSBuild@1
+  inputs:
+    solution: 'src/Device.Net.UWP/Device.NET.UWP.csproj'
