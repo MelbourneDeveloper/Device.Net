@@ -17,3 +17,5 @@ steps:
     projects: |
       src/Device.Net/Device.Net.csproj
       src/Hid.Net/Hid.Net.csproj
+
+
