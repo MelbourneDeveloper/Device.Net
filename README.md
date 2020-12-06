@@ -1,10 +1,14 @@
 # Hid.Net, Usb.Net, SerialPort.Net (Device.Net)
 
+## [Join the conversation](https://discord.gg/ZcvXARm) on Discord ##
+
+## [Follow Me on Twitter](https://twitter.com/intent/follow?screen_name=cfdevelop&tw_p=followbutton) ##
+
 ![diagram](https://github.com/MelbourneDeveloper/Device.Net/blob/master/Diagram.png)
 
-**Cross platform C# framework for talking to connected devices such as Usb, Serial Port and Hid devices.**
+**Version 4 is going to be a big version. Control Transfers are [almost there](https://github.com/MelbourneDeveloper/Device.Net/pull/165)! Check out the [plan](https://github.com/MelbourneDeveloper/Device.Net/projects/11). Many enhancements including Reactive support, standard [`ILogger`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger?view=dotnet-plat-ext-3.1) throughout, are already done and I'm in the middle of testing with more real devices with real apps. The framework is currently getting a thrashing with an app I'm working on. Pull Requests are super welcome!**
 
-**SerialPort.Net is an implementation for Serial Port devices. Currently, Windows is supported, but UWP and others will be on their way. The current version of SerialPort.Net is only in its early stages and may have issues**
+**Cross platform C# framework for talking to connected devices such as Usb, Serial Port and Hid devices.**
 
 This framework provides a common Task based Async interface across platforms and device types. This allows for dependency injection so that different types of devices can be used on any platform with the same code. The supported device types are Hid, Serial Port, and USB. Other device types such as Bluetooth and so on may be added in future. Hid.Net is specifically for Hid devices that may be Usb devices. Usb.Net is specifically for Usb devices that don't have a Hid interface. Please visit the [documentation page](https://github.com/MelbourneDeveloper/Device.Net/wiki). Would you you like to [contribute?](https://christianfindlay.com/2019/04/28/calling-all-c-crypto-developers/)
 
