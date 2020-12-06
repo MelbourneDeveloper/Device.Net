@@ -16,4 +16,4 @@ steps:
     command: 'build'
     projects: |
       src/Device.Net/Device.Net.csproj
-      src/Device.Net.UWP/Device.Net.UWP.csproj
+      src/Hid.Net/Hid.Net.csproj
