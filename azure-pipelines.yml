@@ -14,23 +14,12 @@ steps:
 - task: NuGetCommand@2
   inputs:
     command: 'restore'
-    restoreSolution: 'src/Device.Net/Device.Net.csproj'
-    feedsToUse: 'select'
-
-- task: NuGetCommand@2
-  inputs:
-    command: 'restore'
-    restoreSolution: 'src/Device.Net.UWP/Device.Net.UWP.csproj'
+    restoreSolution: 'src/Device.Net.Pipelines.sln'
     feedsToUse: 'select'
 
 - task: MSBuild@1
   inputs:
-    solution: 'src/Device.Net/Device.Net.csproj'
-    configuration: 'Release'
-
-- task: MSBuild@1
-  inputs:
-    solution: 'src/Device.Net.UWP/Device.Net.UWP.csproj'
+    solution: 'src/Device.Net.Pipelines.sln'
     configuration: 'Release'
 
 - task: NuGetCommand@2
