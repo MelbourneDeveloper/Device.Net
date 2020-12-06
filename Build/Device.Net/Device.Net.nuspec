@@ -29,6 +29,12 @@ Alpha version. Please use 3.x for a stable release</description>
     </dependencies>
   </metadata>
    <files>
+
+        <file src="..\..\src\Device.Net\bin\Release\net45\*.dll" target="lib/net45"/>   
+        <file src="..\..\src\Device.Net\bin\Release\net45\*.pdb" target="lib/net45"/>   
+        <file src="..\..\src\Device.Net\bin\Release\net45\*.xml" target="lib/net45"/>   
+
+
         <file src="..\..\src\Device.Net.UWP\bin\Release\*.dll" target="lib/uap10.0.16299"/>   
         <file src="..\..\src\Device.Net.UWP\bin\Release\*.pdb" target="lib/uap10.0.16299"/>   
         <file src="..\..\src\Device.Net.UWP\bin\Release\*.xml" target="lib/uap10.0.16299"/>   
