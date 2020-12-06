@@ -25,5 +25,5 @@ steps:
 - task: NuGetCommand@2
   inputs:
     command: 'pack'
-    packagesToPack: 'Build/Device.Net'
+    packagesToPack: 'Build/NuSpecs'
     versioningScheme: 'off'
