@@ -57,6 +57,7 @@
       }
     ],
     "dest": "../docs",
+    "filter": "filterconfig.yml",
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
