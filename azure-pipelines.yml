@@ -35,7 +35,10 @@ steps:
 #     nuGetFeedType: 'internal'
 #     publishVstsFeed: 'a579837a-f36e-462f-8492-1a622b5cadb9/ee772268-03f0-4f97-a588-360cde838c29'
 
-- task: DocFxTask@0
-  inputs:
-    solution: 'src/Device.Net.Pipelines.sln'
-    nugetConfigPath: 'docfx_project\docfx.json'
+- powershell: |
+    choco install docfx -y
+    docfx docfx_project/docfx.json
+    if ($lastexitcode -ne 0){
+      throw ("Error generating document")
+    }
+  displayName: "Documentation"
