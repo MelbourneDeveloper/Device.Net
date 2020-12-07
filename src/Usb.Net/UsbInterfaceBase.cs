@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Usb.Net
 {
+    /// <summary>
+    /// Represents a USB interfacxe
+    /// </summary>
     public abstract class UsbInterfaceBase
     {
         #region Fields
