@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Device.Net
 {
+    /// <summary>
+    /// Base class for all devices
+    /// </summary>
     public abstract class DeviceBase : IDisposable
     {
         #region Fields

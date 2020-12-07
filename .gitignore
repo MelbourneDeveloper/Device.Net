@@ -33,4 +33,8 @@ src/Flutter/flutnet_thermometer_bridge/lib/flutnet_thermometer/service_library/g
 
 src/Flutter/flutnet_thermometer_bridge/lib/flutnet_thermometer/service_library/
 
+src/Usb.Net/Usb.Net.xml
+
 src/Device.Net/Device.Net.xml
+
+src/Hid.Net/Hid.Net.xml
