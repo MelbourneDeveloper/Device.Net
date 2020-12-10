@@ -16,6 +16,8 @@ Alpha version. Please use 3.x for a stable release</description>
     <repository url="https://github.com/MelbourneDeveloper/Device.Net" />
     <owners>Christian Findlay</owners>
     <icon>images/Icon.png</icon>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
     <dependencies>
       <group targetFramework=".NETFramework4.5" />
       <group targetFramework=".NETStandard2.0">

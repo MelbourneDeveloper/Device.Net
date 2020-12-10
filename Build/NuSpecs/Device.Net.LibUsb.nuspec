@@ -14,7 +14,9 @@
     <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
     <repository url="https://github.com/MelbourneDeveloper/Device.Net" />
     <owners>Christian Findlay</owners>
-    <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
+    <icon>images/Icon.png</icon>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
         <dependency id="Device.Net" version="3.1.0" exclude="Build,Analyzers" />
@@ -22,4 +24,7 @@
       </group>
     </dependencies>
   </metadata>
+   <files>
+        <file src="../Icon.png" target="images\" />
+    </files>
 </package>
