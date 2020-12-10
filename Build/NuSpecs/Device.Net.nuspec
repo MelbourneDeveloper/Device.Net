@@ -15,7 +15,7 @@ Alpha version. Please use 3.x for a stable release</description>
     <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
     <repository url="https://github.com/MelbourneDeveloper/Device.Net" />
     <owners>Christian Findlay</owners>
-    <icon>Icon.png</icon>
+    <icon>images/Icon.png</icon>
     <dependencies>
       <group targetFramework=".NETFramework4.5" />
       <group targetFramework=".NETStandard2.0">
@@ -27,7 +27,7 @@ Alpha version. Please use 3.x for a stable release</description>
     </dependencies>
   </metadata>
    <files>
-        <file src="Icon.png" target="images\" />
+        <file src="../Icon.png" target="images\" />
 
         <file src="..\..\src\Device.Net\bin\Release\netstandard2.0\*.dll" target="lib/netstandard2.0"/>   
         <file src="..\..\src\Device.Net\bin\Release\netstandard2.0\*.pdb" target="lib/netstandard2.0"/>   
