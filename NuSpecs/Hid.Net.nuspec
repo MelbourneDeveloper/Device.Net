@@ -3,18 +3,18 @@
   <metadata>
     <id>Hid.Net</id>
     <version>4.0.2-alpha</version>
-    <title>Hid.Net</title>
     <authors>Christian Findlay</authors>
-    <owners>Christian Findlay</owners>
     <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
-    <description>Hid.Net
+    <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>
+    <copyright>Copyright (c) 2020 Christian Findlay</copyright>
+    <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
+    <repository url="https://github.com/MelbourneDeveloper/Device.Net" />
+    <title>Hid.Net</title>
 
-Cross platform Hid (USB) library. 
-Enumerate Hid (USB) devices and read and write to/from them. 
-Supports .NET, Android, and UWP out of the box. Other platforms can be added</description>
+    <owners>Christian Findlay</owners>
+
+    
     <summary>Cross platform Hid  library. Enumerate Hid (USB) devices and read and write to/from them.</summary>
-    <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>    
-    <copyright>Copyright (c) 2019 Christian Findlay</copyright>
     <tags>Hid USB Android UWP Ledger Trezor C# MacOS Linux</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
@@ -25,7 +25,6 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</de
       </group>
     </dependencies>
   </metadata>
-
    <files>
         <file src="..\..\src\Hid.Net\bin\Release\netstandard2.0\*.dll" target="lib/netstandard2.0"/>   
         <file src="..\..\src\Hid.Net\bin\Release\netstandard2.0\*.pdb" target="lib/netstandard2.0"/>   
