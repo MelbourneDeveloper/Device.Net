@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>SerialPort.Net</id>
+    <title>SerialPort.Net</title>
+    <description>A COM/Serial Port library written in C# with the backing of the Device.Net framework</description>
+    <summary>A COM/Serial Port library written in C# with the backing of the Device.Net framework</summary>
+    <version>4.0.2-alpha </version>
+    <authors>Christian Findlay</authors>
+    <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
+    <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>
+    <copyright>Copyright (c) 2020 Christian Findlay</copyright>
+    <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
+    <repository url="https://github.com/MelbourneDeveloper/Device.Net" />
+    <owners>Christian Findlay</owners>
+    <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="Device.Net" version="3.1.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Device.Net" version="3.1.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Win32.Registry" version="4.5.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
