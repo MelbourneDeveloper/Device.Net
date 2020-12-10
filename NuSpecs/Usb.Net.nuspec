@@ -2,23 +2,25 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>Usb.Net</id>
-    <version>4.0.2-alpha </version>
     <title>Usb.Net</title>
-    <authors>Christian Findlay</authors>
-    <owners>Christian Findlay</owners>
-    <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
     <description>A cross platform USB library written in C#</description>
-    <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>    
     <summary>A cross platform USB library written in C#</summary>
+    <version>4.0.2-alpha</version>
+    <authors>Christian Findlay</authors>
+    <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
+    <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>
     <copyright>Copyright (c) 2020 Christian Findlay</copyright>
-    <tags>USB Hid Android C#</tags>
+    <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
+    <repository url="https://github.com/MelbourneDeveloper/Device.Net" />
+    <owners>Christian Findlay</owners>
+    <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
-        <dependency id="Device.Net" version="4.0.2-alpha " exclude="Build,Analyzers" />
+        <dependency id="Device.Net" version="4.0.2-alpha" exclude="Build,Analyzers" />
       </group>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Device.Net" version="4.0.2-alpha " exclude="Build,Analyzers" />
-      </group>>      
+        <dependency id="Device.Net" version="4.0.2-alpha" exclude="Build,Analyzers" />
+      </group>
     </dependencies>
   </metadata>
    <files>
@@ -37,6 +39,5 @@
         <file src="..\..\src\Usb.Net.Android\bin\Release\*.dll" target="lib/MonoAndroid"/>   
         <file src="..\..\src\Usb.Net.Android\bin\Release\*.pdb" target="lib/MonoAndroid"/>   
         <file src="..\..\src\Usb.Net.Android\bin\Release\*.xml" target="lib/MonoAndroid"/>   
-        
     </files>    
 </package>
