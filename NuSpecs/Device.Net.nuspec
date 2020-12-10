@@ -2,12 +2,13 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>Device.Net</id>
-    <version>4.0.2-alpha </version>
-    <authors>Christian Findlay</authors>
-    <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
+    <title>Hid.Net</title>
     <description>Cross platform C# library for talking to connected devices in a uniform way through dependency injection.
 
 Alpha version. Please use 3.x for a stable release</description>
+    <version>4.0.2-alpha </version>
+    <authors>Christian Findlay</authors>
+    <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
     <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>
     <copyright>Copyright (c) 2020 Christian Findlay</copyright>
     <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
