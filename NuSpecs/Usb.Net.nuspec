@@ -38,6 +38,6 @@
         
         <file src="..\..\src\Usb.Net.Android\bin\Release\*.dll" target="lib/MonoAndroid"/>   
         <file src="..\..\src\Usb.Net.Android\bin\Release\*.pdb" target="lib/MonoAndroid"/>   
-        <file src="..\..\src\Usb.Net.Android\bin\Release\*.xml" target="lib/MonoAndroid"/>   
-    </files>    
+        <file src="..\..\src\Usb.Net.Android\bin\Release\*.xml" target="lib/MonoAndroid"/>
+    </files>
 </package>
