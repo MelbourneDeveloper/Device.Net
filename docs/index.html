@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Hid.Net, Usb.Net, SerialPort.Net (Device.Net) </title>
+    <title>Device.Net </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Hid.Net, Usb.Net, SerialPort.Net (Device.Net) ">
+    <meta name="title" content="Device.Net ">
     <meta name="generator" content="docfx 2.56.5.0">
     
     <link rel="shortcut icon" href="favicon.ico">
@@ -60,11 +60,51 @@
         <div class="article row grid">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="hidnet-usbnet-serialportnet-devicenet">Hid.Net, Usb.Net, SerialPort.Net (Device.Net)</h1>
+<h1 id="devicenet">Device.Net</h1>
 
 <p><img src="images/Diagram.png" alt="Device.Net Logo"></p>
 <p><strong>Cross-platform .NET framework for talking to connected devices such as USB, Serial Port, and Hid devices uniformly through dependency injection.</strong></p>
-<p>This framework provides a common Task-based Async interface across platforms and device types. This allows for dependency injection to use different types of devices on any platform with the same code. The supported device types are Hid, Serial Port, and USB. We will add Bluetooth in the future, and we are looking for Bluetooth programmers to help. The three main libraries are Usb.Net, Hid.Net, and SerialPort.Net. Please join the community on Discord <a href="https://discord.gg/ZcvXARm">here</a>.</p>
+<p>This framework provides a common task-based Async interface across platforms and device types. This allows for dependency injection to use different types of devices on any platform with the same code. The supported device types are Hid, Serial Port, and USB. We will add Bluetooth in the future, and we are looking for Bluetooth programmers to help. Please join the community on Discord <a href="https://discord.gg/ZcvXARm">here</a>.</p>
+<h2 id="hidnet">Hid.Net</h2>
+<p>This is a cross-platform library for talking to HID devices. The library targets .NET and UWP.</p>
+<h2 id="usbnet">Usb.Net</h2>
+<p>This is a cross-platform library for talking to USB devices. The library targets .NET, Android, and UWP.</p>
+<h2 id="serialportnet">SerialPort.Net</h2>
+<p>This is a .NET library for talking to Serial Port / COM devices on Windows. We are looking to expand this library to other platforms soon.</p>
+<h2 id="devicenetlibusb">Device.Net.LibUsb</h2>
+<p>This is a macOS, Windows, and Linux library for talking to USB devices. This uses the library <a href="https://github.com/LibUsbDotNet/LibUsbDotNet">LibUsbDotNet</a> to bridge with Device.Net. This is an underdeveloped library, and we are looking to replace this with native Linux and macOS API calls. Please reach out if you can help.</p>
+<h3 id="currently-supports">Currently supports:</h3>
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th style="text-align: center;">Device Types</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.NET Framework</td>
+<td style="text-align: center;">Hid, USB, Serial Port</td>
+</tr>
+<tr>
+<td>.NET Core / .NET 5</td>
+<td style="text-align: center;">Hid, USB, Serial Port</td>
+</tr>
+<tr>
+<td>Android*</td>
+<td style="text-align: center;">Hid, USB</td>
+</tr>
+<tr>
+<td>UWP</td>
+<td style="text-align: center;">Hid, USB</td>
+</tr>
+<tr>
+<td>Linux, MacOS*</td>
+<td style="text-align: center;"><a href="https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support">USB (Via LibUsbDotNet)</a></td>
+</tr>
+</tbody>
+</table>
+<p><em>Note: Android treats Hid devices and USB devices as the same thing</em></p>
 </article>
           </div>
           

@@ -1452,7 +1452,7 @@
           "hash": "7tekJPOZzaxWr4sKdyUewg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1484,7 +1484,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "RrKqfLMmkXA1rOfomFIq1g=="
+          "hash": "oK+gd6pzLYxll3oYLJKTLg=="
         }
       },
       "is_incremental": false,
@@ -1516,7 +1516,7 @@
           "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 3,
-          "skipped_file_count": 1
+          "skipped_file_count": 2
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
