@@ -5,6 +5,7 @@
     <LangVersion>8</LangVersion>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <NoWarn>1701;1702;NU5125</NoWarn>    
+    <DocumentationFile>SerialPort.Net.xml</DocumentationFile>    
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
