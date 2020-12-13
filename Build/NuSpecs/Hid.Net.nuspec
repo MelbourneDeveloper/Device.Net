@@ -42,10 +42,6 @@ Supports .NET, Android, and UWP out of the box. Other platforms can be added</de
 
         <file src="..\..\src\Hid.Net.UWP\bin\Release\*.dll" target="lib/uap10.0.16299"/>   
         <file src="..\..\src\Hid.Net.UWP\bin\Release\*.pdb" target="lib/uap10.0.16299"/>   
-        <file src="..\..\src\Hid.Net.UWP\bin\Release\*.xml" target="lib/uap10.0.16299"/>   
-        
-        <file src="..\..\src\Hid.Net.Android\bin\Release\*.dll" target="lib/MonoAndroid"/>   
-        <file src="..\..\src\Hid.Net.Android\bin\Release\*.pdb" target="lib/MonoAndroid"/>   
-        <file src="..\..\src\Hid.Net.Android\bin\Release\*.xml" target="lib/MonoAndroid"/>           
+        <file src="..\..\src\Hid.Net.UWP\bin\Release\*.xml" target="lib/uap10.0.16299"/>                   
     </files>    
 </package>
