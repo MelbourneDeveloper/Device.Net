@@ -1452,7 +1452,7 @@
           "hash": "O7JnYYCTnJx+QtZhaac89Q=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1460,11 +1460,11 @@
         "InvalidFileLink"
       ],
       "type": "Conceptual",
-      "source_relative_path": "articles/Quickstart.md",
+      "source_relative_path": "articles/GettingStarted.md",
       "output": {
         ".html": {
-          "relative_path": "articles/Quickstart.html",
-          "hash": "9or8814/KGGVk5fD7fm8OA=="
+          "relative_path": "articles/GettingStarted.html",
+          "hash": "SJraTnp/k/uDrpOXVl6tsg=="
         }
       },
       "is_incremental": false,
