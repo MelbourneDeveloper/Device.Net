@@ -1420,15 +1420,18 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Conceptual",
       "source_relative_path": "api/index.md",
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "Pby+P8Yaax1xSqQyng9dFA=="
+          "hash": "aA1U9SfE3w+DtezrEwhHDQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1452,7 +1455,7 @@
           "hash": "O7JnYYCTnJx+QtZhaac89Q=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1464,7 +1467,7 @@
           "hash": "5xmJVHMsz7nBELso7nAN2A=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1476,7 +1479,7 @@
           "hash": "mxB4OegpoxHz1YMgt9ENnA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1488,7 +1491,7 @@
           "hash": "dIKhk+lPH2BbF+KXaoueeA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1500,7 +1503,7 @@
           "hash": "i6KwVooDXMFTHL21PywipQ=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1512,7 +1515,7 @@
           "hash": "6KOLp6uguLhK/Lq3vF7KfA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1527,7 +1530,7 @@
           "hash": "4eC/YCCVZUFRi756mUvpgA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1539,7 +1542,7 @@
           "hash": "XgSWLs0/GLFDnaAj5uT0xA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1551,7 +1554,7 @@
           "hash": "+XFs9UFPNGGLDFwqGU2zlQ=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1563,7 +1566,7 @@
           "hash": "6qXez/VoUeYxtDZ1KWPRxg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1638,7 +1641,7 @@
           "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 12,
-          "skipped_file_count": 4
+          "skipped_file_count": 11
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,

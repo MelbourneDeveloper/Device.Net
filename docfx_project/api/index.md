@@ -1,2 +1,3 @@
-# PLACEHOLDER
-TODO: Add .NET projects to the *src* folder and run `docfx` to generate **REAL** *API Documentation*!
+# API Documentation
+
+This contains reference documentation for Device.Net and all the associated libraries. See [Getting Started](../articles/GettingStarted.html) for a quick start guide. 
