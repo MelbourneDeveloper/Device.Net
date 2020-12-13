@@ -80,52 +80,28 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">FilterDeviceDefinition</span></div>
   </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Device.Net.html">Device.Net</a></h6>
   <h6><strong>Assembly</strong>: Device.Net.dll</h6>
   <h5 id="Device_Net_FilterDeviceDefinition_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public sealed class FilterDeviceDefinition</code></pre>
+    <pre><code class="lang-csharp hljs">public sealed class FilterDeviceDefinition : object</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_FilterDeviceDefinition__ctor_System_Nullable_System_UInt32__System_Nullable_System_UInt32__System_Nullable_System_UInt16__System_String_System_Nullable_System_Guid__.md&amp;value=---%0Auid%3A%20Device.Net.FilterDeviceDefinition.%23ctor(System.Nullable%7BSystem.UInt32%7D%2CSystem.Nullable%7BSystem.UInt32%7D%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.String%2CSystem.Nullable%7BSystem.Guid%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_FilterDeviceDefinition__ctor_System_Nullable_System_UInt32__System_Nullable_System_UInt32__System_Nullable_System_UInt16__System_String_System_Nullable_Guid__.md&amp;value=---%0Auid%3A%20Device.Net.FilterDeviceDefinition.%23ctor(System.Nullable%7BSystem.UInt32%7D%2CSystem.Nullable%7BSystem.UInt32%7D%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.String%2CSystem.Nullable%7BGuid%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/FilterDeviceDefinition.cs/#L7">View Source</a>
   </span>
   <a id="Device_Net_FilterDeviceDefinition__ctor_" data-uid="Device.Net.FilterDeviceDefinition.#ctor*"></a>
-  <h4 id="Device_Net_FilterDeviceDefinition__ctor_System_Nullable_System_UInt32__System_Nullable_System_UInt32__System_Nullable_System_UInt16__System_String_System_Nullable_System_Guid__" data-uid="Device.Net.FilterDeviceDefinition.#ctor(System.Nullable{System.UInt32},System.Nullable{System.UInt32},System.Nullable{System.UInt16},System.String,System.Nullable{System.Guid})">FilterDeviceDefinition(Nullable&lt;UInt32&gt;, Nullable&lt;UInt32&gt;, Nullable&lt;UInt16&gt;, String, Nullable&lt;Guid&gt;)</h4>
+  <h4 id="Device_Net_FilterDeviceDefinition__ctor_System_Nullable_System_UInt32__System_Nullable_System_UInt32__System_Nullable_System_UInt16__System_String_System_Nullable_Guid__" data-uid="Device.Net.FilterDeviceDefinition.#ctor(System.Nullable{System.UInt32},System.Nullable{System.UInt32},System.Nullable{System.UInt16},System.String,System.Nullable{Guid})">FilterDeviceDefinition(Nullable&lt;UInt32&gt;, Nullable&lt;UInt32&gt;, Nullable&lt;UInt16&gt;, String, Nullable&lt;Guid&gt;)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public FilterDeviceDefinition(uint? vendorId = default(uint? ), uint? productId = default(uint? ), ushort? usagePage = default(ushort? ), string label = null, Guid? classGuid = default(Guid? ))</code></pre>
+    <pre><code class="lang-csharp hljs">public FilterDeviceDefinition(uint? vendorId = null, uint? productId = null, ushort? usagePage = null, string label = null, Guid? classGuid = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -158,7 +134,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Guid</span>&gt;</td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Guid</span>&gt;</td>
         <td><span class="parametername">classGuid</span></td>
         <td></td>
       </tr>
@@ -191,7 +167,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Guid</span>&gt;</td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">Guid</span>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -321,19 +297,25 @@
   </table>
   <h3 id="extensionmethods">Extension Methods</h3>
   <div>
-      <a class="xref" href="Usb.Net.Windows.WindowsUsbDeviceFactoryExtensions.html#Usb_Net_Windows_WindowsUsbDeviceFactoryExtensions_CreateWindowsUsbDeviceFactory_Device_Net_FilterDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Usb_Net_GetUsbInterfaceManager_System_Nullable_System_Guid__System_Nullable_System_UInt16__System_Nullable_System_UInt16__">WindowsUsbDeviceFactoryExtensions.CreateWindowsUsbDeviceFactory(FilterDeviceDefinition, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetUsbInterfaceManager, Nullable&lt;Guid&gt;, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;)</a>
+      <a class="xref" href="Usb.Net.UWP.UwpUsbDeviceFactoryExtensions.html#Usb_Net_UWP_UwpUsbDeviceFactoryExtensions_CreateUwpUsbDeviceFactory_Device_Net_FilterDeviceDefinition_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Usb_Net_GetUsbInterfaceManager_System_Nullable_System_UInt16__System_Nullable_System_UInt16__">UwpUsbDeviceFactoryExtensions.CreateUwpUsbDeviceFactory(FilterDeviceDefinition, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetUsbInterfaceManager, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;)</a>
   </div>
   <div>
-      <a class="xref" href="Device.Net.LibUsb.LibUsbFactoryExtensions.html#Device_Net_LibUsb_LibUsbFactoryExtensions_CreateLibUsbDeviceFactory_Device_Net_FilterDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Int32__System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Device_Net_ConnectedDeviceDefinition_System_Threading_CancellationToken_System_Threading_Tasks_Task_System_Boolean___">LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(FilterDeviceDefinition, ILoggerFactory, Nullable&lt;Int32&gt;, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;, Func&lt;ConnectedDeviceDefinition, CancellationToken, Task&lt;Boolean&gt;&gt;)</a>
+      <a class="xref" href="Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.html#Hid_Net_Windows_WindowsHidDeviceFactoryExtensions_CreateWindowsHidDeviceManager_Device_Net_FilterDeviceDefinition_ILoggerFactory_Hid_Net_Windows_IHidApiService_System_Nullable_Guid__System_Nullable_System_UInt16__System_Nullable_System_UInt16__">WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceManager(FilterDeviceDefinition, ILoggerFactory, IHidApiService, Nullable&lt;Guid&gt;, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;)</a>
   </div>
   <div>
-      <a class="xref" href="Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.html#Hid_Net_Windows_WindowsHidDeviceFactoryExtensions_CreateWindowsHidDeviceManager_Device_Net_FilterDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_Hid_Net_Windows_IHidApiService_System_Nullable_System_Guid__System_Nullable_System_UInt16__System_Nullable_System_UInt16__">WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceManager(FilterDeviceDefinition, ILoggerFactory, IHidApiService, Nullable&lt;Guid&gt;, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;)</a>
+      <a class="xref" href="Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.html#Hid_Net_Windows_WindowsHidDeviceFactoryExtensions_CreateWindowsHidDeviceFactory_Device_Net_FilterDeviceDefinition_ILoggerFactory_Hid_Net_Windows_IHidApiService_System_Nullable_Guid__System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Nullable_System_Byte__">WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, IHidApiService, Nullable&lt;Guid&gt;, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;, Nullable&lt;Byte&gt;)</a>
   </div>
   <div>
-      <a class="xref" href="Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.html#Hid_Net_Windows_WindowsHidDeviceFactoryExtensions_CreateWindowsHidDeviceFactory_Device_Net_FilterDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_Hid_Net_Windows_IHidApiService_System_Nullable_System_Guid__System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Nullable_System_Byte__">WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, IHidApiService, Nullable&lt;Guid&gt;, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;, Nullable&lt;Byte&gt;)</a>
+      <a class="xref" href="Usb.Net.Windows.WindowsUsbDeviceFactoryExtensions.html#Usb_Net_Windows_WindowsUsbDeviceFactoryExtensions_CreateWindowsUsbDeviceFactory_Device_Net_FilterDeviceDefinition_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Usb_Net_GetUsbInterfaceManager_System_Nullable_Guid__System_Nullable_System_UInt16__System_Nullable_System_UInt16__">WindowsUsbDeviceFactoryExtensions.CreateWindowsUsbDeviceFactory(FilterDeviceDefinition, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetUsbInterfaceManager, Nullable&lt;Guid&gt;, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Hid.Net.UWP.UWPHidDeviceFactoryExtensions.html#Hid_Net_UWP_UWPHidDeviceFactoryExtensions_CreateUwpHidDeviceFactory_Device_Net_FilterDeviceDefinition_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Device_Net_GetDeviceAsync_System_Nullable_System_Byte__">UWPHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable&lt;Byte&gt;)</a>
   </div>
   <div>
       <a class="xref" href="Device.Net.DeviceExtensions.html#Device_Net_DeviceExtensions_IsDefinitionMatch_Device_Net_FilterDeviceDefinition_Device_Net_ConnectedDeviceDefinition_Device_Net_DeviceType_">DeviceExtensions.IsDefinitionMatch(FilterDeviceDefinition, ConnectedDeviceDefinition, DeviceType)</a>
+  </div>
+  <div>
+      <a class="xref" href="Device.Net.LibUsb.LibUsbFactoryExtensions.html#Device_Net_LibUsb_LibUsbFactoryExtensions_CreateLibUsbDeviceFactory_Device_Net_FilterDeviceDefinition_ILoggerFactory_System_Nullable_System_Int32__System_Nullable_System_UInt16__System_Nullable_System_UInt16__Func_Device_Net_ConnectedDeviceDefinition_CancellationToken_Task_System_Boolean___">LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(FilterDeviceDefinition, ILoggerFactory, Nullable&lt;Int32&gt;, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;, Func&lt;ConnectedDeviceDefinition, CancellationToken, Task&lt;Boolean&gt;&gt;)</a>
   </div>
 </article>
           </div>

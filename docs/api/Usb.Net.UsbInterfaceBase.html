@@ -73,7 +73,8 @@
   
   <h1 id="Usb_Net_UsbInterfaceBase" data-uid="Usb.Net.UsbInterfaceBase" class="text-break">Class UsbInterfaceBase
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>Represents a USB interfacxe</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
@@ -83,52 +84,28 @@
       <div class="level2"><a class="xref" href="Usb.Net.UWP.UWPUsbInterface.html">UWPUsbInterface</a></div>
       <div class="level2"><a class="xref" href="Usb.Net.Windows.WindowsUsbInterface.html">WindowsUsbInterface</a></div>
   </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Usb.Net.html">Usb.Net</a></h6>
   <h6><strong>Assembly</strong>: Usb.Net.dll</h6>
   <h5 id="Usb_Net_UsbInterfaceBase_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class UsbInterfaceBase</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class UsbInterfaceBase : object</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UsbInterfaceBase__ctor_Microsoft_Extensions_Logging_ILogger_System_Nullable_System_UInt16__System_Nullable_System_UInt16__.md&amp;value=---%0Auid%3A%20Usb.Net.UsbInterfaceBase.%23ctor(Microsoft.Extensions.Logging.ILogger%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Nullable%7BSystem.UInt16%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UsbInterfaceBase__ctor_ILogger_System_Nullable_System_UInt16__System_Nullable_System_UInt16__.md&amp;value=---%0Auid%3A%20Usb.Net.UsbInterfaceBase.%23ctor(ILogger%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Nullable%7BSystem.UInt16%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L119">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L122">View Source</a>
   </span>
   <a id="Usb_Net_UsbInterfaceBase__ctor_" data-uid="Usb.Net.UsbInterfaceBase.#ctor*"></a>
-  <h4 id="Usb_Net_UsbInterfaceBase__ctor_Microsoft_Extensions_Logging_ILogger_System_Nullable_System_UInt16__System_Nullable_System_UInt16__" data-uid="Usb.Net.UsbInterfaceBase.#ctor(Microsoft.Extensions.Logging.ILogger,System.Nullable{System.UInt16},System.Nullable{System.UInt16})">UsbInterfaceBase(ILogger, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;)</h4>
+  <h4 id="Usb_Net_UsbInterfaceBase__ctor_ILogger_System_Nullable_System_UInt16__System_Nullable_System_UInt16__" data-uid="Usb.Net.UsbInterfaceBase.#ctor(ILogger,System.Nullable{System.UInt16},System.Nullable{System.UInt16})">UsbInterfaceBase(ILogger, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected UsbInterfaceBase(ILogger logger = null, ushort? readBufferSize = default(ushort? ), ushort? writeBufferSize = default(ushort? ))</code></pre>
+    <pre><code class="lang-csharp hljs">protected UsbInterfaceBase(ILogger logger = null, ushort? readBufferSize = null, ushort? writeBufferSize = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -141,7 +118,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Microsoft.Extensions.Logging.ILogger</span></td>
+        <td><span class="xref">ILogger</span></td>
         <td><span class="parametername">logger</span></td>
         <td></td>
       </tr>
@@ -164,7 +141,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UsbInterfaceBase_InterfaceNumber.md&amp;value=---%0Auid%3A%20Usb.Net.UsbInterfaceBase.InterfaceNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L21">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L24">View Source</a>
   </span>
   <a id="Usb_Net_UsbInterfaceBase_InterfaceNumber_" data-uid="Usb.Net.UsbInterfaceBase.InterfaceNumber*"></a>
   <h4 id="Usb_Net_UsbInterfaceBase_InterfaceNumber" data-uid="Usb.Net.UsbInterfaceBase.InterfaceNumber">InterfaceNumber</h4>
@@ -194,7 +171,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UsbInterfaceBase_InterruptReadEndpoint.md&amp;value=---%0Auid%3A%20Usb.Net.UsbInterfaceBase.InterruptReadEndpoint%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L73">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L76">View Source</a>
   </span>
   <a id="Usb_Net_UsbInterfaceBase_InterruptReadEndpoint_" data-uid="Usb.Net.UsbInterfaceBase.InterruptReadEndpoint*"></a>
   <h4 id="Usb_Net_UsbInterfaceBase_InterruptReadEndpoint" data-uid="Usb.Net.UsbInterfaceBase.InterruptReadEndpoint">InterruptReadEndpoint</h4>
@@ -224,7 +201,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UsbInterfaceBase_InterruptWriteEndpoint.md&amp;value=---%0Auid%3A%20Usb.Net.UsbInterfaceBase.InterruptWriteEndpoint%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L63">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L66">View Source</a>
   </span>
   <a id="Usb_Net_UsbInterfaceBase_InterruptWriteEndpoint_" data-uid="Usb.Net.UsbInterfaceBase.InterruptWriteEndpoint*"></a>
   <h4 id="Usb_Net_UsbInterfaceBase_InterruptWriteEndpoint" data-uid="Usb.Net.UsbInterfaceBase.InterruptWriteEndpoint">InterruptWriteEndpoint</h4>
@@ -254,7 +231,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UsbInterfaceBase_Logger.md&amp;value=---%0Auid%3A%20Usb.Net.UsbInterfaceBase.Logger%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L25">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L28">View Source</a>
   </span>
   <a id="Usb_Net_UsbInterfaceBase_Logger_" data-uid="Usb.Net.UsbInterfaceBase.Logger*"></a>
   <h4 id="Usb_Net_UsbInterfaceBase_Logger" data-uid="Usb.Net.UsbInterfaceBase.Logger">Logger</h4>
@@ -274,7 +251,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Microsoft.Extensions.Logging.ILogger</span></td>
+        <td><span class="xref">ILogger</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -284,7 +261,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UsbInterfaceBase_ReadBufferSize.md&amp;value=---%0Auid%3A%20Usb.Net.UsbInterfaceBase.ReadBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L29">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L32">View Source</a>
   </span>
   <a id="Usb_Net_UsbInterfaceBase_ReadBufferSize_" data-uid="Usb.Net.UsbInterfaceBase.ReadBufferSize*"></a>
   <h4 id="Usb_Net_UsbInterfaceBase_ReadBufferSize" data-uid="Usb.Net.UsbInterfaceBase.ReadBufferSize">ReadBufferSize</h4>
@@ -314,7 +291,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UsbInterfaceBase_ReadEndpoint.md&amp;value=---%0Auid%3A%20Usb.Net.UsbInterfaceBase.ReadEndpoint%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L35">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L38">View Source</a>
   </span>
   <a id="Usb_Net_UsbInterfaceBase_ReadEndpoint_" data-uid="Usb.Net.UsbInterfaceBase.ReadEndpoint*"></a>
   <h4 id="Usb_Net_UsbInterfaceBase_ReadEndpoint" data-uid="Usb.Net.UsbInterfaceBase.ReadEndpoint">ReadEndpoint</h4>
@@ -344,7 +321,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UsbInterfaceBase_UsbInterfaceEndpoints.md&amp;value=---%0Auid%3A%20Usb.Net.UsbInterfaceBase.UsbInterfaceEndpoints%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L33">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L36">View Source</a>
   </span>
   <a id="Usb_Net_UsbInterfaceBase_UsbInterfaceEndpoints_" data-uid="Usb.Net.UsbInterfaceBase.UsbInterfaceEndpoints*"></a>
   <h4 id="Usb_Net_UsbInterfaceBase_UsbInterfaceEndpoints" data-uid="Usb.Net.UsbInterfaceBase.UsbInterfaceEndpoints">UsbInterfaceEndpoints</h4>
@@ -364,7 +341,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Usb.Net.IUsbInterfaceEndpoint.html">IUsbInterfaceEndpoint</a>&gt;</td>
+        <td><span class="xref">IList</span>&lt;<a class="xref" href="Usb.Net.IUsbInterfaceEndpoint.html">IUsbInterfaceEndpoint</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -374,7 +351,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UsbInterfaceBase_WriteBufferSize.md&amp;value=---%0Auid%3A%20Usb.Net.UsbInterfaceBase.WriteBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L31">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L34">View Source</a>
   </span>
   <a id="Usb_Net_UsbInterfaceBase_WriteBufferSize_" data-uid="Usb.Net.UsbInterfaceBase.WriteBufferSize*"></a>
   <h4 id="Usb_Net_UsbInterfaceBase_WriteBufferSize" data-uid="Usb.Net.UsbInterfaceBase.WriteBufferSize">WriteBufferSize</h4>
@@ -404,7 +381,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UsbInterfaceBase_WriteEndpoint.md&amp;value=---%0Auid%3A%20Usb.Net.UsbInterfaceBase.WriteEndpoint%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L50">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L53">View Source</a>
   </span>
   <a id="Usb_Net_UsbInterfaceBase_WriteEndpoint_" data-uid="Usb.Net.UsbInterfaceBase.WriteEndpoint*"></a>
   <h4 id="Usb_Net_UsbInterfaceBase_WriteEndpoint" data-uid="Usb.Net.UsbInterfaceBase.WriteEndpoint">WriteEndpoint</h4>
@@ -436,7 +413,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UsbInterfaceBase_ClaimInterface.md&amp;value=---%0Auid%3A%20Usb.Net.UsbInterfaceBase.ClaimInterface%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L112">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L115">View Source</a>
   </span>
   <a id="Usb_Net_UsbInterfaceBase_ClaimInterface_" data-uid="Usb.Net.UsbInterfaceBase.ClaimInterface*"></a>
   <h4 id="Usb_Net_UsbInterfaceBase_ClaimInterface" data-uid="Usb.Net.UsbInterfaceBase.ClaimInterface">ClaimInterface()</h4>
@@ -457,7 +434,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td><span class="xref">Task</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -467,7 +444,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UsbInterfaceBase_RegisterDefaultEndpoints.md&amp;value=---%0Auid%3A%20Usb.Net.UsbInterfaceBase.RegisterDefaultEndpoints%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L85">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L88">View Source</a>
   </span>
   <a id="Usb_Net_UsbInterfaceBase_RegisterDefaultEndpoints_" data-uid="Usb.Net.UsbInterfaceBase.RegisterDefaultEndpoints*"></a>
   <h4 id="Usb_Net_UsbInterfaceBase_RegisterDefaultEndpoints" data-uid="Usb.Net.UsbInterfaceBase.RegisterDefaultEndpoints">RegisterDefaultEndpoints()</h4>
@@ -488,7 +465,7 @@
                     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UsbInterfaceBase.md&amp;value=---%0Auid%3A%20Usb.Net.UsbInterfaceBase%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L12" class="contribution-link">View Source</a>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/UsbInterfaceBase.cs/#L15" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

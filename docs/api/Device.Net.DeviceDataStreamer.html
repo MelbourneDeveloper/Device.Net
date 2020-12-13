@@ -80,34 +80,6 @@
     <div class="level0"><span class="xref">System.Object</span></div>
     <div class="level1"><span class="xref">DeviceDataStreamer</span></div>
   </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><span class="xref">System.IDisposable</span></div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Device.Net.html">Device.Net</a></h6>
   <h6><strong>Assembly</strong>: Device.Net.dll</h6>
   <h5 id="Device_Net_DeviceDataStreamer_syntax">Syntax</h5>
@@ -118,18 +90,18 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_DeviceDataStreamer__ctor_Device_Net_ProcessData_Device_Net_IDeviceFactory_System_Nullable_System_TimeSpan__Microsoft_Extensions_Logging_ILoggerFactory_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__.md&amp;value=---%0Auid%3A%20Device.Net.DeviceDataStreamer.%23ctor(Device.Net.ProcessData%2CDevice.Net.IDeviceFactory%2CSystem.Nullable%7BSystem.TimeSpan%7D%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CSystem.Func%7BDevice.Net.IDevice%2CSystem.Threading.Tasks.Task%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_DeviceDataStreamer__ctor_Device_Net_ProcessData_Device_Net_IDeviceFactory_System_Nullable_TimeSpan__ILoggerFactory_Func_Device_Net_IDevice_Task__.md&amp;value=---%0Auid%3A%20Device.Net.DeviceDataStreamer.%23ctor(Device.Net.ProcessData%2CDevice.Net.IDeviceFactory%2CSystem.Nullable%7BTimeSpan%7D%2CILoggerFactory%2CFunc%7BDevice.Net.IDevice%2CTask%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceDataStreamer.cs/#L22">View Source</a>
   </span>
   <a id="Device_Net_DeviceDataStreamer__ctor_" data-uid="Device.Net.DeviceDataStreamer.#ctor*"></a>
-  <h4 id="Device_Net_DeviceDataStreamer__ctor_Device_Net_ProcessData_Device_Net_IDeviceFactory_System_Nullable_System_TimeSpan__Microsoft_Extensions_Logging_ILoggerFactory_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__" data-uid="Device.Net.DeviceDataStreamer.#ctor(Device.Net.ProcessData,Device.Net.IDeviceFactory,System.Nullable{System.TimeSpan},Microsoft.Extensions.Logging.ILoggerFactory,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task})">DeviceDataStreamer(ProcessData, IDeviceFactory, Nullable&lt;TimeSpan&gt;, ILoggerFactory, Func&lt;IDevice, Task&gt;)</h4>
+  <h4 id="Device_Net_DeviceDataStreamer__ctor_Device_Net_ProcessData_Device_Net_IDeviceFactory_System_Nullable_TimeSpan__ILoggerFactory_Func_Device_Net_IDevice_Task__" data-uid="Device.Net.DeviceDataStreamer.#ctor(Device.Net.ProcessData,Device.Net.IDeviceFactory,System.Nullable{TimeSpan},ILoggerFactory,Func{Device.Net.IDevice,Task})">DeviceDataStreamer(ProcessData, IDeviceFactory, Nullable&lt;TimeSpan&gt;, ILoggerFactory, Func&lt;IDevice, Task&gt;)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public DeviceDataStreamer(ProcessData processData, IDeviceFactory deviceFactory, TimeSpan? interval = default(TimeSpan? ), ILoggerFactory loggerFactory = null, Func&lt;IDevice, Task&gt; initializeFunc = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public DeviceDataStreamer(ProcessData processData, IDeviceFactory deviceFactory, TimeSpan? interval = null, ILoggerFactory loggerFactory = null, Func&lt;IDevice, Task&gt; initializeFunc = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -152,17 +124,17 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.TimeSpan</span>&gt;</td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">TimeSpan</span>&gt;</td>
         <td><span class="parametername">interval</span></td>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">Microsoft.Extensions.Logging.ILoggerFactory</span></td>
+        <td><span class="xref">ILoggerFactory</span></td>
         <td><span class="parametername">loggerFactory</span></td>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Func</span>&lt;<a class="xref" href="Device.Net.IDevice.html">IDevice</a>, <span class="xref">System.Threading.Tasks.Task</span>&gt;</td>
+        <td><span class="xref">Func</span>&lt;<a class="xref" href="Device.Net.IDevice.html">IDevice</a>, <span class="xref">Task</span>&gt;</td>
         <td><span class="parametername">initializeFunc</span></td>
         <td></td>
       </tr>
@@ -215,10 +187,6 @@
       </tr>
     </tbody>
   </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <span class="xref">System.IDisposable</span>
-  </div>
 </article>
           </div>
           

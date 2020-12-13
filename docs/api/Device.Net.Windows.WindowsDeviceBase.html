@@ -83,10 +83,6 @@
     <div class="level2"><span class="xref">WindowsDeviceBase</span></div>
       <div class="level3"><a class="xref" href="Hid.Net.Windows.WindowsHidDevice.html">WindowsHidDevice</a></div>
   </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><span class="xref">System.IDisposable</span></div>
-  </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
@@ -111,16 +107,16 @@
       <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_DeviceId">DeviceBase.DeviceId</a>
     </div>
     <div>
-      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_ReadAsync_System_Threading_CancellationToken_">DeviceBase.ReadAsync(CancellationToken)</a>
+      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_ReadAsync_CancellationToken_">DeviceBase.ReadAsync(CancellationToken)</a>
     </div>
     <div>
-      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_WriteAsync_System_Byte___System_Threading_CancellationToken_">DeviceBase.WriteAsync(Byte[], CancellationToken)</a>
+      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_WriteAsync_System_Byte___CancellationToken_">DeviceBase.WriteAsync(Byte[], CancellationToken)</a>
     </div>
     <div>
-      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_Flush_System_Threading_CancellationToken_">DeviceBase.Flush(CancellationToken)</a>
+      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_Flush_CancellationToken_">DeviceBase.Flush(CancellationToken)</a>
     </div>
     <div>
-      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_WriteAndReadAsync_System_Byte___System_Threading_CancellationToken_">DeviceBase.WriteAndReadAsync(Byte[], CancellationToken)</a>
+      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_WriteAndReadAsync_System_Byte___CancellationToken_">DeviceBase.WriteAndReadAsync(Byte[], CancellationToken)</a>
     </div>
     <div>
       <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_RemoveFirstByte_System_Byte___">DeviceBase.RemoveFirstByte(Byte[])</a>
@@ -129,47 +125,26 @@
       <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_Dispose">DeviceBase.Dispose()</a>
     </div>
     <div>
-      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_GetDeviceDefinitionFromWindowsDeviceId_System_String_Device_Net_DeviceType_Microsoft_Extensions_Logging_ILogger_System_Nullable_System_Guid__">DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(String, DeviceType, ILogger, Nullable&lt;Guid&gt;)</a>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
+      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_GetDeviceDefinitionFromWindowsDeviceId_System_String_Device_Net_DeviceType_ILogger_System_Nullable_Guid__">DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(String, DeviceType, ILogger, Nullable&lt;Guid&gt;)</a>
     </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Device.Net.Windows.html">Device.Net.Windows</a></h6>
   <h6><strong>Assembly</strong>: Device.Net.dll</h6>
   <h5 id="Device_Net_Windows_WindowsDeviceBase_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class WindowsDeviceBase : DeviceBase, IDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class WindowsDeviceBase : DeviceBase</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_Windows_WindowsDeviceBase__ctor_System_String_Microsoft_Extensions_Logging_ILoggerFactory_Microsoft_Extensions_Logging_ILogger_.md&amp;value=---%0Auid%3A%20Device.Net.Windows.WindowsDeviceBase.%23ctor(System.String%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CMicrosoft.Extensions.Logging.ILogger)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_Windows_WindowsDeviceBase__ctor_System_String_ILoggerFactory_ILogger_.md&amp;value=---%0Auid%3A%20Device.Net.Windows.WindowsDeviceBase.%23ctor(System.String%2CILoggerFactory%2CILogger)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/Windows/WindowsDeviceBase.cs/#L19">View Source</a>
   </span>
   <a id="Device_Net_Windows_WindowsDeviceBase__ctor_" data-uid="Device.Net.Windows.WindowsDeviceBase.#ctor*"></a>
-  <h4 id="Device_Net_Windows_WindowsDeviceBase__ctor_System_String_Microsoft_Extensions_Logging_ILoggerFactory_Microsoft_Extensions_Logging_ILogger_" data-uid="Device.Net.Windows.WindowsDeviceBase.#ctor(System.String,Microsoft.Extensions.Logging.ILoggerFactory,Microsoft.Extensions.Logging.ILogger)">WindowsDeviceBase(String, ILoggerFactory, ILogger)</h4>
+  <h4 id="Device_Net_Windows_WindowsDeviceBase__ctor_System_String_ILoggerFactory_ILogger_" data-uid="Device.Net.Windows.WindowsDeviceBase.#ctor(System.String,ILoggerFactory,ILogger)">WindowsDeviceBase(String, ILoggerFactory, ILogger)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -192,12 +167,12 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">Microsoft.Extensions.Logging.ILoggerFactory</span></td>
+        <td><span class="xref">ILoggerFactory</span></td>
         <td><span class="parametername">loggerFactory</span></td>
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">Microsoft.Extensions.Logging.ILogger</span></td>
+        <td><span class="xref">ILogger</span></td>
         <td><span class="parametername">logger</span></td>
         <td></td>
       </tr>
@@ -296,18 +271,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_Windows_WindowsDeviceBase_InitializeAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Device.Net.Windows.WindowsDeviceBase.InitializeAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_Windows_WindowsDeviceBase_InitializeAsync_CancellationToken_.md&amp;value=---%0Auid%3A%20Device.Net.Windows.WindowsDeviceBase.InitializeAsync(CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/Windows/WindowsDeviceBase.cs/#L31">View Source</a>
   </span>
   <a id="Device_Net_Windows_WindowsDeviceBase_InitializeAsync_" data-uid="Device.Net.Windows.WindowsDeviceBase.InitializeAsync*"></a>
-  <h4 id="Device_Net_Windows_WindowsDeviceBase_InitializeAsync_System_Threading_CancellationToken_" data-uid="Device.Net.Windows.WindowsDeviceBase.InitializeAsync(System.Threading.CancellationToken)">InitializeAsync(CancellationToken)</h4>
+  <h4 id="Device_Net_Windows_WindowsDeviceBase_InitializeAsync_CancellationToken_" data-uid="Device.Net.Windows.WindowsDeviceBase.InitializeAsync(CancellationToken)">InitializeAsync(CancellationToken)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract Task InitializeAsync(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract Task InitializeAsync(CancellationToken cancellationToken = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -320,7 +295,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="xref">CancellationToken</span></td>
         <td><span class="parametername">cancellationToken</span></td>
         <td></td>
       </tr>
@@ -336,15 +311,11 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td><span class="xref">Task</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <span class="xref">System.IDisposable</span>
-  </div>
 </article>
           </div>
           
