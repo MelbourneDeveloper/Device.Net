@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Hid.Net</id>
+    <title>Hid.Net</title>
+    <description>Cross-platform .NET library for talking to HID devices. Backed by the Device.Net framework</description>
+    <summary>Cross-platform .NET library for talking to HID devices. Backed by the Device.Net framework</summary>
+    <version>4.0.2-alpha</version>
+    <authors>Christian Findlay</authors>
+    <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
+    <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>
+    <copyright>Copyright (c) 2020 Christian Findlay</copyright>
+    <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
+    <repository url="https://github.com/MelbourneDeveloper/Device.Net" />
+    <owners>Christian Findlay</owners>
+    <icon>images/Icon.png</icon>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <dependencies>
+      <group targetFramework=".NETFramework4.5">
+        <dependency id="Device.Net" version="4.0.2-alpha" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Device.Net" version="4.0.2-alpha" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="UAP10.0.16299">
+        <dependency id="Device.Net" version="4.0.2-alpha" exclude="Build,Analyzers" />
+      </group>          
+    </dependencies>
+  </metadata>
+   <files>
+        <file src="../Icon.png" target="images\" />
+
+        <file src="..\..\src\Hid.Net\bin\Release\netstandard2.0\*.dll" target="lib/netstandard2.0"/>   
+        <file src="..\..\src\Hid.Net\bin\Release\netstandard2.0\*.pdb" target="lib/netstandard2.0"/>   
+        <file src="..\..\src\Hid.Net\bin\Release\netstandard2.0\*.xml" target="lib/netstandard2.0"/>   
+
+        <file src="..\..\src\Hid.Net\bin\Release\net45\*.dll" target="lib/net45"/>   
+        <file src="..\..\src\Hid.Net\bin\Release\net45\*.pdb" target="lib/net45"/>   
+        <file src="..\..\src\Hid.Net\bin\Release\net45\*.xml" target="lib/net45"/>   
+
+        <file src="..\..\src\Hid.Net.UWP\bin\Release\*.dll" target="lib/uap10.0.16299"/>   
+        <file src="..\..\src\Hid.Net.UWP\bin\Release\*.pdb" target="lib/uap10.0.16299"/>   
+        <file src="..\..\src\Hid.Net.UWP\bin\Release\*.xml" target="lib/uap10.0.16299"/>                   
+    </files>    
+</package>

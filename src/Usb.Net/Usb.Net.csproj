@@ -2,44 +2,11 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
-    <Description>A cross platform USB library written in C#
-
-Alpha version. Please use 3.x for a stable release</Description>
-    <Version>4.0.1-alpha</Version>
-    <AssemblyVersion>4.0.1.0</AssemblyVersion>
-    <FileVersion>4.0.1.0</FileVersion>
-    <Authors>Christian Findlay</Authors>
-    <Copyright>Copyright (c) 2020 Christian Findlay</Copyright>
-    <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
-    <PackageTags>USB Hid Android C#</PackageTags>
     <LangVersion>8</LangVersion>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <NoWarn>1701;1702;NU5125</NoWarn>    
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>    
-    <PackageReleaseNotes>Alpha version. Please use 3.x for a stable release</PackageReleaseNotes>      
+    <DocumentationFile>Usb.Net.xml</DocumentationFile>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-    <DocumentationFile>C:\Code\AirNetix\Device.Net\src\Usb.Net\Usb.Net.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <Choose>
-    <When Condition=" '$(Configuration)'=='Debug' ">
-      <PropertyGroup>
-        <SignAssembly>false</SignAssembly>
-      </PropertyGroup>
-    </When>
-    <When Condition=" '$(Configuration)'=='Release' ">
-      <PropertyGroup>
-        <SignAssembly>true</SignAssembly>
-        <DelaySign>false</DelaySign>
-        <AssemblyOriginatorKeyFile>../Device.Net/Device.Net.pfx</AssemblyOriginatorKeyFile>
-      </PropertyGroup>
-    </When>
-  </Choose>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
@@ -49,29 +16,7 @@ Alpha version. Please use 3.x for a stable release</Description>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
   </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0' And '$(TargetFramework)' != 'net45'">
-    <Compile Remove="Windows\**" />
-    <EmbeddedResource Remove="Windows\**" />
-    <None Remove="Windows\**" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' != 'uap10.0.16299'">
-    <Compile Remove="UWP\**" />
-    <EmbeddedResource Remove="UWP\**" />
-    <None Remove="UWP\**" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' != 'MonoAndroid90' And '$(TargetFramework)' != 'monoandroid10.0'">
-    <Compile Remove="Android\**" />
-    <EmbeddedResource Remove="Android\**" />
-    <None Remove="Android\**" />
-  </ItemGroup>
-
+  
 </Project>
