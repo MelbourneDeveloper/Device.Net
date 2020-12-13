@@ -1,9 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>Device.Net.LibUsb</id>
     <title>Device.Net.LibUsb</title>
-
     <description>Device.Net based library for USB access on Linux, MacOS and Windows. Use Usb.Net, and Hid.Net for Windows, UWP, and Android support. The base interfaces are the same so the code is compatible on all platforms.</description>
     <summary>Device.Net based library for USB access on Linux, MacOS and Windows. Use Usb.Net, and Hid.Net for Windows, UWP, and Android support. The base interfaces are the same so the code is compatible on all platforms</summary>
     <version>4.0.2-alpha </version>
