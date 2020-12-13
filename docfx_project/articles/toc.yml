@@ -1,2 +1,4 @@
 - name: Getting Started
   href: GettingStarted.md
+- name: Build Issues
+  href: BuildIssues.md  
