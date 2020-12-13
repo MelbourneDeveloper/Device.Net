@@ -1452,7 +1452,67 @@
           "hash": "O7JnYYCTnJx+QtZhaac89Q=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/DebuggingLoggingTracing.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/DebuggingLoggingTracing.html",
+          "hash": "5xmJVHMsz7nBELso7nAN2A=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/DeviceFirmwareDeveloperProgram.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/DeviceFirmwareDeveloperProgram.html",
+          "hash": "mxB4OegpoxHz1YMgt9ENnA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/DeviceListener.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/DeviceListener.html",
+          "hash": "dIKhk+lPH2BbF+KXaoueeA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/DevicePermissionSetup.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/DevicePermissionSetup.html",
+          "hash": "i6KwVooDXMFTHL21PywipQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/EnumeratingConnectedDevices.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/EnumeratingConnectedDevices.html",
+          "hash": "6KOLp6uguLhK/Lq3vF7KfA=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1471,12 +1531,48 @@
       "version": ""
     },
     {
+      "type": "Conceptual",
+      "source_relative_path": "articles/LinuxmacOSSupport.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/LinuxmacOSSupport.html",
+          "hash": "XgSWLs0/GLFDnaAj5uT0xA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/NuGet.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/NuGet.html",
+          "hash": "+XFs9UFPNGGLDFwqGU2zlQ=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/SamplesAndUnitTests.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/SamplesAndUnitTests.html",
+          "hash": "6qXez/VoUeYxtDZ1KWPRxg=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
       "type": "Toc",
       "source_relative_path": "articles/toc.yml",
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "Qo+K0WGu+iDnBJBZZ78Efw=="
+          "hash": "Eib7pVCS243GEyHvdaD9RA=="
         }
       },
       "is_incremental": false,
@@ -1522,7 +1618,7 @@
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "PoeiZ5RAJDTjuvM4f9pU3w=="
+          "hash": "5g8y4rv5HFxxjUu6XwZpFQ=="
         }
       },
       "is_incremental": false,
@@ -1541,8 +1637,8 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 4,
-          "skipped_file_count": 3
+          "total_file_count": 12,
+          "skipped_file_count": 4
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,

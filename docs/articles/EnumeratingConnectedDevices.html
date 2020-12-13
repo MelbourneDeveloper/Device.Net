@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title> </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content=" ">
+    <meta name="generator" content="docfx 2.56.5.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p>To enumerate connected devices, you must register the factories for the device types. If you're not sure which device type you want to connect to, you should try both USB, and Hid. In this case, you will need to add both <a href="https://github.com/MelbourneDeveloper/Device.Net/wiki/NuGet">NuGet</a> packages. Using the <a href="https://github.com/MelbourneDeveloper/Device.Net/wiki/Device-Listener">DeviceListener</a> is probably a better option than simply enumerating devices because it will handle the connecting to (initializing) and from the device for you.</p>
+<p><em>Note: if you have not already been through the process you will need to <a href="https://github.com/MelbourneDeveloper/Device.Net/wiki/Device-Permission-Setup">configure device permissions</a> on Android, or UWP.</em></p>
+<p>Here is an example for registering both factories on Windows:</p>
+<pre><code class="lang-cs">WindowsUsbDeviceFactory.Register(Logger, Tracer);
+WindowsHidDeviceFactory.Register(Logger, Tracer);
+</code></pre>
+<p><em>Note: it is a good idea to specify a logger during the factory registration. This means that the factories will log errors and so on when attempting to connect to enumerate or connect to devices. The <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/master/src/Device.Net/DebugLogger.cs">DebugLogger</a> is a simple example. This will log information to the debug window. More sophisticated logging can be implemented by implementing ILogger.</em></p>
+<p><a href="https://github.com/MelbourneDeveloper/Device.Net/blob/3a7324746e01a0e252d2a4d1b630ed4b623f3903/src/Usb.Net.WindowsSample/Program.cs#L105">Code Reference</a></p>
+<p>Then, you can use the Device manager to get a list of connected devices.</p>
+<pre><code class="lang-cs">var devices = await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null);
+Console.WriteLine(&quot;Currently connected devices: &quot;);
+foreach (var device in devices)
+{
+    Console.WriteLine(device.DeviceId);
+}
+Console.WriteLine();
+</code></pre>
+<p><strong>Output:</strong></p>
+<blockquote>
+<p>\?\usb#vid_1209&amp;pid_53c1&amp;mi_00#6&amp;3344a6c7&amp;1&amp;0000#{dee824ef-729b-4a0e-9c14-b7117d33a817}</p>
+</blockquote>
+<blockquote>
+<p>\?\hid#vid_1209&amp;pid_53c1&amp;mi_01#7&amp;317d5c08&amp;0&amp;0000#{4d1e55b2-f16f-11cf-88cb-001111000030}</p>
+</blockquote>
+<p>As you can see above, these are unique Ids that will allow you to construct IDevice objects that can communicate with the Hid or USB device. In this case, the device with a Vid of 0x1209 and Pid of 0x53C1 has both a USB and a Hid interface. You can construct a device and initialize simply like this:</p>
+<pre><code class="lang-cs">var windowsUsbDevice = new WindowsUsbDevice(devices.First().DeviceId);
+await windowsUsbDevice.InitializeAsync();
+</code></pre>
+<p><strong>Error Logging</strong></p>
+<p>See <a href="https://github.com/MelbourneDeveloper/Device.Net/wiki/Debugging,-Logging,-and-Tracing">this article</a></p>
+<p>If devices fail for some reason, the library will try to log the result. However, for logging to be enabled, an ILogger object must be passed with the factory registration like so:</p>
+<p><a href="https://github.com/MelbourneDeveloper/Device.Net/blob/3a7324746e01a0e252d2a4d1b630ed4b623f3903/src/Usb.Net.WindowsSample/Program.cs#L30">Code Reference</a></p>
+<pre><code class="lang-cs">WindowsUsbDeviceFactory.Register(Logger, Tracer);
+</code></pre>
+<p>The Windows sample uses the default DebugLogger which will simply log results to the debug output window. This will provide useful information about why a device may not connect even though the Device Id appears in the list of Device Ids.</p>
+<p><strong>Using DeviceManager</strong></p>
+<p>Alternatively, you can allow the DeviceManager to create your devices like this. This is generally the easier option.</p>
+<pre><code class="lang-cs">//Define the types of devices to search for.
+var deviceDefinitions = new List&lt;FilterDeviceDefinition&gt;
+{
+    new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, Label=&quot;Trezor One Firmware 1.7.x&quot; }
+};
+
+//Get the first available device and connect to it
+var devices = await DeviceManager.Current.GetDevicesAsync(_DeviceDefinitions);
+using (var trezorDevice = devices.FirstOrDefault())
+{
+    await trezorDevice.InitializeAsync();
+}
+</code></pre>
+<p><a href="https://github.com/MelbourneDeveloper/Device.Net/blob/a63ed3781b16f18dbefed13c6f0c9215377cceaa/src/Usb.Net.UWP.Sample/TrezorExample.cs#L70">Code Reference</a></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/docfx_project/articles/EnumeratingConnectedDevices.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

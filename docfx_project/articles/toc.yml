@@ -1,4 +1,24 @@
-- name: Getting Started
-  href: GettingStarted.md
 - name: Build Issues
   href: BuildIssues.md  
+
+- name: Debugging, Logging and Tracing
+  href: DebuggingLoggingTracing.md 
+
+- name: Device Firmware Developer Program
+  href: DeviceFirmwareDeveloperProgram.md
+
+- name: Enumerating Connected Devices
+  href: EnumeratingConnectedDevices.md
+
+- name: Getting Started
+  href: GettingStarted.md
+
+- name: Linux and macOS Support
+  href: LinuxmacOSSupport.md
+
+- name: NuGet
+  href: NuGet.md  
+
+- name: Samples and Unit Tests
+  href: SamplesAndUnitTests.md
+

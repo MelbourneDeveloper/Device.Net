@@ -1,0 +1,417 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title> </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content=" ">
+    <meta name="generator" content="docfx 2.56.5.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><strong>Linux and MacOS support is here! Check out the <a href="https://github.com/MelbourneDeveloper/Device.Net/tree/develop/src/Device.Net.MacOSLibUsbSample">MacOS sample</a> and the <a href="https://github.com/MelbourneDeveloper/Device.Net/tree/develop/src/Device.Net.LibUsbSample">Linux/MacOS/Windows Terminal/Console App</a>. Grab the NuGet for <a href="https://www.nuget.org/packages/Device.Net.LibUsb/">Device.Net.LibUsb</a>.</strong></p>
+<p>The most common Linux/Windows cross platform library is called <a href="https://github.com/libusb/libusb">LibUsb</a>. There is a C# wrapper for it called <a href="https://github.com/LibUsbDotNet/LibUsbDotNet">LibUsbDotNet</a>. This library wrapper is leveraged in <a href="https://www.nuget.org/packages/Device.Net.LibUsb/">Device.Net.LibUsb</a> to bring Linux and MacOS support to your Device.Net based app. As long as you use the <a href="https://github.com/MelbourneDeveloper/Device.Net/wiki/IDevice">IDevice interface</a> across platforms, code will be 100% compatible. The IDevice implementation is below.</p>
+<p><strong>Please <a href="https://libusb.info/">install LibUsb</a>! If it is not installed on your machine, the samples will not work!</strong></p>
+<p>In the long term, I'm still looking to build a Linux, and MacOS library from the ground up without the LibUsb dependency, so please get it contact if you'd like to contribute. But, For now, Device.Net.LibUsb will get you over the hump.</p>
+<pre><code class="lang-cs">    public class LibUsbDevice : IDevice
+    {
+        #region Fields
+        private UsbEndpointReader _UsbEndpointReader;
+        private UsbEndpointWriter _UsbEndpointWriter;
+        private int ReadPacketSize;
+        private SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        #endregion
+
+        #region Public Properties
+        public UsbDevice UsbDevice { get; }
+        public int VendorId =&gt; GetVendorId(UsbDevice);
+        public int ProductId =&gt; GetProductId(UsbDevice);
+        public int Timeout { get; }
+        public bool IsInitialized { get; private set; }
+        public ConnectedDeviceDefinitionBase ConnectedDeviceDefinition =&gt; throw new NotImplementedException();
+        public string DeviceId =&gt; UsbDevice.DevicePath;
+        #endregion
+
+        #region Events
+        public event EventHandler Connected;
+        public event EventHandler Disconnected;
+        #endregion
+
+        #region Constructor
+        public LibUsbDevice(UsbDevice usbDevice, int timeout)
+        {
+            UsbDevice = usbDevice;
+            Timeout = timeout;
+        }
+        #endregion
+
+        #region Implementation
+        public void Dispose()
+        {
+            //TODO: Release the device...
+            // UsbDevice.Dispose();
+        }
+
+
+        public async Task InitializeAsync()
+        {
+            await Task.Run(() =&gt;
+            {
+
+                //TODO: Error handling etc.
+                UsbDevice.Open();
+
+                //TODO: This is far beyond not cool.
+                if (UsbDevice is MonoUsbDevice monoUsbDevice)
+                {
+                    monoUsbDevice.ClaimInterface(0);
+                }
+                else if (UsbDevice is WinUsbDevice winUsbDevice)
+                {
+                    //Doesn't seem necessary in this case...
+                }
+                else
+                {
+                    ((IUsbDevice)UsbDevice).ClaimInterface(0);
+                }
+
+                _UsbEndpointWriter = UsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
+                _UsbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
+                ReadPacketSize = _UsbEndpointReader.EndpointInfo.Descriptor.MaxPacketSize;
+
+                IsInitialized = true;
+            });
+        }
+
+        public async Task&lt;byte[]&gt; ReadAsync()
+        {
+            await _WriteAndReadLock.WaitAsync();
+
+            try
+            {
+                return await Task.Run(() =&gt;
+                {
+                    var buffer = new byte[ReadPacketSize];
+
+                    _UsbEndpointReader.Read(buffer, Timeout, out var bytesRead);
+
+                    return buffer;
+                });
+            }
+            finally
+            {
+                _WriteAndReadLock.Release();
+            }
+        }
+
+        public async Task WriteAsync(byte[] data)
+        {
+            await _WriteAndReadLock.WaitAsync();
+
+            try
+            {
+                await Task.Run(() =&gt;
+                {
+                    _UsbEndpointWriter.Write(data, Timeout, out var bytesWritten);
+                });
+            }
+            finally
+            {
+                _WriteAndReadLock.Release();
+            }
+        }
+
+        public async Task&lt;byte[]&gt; WriteAndReadAsync(byte[] writeBuffer)
+        {
+            await WriteAsync(writeBuffer);
+            return await ReadAsync();
+        }
+        #endregion
+
+        #region Public Static Methods
+        public static int GetVendorId(UsbDevice usbDevice)
+        {
+            if (usbDevice is MonoUsbDevice monoUsbDevice)
+            {
+                return monoUsbDevice.Profile.DeviceDescriptor.VendorID;
+            }
+            else
+            {
+                return usbDevice.UsbRegistryInfo.Vid;
+            }
+        }
+
+        public static int GetProductId(UsbDevice usbDevice)
+        {
+            if (usbDevice is MonoUsbDevice monoUsbDevice)
+            {
+                return monoUsbDevice.Profile.DeviceDescriptor.ProductID;
+            }
+            else
+            {
+                return usbDevice.UsbRegistryInfo.Pid;
+            }
+        }
+        #endregion
+    }
+</code></pre>
+<p><a href="https://github.com/MelbourneDeveloper/Device.Net/blob/e195ee2c993608f81aba67fbe48db1f5d0954905/src/Device.Net.LibUsb/LibUsbDevice.cs#L10">Code Reference</a></p>
+<p>Here is a cross platform Terminal/Console sample (Linux, MacOS, Windows):</p>
+<pre><code class="lang-cs">    internal class Program
+    {
+        #region Fields
+        private static TrezorExample _DeviceConnectionExample = new TrezorExample();
+        #endregion
+
+        #region Main
+        private static void Main(string[] args)
+        {
+            //Register the factory for creating Usb devices. This only needs to be done once.
+#if (LIBUSB)
+            LibUsbUsbDeviceFactory.Register();
+#else
+            WindowsUsbDeviceFactory.Register();
+            WindowsHidDeviceFactory.Register();
+#endif
+
+            _DeviceConnectionExample.TrezorInitialized += _DeviceConnectionExample_TrezorInitialized;
+            _DeviceConnectionExample.TrezorDisconnected += _DeviceConnectionExample_TrezorDisconnected;
+
+            Go(Menu());
+
+            new ManualResetEvent(false).WaitOne();
+        }
+
+        private static async Task Go(int menuOption)
+        {
+            switch (menuOption)
+            {
+                case 1:
+                    try
+                    {
+                        await _DeviceConnectionExample.InitializeTrezorAsync();
+                        await DisplayDataAsync();
+                        _DeviceConnectionExample.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.Clear();
+                        Console.WriteLine(ex.ToString());
+                    }
+                    Console.ReadKey();
+                    break;
+                case 2:
+                    Console.Clear();
+                    DisplayWaitMessage();
+                    _DeviceConnectionExample.StartListening();
+                    break;
+            }
+        }
+        #endregion
+
+        #region Event Handlers
+        private static void _DeviceConnectionExample_TrezorDisconnected(object sender, EventArgs e)
+        {
+            Console.Clear();
+            Console.WriteLine(&quot;Disconnnected.&quot;);
+            DisplayWaitMessage();
+        }
+
+        private static async void _DeviceConnectionExample_TrezorInitialized(object sender, EventArgs e)
+        {
+            try
+            {
+                Console.Clear();
+                await DisplayDataAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.Clear();
+                Console.WriteLine(ex.ToString());
+            }
+        }
+        #endregion
+
+        #region Private Methods
+        private static int Menu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine(&quot;Console sample. This sample demonstrates either writing to the first found connected device, or listening for a device and then writing to it. If you listen for the device, you will be able to connect and disconnect multiple times. This represents how users may actually use the device.&quot;);
+                Console.WriteLine();
+                Console.WriteLine(&quot;1. Write To Connected Device&quot;);
+                Console.WriteLine(&quot;2. Listen For Device&quot;);
+                var consoleKey = Console.ReadKey();
+                if (consoleKey.KeyChar == '1') return 1;
+                if (consoleKey.KeyChar == '2') return 2;
+            }
+        }
+
+        private static async Task DisplayDataAsync()
+        {
+            var bytes = await _DeviceConnectionExample.WriteAndReadFromDeviceAsync();
+            Console.Clear();
+            Console.WriteLine(&quot;Device connected. Output:&quot;);
+            DisplayData(bytes);
+        }
+
+        private static void DisplayData(byte[] readBuffer)
+        {
+            Console.WriteLine(string.Join(' ', readBuffer));
+            Console.ReadKey();
+        }
+
+        private static void DisplayWaitMessage()
+        {
+            Console.WriteLine(&quot;Waiting for device to be plugged in...&quot;);
+        }
+        #endregion
+    }
+</code></pre>
+<p><a href="https://github.com/MelbourneDeveloper/Device.Net/blob/e195ee2c993608f81aba67fbe48db1f5d0954905/src/Usb.Net.UWP.Sample/TrezorExample.cs#L9">Trezor Example Code Reference</a></p>
+<p>Here is a simple Mac sample.</p>
+<pre><code class="lang-cs">    public partial class ViewController : NSViewController
+    {
+        TrezorExample TrezorExample = new TrezorExample();
+
+        public ViewController(IntPtr handle) : base(handle)
+        {
+
+        }
+
+        public async override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+
+            LibUsbUsbDeviceFactory.Register();
+
+            await TrezorExample.InitializeTrezorAsync();
+            var buffer = await TrezorExample.WriteAndReadFromDeviceAsync();
+
+            var alert = new NSAlert
+            {
+                MessageText = $&quot;Got it! {buffer[0]},{buffer[1]},{buffer[2]}.  Warning: Make sure you unplug and replug before trying again.&quot;,
+                AlertStyle = NSAlertStyle.Informational
+            };
+
+            alert.AddButton(&quot;OK&quot;);
+
+            var returnValue = alert.RunModal();
+        }
+
+        public override NSObject RepresentedObject
+        {
+            get
+            {
+                return base.RepresentedObject;
+            }
+            set
+            {
+                base.RepresentedObject = value;
+                // Update the view, if already loaded.
+            }
+        }
+    }
+</code></pre>
+<p><a href="https://github.com/MelbourneDeveloper/Device.Net/blob/e195ee2c993608f81aba67fbe48db1f5d0954905/src/Device.Net.MacOSLibUsbSample/ViewController.cs#L10">Code Reference</a></p>
+<p><a href="https://github.com/treehopper-electronics/HIDSharp">HIDSharp</a> is another cross platform library that looks promising. It seems to have providers for MacOS and Linux. I haven't tested this, but I'd really like to hear from anyone who has tried it.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/docfx_project/articles/LinuxmacOSSupport.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
