@@ -4,7 +4,7 @@
 
 Run the Windows sample. You should see your device's path appear at the top of the console. If it does not, check the logs to find out why it didn't appear.
 
-![Image](images/WindowsSample.png)
+![Image](../images/WindowsSample.png)
 
 ## Modify a Sample
 
