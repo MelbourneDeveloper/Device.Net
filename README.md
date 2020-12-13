@@ -6,7 +6,7 @@
 
 ![diagram](https://github.com/MelbourneDeveloper/Device.Net/blob/master/Diagram.png)
 
-[## Version 4 Documentation](https://melbournedeveloper.github.io/Device.Net/index.html)
+## [Version 4 Documentation](https://melbournedeveloper.github.io/Device.Net/index.html)
 
 **Version 4 is going to be a big version. Control Transfers are [almost there](https://github.com/MelbourneDeveloper/Device.Net/pull/165)! Check out the [plan](https://github.com/MelbourneDeveloper/Device.Net/projects/11). Many enhancements including Reactive support, standard [`ILogger`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger?view=dotnet-plat-ext-3.1) throughout, are already done and I'm in the middle of testing with more real devices with real apps. The framework is currently getting a thrashing with an app I'm working on. Pull Requests are super welcome!**
 
