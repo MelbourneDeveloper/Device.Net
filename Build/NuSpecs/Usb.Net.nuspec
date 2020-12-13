@@ -3,8 +3,8 @@
   <metadata>
     <id>Usb.Net</id>
     <title>Usb.Net</title>
-    <description>A cross platform USB library written in C#</description>
-    <summary>A cross platform USB library written in C#</summary>
+    <description>Cross-platform .NET library for talking to USB devices. Backed by the Device.Net framework</description>
+    <summary>Cross-platform .NET library for talking to USB devices. Backed by the Device.Net framework</summary>
     <version>4.0.2-alpha</version>
     <authors>Christian Findlay</authors>
     <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>

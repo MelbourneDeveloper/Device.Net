@@ -3,10 +3,10 @@
   <metadata>
     <id>Device.Net</id>
     <title>Device.Net</title>
-    <description>Cross platform C# library for talking to connected devices in a uniform way through dependency injection.
+    <description>Cross-platform .NET framework for talking to connected devices in a uniform way through dependency injection.
 
 Alpha version. Please use 3.x for a stable release</description>
-    <summary>Cross platform C# library for talking to connected devices in a uniform way through dependency injection.</summary>
+    <summary>Cross-platform .NET framework for talking to connected devices in a uniform way through dependency injection.</summary>
     <version>4.0.2-alpha </version>
     <authors>Christian Findlay</authors>
     <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>

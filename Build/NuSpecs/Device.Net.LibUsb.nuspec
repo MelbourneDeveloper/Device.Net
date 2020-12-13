@@ -3,8 +3,8 @@
   <metadata>
     <id>Device.Net.LibUsb</id>
     <title>Device.Net.LibUsb</title>
-    <description>Device.Net based library for USB access on Linux, MacOS and Windows. Use Usb.Net, and Hid.Net for Windows, UWP, and Android support. The base interfaces are the same so the code is compatible on all platforms.</description>
-    <summary>Device.Net based library for USB access on Linux, MacOS and Windows. Use Usb.Net, and Hid.Net for Windows, UWP, and Android support. The base interfaces are the same so the code is compatible on all platforms</summary>
+    <description>macOS and Linux .NET library for talking to USB devices. Backed by the Device.Net framework</description>
+    <summary>macOS and Linux .NET library for talking to USB devices. Backed by the Device.Net framework</summary>
     <version>4.0.2-alpha </version>
     <authors>Christian Findlay</authors>
     <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>

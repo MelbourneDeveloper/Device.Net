@@ -3,12 +3,8 @@
   <metadata>
     <id>Hid.Net</id>
     <title>Hid.Net</title>
-    <description>Hid.Net
-
-Cross platform Hid (USB) library. 
-Enumerate Hid (USB) devices and read and write to/from them. 
-Supports .NET, Android, and UWP out of the box. Other platforms can be added</description>
-    <summary>Cross platform Hid library. Enumerate Hid (USB) devices and read and write to/from them.</summary>
+    <description>Cross-platform .NET library for talking to HID devices. Backed by the Device.Net framework</description>
+    <summary>Cross-platform .NET library for talking to HID devices. Backed by the Device.Net framework</summary>
     <version>4.0.2-alpha</version>
     <authors>Christian Findlay</authors>
     <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
