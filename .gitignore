@@ -38,3 +38,5 @@ src/Usb.Net/Usb.Net.xml
 src/Device.Net/Device.Net.xml
 
 src/Hid.Net/Hid.Net.xml
+
+src/SerialPort.Net/SerialPort.Net.xml

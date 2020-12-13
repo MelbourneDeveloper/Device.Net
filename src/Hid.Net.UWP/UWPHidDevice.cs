@@ -40,7 +40,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Event Handlers
-        private void HidDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args) => HandleDataReceived(InputReportToBytes(args));
+        private void HidDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args) => HandleDataReceived(GetReadReport(args).Data);
         #endregion
 
         #region Constructors
@@ -85,16 +85,17 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Private Static Methods
-        private static byte[] InputReportToBytes(HidInputReportReceivedEventArgs args)
+        private static ReadReport GetReadReport(HidInputReportReceivedEventArgs args)
         {
             byte[] bytes;
+            uint bytesRead;
             using (var stream = args.Report.Data.AsStream())
             {
                 bytes = new byte[args.Report.Data.Length];
-                stream.Read(bytes, 0, (int)args.Report.Data.Length);
+                bytesRead = (uint)stream.Read(bytes, 0, (int)args.Report.Data.Length);
             }
 
-            return bytes;
+            return new ReadReport((byte)args.Report.Id, bytes, bytesRead);
         }
         #endregion
 
@@ -173,7 +174,7 @@ namespace Hid.Net.UWP
                 bytes = DeviceBase.RemoveFirstByte(bytes);
             }
 
-            return new ReadReport(reportId, bytes);
+            return new ReadReport(reportId, bytes, bytes.BytesTransferred);
         }
 
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
@@ -195,7 +196,7 @@ namespace Hid.Net.UWP
 
             try
             {
-                await WriteAsync(writeBuffer, cancellationToken);
+                _ = await WriteAsync(writeBuffer, cancellationToken);
                 var retVal = await ReadAsync(cancellationToken);
 
                 Logger?.LogDebug(Messages.SuccessMessageWriteAndReadCalled);
@@ -208,7 +209,7 @@ namespace Hid.Net.UWP
             }
             finally
             {
-                _WriteAndReadLock.Release();
+                _ = _WriteAndReadLock.Release();
             }
         }
 

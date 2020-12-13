@@ -83,7 +83,12 @@ namespace SerialPort.Net.Windows
         public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             ValidateConnection();
-            return Task.Run(() => Write(data), cancellationToken);
+            return Task.Run(() =>
+            {
+                var bytesWritten = Write(data);
+                Logger.LogTrace(new Trace(false, data));
+                return bytesWritten;
+            }, cancellationToken);
         }
 
         public override Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
@@ -94,6 +99,9 @@ namespace SerialPort.Net.Windows
             {
                 var buffer = new byte[_ReadBufferSize];
                 var bytesRead = Read(buffer);
+
+                Logger.LogTrace(new Trace(false, buffer));
+
                 return new TransferResult(buffer, bytesRead);
             }, cancellationToken);
         }
@@ -164,20 +172,14 @@ namespace SerialPort.Net.Windows
                     break;
             }
 
-            switch (_StopBits)
+            dcb.StopBits = _StopBits switch
             {
-                case StopBits.One:
-                    dcb.StopBits = 0;
-                    break;
-                case StopBits.OnePointFive:
-                    dcb.StopBits = 1;
-                    break;
-                case StopBits.Two:
-                    dcb.StopBits = 2;
-                    break;
-                default:
-                    throw new ArgumentException(Messages.ErrorMessageStopBitsMustBeSpecified);
-            }
+                StopBits.One => 0,
+                StopBits.OnePointFive => 1,
+                StopBits.Two => 2,
+                StopBits.None => throw new NotImplementedException(),
+                _ => throw new ArgumentException(Messages.ErrorMessageStopBitsMustBeSpecified),
+            };
 #pragma warning restore IDE0010 // Add missing cases
 
             isSuccess = ApiService.ASetCommState(_ReadSafeFileHandle, ref dcb);
@@ -194,14 +196,16 @@ namespace SerialPort.Net.Windows
 
             isSuccess = ApiService.ASetCommTimeouts(_ReadSafeFileHandle, ref timeouts);
             WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorCouldNotSetCommTimeout);
+
+            Logger.LogInformation("Serial Port device initialized successfully. Port: {port}", DeviceId);
         }
 
         private uint Read(byte[] data)
-        {
-            return ApiService.AReadFile(_ReadSafeFileHandle, data, data.Length, out var bytesRead, 0)
+        =>
+             ApiService.AReadFile(_ReadSafeFileHandle, data, data.Length, out var bytesRead, 0)
                 ? bytesRead
                 : throw new IOException(Messages.ErrorMessageRead);
-        }
+
 
         private void ValidateConnection()
         {

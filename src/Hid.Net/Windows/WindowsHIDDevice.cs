@@ -195,9 +195,9 @@ namespace Hid.Net.Windows
 
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
-            var data = (await ReadReportAsync(cancellationToken)).Data;
-            Logger.LogTrace(new Trace(false, data));
-            return data;
+            var readReport = await ReadReportAsync(cancellationToken);
+            Logger.LogTrace(new Trace(false, readReport.Data));
+            return new TransferResult(readReport.Data, readReport.BytesRead);
         }
 
         public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
@@ -211,9 +211,11 @@ namespace Hid.Net.Windows
 
             var bytes = new byte[ReadBufferSize];
 
+            uint bytesRead;
+
             try
             {
-                await _ReadFileStream.ReadAsync(bytes, 0, bytes.Length, cancellationToken);
+                bytesRead = (uint)await _ReadFileStream.ReadAsync(bytes, 0, bytes.Length, cancellationToken);
             }
             catch (OperationCanceledException oce)
             {
@@ -230,7 +232,7 @@ namespace Hid.Net.Windows
 
             var retVal = ReadBufferHasReportId ? RemoveFirstByte(bytes) : bytes;
 
-            return new ReadReport(reportId, retVal);
+            return new ReadReport(reportId, retVal, bytesRead);
         }
 
         public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
