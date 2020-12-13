@@ -1,6 +1,6 @@
 # Hid.Net, Usb.Net, SerialPort.Net (Device.Net)
 
-![diagram](/images/Diagram.png)
+![Device.Net Logo](/images/Diagram.png)
 
 **Cross-platform .NET framework for talking to connected devices such as USB, Serial Port, and Hid devices uniformly through dependency injection.**
 
