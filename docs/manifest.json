@@ -1452,7 +1452,7 @@
           "hash": "O7JnYYCTnJx+QtZhaac89Q=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1471,15 +1471,12 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
       "type": "Toc",
       "source_relative_path": "articles/toc.yml",
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "euOOBpQvkd4uU8gwUbe/2g=="
+          "hash": "oNspwy9TE5pOHCyICTw6xA=="
         }
       },
       "is_incremental": false,
@@ -1520,15 +1517,12 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
       "type": "Toc",
       "source_relative_path": "toc.yml",
       "output": {
         ".html": {
           "relative_path": "toc.html",
-          "hash": "399+qaCKRcOvkwQafl580Q=="
+          "hash": "PoeiZ5RAJDTjuvM4f9pU3w=="
         }
       },
       "is_incremental": false,
@@ -1548,7 +1542,7 @@
           "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 4,
-          "skipped_file_count": 3
+          "skipped_file_count": 4
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
