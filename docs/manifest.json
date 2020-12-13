@@ -1444,15 +1444,12 @@
       "version": ""
     },
     {
-      "log_codes": [
-        "InvalidFileLink"
-      ],
       "type": "Conceptual",
       "source_relative_path": "articles/intro.md",
       "output": {
         ".html": {
           "relative_path": "articles/intro.html",
-          "hash": "57S3HSGAyzPBsyTNlsn3qA=="
+          "hash": "gCdzhbwodz8fNPJ871Hcbg=="
         }
       },
       "is_incremental": false,
