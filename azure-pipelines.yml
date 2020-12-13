@@ -33,7 +33,7 @@ steps:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
     nuGetFeedType: 'internal'
-    publishVstsFeed: 'a579837a-f36e-462f-8492-1a622b5cadb9/683ef5ce-90b0-447e-9b37-149cf359cf6c'
+    publishVstsFeed: 'a579837a-f36e-462f-8492-1a622b5cadb9/090d756e-449c-4967-8758-2f98c474912d'
 
 # - powershell: |
 #     choco install docfx -y
