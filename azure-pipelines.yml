@@ -11,11 +11,34 @@ pool:
 
 steps:
 
-- task: DotNetCoreCLI@2
+- task: NuGetCommand@2
   inputs:
-    command: 'build'
-    projects: |
-      src/Device.Net/Device.Net.csproj
-      src/Usb.Net/Usb.Net.csproj
+    command: 'restore'
+    restoreSolution: 'src/Device.Net.Pipelines.sln'
+    feedsToUse: 'select'
 
+- task: MSBuild@1
+  inputs:
+    solution: 'src/Device.Net.Pipelines.sln'
+    configuration: 'Release'
 
+- task: NuGetCommand@2
+  inputs:
+    command: 'pack'
+    packagesToPack: 'Build/NuSpecs/*.nuspec'
+    versioningScheme: 'off'
+
+- task: NuGetCommand@2
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: 'a579837a-f36e-462f-8492-1a622b5cadb9/090d756e-449c-4967-8758-2f98c474912d'
+
+# - powershell: |
+#     choco install docfx -y
+#     docfx docfx_project/docfx.json
+#     if ($lastexitcode -ne 0){
+#       throw ("Error generating document")
+#     }
+#   displayName: "Documentation"

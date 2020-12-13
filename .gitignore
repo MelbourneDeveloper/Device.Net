@@ -24,7 +24,6 @@ file_paths.xml
 *.nupkg
 *.bak
 /.vscode
-*.nuspec
 
 src/Flutter/flutnet_thermometer_bridge/lib/flutnet/data/
 
@@ -33,3 +32,9 @@ src/Flutter/flutnet_thermometer_bridge/lib/flutnet/service_model/
 src/Flutter/flutnet_thermometer_bridge/lib/flutnet_thermometer/service_library/generated/
 
 src/Flutter/flutnet_thermometer_bridge/lib/flutnet_thermometer/service_library/
+
+src/Usb.Net/Usb.Net.xml
+
+src/Device.Net/Device.Net.xml
+
+src/Hid.Net/Hid.Net.xml

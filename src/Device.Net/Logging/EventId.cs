@@ -1,8 +1,9 @@
-﻿namespace Microsoft.Extensions.Logging
+﻿#pragma warning disable CA1815 // Override equals and operator equals on value types
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+namespace Microsoft.Extensions.Logging
 {
-#pragma warning disable CA1815 // Override equals and operator equals on value types
     public readonly struct EventId
-#pragma warning restore CA1815 // Override equals and operator equals on value types
     {
         public EventId(int id, string name = null)
         {
@@ -14,3 +15,6 @@
         public string Name { get; }
     }
 }
+
+#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
+#pragma warning restore CA1815 // Override equals and operator equals on value types

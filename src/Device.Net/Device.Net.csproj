@@ -3,50 +3,12 @@
   <PropertyGroup>
     <LangVersion>8.0</LangVersion>
     <TargetFrameworks>netstandard2.0;net45;</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AssemblyVersion>4.0.0.0</AssemblyVersion>
-    <FileVersion>4.0.0.0</FileVersion>
-    <Version>4.0.0-alpha</Version>
-    <Authors>Christian Findlay</Authors>
-    <Description>Cross platform C# library for talking to connected devices in a uniform way through dependency injection.
-
-Alpha version. Please use 3.x for a stable release</Description>
-    <Copyright>Copyright (c) 2020 Christian Findlay</Copyright>
-    <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net</RepositoryUrl>
-    <PackageTags>Hid USB Android UWP Windows C# MacOS Linux</PackageTags>
     <NoWarn>NU5125</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageReleaseNotes>Alpha version. Please use 3.x for a stable release</PackageReleaseNotes>
-    <AssemblyOriginatorKeyFile>Device.Net.pfx</AssemblyOriginatorKeyFile>   
+    <DocumentationFile>Device.Net.xml</DocumentationFile>  
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
-    <DocumentationFile>C:\Code\AirNetix\Device.Net\src\Device.Net\Device.Net.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <Choose>
-    <When Condition=" '$(Configuration)'=='Debug' ">
-      <PropertyGroup>
-        <SignAssembly>false</SignAssembly>
-      </PropertyGroup>
-    </When>
-    <When Condition=" '$(Configuration)'=='Release' ">
-      <PropertyGroup>
-        <SignAssembly>true</SignAssembly>
-        <DelaySign>false</DelaySign>
-        <AssemblyOriginatorKeyFile>Device.Net.pfx</AssemblyOriginatorKeyFile>
-      </PropertyGroup>
-    </When>
-  </Choose>
-	
   <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
     <None Include="..\..\README.md" Link="README.md" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
       <PrivateAssets>all</PrivateAssets>
@@ -54,29 +16,11 @@ Alpha version. Please use 3.x for a stable release</Description>
     </PackageReference>    
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0' And '$(TargetFramework)' != 'net45'">
-    <Compile Remove="Windows\**" />
-    <EmbeddedResource Remove="Windows\**" />
-    <None Remove="Windows\**" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' != 'uap10.0.16299'">
-    <Compile Remove="UWP\**" />
-    <EmbeddedResource Remove="UWP\**" />
-    <None Remove="UWP\**" />
-  </ItemGroup>
-
 	<ItemGroup Condition="'$(TargetFramework)' != 'net45'">
 		<Compile Remove="Logging/*.*" />
 	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
 	    <Version>3.1.7</Version>
 	  </PackageReference>    
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Reference Include="Windows.Foundation.FoundationContract">
-	    <HintPath>C:\Program Files (x86)\Windows Kits\10\References\10.0.17134.0\Windows.Foundation.FoundationContract\3.0.0.0\Windows.Foundation.FoundationContract.winmd</HintPath>
-	  </Reference>
 	</ItemGroup>
 
 </Project>

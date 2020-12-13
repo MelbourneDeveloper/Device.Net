@@ -8,6 +8,9 @@ using System.Linq;
 
 namespace Usb.Net
 {
+    /// <summary>
+    /// Keeps track of the existing USB interfaces
+    /// </summary>
     public class UsbInterfaceManager : IDisposable
     {
         #region Fields
