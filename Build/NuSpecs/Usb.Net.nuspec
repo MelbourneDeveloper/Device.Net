@@ -23,6 +23,12 @@
       <group targetFramework=".NETStandard2.0">
         <dependency id="Device.Net" version="4.0.2-alpha" exclude="Build,Analyzers" />
       </group>
+      <group targetFramework="UAP10.0.16299">
+        <dependency id="Device.Net" version="4.0.2-alpha" exclude="Build,Analyzers" />
+      </group>    
+      <group targetFramework="MonoAndroid0.0">
+        <dependency id="Device.Net" version="4.0.2-alpha" exclude="Build,Analyzers" />
+      </group>              
     </dependencies>
   </metadata>
    <files>
