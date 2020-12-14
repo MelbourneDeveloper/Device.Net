@@ -37,7 +37,11 @@ namespace Usb.Net.WindowsSample
         #region Main
         private static async Task Main()
         {
-            _loggerFactory = LoggerFactory.Create((builder) => builder.AddDebug());
+            _loggerFactory = LoggerFactory.Create((builder) =>
+            {
+                builder.AddDebug(); 
+                builder.SetMinimumLevel(LogLevel.Trace);
+            });
 
 
             //Register the factories for creating Usb devices. This only needs to be done once.
