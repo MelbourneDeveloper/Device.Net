@@ -79,7 +79,7 @@
   <h6><strong>Assembly</strong>: Device.Net.UWP.dll</h6>
   <h5 id="Device_Net_UWP_TestConnection_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public delegate Task&lt;ConnectionInfo&gt; TestConnection(string deviceId, CancellationToken cancellationToken = null);</code></pre>
+    <pre><code class="lang-csharp hljs">public delegate Task&lt;ConnectionInfo&gt; TestConnection(string deviceId, CancellationToken cancellationToken = default(CancellationToken));</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -97,7 +97,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
         <td><span class="parametername">cancellationToken</span></td>
         <td></td>
       </tr>
@@ -113,7 +113,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Task</span>&lt;<a class="xref" href="Device.Net.UWP.ConnectionInfo.html">ConnectionInfo</a>&gt;</td>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.UWP.ConnectionInfo.html">ConnectionInfo</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>

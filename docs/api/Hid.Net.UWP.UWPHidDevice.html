@@ -85,10 +85,9 @@
   <div classs="implements">
     <h5>Implements</h5>
     <div><a class="xref" href="Device.Net.IDeviceHandler.html">IDeviceHandler</a></div>
-    <div><span class="xref">IDisposable</span></div>
     <div><a class="xref" href="Hid.Net.IHidDevice.html">IHidDevice</a></div>
     <div><a class="xref" href="Device.Net.IDevice.html">IDevice</a></div>
-    <div><span class="xref">IDisposable</span></div>
+    <div><span class="xref">System.IDisposable</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -102,7 +101,7 @@
       <a class="xref" href="Device.Net.UWP.UWPDeviceBase-1.html#Device_Net_UWP_UWPDeviceBase_1_LoggerFactory">UWPDeviceBase&lt;HidDevice&gt;.LoggerFactory</a>
     </div>
     <div>
-      <a class="xref" href="Device.Net.UWP.UWPDeviceBase-1.html#Device_Net_UWP_UWPDeviceBase_1_GetDeviceAsync_System_String_CancellationToken_">UWPDeviceBase&lt;HidDevice&gt;.GetDeviceAsync(String, CancellationToken)</a>
+      <a class="xref" href="Device.Net.UWP.UWPDeviceBase-1.html#Device_Net_UWP_UWPDeviceBase_1_GetDeviceAsync_System_String_System_Threading_CancellationToken_">UWPDeviceBase&lt;HidDevice&gt;.GetDeviceAsync(String, CancellationToken)</a>
     </div>
     <div>
       <a class="xref" href="Device.Net.UWP.UWPDeviceBase-1.html#Device_Net_UWP_UWPDeviceBase_1_IsInitialized">UWPDeviceBase&lt;HidDevice&gt;.IsInitialized</a>
@@ -128,29 +127,50 @@
     <div>
       <a class="xref" href="Device.Net.UWP.UWPDeviceBase.html#Device_Net_UWP_UWPDeviceBase_HandleDataReceived_System_Byte___">UWPDeviceBase.HandleDataReceived(Byte[])</a>
     </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Hid.Net.UWP.html">Hid.Net.UWP</a></h6>
   <h6><strong>Assembly</strong>: Hid.Net.UWP.dll</h6>
   <h5 id="Hid_Net_UWP_UWPHidDevice_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class UWPHidDevice : UWPDeviceBase&lt;HidDevice&gt;, IDeviceHandler, IDisposable, IHidDevice, IDevice, IDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">public class UWPHidDevice : UWPDeviceBase&lt;HidDevice&gt;, IDeviceHandler, IHidDevice, IDevice, IDisposable</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice__ctor_Device_Net_ConnectedDeviceDefinition_ILoggerFactory_System_Nullable_System_Byte__.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.%23ctor(Device.Net.ConnectedDeviceDefinition%2CILoggerFactory%2CSystem.Nullable%7BSystem.Byte%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice__ctor_Device_Net_ConnectedDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Byte__.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.%23ctor(Device.Net.ConnectedDeviceDefinition%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CSystem.Nullable%7BSystem.Byte%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L47">View Source</a>
   </span>
   <a id="Hid_Net_UWP_UWPHidDevice__ctor_" data-uid="Hid.Net.UWP.UWPHidDevice.#ctor*"></a>
-  <h4 id="Hid_Net_UWP_UWPHidDevice__ctor_Device_Net_ConnectedDeviceDefinition_ILoggerFactory_System_Nullable_System_Byte__" data-uid="Hid.Net.UWP.UWPHidDevice.#ctor(Device.Net.ConnectedDeviceDefinition,ILoggerFactory,System.Nullable{System.Byte})">UWPHidDevice(ConnectedDeviceDefinition, ILoggerFactory, Nullable&lt;Byte&gt;)</h4>
+  <h4 id="Hid_Net_UWP_UWPHidDevice__ctor_Device_Net_ConnectedDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Byte__" data-uid="Hid.Net.UWP.UWPHidDevice.#ctor(Device.Net.ConnectedDeviceDefinition,Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.Byte})">UWPHidDevice(ConnectedDeviceDefinition, ILoggerFactory, Nullable&lt;Byte&gt;)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public UWPHidDevice(ConnectedDeviceDefinition connectedDeviceDefinition, ILoggerFactory loggerFactory = null, byte? defaultReportId = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public UWPHidDevice(ConnectedDeviceDefinition connectedDeviceDefinition, ILoggerFactory loggerFactory = null, byte? defaultReportId = default(byte? ))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -168,7 +188,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">ILoggerFactory</span></td>
+        <td><span class="xref">Microsoft.Extensions.Logging.ILoggerFactory</span></td>
         <td><span class="parametername">loggerFactory</span></td>
         <td></td>
       </tr>
@@ -328,18 +348,18 @@
   <div><span class="xref">Device.Net.UWP.UWPDeviceBase&lt;Windows.Devices.HumanInterfaceDevice.HidDevice&gt;.Dispose()</span></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_Flush_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.Flush(CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_Flush_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.Flush(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L216">View Source</a>
   </span>
   <a id="Hid_Net_UWP_UWPHidDevice_Flush_" data-uid="Hid.Net.UWP.UWPHidDevice.Flush*"></a>
-  <h4 id="Hid_Net_UWP_UWPHidDevice_Flush_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.Flush(CancellationToken)">Flush(CancellationToken)</h4>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_Flush_System_Threading_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.Flush(System.Threading.CancellationToken)">Flush(CancellationToken)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task Flush(CancellationToken cancellationToken = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task Flush(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -352,7 +372,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
         <td><span class="parametername">cancellationToken</span></td>
         <td></td>
       </tr>
@@ -368,7 +388,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Task</span></td>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -471,18 +491,18 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_InitializeAsync_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.InitializeAsync(CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_InitializeAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.InitializeAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L55">View Source</a>
   </span>
   <a id="Hid_Net_UWP_UWPHidDevice_InitializeAsync_" data-uid="Hid.Net.UWP.UWPHidDevice.InitializeAsync*"></a>
-  <h4 id="Hid_Net_UWP_UWPHidDevice_InitializeAsync_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.InitializeAsync(CancellationToken)">InitializeAsync(CancellationToken)</h4>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_InitializeAsync_System_Threading_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.InitializeAsync(System.Threading.CancellationToken)">InitializeAsync(CancellationToken)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override Task InitializeAsync(CancellationToken cancellationToken = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public override Task InitializeAsync(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -495,7 +515,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
         <td><span class="parametername">cancellationToken</span></td>
         <td></td>
       </tr>
@@ -511,25 +531,27 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Task</span></td>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Device.Net.UWP.UWPDeviceBase.html#Device_Net_UWP_UWPDeviceBase_InitializeAsync_System_Threading_CancellationToken_">UWPDeviceBase.InitializeAsync(CancellationToken)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_ReadAsync_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.ReadAsync(CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_ReadAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.ReadAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L180">View Source</a>
   </span>
   <a id="Hid_Net_UWP_UWPHidDevice_ReadAsync_" data-uid="Hid.Net.UWP.UWPHidDevice.ReadAsync*"></a>
-  <h4 id="Hid_Net_UWP_UWPHidDevice_ReadAsync_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.ReadAsync(CancellationToken)">ReadAsync(CancellationToken)</h4>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_ReadAsync_System_Threading_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.ReadAsync(System.Threading.CancellationToken)">ReadAsync(CancellationToken)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override Task&lt;TransferResult&gt; ReadAsync(CancellationToken cancellationToken = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public override Task&lt;TransferResult&gt; ReadAsync(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -542,7 +564,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
         <td><span class="parametername">cancellationToken</span></td>
         <td></td>
       </tr>
@@ -558,25 +580,27 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Task</span>&lt;<a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Device.Net.UWP.UWPDeviceBase&lt;Windows.Devices.HumanInterfaceDevice.HidDevice&gt;.ReadAsync(System.Threading.CancellationToken)</span></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_ReadReportAsync_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.ReadReportAsync(CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_ReadReportAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.ReadReportAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L166">View Source</a>
   </span>
   <a id="Hid_Net_UWP_UWPHidDevice_ReadReportAsync_" data-uid="Hid.Net.UWP.UWPHidDevice.ReadReportAsync*"></a>
-  <h4 id="Hid_Net_UWP_UWPHidDevice_ReadReportAsync_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.ReadReportAsync(CancellationToken)">ReadReportAsync(CancellationToken)</h4>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_ReadReportAsync_System_Threading_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.ReadReportAsync(System.Threading.CancellationToken)">ReadReportAsync(CancellationToken)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ReadReport&gt; ReadReportAsync(CancellationToken cancellationToken = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;ReadReport&gt; ReadReportAsync(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -589,7 +613,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
         <td><span class="parametername">cancellationToken</span></td>
         <td></td>
       </tr>
@@ -605,25 +629,25 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Task</span>&lt;<a class="xref" href="Hid.Net.ReadReport.html">ReadReport</a>&gt;</td>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Hid.Net.ReadReport.html">ReadReport</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_WriteAndReadAsync_System_Byte___CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.WriteAndReadAsync(System.Byte%5B%5D%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_WriteAndReadAsync_System_Byte___System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.WriteAndReadAsync(System.Byte%5B%5D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L191">View Source</a>
   </span>
   <a id="Hid_Net_UWP_UWPHidDevice_WriteAndReadAsync_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteAndReadAsync*"></a>
-  <h4 id="Hid_Net_UWP_UWPHidDevice_WriteAndReadAsync_System_Byte___CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteAndReadAsync(System.Byte[],CancellationToken)">WriteAndReadAsync(Byte[], CancellationToken)</h4>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_WriteAndReadAsync_System_Byte___System_Threading_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteAndReadAsync(System.Byte[],System.Threading.CancellationToken)">WriteAndReadAsync(Byte[], CancellationToken)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;TransferResult&gt; WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;TransferResult&gt; WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -641,7 +665,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
         <td><span class="parametername">cancellationToken</span></td>
         <td></td>
       </tr>
@@ -657,25 +681,25 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Task</span>&lt;<a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_WriteAsync_System_Byte___CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.WriteAsync(System.Byte%5B%5D%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_WriteAsync_System_Byte___System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.WriteAsync(System.Byte%5B%5D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L113">View Source</a>
   </span>
   <a id="Hid_Net_UWP_UWPHidDevice_WriteAsync_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteAsync*"></a>
-  <h4 id="Hid_Net_UWP_UWPHidDevice_WriteAsync_System_Byte___CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteAsync(System.Byte[],CancellationToken)">WriteAsync(Byte[], CancellationToken)</h4>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_WriteAsync_System_Byte___System_Threading_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteAsync(System.Byte[],System.Threading.CancellationToken)">WriteAsync(Byte[], CancellationToken)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual Task&lt;uint&gt; WriteAsync(byte[] data, CancellationToken cancellationToken = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public virtual Task&lt;uint&gt; WriteAsync(byte[] data, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -693,7 +717,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
         <td><span class="parametername">cancellationToken</span></td>
         <td></td>
       </tr>
@@ -709,25 +733,25 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Task</span>&lt;<span class="xref">System.UInt32</span>&gt;</td>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.UInt32</span>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_WriteReportAsync_System_Byte___System_Nullable_System_Byte__CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.WriteReportAsync(System.Byte%5B%5D%2CSystem.Nullable%7BSystem.Byte%7D%2CCancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UWPHidDevice_WriteReportAsync_System_Byte___System_Nullable_System_Byte__System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UWPHidDevice.WriteReportAsync(System.Byte%5B%5D%2CSystem.Nullable%7BSystem.Byte%7D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UWPHidDevice.cs/#L115">View Source</a>
   </span>
   <a id="Hid_Net_UWP_UWPHidDevice_WriteReportAsync_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteReportAsync*"></a>
-  <h4 id="Hid_Net_UWP_UWPHidDevice_WriteReportAsync_System_Byte___System_Nullable_System_Byte__CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteReportAsync(System.Byte[],System.Nullable{System.Byte},CancellationToken)">WriteReportAsync(Byte[], Nullable&lt;Byte&gt;, CancellationToken)</h4>
+  <h4 id="Hid_Net_UWP_UWPHidDevice_WriteReportAsync_System_Byte___System_Nullable_System_Byte__System_Threading_CancellationToken_" data-uid="Hid.Net.UWP.UWPHidDevice.WriteReportAsync(System.Byte[],System.Nullable{System.Byte},System.Threading.CancellationToken)">WriteReportAsync(Byte[], Nullable&lt;Byte&gt;, CancellationToken)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;uint&gt; WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;uint&gt; WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -750,7 +774,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
         <td><span class="parametername">cancellationToken</span></td>
         <td></td>
       </tr>
@@ -766,7 +790,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Task</span>&lt;<span class="xref">System.UInt32</span>&gt;</td>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<span class="xref">System.UInt32</span>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -776,16 +800,13 @@
       <a class="xref" href="Device.Net.IDeviceHandler.html">IDeviceHandler</a>
   </div>
   <div>
-      <span class="xref">IDisposable</span>
-  </div>
-  <div>
       <a class="xref" href="Hid.Net.IHidDevice.html">IHidDevice</a>
   </div>
   <div>
       <a class="xref" href="Device.Net.IDevice.html">IDevice</a>
   </div>
   <div>
-      <span class="xref">IDisposable</span>
+      <span class="xref">System.IDisposable</span>
   </div>
 </article>
           </div>

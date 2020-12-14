@@ -6,12 +6,12 @@ using Microsoft.Extensions.Logging;
 using System.Reactive.Linq;
 using System.Collections.Generic;
 using System.Linq;
-using Device.Net.Windows;
 
 #if !LIBUSB
 using SerialPort.Net.Windows;
 using Hid.Net.Windows;
 using Usb.Net.Windows;
+using Device.Net.Windows;
 #else
 using Device.Net.LibUsb;
 #endif
@@ -39,10 +39,9 @@ namespace Usb.Net.WindowsSample
         {
             _loggerFactory = LoggerFactory.Create((builder) =>
             {
-                builder.AddDebug(); 
+                builder.AddDebug();
                 builder.SetMinimumLevel(LogLevel.Trace);
             });
-
 
             //Register the factories for creating Usb devices. This only needs to be done once.
 #if LIBUSB

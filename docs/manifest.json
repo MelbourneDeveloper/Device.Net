@@ -213,7 +213,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Device.Net.FilterDeviceDefinition.html",
-          "hash": "+W/CyMmZNzjTl/FNKWRamw=="
+          "hash": "AuueqSyoyC9hYLnIGsNquA=="
         }
       },
       "is_incremental": true,
@@ -348,7 +348,7 @@
           "hash": "hflAkifhsaR4SLBYESBeIg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -396,7 +396,7 @@
           "hash": "O2hhV3BrAtgh48mBVyTsTg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -465,7 +465,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Device.Net.UWP.AqsHelpers.html",
-          "hash": "PvqZGik9HUtHBYH4wJJTyA=="
+          "hash": "L33kefofUWqahzTeOwIMYA=="
         }
       },
       "is_incremental": true,
@@ -477,7 +477,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Device.Net.UWP.ConnectionInfo.html",
-          "hash": "WvDjlYS+EnKcu4x3UaMvhQ=="
+          "hash": "g8z+/VHX+2v+CL9CUUsXUA=="
         }
       },
       "is_incremental": true,
@@ -489,7 +489,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Device.Net.UWP.TestConnection.html",
-          "hash": "htLn0qJXVnaw2XEAWlWSMQ=="
+          "hash": "iYLD4GAwlBqvPWvCNsbg6A=="
         }
       },
       "is_incremental": true,
@@ -501,7 +501,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Device.Net.UWP.UWPDeviceBase-1.html",
-          "hash": "nN29DnxdE8CzaZxM5owCRw=="
+          "hash": "CPhwM0D0loVw/TEG7fJCbw=="
         }
       },
       "is_incremental": true,
@@ -513,7 +513,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Device.Net.UWP.UWPDeviceBase.html",
-          "hash": "JHClDyVNiDxn7Tova/htTw=="
+          "hash": "hC3JgJsriPmT+2U073+djA=="
         }
       },
       "is_incremental": true,
@@ -525,7 +525,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Device.Net.UWP.UwpDeviceEnumerator.html",
-          "hash": "Ul+jJFdngJH4QOofJj69JA=="
+          "hash": "/JN9oauOQd+QV8isPHwEgQ=="
         }
       },
       "is_incremental": true,
@@ -753,7 +753,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Hid.Net.UWP.UWPHidDevice.html",
-          "hash": "vGzeluzmoON7QzIyznBIDw=="
+          "hash": "25hFmwlz3Dzk3T5v4Enc+Q=="
         }
       },
       "is_incremental": true,
@@ -765,7 +765,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Hid.Net.UWP.UWPHidDeviceFactoryExtensions.html",
-          "hash": "x9sKnN3DKsFP5Qz73V+sAw=="
+          "hash": "3kVne6Gg6G6MRTwFGV654g=="
         }
       },
       "is_incremental": true,
@@ -885,10 +885,10 @@
       "output": {
         ".html": {
           "relative_path": "api/Usb.Net.Android.AndroidUsbEndpoint.html",
-          "hash": "jgg08c6sF6yn+TnATA9fjg=="
+          "hash": "YtpDC5Jd595CdeEQtOF66g=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -897,7 +897,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Usb.Net.Android.AndroidUsbFactoryExtensions.html",
-          "hash": "9FHkEg9AO97pM31TSDIL5w=="
+          "hash": "VfaN1DUBK73N0NuthyNs5g=="
         }
       },
       "is_incremental": true,
@@ -909,7 +909,19 @@
       "output": {
         ".html": {
           "relative_path": "api/Usb.Net.Android.AndroidUsbInterfaceManager.html",
-          "hash": "bsJdeWOOExaUudwz9Jfv2w=="
+          "hash": "a00P8bB1QAXKlHN4sMqQMA=="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Usb.Net.Android.Resource.Animation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Usb.Net.Android.Resource.Animation.html",
+          "hash": "xA1pC6z5eiQ3XcdU6hu4Ng=="
         }
       },
       "is_incremental": true,
@@ -921,7 +933,91 @@
       "output": {
         ".html": {
           "relative_path": "api/Usb.Net.Android.Resource.Attribute.html",
-          "hash": "+Iqz4eHDJkGFcFIlhvgCfg=="
+          "hash": "KxbPEsUG3M2py0A4uq/avQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Usb.Net.Android.Resource.Boolean.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Usb.Net.Android.Resource.Boolean.html",
+          "hash": "OWL24s0USCkysmkeLiD3EQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Usb.Net.Android.Resource.Color.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Usb.Net.Android.Resource.Color.html",
+          "hash": "uQX6r+QWZhism4RoLPzBKw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Usb.Net.Android.Resource.Dimension.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Usb.Net.Android.Resource.Dimension.html",
+          "hash": "hlR8fPFpWPAsOoTiKG0UsQ=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Usb.Net.Android.Resource.Drawable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Usb.Net.Android.Resource.Drawable.html",
+          "hash": "tIXAM4VZQTswWu00z4yQEA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Usb.Net.Android.Resource.Id.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Usb.Net.Android.Resource.Id.html",
+          "hash": "e6yKsM18X09h0eSo0pBdLw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Usb.Net.Android.Resource.Integer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Usb.Net.Android.Resource.Integer.html",
+          "hash": "FBXGjrAsGMW0Cc2A6NrFkw=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Usb.Net.Android.Resource.Layout.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Usb.Net.Android.Resource.Layout.html",
+          "hash": "fzkGQd73ChxtCsNOfShkRQ=="
         }
       },
       "is_incremental": true,
@@ -933,7 +1029,31 @@
       "output": {
         ".html": {
           "relative_path": "api/Usb.Net.Android.Resource.String.html",
-          "hash": "C4cr8FP6vBZb+yac/UNHkw=="
+          "hash": "crayPYB865pgfoDXQG95BA=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Usb.Net.Android.Resource.Style.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Usb.Net.Android.Resource.Style.html",
+          "hash": "yggnYWe9q5eOIOMX0rWDWg=="
+        }
+      },
+      "is_incremental": true,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Usb.Net.Android.Resource.Styleable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Usb.Net.Android.Resource.Styleable.html",
+          "hash": "yoIzmaFfCywS3PP9cPibFw=="
         }
       },
       "is_incremental": true,
@@ -957,10 +1077,10 @@
       "output": {
         ".html": {
           "relative_path": "api/Usb.Net.Android.UsbPermissionBroadcastReceiver.html",
-          "hash": "QwK0GuVo/IA2PiyU+9UntA=="
+          "hash": "YAhTRC1OB/q1DxHh0YQu7w=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -969,10 +1089,10 @@
       "output": {
         ".html": {
           "relative_path": "api/Usb.Net.Android.html",
-          "hash": "Mf6atrDphF4J7uYZFySvWQ=="
+          "hash": "iUCtbCCchyvhbcIAQJc4ag=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1101,7 +1221,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Usb.Net.UWP.UWPUsbInterface.html",
-          "hash": "rVUn1BBtI4PrGwTdYT0SSQ=="
+          "hash": "hNL/kX7d2SxZeT2Y3h3t4g=="
         }
       },
       "is_incremental": true,
@@ -1113,7 +1233,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Usb.Net.UWP.UWPUsbInterfaceEndpoint-1.html",
-          "hash": "9GwkGtSpnFtX6UzDjLT4DQ=="
+          "hash": "A7YlO4U1UJM/5LymY/tdiA=="
         }
       },
       "is_incremental": true,
@@ -1125,7 +1245,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Usb.Net.UWP.UWPUsbInterfaceInterruptReadEndpoint.html",
-          "hash": "ulknrhCXMoWPPVozcYrDwA=="
+          "hash": "VzE2DgzgIQMcqEi3DXnaYQ=="
         }
       },
       "is_incremental": true,
@@ -1137,7 +1257,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Usb.Net.UWP.UWPUsbInterfaceManager.html",
-          "hash": "hlSMPYjZZJ/0g/OuWsCGXQ=="
+          "hash": "0gTLo/aaj1CaAvNiD9e88Q=="
         }
       },
       "is_incremental": true,
@@ -1149,7 +1269,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Usb.Net.UWP.UwpUsbDeviceFactoryExtensions.html",
-          "hash": "TmZpbs8irBfQZXkxq0dPEw=="
+          "hash": "2d49HkjFEi8ohXsXkWDwfA=="
         }
       },
       "is_incremental": true,
@@ -1236,7 +1356,7 @@
           "hash": "l85TmQb6r5KBSbraaI+HBA=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1392,7 +1512,7 @@
           "hash": "s6amEMIBW+QXle+GR3zFKg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1404,7 +1524,7 @@
           "hash": "bBpqWaWu0KvQI7SPfO22Ig=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1416,7 +1536,7 @@
           "hash": "fccfhWGKw+Z4DQQdaGh5KQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1431,7 +1551,7 @@
           "hash": "aA1U9SfE3w+DtezrEwhHDQ=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1440,7 +1560,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "UWfJi/i6UBy4frPGn+p6kA=="
+          "hash": "fYmt2O4A7borTqV6M2Iu4A=="
         }
       },
       "is_incremental": false,
@@ -1459,12 +1579,15 @@
       "version": ""
     },
     {
+      "log_codes": [
+        "InvalidFileLink"
+      ],
       "type": "Conceptual",
       "source_relative_path": "articles/DebuggingLoggingTracing.md",
       "output": {
         ".html": {
           "relative_path": "articles/DebuggingLoggingTracing.html",
-          "hash": "5xmJVHMsz7nBELso7nAN2A=="
+          "hash": "/I9vuzfbHy9T033JpY6TPw=="
         }
       },
       "is_incremental": true,
@@ -1641,13 +1764,13 @@
           "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 12,
-          "skipped_file_count": 11
+          "skipped_file_count": 12
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 118,
-          "skipped_file_count": 118
+          "total_file_count": 128,
+          "skipped_file_count": 125
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,
