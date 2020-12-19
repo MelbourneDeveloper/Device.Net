@@ -153,24 +153,14 @@ namespace SerialPort.Net.Windows
 
             dcb.fParity = 1;
 #pragma warning disable IDE0010 // Add missing cases
-            switch (_Parity)
+            dcb.Parity = _Parity switch
             {
-                case Parity.Even:
-                    dcb.Parity = 2;
-                    break;
-                case Parity.Mark:
-                    dcb.Parity = 3;
-                    break;
-                case Parity.Odd:
-                    dcb.Parity = 1;
-                    break;
-                case Parity.Space:
-                    dcb.Parity = 4;
-                    break;
-                default:
-                    dcb.Parity = 0;
-                    break;
-            }
+                Parity.Even => 2,
+                Parity.Mark => 3,
+                Parity.Odd => 1,
+                Parity.Space => 4,
+                _ => 0
+            };
 
             dcb.StopBits = _StopBits switch
             {

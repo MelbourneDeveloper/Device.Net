@@ -112,7 +112,7 @@ namespace Device.Net.UWP
 #pragma warning restore CA1031 
             {
                 //Log and move on
-                Logger?.LogError(ex, Messages.ErrorMessageCantClose, new object[] { DeviceId, GetType().Name });
+                Logger?.LogError(ex, Messages.ErrorMessageCantClose, DeviceId, GetType().Name);
             }
 
             _IsClosing = false;

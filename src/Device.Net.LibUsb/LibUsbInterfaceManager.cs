@@ -199,18 +199,20 @@ namespace Device.Net.LibUsb
             //TODO: this isn't very nice
 
             var usbRegistryInfo = UsbDevice.UsbRegistryInfo;
-            if (usbRegistryInfo != null)
+
+            if (usbRegistryInfo == null)
             {
-                var result = usbRegistryInfo.ToConnectedDevice();
-                return Task.FromResult(result);
+                return Task.FromResult(new ConnectedDeviceDefinition(
+                    UsbDevice.DevicePath,
+                    DeviceType.Usb,
+                    (uint)GetVendorId(UsbDevice),
+                    (uint)GetProductId(UsbDevice)));
             }
 
+            var result = usbRegistryInfo.ToConnectedDevice();
+            return Task.FromResult(result);
+
             //TODO: Return more information
-            return Task.FromResult(new ConnectedDeviceDefinition(
-                UsbDevice.DevicePath,
-                DeviceType.Usb,
-                (uint)GetVendorId(UsbDevice),
-                (uint)GetProductId(UsbDevice)));
         }
         #endregion
     }

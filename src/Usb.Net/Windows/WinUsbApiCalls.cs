@@ -76,11 +76,9 @@ namespace Usb.Net.Windows
                 logger.LogWarning(errorMessage);
                 return null;
             }
-            else
-            {
-                var descriptor = new string(Encoding.Unicode.GetChars(buffer, 2, (int)transfered));
-                return descriptor.Substring(0, descriptor.Length - 1);
-            }
+
+            var descriptor = new string(Encoding.Unicode.GetChars(buffer, 2, (int)transfered));
+            return descriptor.Substring(0, descriptor.Length - 1);
         }
         #endregion
     }

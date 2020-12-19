@@ -164,11 +164,9 @@ namespace Usb.Net.Android
                         {
                             var usbEndpoint = usbInterface.GetEndpoint(endpointNumber);
 
-                            if (usbEndpoint != null)
-                            {
-                                var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, interfaceNumber, LoggerFactory.CreateLogger<AndroidUsbEndpoint>());
-                                androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
-                            }
+                            if (usbEndpoint == null) continue;
+                            var androidUsbEndpoint = new AndroidUsbEndpoint(usbEndpoint, interfaceNumber, LoggerFactory.CreateLogger<AndroidUsbEndpoint>());
+                            androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
                         }
 
                         await androidUsbInterface.ClaimInterface();

@@ -35,7 +35,7 @@ namespace Hid.Net.UWP
         {
             loggerFactory ??= NullLoggerFactory.Instance;
 
-            if (getDevice == null) getDevice = (c, cancellationToken) => Task.FromResult<IDevice>(new UWPHidDevice(c, loggerFactory, defaultReportId));
+            getDevice ??= (c, cancellationToken) => Task.FromResult<IDevice>(new UWPHidDevice(c, loggerFactory, defaultReportId));
 
             var firstDevice = filterDeviceDefinitions.First();
 

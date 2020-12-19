@@ -56,17 +56,14 @@ namespace Usb.Net.UWP
                 getConnectedDeviceDefinitionsAsync = uwpHidDeviceEnumerator.GetConnectedDeviceDefinitionsAsync;
             }
 
-            if (getUsbInterfaceManager == null)
-            {
-                getUsbInterfaceManager = (deviceId, cancellationToken) =>
+            getUsbInterfaceManager ??= (deviceId, cancellationToken) =>
                 Task.FromResult<IUsbInterfaceManager>(
                     new UWPUsbInterfaceManager(
-                    //TODO: no idea if this is OK...
-                    new ConnectedDeviceDefinition(deviceId, DeviceType.Usb),
-                    loggerFactory,
-                    readBufferSize,
-                    writeBufferSize));
-            }
+                        //TODO: no idea if this is OK...
+                        new ConnectedDeviceDefinition(deviceId, DeviceType.Usb),
+                        loggerFactory,
+                        readBufferSize,
+                        writeBufferSize));
 
             return UsbDeviceFactoryExtensions.CreateUsbDeviceFactory(getConnectedDeviceDefinitionsAsync, getUsbInterfaceManager, loggerFactory);
         }

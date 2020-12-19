@@ -78,14 +78,14 @@ namespace Usb.Net.UWP
 
             try
             {
-                await _ReadLock.WaitAsync();
+                await _ReadLock.WaitAsync(cancellationToken);
 
                 byte[] retVal = null;
 
                 try
                 {
                     //Don't let any datas be added to the chunks here
-                    await _DataReceivedLock.WaitAsync();
+                    await _DataReceivedLock.WaitAsync(cancellationToken);
 
                     if (_Chunks.Count > 0)
                     {

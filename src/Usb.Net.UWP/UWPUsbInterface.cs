@@ -16,7 +16,7 @@ namespace Usb.Net.UWP
     public class UWPUsbInterface : UsbInterfaceBase, IUsbInterface
     {
         #region Fields
-        private bool disposedValue = false;
+        private bool disposedValue;
         #endregion
 
         #region Public Properties

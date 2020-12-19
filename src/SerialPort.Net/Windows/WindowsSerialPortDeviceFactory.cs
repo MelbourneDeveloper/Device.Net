@@ -31,7 +31,7 @@ namespace SerialPort.Net.Windows
         {
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
 
-            //Note this loggerfactory may get shared with other factories of this type
+            //Note this loggerFactory may get shared with other factories of this type
             _logger = _loggerFactory.CreateLogger<WindowsSerialPortDeviceFactory>();
         }
         #endregion
