@@ -7,10 +7,6 @@ using System.Threading.Tasks;
 
 namespace Device.Net
 {
-    public delegate Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default);
-    public delegate ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, Guid classGuid);
-    public delegate Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition deviceId, CancellationToken cancellationToken = default);
-
     public sealed class DeviceFactory : IDeviceFactory
     {
         #region Fields
@@ -24,8 +20,13 @@ namespace Device.Net
         #endregion
 
         #region Constructor
+        /// <summary>
+        /// Constructs a DeviceFactory
+        /// </summary>
         /// <param name="loggerFactory">The factory for creating new loggers for each device</param>
-        /// <param name="logger">The logger that this base class will use. The generic type should come from the inheriting class</param>
+        /// <param name="getConnectedDevicesAsync">A delegate that returns matching connected device definitions</param>
+        /// <param name="getDevice">A delegate to construct the device based on the specified connected device definition</param>
+        /// <param name="supportsDevice">A delegate that returns whether or not this factory supports the connected device</param>
         public DeviceFactory(
 
             ILoggerFactory loggerFactory,

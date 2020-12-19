@@ -38,28 +38,28 @@ namespace Usb.Net.UWP
             {
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceInterruptReadEndpoint(inPipe, Logger);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
-                if (InterruptReadEndpoint == null) InterruptReadEndpoint = uwpUsbInterfaceEndpoint;
+                InterruptReadEndpoint ??= uwpUsbInterfaceEndpoint;
             }
 
             foreach (var outPipe in usbInterface.InterruptOutPipes)
             {
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbInterruptOutPipe>(outPipe);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
-                if (InterruptWriteEndpoint == null) InterruptWriteEndpoint = uwpUsbInterfaceEndpoint;
+                InterruptWriteEndpoint ??= uwpUsbInterfaceEndpoint;
             }
 
             foreach (var inPipe in usbInterface.BulkInPipes)
             {
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbBulkInPipe>(inPipe);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
-                if (ReadEndpoint == null) ReadEndpoint = uwpUsbInterfaceEndpoint;
+                ReadEndpoint ??= uwpUsbInterfaceEndpoint;
             }
 
             foreach (var outPipe in usbInterface.BulkOutPipes)
             {
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbBulkOutPipe>(outPipe);
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
-                if (WriteEndpoint == null) WriteEndpoint = uwpUsbInterfaceEndpoint;
+                WriteEndpoint ??= uwpUsbInterfaceEndpoint;
             }
 
             //TODO: Why does not UWP not support Control Transfer?

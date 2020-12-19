@@ -56,18 +56,18 @@ namespace Device.Net.LibUsb
                 //TODO: Error handling etc.
                 UsbDevice.Open();
 
-                //TODO: This is far beyond not cool.
-                if (UsbDevice is MonoUsbDevice monoUsbDevice)
+                switch (UsbDevice)
                 {
-                    monoUsbDevice.ClaimInterface(0);
-                }
-                else if (UsbDevice is WinUsbDevice winUsbDevice)
-                {
-                    //Doesn't seem necessary in this case...
-                }
-                else
-                {
-                    ((IUsbDevice)UsbDevice).ClaimInterface(0);
+                    //TODO: This is far beyond not cool.
+                    case MonoUsbDevice monoUsbDevice:
+                        monoUsbDevice.ClaimInterface(0);
+                        break;
+                    case WinUsbDevice winUsbDevice:
+                        //Doesn't seem necessary in this case...
+                        break;
+                    default:
+                        ((IUsbDevice)UsbDevice).ClaimInterface(0);
+                        break;
                 }
 
                 foreach (var usbConfigInfo in UsbDevice.Configs)
@@ -79,22 +79,22 @@ namespace Device.Net.LibUsb
 
                         UsbInterfaces.Add(usbInterface);
 
-                        if (ReadUsbInterface == null) ReadUsbInterface = usbInterface;
-                        if (WriteUsbInterface == null) WriteUsbInterface = usbInterface;
+                        ReadUsbInterface ??= usbInterface;
+                        WriteUsbInterface ??= usbInterface;
 
                         //Write endpoint
                         var usbEndpointWriter = UsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
                         var writeBufferSize = _writeBufferSize ?? 64;
                         var writeEndpoint = new WriteEndpoint(usbEndpointWriter, writeBufferSize);
                         usbInterface.UsbInterfaceEndpoints.Add(writeEndpoint);
-                        if (usbInterface.WriteEndpoint == null) usbInterface.WriteEndpoint = writeEndpoint;
+                        usbInterface.WriteEndpoint ??= writeEndpoint;
 
                         //Read endpoint
                         var usbEndpointReader = UsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
                         var readBufferSize = _readBufferSize ?? 64;
                         var readEndpoint = new ReadEndpoint(usbEndpointReader, readBufferSize);
                         usbInterface.UsbInterfaceEndpoints.Add(readEndpoint);
-                        if (usbInterface.ReadEndpoint == null) usbInterface.ReadEndpoint = readEndpoint;
+                        usbInterface.ReadEndpoint ??= readEndpoint;
 
                         //int endpointCount = usbInterfaceInfo.EndpointInfoList.Count;
 
