@@ -43,7 +43,7 @@ namespace Usb.Net.Windows
             {
                 var bytes = new byte[bufferLength];
                 var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_SafeFileHandle, ReadEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
-                WindowsHelpers.HandleError(isSuccess, "Couldn't read data");
+                WindowsHelpers.HandleError(isSuccess, "Couldn't read data", Logger);
                 Logger.LogTrace(new Trace(false, bytes));
                 return new TransferResult(bytes, bytesRead);
             }, cancellationToken);
@@ -59,7 +59,7 @@ namespace Usb.Net.Windows
                     (uint)data.Length,
                     out var bytesWritten,
                     IntPtr.Zero);
-                WindowsHelpers.HandleError(isSuccess, "Couldn't write data");
+                WindowsHelpers.HandleError(isSuccess, "Couldn't write data", Logger);
                 Logger.LogTrace(new Trace(true, data));
                 return bytesWritten;
             }, cancellationToken);
@@ -71,7 +71,7 @@ namespace Usb.Net.Windows
 
             //This is a native resource, so the IDisposable pattern should probably be implemented...
             var isSuccess = WinUsbApiCalls.WinUsb_Free(_SafeFileHandle);
-            WindowsHelpers.HandleError(isSuccess, "Interface could not be disposed");
+            WindowsHelpers.HandleError(isSuccess, "Interface could not be disposed", Logger);
 
             GC.SuppressFinalize(this);
         }
@@ -107,7 +107,7 @@ namespace Usb.Net.Windows
                         ref bytesTransferred,
                         IntPtr.Zero);
 
-                    WindowsHelpers.HandleError(isSuccess, "Couldn't do a control transfer");
+                    WindowsHelpers.HandleError(isSuccess, "Couldn't do a control transfer", Logger);
 
                     Logger.LogTrace(new Trace(setupPacket.RequestType.Direction == RequestDirection.Out, transferBuffer));
                     Logger.LogInformation("Control Transfer complete {setupPacket}", setupPacket);

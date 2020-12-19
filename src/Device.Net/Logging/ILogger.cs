@@ -7,6 +7,7 @@ namespace Microsoft.Extensions.Logging
     public interface ILogger
     {
         IDisposable BeginScope(string messageFormat, params object[] args);
+        void LogError(EventId eventId, Exception exception, string message, params object[] args);
         void LogError(Exception exception, string message, params object[] args);
         void LogInformation(string message, params object[] args);
         void LogWarning(string message, params object[] args);
