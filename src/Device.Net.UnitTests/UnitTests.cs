@@ -87,7 +87,14 @@ namespace Device.Net.UnitTests
         public void TestGetAqsSingleHidDevice()
         {
             var aqs = AqsHelpers.GetAqs(new List<FilterDeviceDefinition> { new FilterDeviceDefinition(10741, 4112) }, DeviceType.Hid);
-            Assert.AreEqual("System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND (System.DeviceInterface.Hid.VendorId:=10741 AND System.DeviceInterface.Hid.ProductId:=4112)", aqs);
+            Assert.AreEqual("System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND ((System.DeviceInterface.Hid.VendorId:=10741 AND System.DeviceInterface.Hid.ProductId:=4112))", aqs);
+        }
+
+        [TestMethod]
+        public void TestGetAqsSingleUsbDevice()
+        {
+            var aqs = AqsHelpers.GetAqs(new List<FilterDeviceDefinition> { new FilterDeviceDefinition(0x1209, 0x53C1) }, DeviceType.Usb);
+            Assert.AreEqual("System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND ((System.DeviceInterface.WinUsb.UsbVendorId:=4617 AND System.DeviceInterface.WinUsb.UsbProductId:=21441))", aqs);
         }
 
         [TestMethod]
@@ -98,8 +105,9 @@ namespace Device.Net.UnitTests
                 new FilterDeviceDefinition(10741, 4112),
                 new FilterDeviceDefinition(10741, 4113)
             }, DeviceType.Hid);
-            Assert.AreEqual("System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND (System.DeviceInterface.Hid.VendorId:=10741 AND System.DeviceInterface.Hid.ProductId:=4112) OR (System.DeviceInterface.Hid.VendorId:=10741 AND System.DeviceInterface.Hid.ProductId:=4113)", aqs);
+            Assert.AreEqual("System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND ((System.DeviceInterface.Hid.VendorId:=10741 AND System.DeviceInterface.Hid.ProductId:=4112) OR (System.DeviceInterface.Hid.VendorId:=10741 AND System.DeviceInterface.Hid.ProductId:=4113))", aqs);
         }
+
         #endregion
 
         [TestMethod]

@@ -40,15 +40,10 @@ namespace Usb.Net.UWP
         {
             var firstDevice = filterDeviceDefinitions.First();
 
-            //TODO: WRONG!!!
-
-            var interfaceClassGuid = "System.Devices.InterfaceClassGuid:=\"{" + WindowsDeviceConstants.WinUSBGuid + "}\"";
-            var aqs = $"{interfaceClassGuid} {AqsHelpers.InterfaceEnabledPart} {AqsHelpers.GetVendorPart(firstDevice.VendorId, DeviceType.Usb)} {AqsHelpers.GetProductPart(firstDevice.ProductId, DeviceType.Usb)}";
-
             if (getConnectedDeviceDefinitionsAsync == null)
             {
                 var uwpHidDeviceEnumerator = new UwpDeviceEnumerator(
-                    aqs,
+                    AqsHelpers.GetAqs(filterDeviceDefinitions, DeviceType.Usb),
                     DeviceType.Usb,
                     (d, cancellationToken) => Task.FromResult(new ConnectionInfo { CanConnect = true }),
                     loggerFactory);
