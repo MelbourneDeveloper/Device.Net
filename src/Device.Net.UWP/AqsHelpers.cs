@@ -1,4 +1,7 @@
-﻿namespace Device.Net.UWP
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Device.Net.UWP
 {
     public static class AqsHelpers
     {
@@ -21,6 +24,15 @@
             string productPart = null;
             if (productId.HasValue) productPart = $"{(deviceType == DeviceType.Hid ? HidProductFilterName : ProductFilterName) }:={productId.Value}";
             return productPart;
+        }
+
+        public static string GetAqs(IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions, DeviceType deviceType)
+        {
+            var deviceFilters = filterDeviceDefinitions.Select(firstDevice => $"({ GetVendorPart(firstDevice.VendorId, deviceType) } AND { GetProductPart(firstDevice.ProductId, deviceType)})");
+
+            var deviceListFilter = string.Join(", OR ", deviceFilters);
+
+            return $"{InterfaceEnabledPart} AND {deviceListFilter}";
         }
     }
 }

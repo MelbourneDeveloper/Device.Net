@@ -37,11 +37,7 @@ namespace Hid.Net.UWP
 
             getDevice ??= (c, cancellationToken) => Task.FromResult<IDevice>(new UWPHidDevice(c, loggerFactory, defaultReportId));
 
-            var deviceFilters = filterDeviceDefinitions.Select(firstDevice => $"({ AqsHelpers.GetVendorPart(firstDevice.VendorId, DeviceType.Hid) } AND { AqsHelpers.GetProductPart(firstDevice.ProductId, DeviceType.Hid)})");
-
-            var deviceListFilter = string.Join(", OR ", deviceFilters);
-
-            var aqs = $"{AqsHelpers.InterfaceEnabledPart} AND {deviceListFilter}";
+            var aqs = AqsHelpers.GetAqs(filterDeviceDefinitions, DeviceType.Hid);
 
             var logger = loggerFactory.CreateLogger<UwpDeviceEnumerator>();
 
