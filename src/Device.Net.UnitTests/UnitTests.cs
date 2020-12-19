@@ -120,9 +120,16 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public void TestGetAllDevices()
+        public void TestGetAllUsbDevices()
         {
             var aqs = AqsHelpers.GetAqs(new List<FilterDeviceDefinition>{}, DeviceType.Usb);
+            Assert.AreEqual("System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True", aqs);
+        }
+
+        [TestMethod]
+        public void TestGetAllHidDevices()
+        {
+            var aqs = AqsHelpers.GetAqs(new List<FilterDeviceDefinition> { }, DeviceType.Hid);
             Assert.AreEqual("System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True", aqs);
         }
         #endregion

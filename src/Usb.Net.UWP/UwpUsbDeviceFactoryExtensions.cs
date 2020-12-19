@@ -2,9 +2,10 @@
 using Device.Net.UWP;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using wde = Windows.Devices.Enumeration;
 
 namespace Usb.Net.UWP
 {
@@ -35,16 +36,24 @@ namespace Usb.Net.UWP
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetUsbInterfaceManager getUsbInterfaceManager = null,
         ushort? readBufferSize = null,
-        ushort? writeBufferSize = null
-        )
+        ushort? writeBufferSize = null,
+        Func<wde.DeviceInformation, bool> deviceInformationFilter = null)
         {
             if (getConnectedDeviceDefinitionsAsync == null)
             {
+                //Filter to by device Id. 
+                //TODO: There is surely a better way to do this
+                deviceInformationFilter ??= (d) =>
+                    d.Id.Contains(@"\\?\usb", StringComparison.OrdinalIgnoreCase) &&
+                    d.Id.Contains(@"vid", StringComparison.OrdinalIgnoreCase) &&
+                    d.Id.Contains(@"pid", StringComparison.OrdinalIgnoreCase);
+
                 var uwpHidDeviceEnumerator = new UwpDeviceEnumerator(
                     AqsHelpers.GetAqs(filterDeviceDefinitions, DeviceType.Usb),
                     DeviceType.Usb,
                     (d, cancellationToken) => Task.FromResult(new ConnectionInfo { CanConnect = true }),
-                    loggerFactory);
+                    loggerFactory,
+                    deviceInformationFilter);
 
                 getConnectedDeviceDefinitionsAsync = uwpHidDeviceEnumerator.GetConnectedDeviceDefinitionsAsync;
             }

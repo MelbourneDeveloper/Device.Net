@@ -13,6 +13,11 @@ namespace Device.Net.UnitTests
             ILoggerFactory loggerFactory)
             => filterDeviceDefinitions.CreateUwpUsbDeviceFactory(loggerFactory);
 
+        public static IDeviceFactory GetHidDeviceFactory(
+            this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
+            ILoggerFactory loggerFactory)
+            => filterDeviceDefinitions.CreateUwpHidDeviceFactory(loggerFactory);
+
         public static IDeviceFactory GetUsbDeviceFactory(
             this FilterDeviceDefinition filterDeviceDefinition,
             ILoggerFactory loggerFactory)

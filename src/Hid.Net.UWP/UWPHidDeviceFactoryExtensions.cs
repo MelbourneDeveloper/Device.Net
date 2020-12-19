@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using wde = Windows.Devices.Enumeration;
 
 namespace Hid.Net.UWP
 {
@@ -31,7 +32,8 @@ namespace Hid.Net.UWP
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetDeviceAsync getDevice = null,
         byte? defaultReportId = null,
-        Guid? classGuid = null)
+        Guid? classGuid = null,
+        Func<wde.DeviceInformation, bool> deviceInformationFilter = null)
         {
             loggerFactory ??= NullLoggerFactory.Instance;
 
@@ -43,6 +45,13 @@ namespace Hid.Net.UWP
 
             if (getConnectedDeviceDefinitionsAsync == null)
             {
+                //Filter to by device Id. 
+                //TODO: There is surely a better way to do this
+                deviceInformationFilter ??= (d) =>
+                    d.Id.Contains(@"\\?\hid", StringComparison.OrdinalIgnoreCase) &&
+                    d.Id.Contains(@"vid", StringComparison.OrdinalIgnoreCase) &&
+                    d.Id.Contains(@"pid", StringComparison.OrdinalIgnoreCase);
+
                 var uwpHidDeviceEnumerator = new UwpDeviceEnumerator(
                     aqs,
                     DeviceType.Hid,
@@ -58,7 +67,8 @@ namespace Hid.Net.UWP
 
                         return new ConnectionInfo { CanConnect = true, UsagePage = hidDevice.UsagePage };
                     },
-                    loggerFactory);
+                    loggerFactory,
+                    deviceInformationFilter);
 
                 getConnectedDeviceDefinitionsAsync = uwpHidDeviceEnumerator.GetConnectedDeviceDefinitionsAsync;
             }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Device.Net.Windows
 {
@@ -33,7 +32,9 @@ namespace Device.Net.Windows
 
         public static string GetAqs(IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions, DeviceType deviceType, Guid? classGuid = null)
         {
-            var deviceListFilter = $"({ string.Join(" OR ", (filterDeviceDefinitions ?? new List<FilterDeviceDefinition>()).Select(firstDevice => $"({ GetVendorPart(firstDevice.VendorId, deviceType) } AND { GetProductPart(firstDevice.ProductId, deviceType)})"))})";
+            var filterList = filterDeviceDefinitions?.ToList() ?? new List<FilterDeviceDefinition>();
+
+            var deviceListFilter = $"({ string.Join(" OR ", filterList.Select(firstDevice => $"({ GetVendorPart(firstDevice.VendorId, deviceType) } AND { GetProductPart(firstDevice.ProductId, deviceType)})"))})";
 
             var aqs = $"{InterfaceEnabledPart}";
 
@@ -42,7 +43,7 @@ namespace Device.Net.Windows
                 aqs += $" AND System.Devices.InterfaceClassGuid:=\"{classGuid}\"";
             }
 
-            if (!string.IsNullOrEmpty(deviceListFilter))
+            if (filterList.Count > 0)
             {
                 aqs += $" AND {deviceListFilter}";
             }

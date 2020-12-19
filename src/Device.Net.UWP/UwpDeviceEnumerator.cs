@@ -21,19 +21,23 @@ namespace Device.Net.UWP
         private readonly Dictionary<string, ConnectionInfo> _ConnectionTestedDeviceIds = new Dictionary<string, ConnectionInfo>();
         private readonly DeviceType _deviceType;
         private readonly TestConnection _testConnection;
+        private readonly Func<wde.DeviceInformation, bool> _deviceInformationFilter;
 
         #region Constructor
         public UwpDeviceEnumerator(
             string aqf,
             DeviceType deviceType,
             TestConnection testConnection,
-            ILoggerFactory loggerFactory = null)
+            ILoggerFactory loggerFactory = null,
+            Func<wde.DeviceInformation, bool> idFilter = null
+            )
         {
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             _logger = _loggerFactory.CreateLogger<UwpDeviceEnumerator>();
             aqsFilter = aqf;
             _deviceType = deviceType;
             _testConnection = testConnection;
+            _deviceInformationFilter = idFilter ?? new Func<wde.DeviceInformation, bool>((d) => true);
         }
         #endregion
 
@@ -44,8 +48,9 @@ namespace Device.Net.UWP
                 ? await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask()
                 : await wde.DeviceInformation.FindAllAsync().AsTask();
 
-            var deviceInformationList = deviceInformationCollection.ToList();
-            var deviceDefinitions = deviceInformationList.Select(d => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(d.Id, _deviceType, _logger));
+            var deviceDefinitions = deviceInformationCollection
+                .Where(_deviceInformationFilter)
+                .Select(d => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(d.Id, _deviceType, _logger));
 
             var deviceDefinitionList = new List<ConnectedDeviceDefinition>();
 
@@ -54,14 +59,17 @@ namespace Device.Net.UWP
                 var connectionInformation = await TestConnection(deviceDef.DeviceId, cancellationToken);
                 if (connectionInformation.CanConnect)
                 {
-                    deviceDefinitionList.Add(
-                        new ConnectedDeviceDefinition(
-                            deviceDef.DeviceId,
-                            _deviceType,
-                            usagePage: connectionInformation.UsagePage,
-                            vendorId: deviceDef.VendorId,
-                            productId: deviceDef.ProductId
-                            ));
+                    var connectedDeviceDefinition = new ConnectedDeviceDefinition(
+                                                deviceDef.DeviceId,
+                                                _deviceType,
+                                                usagePage: connectionInformation.UsagePage,
+                                                vendorId: deviceDef.VendorId,
+                                                productId: deviceDef.ProductId
+                                                );
+
+                    deviceDefinitionList.Add(connectedDeviceDefinition);
+
+                    _logger.LogInformation("Found connected device {deviceId} {connectedDeviceDefinition}", deviceDef.DeviceId, connectedDeviceDefinition);
                 }
             }
 

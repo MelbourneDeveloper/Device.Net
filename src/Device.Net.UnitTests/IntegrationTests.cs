@@ -152,11 +152,22 @@ namespace Device.Net.UnitTests
             );
 
         [TestMethod]
-        public Task TestGetAllUsbDevices()
-            => new List<FilterDeviceDefinition> { }
+        public async Task TestGetAllUsbDevices()
+        {
+            var devices = await new List<FilterDeviceDefinition> { }
             .GetUsbDeviceFactory(loggerFactory)
             .GetConnectedDeviceDefinitionsAsync();
+            Assert.IsTrue(devices.Count() > 0);
+        }
 
+        [TestMethod]
+        public async Task TestGetAllHidDevices()
+        {
+            var devices = await new List<FilterDeviceDefinition> { }
+            .GetHidDeviceFactory(loggerFactory)
+            .GetConnectedDeviceDefinitionsAsync();
+            Assert.IsTrue(devices.Count() > 0);
+        }
 
 #if NETCOREAPP3_1
 
