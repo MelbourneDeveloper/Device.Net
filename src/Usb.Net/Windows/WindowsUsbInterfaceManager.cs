@@ -76,7 +76,7 @@ namespace Usb.Net.Windows
 #pragma warning disable CA2000 //We need to hold on to this handle
                 var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
 #pragma warning restore CA2000
-                WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorMessageCouldntIntializeDevice);
+                WindowsHelpers.HandleError(isSuccess, Messages.ErrorMessageCouldntIntializeDevice);
 
                 var connectedDeviceDefinition = GetDeviceDefinition(defaultInterfaceHandle, DeviceId, Logger);
 
@@ -140,12 +140,12 @@ namespace Usb.Net.Windows
             var isSuccess = WinUsbApiCalls.WinUsb_QueryInterfaceSettings(interfaceHandle, 0, out var interfaceDescriptor);
 
             var retVal = new WindowsUsbInterface(interfaceHandle, interfaceDescriptor.bInterfaceNumber, Logger, ReadBufferSizeProtected, WriteBufferSizeProtected);
-            WindowsDeviceBase.HandleError(isSuccess, "Couldn't query interface");
+            WindowsHelpers.HandleError(isSuccess, "Couldn't query interface");
 
             for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)
             {
                 isSuccess = WinUsbApiCalls.WinUsb_QueryPipe(interfaceHandle, 0, i, out var pipeInfo);
-                WindowsDeviceBase.HandleError(isSuccess, "Couldn't query endpoint");
+                WindowsHelpers.HandleError(isSuccess, "Couldn't query endpoint");
                 retVal.UsbInterfaceEndpoints.Add(new WindowsUsbInterfaceEndpoint(pipeInfo.PipeId, pipeInfo.PipeType));
             }
 
@@ -160,7 +160,7 @@ namespace Usb.Net.Windows
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
             var isSuccess2 = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, WinUsbApiCalls.EnglishLanguageID, out var _UsbDeviceDescriptor, bufferLength, out var lengthTransferred);
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
-            WindowsDeviceBase.HandleError(isSuccess2, "Couldn't get device descriptor");
+            WindowsHelpers.HandleError(isSuccess2, "Couldn't get device descriptor");
 
             string productName = null;
             string serialNumber = null;

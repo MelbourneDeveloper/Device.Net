@@ -71,7 +71,7 @@ namespace Usb.Net.Windows
 
             var buffer = new byte[256];
             var isSuccess = WinUsb_GetDescriptor(defaultInterfaceHandle, USB_STRING_DESCRIPTOR_TYPE, index, EnglishLanguageID, buffer, (uint)buffer.Length, out var transfered);
-            if (WindowsDeviceBase.HandleError(isSuccess, errorMessage, false) != 0)
+            if (WindowsHelpers.HandleError(isSuccess, errorMessage, false) != 0)
             {
                 logger.LogWarning(errorMessage);
                 return null;

@@ -40,7 +40,7 @@ namespace Device.Net.LibUsb
             )
              => new DeviceFactory(
                 loggerFactory,
-                (cancellationToken) => GetConnectedDeviceDefinitionsAsync(filterDeviceDefinitions, cancellationToken),
+                cancellationToken => GetConnectedDeviceDefinitionsAsync(filterDeviceDefinitions, cancellationToken),
                 (c, cancellationToken) =>
                 Task.FromResult<IDevice>(
                     new Usb.Net.UsbDevice

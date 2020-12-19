@@ -57,9 +57,9 @@ namespace Hid.Net.UWP
 
                         if (!canConnect) return new ConnectionInfo { CanConnect = false };
 
-                        logger?.LogInformation("Testing device connection. Id: {deviceId}. Can connect: {canConnect}", deviceId, canConnect);
+                        logger?.LogInformation("Testing device connection. Id: {deviceId}. Can connect: {canConnect}", deviceId, true);
 
-                        return new ConnectionInfo { CanConnect = canConnect, UsagePage = hidDevice.UsagePage };
+                        return new ConnectionInfo { CanConnect = true, UsagePage = hidDevice.UsagePage };
                     },
                     loggerFactory);
 

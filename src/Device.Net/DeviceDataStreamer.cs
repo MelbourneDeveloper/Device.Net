@@ -31,7 +31,7 @@ namespace Device.Net
             _deviceFactory = deviceFactory;
             _interval = interval ?? new TimeSpan(0, 0, 1);
             _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<DeviceDataStreamer>();
-            _initializeFunc = initializeFunc ?? ((d) => d.InitializeAsync());
+            _initializeFunc = initializeFunc ?? (d => d.InitializeAsync());
         }
 
         public DeviceDataStreamer Start()

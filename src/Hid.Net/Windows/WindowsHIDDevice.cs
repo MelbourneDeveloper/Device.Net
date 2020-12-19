@@ -30,10 +30,6 @@ namespace Hid.Net.Windows
         private bool ReadBufferHasReportId => ReadBufferSize == 65;
         #endregion
 
-        #region Protected Properties
-        protected override string LogSection => nameof(WindowsHidDevice);
-        #endregion
-
         #region Public Overrides
         public override bool IsInitialized => _ReadSafeFileHandle != null && !_ReadSafeFileHandle.IsInvalid;
         public override ushort WriteBufferSize => _WriteBufferSize ?? (ConnectedDeviceDefinition == null ? 0 : (ushort)ConnectedDeviceDefinition.WriteBufferSize.Value);

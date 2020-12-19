@@ -46,16 +46,14 @@ namespace Usb.Net.UWP
                     _logger.LogInformation("{bytesLength} read on interrupt pipe {endpointNumber}", bytes.Length, UsbInterruptInPipe.EndpointDescriptor.EndpointNumber);
                 }
 
-                if (_ReadChunkTaskCompletionSource != null && _ReadChunkTaskCompletionSource.Task.Status != TaskStatus.RanToCompletion)
-                {
-                    //In this case there should be no chunks. TODO: Put some unit tests around this.
-                    //The read method wil be waiting on this
-                    var result = _Chunks[0];
-                    _Chunks.RemoveAt(0);
-                    _ReadChunkTaskCompletionSource.SetResult(result);
-                    _logger.LogInformation($"Completion source result set");
-                    return;
-                }
+                if (_ReadChunkTaskCompletionSource == null || _ReadChunkTaskCompletionSource.Task.Status == TaskStatus.RanToCompletion) return;
+
+                //In this case there should be no chunks. TODO: Put some unit tests around this.
+                //The read method wil be waiting on this
+                var result = _Chunks[0];
+                _Chunks.RemoveAt(0);
+                _ReadChunkTaskCompletionSource.SetResult(result);
+                _logger.LogInformation("Completion source result set");
             }
             finally
             {

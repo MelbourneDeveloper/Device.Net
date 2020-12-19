@@ -57,12 +57,10 @@ namespace Device.Net.LibUsb
                     Logger.LogTrace(new Trace(true, data));
                     return (uint)bytesWritten;
                 }
-                else
-                {
-                    var message = "Error. Write error code: {errorCode}";
-                    Logger.LogError(new Exception(message), message, errorCode);
-                    throw new IOException(message);
-                }
+
+                var message = "Error. Write error code: {errorCode}";
+                Logger.LogError(new Exception(message), message, errorCode);
+                throw new IOException(message);
             }, cancellationToken);
         }
 

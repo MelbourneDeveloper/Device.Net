@@ -142,7 +142,7 @@ namespace SerialPort.Net.Windows
 
             var isSuccess = ApiService.AGetCommState(_ReadSafeFileHandle, ref dcb);
 
-            WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorCouldNotGetCommState);
+            WindowsHelpers.HandleError(isSuccess, Messages.ErrorCouldNotGetCommState);
 
             dcb.ByteSize = _ByteSize;
             dcb.fDtrControl = 1;
@@ -183,7 +183,7 @@ namespace SerialPort.Net.Windows
 #pragma warning restore IDE0010 // Add missing cases
 
             isSuccess = ApiService.ASetCommState(_ReadSafeFileHandle, ref dcb);
-            WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorCouldNotSetCommState);
+            WindowsHelpers.HandleError(isSuccess, Messages.ErrorCouldNotSetCommState);
 
             var timeouts = new CommTimeouts
             {
@@ -195,7 +195,7 @@ namespace SerialPort.Net.Windows
             };
 
             isSuccess = ApiService.ASetCommTimeouts(_ReadSafeFileHandle, ref timeouts);
-            WindowsDeviceBase.HandleError(isSuccess, Messages.ErrorCouldNotSetCommTimeout);
+            WindowsHelpers.HandleError(isSuccess, Messages.ErrorCouldNotSetCommTimeout);
 
             Logger.LogInformation("Serial Port device initialized successfully. Port: {port}", DeviceId);
         }
