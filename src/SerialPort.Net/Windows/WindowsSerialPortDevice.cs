@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SerialPort.Net.Windows
 {
-    public class WindowsSerialPortDevice : DeviceBase, IDevice, IDisposable
+    public class WindowsSerialPortDevice : DeviceBase, IDevice
     {
         #region Fields
         private readonly int _BaudRate;

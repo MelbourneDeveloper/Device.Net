@@ -50,43 +50,37 @@ namespace Usb.Net.Android
             if (context == null) throw new ArgumentNullException(nameof(context));
             loggerFactory ??= NullLoggerFactory.Instance;
 
-            if (getConnectedDeviceDefinitionsAsync == null)
-            {
-                getConnectedDeviceDefinitionsAsync = (cancellationToken) =>
-
-               Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>
-               (
+            getConnectedDeviceDefinitionsAsync ??= cancellationToken =>
+                Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>
+                (
                     new ReadOnlyCollection<ConnectedDeviceDefinition>
                     (
                         usbManager.DeviceList.Select(kvp => kvp.Value)
-                        .Where
-                        (
-                            d =>
-                            filterDeviceDefinitions.FirstOrDefault
+                            .Where
                             (
-                                f =>
-                                (!f.VendorId.HasValue || f.VendorId.Value == d.VendorId) &&
-                                (!f.ProductId.HasValue || f.ProductId.Value == d.ProductId)
-                            ) != null
-                        )
-                        .Select(AndroidUsbInterfaceManager.GetAndroidDeviceDefinition)
-                        .ToList()
+                                d =>
+                                    filterDeviceDefinitions.FirstOrDefault
+                                    (
+                                        f =>
+                                            (!f.VendorId.HasValue || f.VendorId.Value == d.VendorId) &&
+                                            (!f.ProductId.HasValue || f.ProductId.Value == d.ProductId)
+                                    ) != null
+                            )
+                            .Select(AndroidUsbInterfaceManager.GetAndroidDeviceDefinition)
+                            .ToList()
                     )
                 );
-            }
 
-            if (getUsbInterfaceManager == null)
-            {
-                getUsbInterfaceManager = (a, cancellationToken) => Task.FromResult<IUsbInterfaceManager>(new AndroidUsbInterfaceManager(
-                   usbManager,
-                   context,
-                   //TODO: throw a validation message
-                   int.Parse(a),
-                   loggerFactory,
-                   readBufferSize,
-                   writeBufferSize
-                   ));
-            }
+            getUsbInterfaceManager ??= (a, cancellationToken) => Task.FromResult<IUsbInterfaceManager>(
+                new AndroidUsbInterfaceManager(
+                    usbManager,
+                    context,
+                    //TODO: throw a validation message
+                    int.Parse(a),
+                    loggerFactory,
+                    readBufferSize,
+                    writeBufferSize
+                ));
 
             return UsbDeviceFactoryExtensions.CreateUsbDeviceFactory(getConnectedDeviceDefinitionsAsync, getUsbInterfaceManager, loggerFactory);
         }

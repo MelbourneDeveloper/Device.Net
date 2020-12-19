@@ -55,8 +55,7 @@ namespace Device.Net.LibUsb
                     )
                 ),
                 supportsDevice ??
-                new Func<ConnectedDeviceDefinition, CancellationToken, Task<bool>>((c, cancellationToken) => Task.FromResult(c.DeviceType == DeviceType.Usb)
-                )
+                ((c, cancellationToken) => Task.FromResult(c.DeviceType == DeviceType.Usb))
             );
 
         public static async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(
