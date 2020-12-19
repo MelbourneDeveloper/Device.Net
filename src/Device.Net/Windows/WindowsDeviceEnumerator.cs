@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
@@ -17,6 +17,8 @@ namespace Device.Net.Windows
         private readonly Guid _classGuid;
         private readonly GetDeviceDefinition _getDeviceDefinition;
         private readonly IsMatch _isMatch;
+
+        //TODO: Inject a windows API abstraction here for unit testing purposes
 
         public WindowsDeviceEnumerator(
             ILogger logger,
