@@ -20,14 +20,11 @@ namespace Device.Net.Windows
                 return 0;
             }
 
-            if (throwException)
-            {
-                var apiException = new ApiException($"{message}. Error code: {errorCode}");
-                logger.LogError(new EventId(errorCode), apiException, "Windows error", errorCode);
-                throw apiException;
-            }
+            if (!throwException) return errorCode;
 
-            return errorCode;
+            var apiException = new ApiException($"{message}. Error code: {errorCode}");
+            logger.LogError(new EventId(errorCode), apiException, "Windows error", errorCode);
+            throw apiException;
         }
     }
 }
