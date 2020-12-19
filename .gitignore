@@ -24,6 +24,7 @@ file_paths.xml
 *.nupkg
 *.bak
 /.vscode
+src/.idea/
 
 src/Flutter/flutnet_thermometer_bridge/lib/flutnet/data/
 
