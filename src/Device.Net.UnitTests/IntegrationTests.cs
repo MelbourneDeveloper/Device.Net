@@ -194,7 +194,7 @@ namespace Device.Net.UnitTests
                 var temp = Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
 
                 //I think my room should pretty much always be between these temperatures
-                Assert.IsTrue(temp > 10 && temp < 35);
+                Assert.IsTrue(temp is > 10 and < 35);
 
 #if WINDOWS_UWP
                 var windowsHidDevice = (UWPHidDevice)device;
