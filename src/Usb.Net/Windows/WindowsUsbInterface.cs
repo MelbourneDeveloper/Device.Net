@@ -50,7 +50,7 @@ namespace Usb.Net.Windows
         }
 
         public Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
-            => Task.Run(async () =>
+            => Task.Run(() =>
             {
                 var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(
                     _SafeFileHandle,

@@ -62,12 +62,12 @@ namespace Usb.Net.WindowsSample
             _DeviceConnectionExample.TrezorInitialized += DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += DeviceConnectionExample_TrezorDisconnected;
 
-            Go().Wait();
+            await GoAsync();
         }
 
-        private static async Task Go()
+        private static async Task GoAsync()
         {
-            var menuOption = await Menu();
+            var menuOption = await MenuAsync();
 
             switch (menuOption)
             {
@@ -165,7 +165,9 @@ namespace Usb.Net.WindowsSample
         #endregion
 
         #region Private Methods
-        private static async Task<int> Menu()
+#pragma warning disable CS1998 
+        private static async Task<int> MenuAsync()
+#pragma warning restore CS1998 
         {
             while (true)
             {

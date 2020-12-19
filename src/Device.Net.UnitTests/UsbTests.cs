@@ -48,7 +48,7 @@ namespace Device.Net.UnitTests
 
 #if !WINDOWS_UWP
         [TestMethod]
-        public async Task TestDeviceIdIsPersisted()
+        public void TestDeviceIdIsPersisted()
         {
             var deviceId = "asd";
             var mock = new Mock<ILoggerFactory>();

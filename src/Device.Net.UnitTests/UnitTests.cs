@@ -198,7 +198,7 @@ namespace Device.Net.UnitTests
                 _ = hidMock.Setup(f => f.GetDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).Returns(
                 Task.FromResult<IDevice>(new MockHidDevice("Asd", _LoggerFactoryMock.Object, _loggerMock.Object)));
 
-                _ = hidMock.Setup(f => f.SupportsDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).Returns(async () => isHidConnected);
+                _ = hidMock.Setup(f => f.SupportsDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).Returns(() => Task.FromResult(isHidConnected));
             }
 
             if (isUsbConnected && ((!vid.HasValue && !pid.HasValue) || (vid == 2 && pid == 2)))
@@ -253,7 +253,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestDeviceFactoriesNotRegisteredException()
+        public void TestDeviceFactoriesNotRegisteredException()
         {
 
             try

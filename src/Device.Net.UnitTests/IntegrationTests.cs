@@ -186,7 +186,7 @@ namespace Device.Net.UnitTests
 #else
                 filterDeviceDefinition.GetHidDeviceFactory(loggerFactory));
 #endif
-            await integrationTester.TestAsync(request, async (result, device) =>
+            await integrationTester.TestAsync(request, (result, device) =>
             {
                 Assert.IsTrue(device.IsInitialized);
 
@@ -206,6 +206,8 @@ namespace Device.Net.UnitTests
                 Assert.AreEqual(9, windowsHidDevice.ReadBufferSize);
                 Assert.AreEqual(9, windowsHidDevice.WriteBufferSize);
 #endif
+                return Task.FromResult(true);
+
             }, 9);
         }
 
@@ -224,7 +226,7 @@ namespace Device.Net.UnitTests
 
             var integrationTester = new IntegrationTester(filterDeviceDefinition.GetHidDeviceFactory(loggerFactory));
 
-            await integrationTester.TestAsync(request, async (result, device) =>
+            await integrationTester.TestAsync(request, (result, device) =>
              {
                  Assert.AreEqual(64, result.Data.Length);
                  Assert.AreEqual(63, result.Data[0]);
@@ -249,6 +251,8 @@ namespace Device.Net.UnitTests
                  Assert.AreEqual(64, windowsHidDevice.ReadBufferSize);
                  Assert.AreEqual(64, windowsHidDevice.WriteBufferSize);
 #endif
+                 return Task.FromResult(true);
+
              }, 64);
         }
         #endregion
