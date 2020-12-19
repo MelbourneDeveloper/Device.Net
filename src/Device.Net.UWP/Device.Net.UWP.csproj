@@ -123,7 +123,6 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AqsHelpers.cs" />
     <Compile Include="ConnectionInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UWPDeviceBase - Generic.cs" />

@@ -3,6 +3,7 @@
 #if !NET45
 
 using Device.Net.Exceptions;
+using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -77,6 +78,30 @@ namespace Device.Net.UnitTests
         }
 
         #region Tests
+
+        #region Aqs
+
+        //Note: Aqs is mainly only used on UWP, but it's technically a Windows-wide tech
+
+        [TestMethod]
+        public void TestGetAqsSingleHidDevice()
+        {
+            var aqs = AqsHelpers.GetAqs(new List<FilterDeviceDefinition> { new FilterDeviceDefinition(10741, 4112) }, DeviceType.Hid);
+            Assert.AreEqual("System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND (System.DeviceInterface.Hid.VendorId:=10741 AND System.DeviceInterface.Hid.ProductId:=4112)", aqs);
+        }
+
+        [TestMethod]
+        public void TestGetAqsTwoHidDevices()
+        {
+            var aqs = AqsHelpers.GetAqs(new List<FilterDeviceDefinition>
+            {
+                new FilterDeviceDefinition(10741, 4112),
+                new FilterDeviceDefinition(10741, 4113)
+            }, DeviceType.Hid);
+            Assert.AreEqual("System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND (System.DeviceInterface.Hid.VendorId:=10741 AND System.DeviceInterface.Hid.ProductId:=4112) OR (System.DeviceInterface.Hid.VendorId:=10741 AND System.DeviceInterface.Hid.ProductId:=4113)", aqs);
+        }
+        #endregion
+
         [TestMethod]
         [DataRow(true, true, 1, MockHidDeviceVendorId, MockHidDeviceProductId)]
         [DataRow(true, false, 1, MockHidDeviceVendorId, MockHidDeviceProductId)]

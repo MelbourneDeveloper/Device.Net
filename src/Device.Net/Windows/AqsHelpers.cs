@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Device.Net.UWP
+namespace Device.Net.Windows
 {
+    /// <summary>
+    /// Advanced Query Syntax is a query syntax for searching for various Windows components. UWP uses this to search for devices.
+    /// </summary>
     public static class AqsHelpers
     {
         public const string InterfaceEnabledPart = "System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True";
@@ -30,7 +33,7 @@ namespace Device.Net.UWP
         {
             var deviceFilters = filterDeviceDefinitions.Select(firstDevice => $"({ GetVendorPart(firstDevice.VendorId, deviceType) } AND { GetProductPart(firstDevice.ProductId, deviceType)})");
 
-            var deviceListFilter = string.Join(", OR ", deviceFilters);
+            var deviceListFilter = string.Join(" OR ", deviceFilters);
 
             return $"{InterfaceEnabledPart} AND {deviceListFilter}";
         }

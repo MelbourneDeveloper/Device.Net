@@ -1,10 +1,10 @@
 ﻿using Device.Net;
 using Device.Net.UWP;
+using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Hid.Net.UWP
