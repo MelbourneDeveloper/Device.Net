@@ -184,7 +184,7 @@ namespace Usb.Net.Android
             }
             finally
             {
-                _InitializingSemaphoreSlim.Release();
+                _ = _InitializingSemaphoreSlim.Release();
             }
         }
 

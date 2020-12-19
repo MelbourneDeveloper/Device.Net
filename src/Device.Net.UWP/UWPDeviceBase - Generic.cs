@@ -71,7 +71,7 @@ namespace Device.Net.UWP
             //Cancel the completion source if the token is canceled
             using (cancellationToken.Register(() => ReadChunkTaskCompletionSource.TrySetCanceled()))
             {
-                await ReadChunkTaskCompletionSource.Task;
+                _ = await ReadChunkTaskCompletionSource.Task;
             }
 
             var data = await ReadChunkTaskCompletionSource.Task;

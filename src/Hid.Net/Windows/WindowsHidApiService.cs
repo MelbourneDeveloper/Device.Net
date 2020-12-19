@@ -93,14 +93,14 @@ namespace Hid.Net.Windows
         public HidAttributes GetHidAttributes(SafeFileHandle safeFileHandle)
         {
             var isSuccess = HidD_GetAttributes(safeFileHandle, out var hidAttributes);
-            WindowsHelpers.HandleError(isSuccess, $"Could not get Hid Attributes (Call {nameof(HidD_GetAttributes)})", Logger);
+            _ = WindowsHelpers.HandleError(isSuccess, $"Could not get Hid Attributes (Call {nameof(HidD_GetAttributes)})", Logger);
             return hidAttributes;
         }
 
         public HidCollectionCapabilities GetHidCapabilities(SafeFileHandle readSafeFileHandle)
         {
             var isSuccess = HidD_GetPreparsedData(readSafeFileHandle, out var pointerToPreParsedData);
-            WindowsHelpers.HandleError(isSuccess, "Could not get pre parsed data", Logger);
+            _ = WindowsHelpers.HandleError(isSuccess, "Could not get pre parsed data", Logger);
 
             var result = HidP_GetCaps(pointerToPreParsedData, out var hidCollectionCapabilities);
             if (result != HIDP_STATUS_SUCCESS)
@@ -109,7 +109,7 @@ namespace Hid.Net.Windows
             }
 
             isSuccess = HidD_FreePreparsedData(ref pointerToPreParsedData);
-            WindowsHelpers.HandleError(isSuccess, "Could not release handle for getting Hid capabilities", Logger);
+            _ = WindowsHelpers.HandleError(isSuccess, "Could not release handle for getting Hid capabilities", Logger);
 
             return hidCollectionCapabilities;
         }

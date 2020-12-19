@@ -155,7 +155,7 @@ namespace Device.Net
 
                 foreach (var deviceId in removeDeviceIds)
                 {
-                    _CreatedDevicesByDefinition.Remove(deviceId);
+                    _ = _CreatedDevicesByDefinition.Remove(deviceId);
                 }
 
                 _logger.LogDebug(Messages.InformationMessageDeviceListenerPollingComplete);
@@ -173,7 +173,7 @@ namespace Device.Net
             finally
             {
                 if (!_IsDisposed)
-                    _ListenSemaphoreSlim.Release();
+                    _ = _ListenSemaphoreSlim.Release();
             }
         }
 

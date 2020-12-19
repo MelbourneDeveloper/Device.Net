@@ -20,7 +20,7 @@ namespace Device.Net.UnitTests
         {
             try
             {
-                new WindowsHidDevice(null, null);
+                _ = new WindowsHidDevice(null, null);
             }
             catch (ArgumentNullException ane)
             {
@@ -53,24 +53,24 @@ namespace Device.Net.UnitTests
             var hidService = Substitute.For<IHidApiService>();
             var invalidSafeFileHandle = new SafeFileHandle((IntPtr)(-1), true);
             var validSafeFileHandle = new SafeFileHandle((IntPtr)100, true);
-            hidService.CreateReadConnection("", Windows.FileAccessRights.None).ReturnsForAnyArgs(validSafeFileHandle);
-            hidService.CreateWriteConnection("").ReturnsForAnyArgs(!isReadonly ? validSafeFileHandle : invalidSafeFileHandle);
-            hidService.GetDeviceDefinition(deviceId, validSafeFileHandle).ReturnsForAnyArgs(
+            _ = hidService.CreateReadConnection("", Windows.FileAccessRights.None).ReturnsForAnyArgs(validSafeFileHandle);
+            _ = hidService.CreateWriteConnection("").ReturnsForAnyArgs(!isReadonly ? validSafeFileHandle : invalidSafeFileHandle);
+            _ = hidService.GetDeviceDefinition(deviceId, validSafeFileHandle).ReturnsForAnyArgs(
                 new ConnectedDeviceDefinition(deviceId, DeviceType.Hid, readBufferSize: 64, writeBufferSize: 64));
 
             var readStream = Substitute.For<Stream>();
-            readStream.CanRead.ReturnsForAnyArgs(true);
-            hidService.OpenRead(null, 0).ReturnsForAnyArgs(readStream);
+            _ = readStream.CanRead.ReturnsForAnyArgs(true);
+            _ = hidService.OpenRead(null, 0).ReturnsForAnyArgs(readStream);
 
             var writeStream = Substitute.For<Stream>();
-            writeStream.CanWrite.ReturnsForAnyArgs(true);
-            hidService.OpenWrite(null, 0).ReturnsForAnyArgs(writeStream);
+            _ = writeStream.CanWrite.ReturnsForAnyArgs(true);
+            _ = hidService.OpenWrite(null, 0).ReturnsForAnyArgs(writeStream);
 
             var loggerFactory = new Mock<ILoggerFactory>();
             var logger = new Mock<ILogger<WindowsHidDevice>>();
-            logger.Setup(l => l.BeginScope(It.IsAny<It.IsAnyType>())).Returns(new Mock<IDisposable>().Object);
+            _ = logger.Setup(l => l.BeginScope(It.IsAny<It.IsAnyType>())).Returns(new Mock<IDisposable>().Object);
 
-            loggerFactory.Setup(f => f.CreateLogger(It.IsAny<string>())).Returns(logger.Object);
+            _ = loggerFactory.Setup(f => f.CreateLogger(It.IsAny<string>())).Returns(logger.Object);
 
             var windowsHidDevice = new WindowsHidDevice(deviceId, loggerFactory: loggerFactory.Object, hidService: hidService);
             await windowsHidDevice.InitializeAsync();

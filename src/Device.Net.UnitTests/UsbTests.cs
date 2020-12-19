@@ -61,8 +61,8 @@ namespace Device.Net.UnitTests
         public async Task TestWrite()
         {
             await InitializeDevice();
-            await _UsbDevice.WriteAsync(testreadpacket);
-            await _UsbDevice.UsbInterfaceManager.WriteUsbInterface.Received().WriteAsync(testreadpacket);
+            _ = await _UsbDevice.WriteAsync(testreadpacket);
+            _ = await _UsbDevice.UsbInterfaceManager.WriteUsbInterface.Received().WriteAsync(testreadpacket);
         }
 
 
@@ -151,10 +151,10 @@ namespace Device.Net.UnitTests
             usbInterfaceManager.ReadUsbInterface = usbInterface;
             usbInterfaceManager.WriteUsbInterface = usbInterface;
 
-            usbInterface.ReadAsync(3).ReturnsForAnyArgs(testreadpacket);
+            _ = usbInterface.ReadAsync(3).ReturnsForAnyArgs(testreadpacket);
 
             //TODO: Probably shouldn't be relying on this method
-            usbInterfaceManager.GetConnectedDeviceDefinitionAsync().ReturnsForAnyArgs(new ConnectedDeviceDefinition(deviceId, DeviceType.Usb));
+            _ = usbInterfaceManager.GetConnectedDeviceDefinitionAsync().ReturnsForAnyArgs(new ConnectedDeviceDefinition(deviceId, DeviceType.Usb));
 
             _UsbDevice = new UsbDevice(deviceId, usbInterfaceManager, _loggerFactory);
 

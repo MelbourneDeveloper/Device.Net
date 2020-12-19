@@ -55,7 +55,7 @@ namespace SerialPort.Net.Windows
 
             ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId, DeviceType.SerialPort);
 
-            if (byteSize == 5 && stopBits == StopBits.Two || stopBits == StopBits.OnePointFive && byteSize > 5)
+            if ((byteSize == 5 && stopBits == StopBits.Two) || (stopBits == StopBits.OnePointFive && byteSize > 5))
                 throw new ArgumentException(Messages.ErrorInvalidByteSizeAndStopBitsCombo);
 
             if (byteSize < 5 || byteSize > 8)
@@ -142,7 +142,7 @@ namespace SerialPort.Net.Windows
 
             var isSuccess = ApiService.AGetCommState(_ReadSafeFileHandle, ref dcb);
 
-            WindowsHelpers.HandleError(isSuccess, Messages.ErrorCouldNotGetCommState, Logger);
+            _ = WindowsHelpers.HandleError(isSuccess, Messages.ErrorCouldNotGetCommState, Logger);
 
             dcb.ByteSize = _ByteSize;
             dcb.fDtrControl = 1;
@@ -159,6 +159,7 @@ namespace SerialPort.Net.Windows
                 Parity.Mark => 3,
                 Parity.Odd => 1,
                 Parity.Space => 4,
+                Parity.None => throw new NotImplementedException(),
                 _ => 0
             };
 
@@ -173,7 +174,7 @@ namespace SerialPort.Net.Windows
 #pragma warning restore IDE0010 // Add missing cases
 
             isSuccess = ApiService.ASetCommState(_ReadSafeFileHandle, ref dcb);
-            WindowsHelpers.HandleError(isSuccess, Messages.ErrorCouldNotSetCommState, Logger);
+            _ = WindowsHelpers.HandleError(isSuccess, Messages.ErrorCouldNotSetCommState, Logger);
 
             var timeouts = new CommTimeouts
             {
@@ -185,7 +186,7 @@ namespace SerialPort.Net.Windows
             };
 
             isSuccess = ApiService.ASetCommTimeouts(_ReadSafeFileHandle, ref timeouts);
-            WindowsHelpers.HandleError(isSuccess, Messages.ErrorCouldNotSetCommTimeout, Logger);
+            _ = WindowsHelpers.HandleError(isSuccess, Messages.ErrorCouldNotSetCommTimeout, Logger);
 
             Logger.LogInformation("Serial Port device initialized successfully. Port: {port}", DeviceId);
         }

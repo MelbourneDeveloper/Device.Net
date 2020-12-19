@@ -64,7 +64,7 @@ namespace Device.Net
 
             try
             {
-                await WriteAsync(writeBuffer, cancellationToken);
+                _ = await WriteAsync(writeBuffer, cancellationToken);
                 var retVal = await ReadAsync(cancellationToken);
                 Logger.LogInformation(Messages.SuccessMessageWriteAndReadCalled);
                 return retVal;
@@ -76,7 +76,7 @@ namespace Device.Net
             }
             finally
             {
-                _WriteAndReadLock.Release();
+                _ = _WriteAndReadLock.Release();
             }
         }
 

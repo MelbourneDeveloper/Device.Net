@@ -91,7 +91,7 @@ namespace Device.Net.UWP
             }
             finally
             {
-                _TestConnectionSemaphore.Release();
+                _ = _TestConnectionSemaphore.Release();
             }
         }
         public void Dispose() => _TestConnectionSemaphore.Dispose();

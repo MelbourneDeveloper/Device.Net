@@ -52,17 +52,17 @@ namespace Usb.Net.Android
                         endpoint.EndpointNumber);
                     var byteBuffer = ByteBuffer.Allocate((int)bufferLength);
                     var request = new UsbRequest();
-                    request.Initialize(_UsbDeviceConnection, endpoint);
+                    _ = request.Initialize(_UsbDeviceConnection, endpoint);
 #pragma warning disable CS0618
-                    request.Queue(byteBuffer, (int)bufferLength);
+                    _ = request.Queue(byteBuffer, (int)bufferLength);
 #pragma warning restore CS0618
-                    await _UsbDeviceConnection.RequestWaitAsync();
+                    _ = await _UsbDeviceConnection.RequestWaitAsync();
 
                     //TODO: Get the actual length of the data read instead of just returning the length of the array
 
                     var buffers = new TransferResult(new byte[bufferLength], bufferLength);
 
-                    byteBuffer.Rewind();
+                    _ = byteBuffer.Rewind();
 
                     //Ouch. Super nasty
                     for (var i = 0; i < bufferLength; i++)
@@ -100,14 +100,14 @@ namespace Usb.Net.Android
                     using var logScope = Logger.BeginScope("UsbInterface: {usbInterface} Endpoint: {endpoint} Call: {call} Data Length: {writeLength}", UsbInterface.Id, endpoint.Address, nameof(WriteAsync), data.Length);
                     Logger.LogInformation("Before Write UsbInterface: {usbInterface} Endpoint: {endpoint} Call: {call} Data Length: {writeLength}", UsbInterface.Id, endpoint.Address, nameof(WriteAsync), data.Length);
 
-                    request.Initialize(_UsbDeviceConnection, endpoint);
+                    _ = request.Initialize(_UsbDeviceConnection, endpoint);
                     var byteBuffer = ByteBuffer.Wrap(data);
 
 #pragma warning disable CS0618
-                    request.Queue(byteBuffer, data.Length);
+                    _ = request.Queue(byteBuffer, data.Length);
 #pragma warning restore CS0618
 
-                    await _UsbDeviceConnection.RequestWaitAsync();
+                    _ = await _UsbDeviceConnection.RequestWaitAsync();
 
                     //TODO: It's not clear if there is a way to count the number of bytes transferred here. This is a bug in a sense...
 

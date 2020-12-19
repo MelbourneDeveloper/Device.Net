@@ -133,7 +133,7 @@ namespace Device.Net.Windows
 #pragma warning restore CA1031
                     }
 
-                    APICalls.SetupDiDestroyDeviceInfoList(devicesHandle);
+                    _ = APICalls.SetupDiDestroyDeviceInfoList(devicesHandle);
 
                     return new ReadOnlyCollection<ConnectedDeviceDefinition>(deviceDefinitions);
                 }

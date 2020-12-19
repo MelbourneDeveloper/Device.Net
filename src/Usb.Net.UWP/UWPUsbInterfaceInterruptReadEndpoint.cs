@@ -57,7 +57,7 @@ namespace Usb.Net.UWP
             }
             finally
             {
-                _DataReceivedLock.Release();
+                _ = _DataReceivedLock.Release();
             }
         }
         #endregion
@@ -103,7 +103,7 @@ namespace Usb.Net.UWP
                 }
                 finally
                 {
-                    _DataReceivedLock.Release();
+                    _ = _DataReceivedLock.Release();
                 }
 
                 //Wait for the event here. Once the event occurs, this should return and the semaphore should be released
@@ -114,7 +114,7 @@ namespace Usb.Net.UWP
                 //Cancel the completion source if the token is canceled
                 using (cancellationToken.Register(() => _ReadChunkTaskCompletionSource.TrySetCanceled()))
                 {
-                    await _ReadChunkTaskCompletionSource.Task;
+                    _ = await _ReadChunkTaskCompletionSource.Task;
                 }
 
                 _ReadChunkTaskCompletionSource = null;
@@ -126,7 +126,7 @@ namespace Usb.Net.UWP
             }
             finally
             {
-                _ReadLock.Release();
+                _ = _ReadLock.Release();
             }
         }
         #endregion

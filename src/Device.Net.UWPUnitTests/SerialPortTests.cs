@@ -140,7 +140,7 @@ namespace Device.Net.UWPIntegrationTests
                             }
                         }
 
-                        Task.Delay(10);
+                        _ = Task.Delay(10);
                     }
                 }
 

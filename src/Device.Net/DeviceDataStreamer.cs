@@ -38,38 +38,38 @@ namespace Device.Net
         {
             _isRunning = true;
 
-            Task.Run(async () =>
-            {
-                while (_isRunning)
-                {
-                    await Task.Delay(_interval.Value);
+            _ = Task.Run(async () =>
+              {
+                  while (_isRunning)
+                  {
+                      await Task.Delay(_interval.Value);
 
-                    try
-                    {
-                        if (_currentDevice == null)
-                        {
-                            var connectedDevices = await _deviceFactory.GetConnectedDeviceDefinitionsAsync();
-                            var firstConnectedDevice = connectedDevices.FirstOrDefault();
+                      try
+                      {
+                          if (_currentDevice == null)
+                          {
+                              var connectedDevices = await _deviceFactory.GetConnectedDeviceDefinitionsAsync();
+                              var firstConnectedDevice = connectedDevices.FirstOrDefault();
 
-                            if (firstConnectedDevice == null)
-                            {
-                                continue;
-                            }
+                              if (firstConnectedDevice == null)
+                              {
+                                  continue;
+                              }
 
-                            _currentDevice = await _deviceFactory.GetDeviceAsync(firstConnectedDevice);
-                            await _initializeFunc(_currentDevice);
-                        }
+                              _currentDevice = await _deviceFactory.GetDeviceAsync(firstConnectedDevice);
+                              await _initializeFunc(_currentDevice);
+                          }
 
-                        await _processData(_currentDevice);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, "Error processing");
-                        _currentDevice?.Dispose();
-                        _currentDevice = null;
-                    }
-                }
-            });
+                          await _processData(_currentDevice);
+                      }
+                      catch (Exception ex)
+                      {
+                          _logger.LogError(ex, "Error processing");
+                          _currentDevice?.Dispose();
+                          _currentDevice = null;
+                      }
+                  }
+              });
 
             return this;
         }

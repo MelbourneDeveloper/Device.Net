@@ -54,19 +54,19 @@ namespace Device.Net.LibUsb
             await Task.Run(() =>
             {
                 //TODO: Error handling etc.
-                UsbDevice.Open();
+                _ = UsbDevice.Open();
 
                 switch (UsbDevice)
                 {
                     //TODO: This is far beyond not cool.
                     case MonoUsbDevice monoUsbDevice:
-                        monoUsbDevice.ClaimInterface(0);
+                        _ = monoUsbDevice.ClaimInterface(0);
                         break;
                     case WinUsbDevice winUsbDevice:
                         //Doesn't seem necessary in this case...
                         break;
                     default:
-                        ((IUsbDevice)UsbDevice).ClaimInterface(0);
+                        _ = ((IUsbDevice)UsbDevice).ClaimInterface(0);
                         break;
                 }
 
@@ -163,7 +163,7 @@ namespace Device.Net.LibUsb
             }
             finally
             {
-                _WriteAndReadLock.Release();
+                _ = _WriteAndReadLock.Release();
             }
         }
 
@@ -173,11 +173,11 @@ namespace Device.Net.LibUsb
 
             try
             {
-                await WriteUsbInterface.WriteAsync(data);
+                _ = await WriteUsbInterface.WriteAsync(data);
             }
             finally
             {
-                _WriteAndReadLock.Release();
+                _ = _WriteAndReadLock.Release();
             }
         }
 

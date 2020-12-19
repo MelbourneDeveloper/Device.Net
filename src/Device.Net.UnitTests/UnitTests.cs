@@ -225,10 +225,10 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public void TestNullLoggers()
         {
-            new UsbDevice("asd", new Mock<IUsbInterfaceManager>().Object);
-            new WindowsHidDevice("asd");
-            new WindowsUsbInterface(default, 0 );
-            new WindowsUsbInterfaceManager("asd");
+            _ = new UsbDevice("asd", new Mock<IUsbInterfaceManager>().Object);
+            _ = new WindowsHidDevice("asd");
+            _ = new WindowsUsbInterface(default, 0);
+            _ = new WindowsUsbInterfaceManager("asd");
         }
 #endif
 

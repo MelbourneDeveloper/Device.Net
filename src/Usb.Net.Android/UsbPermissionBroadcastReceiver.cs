@@ -49,7 +49,7 @@ namespace Usb.Net.Android
         #region Public Methods
         public void Register()
         {
-            _Context.RegisterReceiver(this, new IntentFilter(RequestUsbIntentAction));
+            _ = _Context.RegisterReceiver(this, new IntentFilter(RequestUsbIntentAction));
             _logger.LogInformation("Receiver registered", IsPermissionGranted, _Device.DeviceId);
             var pendingIntent = PendingIntent.GetBroadcast(_Context, 0, new Intent(RequestUsbIntentAction), 0);
             _Manager.RequestPermission(_Device, pendingIntent);
