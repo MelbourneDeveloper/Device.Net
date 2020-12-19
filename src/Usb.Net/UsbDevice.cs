@@ -94,10 +94,8 @@ namespace Usb.Net
         #endregion
 
         #region Finalizer
-        ~UsbDevice()
-        {
-            Dispose();
-        }
+        ~UsbDevice() => Dispose();
+
         #endregion
     }
 }

@@ -70,7 +70,7 @@ namespace Device.Net.LibUsb
                return filterDeviceDefinitions == null || filterDeviceDefinitions.Count == 0
                    ? devices.Select(usbRegistry
                    =>
-                   new ConnectedDeviceDefinition(usbRegistry.DevicePath, DeviceType.Usb, vendorId: (uint)usbRegistry.Vid, productId: (uint)usbRegistry.Pid)
+                   new ConnectedDeviceDefinition(usbRegistry.DevicePath, DeviceType.Usb, (uint)usbRegistry.Vid, (uint)usbRegistry.Pid)
                    ).ToList()
                    : devices
                .Where(d => filterDeviceDefinitions.FirstOrDefault(f

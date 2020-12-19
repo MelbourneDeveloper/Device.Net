@@ -233,10 +233,8 @@ namespace Usb.Net.Android
         /// <summary>
         /// What's this then?
         /// </summary>
-        ~AndroidUsbInterfaceManager()
-        {
-            Dispose();
-        }
+        ~AndroidUsbInterfaceManager() => Dispose();
+
         #endregion
     }
 }

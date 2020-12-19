@@ -205,10 +205,8 @@ namespace Device.Net
         #endregion
 
         #region Finalizer
-        ~DeviceListener()
-        {
-            Dispose();
-        }
+        ~DeviceListener() => Dispose();
+
         #endregion
     }
 

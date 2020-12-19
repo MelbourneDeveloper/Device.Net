@@ -294,10 +294,8 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Finalizer
-        ~WindowsHidDevice()
-        {
-            Dispose();
-        }
+        ~WindowsHidDevice() => Dispose();
+
         #endregion
     }
 }

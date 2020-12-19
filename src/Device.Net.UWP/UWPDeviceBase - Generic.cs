@@ -120,10 +120,8 @@ namespace Device.Net.UWP
         #endregion
 
         #region Finaliser
-        ~UWPDeviceBase()
-        {
-            Dispose();
-        }
+        ~UWPDeviceBase() => Dispose();
+
         #endregion
 
     }

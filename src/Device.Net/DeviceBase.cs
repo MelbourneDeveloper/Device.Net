@@ -129,7 +129,7 @@ namespace Device.Net
                 (logger ?? NullLogger.Instance).LogError(ex, "Error {errorMessage} Area: {area}", ex.Message, nameof(GetDeviceDefinitionFromWindowsDeviceId));
             }
 
-            return new ConnectedDeviceDefinition(deviceId, deviceType, vendorId: vid, productId: pid, classGuid: classGuid);
+            return new ConnectedDeviceDefinition(deviceId, deviceType, vid, pid, classGuid: classGuid);
         }
         #endregion
 
@@ -152,10 +152,8 @@ namespace Device.Net
         #endregion
 
         #region Finalizer
-        ~DeviceBase()
-        {
-            Dispose();
-        }
+        ~DeviceBase() => Dispose();
+
         #endregion
     }
 }

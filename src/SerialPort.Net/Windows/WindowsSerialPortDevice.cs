@@ -55,7 +55,7 @@ namespace SerialPort.Net.Windows
 
             ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId, DeviceType.SerialPort);
 
-            if ((byteSize == 5 && stopBits == StopBits.Two) || (stopBits == StopBits.OnePointFive && byteSize > 5))
+            if (byteSize == 5 && stopBits == StopBits.Two || stopBits == StopBits.OnePointFive && byteSize > 5)
                 throw new ArgumentException(Messages.ErrorInvalidByteSizeAndStopBitsCombo);
 
             if (byteSize < 5 || byteSize > 8)
