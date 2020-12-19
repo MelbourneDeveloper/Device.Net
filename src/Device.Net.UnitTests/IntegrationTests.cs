@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Usb.Net;
+using System.Collections.Generic;
 
 #if !WINDOWS_UWP
 using Device.Net.LibUsb;
@@ -149,6 +150,13 @@ namespace Device.Net.UnitTests
         new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53c1)
             .GetUsbDeviceFactory(loggerFactory)
             );
+
+        [TestMethod]
+        public Task TestGetAllUsbDevices()
+            => new List<FilterDeviceDefinition> { }
+            .GetUsbDeviceFactory(loggerFactory)
+            .GetConnectedDeviceDefinitionsAsync();
+
 
 #if NETCOREAPP3_1
 
