@@ -159,7 +159,7 @@ namespace SerialPort.Net.Windows
                 Parity.Mark => 3,
                 Parity.Odd => 1,
                 Parity.Space => 4,
-                Parity.None => throw new NotImplementedException(),
+                Parity.None => 0,
                 _ => 0
             };
 
@@ -168,7 +168,7 @@ namespace SerialPort.Net.Windows
                 StopBits.One => 0,
                 StopBits.OnePointFive => 1,
                 StopBits.Two => 2,
-                StopBits.None => throw new NotImplementedException(),
+                StopBits.None => throw new ArgumentException(Messages.ErrorMessageStopBitsMustBeSpecified),
                 _ => throw new ArgumentException(Messages.ErrorMessageStopBitsMustBeSpecified),
             };
 #pragma warning restore IDE0010 // Add missing cases
