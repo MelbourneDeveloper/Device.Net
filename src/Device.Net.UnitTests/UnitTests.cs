@@ -108,6 +108,17 @@ namespace Device.Net.UnitTests
             Assert.AreEqual("System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND ((System.DeviceInterface.Hid.VendorId:=10741 AND System.DeviceInterface.Hid.ProductId:=4112) OR (System.DeviceInterface.Hid.VendorId:=10741 AND System.DeviceInterface.Hid.ProductId:=4113))", aqs);
         }
 
+        [TestMethod]
+        public void TestGetAqsTwoUsbDevices()
+        {
+            var aqs = AqsHelpers.GetAqs(new List<FilterDeviceDefinition>
+            {
+                new FilterDeviceDefinition(10741, 4112),
+                new FilterDeviceDefinition(10741, 4113)
+            }, DeviceType.Usb);
+            Assert.AreEqual("System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True AND ((System.DeviceInterface.WinUsb.UsbVendorId:=10741 AND System.DeviceInterface.WinUsb.UsbProductId:=4112) OR (System.DeviceInterface.WinUsb.UsbVendorId:=10741 AND System.DeviceInterface.WinUsb.UsbProductId:=4113))", aqs);
+        }
+
         #endregion
 
         [TestMethod]
