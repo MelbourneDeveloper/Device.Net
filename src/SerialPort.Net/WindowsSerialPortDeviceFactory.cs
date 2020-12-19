@@ -56,18 +56,16 @@ namespace SerialPort.Net.Windows
 
             try
             {
-                using (var key = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DEVICEMAP\SERIALCOMM"))
+                using var key = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DEVICEMAP\SERIALCOMM");
+                if (key != null)
                 {
-                    if (key != null)
-                    {
-                        registryAvailable = true;
+                    registryAvailable = true;
 
-                        //We can look at the registry
+                    //We can look at the registry
 
-                        var valueNames = key.GetValueNames();
+                    var valueNames = key.GetValueNames();
 
-                        returnValue.AddRange(from valueName in valueNames let comPortName = key.GetValue(valueName) select new ConnectedDeviceDefinition($@"\\.\{comPortName}", DeviceType.SerialPort, label: valueName));
-                    }
+                    returnValue.AddRange(from valueName in valueNames let comPortName = key.GetValue(valueName) select new ConnectedDeviceDefinition($@"\\.\{comPortName}", DeviceType.SerialPort, label: valueName));
                 }
             }
             catch (Exception ex)
@@ -81,11 +79,9 @@ namespace SerialPort.Net.Windows
             for (var i = 0; i < 9; i++)
             {
                 var portName = $@"\\.\COM{i}";
-                using (var serialPortDevice = new WindowsSerialPortDevice(portName))
-                {
-                    await serialPortDevice.InitializeAsync(cancellationToken);
-                    if (serialPortDevice.IsInitialized) returnValue.Add(new ConnectedDeviceDefinition(portName, DeviceType.SerialPort));
-                }
+                using var serialPortDevice = new WindowsSerialPortDevice(portName);
+                await serialPortDevice.InitializeAsync(cancellationToken);
+                if (serialPortDevice.IsInitialized) returnValue.Add(new ConnectedDeviceDefinition(portName, DeviceType.SerialPort));
             }
 
             return new ReadOnlyCollection<ConnectedDeviceDefinition>(returnValue);
