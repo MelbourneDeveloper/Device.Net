@@ -38,8 +38,6 @@ namespace Usb.Net.UWP
         ushort? writeBufferSize = null
         )
         {
-            var firstDevice = filterDeviceDefinitions.First();
-
             if (getConnectedDeviceDefinitionsAsync == null)
             {
                 var uwpHidDeviceEnumerator = new UwpDeviceEnumerator(
