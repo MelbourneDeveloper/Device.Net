@@ -1,4 +1,3 @@
-#if !NET45
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -26,7 +25,17 @@ namespace Device.Net.UnitTests
         private const byte STATE_DFU_ERROR = 0x0A;
         private const byte STATUS_errTARGET = 0x01;
 
-        private ILoggerFactory loggerFactory;
+        private readonly ILoggerFactory loggerFactory
+#if NET45
+;
+#else
+         = LoggerFactory.Create((builder) =>
+        {
+            _ = builder.AddConsole()
+            .AddDebug()
+            .SetMinimumLevel(LogLevel.Trace);
+        });
+#endif
 
         #region Tests
 
@@ -115,6 +124,12 @@ namespace Device.Net.UnitTests
 
             await PerformStmDfTest(stmDfuDevice);
         }
+
+        [TestMethod]
+        public Task TestWriteAndReadFromTrezorLibUsb()
+            => TestWriteAndReadFromTrezor(new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53C1, label: "Trezor One Firmware 1.7.x")
+            .CreateLibUsbDeviceFactory(loggerFactory)
+        );
 #endif
 
         [TestMethod]
@@ -168,15 +183,6 @@ namespace Device.Net.UnitTests
             .GetConnectedDeviceDefinitionsAsync();
             Assert.IsTrue(devices.Count() > 0);
         }
-
-#if NETCOREAPP3_1
-
-        [TestMethod]
-        public Task TestWriteAndReadFromTrezorLibUsb() => TestWriteAndReadFromTrezor(
-            new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53C1, label: "Trezor One Firmware 1.7.x")
-            .CreateLibUsbDeviceFactory(loggerFactory)
-        );
-#endif
 
         private async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64)
         {
@@ -276,19 +282,6 @@ namespace Device.Net.UnitTests
         }
         #endregion
 
-        #region Setup
-        [TestInitialize]
-        public void Setup()
-        {
-            loggerFactory = LoggerFactory.Create((builder) =>
-            {
-                _ = builder.AddConsole()
-                .AddDebug()
-                .SetMinimumLevel(LogLevel.Trace);
-            });
-        }
-        #endregion
-
         #region Private Methods
         private static async Task PerformStmDfTest(IUsbDevice stmDfuDevice)
         {
@@ -347,5 +340,3 @@ namespace Device.Net.UnitTests
         #endregion
     }
 }
-
-#endif

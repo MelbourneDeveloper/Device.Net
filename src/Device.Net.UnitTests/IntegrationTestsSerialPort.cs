@@ -1,4 +1,3 @@
-#if !NET45
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SerialPort.Net.Windows;
@@ -111,5 +110,3 @@ namespace Device.Net.UnitTests
         #endregion
     }
 }
-
-#endif

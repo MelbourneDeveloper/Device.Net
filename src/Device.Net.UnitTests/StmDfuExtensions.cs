@@ -1,6 +1,4 @@
-﻿#if !NET45
-
-using Device.Net.Exceptions;
+﻿using Device.Net.Exceptions;
 using Polly;
 using System;
 using System.Threading.Tasks;
@@ -79,5 +77,3 @@ namespace Device.Net.UnitTests
             ), DownloadRequestBuffer);
     }
 }
-
-#endif
