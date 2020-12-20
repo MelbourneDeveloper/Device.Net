@@ -11,6 +11,8 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class IntegrationTestsSerialPort
     {
+        private const string DeviceId = @"\\.\COM4";
+
         #region Fields
         private static WindowsSerialPortDeviceFactory windowsSerialPortDeviceFactory;
         #endregion
@@ -99,7 +101,7 @@ namespace Device.Net.UnitTests
 
         private static async Task ReadAsync()
         {
-            using var serialPortDevice = new WindowsSerialPortDevice(@"\\.\COM1");
+            using var serialPortDevice = new WindowsSerialPortDevice(DeviceId);
             await serialPortDevice.InitializeAsync();
             var result = await serialPortDevice.ReadAsync();
             Assert.IsTrue(result.Data.Length > 0);

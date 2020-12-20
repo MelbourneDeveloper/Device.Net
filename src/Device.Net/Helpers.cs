@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-
+﻿
 #if!NET45
 using System;
 using System.Threading;
@@ -13,14 +12,6 @@ namespace Device.Net
     /// </summary> 
     public static class Helpers
     {
-        public static bool ContainsIgnoreCase(this string paragraph, string word) => ParsingCulture.CompareInfo.IndexOf(paragraph, word, CompareOptions.IgnoreCase) >= 0;
-
-        public static string GetHex(uint? id) =>
-            //TODO: Fix code rules here
-            id?.ToString("X").ToLower().PadLeft(4, '0');
-
-        public static CultureInfo ParsingCulture { get; } = new CultureInfo("en-US");
-
 #if!NET45
         /// <summary>
         /// Create an awaitable task that will return cancelled if the cancellation token requests cancellation

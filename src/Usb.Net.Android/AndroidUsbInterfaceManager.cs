@@ -192,7 +192,7 @@ namespace Usb.Net.Android
         {
             if (usbDevice == null) throw new ArgumentNullException(nameof(usbDevice));
 
-            var deviceId = usbDevice.DeviceId.ToString(Helpers.ParsingCulture);
+            var deviceId = usbDevice.DeviceId.ToString();
 
             return new ConnectedDeviceDefinition(
                 deviceId,
