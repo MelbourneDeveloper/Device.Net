@@ -25,7 +25,7 @@ namespace Device.Net.UnitTests
 
         public static Task<T> PerformControlTransferWithRetry<T>(
          this IUsbDevice usbDevice,
-         Func<Task<T>> func,
+         Func<IUsbDevice, Task<T>> func,
          int retryCount = 3,
          int sleepDurationMilliseconds = 250)
         {
@@ -38,7 +38,7 @@ namespace Device.Net.UnitTests
                     onRetryAsync: (e, t) => usbDevice.ClearStatusAsync()
                     );
 
-            return retryPolicy.ExecuteAsync(func);
+            return retryPolicy.ExecuteAsync(() => func(usbDevice));
         }
 
         public static Task ClearStatusAsync(this IUsbDevice usbDevice)

@@ -78,8 +78,7 @@ namespace Device.Net.UnitTests
 
             await windowsUsbDevice.ClearStatusAsync();
 
-            var dfuStatus = await windowsUsbDevice.PerformControlTransferWithRetry(
-                () => windowsUsbDevice.GetStatusAsync());
+            var dfuStatus = await windowsUsbDevice.PerformControlTransferWithRetry(ud => windowsUsbDevice.GetStatusAsync());
 
             //TODO: This sometimes fails. Perhaps it should be part of the retry?
 
@@ -293,16 +292,14 @@ namespace Device.Net.UnitTests
             // executes a DFU "Set Address Pointer" command through the DFU DNLOAD request
             ////////////////////////////////////
             // 1st step: send DFU_DNLOAD request
-            var dfuRequestResult = await stmDfuDevice.PerformControlTransferWithRetry(()
-                => stmDfuDevice.SendDownloadRequestAsync());
+            var dfuRequestResult = await stmDfuDevice.PerformControlTransferWithRetry(ud => ud.SendDownloadRequestAsync());
 
             // Assert that the bytes transfered match the buffer lenght
             Assert.IsTrue(dfuRequestResult.BytesTransferred == StmDfuExtensions.DownloadRequestLength);
 
             ///////////////////////////////////////
             // 2nd step: send DFU_GETSTATUS request
-            dfuRequestResult = await stmDfuDevice.PerformControlTransferWithRetry(()
-                => stmDfuDevice.GetStatusAsync());
+            dfuRequestResult = await stmDfuDevice.PerformControlTransferWithRetry(ud => ud.GetStatusAsync());
 
             // Assert that the received buffer has the requested lenght 
             Assert.IsTrue(dfuRequestResult.BytesTransferred == StmDfuExtensions.GetStatusPacketLength);
@@ -312,9 +309,7 @@ namespace Device.Net.UnitTests
 
             ///////////////////////////////////////////////////////////////
             // 3rd step: send new DFU_GETSTATUS request to check execution
-            dfuRequestResult = await stmDfuDevice.PerformControlTransferWithRetry(
-                () => stmDfuDevice.GetStatusAsync()
-            );
+            dfuRequestResult = await stmDfuDevice.PerformControlTransferWithRetry(ud => stmDfuDevice.GetStatusAsync());
 
             // Assert that the received buffer has the requested lenght 
             Assert.IsTrue(dfuRequestResult.BytesTransferred == StmDfuExtensions.GetStatusPacketLength);
