@@ -20,7 +20,6 @@ using Usb.Net.Windows;
 using Usb.Net;
 #endif
 
-
 namespace Device.Net.UnitTests
 {
     [TestClass]
@@ -43,41 +42,6 @@ namespace Device.Net.UnitTests
         /// </summary>
         private readonly ILoggerFactory _loggerFactory = LoggerFactory.Create((builder) => { });
         #endregion
-
-
-        public static void CheckLogMessageText(Mock<ILogger> loggerMock, string containsText, LogLevel logLevel, Times times)
-        {
-            loggerMock.Verify
-            (
-                l => l.Log
-                (
-                    //Check the severity level
-                    logLevel,
-                    //This may or may not be relevant to your scenario
-                    It.IsAny<EventId>(),
-                    //This is the magical Moq code that exposes internal log processing from the extension methods
-                    It.Is<It.IsAnyType>((state, t) =>
-                        //This confirms that the correct log message was sent to the logger. {OriginalFormat} should match the value passed to the logger
-                        //Note: messages should be retrieved from a service that will probably store the strings in a resource file
-                        ((string)GetValue(state, "{OriginalFormat}")).Contains(containsText)
-                ),
-                //Confirm the exception type
-                It.IsAny<Exception>(),
-                //Accept any valid Func here. The Func is specified by the extension methods
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
-                //Make sure the message was logged the correct number of times
-                times
-            );
-        }
-
-        private static object GetValue(object state, string key)
-        {
-            var keyValuePairList = (IReadOnlyList<KeyValuePair<string, object>>)state;
-
-            var actualValue = keyValuePairList.First(kvp => string.Compare(kvp.Key, key, StringComparison.Ordinal) == 0).Value;
-
-            return actualValue;
-        }
 
         #region Tests
 
@@ -136,8 +100,7 @@ namespace Device.Net.UnitTests
         }
         #endregion
 
-        #region DeviceManager
-
+        #region DeviceManager 
         [TestMethod]
         public void TestThatDeviceManagerRequiresAFactory() => _ = Assert.ThrowsException<InvalidOperationException>(() 
             => new DeviceManager(new List<IDeviceFactory>()));
@@ -159,6 +122,26 @@ namespace Device.Net.UnitTests
 
         #endregion
 
+        //CreateWindowsHidDeviceFactory
+
+        #region Device Factories
+
+        [TestMethod]
+        public void TestDeviceFactoriesNotRegisteredException()
+        {
+
+            try
+            {
+                var deviceManager = new DeviceManager(new List<IDeviceFactory>(), _loggerFactory);
+            }
+            catch (InvalidOperationException)
+            {
+                return;
+            }
+
+            Assert.Fail("The call was not stopped");
+        }
+
         [TestMethod]
         [DataRow(true, true, 1, MockHidDeviceVendorId, MockHidDeviceProductId)]
         [DataRow(true, false, 1, MockHidDeviceVendorId, MockHidDeviceProductId)]
@@ -172,15 +155,15 @@ namespace Device.Net.UnitTests
         public async Task TestWithMatchedFilterAsync(bool isHidConnected, bool isUsbConnected, int expectedCount, uint vid, uint pid)
         {
             var (hid, usb) = GetMockedFactories(isHidConnected, isUsbConnected, vid, pid);
-            var deviceManager = new List<IDeviceFactory> { hid.Object, usb.Object }.Aggregate();
+            var deviceFactory = new List<IDeviceFactory> { hid.Object, usb.Object }.Aggregate();
 
-            var connectedDeviceDefinitions = (await deviceManager.GetConnectedDeviceDefinitionsAsync()).ToList();
+            var connectedDeviceDefinitions = (await deviceFactory.GetConnectedDeviceDefinitionsAsync()).ToList();
 
             if (connectedDeviceDefinitions.Count > 0)
             {
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
                 {
-                    _ = deviceManager.GetDeviceAsync(connectedDeviceDefinition);
+                    _ = deviceFactory.GetDeviceAsync(connectedDeviceDefinition);
 
                     //TODO: put stuff here
                 }
@@ -301,18 +284,9 @@ namespace Device.Net.UnitTests
 
             return (hidMock, usbMock);
         }
+        #endregion
 
-#if NETCOREAPP3_1
-        //Check that we can construct objects without loggers
-        [TestMethod]
-        public void TestNullLoggers()
-        {
-            _ = new UsbDevice("asd", new Mock<IUsbInterfaceManager>().Object);
-            _ = new WindowsHidDevice("asd");
-            _ = new WindowsUsbInterface(default, 0);
-            _ = new WindowsUsbInterfaceManager("asd");
-        }
-#endif
+        #region Device Listener
 
         [TestMethod]
         public async Task TestDeviceListenerAsync()
@@ -334,21 +308,68 @@ namespace Device.Net.UnitTests
             Assert.IsTrue(isTimeout, "Device is connected");
         }
 
+        #endregion
+
+        #region Misc
         [TestMethod]
-        public void TestDeviceFactoriesNotRegisteredException()
+        public async Task TestSynchronizeWithCancellationToken()
         {
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
 
-            try
-            {
-                var deviceManager = new DeviceManager(new List<IDeviceFactory>(), _loggerFactory);
-            }
-            catch (InvalidOperationException)
-            {
-                return;
-            }
+            var completed = false;
 
-            Assert.Fail("The call was not stopped");
+            var task = Task.Run(() =>
+            {
+                //Iterate for one second
+                for (var i = 0; i < 100; i++)
+                {
+                    Thread.Sleep(10);
+                }
+
+                return true;
+            });
+
+            var cancellationTokenSource = new CancellationTokenSource();
+
+            //Start a task that will cancel in 500 milliseconds
+            var cancelTask = Task.Run(() =>
+            {
+                Thread.Sleep(500);
+                cancellationTokenSource.Cancel();
+                return true;
+            });
+
+            //Get a task that will finish when the cancellation token is cancelled
+            var syncTask = task.SynchronizeWithCancellationToken(cancellationToken: cancellationTokenSource.Token);
+
+            //Wait for the first task to finish
+            var completedTask = (Task<bool>)await Task.WhenAny(new Task[]
+            {
+                syncTask,
+                cancelTask
+            });
+
+            //Ensure the task didn't wait a long time
+            Assert.IsTrue(stopWatch.ElapsedMilliseconds < 1000);
+
+            //Ensure the task wasn't completed
+            Assert.IsFalse(completed);
         }
+
+#if NETCOREAPP3_1
+        //Check that we can construct objects without loggers
+        [TestMethod]
+        public void TestNullLoggers()
+        {
+            _ = new UsbDevice("asd", new Mock<IUsbInterfaceManager>().Object);
+            _ = new WindowsHidDevice("asd");
+            _ = new WindowsUsbInterface(default, 0);
+            _ = new WindowsUsbInterfaceManager("asd");
+        }
+#endif
+        #endregion
+
         #endregion
 
         #region Exceptions
@@ -397,6 +418,40 @@ namespace Device.Net.UnitTests
         #endregion
 
         #region Helpers
+        private static void CheckLogMessageText(Mock<ILogger> loggerMock, string containsText, LogLevel logLevel, Times times)
+        {
+            loggerMock.Verify
+            (
+                l => l.Log
+                (
+                    //Check the severity level
+                    logLevel,
+                    //This may or may not be relevant to your scenario
+                    It.IsAny<EventId>(),
+                    //This is the magical Moq code that exposes internal log processing from the extension methods
+                    It.Is<It.IsAnyType>((state, t) =>
+                        //This confirms that the correct log message was sent to the logger. {OriginalFormat} should match the value passed to the logger
+                        //Note: messages should be retrieved from a service that will probably store the strings in a resource file
+                        ((string)GetValue(state, "{OriginalFormat}")).Contains(containsText)
+                ),
+                //Confirm the exception type
+                It.IsAny<Exception>(),
+                //Accept any valid Func here. The Func is specified by the extension methods
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                //Make sure the message was logged the correct number of times
+                times
+            );
+        }
+
+        private static object GetValue(object state, string key)
+        {
+            var keyValuePairList = (IReadOnlyList<KeyValuePair<string, object>>)state;
+
+            var actualValue = keyValuePairList.First(kvp => string.Compare(kvp.Key, key, StringComparison.Ordinal) == 0).Value;
+
+            return actualValue;
+        }
+
         private async Task<bool> ListenForDeviceAsync(IReadOnlyCollection<IDeviceFactory> deviceFactories)
         {
             var listenTaskCompletionSource = new TaskCompletionSource<bool>();
@@ -437,52 +492,6 @@ namespace Device.Net.UnitTests
             }
         }
         #endregion
-
-        [TestMethod]
-        public async Task TestSynchronizeWithCancellationToken()
-        {
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            var completed = false;
-
-            var task = Task.Run(() =>
-            {
-                //Iterate for one second
-                for (var i = 0; i < 100; i++)
-                {
-                    Thread.Sleep(10);
-                }
-
-                return true;
-            });
-
-            var cancellationTokenSource = new CancellationTokenSource();
-
-            //Start a task that will cancel in 500 milliseconds
-            var cancelTask = Task.Run(() =>
-            {
-                Thread.Sleep(500);
-                cancellationTokenSource.Cancel();
-                return true;
-            });
-
-            //Get a task that will finish when the cancellation token is cancelled
-            var syncTask = task.SynchronizeWithCancellationToken(cancellationToken: cancellationTokenSource.Token);
-
-            //Wait for the first task to finish
-            var completedTask = (Task<bool>)await Task.WhenAny(new Task[]
-            {
-                syncTask,
-                cancelTask
-            });
-
-            //Ensure the task didn't wait a long time
-            Assert.IsTrue(stopWatch.ElapsedMilliseconds < 1000);
-
-            //Ensure the task wasn't completed
-            Assert.IsFalse(completed);
-        }
     }
 }
 
