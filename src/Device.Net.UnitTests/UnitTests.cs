@@ -1,9 +1,6 @@
-#pragma warning disable IDE0055
-
-#if !NET45
-
 using Device.Net.Exceptions;
 using Device.Net.Windows;
+using Hid.Net.Windows;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -13,12 +10,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
-#if NETCOREAPP3_1
-using Hid.Net.Windows;
-using Usb.Net.Windows;
 using Usb.Net;
-#endif
+using Usb.Net.Windows;
 
 namespace Device.Net.UnitTests
 {
@@ -40,7 +33,13 @@ namespace Device.Net.UnitTests
         /// Dummy logger factory for now
         /// TODO: remove this because the factory is no longer a required parameter
         /// </summary>
-        private readonly ILoggerFactory _loggerFactory = LoggerFactory.Create((builder) => { });
+        private readonly ILoggerFactory _loggerFactory
+#if !NET45
+            = LoggerFactory.Create((builder) => { });
+#else
+            ;
+#endif
+
         #endregion
 
         #region Tests
@@ -88,7 +87,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public void TestGetAllUsbDevices()
         {
-            var aqs = AqsHelpers.GetAqs(new List<FilterDeviceDefinition>{}, DeviceType.Usb);
+            var aqs = AqsHelpers.GetAqs(new List<FilterDeviceDefinition> { }, DeviceType.Usb);
             Assert.AreEqual("System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True", aqs);
         }
 
@@ -102,7 +101,7 @@ namespace Device.Net.UnitTests
 
         #region DeviceManager 
         [TestMethod]
-        public void TestThatDeviceManagerRequiresAFactory() => _ = Assert.ThrowsException<InvalidOperationException>(() 
+        public void TestThatDeviceManagerRequiresAFactory() => _ = Assert.ThrowsException<InvalidOperationException>(()
             => new DeviceManager(new List<IDeviceFactory>()));
 
         [TestMethod]
@@ -122,13 +121,16 @@ namespace Device.Net.UnitTests
 
         #endregion
 
+        #region Device Factory Extensions
+
+#if !WINDOWS_UWP
         [TestMethod]
         public async Task TestCreateWindowsHidDeviceFactory()
         {
             var result = new List<ConnectedDeviceDefinition> { new ConnectedDeviceDefinition("123", DeviceType.Hid) };
 
             var deviceFactory = new FilterDeviceDefinition().CreateWindowsHidDeviceFactory(
-                getConnectedDeviceDefinitionsAsync: (c)=>
+                getConnectedDeviceDefinitionsAsync: (c) =>
                 {
                     return Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(result);
                 });
@@ -137,6 +139,9 @@ namespace Device.Net.UnitTests
             Assert.AreEqual(deviceDefinitions.Count(), deviceDefinitions.Count());
             Assert.AreEqual(deviceDefinitions.First().DeviceId, deviceDefinitions.First().DeviceId);
         }
+#endif
+
+        #endregion
 
         #region Device Factories
 
@@ -187,7 +192,6 @@ namespace Device.Net.UnitTests
             Assert.AreEqual(expectedCount, connectedDeviceDefinitions.Count);
         }
 
-#pragma warning disable IDE0022 // Use expression body for methods
         [TestMethod]
         [DataRow(true, true, MockHidDeviceVendorId, MockHidDeviceProductId)]
         [DataRow(true, false, MockHidDeviceVendorId, MockHidDeviceProductId)]
@@ -197,6 +201,7 @@ namespace Device.Net.UnitTests
 
             var actualCount = 0;
 
+#if !NET45
             _ = _loggerMock.Setup(l => l.Log(
               LogLevel.Trace,
               It.IsAny<EventId>(),
@@ -205,6 +210,7 @@ namespace Device.Net.UnitTests
               (Func<It.IsAnyType, Exception, string>)It.IsAny<object>())).Callback(() => actualCount++);
 
             _ = _loggerMock.Setup(l => l.BeginScope(It.IsAny<It.IsAnyType>())).Returns(new Mock<IDisposable>().Object);
+#endif
 
             var (hid, usb) = GetMockedFactories(isHidConnected, isUsbConnected, vid, pid);
 
@@ -233,14 +239,16 @@ namespace Device.Net.UnitTests
                 Assert.IsTrue(result.Data[0] == i);
             }
 
-            Assert.AreEqual(count*2, actualCount);
+            Assert.AreEqual(count * 2, actualCount);
 
             //TODO: this should get called 10 times and that seems to be what's happening, bu tif you specify 10 it says that it was called 20.
             //Bug in Moq?
 
+#if !NET45
+
             CheckLogMessageText(_loggerMock, Messages.SuccessMessageWriteAndReadCalled, LogLevel.Information, Times.AtLeast(1));
+#endif
         }
-#pragma warning restore IDE0022 // Use expression body for methods
 
         [TestMethod]
         [DataRow(true, true, 2)]
@@ -250,19 +258,19 @@ namespace Device.Net.UnitTests
         {
             var (hidMock, usbMock) = GetMockedFactories(isHidConnected, isUsbConnected, null, null);
 
-            var deviceFactories =new List<IDeviceFactory> { hidMock.Object, usbMock.Object } .Aggregate(_loggerFactory);
+            var deviceFactories = new List<IDeviceFactory> { hidMock.Object, usbMock.Object }.Aggregate(_loggerFactory);
 
             var connectedDeviceDefinitions = (await deviceFactories.GetConnectedDeviceDefinitionsAsync()).ToList();
             Assert.IsNotNull(connectedDeviceDefinitions);
             Assert.AreEqual(expectedCount, connectedDeviceDefinitions.Count);
         }
 
-        private static (Mock<IDeviceFactory> hidMock,  Mock<IDeviceFactory> usbMock) GetMockedFactories(bool isHidConnected, bool isUsbConnected, uint? vid, uint? pid)
+        private static (Mock<IDeviceFactory> hidMock, Mock<IDeviceFactory> usbMock) GetMockedFactories(bool isHidConnected, bool isUsbConnected, uint? vid, uint? pid)
         {
             var hidMock = new Mock<IDeviceFactory>();
             var usbMock = new Mock<IDeviceFactory>();
 
-            if (isHidConnected && ((!vid.HasValue && !pid.HasValue) || (vid==1 && pid ==1)))
+            if (isHidConnected && ((!vid.HasValue && !pid.HasValue) || (vid == 1 && pid == 1)))
             {
                 _ = hidMock.Setup(f => f.GetConnectedDeviceDefinitionsAsync(It.IsAny<CancellationToken>())).Returns(
                     Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> {
@@ -325,53 +333,6 @@ namespace Device.Net.UnitTests
         #endregion
 
         #region Misc
-        [TestMethod]
-        public async Task TestSynchronizeWithCancellationToken()
-        {
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-
-            var completed = false;
-
-            var task = Task.Run(() =>
-            {
-                //Iterate for one second
-                for (var i = 0; i < 100; i++)
-                {
-                    Thread.Sleep(10);
-                }
-
-                return true;
-            });
-
-            var cancellationTokenSource = new CancellationTokenSource();
-
-            //Start a task that will cancel in 500 milliseconds
-            var cancelTask = Task.Run(() =>
-            {
-                Thread.Sleep(500);
-                cancellationTokenSource.Cancel();
-                return true;
-            });
-
-            //Get a task that will finish when the cancellation token is cancelled
-            var syncTask = task.SynchronizeWithCancellationToken(cancellationToken: cancellationTokenSource.Token);
-
-            //Wait for the first task to finish
-            var completedTask = (Task<bool>)await Task.WhenAny(new Task[]
-            {
-                syncTask,
-                cancelTask
-            });
-
-            //Ensure the task didn't wait a long time
-            Assert.IsTrue(stopWatch.ElapsedMilliseconds < 1000);
-
-            //Ensure the task wasn't completed
-            Assert.IsFalse(completed);
-        }
-
-#if NETCOREAPP3_1
         //Check that we can construct objects without loggers
         [TestMethod]
         public void TestNullLoggers()
@@ -381,7 +342,6 @@ namespace Device.Net.UnitTests
             _ = new WindowsUsbInterface(default, 0);
             _ = new WindowsUsbInterfaceManager("asd");
         }
-#endif
         #endregion
 
         #endregion
@@ -432,6 +392,7 @@ namespace Device.Net.UnitTests
         #endregion
 
         #region Helpers
+#if !NET45
         private static void CheckLogMessageText(Mock<ILogger> loggerMock, string containsText, LogLevel logLevel, Times times)
         {
             loggerMock.Verify
@@ -465,6 +426,7 @@ namespace Device.Net.UnitTests
 
             return actualValue;
         }
+#endif
 
         private async Task<bool> ListenForDeviceAsync(IReadOnlyCollection<IDeviceFactory> deviceFactories)
         {
@@ -508,7 +470,3 @@ namespace Device.Net.UnitTests
         #endregion
     }
 }
-
-#endif
-
-#pragma warning restore IDE0055
