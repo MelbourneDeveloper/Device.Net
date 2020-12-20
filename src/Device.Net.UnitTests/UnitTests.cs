@@ -122,7 +122,21 @@ namespace Device.Net.UnitTests
 
         #endregion
 
-        //CreateWindowsHidDeviceFactory
+        [TestMethod]
+        public async Task TestCreateWindowsHidDeviceFactory()
+        {
+            var result = new List<ConnectedDeviceDefinition> { new ConnectedDeviceDefinition("123", DeviceType.Hid) };
+
+            var deviceFactory = new FilterDeviceDefinition().CreateWindowsHidDeviceFactory(
+                getConnectedDeviceDefinitionsAsync: (c)=>
+                {
+                    return Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(result);
+                });
+            var deviceDefinitions = await deviceFactory.GetConnectedDeviceDefinitionsAsync();
+
+            Assert.AreEqual(deviceDefinitions.Count(), deviceDefinitions.Count());
+            Assert.AreEqual(deviceDefinitions.First().DeviceId, deviceDefinitions.First().DeviceId);
+        }
 
         #region Device Factories
 

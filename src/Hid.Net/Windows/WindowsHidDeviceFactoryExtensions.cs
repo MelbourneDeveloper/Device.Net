@@ -21,7 +21,8 @@ namespace Hid.Net.Windows
         IHidApiService hidApiService = null,
         Guid? classGuid = null,
         ushort? readBufferSize = null,
-        ushort? writeBufferSize = null)
+        ushort? writeBufferSize = null,
+        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null)
         {
             return CreateWindowsHidDeviceFactory(
                 new ReadOnlyCollection<FilterDeviceDefinition>(new List<FilterDeviceDefinition>()),
@@ -29,7 +30,9 @@ namespace Hid.Net.Windows
                 hidApiService,
                 classGuid,
                 readBufferSize,
-                writeBufferSize
+                writeBufferSize,
+                null,
+                getConnectedDeviceDefinitionsAsync
                 );
         }
 
@@ -66,6 +69,7 @@ namespace Hid.Net.Windows
         /// <param name="readBufferSize"></param>
         /// <param name="writeBufferSize"></param>
         /// <param name="defaultReportId"></param>
+        /// <param name="getConnectedDeviceDefinitionsAsync"></param>
         /// <returns></returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
         this FilterDeviceDefinition filterDeviceDefinition,
@@ -74,7 +78,8 @@ namespace Hid.Net.Windows
         Guid? classGuid = null,
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null,
-        byte? defaultReportId = null)
+        byte? defaultReportId = null,
+        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null)
         {
             return CreateWindowsHidDeviceFactory(
                 new ReadOnlyCollection<FilterDeviceDefinition>(new List<FilterDeviceDefinition> { filterDeviceDefinition }),
@@ -83,7 +88,8 @@ namespace Hid.Net.Windows
                 classGuid,
                 readBufferSize,
                 writeBufferSize,
-                defaultReportId
+                defaultReportId,
+                getConnectedDeviceDefinitionsAsync
                 );
         }
 
@@ -97,6 +103,7 @@ namespace Hid.Net.Windows
         /// <param name="readBufferSize"></param>
         /// <param name="writeBufferSize"></param>
         /// <param name="defaultReportId"></param>
+        /// <param name="getConnectedDeviceDefinitionsAsync">Specify custom code for getting the device definitions</param>
         /// <returns></returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
             this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
@@ -105,7 +112,8 @@ namespace Hid.Net.Windows
             Guid? classGuid = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null,
-            byte? defaultReportId = null)
+            byte? defaultReportId = null,
+            GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null)
         {
             if (filterDeviceDefinitions == null) throw new ArgumentNullException(nameof(filterDeviceDefinitions));
 
@@ -115,16 +123,21 @@ namespace Hid.Net.Windows
 
             classGuid ??= selectedHidApiService.GetHidGuid();
 
-            var windowsDeviceEnumerator = new WindowsDeviceEnumerator(
-                loggerFactory.CreateLogger<WindowsDeviceEnumerator>(),
-                classGuid.Value,
-                (d, guid) => GetDeviceDefinition(d, selectedHidApiService, loggerFactory.CreateLogger(nameof(WindowsHidDeviceFactoryExtensions))),
-                c => Task.FromResult(!filterDeviceDefinitions.Any() || filterDeviceDefinitions.FirstOrDefault(f => f.IsDefinitionMatch(c, DeviceType.Hid)) != null)
-                );
+            if (getConnectedDeviceDefinitionsAsync == null)
+            {
+                var windowsDeviceEnumerator = new WindowsDeviceEnumerator(
+                    loggerFactory.CreateLogger<WindowsDeviceEnumerator>(),
+                    classGuid.Value,
+                    (d, guid) => GetDeviceDefinition(d, selectedHidApiService, loggerFactory.CreateLogger(nameof(WindowsHidDeviceFactoryExtensions))),
+                    c => Task.FromResult(!filterDeviceDefinitions.Any() || filterDeviceDefinitions.FirstOrDefault(f => f.IsDefinitionMatch(c, DeviceType.Hid)) != null)
+                    );
+
+                getConnectedDeviceDefinitionsAsync = windowsDeviceEnumerator.GetConnectedDeviceDefinitionsAsync;
+            }
 
             return new DeviceFactory(
                 loggerFactory,
-                windowsDeviceEnumerator.GetConnectedDeviceDefinitionsAsync,
+                getConnectedDeviceDefinitionsAsync,
                 (c, cancellationToken) => Task.FromResult<IDevice>(new WindowsHidDevice
                 (
                     c.DeviceId,
