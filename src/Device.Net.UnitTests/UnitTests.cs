@@ -26,6 +26,7 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class UnitTests
     {
+        #region Fields
         private const uint MockUsbDeviceProductId = 2;
         private const uint MockUsbDeviceVendorId = 2;
 
@@ -41,6 +42,7 @@ namespace Device.Net.UnitTests
         /// TODO: remove this because the factory is no longer a required parameter
         /// </summary>
         private readonly ILoggerFactory _loggerFactory = LoggerFactory.Create((builder) => { });
+        #endregion
 
 
         public static void CheckLogMessageText(Mock<ILogger> loggerMock, string containsText, LogLevel logLevel, Times times)
@@ -132,6 +134,31 @@ namespace Device.Net.UnitTests
             var aqs = AqsHelpers.GetAqs(new List<FilterDeviceDefinition> { }, DeviceType.Hid);
             Assert.AreEqual("System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True", aqs);
         }
+        #endregion
+
+        #region DeviceManager
+
+        [TestMethod]
+        public void TestThatDeviceManagerRequiresAFactory() => _ = Assert.ThrowsException<InvalidOperationException>(() 
+            => new DeviceManager(new List<IDeviceFactory>()));
+
+        [TestMethod]
+        [DataRow(true,1)]
+        [DataRow(false, 0)]
+        public async Task TestThatDeviceManagerReturnsDevice(bool supportsDevice, int deviceCount)
+        {
+            var deviceFactoryMock = new Mock<IDeviceFactory>();
+
+            _ = deviceFactoryMock.Setup(df => df.SupportsDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(supportsDevice));
+
+            _ = deviceFactoryMock.Setup(df => df.GetConnectedDeviceDefinitionsAsync( It.IsAny<CancellationToken>())).Returns(Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> { new ConnectedDeviceDefinition("123", DeviceType.Usb) }));
+
+            var deviceManager = new DeviceManager(new List<IDeviceFactory> { deviceFactoryMock.Object });
+            var devices = await deviceManager.GetConnectedDeviceDefinitionsAsync();
+
+            Assert.AreEqual(deviceCount, devices.Count());
+        }
+
         #endregion
 
         [TestMethod]
