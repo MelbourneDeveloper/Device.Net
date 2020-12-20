@@ -143,20 +143,18 @@ namespace Device.Net.UnitTests
             => new DeviceManager(new List<IDeviceFactory>()));
 
         [TestMethod]
-        [DataRow(true,1)]
-        [DataRow(false, 0)]
-        public async Task TestThatDeviceManagerReturnsDevice(bool supportsDevice, int deviceCount)
+        public async Task TestThatDeviceManagerReturnsDevice()
         {
             var deviceFactoryMock = new Mock<IDeviceFactory>();
 
-            _ = deviceFactoryMock.Setup(df => df.SupportsDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult(supportsDevice));
-
-            _ = deviceFactoryMock.Setup(df => df.GetConnectedDeviceDefinitionsAsync( It.IsAny<CancellationToken>())).Returns(Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> { new ConnectedDeviceDefinition("123", DeviceType.Usb) }));
+            const string deviceId = "123";
+            _ = deviceFactoryMock.Setup(df => df.GetConnectedDeviceDefinitionsAsync(It.IsAny<CancellationToken>())).Returns(Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> { new ConnectedDeviceDefinition(deviceId, DeviceType.Usb) }));
 
             var deviceManager = new DeviceManager(new List<IDeviceFactory> { deviceFactoryMock.Object });
             var devices = await deviceManager.GetConnectedDeviceDefinitionsAsync();
 
-            Assert.AreEqual(deviceCount, devices.Count());
+            Assert.AreEqual(1, devices.Count());
+            Assert.AreEqual(deviceId, devices.First().DeviceId);
         }
 
         #endregion
