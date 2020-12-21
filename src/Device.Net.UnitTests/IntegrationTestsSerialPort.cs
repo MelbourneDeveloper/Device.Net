@@ -76,7 +76,7 @@ namespace Device.Net.UnitTests
 
             var devices = await deviceManager.GetConnectedDeviceDefinitionsAsync();
 
-            Assert.IsTrue(devices.Count() > 0);
+            Assert.IsTrue(devices.Any());
         }
 
         [TestMethod]

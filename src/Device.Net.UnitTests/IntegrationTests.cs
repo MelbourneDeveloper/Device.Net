@@ -171,7 +171,7 @@ namespace Device.Net.UnitTests
             var devices = await new List<FilterDeviceDefinition> { }
             .GetUsbDeviceFactory(loggerFactory)
             .GetConnectedDeviceDefinitionsAsync();
-            Assert.IsTrue(devices.Count() > 0);
+            Assert.IsTrue(devices.Any());
         }
 
         [TestMethod]
@@ -180,7 +180,7 @@ namespace Device.Net.UnitTests
             var devices = await new List<FilterDeviceDefinition> { }
             .GetHidDeviceFactory(loggerFactory)
             .GetConnectedDeviceDefinitionsAsync();
-            Assert.IsTrue(devices.Count() > 0);
+            Assert.IsTrue(devices.Any());
         }
 
         private async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64)
