@@ -8,7 +8,7 @@ using Windows.Foundation;
 
 namespace Device.Net.UWP
 {
-    public abstract class UWPDeviceBase<T> : UWPDeviceBase, IDeviceHandler
+    public abstract class UWPDeviceBase<T> : UWPDeviceBase
     {
         #region Fields
         private bool _IsClosing;

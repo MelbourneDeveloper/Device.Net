@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 
 namespace Usb.Net
 {
-    public interface IUsbInterfaceManager : IDeviceHandler
+    /// <summary>
+    /// Manages USB interfaces
+    /// </summary>
+    public interface IUsbInterfaceManager
     {
         /// <summary>
         /// Usb interface for reading from the device. Note: this will default to the first read Bulk interface. If this is incorrect, inspect the UsbInterfaces property.
@@ -23,5 +26,28 @@ namespace Usb.Net
         /// TODO: This shouldn't be here. Don't use this
         /// </summary>
         Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Maximum write buffer size
+        /// </summary>
+        ushort WriteBufferSize { get; }
+
+        /// <summary>
+        /// MAximum read buffer size
+        /// </summary>
+        ushort ReadBufferSize { get; }
+
+        /// <summary>
+        /// Whether or not the manager is initialized
+        /// </summary>
+        bool IsInitialized { get; }
+
+        //Initialize the manager
+        Task InitializeAsync(CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Close the manager
+        /// </summary>
+        void Close();
     }
 }
