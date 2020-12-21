@@ -43,7 +43,7 @@ namespace Usb.Net.UWP
             {
                 //Filter to by device Id. 
                 //TODO: There is surely a better way to do this
-                deviceInformationFilter ??= (d) =>
+                deviceInformationFilter ??= d =>
                     d.Id.Contains(@"\\?\usb", StringComparison.OrdinalIgnoreCase) &&
                     d.Id.Contains(@"vid", StringComparison.OrdinalIgnoreCase) &&
                     d.Id.Contains(@"pid", StringComparison.OrdinalIgnoreCase);

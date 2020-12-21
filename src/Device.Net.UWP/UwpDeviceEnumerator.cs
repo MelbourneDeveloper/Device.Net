@@ -37,7 +37,7 @@ namespace Device.Net.UWP
             aqsFilter = aqf;
             _deviceType = deviceType;
             _testConnection = testConnection;
-            _deviceInformationFilter = idFilter ?? new Func<wde.DeviceInformation, bool>((d) => true);
+            _deviceInformationFilter = idFilter ?? new Func<wde.DeviceInformation, bool>(d => true);
         }
         #endregion
 

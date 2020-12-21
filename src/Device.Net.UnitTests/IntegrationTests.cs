@@ -29,7 +29,7 @@ namespace Device.Net.UnitTests
 #if NET45
 ;
 #else
-         = LoggerFactory.Create((builder) =>
+         = LoggerFactory.Create(builder =>
         {
             _ = builder.AddConsole()
             .AddDebug()

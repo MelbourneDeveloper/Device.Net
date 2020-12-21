@@ -35,7 +35,7 @@ namespace Device.Net.UnitTests
         /// </summary>
         private readonly ILoggerFactory _loggerFactory
 #if !NET45
-            = LoggerFactory.Create((builder) => { });
+            = LoggerFactory.Create(builder => { });
 #else
             ;
 #endif
