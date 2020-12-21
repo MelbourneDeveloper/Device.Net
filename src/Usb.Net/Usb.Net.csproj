@@ -6,6 +6,7 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <NoWarn>1701;1702;NU5125</NoWarn>    
     <DocumentationFile>Usb.Net.xml</DocumentationFile>
+    <Version>4.0.3-alpha</Version>    
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
