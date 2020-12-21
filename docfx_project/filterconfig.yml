@@ -1,4 +1,4 @@
 apiRules:
-- exclude:
-    uidRegex: ^Device\.Net\.LoggingExtensions$
-    type: Type    
+    - exclude:
+          uidRegex: ^Device\.Net\.LoggingExtensions$
+          type: Type

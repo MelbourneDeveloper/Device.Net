@@ -73,43 +73,85 @@
   
   <h1 id="Usb_Net_IUsbInterfaceManager" data-uid="Usb.Net.IUsbInterfaceManager" class="text-break">Interface IUsbInterfaceManager
   </h1>
-  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 summary"><p>Manages USB interfaces</p>
+</div>
   <div class="markdown level0 conceptual"></div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <a class="xref" href="Device.Net.IDeviceHandler.html#Device_Net_IDeviceHandler_WriteBufferSize">IDeviceHandler.WriteBufferSize</a>
-    </div>
-    <div>
-      <a class="xref" href="Device.Net.IDeviceHandler.html#Device_Net_IDeviceHandler_ReadBufferSize">IDeviceHandler.ReadBufferSize</a>
-    </div>
-    <div>
-      <a class="xref" href="Device.Net.IDeviceHandler.html#Device_Net_IDeviceHandler_IsInitialized">IDeviceHandler.IsInitialized</a>
-    </div>
-    <div>
-      <a class="xref" href="Device.Net.IDeviceHandler.html#Device_Net_IDeviceHandler_InitializeAsync_System_Threading_CancellationToken_">IDeviceHandler.InitializeAsync(CancellationToken)</a>
-    </div>
-    <div>
-      <a class="xref" href="Device.Net.IDeviceHandler.html#Device_Net_IDeviceHandler_Close">IDeviceHandler.Close()</a>
-    </div>
-    <div>
-      <span class="xref">System.IDisposable.Dispose()</span>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Usb.Net.html">Usb.Net</a></h6>
   <h6><strong>Assembly</strong>: Usb.Net.dll</h6>
   <h5 id="Usb_Net_IUsbInterfaceManager_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public interface IUsbInterfaceManager : IDeviceHandler, IDisposable</code></pre>
+    <pre><code class="lang-csharp hljs">public interface IUsbInterfaceManager</code></pre>
   </div>
   <h3 id="properties">Properties
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_IUsbInterfaceManager_IsInitialized.md&amp;value=---%0Auid%3A%20Usb.Net.IUsbInterfaceManager.IsInitialized%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/IUsbDeviceManager.cs/#L43">View Source</a>
+  </span>
+  <a id="Usb_Net_IUsbInterfaceManager_IsInitialized_" data-uid="Usb.Net.IUsbInterfaceManager.IsInitialized*"></a>
+  <h4 id="Usb_Net_IUsbInterfaceManager_IsInitialized" data-uid="Usb.Net.IUsbInterfaceManager.IsInitialized">IsInitialized</h4>
+  <div class="markdown level1 summary"><p>Whether or not the manager is initialized</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool IsInitialized { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_IUsbInterfaceManager_ReadBufferSize.md&amp;value=---%0Auid%3A%20Usb.Net.IUsbInterfaceManager.ReadBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/IUsbDeviceManager.cs/#L38">View Source</a>
+  </span>
+  <a id="Usb_Net_IUsbInterfaceManager_ReadBufferSize_" data-uid="Usb.Net.IUsbInterfaceManager.ReadBufferSize*"></a>
+  <h4 id="Usb_Net_IUsbInterfaceManager_ReadBufferSize" data-uid="Usb.Net.IUsbInterfaceManager.ReadBufferSize">ReadBufferSize</h4>
+  <div class="markdown level1 summary"><p>MAximum read buffer size</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ushort ReadBufferSize { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_IUsbInterfaceManager_ReadUsbInterface.md&amp;value=---%0Auid%3A%20Usb.Net.IUsbInterfaceManager.ReadUsbInterface%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/IUsbDeviceManager.cs/#L13">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/IUsbDeviceManager.cs/#L16">View Source</a>
   </span>
   <a id="Usb_Net_IUsbInterfaceManager_ReadUsbInterface_" data-uid="Usb.Net.IUsbInterfaceManager.ReadUsbInterface*"></a>
   <h4 id="Usb_Net_IUsbInterfaceManager_ReadUsbInterface" data-uid="Usb.Net.IUsbInterfaceManager.ReadUsbInterface">ReadUsbInterface</h4>
@@ -140,7 +182,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_IUsbInterfaceManager_UsbInterfaces.md&amp;value=---%0Auid%3A%20Usb.Net.IUsbInterfaceManager.UsbInterfaces%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/IUsbDeviceManager.cs/#L20">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/IUsbDeviceManager.cs/#L23">View Source</a>
   </span>
   <a id="Usb_Net_IUsbInterfaceManager_UsbInterfaces_" data-uid="Usb.Net.IUsbInterfaceManager.UsbInterfaces*"></a>
   <h4 id="Usb_Net_IUsbInterfaceManager_UsbInterfaces" data-uid="Usb.Net.IUsbInterfaceManager.UsbInterfaces">UsbInterfaces</h4>
@@ -167,10 +209,41 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_IUsbInterfaceManager_WriteBufferSize.md&amp;value=---%0Auid%3A%20Usb.Net.IUsbInterfaceManager.WriteBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/IUsbDeviceManager.cs/#L33">View Source</a>
+  </span>
+  <a id="Usb_Net_IUsbInterfaceManager_WriteBufferSize_" data-uid="Usb.Net.IUsbInterfaceManager.WriteBufferSize*"></a>
+  <h4 id="Usb_Net_IUsbInterfaceManager_WriteBufferSize" data-uid="Usb.Net.IUsbInterfaceManager.WriteBufferSize">WriteBufferSize</h4>
+  <div class="markdown level1 summary"><p>Maximum write buffer size</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">ushort WriteBufferSize { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt16</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_IUsbInterfaceManager_WriteUsbInterface.md&amp;value=---%0Auid%3A%20Usb.Net.IUsbInterfaceManager.WriteUsbInterface%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/IUsbDeviceManager.cs/#L17">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/IUsbDeviceManager.cs/#L20">View Source</a>
   </span>
   <a id="Usb_Net_IUsbInterfaceManager_WriteUsbInterface_" data-uid="Usb.Net.IUsbInterfaceManager.WriteUsbInterface*"></a>
   <h4 id="Usb_Net_IUsbInterfaceManager_WriteUsbInterface" data-uid="Usb.Net.IUsbInterfaceManager.WriteUsbInterface">WriteUsbInterface</h4>
@@ -200,10 +273,26 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_IUsbInterfaceManager_Close.md&amp;value=---%0Auid%3A%20Usb.Net.IUsbInterfaceManager.Close%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/IUsbDeviceManager.cs/#L51">View Source</a>
+  </span>
+  <a id="Usb_Net_IUsbInterfaceManager_Close_" data-uid="Usb.Net.IUsbInterfaceManager.Close*"></a>
+  <h4 id="Usb_Net_IUsbInterfaceManager_Close" data-uid="Usb.Net.IUsbInterfaceManager.Close">Close()</h4>
+  <div class="markdown level1 summary"><p>Close the manager</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Close()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_IUsbInterfaceManager_GetConnectedDeviceDefinitionAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Usb.Net.IUsbInterfaceManager.GetConnectedDeviceDefinitionAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/IUsbDeviceManager.cs/#L25">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/IUsbDeviceManager.cs/#L28">View Source</a>
   </span>
   <a id="Usb_Net_IUsbInterfaceManager_GetConnectedDeviceDefinitionAsync_" data-uid="Usb.Net.IUsbInterfaceManager.GetConnectedDeviceDefinitionAsync*"></a>
   <h4 id="Usb_Net_IUsbInterfaceManager_GetConnectedDeviceDefinitionAsync_System_Threading_CancellationToken_" data-uid="Usb.Net.IUsbInterfaceManager.GetConnectedDeviceDefinitionAsync(System.Threading.CancellationToken)">GetConnectedDeviceDefinitionAsync(CancellationToken)</h4>
@@ -246,6 +335,53 @@
       </tr>
     </tbody>
   </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_IUsbInterfaceManager_InitializeAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Usb.Net.IUsbInterfaceManager.InitializeAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/IUsbDeviceManager.cs/#L46">View Source</a>
+  </span>
+  <a id="Usb_Net_IUsbInterfaceManager_InitializeAsync_" data-uid="Usb.Net.IUsbInterfaceManager.InitializeAsync*"></a>
+  <h4 id="Usb_Net_IUsbInterfaceManager_InitializeAsync_System_Threading_CancellationToken_" data-uid="Usb.Net.IUsbInterfaceManager.InitializeAsync(System.Threading.CancellationToken)">InitializeAsync(CancellationToken)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">Task InitializeAsync(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           
@@ -257,7 +393,7 @@
                     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_IUsbInterfaceManager.md&amp;value=---%0Auid%3A%20Usb.Net.IUsbInterfaceManager%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/IUsbDeviceManager.cs/#L8" class="contribution-link">View Source</a>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/IUsbDeviceManager.cs/#L11" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
