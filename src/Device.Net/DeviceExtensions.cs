@@ -8,6 +8,12 @@ namespace Device.Net
 {
     public static class DeviceExtensions
     {
+        /// <summary>
+        /// Creates a new <see cref="IDeviceFactory"/> that contains with the existing deviceFactories
+        /// </summary>
+        /// <param name="deviceFactories"></param>
+        /// <param name="loggerFactory"></param>
+        /// <returns></returns>
         public static IDeviceFactory Aggregate(this IList<IDeviceFactory> deviceFactories, ILoggerFactory loggerFactory = null)
             => deviceFactories == null ? throw new ArgumentNullException(nameof(deviceFactories)) :
             new DeviceManager(new ReadOnlyCollection<IDeviceFactory>(deviceFactories), loggerFactory);
@@ -29,6 +35,13 @@ namespace Device.Net
                 deviceFactory,
                 initializeFunc: initializeFunc);
 
+        /// <summary>
+        /// Compares a <see cref="ConnectedDeviceDefinition"/> with a <see cref="FilterDeviceDefinition"/>
+        /// </summary>
+        /// <param name="filterDevice"></param>
+        /// <param name="actualDevice"></param>
+        /// <param name="deviceType"></param>
+        /// <returns>True if the filterDevice matches the actualDevice</returns>
         public static bool IsDefinitionMatch(this FilterDeviceDefinition filterDevice, ConnectedDeviceDefinition actualDevice, DeviceType deviceType)
         {
             if (actualDevice == null) throw new ArgumentNullException(nameof(actualDevice));

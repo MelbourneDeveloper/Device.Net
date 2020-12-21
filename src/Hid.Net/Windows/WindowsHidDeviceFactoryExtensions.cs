@@ -16,6 +16,16 @@ namespace Hid.Net.Windows
     public static class WindowsHidDeviceFactoryExtensions
 #pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     {
+        /// <summary>
+        /// Creates a <see cref="IDeviceFactory"/> for Windows Hid devices
+        /// </summary>
+        /// <param name="loggerFactory"></param>
+        /// <param name="hidApiService"></param>
+        /// <param name="classGuid">Filters by specified class guid</param>
+        /// <param name="readBufferSize"></param>
+        /// <param name="writeBufferSize"></param>
+        /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
+        /// <returns></returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
         ILoggerFactory loggerFactory = null,
         IHidApiService hidApiService = null,
