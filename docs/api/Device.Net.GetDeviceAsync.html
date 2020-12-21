@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Delegate GetDeviceAsync
    ">
-    <meta name="generator" content="docfx 2.56.5.0">
+    <meta name="generator" content="docfx 2.56.6.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -79,7 +79,7 @@
   <h6><strong>Assembly</strong>: Device.Net.dll</h6>
   <h5 id="Device_Net_GetDeviceAsync_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public delegate Task&lt;IDevice&gt; GetDeviceAsync(ConnectedDeviceDefinition deviceId, CancellationToken cancellationToken = null);</code></pre>
+    <pre><code class="lang-csharp hljs">public delegate Task&lt;IDevice&gt; GetDeviceAsync(ConnectedDeviceDefinition deviceId, CancellationToken cancellationToken = default(CancellationToken));</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -97,7 +97,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">CancellationToken</span></td>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
         <td><span class="parametername">cancellationToken</span></td>
         <td></td>
       </tr>
@@ -113,7 +113,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Task</span>&lt;<a class="xref" href="Device.Net.IDevice.html">IDevice</a>&gt;</td>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.IDevice.html">IDevice</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
@@ -129,7 +129,7 @@
                     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_GetDeviceAsync.md&amp;value=---%0Auid%3A%20Device.Net.GetDeviceAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceFactory.cs/#L12" class="contribution-link">View Source</a>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/Delegates.cs/#L10" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
