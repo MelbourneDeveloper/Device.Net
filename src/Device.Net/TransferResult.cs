@@ -1,16 +1,24 @@
 ﻿namespace Device.Net
 {
 #pragma warning disable CA1815 // Override equals and operator equals on value types
+    /// <summary>
+    /// Represents the result of a read or write transfer
+    /// </summary>
     public readonly struct TransferResult
 
 #pragma warning restore CA1815 // Override equals and operator equals on value types
     {
         #region Public Properties
 #pragma warning disable CA1819 // Properties should not return arrays
+        /// <summary>
+        /// The data that was transferred
+        /// </summary>
         public byte[] Data { get; }
 #pragma warning restore CA1819 // Properties should not return arrays
 
-        //TODO: Int or Uint?
+        /// <summary>
+        /// The number of bytes transferred
+        /// </summary>
         public uint BytesTransferred { get; }
         #endregion
 
