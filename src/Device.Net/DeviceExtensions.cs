@@ -28,7 +28,7 @@ namespace Device.Net
 
         public static DeviceDataStreamer CreateDeviceDataStreamer(
             this IDeviceFactory deviceFactory,
-            ProcessData processData,
+            Func<IDevice, Task> processData,
             Func<IDevice, Task> initializeFunc = null) =>
             new DeviceDataStreamer(
                 processData,

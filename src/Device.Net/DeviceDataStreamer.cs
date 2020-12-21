@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace Device.Net
 {
-
-    public delegate Task ProcessData(IDevice device);
-
     public class DeviceDataStreamer : IDisposable
     {
         private bool _isRunning;
-        private readonly ProcessData _processData;
+        private readonly Func<IDevice, Task> _processData;
         private readonly IDeviceFactory _deviceFactory;
         private IDevice _currentDevice;
         private readonly TimeSpan? _interval;
@@ -20,7 +17,7 @@ namespace Device.Net
         private readonly Func<IDevice, Task> _initializeFunc;
 
         public DeviceDataStreamer(
-            ProcessData processData,
+            Func<IDevice, Task> processData,
             IDeviceFactory deviceFactory,
             TimeSpan? interval = null,
             ILoggerFactory loggerFactory = null,
