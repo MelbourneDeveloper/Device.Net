@@ -11,12 +11,11 @@
     <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>
     <copyright>Copyright (c) 2020 Christian Findlay</copyright>
     <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
-    <repository url="https://github.com/MelbourneDeveloper/Device.Net" />
+    <repository type="git" url="https://github.com/MelbourneDeveloper/Device.Net" commit="54dae598f51715043a62da76fe132765a2eed7d0" />
     <owners>Christian Findlay</owners>
     <icon>images/Icon.png</icon>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <license type="expression">MIT</license>
-    <repository type="git" url="https://github.com/MelbourneDeveloper/Device.Net" commit="54dae598f51715043a62da76fe132765a2eed7d0" />
     <dependencies>
       <group targetFramework=".NETFramework4.5">
         <dependency id="Device.Net" version="3.1.0" exclude="Build,Analyzers" />
