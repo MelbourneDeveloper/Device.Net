@@ -18,6 +18,7 @@ Alpha version. Please use 3.x for a stable release</description>
     <icon>images/Icon.png</icon>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <license type="expression">MIT</license>
+    <repository type="git" url="https://github.com/MelbourneDeveloper/Device.Net" commit="54dae598f51715043a62da76fe132765a2eed7d0" />
     <dependencies>
       <group targetFramework=".NETFramework4.5" />
       <group targetFramework=".NETStandard2.0">

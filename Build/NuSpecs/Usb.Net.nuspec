@@ -16,6 +16,7 @@
     <icon>images/Icon.png</icon>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <license type="expression">MIT</license>
+    <repository type="git" url="https://github.com/MelbourneDeveloper/Device.Net" commit="54dae598f51715043a62da76fe132765a2eed7d0" />
     <dependencies>
       <group targetFramework=".NETFramework4.5">
         <dependency id="Device.Net" version="4.0.3-alpha" exclude="Build,Analyzers" />
