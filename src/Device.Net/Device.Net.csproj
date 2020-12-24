@@ -9,6 +9,7 @@
         <DebugType>embedded</DebugType>
         <DebugSymbols>true</DebugSymbols>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>        
     </PropertyGroup>
     <ItemGroup>
         <None Include="..\..\README.md" Link="README.md" />
