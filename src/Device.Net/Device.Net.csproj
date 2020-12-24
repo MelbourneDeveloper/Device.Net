@@ -1,32 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <LangVersion>9.0</LangVersion>
-    <TargetFrameworks>netstandard2.0;net45;</TargetFrameworks>
-    <NoWarn>NU5125</NoWarn>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <DocumentationFile>Device.Net.xml</DocumentationFile>
-    <Version>4.0.4-alpha</Version>  
-    <DebugType>portable</DebugType>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="..\..\README.md" Link="README.md" />
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>    
-  </ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' != 'net45'">
-		<Compile Remove="Logging/*.*" />
-	  <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
-	    <Version>3.1.7</Version>
-	  </PackageReference>    
-	</ItemGroup>
-
+    <PropertyGroup>
+        <LangVersion>9.0</LangVersion>
+        <TargetFrameworks>netstandard2.0;net45;</TargetFrameworks>
+        <NoWarn>NU5125</NoWarn>
+        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+        <DocumentationFile>Device.Net.xml</DocumentationFile>
+        <Version>4.0.4-alpha</Version>
+        <DebugType>embedded</DebugType>
+        <DebugSymbols>true</DebugSymbols>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Include="..\..\README.md" Link="README.md" />
+        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' != 'net45'">
+        <Compile Remove="Logging/*.*" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions">
+            <Version>3.1.7</Version>
+        </PackageReference>
+    </ItemGroup>
 </Project>
