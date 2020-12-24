@@ -21,7 +21,8 @@
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <PublishRepositoryUrl>true</PublishRepositoryUrl> 
-    <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>      
+    <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild> 
+    <DocumentationFile>Usb.Net.UWP.xml</DocumentationFile>             
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
