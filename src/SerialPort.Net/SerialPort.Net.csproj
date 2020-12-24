@@ -6,6 +6,8 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <NoWarn>1701;1702;NU5125</NoWarn>    
     <DocumentationFile>SerialPort.Net.xml</DocumentationFile>    
+    <Version>4.0.4-alpha</Version>     
+    <DebugType>portable</DebugType>    
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">

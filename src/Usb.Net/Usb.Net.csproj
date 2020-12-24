@@ -7,6 +7,7 @@
     <NoWarn>1701;1702;NU5125</NoWarn>    
     <DocumentationFile>Usb.Net.xml</DocumentationFile>
     <Version>4.0.4-alpha</Version>    
+    <DebugType>portable</DebugType>    
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">

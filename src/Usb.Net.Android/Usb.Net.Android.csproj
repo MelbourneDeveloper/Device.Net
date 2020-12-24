@@ -21,6 +21,7 @@
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <SignAssembly>false</SignAssembly>
     <DocumentationFile>Usb.Net.Android.xml</DocumentationFile>
+    <DebugType>portable</DebugType>    
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
