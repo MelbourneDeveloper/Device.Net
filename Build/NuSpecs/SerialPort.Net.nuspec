@@ -34,6 +34,5 @@
 
         <file src="..\..\src\SerialPort.Net\bin\Release\net45\*.dll" target="lib/net45"/>   
         <file src="..\..\src\SerialPort.Net\bin\Release\net45\*.xml" target="lib/net45"/>   
-
     </files>
 </package>
