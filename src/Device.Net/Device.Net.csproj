@@ -6,7 +6,7 @@
     <NoWarn>NU5125</NoWarn>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <DocumentationFile>Device.Net.xml</DocumentationFile>
-    <Version>4.0.3-alpha</Version>  
+    <Version>4.0.4-alpha</Version>  
   </PropertyGroup>
 
   <ItemGroup>

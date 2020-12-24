@@ -6,7 +6,7 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>  
     <NoWarn>1701;1702;NU5125</NoWarn>      
     <DocumentationFile>Hid.Net.xml</DocumentationFile>
-    <Version>4.0.3-alpha</Version>    
+    <Version>4.0.4-alpha</Version>    
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

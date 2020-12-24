@@ -5,7 +5,7 @@
     <title>Device.Net.LibUsb</title>
     <description>macOS and Linux .NET library for talking to USB devices. Backed by the Device.Net framework</description>
     <summary>macOS and Linux .NET library for talking to USB devices. Backed by the Device.Net framework</summary>
-    <version>4.0.3-alpha</version>
+    <version>4.0.4-alpha</version>
     <authors>Christian Findlay</authors>
     <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
     <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>
@@ -18,13 +18,13 @@
     <license type="expression">MIT</license>
     <dependencies>
       <group targetFramework=".NETFramework4.5">
-        <dependency id="Device.Net" version="4.0.3-alpha" exclude="Build,Analyzers" />
-        <dependency id="Usb.Net" version="4.0.3-alpha" exclude="Build,Analyzers" />
+        <dependency id="Device.Net" version="4.0.4-alpha" exclude="Build,Analyzers" />
+        <dependency id="Usb.Net" version="4.0.4-alpha" exclude="Build,Analyzers" />
         <dependency id="LibUsbDotNet" version="2.2.29" exclude="Build,Analyzers" />        
       </group>    
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Device.Net" version="4.0.3-alpha" exclude="Build,Analyzers" />
-        <dependency id="Usb.Net" version="4.0.3-alpha" exclude="Build,Analyzers" />
+        <dependency id="Device.Net" version="4.0.4-alpha" exclude="Build,Analyzers" />
+        <dependency id="Usb.Net" version="4.0.4-alpha" exclude="Build,Analyzers" />
         <dependency id="LibUsbDotNet" version="2.2.29" exclude="Build,Analyzers" />
       </group>
     </dependencies>
