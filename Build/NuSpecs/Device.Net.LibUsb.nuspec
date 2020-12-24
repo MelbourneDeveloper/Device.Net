@@ -1,43 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
-  <metadata>
-    <id>Device.Net.LibUsb</id>
-    <title>Device.Net.LibUsb</title>
-    <description>macOS and Linux .NET library for talking to USB devices. Backed by the Device.Net framework</description>
-    <summary>macOS and Linux .NET library for talking to USB devices. Backed by the Device.Net framework</summary>
-    <version>4.0.4-alpha</version>
-    <authors>Christian Findlay</authors>
-    <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
-    <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>
-    <copyright>Copyright (c) 2020 Christian Findlay</copyright>
-    <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
-    <repository type="git" url="https://github.com/MelbourneDeveloper/Device.Net" commit="549f4a18913b8b861e57f14f839c6dfd8ae83a65" />
-    <owners>Christian Findlay</owners>
-    <icon>images/Icon.png</icon>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <license type="expression">MIT</license>
-    <dependencies>
-      <group targetFramework=".NETFramework4.5">
-        <dependency id="Device.Net" version="4.0.4-alpha" exclude="Build,Analyzers" />
-        <dependency id="Usb.Net" version="4.0.4-alpha" exclude="Build,Analyzers" />
-        <dependency id="LibUsbDotNet" version="2.2.29" exclude="Build,Analyzers" />        
-      </group>    
-      <group targetFramework=".NETStandard2.0">
-        <dependency id="Device.Net" version="4.0.4-alpha" exclude="Build,Analyzers" />
-        <dependency id="Usb.Net" version="4.0.4-alpha" exclude="Build,Analyzers" />
-        <dependency id="LibUsbDotNet" version="2.2.29" exclude="Build,Analyzers" />
-      </group>
-    </dependencies>
-  </metadata>
-   <files>
+<package
+    xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+    <metadata>
+        <id>Device.Net.LibUsb</id>
+        <title>Device.Net.LibUsb</title>
+        <description>macOS and Linux .NET library for talking to USB devices. Backed by the Device.Net framework</description>
+        <summary>macOS and Linux .NET library for talking to USB devices. Backed by the Device.Net framework</summary>
+        <version>4.0.4-alpha</version>
+        <authors>Christian Findlay</authors>
+        <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
+        <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>
+        <copyright>Copyright (c) 2020 Christian Findlay</copyright>
+        <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
+        <repository type="git" url="https://github.com/MelbourneDeveloper/Device.Net" commit="549f4a18913b8b861e57f14f839c6dfd8ae83a65" />
+        <owners>Christian Findlay</owners>
+        <icon>images/Icon.png</icon>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <license type="expression">MIT</license>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="Device.Net" version="4.0.4-alpha" exclude="Build,Analyzers" />
+                <dependency id="Usb.Net" version="4.0.4-alpha" exclude="Build,Analyzers" />
+                <dependency id="LibUsbDotNet" version="2.2.29" exclude="Build,Analyzers" />
+            </group>
+            <group targetFramework=".NETStandard2.0">
+                <dependency id="Device.Net" version="4.0.4-alpha" exclude="Build,Analyzers" />
+                <dependency id="Usb.Net" version="4.0.4-alpha" exclude="Build,Analyzers" />
+                <dependency id="LibUsbDotNet" version="2.2.29" exclude="Build,Analyzers" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
         <file src="../Icon.png" target="images\" />
-
-        <file src="..\..\src\Device.Net.LibUsb\bin\Release\netstandard2.0\*.dll" target="lib/netstandard2.0"/>   
-        <file src="..\..\src\Device.Net.LibUsb\bin\Release\netstandard2.0\*.pdb" target="lib/netstandard2.0"/>   
-        <file src="..\..\src\Device.Net.LibUsb\bin\Release\netstandard2.0\*.xml" target="lib/netstandard2.0"/>        
-
-        <file src="..\..\src\Device.Net.LibUsb\bin\Release\net45\*.dll" target="lib/net45"/>   
-        <file src="..\..\src\Device.Net.LibUsb\bin\Release\net45\*.pdb" target="lib/net45"/>   
-        <file src="..\..\src\Device.Net.LibUsb\bin\Release\net45\*.xml" target="lib/net45"/>                
+        <file src="..\..\src\Device.Net.LibUsb\bin\Release\netstandard2.0\*.dll" target="lib/netstandard2.0"/>
+        <file src="..\..\src\Device.Net.LibUsb\bin\Release\netstandard2.0\*.xml" target="lib/netstandard2.0"/>
+        <file src="..\..\src\Device.Net.LibUsb\bin\Release\net45\*.dll" target="lib/net45"/>
+        <file src="..\..\src\Device.Net.LibUsb\bin\Release\net45\*.xml" target="lib/net45"/>
     </files>
 </package>
