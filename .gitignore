@@ -22,6 +22,7 @@ AppPackages
 file_paths.xml
 /NuGet/netstandard2.0/Hid.Net.deps.json
 *.nupkg
+*.snupkg
 *.bak
 /.vscode
 src/.idea/
