@@ -9,7 +9,8 @@
         <DebugType>embedded</DebugType>
         <DebugSymbols>true</DebugSymbols>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>            
+        <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
     </PropertyGroup>
     <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
         <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">

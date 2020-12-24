@@ -9,7 +9,8 @@
         <DebugType>embedded</DebugType>
         <DebugSymbols>true</DebugSymbols>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>        
+        <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
     </PropertyGroup>
     <ItemGroup>
         <None Include="..\..\README.md" Link="README.md" />

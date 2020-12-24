@@ -22,7 +22,8 @@
     <DebugSymbols>true</DebugSymbols>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>        
     <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>     
-    <DocumentationFile>Hid.Net.UWP.xml</DocumentationFile>    
+    <DocumentationFile>Hid.Net.UWP.xml</DocumentationFile>   
+    <EmbedUntrackedSources>true</EmbedUntrackedSources> 
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
