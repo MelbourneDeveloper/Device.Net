@@ -29,9 +29,9 @@
     </metadata>
     <files>
         <file src="../Icon.png" target="images\" />
-        <file src="..\..\src\SerialPort.Net\bin\Release\netstandard2.0\*.dll" target="lib/netstandard2.0"/>
-        <file src="..\..\src\SerialPort.Net\bin\Release\netstandard2.0\*.xml" target="lib/netstandard2.0"/>
-        <file src="..\..\src\SerialPort.Net\bin\Release\net45\*.dll" target="lib/net45"/>
-        <file src="..\..\src\SerialPort.Net\bin\Release\net45\*.xml" target="lib/net45"/>
+        <file src="..\..\src\SerialPort.Net\bin\Release\netstandard2.0\SerialPort.Net.dll" target="lib/netstandard2.0"/>
+        <file src="..\..\src\SerialPort.Net\bin\Release\netstandard2.0\SerialPort.Net.xml" target="lib/netstandard2.0"/>
+        <file src="..\..\src\SerialPort.Net\bin\Release\net45\SerialPort.Net.dll" target="lib/net45"/>
+        <file src="..\..\src\SerialPort.Net\bin\Release\net45\SerialPort.Net.xml" target="lib/net45"/>
     </files>
 </package>

@@ -31,11 +31,13 @@
     </metadata>
     <files>
         <file src="../Icon.png" target="images\" />
-        <file src="..\..\src\Hid.Net\bin\Release\netstandard2.0\*.dll" target="lib/netstandard2.0"/>
-        <file src="..\..\src\Hid.Net\bin\Release\netstandard2.0\*.xml" target="lib/netstandard2.0"/>
-        <file src="..\..\src\Hid.Net\bin\Release\net45\*.dll" target="lib/net45"/>
-        <file src="..\..\src\Hid.Net\bin\Release\net45\*.xml" target="lib/net45"/>
-        <file src="..\..\src\Hid.Net.UWP\bin\Release\*.dll" target="lib/uap10.0.16299"/>
-        <file src="..\..\src\Hid.Net.UWP\bin\Release\*.xml" target="lib/uap10.0.16299"/>
+        <file src="..\..\src\Hid.Net\bin\Release\netstandard2.0\Hid.Net.dll" target="lib/netstandard2.0"/>
+        <file src="..\..\src\Hid.Net\bin\Release\netstandard2.0\Hid.Net.xml" target="lib/netstandard2.0"/>
+        <file src="..\..\src\Hid.Net\bin\Release\net45\Hid.Net.dll" target="lib/net45"/>
+        <file src="..\..\src\Hid.Net\bin\Release\net45\Hid.Net.xml" target="lib/net45"/>
+        <file src="..\..\src\Hid.Net.UWP\bin\Release\Hid.Net.dll" target="lib/uap10.0.16299"/>
+        <file src="..\..\src\Hid.Net.UWP\bin\Release\Hid.Net.xml" target="lib/uap10.0.16299"/>
+        <file src="..\..\src\Hid.Net.UWP\bin\Release\Hid.Net.UWP.dll" target="lib/uap10.0.16299"/>
+        <file src="..\..\src\Hid.Net.UWP\bin\Release\Hid.Net.UWP.xml" target="lib/uap10.0.16299"/>
     </files>
 </package>

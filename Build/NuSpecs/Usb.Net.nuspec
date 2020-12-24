@@ -34,13 +34,17 @@
     </metadata>
     <files>
         <file src="../Icon.png" target="images\" />
-        <file src="..\..\src\Usb.Net\bin\Release\netstandard2.0\*.dll" target="lib/netstandard2.0"/>
-        <file src="..\..\src\Usb.Net\bin\Release\netstandard2.0\*.xml" target="lib/netstandard2.0"/>
-        <file src="..\..\src\Usb.Net\bin\Release\net45\*.dll" target="lib/net45"/>
-        <file src="..\..\src\Usb.Net\bin\Release\net45\*.xml" target="lib/net45"/>
-        <file src="..\..\src\Usb.Net.UWP\bin\Release\*.dll" target="lib/uap10.0.16299"/>
-        <file src="..\..\src\Usb.Net.UWP\bin\Release\*.xml" target="lib/uap10.0.16299"/>
-        <file src="..\..\src\Usb.Net.Android\bin\Release\*.dll" target="lib/MonoAndroid"/>
-        <file src="..\..\src\Usb.Net.Android\bin\Release\*.xml" target="lib/MonoAndroid"/>
+        <file src="..\..\src\Usb.Net\bin\Release\netstandard2.0\Usb.Net.dll" target="lib/netstandard2.0"/>
+        <file src="..\..\src\Usb.Net\bin\Release\netstandard2.0\Usb.Net.xml" target="lib/netstandard2.0"/>
+        <file src="..\..\src\Usb.Net\bin\Release\net45\Usb.Net.dll" target="lib/net45"/>
+        <file src="..\..\src\Usb.Net\bin\Release\net45\Usb.Net.xml" target="lib/net45"/>
+        <file src="..\..\src\Usb.Net.UWP\bin\Release\Usb.Net.dll" target="lib/uap10.0.16299"/>
+        <file src="..\..\src\Usb.Net.UWP\bin\Release\Usb.Net.xml" target="lib/uap10.0.16299"/>
+        <file src="..\..\src\Usb.Net.UWP\bin\Release\Usb.Net.UWP.dll" target="lib/uap10.0.16299"/>
+        <file src="..\..\src\Usb.Net.UWP\bin\Release\Usb.Net.UWP.xml" target="lib/uap10.0.16299"/>
+        <file src="..\..\src\Usb.Net.Android\bin\Release\Usb.Net.dll" target="lib/MonoAndroid"/>
+        <file src="..\..\src\Usb.Net.Android\bin\Release\Usb.Net.xml" target="lib/MonoAndroid"/>
+        <file src="..\..\src\Usb.Net.Android\bin\Release\Usb.Net.Android.dll" target="lib/MonoAndroid"/>
+        <file src="..\..\src\Usb.Net.Android\bin\Release\Usb.Net.Android.xml" target="lib/MonoAndroid"/>
     </files>
 </package>
