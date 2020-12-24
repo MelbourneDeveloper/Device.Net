@@ -6,7 +6,7 @@
         <title>SerialPort.Net</title>
         <description>Cross-platform .NET library for talking to Serial Port / COM devices. Backed by the Device.Net framework</description>
         <summary>Cross-platform .NET library for talking to Serial Port / COM devices. Backed by the Device.Net framework</summary>
-        <version>4.0.4-alpha </version>
+        <version>4.0.5-alpha </version>
         <authors>Christian Findlay</authors>
         <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
         <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>

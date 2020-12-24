@@ -5,7 +5,7 @@
         <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
         <NoWarn>1701;1702;NU5125</NoWarn>
         <DocumentationFile>Usb.Net.xml</DocumentationFile>
-        <Version>4.0.4-alpha</Version>
+        <Version>4.0.5-alpha</Version>
         <DebugType>embedded</DebugType>
         <DebugSymbols>true</DebugSymbols>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
