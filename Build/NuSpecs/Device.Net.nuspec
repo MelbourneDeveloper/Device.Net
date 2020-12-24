@@ -38,4 +38,4 @@ Alpha version. Please use 3.x for a stable release</description>
         <file src="..\..\src\Device.Net.UWP\bin\Release\*.dll" target="lib/uap10.0.16299"/>
         <file src="..\..\src\Device.Net.UWP\bin\Release\*.xml" target="lib/uap10.0.16299"/>
     </files>
-</package
+</package>
