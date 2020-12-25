@@ -66,13 +66,13 @@ namespace Device.Net
 
         public static async Task<IDevice> GetFirstDeviceAsync(this IDeviceFactory deviceFactory)
             => deviceFactory != null ?
-            await deviceFactory.GetDeviceAsync(await (await deviceFactory.GetConnectedDeviceDefinitionsAsync()).FirstOrDefaultAsync())
+            await deviceFactory.GetDeviceAsync(await (await deviceFactory.GetConnectedDeviceDefinitionsAsync().ConfigureAwait(false)).FirstOrDefaultAsync().ConfigureAwait(false)).ConfigureAwait(false)
             : throw new ArgumentNullException(nameof(deviceFactory));
 
         public static async Task<IDevice> ConnectFirstAsync(this IDeviceFactory deviceFactory)
         {
-            var device = await GetFirstDeviceAsync(deviceFactory);
-            await device.InitializeAsync();
+            var device = await GetFirstDeviceAsync(deviceFactory).ConfigureAwait(false);
+            await device.InitializeAsync().ConfigureAwait(false);
             return device;
         }
 

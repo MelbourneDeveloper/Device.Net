@@ -20,10 +20,10 @@
     <SignAssembly>false</SignAssembly>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>        
-    <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>     
-    <DocumentationFile>Hid.Net.UWP.xml</DocumentationFile>   
-    <EmbedUntrackedSources>true</EmbedUntrackedSources> 
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>
+    <DocumentationFile>Hid.Net.UWP.xml</DocumentationFile>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -61,7 +61,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <PlatformTarget>ARM</PlatformTarget>
-     <OutputPath>bin\ARM\Debug\</OutputPath>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
     <NoWarn>;2008</NoWarn>
     <UseVSHostingProcess>false</UseVSHostingProcess>

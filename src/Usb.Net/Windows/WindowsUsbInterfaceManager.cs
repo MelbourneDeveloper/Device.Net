@@ -231,7 +231,7 @@ namespace Usb.Net.Windows
             GC.SuppressFinalize(this);
         }
 
-        public async Task InitializeAsync(CancellationToken cancellationToken = default) => await Task.Run(Initialize, cancellationToken);
+        public async Task InitializeAsync(CancellationToken cancellationToken = default) => await Task.Run(Initialize, cancellationToken).ConfigureAwait(false);
 
         public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync(CancellationToken cancellationToken = default)
         {

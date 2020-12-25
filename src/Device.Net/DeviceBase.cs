@@ -58,14 +58,14 @@ namespace Device.Net
         {
             if (writeBuffer == null) throw new ArgumentNullException(nameof(writeBuffer));
 
-            await _WriteAndReadLock.WaitAsync(cancellationToken);
+            await _WriteAndReadLock.WaitAsync(cancellationToken).ConfigureAwait(false);
 
             using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call} Write Buffer Length: {writeBufferLength}", DeviceId, nameof(WriteAndReadAsync), writeBuffer.Length);
 
             try
             {
-                _ = await WriteAsync(writeBuffer, cancellationToken);
-                var retVal = await ReadAsync(cancellationToken);
+                _ = await WriteAsync(writeBuffer, cancellationToken).ConfigureAwait(false);
+                var retVal = await ReadAsync(cancellationToken).ConfigureAwait(false);
                 Logger.LogInformation(Messages.SuccessMessageWriteAndReadCalled);
                 return retVal;
             }

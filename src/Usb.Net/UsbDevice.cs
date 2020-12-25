@@ -45,15 +45,15 @@ namespace Usb.Net
         #region Public Methods
         public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
-            await UsbInterfaceManager.InitializeAsync(cancellationToken);
-            ConnectedDeviceDefinition = await UsbInterfaceManager.GetConnectedDeviceDefinitionAsync(cancellationToken);
+            await UsbInterfaceManager.InitializeAsync(cancellationToken).ConfigureAwait(false);
+            ConnectedDeviceDefinition = await UsbInterfaceManager.GetConnectedDeviceDefinitionAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             return UsbInterfaceManager.ReadUsbInterface == null
                 ? throw new DeviceException(Messages.ErrorMessageNoReadInterfaceSpecified)
-                : await UsbInterfaceManager.ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
+                : await UsbInterfaceManager.ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken).ConfigureAwait(false);
         }
 
         public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)

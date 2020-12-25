@@ -23,8 +23,8 @@
     <DocumentationFile>Usb.Net.Android.xml</DocumentationFile>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl> 
-    <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>    
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

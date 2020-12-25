@@ -132,7 +132,7 @@ namespace Device.Net.LibUsb
                 }
 
                 IsInitialized = true;
-            }, cancellationToken);
+            }, cancellationToken).ConfigureAwait(false);
         }
         #endregion
 
@@ -155,11 +155,11 @@ namespace Device.Net.LibUsb
 
         public async Task<TransferResult> ReadAsync()
         {
-            await _WriteAndReadLock.WaitAsync();
+            await _WriteAndReadLock.WaitAsync().ConfigureAwait(false);
 
             try
             {
-                return await ReadUsbInterface.ReadAsync(ReadBufferSize);
+                return await ReadUsbInterface.ReadAsync(ReadBufferSize).ConfigureAwait(false);
             }
             finally
             {
@@ -169,11 +169,11 @@ namespace Device.Net.LibUsb
 
         public async Task WriteAsync(byte[] data)
         {
-            await _WriteAndReadLock.WaitAsync();
+            await _WriteAndReadLock.WaitAsync().ConfigureAwait(false);
 
             try
             {
-                _ = await WriteUsbInterface.WriteAsync(data);
+                _ = await WriteUsbInterface.WriteAsync(data).ConfigureAwait(false);
             }
             finally
             {

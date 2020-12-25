@@ -62,7 +62,7 @@ namespace Device.Net
         {
             if (_IsDisposed)
                 return;
-            await CheckForDevicesAsync();
+            await CheckForDevicesAsync().ConfigureAwait(false);
         }
         #endregion
 
@@ -85,9 +85,9 @@ namespace Device.Net
             try
             {
                 if (_IsDisposed) return;
-                await _ListenSemaphoreSlim.WaitAsync(cancellationToken);
+                await _ListenSemaphoreSlim.WaitAsync(cancellationToken).ConfigureAwait(false);
 
-                var connectedDeviceDefinitions = (await DeviceFactory.GetConnectedDeviceDefinitionsAsync(cancellationToken)).ToList();
+                var connectedDeviceDefinitions = (await DeviceFactory.GetConnectedDeviceDefinitionsAsync(cancellationToken).ConfigureAwait(false)).ToList();
 
                 //Iterate through connected devices
                 foreach (var connectedDeviceDefinition in connectedDeviceDefinitions)
@@ -103,7 +103,7 @@ namespace Device.Net
                     if (device == null)
                     {
                         //Need to use the connected device def here instead of the filter version because the filter version won't have the id or any details
-                        device = await DeviceFactory.GetDeviceAsync(connectedDeviceDefinition, cancellationToken);
+                        device = await DeviceFactory.GetDeviceAsync(connectedDeviceDefinition, cancellationToken).ConfigureAwait(false);
 
                         if (device == null)
                         {
@@ -122,7 +122,7 @@ namespace Device.Net
                     _logger.LogDebug("Attempting to initialize with DeviceId of {deviceId}", device.DeviceId);
 
                     //The device is not initialized so initialize it
-                    await device.InitializeAsync(cancellationToken);
+                    await device.InitializeAsync(cancellationToken).ConfigureAwait(false);
 
                     //Let listeners know a registered device was initialized
                     DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));

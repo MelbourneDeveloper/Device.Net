@@ -184,14 +184,14 @@ namespace Hid.Net.Windows
         {
             if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
-            await Task.Run(Initialize, cancellationToken);
+            await Task.Run(Initialize, cancellationToken).ConfigureAwait(false);
         }
 
 
 
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
-            var readReport = await ReadReportAsync(cancellationToken);
+            var readReport = await ReadReportAsync(cancellationToken).ConfigureAwait(false);
             Logger.LogTrace(new Trace(false, readReport.Data));
             return new TransferResult(readReport.Data, readReport.BytesRead);
         }
@@ -211,7 +211,7 @@ namespace Hid.Net.Windows
 
             try
             {
-                bytesRead = (uint)await _ReadFileStream.ReadAsync(bytes, 0, bytes.Length, cancellationToken);
+                bytesRead = (uint)await _ReadFileStream.ReadAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
             }
             catch (OperationCanceledException oce)
             {
@@ -270,7 +270,7 @@ namespace Hid.Net.Windows
                 {
                     try
                     {
-                        await _WriteFileStream.WriteAsync(bytes, 0, bytes.Length, cancellationToken);
+                        await _WriteFileStream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
                         Logger.LogTrace(new Trace(true, bytes));
                     }
                     catch (Exception ex)

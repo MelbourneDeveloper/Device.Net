@@ -22,7 +22,7 @@ namespace Device.Net
             {
                 if (cancellationToken.IsCancellationRequested) return default;
 
-                if (await predicate(item))
+                if (await predicate(item).ConfigureAwait(false))
                 {
                     return item;
                 }

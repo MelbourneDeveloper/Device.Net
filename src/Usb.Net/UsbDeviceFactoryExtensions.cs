@@ -21,7 +21,7 @@ namespace Usb.Net
             getConnectedDeviceDefinitionsAsync,
             async (d, cancellationToken) =>
             {
-                var usbInterfaceManager = await getUsbInterfaceManager(d.DeviceId, cancellationToken);
+                var usbInterfaceManager = await getUsbInterfaceManager(d.DeviceId, cancellationToken).ConfigureAwait(false);
                 return new UsbDevice(d.DeviceId, usbInterfaceManager, loggerFactory);
             },
             //Support the device if the factory doesn't filter on class guid, or the filter matches the device

@@ -86,7 +86,7 @@ namespace Device.Net.LibUsb
                    productId: (uint)usbRegistry.Pid,
                    deviceType: DeviceType.Usb
                )).ToList();
-           }, cancellationToken);
+           }, cancellationToken).ConfigureAwait(false);
         }
 
         public static UsbDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)

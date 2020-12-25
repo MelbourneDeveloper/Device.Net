@@ -39,13 +39,13 @@ namespace Device.Net
               {
                   while (_isRunning)
                   {
-                      await Task.Delay(_interval.Value);
+                      await Task.Delay(_interval.Value).ConfigureAwait(false);
 
                       try
                       {
                           if (_currentDevice == null)
                           {
-                              var connectedDevices = await _deviceFactory.GetConnectedDeviceDefinitionsAsync();
+                              var connectedDevices = await _deviceFactory.GetConnectedDeviceDefinitionsAsync().ConfigureAwait(false);
                               var firstConnectedDevice = connectedDevices.FirstOrDefault();
 
                               if (firstConnectedDevice == null)
@@ -53,11 +53,11 @@ namespace Device.Net
                                   continue;
                               }
 
-                              _currentDevice = await _deviceFactory.GetDeviceAsync(firstConnectedDevice);
-                              await _initializeFunc(_currentDevice);
+                              _currentDevice = await _deviceFactory.GetDeviceAsync(firstConnectedDevice).ConfigureAwait(false);
+                              await _initializeFunc(_currentDevice).ConfigureAwait(false);
                           }
 
-                          await _processData(_currentDevice);
+                          await _processData(_currentDevice).ConfigureAwait(false);
                       }
                       catch (Exception ex)
                       {

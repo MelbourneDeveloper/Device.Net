@@ -41,7 +41,7 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public async Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default) => await DeviceFactories.FirstOrDefaultAsync(async d => await d.SupportsDeviceAsync(deviceDefinition, cancellationToken), cancellationToken) != null;
+        public async Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default) => await DeviceFactories.FirstOrDefaultAsync(async d => await d.SupportsDeviceAsync(deviceDefinition, cancellationToken).ConfigureAwait(false), cancellationToken).ConfigureAwait(false) != null;
 
         public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default)
         {
@@ -52,7 +52,7 @@ namespace Device.Net
                 try
                 {
                     //TODO: Do this in parallel?
-                    var factoryResults = await deviceFactory.GetConnectedDeviceDefinitionsAsync(cancellationToken);
+                    var factoryResults = await deviceFactory.GetConnectedDeviceDefinitionsAsync(cancellationToken).ConfigureAwait(false);
                     retVal.AddRange(factoryResults);
 
                     _logger.LogDebug("Called " + nameof(GetConnectedDeviceDefinitionsAsync) + " on " + deviceFactory.GetType().Name);
@@ -70,9 +70,9 @@ namespace Device.Net
 
         public async Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition, CancellationToken cancellationToken = default)
              => connectedDeviceDefinition == null ? throw new ArgumentNullException(nameof(connectedDeviceDefinition)) :
-            await (await DeviceFactories.FirstOrDefaultAsync(f => f.SupportsDeviceAsync(connectedDeviceDefinition), cancellationToken)
+            await (await DeviceFactories.FirstOrDefaultAsync(f => f.SupportsDeviceAsync(connectedDeviceDefinition), cancellationToken).ConfigureAwait(false)
             ?? throw new DeviceException(Messages.ErrorMessageCouldntGetDevice))
-            .GetDeviceAsync(connectedDeviceDefinition, cancellationToken);
+            .GetDeviceAsync(connectedDeviceDefinition, cancellationToken).ConfigureAwait(false);
 
         #endregion
     }

@@ -122,7 +122,7 @@ namespace Device.Net.Windows
                                 continue;
                             }
 
-                            if (!await _isMatch(connectedDeviceDefinition)) continue;
+                            if (!await _isMatch(connectedDeviceDefinition).ConfigureAwait(false)) continue;
 
                             deviceDefinitions.Add(connectedDeviceDefinition);
                         }

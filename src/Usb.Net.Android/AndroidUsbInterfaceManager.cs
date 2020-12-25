@@ -112,11 +112,13 @@ namespace Usb.Net.Android
 
             using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceNumberId, nameof(InitializeAsync));
 
+            Logger.LogInformation("Attempting to initialize... {deviceId}", DeviceNumberId);
+
             try
             {
                 return Task.Run(async () =>
                 {
-                    await _InitializingSemaphoreSlim.WaitAsync();
+                    await _InitializingSemaphoreSlim.WaitAsync(cancellationToken);
 
                     Close();
 

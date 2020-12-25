@@ -46,7 +46,7 @@ namespace Usb.Net.Windows
                 _ = WindowsHelpers.HandleError(isSuccess, "Couldn't read data", Logger);
                 Logger.LogTrace(new Trace(false, bytes));
                 return new TransferResult(bytes, bytesRead);
-            }, cancellationToken);
+            }, cancellationToken).ConfigureAwait(false);
         }
 
         public Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)

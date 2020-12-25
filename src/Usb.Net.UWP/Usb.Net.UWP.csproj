@@ -20,10 +20,10 @@
     <SignAssembly>false</SignAssembly>
     <DebugType>embedded</DebugType>
     <DebugSymbols>true</DebugSymbols>
-    <PublishRepositoryUrl>true</PublishRepositoryUrl> 
-    <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild> 
-    <DocumentationFile>Usb.Net.UWP.xml</DocumentationFile>     
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>        
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>
+    <DocumentationFile>Usb.Net.UWP.xml</DocumentationFile>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>

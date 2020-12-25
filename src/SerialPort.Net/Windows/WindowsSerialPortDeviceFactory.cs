@@ -80,7 +80,7 @@ namespace SerialPort.Net.Windows
             {
                 var portName = $@"\\.\COM{i}";
                 using var serialPortDevice = new WindowsSerialPortDevice(portName);
-                await serialPortDevice.InitializeAsync(cancellationToken);
+                await serialPortDevice.InitializeAsync(cancellationToken).ConfigureAwait(false);
                 if (serialPortDevice.IsInitialized) returnValue.Add(new ConnectedDeviceDefinition(portName, DeviceType.SerialPort));
             }
 
