@@ -1,8 +1,3 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
   - main
 
@@ -33,11 +28,3 @@ steps:
       packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
       nuGetFeedType: 'internal'
       publishVstsFeed: 'a579837a-f36e-462f-8492-1a622b5cadb9/f3bac9de-5bde-4855-b10a-d1fe458ac336'
-
-# - powershell: |
-#     choco install docfx -y
-#     docfx docfx_project/docfx.json
-#     if ($lastexitcode -ne 0){
-#       throw ("Error generating document")
-#     }
-#   displayName: "Documentation"
