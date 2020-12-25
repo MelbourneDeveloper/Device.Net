@@ -27,12 +27,12 @@ steps:
       packagesToPack: "Build/NuSpecs/*.nuspec"
       versioningScheme: "off"
 
-- task: NuGetCommand@2
-  inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
-    nuGetFeedType: 'internal'
-    publishVstsFeed: 'a579837a-f36e-462f-8492-1a622b5cadb9/f3bac9de-5bde-4855-b10a-d1fe458ac336'
+  - task: NuGetCommand@2
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'internal'
+      publishVstsFeed: 'a579837a-f36e-462f-8492-1a622b5cadb9/f3bac9de-5bde-4855-b10a-d1fe458ac336'
 
 # - powershell: |
 #     choco install docfx -y
