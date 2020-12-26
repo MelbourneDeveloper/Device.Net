@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Usb.Net
 {
     /// <summary>
-    /// Represents a USB interfacxe
+    /// Represents a USB interface
     /// </summary>
     public abstract class UsbInterfaceBase
     {

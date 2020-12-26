@@ -1,22 +1,19 @@
 ﻿using Device.Net;
-using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
-using Microsoft.Win32.SafeHandles;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Usb.Net.Windows
+namespace Usb.Net
 {
-    public class WindowsUsbInterface : UsbInterfaceBase, IUsbInterface
+    public class UsbInterface : UsbInterfaceBase, IUsbInterface
     {
         #region Private Properties
         private bool _IsDisposed;
-        private readonly SafeFileHandle _SafeFileHandle;
-        /// <summary>
-        /// TODO: Make private?
-        /// </summary>
-
+        private readonly Func<IUsbInterfaceEndpoint, Task<TransferResult>> _readFromEndpoint;
+        private readonly Func<IUsbInterfaceEndpoint, byte[], Task<uint>> _writeToEndpoint;
+        private readonly Func<SetupPacket, byte[], Task<TransferResult>> _controlTransfer;
+        private readonly Action _freeInterface;
         #endregion
 
         #region Public Properties
@@ -24,42 +21,31 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsUsbInterface(
-            SafeFileHandle handle,
+        public UsbInterface(
             byte interfaceNumber,
             ILogger logger = null,
             ushort? readBufferSize = null,
-            ushort? writeBufferSzie = null) : base(logger, readBufferSize, writeBufferSzie)
-        {
-            _SafeFileHandle = handle;
-            InterfaceNumber = interfaceNumber;
-        }
+            ushort? writeBufferSzie = null) : base(
+                logger,
+                readBufferSize,
+                writeBufferSzie) => InterfaceNumber = interfaceNumber;
         #endregion
 
         #region Public Methods
         public async Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
         {
-            return await Task.Run(() =>
+            return await Task.Run(async () =>
             {
-                var bytes = new byte[bufferLength];
-                var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_SafeFileHandle, ReadEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
-                _ = WindowsHelpers.HandleError(isSuccess, "Couldn't read data", Logger);
-                Logger.LogTrace(new Trace(false, bytes));
-                return new TransferResult(bytes, bytesRead);
+                var transferResult = await _readFromEndpoint(ReadEndpoint).ConfigureAwait(false);
+                Logger.LogTrace(new Trace(false, transferResult.Data));
+                return transferResult;
             }, cancellationToken).ConfigureAwait(false);
         }
 
         public Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
-            => Task.Run(() =>
+            => Task.Run(async () =>
             {
-                var isSuccess = WinUsbApiCalls.WinUsb_WritePipe(
-                    _SafeFileHandle,
-                    WriteEndpoint.PipeId,
-                    data,
-                    (uint)data.Length,
-                    out var bytesWritten,
-                    IntPtr.Zero);
-                _ = WindowsHelpers.HandleError(isSuccess, "Couldn't write data", Logger);
+                var bytesWritten = await _writeToEndpoint(WriteEndpoint, data);
                 Logger.LogTrace(new Trace(true, data));
                 return bytesWritten;
             }, cancellationToken);
@@ -76,9 +62,7 @@ namespace Usb.Net.Windows
 
             Logger.LogInformation(Messages.InformationMessageDisposingDevice, InterfaceNumber);
 
-            //This is a native resource, so the IDisposable pattern should probably be implemented...
-            var isSuccess = WinUsbApiCalls.WinUsb_Free(_SafeFileHandle);
-            _ = WindowsHelpers.HandleError(isSuccess, "Interface could not be disposed", Logger);
+            _freeInterface();
 
             GC.SuppressFinalize(this);
         }
@@ -87,16 +71,13 @@ namespace Usb.Net.Windows
         {
             return setupPacket == null
                 ? throw new ArgumentNullException(nameof(setupPacket)) :
-            Task.Run(() =>
+            Task.Run(async () =>
             {
                 using var scope = Logger.BeginScope("Perfoming Control Transfer {setupPacket}", setupPacket);
 
                 try
                 {
-
                     var transferBuffer = new byte[setupPacket.Length];
-
-                    uint bytesTransferred = 0;
 
                     if (setupPacket.Length > 0)
                     {
@@ -107,21 +88,14 @@ namespace Usb.Net.Windows
                         }
                     }
 
-                    var isSuccess = WinUsbApiCalls.WinUsb_ControlTransfer(_SafeFileHandle.DangerousGetHandle(),
-                        setupPacket.ToWindowsSetupPacket(),
-                        transferBuffer,
-                        (uint)transferBuffer.Length,
-                        ref bytesTransferred,
-                        IntPtr.Zero);
-
-                    _ = WindowsHelpers.HandleError(isSuccess, "Couldn't do a control transfer", Logger);
+                    var transferResult = await _controlTransfer(setupPacket, transferBuffer);
 
                     Logger.LogTrace(new Trace(setupPacket.RequestType.Direction == RequestDirection.Out, transferBuffer));
                     Logger.LogInformation("Control Transfer complete {setupPacket}", setupPacket);
 
-                    return bytesTransferred != setupPacket.Length && setupPacket.RequestType.Direction == RequestDirection.In
-                        ? throw new ControlTransferException($"Requested {setupPacket.Length} bytes but received {bytesTransferred}")
-                        : new TransferResult(transferBuffer, bytesTransferred);
+                    return transferResult.BytesTransferred != setupPacket.Length && setupPacket.RequestType.Direction == RequestDirection.In
+                        ? throw new ControlTransferException($"Requested {setupPacket.Length} bytes but received {transferResult.BytesTransferred}")
+                        : transferResult;
                 }
                 catch (Exception ex)
                 {
