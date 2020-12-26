@@ -121,12 +121,14 @@ namespace Usb.Net.Android
 
             if (IsInitialized) Logger.LogWarning("Device is already initialized...");
 
-            Logger.LogInformation("Attempting to initialize... {deviceId}", DeviceNumberId);
+            Logger.LogInformation("Attempting to initialize...");
 
             try
             {
                 return Task.Run(async () =>
                 {
+                    Logger.LogTrace("Waiting for initialization lock ... {deviceId}", DeviceNumberId);
+
                     await _InitializingSemaphoreSlim.WaitAsync(cancellationToken).ConfigureAwait(false);
 
                     Close();
@@ -195,6 +197,7 @@ namespace Usb.Net.Android
             }
             finally
             {
+                Logger.LogTrace("Releasing initialization lock");
                 _ = _InitializingSemaphoreSlim.Release();
             }
         }
