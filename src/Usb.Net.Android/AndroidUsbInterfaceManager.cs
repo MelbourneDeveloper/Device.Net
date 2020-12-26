@@ -112,6 +112,8 @@ namespace Usb.Net.Android
 
             using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceNumberId, nameof(InitializeAsync));
 
+            if (IsInitialized) Logger.LogWarning("Device is already initialized...");
+
             Logger.LogInformation("Attempting to initialize... {deviceId}", DeviceNumberId);
 
             try
