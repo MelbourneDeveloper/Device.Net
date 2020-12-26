@@ -141,8 +141,15 @@ namespace Device.Net.LibUsb
 
         public override void Dispose()
         {
-            if (disposed) return;
+            if (disposed)
+            {
+                Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, UsbDevice?.DevicePath);
+                return;
+            }
+
             disposed = true;
+
+            Logger.LogInformation(Messages.InformationMessageDisposingDevice, UsbDevice?.DevicePath);
 
             _WriteAndReadLock.Dispose();
 

@@ -16,7 +16,7 @@ namespace Usb.Net.UWP
     public class UWPUsbInterface : UsbInterfaceBase, IUsbInterface
     {
         #region Fields
-        private bool disposedValue;
+        private bool disposed;
         #endregion
 
         #region Public Properties
@@ -146,8 +146,15 @@ namespace Usb.Net.UWP
         #region IDisposable Support
         public void Dispose()
         {
-            if (disposedValue) return;
-            disposedValue = true;
+            if (disposed)
+            {
+                Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, UsbInterface?.ToString());
+                return;
+            }
+
+            disposed = true;
+
+            Logger.LogInformation("Dispose called on the interface but not really doing anything...", UsbInterface?.ToString());
         }
         #endregion
     }

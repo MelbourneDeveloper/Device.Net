@@ -66,8 +66,15 @@ namespace Usb.Net.Windows
 
         public void Dispose()
         {
-            if (_IsDisposed) return;
+            if (_IsDisposed)
+            {
+                Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, InterfaceNumber);
+                return;
+            }
+
             _IsDisposed = true;
+
+            Logger.LogInformation(Messages.InformationMessageDisposingDevice, InterfaceNumber);
 
             //This is a native resource, so the IDisposable pattern should probably be implemented...
             var isSuccess = WinUsbApiCalls.WinUsb_Free(_SafeFileHandle);

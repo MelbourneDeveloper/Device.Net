@@ -8,6 +8,7 @@ namespace Device.Net
 {
     public class DeviceDataStreamer : IDisposable
     {
+        private bool disposed;
         private bool _isRunning;
         private readonly Func<IDevice, Task> _processData;
         private readonly IDeviceFactory _deviceFactory;
@@ -72,7 +73,18 @@ namespace Device.Net
         }
 
 #pragma warning disable CA1816 // Dispose methods should call SuppressFinalize
-        public void Dispose() => _isRunning = false;
+        public void Dispose()
+        {
+            if (disposed)
+            {
+                _logger.LogWarning(Messages.WarningMessageAlreadyDisposed, _currentDevice?.DeviceId);
+                return;
+            }
+
+            _logger.LogInformation("Disposing {deviceId}", _currentDevice?.DeviceId);
+
+            _isRunning = false;
+        }
 #pragma warning restore CA1816 // Dispose methods should call SuppressFinalize
     }
 }

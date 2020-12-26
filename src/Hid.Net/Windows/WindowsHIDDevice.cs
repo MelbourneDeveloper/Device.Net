@@ -169,11 +169,17 @@ namespace Hid.Net.Windows
 
         public override void Dispose()
         {
-            if (disposed) return;
-
-            GC.SuppressFinalize(this);
+            if (disposed)
+            {
+                Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, DeviceId);
+                return;
+            }
 
             disposed = true;
+
+            Logger.LogInformation(Messages.InformationMessageDisposingDevice, DeviceId);
+
+            GC.SuppressFinalize(this);
 
             Close();
 

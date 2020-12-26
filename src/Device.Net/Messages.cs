@@ -1,4 +1,5 @@
 ﻿// ReSharper disable UnusedMember.Global
+
 namespace Device.Net
 {
     public static class Messages
@@ -18,6 +19,7 @@ namespace Device.Net
         public const string WarningMessageOpeningInReadonlyMode = "Opening device {deviceId} in read only mode.";
         public const string WarningMessageReadFileStreamCantRead = "Read file stream cannot be read from";
         public const string WarningMessageWriteFileStreamCantWrite = "Write file stream cannot be written to";
+        public const string WarningMessageAlreadyDisposed = "Attempted to dispose already disposed device {deviceId}";
         #endregion
 
         #region Device Initialization
@@ -37,6 +39,7 @@ namespace Device.Net
         public const string ErrorMessageOperationNotSupportedOnPlatform = "You can't use this class on this platform";
         public const string InformationMessageFoundDevice = "Found device";
         public const string DebugMessageCompletionSourceNulled = "Completion source nulled";
+        public const string InformationMessageDisposingDevice = "Disposing ... DeviceId: {deviceId}";
         #endregion
 
         #region IO

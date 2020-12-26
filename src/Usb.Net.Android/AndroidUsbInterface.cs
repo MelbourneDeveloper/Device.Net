@@ -125,8 +125,15 @@ namespace Usb.Net.Android
 
         public void Dispose()
         {
-            if (disposed) return;
+            if (disposed)
+            {
+                Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, UsbInterface?.ToString());
+                return;
+            }
+
             disposed = true;
+
+            Logger.LogInformation(Messages.InformationMessageDisposingDevice, UsbInterface?.ToString());
 
             UsbInterface.Dispose();
             _UsbDeviceConnection.Dispose();

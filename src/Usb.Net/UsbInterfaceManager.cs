@@ -100,8 +100,15 @@ namespace Usb.Net
 
         public virtual void Dispose()
         {
-            if (disposed) return;
+            if (disposed)
+            {
+                Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, nameof(UsbInterfaceManager));
+                return;
+            }
+
             disposed = true;
+
+            Logger.LogInformation(Messages.InformationMessageDisposingDevice, nameof(UsbInterfaceManager));
 
             foreach (var usbInterface in UsbInterfaces)
             {

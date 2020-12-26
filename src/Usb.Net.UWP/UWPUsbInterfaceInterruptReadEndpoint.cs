@@ -65,8 +65,16 @@ namespace Usb.Net.UWP
         #region Public Methods
         public void Dispose()
         {
-            if (disposed) return;
+            if (disposed)
+            {
+                _logger.LogWarning(Messages.WarningMessageAlreadyDisposed, Pipe?.ToString());
+                return;
+            }
+
             disposed = true;
+
+            _logger.LogInformation(Messages.InformationMessageDisposingDevice, Pipe?.ToString());
+
             _ReadLock.Dispose();
             _DataReceivedLock.Dispose();
             GC.SuppressFinalize(this);

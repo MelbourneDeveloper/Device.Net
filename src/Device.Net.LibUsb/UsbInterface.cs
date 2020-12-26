@@ -10,11 +10,18 @@ namespace Device.Net.LibUsb
 {
     public class UsbInterface : UsbInterfaceBase, IUsbInterface
     {
+        #region Fields
         private readonly byte _interfaceId;
         private readonly LibUsbDotNet.UsbDevice _usbDevice;
+        private bool disposed;
+        #endregion
 
+        #region Public Properties
         public int Timeout { get; set; }
+        public override byte InterfaceNumber => _interfaceId;
+        #endregion
 
+        #region Constructor
         public UsbInterface(
             LibUsbDotNet.UsbDevice usbDevice,
             byte interfaceId,
@@ -27,11 +34,22 @@ namespace Device.Net.LibUsb
             Timeout = timeout;
             _interfaceId = interfaceId;
         }
+        #endregion
 
-        public override byte InterfaceNumber => _interfaceId;
-
+        #region Public Methods
         public void Dispose()
         {
+            if (disposed)
+            {
+                Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, _usbDevice?.DevicePath);
+                return;
+            }
+
+            disposed = true;
+
+            Logger.LogInformation(Messages.InformationMessageDisposingDevice, _usbDevice?.DevicePath);
+
+            _ = _usbDevice.Close();
         }
 
         public Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken)
@@ -80,5 +98,6 @@ namespace Device.Net.LibUsb
 
             return !isSuccess ? throw new ControlTransferException("LibUsb says no") : Task.FromResult(new TransferResult(buffer, (uint)length));
         }
+        #endregion
     }
 }

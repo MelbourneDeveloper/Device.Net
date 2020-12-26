@@ -181,8 +181,15 @@ namespace Device.Net
 
         public void Dispose()
         {
-            if (_IsDisposed) return;
+            if (_IsDisposed)
+            {
+                _logger.LogWarning(Messages.WarningMessageAlreadyDisposed, "Listener");
+                return;
+            }
+
             _IsDisposed = true;
+
+            _logger.LogInformation(Messages.InformationMessageDisposingDevice, "Listener");
 
             Stop();
 

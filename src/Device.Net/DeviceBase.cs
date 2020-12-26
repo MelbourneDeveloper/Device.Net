@@ -97,9 +97,15 @@ namespace Device.Net
 
         public virtual void Dispose()
         {
-            if (disposed) return;
+            if (disposed)
+            {
+                Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, DeviceId);
+                return;
+            }
 
             disposed = true;
+
+            Logger.LogInformation(Messages.InformationMessageDisposingDevice, DeviceId);
 
             _WriteAndReadLock.Dispose();
 

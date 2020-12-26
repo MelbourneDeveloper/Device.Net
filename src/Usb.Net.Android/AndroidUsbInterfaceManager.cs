@@ -65,8 +65,15 @@ namespace Usb.Net.Android
 
         public override void Dispose()
         {
-            if (disposed) return;
+            if (disposed)
+            {
+                Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, DeviceNumberId);
+                return;
+            }
+
             disposed = true;
+
+            Logger.LogInformation(Messages.InformationMessageDisposingDevice, DeviceNumberId);
 
             Close();
 
