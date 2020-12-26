@@ -81,6 +81,8 @@ namespace Device.Net
                 return;
             }
 
+            disposed = true;
+
             _logger.LogInformation("Disposing {deviceId}", _currentDevice?.DeviceId);
 
             _isRunning = false;
