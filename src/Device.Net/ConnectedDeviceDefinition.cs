@@ -117,5 +117,7 @@ namespace Device.Net
             Label = label;
         }
         #endregion
+
+        public override string ToString() => $"Device Id: {DeviceId} Label: {Label} Vid: {VendorId} Pid: {ProductId}";
     }
 }

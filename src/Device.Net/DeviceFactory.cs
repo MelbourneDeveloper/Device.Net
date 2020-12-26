@@ -44,9 +44,26 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition, CancellationToken cancellationToken = default) => _supportsDevice(connectedDeviceDefinition, cancellationToken);
-        public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default) => _getConnectedDevicesAsync(cancellationToken);
-        public Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition, CancellationToken cancellationToken = default) => connectedDeviceDefinition == null ? throw new ArgumentNullException(nameof(connectedDeviceDefinition)) : _getDevice(connectedDeviceDefinition, cancellationToken);
+        public Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition, CancellationToken cancellationToken = default)
+        {
+            _logger.LogInformation("Checking if the factory supports this connected device. Device Definition: {deviceDefinition}", connectedDeviceDefinition);
+            return _supportsDevice(connectedDeviceDefinition, cancellationToken);
+        }
+
+        public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default)
+        {
+            _logger.LogInformation("Getting connected device definitions...");
+            return _getConnectedDevicesAsync(cancellationToken);
+        }
+        public Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition, CancellationToken cancellationToken = default)
+        {
+            _logger.LogInformation("Getting device for connected device {deviceDefinition}", connectedDeviceDefinition);
+
+            return connectedDeviceDefinition == null ?
+                throw new ArgumentNullException(nameof(connectedDeviceDefinition)) :
+                _getDevice(connectedDeviceDefinition, cancellationToken);
+        }
+
         #endregion
     }
 }

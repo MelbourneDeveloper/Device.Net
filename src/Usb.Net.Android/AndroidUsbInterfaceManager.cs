@@ -113,7 +113,7 @@ namespace Usb.Net.Android
 
         public Task WriteAsync(byte[] data) => WriteUsbInterface.WriteAsync(data);
 
-        public Task InitializeAsync(CancellationToken cancellationToken = default)
+        public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             if (disposed) throw new DeviceException(Messages.DeviceDisposedErrorMessage);
 
@@ -125,7 +125,7 @@ namespace Usb.Net.Android
 
             try
             {
-                return Task.Run(async () =>
+                await Task.Run(async () =>
                 {
                     Logger.LogTrace("Waiting for initialization lock ... {deviceId}", DeviceNumberId);
 
@@ -188,7 +188,7 @@ namespace Usb.Net.Android
                     RegisterDefaultInterfaces();
 
                     Logger.LogInformation("Device initialized successfully.");
-                }, cancellationToken);
+                }, cancellationToken).ConfigureAwait(false);
             }
             catch (Exception ex)
             {

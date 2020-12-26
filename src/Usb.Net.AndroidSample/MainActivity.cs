@@ -69,7 +69,7 @@ namespace Usb.Net.AndroidSample
             {
                 if (!(GetSystemService(UsbService) is UsbManager usbManager)) throw new Exception("UsbManager is null");
 
-                var loggerFactory = LoggerFactory.Create((builder) => builder.AddDebug());
+                var loggerFactory = LoggerFactory.Create((builder) => builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 
                 var deviceManager = TrezorExample.UsbDeviceDefinitions
                     .CreateAndroidUsbDeviceFactory(usbManager, base.ApplicationContext, loggerFactory: loggerFactory);
