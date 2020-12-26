@@ -46,3 +46,5 @@ src/SerialPort.Net/SerialPort.Net.xml
 src/Hid.Net.UWP/Hid.Net.UWP.xml
 
 src/Usb.Net.UWP/Usb.Net.UWP.xml
+
+src/Usb.Net.Android/Usb.Net.Android.xml
