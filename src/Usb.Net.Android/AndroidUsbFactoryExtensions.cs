@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -76,7 +77,7 @@ namespace Usb.Net.Android
                     usbManager,
                     context,
                     //TODO: throw a validation message
-                    int.Parse(a),
+                    int.Parse(a, IntParsingCulture),
                     loggerFactory,
                     readBufferSize,
                     writeBufferSize
@@ -84,5 +85,7 @@ namespace Usb.Net.Android
 
             return UsbDeviceFactoryExtensions.CreateUsbDeviceFactory(getConnectedDeviceDefinitionsAsync, getUsbInterfaceManager, loggerFactory);
         }
+
+        internal static CultureInfo IntParsingCulture { get; } = CultureInfo.GetCultureInfo("en-US");
     }
 }
