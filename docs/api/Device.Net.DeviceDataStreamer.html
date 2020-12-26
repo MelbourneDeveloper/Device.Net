@@ -118,18 +118,18 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_DeviceDataStreamer__ctor_Device_Net_ProcessData_Device_Net_IDeviceFactory_System_Nullable_System_TimeSpan__Microsoft_Extensions_Logging_ILoggerFactory_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__.md&amp;value=---%0Auid%3A%20Device.Net.DeviceDataStreamer.%23ctor(Device.Net.ProcessData%2CDevice.Net.IDeviceFactory%2CSystem.Nullable%7BSystem.TimeSpan%7D%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CSystem.Func%7BDevice.Net.IDevice%2CSystem.Threading.Tasks.Task%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_DeviceDataStreamer__ctor_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__Device_Net_IDeviceFactory_System_Nullable_System_TimeSpan__Microsoft_Extensions_Logging_ILoggerFactory_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__.md&amp;value=---%0Auid%3A%20Device.Net.DeviceDataStreamer.%23ctor(System.Func%7BDevice.Net.IDevice%2CSystem.Threading.Tasks.Task%7D%2CDevice.Net.IDeviceFactory%2CSystem.Nullable%7BSystem.TimeSpan%7D%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CSystem.Func%7BDevice.Net.IDevice%2CSystem.Threading.Tasks.Task%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceDataStreamer.cs/#L22">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceDataStreamer.cs/#L20">View Source</a>
   </span>
   <a id="Device_Net_DeviceDataStreamer__ctor_" data-uid="Device.Net.DeviceDataStreamer.#ctor*"></a>
-  <h4 id="Device_Net_DeviceDataStreamer__ctor_Device_Net_ProcessData_Device_Net_IDeviceFactory_System_Nullable_System_TimeSpan__Microsoft_Extensions_Logging_ILoggerFactory_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__" data-uid="Device.Net.DeviceDataStreamer.#ctor(Device.Net.ProcessData,Device.Net.IDeviceFactory,System.Nullable{System.TimeSpan},Microsoft.Extensions.Logging.ILoggerFactory,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task})">DeviceDataStreamer(ProcessData, IDeviceFactory, Nullable&lt;TimeSpan&gt;, ILoggerFactory, Func&lt;IDevice, Task&gt;)</h4>
+  <h4 id="Device_Net_DeviceDataStreamer__ctor_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__Device_Net_IDeviceFactory_System_Nullable_System_TimeSpan__Microsoft_Extensions_Logging_ILoggerFactory_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__" data-uid="Device.Net.DeviceDataStreamer.#ctor(System.Func{Device.Net.IDevice,System.Threading.Tasks.Task},Device.Net.IDeviceFactory,System.Nullable{System.TimeSpan},Microsoft.Extensions.Logging.ILoggerFactory,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task})">DeviceDataStreamer(Func&lt;IDevice, Task&gt;, IDeviceFactory, Nullable&lt;TimeSpan&gt;, ILoggerFactory, Func&lt;IDevice, Task&gt;)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public DeviceDataStreamer(ProcessData processData, IDeviceFactory deviceFactory, TimeSpan? interval = default(TimeSpan? ), ILoggerFactory loggerFactory = null, Func&lt;IDevice, Task&gt; initializeFunc = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public DeviceDataStreamer(Func&lt;IDevice, Task&gt; processData, IDeviceFactory deviceFactory, TimeSpan? interval = default(TimeSpan? ), ILoggerFactory loggerFactory = null, Func&lt;IDevice, Task&gt; initializeFunc = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -142,7 +142,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Device.Net.ProcessData.html">ProcessData</a></td>
+        <td><span class="xref">System.Func</span>&lt;<a class="xref" href="Device.Net.IDevice.html">IDevice</a>, <span class="xref">System.Threading.Tasks.Task</span>&gt;</td>
         <td><span class="parametername">processData</span></td>
         <td></td>
       </tr>
@@ -175,7 +175,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_DeviceDataStreamer_Dispose.md&amp;value=---%0Auid%3A%20Device.Net.DeviceDataStreamer.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceDataStreamer.cs/#L78">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceDataStreamer.cs/#L76">View Source</a>
   </span>
   <a id="Device_Net_DeviceDataStreamer_Dispose_" data-uid="Device.Net.DeviceDataStreamer.Dispose*"></a>
   <h4 id="Device_Net_DeviceDataStreamer_Dispose" data-uid="Device.Net.DeviceDataStreamer.Dispose">Dispose()</h4>
@@ -190,7 +190,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_DeviceDataStreamer_Start.md&amp;value=---%0Auid%3A%20Device.Net.DeviceDataStreamer.Start%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceDataStreamer.cs/#L37">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceDataStreamer.cs/#L35">View Source</a>
   </span>
   <a id="Device_Net_DeviceDataStreamer_Start_" data-uid="Device.Net.DeviceDataStreamer.Start*"></a>
   <h4 id="Device_Net_DeviceDataStreamer_Start" data-uid="Device.Net.DeviceDataStreamer.Start">Start()</h4>
@@ -230,7 +230,7 @@
                     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_DeviceDataStreamer.md&amp;value=---%0Auid%3A%20Device.Net.DeviceDataStreamer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceDataStreamer.cs/#L12" class="contribution-link">View Source</a>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceDataStreamer.cs/#L9" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

@@ -330,7 +330,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;bool&gt; SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;bool&gt; SupportsDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -344,7 +344,7 @@
     <tbody>
       <tr>
         <td><a class="xref" href="Device.Net.ConnectedDeviceDefinition.html">ConnectedDeviceDefinition</a></td>
-        <td><span class="parametername">deviceDefinition</span></td>
+        <td><span class="parametername">connectedDeviceDefinition</span></td>
         <td></td>
       </tr>
       <tr>
@@ -378,7 +378,7 @@
       <a class="xref" href="Device.Net.DeviceExtensions.html#Device_Net_DeviceExtensions_Aggregate_Device_Net_IDeviceFactory_Device_Net_IDeviceFactory_Microsoft_Extensions_Logging_ILoggerFactory_">DeviceExtensions.Aggregate(IDeviceFactory, IDeviceFactory, ILoggerFactory)</a>
   </div>
   <div>
-      <a class="xref" href="Device.Net.DeviceExtensions.html#Device_Net_DeviceExtensions_CreateDeviceDataStreamer_Device_Net_IDeviceFactory_Device_Net_ProcessData_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__">DeviceExtensions.CreateDeviceDataStreamer(IDeviceFactory, ProcessData, Func&lt;IDevice, Task&gt;)</a>
+      <a class="xref" href="Device.Net.DeviceExtensions.html#Device_Net_DeviceExtensions_CreateDeviceDataStreamer_Device_Net_IDeviceFactory_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__">DeviceExtensions.CreateDeviceDataStreamer(IDeviceFactory, Func&lt;IDevice, Task&gt;, Func&lt;IDevice, Task&gt;)</a>
   </div>
   <div>
       <a class="xref" href="Device.Net.DeviceExtensions.html#Device_Net_DeviceExtensions_GetFirstDeviceAsync_Device_Net_IDeviceFactory_">DeviceExtensions.GetFirstDeviceAsync(IDeviceFactory)</a>

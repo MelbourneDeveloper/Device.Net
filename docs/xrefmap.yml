@@ -168,6 +168,19 @@ references:
   isSpec: "True"
   fullName: Device.Net.ConnectedDeviceDefinition.SerialNumber
   nameWithType: ConnectedDeviceDefinition.SerialNumber
+- uid: Device.Net.ConnectedDeviceDefinition.ToString
+  name: ToString()
+  href: api/Device.Net.ConnectedDeviceDefinition.html#Device_Net_ConnectedDeviceDefinition_ToString
+  commentId: M:Device.Net.ConnectedDeviceDefinition.ToString
+  fullName: Device.Net.ConnectedDeviceDefinition.ToString()
+  nameWithType: ConnectedDeviceDefinition.ToString()
+- uid: Device.Net.ConnectedDeviceDefinition.ToString*
+  name: ToString
+  href: api/Device.Net.ConnectedDeviceDefinition.html#Device_Net_ConnectedDeviceDefinition_ToString_
+  commentId: Overload:Device.Net.ConnectedDeviceDefinition.ToString
+  isSpec: "True"
+  fullName: Device.Net.ConnectedDeviceDefinition.ToString
+  nameWithType: ConnectedDeviceDefinition.ToString
 - uid: Device.Net.ConnectedDeviceDefinition.Usage
   name: Usage
   href: api/Device.Net.ConnectedDeviceDefinition.html#Device_Net_ConnectedDeviceDefinition_Usage
@@ -465,15 +478,15 @@ references:
   commentId: T:Device.Net.DeviceDataStreamer
   fullName: Device.Net.DeviceDataStreamer
   nameWithType: DeviceDataStreamer
-- uid: Device.Net.DeviceDataStreamer.#ctor(Device.Net.ProcessData,Device.Net.IDeviceFactory,System.Nullable{System.TimeSpan},Microsoft.Extensions.Logging.ILoggerFactory,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task})
-  name: DeviceDataStreamer(ProcessData, IDeviceFactory, Nullable<TimeSpan>, ILoggerFactory, Func<IDevice, Task>)
-  href: api/Device.Net.DeviceDataStreamer.html#Device_Net_DeviceDataStreamer__ctor_Device_Net_ProcessData_Device_Net_IDeviceFactory_System_Nullable_System_TimeSpan__Microsoft_Extensions_Logging_ILoggerFactory_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__
-  commentId: M:Device.Net.DeviceDataStreamer.#ctor(Device.Net.ProcessData,Device.Net.IDeviceFactory,System.Nullable{System.TimeSpan},Microsoft.Extensions.Logging.ILoggerFactory,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task})
-  name.vb: DeviceDataStreamer(ProcessData, IDeviceFactory, Nullable(Of TimeSpan), ILoggerFactory, Func(Of IDevice, Task))
-  fullName: Device.Net.DeviceDataStreamer.DeviceDataStreamer(Device.Net.ProcessData, Device.Net.IDeviceFactory, System.Nullable<System.TimeSpan>, Microsoft.Extensions.Logging.ILoggerFactory, System.Func<Device.Net.IDevice, System.Threading.Tasks.Task>)
-  fullName.vb: Device.Net.DeviceDataStreamer.DeviceDataStreamer(Device.Net.ProcessData, Device.Net.IDeviceFactory, System.Nullable(Of System.TimeSpan), Microsoft.Extensions.Logging.ILoggerFactory, System.Func(Of Device.Net.IDevice, System.Threading.Tasks.Task))
-  nameWithType: DeviceDataStreamer.DeviceDataStreamer(ProcessData, IDeviceFactory, Nullable<TimeSpan>, ILoggerFactory, Func<IDevice, Task>)
-  nameWithType.vb: DeviceDataStreamer.DeviceDataStreamer(ProcessData, IDeviceFactory, Nullable(Of TimeSpan), ILoggerFactory, Func(Of IDevice, Task))
+- uid: Device.Net.DeviceDataStreamer.#ctor(System.Func{Device.Net.IDevice,System.Threading.Tasks.Task},Device.Net.IDeviceFactory,System.Nullable{System.TimeSpan},Microsoft.Extensions.Logging.ILoggerFactory,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task})
+  name: DeviceDataStreamer(Func<IDevice, Task>, IDeviceFactory, Nullable<TimeSpan>, ILoggerFactory, Func<IDevice, Task>)
+  href: api/Device.Net.DeviceDataStreamer.html#Device_Net_DeviceDataStreamer__ctor_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__Device_Net_IDeviceFactory_System_Nullable_System_TimeSpan__Microsoft_Extensions_Logging_ILoggerFactory_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__
+  commentId: M:Device.Net.DeviceDataStreamer.#ctor(System.Func{Device.Net.IDevice,System.Threading.Tasks.Task},Device.Net.IDeviceFactory,System.Nullable{System.TimeSpan},Microsoft.Extensions.Logging.ILoggerFactory,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task})
+  name.vb: DeviceDataStreamer(Func(Of IDevice, Task), IDeviceFactory, Nullable(Of TimeSpan), ILoggerFactory, Func(Of IDevice, Task))
+  fullName: Device.Net.DeviceDataStreamer.DeviceDataStreamer(System.Func<Device.Net.IDevice, System.Threading.Tasks.Task>, Device.Net.IDeviceFactory, System.Nullable<System.TimeSpan>, Microsoft.Extensions.Logging.ILoggerFactory, System.Func<Device.Net.IDevice, System.Threading.Tasks.Task>)
+  fullName.vb: Device.Net.DeviceDataStreamer.DeviceDataStreamer(System.Func(Of Device.Net.IDevice, System.Threading.Tasks.Task), Device.Net.IDeviceFactory, System.Nullable(Of System.TimeSpan), Microsoft.Extensions.Logging.ILoggerFactory, System.Func(Of Device.Net.IDevice, System.Threading.Tasks.Task))
+  nameWithType: DeviceDataStreamer.DeviceDataStreamer(Func<IDevice, Task>, IDeviceFactory, Nullable<TimeSpan>, ILoggerFactory, Func<IDevice, Task>)
+  nameWithType.vb: DeviceDataStreamer.DeviceDataStreamer(Func(Of IDevice, Task), IDeviceFactory, Nullable(Of TimeSpan), ILoggerFactory, Func(Of IDevice, Task))
 - uid: Device.Net.DeviceDataStreamer.#ctor*
   name: DeviceDataStreamer
   href: api/Device.Net.DeviceDataStreamer.html#Device_Net_DeviceDataStreamer__ctor_
@@ -580,15 +593,15 @@ references:
   isSpec: "True"
   fullName: Device.Net.DeviceExtensions.ConnectFirstAsync
   nameWithType: DeviceExtensions.ConnectFirstAsync
-- uid: Device.Net.DeviceExtensions.CreateDeviceDataStreamer(Device.Net.IDeviceFactory,Device.Net.ProcessData,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task})
-  name: CreateDeviceDataStreamer(IDeviceFactory, ProcessData, Func<IDevice, Task>)
-  href: api/Device.Net.DeviceExtensions.html#Device_Net_DeviceExtensions_CreateDeviceDataStreamer_Device_Net_IDeviceFactory_Device_Net_ProcessData_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__
-  commentId: M:Device.Net.DeviceExtensions.CreateDeviceDataStreamer(Device.Net.IDeviceFactory,Device.Net.ProcessData,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task})
-  name.vb: CreateDeviceDataStreamer(IDeviceFactory, ProcessData, Func(Of IDevice, Task))
-  fullName: Device.Net.DeviceExtensions.CreateDeviceDataStreamer(Device.Net.IDeviceFactory, Device.Net.ProcessData, System.Func<Device.Net.IDevice, System.Threading.Tasks.Task>)
-  fullName.vb: Device.Net.DeviceExtensions.CreateDeviceDataStreamer(Device.Net.IDeviceFactory, Device.Net.ProcessData, System.Func(Of Device.Net.IDevice, System.Threading.Tasks.Task))
-  nameWithType: DeviceExtensions.CreateDeviceDataStreamer(IDeviceFactory, ProcessData, Func<IDevice, Task>)
-  nameWithType.vb: DeviceExtensions.CreateDeviceDataStreamer(IDeviceFactory, ProcessData, Func(Of IDevice, Task))
+- uid: Device.Net.DeviceExtensions.CreateDeviceDataStreamer(Device.Net.IDeviceFactory,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task},System.Func{Device.Net.IDevice,System.Threading.Tasks.Task})
+  name: CreateDeviceDataStreamer(IDeviceFactory, Func<IDevice, Task>, Func<IDevice, Task>)
+  href: api/Device.Net.DeviceExtensions.html#Device_Net_DeviceExtensions_CreateDeviceDataStreamer_Device_Net_IDeviceFactory_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__
+  commentId: M:Device.Net.DeviceExtensions.CreateDeviceDataStreamer(Device.Net.IDeviceFactory,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task},System.Func{Device.Net.IDevice,System.Threading.Tasks.Task})
+  name.vb: CreateDeviceDataStreamer(IDeviceFactory, Func(Of IDevice, Task), Func(Of IDevice, Task))
+  fullName: Device.Net.DeviceExtensions.CreateDeviceDataStreamer(Device.Net.IDeviceFactory, System.Func<Device.Net.IDevice, System.Threading.Tasks.Task>, System.Func<Device.Net.IDevice, System.Threading.Tasks.Task>)
+  fullName.vb: Device.Net.DeviceExtensions.CreateDeviceDataStreamer(Device.Net.IDeviceFactory, System.Func(Of Device.Net.IDevice, System.Threading.Tasks.Task), System.Func(Of Device.Net.IDevice, System.Threading.Tasks.Task))
+  nameWithType: DeviceExtensions.CreateDeviceDataStreamer(IDeviceFactory, Func<IDevice, Task>, Func<IDevice, Task>)
+  nameWithType.vb: DeviceExtensions.CreateDeviceDataStreamer(IDeviceFactory, Func(Of IDevice, Task), Func(Of IDevice, Task))
 - uid: Device.Net.DeviceExtensions.CreateDeviceDataStreamer*
   name: CreateDeviceDataStreamer
   href: api/Device.Net.DeviceExtensions.html#Device_Net_DeviceExtensions_CreateDeviceDataStreamer_
@@ -2320,6 +2333,12 @@ references:
   commentId: F:Device.Net.Messages.InformationMessageDeviceListenerPollingComplete
   fullName: Device.Net.Messages.InformationMessageDeviceListenerPollingComplete
   nameWithType: Messages.InformationMessageDeviceListenerPollingComplete
+- uid: Device.Net.Messages.InformationMessageDisposingDevice
+  name: InformationMessageDisposingDevice
+  href: api/Device.Net.Messages.html#Device_Net_Messages_InformationMessageDisposingDevice
+  commentId: F:Device.Net.Messages.InformationMessageDisposingDevice
+  fullName: Device.Net.Messages.InformationMessageDisposingDevice
+  nameWithType: Messages.InformationMessageDisposingDevice
 - uid: Device.Net.Messages.InformationMessageFoundDevice
   name: InformationMessageFoundDevice
   href: api/Device.Net.Messages.html#Device_Net_Messages_InformationMessageFoundDevice
@@ -2368,6 +2387,12 @@ references:
   commentId: F:Device.Net.Messages.SuccessMessageWriteFileStreamOpened
   fullName: Device.Net.Messages.SuccessMessageWriteFileStreamOpened
   nameWithType: Messages.SuccessMessageWriteFileStreamOpened
+- uid: Device.Net.Messages.WarningMessageAlreadyDisposed
+  name: WarningMessageAlreadyDisposed
+  href: api/Device.Net.Messages.html#Device_Net_Messages_WarningMessageAlreadyDisposed
+  commentId: F:Device.Net.Messages.WarningMessageAlreadyDisposed
+  fullName: Device.Net.Messages.WarningMessageAlreadyDisposed
+  nameWithType: Messages.WarningMessageAlreadyDisposed
 - uid: Device.Net.Messages.WarningMessageOpeningInReadonlyMode
   name: WarningMessageOpeningInReadonlyMode
   href: api/Device.Net.Messages.html#Device_Net_Messages_WarningMessageOpeningInReadonlyMode
@@ -2410,12 +2435,6 @@ references:
   commentId: F:Device.Net.Messages.WriteErrorMessage
   fullName: Device.Net.Messages.WriteErrorMessage
   nameWithType: Messages.WriteErrorMessage
-- uid: Device.Net.ProcessData
-  name: ProcessData
-  href: api/Device.Net.ProcessData.html
-  commentId: T:Device.Net.ProcessData
-  fullName: Device.Net.ProcessData
-  nameWithType: ProcessData
 - uid: Device.Net.Trace
   name: Trace
   href: api/Device.Net.Trace.html
