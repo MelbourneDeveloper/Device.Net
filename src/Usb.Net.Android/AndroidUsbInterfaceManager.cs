@@ -127,7 +127,7 @@ namespace Usb.Net.Android
             {
                 return Task.Run(async () =>
                 {
-                    await _InitializingSemaphoreSlim.WaitAsync(cancellationToken);
+                    await _InitializingSemaphoreSlim.WaitAsync(cancellationToken).ConfigureAwait(false);
 
                     Close();
 

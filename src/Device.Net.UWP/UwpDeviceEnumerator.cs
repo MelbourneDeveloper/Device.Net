@@ -82,7 +82,7 @@ namespace Device.Net.UWP
 
             try
             {
-                await _TestConnectionSemaphore.WaitAsync(cancellationToken);
+                await _TestConnectionSemaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
 
                 if (_ConnectionTestedDeviceIds.TryGetValue(deviceId, out var connectionInfo)) return connectionInfo;
 
