@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Usb.Net
 {
+    ///<inheritdoc cref="IUsbDevice"/>
     public class UsbDevice : DeviceBase, IUsbDevice
     {
         #region Fields

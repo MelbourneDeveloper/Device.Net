@@ -14,8 +14,7 @@ using Windows.Storage;
 
 namespace Hid.Net.UWP
 {
-    //TODO: Make this class inherit from DeviceBase
-
+    ///<inheritdoc cref="IHidDevice"/>
     public class UWPHidDevice : UWPDeviceBase<HidDevice>, IHidDevice
     {
         #region Fields

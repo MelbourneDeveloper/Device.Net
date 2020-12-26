@@ -33,7 +33,7 @@ namespace Usb.Net
         ushort WriteBufferSize { get; }
 
         /// <summary>
-        /// MAximum read buffer size
+        /// Maximum read buffer size
         /// </summary>
         ushort ReadBufferSize { get; }
 
@@ -42,7 +42,11 @@ namespace Usb.Net
         /// </summary>
         bool IsInitialized { get; }
 
-        //Initialize the manager
+        /// <summary>
+        /// Initialize the manager
+        /// </summary>
+        /// <param name="cancellationToken">Allows you to cancel the operation</param>
+        /// <returns></returns>
         Task InitializeAsync(CancellationToken cancellationToken = default);
 
         /// <summary>

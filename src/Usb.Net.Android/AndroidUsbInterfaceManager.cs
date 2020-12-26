@@ -11,13 +11,15 @@ using usbDevice = Android.Hardware.Usb.UsbDevice;
 
 namespace Usb.Net.Android
 {
+    /// <summary>
+    ///<inheritdoc cref="IUsbInterfaceManager"/>
+    /// </summary>
     public class AndroidUsbInterfaceManager : UsbInterfaceManager, IUsbInterfaceManager
     {
         #region Fields
         private UsbDeviceConnection _UsbDeviceConnection;
         private usbDevice _UsbDevice;
         private readonly SemaphoreSlim _InitializingSemaphoreSlim = new SemaphoreSlim(1, 1);
-        private bool _IsClosing;
         private bool disposed;
         private ushort? ReadBufferSizeProtected { get; set; }
         private ushort? WriteBufferSizeProtected { get; set; }
@@ -77,18 +79,6 @@ namespace Usb.Net.Android
 
             Close();
 
-            _InitializingSemaphoreSlim.Dispose();
-
-            base.Dispose();
-
-            GC.SuppressFinalize(this);
-        }
-
-        public void Close()
-        {
-            if (_IsClosing) return;
-            _IsClosing = true;
-
             try
             {
                 _UsbDeviceConnection?.Dispose();
@@ -101,13 +91,19 @@ namespace Usb.Net.Android
                 ReadUsbInterface = null;
                 WriteUsbInterface = null;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Logging
+                Logger.LogError(ex, "Dispose error DeviceId: {deviceNumberId}", DeviceNumberId);
             }
 
-            _IsClosing = false;
+            _InitializingSemaphoreSlim.Dispose();
+
+            base.Dispose();
+
+            GC.SuppressFinalize(this);
         }
+
+        public void Close() => _UsbDeviceConnection?.Close();
 
         public Task<TransferResult> ReadAsync() => ReadUsbInterface.ReadAsync(ReadBufferSize);
 

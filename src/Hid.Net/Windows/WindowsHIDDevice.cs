@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
+    ///<inheritdoc cref="IHidDevice"/>
     public sealed class WindowsHidDevice : WindowsDeviceBase, IHidDevice
     {
         #region Fields
