@@ -11,7 +11,7 @@ namespace Usb.Net
         public static Task<TransferResult> PerformControlTransferAsync(this IUsbDevice usbDevice, SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default)
             => usbDevice == null ? throw new ArgumentNullException(nameof(usbDevice)) :
             (usbDevice.UsbInterfaceManager.UsbInterfaces.FirstOrDefault() ??
-            throw new Exception("There are no interfaces to send a control transfer to"))
+            throw new ControlTransferException("There are no interfaces to send a control transfer to"))
             .PerformControlTransferAsync(setupPacket, buffer, cancellationToken);
     }
 }

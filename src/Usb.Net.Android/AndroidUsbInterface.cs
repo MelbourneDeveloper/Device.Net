@@ -112,7 +112,7 @@ namespace Usb.Net.Android
                     //TODO: It's not clear if there is a way to count the number of bytes transferred here. This is a bug in a sense...
 
                     Logger.LogTrace(new Trace(true, data), $"Write endpoint: {endpoint.Address}");
-                    
+
                     return (uint)data.Length;
                 }
                 catch (Exception ex)

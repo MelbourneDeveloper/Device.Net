@@ -12,8 +12,6 @@
 
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types", Justification = "<Pending>", Scope = "type", Target = "~T:Device.Net.Windows.SpDeviceInterfaceDetailData")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types", Justification = "<Pending>", Scope = "type", Target = "~T:Device.Net.Windows.SpDeviceInfoData")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pending>", Scope = "member", Target = "~M:Device.Net.Helpers.GetHex(System.Nullable{System.UInt32})~System.String")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1304:Specify CultureInfo", Justification = "<Pending>", Scope = "member", Target = "~M:Device.Net.Helpers.GetHex(System.Nullable{System.UInt32})~System.String")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1819:Properties should not return arrays", Justification = "<Pending>", Scope = "member", Target = "~P:Device.Net.TransferResult.Data")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>", Scope = "member", Target = "~M:Device.Net.TransferResult.op_Implicit(System.Byte[])~Device.Net.TransferResult")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2225:Operator overloads have named alternates", Justification = "<Pending>", Scope = "member", Target = "~M:Device.Net.TransferResult.op_Implicit(System.Byte[])~Device.Net.TransferResult")]

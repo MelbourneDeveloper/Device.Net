@@ -14,7 +14,7 @@
     </PropertyGroup>
     <ItemGroup>
         <None Include="..\..\README.md" Link="README.md" />
-        <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>

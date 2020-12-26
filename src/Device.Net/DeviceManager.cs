@@ -41,7 +41,7 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public async Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default) => await DeviceFactories.FirstOrDefaultAsync(async d => await d.SupportsDeviceAsync(deviceDefinition, cancellationToken).ConfigureAwait(false), cancellationToken).ConfigureAwait(false) != null;
+        public async Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition, CancellationToken cancellationToken = default) => await DeviceFactories.FirstOrDefaultAsync(async d => await d.SupportsDeviceAsync(connectedDeviceDefinition, cancellationToken).ConfigureAwait(false), cancellationToken).ConfigureAwait(false) != null;
 
         public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default)
         {

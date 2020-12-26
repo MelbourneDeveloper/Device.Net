@@ -87,14 +87,14 @@ namespace SerialPort.Net.Windows
             return new ReadOnlyCollection<ConnectedDeviceDefinition>(returnValue);
         }
 
-        public Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default)
-             => Task.FromResult<IDevice>(deviceDefinition == null
-                ? throw new ArgumentNullException(nameof(deviceDefinition))
-                : new WindowsSerialPortDevice(deviceDefinition.DeviceId));
+        public Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition, CancellationToken cancellationToken = default)
+             => Task.FromResult<IDevice>(connectedDeviceDefinition == null
+                ? throw new ArgumentNullException(nameof(connectedDeviceDefinition))
+                : new WindowsSerialPortDevice(connectedDeviceDefinition.DeviceId));
 
-        public Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default)
-            => deviceDefinition != null ? Task.FromResult(deviceDefinition.DeviceType == DeviceType.SerialPort) :
-            throw new ArgumentNullException(nameof(deviceDefinition));
+        public Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition, CancellationToken cancellationToken = default)
+            => connectedDeviceDefinition != null ? Task.FromResult(connectedDeviceDefinition.DeviceType == DeviceType.SerialPort) :
+            throw new ArgumentNullException(nameof(connectedDeviceDefinition));
 
         #endregion
     }

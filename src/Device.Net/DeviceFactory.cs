@@ -44,9 +44,9 @@ namespace Device.Net
         #endregion
 
         #region Public Methods
-        public Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default) => _supportsDevice(deviceDefinition, cancellationToken);
+        public Task<bool> SupportsDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition, CancellationToken cancellationToken = default) => _supportsDevice(connectedDeviceDefinition, cancellationToken);
         public Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default) => _getConnectedDevicesAsync(cancellationToken);
-        public Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition deviceDefinition, CancellationToken cancellationToken = default) => deviceDefinition == null ? throw new ArgumentNullException(nameof(deviceDefinition)) : _getDevice(deviceDefinition, cancellationToken);
+        public Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition, CancellationToken cancellationToken = default) => connectedDeviceDefinition == null ? throw new ArgumentNullException(nameof(connectedDeviceDefinition)) : _getDevice(connectedDeviceDefinition, cancellationToken);
         #endregion
     }
 }
