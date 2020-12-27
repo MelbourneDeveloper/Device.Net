@@ -10,10 +10,7 @@ namespace Usb.Net
     {
         #region Private Properties
         private bool _IsDisposed;
-        private readonly Func<IUsbInterfaceEndpoint, Task<TransferResult>> _readFromEndpoint;
-        private readonly Func<IUsbInterfaceEndpoint, byte[], Task<uint>> _writeToEndpoint;
-        private readonly Func<SetupPacket, byte[], Task<TransferResult>> _controlTransfer;
-        private readonly Action _freeInterface;
+        private readonly IUsbInterface2 _usbInterface2;
         #endregion
 
         #region Public Properties
@@ -22,13 +19,18 @@ namespace Usb.Net
 
         #region Constructor
         public UsbInterface(
+            IUsbInterface2 usbInterface2,
             byte interfaceNumber,
             ILogger logger = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSzie = null) : base(
                 logger,
                 readBufferSize,
-                writeBufferSzie) => InterfaceNumber = interfaceNumber;
+                writeBufferSzie)
+        {
+            _usbInterface2 = usbInterface2;
+            InterfaceNumber = interfaceNumber;
+        }
         #endregion
 
         #region Public Methods
@@ -36,7 +38,7 @@ namespace Usb.Net
         {
             return await Task.Run(async () =>
             {
-                var transferResult = await _readFromEndpoint(ReadEndpoint).ConfigureAwait(false);
+                var transferResult = await _usbInterface2.ReadFromEndpointAsync(ReadEndpoint, bufferLength).ConfigureAwait(false);
                 Logger.LogTrace(new Trace(false, transferResult.Data));
                 return transferResult;
             }, cancellationToken).ConfigureAwait(false);
@@ -45,7 +47,7 @@ namespace Usb.Net
         public Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
             => Task.Run(async () =>
             {
-                var bytesWritten = await _writeToEndpoint(WriteEndpoint, data);
+                var bytesWritten = await _usbInterface2.WriteToEndpointAsync(WriteEndpoint, data);
                 Logger.LogTrace(new Trace(true, data));
                 return bytesWritten;
             }, cancellationToken);
@@ -62,7 +64,7 @@ namespace Usb.Net
 
             Logger.LogInformation(Messages.InformationMessageDisposingDevice, InterfaceNumber);
 
-            _freeInterface();
+            _usbInterface2.Close();
 
             GC.SuppressFinalize(this);
         }
@@ -88,7 +90,7 @@ namespace Usb.Net
                         }
                     }
 
-                    var transferResult = await _controlTransfer(setupPacket, transferBuffer);
+                    var transferResult = await _usbInterface2.ControlTransferAsync(setupPacket, transferBuffer);
 
                     Logger.LogTrace(new Trace(setupPacket.RequestType.Direction == RequestDirection.Out, transferBuffer));
                     Logger.LogInformation("Control Transfer complete {setupPacket}", setupPacket);

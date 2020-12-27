@@ -4,7 +4,7 @@ namespace Microsoft.Extensions.Logging
 {
     public interface ILoggerFactory
     {
-        ILogger CreateLogger<T>();
+        ILogger<T> CreateLogger<T>();
         ILogger CreateLogger(string name);
     }
 }

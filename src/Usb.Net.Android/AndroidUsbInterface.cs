@@ -7,6 +7,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using ahu = Android.Hardware.Usb;
 
 namespace Usb.Net.Android
 {
@@ -19,7 +20,7 @@ namespace Usb.Net.Android
 
         #region Constructor
         public AndroidUsbInterface(
-            UsbInterface usbInterface,
+            ahu.UsbInterface usbInterface,
             UsbDeviceConnection usbDeviceConnection,
             ILogger logger = null,
             ushort? readBufferSize = null,
@@ -32,7 +33,7 @@ namespace Usb.Net.Android
 
         #region Public Properties
         public override byte InterfaceNumber => (byte)UsbInterface.Id;
-        public UsbInterface UsbInterface { get; }
+        public ahu.UsbInterface UsbInterface { get; }
         #endregion
 
         #region Public Methods
