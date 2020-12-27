@@ -12,9 +12,11 @@
 
     public interface ByteBuffer
     {
-        public static ByteBuffer Allocate(int capacity)
-        {
-            return default;
-        }
+        sbyte Get();
+#pragma warning disable IDE0060 // Remove unused parameter
+        public static ByteBuffer Allocate(int capacity) => default;
+        public static ByteBuffer? Wrap(byte[]? array) => default;
+#pragma warning restore IDE0060 // Remove unused parameter
+        Buffer? Rewind();
     }
 }

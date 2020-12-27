@@ -1,5 +1,6 @@
 ﻿
 
+using Android.App;
 using System.Collections.Generic;
 
 namespace Android.Hardware.Usb
@@ -9,6 +10,6 @@ namespace Android.Hardware.Usb
         public const string ExtraPermissionGranted = "permission";
         IDictionary<string, UsbDevice>? DeviceList { get; }
         UsbDeviceConnection OpenDevice(UsbDevice usbDevice);
-        public virtual void RequestPermission(UsbDevice? device, PendingIntent? pi);
+        void RequestPermission(UsbDevice? device, PendingIntent? pi);
     }
 }
