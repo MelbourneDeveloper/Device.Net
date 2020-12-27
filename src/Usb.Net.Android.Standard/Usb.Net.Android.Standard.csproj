@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>9</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Usb.Net.Android\AndroidUsbEndpoint.cs" Link="AndroidUsbEndpoint.cs" />
+    <Compile Include="..\Usb.Net.Android\AndroidUsbFactoryExtensions.cs" Link="AndroidUsbFactoryExtensions.cs" />
+    <Compile Include="..\Usb.Net.Android\AndroidUsbInterface.cs" Link="AndroidUsbInterface.cs" />
+    <Compile Include="..\Usb.Net.Android\AndroidUsbInterfaceManager.cs" Link="AndroidUsbInterfaceManager.cs" />
+    <Compile Include="..\Usb.Net.Android\UsbPermissionBroadcastReceiver.cs" Link="UsbPermissionBroadcastReceiver.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
+    <ProjectReference Include="..\Usb.Net.Android.Fakes\Usb.Net.Android.Fakes.csproj" />
+    <ProjectReference Include="..\Usb.Net\Usb.Net.csproj" />
+  </ItemGroup>
+
+</Project>
