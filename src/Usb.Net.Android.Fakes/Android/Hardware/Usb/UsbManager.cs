@@ -7,5 +7,7 @@ namespace Android.Hardware.Usb
     public interface UsbManager
     {
         IDictionary<string, UsbDevice>? DeviceList { get; }
+
+        UsbDeviceConnection OpenDevice(UsbDevice usbDevice);
     }
 }
