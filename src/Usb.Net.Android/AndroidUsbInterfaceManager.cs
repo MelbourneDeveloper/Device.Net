@@ -33,7 +33,6 @@ namespace Usb.Net.Android
 
         #region Public Properties
         public UsbManager UsbManager { get; }
-        public Context AndroidContext { get; }
         public ushort WriteBufferSize => WriteBufferSizeProtected == null && WriteUsbInterface == null
                     ? throw new InvalidOperationException("WriteBufferSize was not specified, and no write usb interface has been selected")
                     : WriteBufferSizeProtected ?? WriteUsbInterface.ReadBufferSize;
@@ -48,7 +47,6 @@ namespace Usb.Net.Android
         #region Constructor
         public AndroidUsbInterfaceManager(
             UsbManager usbManager,
-            Context androidContext,
             int deviceNumberId,
             IAndroidFactory androidFactory,
             Func<usbDevice, IUsbPermissionBroadcastReceiver> usbPermissionBroadcastReceiver,
@@ -59,7 +57,6 @@ namespace Usb.Net.Android
             ReadBufferSizeProtected = readBufferLength;
             WriteBufferSizeProtected = writeBufferLength;
             UsbManager = usbManager ?? throw new ArgumentNullException(nameof(usbManager));
-            AndroidContext = androidContext ?? throw new ArgumentNullException(nameof(androidContext));
             DeviceNumberId = deviceNumberId;
             _androidFactory = androidFactory;
             _getUsbPermissionBroadcastReceiver = usbPermissionBroadcastReceiver;

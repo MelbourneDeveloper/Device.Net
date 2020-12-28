@@ -114,7 +114,6 @@ namespace Usb.Net.Android
             getUsbInterfaceManager ??= (a, cancellationToken) => Task.FromResult<IUsbInterfaceManager>(
                 new AndroidUsbInterfaceManager(
                     usbManager,
-                    context,
                     //TODO: throw a validation message
                     int.Parse(a, IntParsingCulture),
                     androidFactory,
