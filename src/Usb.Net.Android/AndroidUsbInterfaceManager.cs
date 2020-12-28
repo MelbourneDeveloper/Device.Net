@@ -24,6 +24,7 @@ namespace Usb.Net.Android
         private ushort? ReadBufferSizeProtected { get; set; }
         private ushort? WriteBufferSizeProtected { get; set; }
         private readonly IAndroidFactory _androidFactory;
+        private readonly Func<usbDevice, IUsbPermissionBroadcastReceiver> _getUsbPermissionBroadcastReceiver;
         #endregion
 
         #region Public Override Properties
@@ -50,6 +51,7 @@ namespace Usb.Net.Android
             Context androidContext,
             int deviceNumberId,
             IAndroidFactory androidFactory,
+            Func<usbDevice, IUsbPermissionBroadcastReceiver> usbPermissionBroadcastReceiver,
             ILoggerFactory loggerFactory = null,
             ushort? readBufferLength = null,
             ushort? writeBufferLength = null) : base(loggerFactory)
@@ -60,6 +62,7 @@ namespace Usb.Net.Android
             AndroidContext = androidContext ?? throw new ArgumentNullException(nameof(androidContext));
             DeviceNumberId = deviceNumberId;
             _androidFactory = androidFactory;
+            _getUsbPermissionBroadcastReceiver = usbPermissionBroadcastReceiver;
 
             Logger.LogInformation("read buffer size: {readBufferLength} writeBufferLength {writeBufferLength}", readBufferLength, writeBufferLength);
         }
@@ -234,12 +237,8 @@ namespace Usb.Net.Android
 
             var taskCompletionSource = new TaskCompletionSource<bool?>();
 
-            var usbPermissionBroadcastReceiver = new UsbPermissionBroadcastReceiver(
-                UsbManager,
-                _UsbDevice,
-                AndroidContext,
-                _androidFactory,
-                LoggerFactory.CreateLogger<UsbPermissionBroadcastReceiver>());
+            var usbPermissionBroadcastReceiver = _getUsbPermissionBroadcastReceiver(_UsbDevice);
+
             usbPermissionBroadcastReceiver.Received += (sender, eventArgs) => taskCompletionSource.SetResult(usbPermissionBroadcastReceiver.IsPermissionGranted);
 
             usbPermissionBroadcastReceiver.Register();

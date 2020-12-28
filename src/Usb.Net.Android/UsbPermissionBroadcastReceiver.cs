@@ -11,7 +11,7 @@ namespace Usb.Net.Android
     /// <summary>
     /// 
     /// </summary>
-    public class UsbPermissionBroadcastReceiver : BroadcastReceiver
+    public class UsbPermissionBroadcastReceiver : BroadcastReceiver, IUsbPermissionBroadcastReceiver
     {
         #region Fields
         /// <summary>

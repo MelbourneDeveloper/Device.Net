@@ -1,5 +1,6 @@
 ﻿using Android.Content;
 using Android.Hardware.Usb;
+using AndroidUsbDevice = Android.Hardware.Usb.UsbDevice;
 using Device.Net;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -47,46 +48,62 @@ namespace Usb.Net.Android
         GetUsbInterfaceManager getUsbInterfaceManager = null,
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null,
-        IAndroidFactory androidFactory = null
+        IAndroidFactory androidFactory = null,
+        Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver> usbPermissionBroadcastReceiver = null
         )
         {
             if (usbManager == null) throw new ArgumentNullException(nameof(usbManager));
             if (context == null) throw new ArgumentNullException(nameof(context));
             loggerFactory ??= NullLoggerFactory.Instance;
 
+
+#if __ANDROID__
             if (androidFactory == null)
             {
-#if __ANDROID__
                 androidFactory = new AndroidFactory();
-#else
-                throw new ArgumentNullException(nameof(androidFactory));
-#endif
             }
 
-            getConnectedDeviceDefinitionsAsync ??= (cancellationToken) =>
+            if (usbPermissionBroadcastReceiver == null)
             {
-                return Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>
-                (
-                    new ReadOnlyCollection<ConnectedDeviceDefinition>
+                usbPermissionBroadcastReceiver = new Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver>((ud) =>
+                    new UsbPermissionBroadcastReceiver(
+                    usbManager,
+                    ud,
+                    context,
+                    androidFactory,
+                    loggerFactory.CreateLogger<UsbPermissionBroadcastReceiver>()));
+            }
+#else
+            if (androidFactory == null)
+            {
+                throw new ArgumentNullException(nameof(androidFactory));
+            }
+#endif
+
+            getConnectedDeviceDefinitionsAsync ??= (cancellationToken) =>
+                {
+                    return Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>
                     (
-                        usbManager
-                        .DeviceList
-                        .Select(kvp => kvp.Value)
-                        .Where
+                        new ReadOnlyCollection<ConnectedDeviceDefinition>
                         (
-                            d => filterDeviceDefinitions
-                            .FirstOrDefault
+                            usbManager
+                            .DeviceList
+                            .Select(kvp => kvp.Value)
+                            .Where
                             (
-                                f =>
-                                    (!f.VendorId.HasValue || f.VendorId.Value == d.VendorId) &&
-                                    (!f.ProductId.HasValue || f.ProductId.Value == d.ProductId)
-                            ) != null
+                                d => filterDeviceDefinitions
+                                .FirstOrDefault
+                                (
+                                    f =>
+                                        (!f.VendorId.HasValue || f.VendorId.Value == d.VendorId) &&
+                                        (!f.ProductId.HasValue || f.ProductId.Value == d.ProductId)
+                                ) != null
+                            )
+                            .Select(AndroidUsbInterfaceManager.GetAndroidDeviceDefinition)
+                            .ToList()
                         )
-                        .Select(AndroidUsbInterfaceManager.GetAndroidDeviceDefinition)
-                        .ToList()
-                    )
-                );
-            };
+                    );
+                };
 
             getUsbInterfaceManager ??= (a, cancellationToken) => Task.FromResult<IUsbInterfaceManager>(
                 new AndroidUsbInterfaceManager(
@@ -95,6 +112,7 @@ namespace Usb.Net.Android
                     //TODO: throw a validation message
                     int.Parse(a, IntParsingCulture),
                     androidFactory,
+                    usbPermissionBroadcastReceiver,
                     loggerFactory,
                     readBufferSize,
                     writeBufferSize
