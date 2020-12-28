@@ -1,4 +1,6 @@
-﻿namespace Java.Nio
+﻿using System;
+
+namespace Java.Nio
 {
     //
     // Summary:
@@ -12,10 +14,14 @@
 
     public interface ByteBuffer
     {
+        ///Use these to inject funcs for returning values
+        public static Func<int, ByteBuffer> AllocateFunc { get; set; }
+        public static Func<byte[]?, ByteBuffer> WrapFunc { get; set; }
+
         sbyte Get();
 #pragma warning disable IDE0060 // Remove unused parameter
-        public static ByteBuffer Allocate(int capacity) => default;
-        public static ByteBuffer? Wrap(byte[]? array) => default;
+        public static ByteBuffer Allocate(int capacity) => AllocateFunc(capacity);
+        public static ByteBuffer? Wrap(byte[]? array) => WrapFunc(array);
 #pragma warning restore IDE0060 // Remove unused parameter
         Buffer? Rewind();
     }

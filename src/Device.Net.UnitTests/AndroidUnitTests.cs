@@ -2,9 +2,11 @@
 
 using Android.Content;
 using Android.Hardware.Usb;
+using Java.Nio;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Usb.Net.Android;
@@ -37,6 +39,10 @@ namespace Device.Net.UnitTests
                  .AddDebug()
                  .SetMinimumLevel(LogLevel.Trace);
              });
+
+            //Set the return value of the static method
+            ByteBuffer.AllocateFunc = new Func<int, ByteBuffer>((c) => new Mock<ByteBuffer>().Object);
+            ByteBuffer.WrapFunc = new Func<byte[]?, ByteBuffer>((c) => new Mock<ByteBuffer>().Object);
 
             var usbManagerMock = new Mock<UsbManager>();
             var contextMock = new Mock<Context>();
