@@ -16,6 +16,7 @@ using Device.Net.Windows;
 #if !NET45
 using Usb.Net.Android;
 using UsbManager = Android.Hardware.Usb.UsbManager;
+using AndroidUsbDevice = Android.Hardware.Usb.UsbDevice;
 using Android.Content;
 using Moq;
 #endif
@@ -32,7 +33,8 @@ namespace Device.Net.UnitTests
         private const byte STATE_DFU_IDLE = 0x02;
         private const byte STATE_DFU_ERROR = 0x0A;
         private const byte STATUS_errTARGET = 0x01;
-
+        private const int TrezorVendorId = 0x1209;
+        private const int TrezorOneProductId = 0x53C1;
         private readonly ILoggerFactory loggerFactory
 #if NET45
 ;
@@ -134,7 +136,7 @@ namespace Device.Net.UnitTests
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorLibUsb()
-            => TestWriteAndReadFromTrezor(new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53C1, label: "Trezor One Firmware 1.7.x")
+            => TestWriteAndReadFromTrezor(new FilterDeviceDefinition(vendorId: TrezorVendorId, productId: TrezorOneProductId, label: "Trezor One Firmware 1.7.x")
             .CreateLibUsbDeviceFactory(loggerFactory)
         );
 #endif
@@ -151,7 +153,7 @@ namespace Device.Net.UnitTests
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(
-            new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53C1, label: "Trezor One Firmware 1.7.x")
+            new FilterDeviceDefinition(vendorId: TrezorVendorId, productId: TrezorOneProductId, label: "Trezor One Firmware 1.7.x")
             .GetUsbDeviceFactory(loggerFactory)
         );
 
@@ -169,7 +171,7 @@ namespace Device.Net.UnitTests
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorModelTUsb() => TestWriteAndReadFromTrezor(
-        new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53c1)
+        new FilterDeviceDefinition(vendorId: TrezorVendorId, productId: TrezorOneProductId)
             .GetUsbDeviceFactory(loggerFactory)
             );
 
@@ -296,13 +298,25 @@ namespace Device.Net.UnitTests
             var usbManagerMock = new Mock<UsbManager>();
             var contextMock = new Mock<Context>();
             var androidFactoryMock = new Mock<IAndroidFactory>();
+            var usbDevice = new Mock<AndroidUsbDevice>();
+
+            //Set up the Trezor usb device as being connected
+            _ = usbDevice.Setup(ud => ud.ProductId).Returns(TrezorOneProductId);
+            _ = usbDevice.Setup(ud => ud.VendorId).Returns(TrezorVendorId);
+            _ = usbManagerMock.Setup(um => um.DeviceList).Returns(new Dictionary<string, AndroidUsbDevice>
+            {
+                {"asd", usbDevice.Object }
+            });
 
             await TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition(
-                vendorId: 0x1209,
-                productId: 0x53C1,
+                vendorId: TrezorVendorId,
+                productId: TrezorOneProductId,
                 label: "Trezor One Firmware 1.7.x")
-            .CreateAndroidUsbDeviceFactory(usbManagerMock.Object, contextMock.Object, androidFactory: androidFactoryMock.Object)
+            .CreateAndroidUsbDeviceFactory(usbManagerMock.Object,
+                contextMock.Object,
+                loggerFactory,
+                androidFactory: androidFactoryMock.Object)
             );
         }
 #endif
