@@ -106,11 +106,7 @@ namespace Usb.Net.Android
         }
 
         public void Close() => _UsbDeviceConnection?.Close();
-
-        public Task<TransferResult> ReadAsync() => ReadUsbInterface.ReadAsync(ReadBufferSize);
-
-        public Task WriteAsync(byte[] data) => WriteUsbInterface.WriteAsync(data);
-
+        
         public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             if (disposed) throw new DeviceException(Messages.DeviceDisposedErrorMessage);
@@ -242,14 +238,6 @@ namespace Usb.Net.Android
 
             return taskCompletionSource.Task;
         }
-        #endregion
-
-        #region Finalizer
-        /// <summary>
-        /// What's this then?
-        /// </summary>
-        ~AndroidUsbInterfaceManager() => Dispose();
-
         #endregion
     }
 }

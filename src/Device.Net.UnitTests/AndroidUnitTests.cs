@@ -16,23 +16,29 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class AndroidUnitTests
     {
-        private async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64)
+        private Task<IDevice> TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, bool dispose = true)
         {
             //Send the request part of the Message Contract
+            var integrationTester = new IntegrationTester(
+                deviceFactory);
+
+            return integrationTester.TestAsync(GetTrezorRequest(), IntegrationTests.AssertTrezorResult, expectedDataLength, dispose);
+        }
+
+        private static byte[] GetTrezorRequest()
+        {
             var request = new byte[64];
             request[0] = 0x3f;
             request[1] = 0x23;
             request[2] = 0x23;
-
-            var integrationTester = new IntegrationTester(
-                deviceFactory);
-
-            await integrationTester.TestAsync(request, IntegrationTests.AssertTrezorResult, expectedDataLength);
+            return request;
         }
 
         [TestMethod]
         public async Task TestWriteAndReadFromTrezorUsbAndroid()
         {
+            const int ExpectedDataLength = 64;
+
             var loggerFactory = LoggerFactory.Create(builder =>
              {
                  _ = builder.AddConsole()
@@ -93,7 +99,7 @@ namespace Device.Net.UnitTests
             //Return a usb request
             _ = androidFactoryMock.Setup(f => f.CreateUsbRequest()).Returns(new Mock<UsbRequest>().Object);
 
-            await TestWriteAndReadFromTrezor(
+            var device = await TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition(
                 vendorId: IntegrationTests.TrezorVendorId,
                 productId: IntegrationTests.TrezorOneProductId,
@@ -114,7 +120,7 @@ namespace Device.Net.UnitTests
                     FakeReceiveAsync(usbPermissionBroadcastReceiver);
 
                     return usbPermissionBroadcastReceiver;
-                })
+                }), ExpectedDataLength, false
             );
 
             ///Keeps running until the received event fires which allows code elsewhere to continue
@@ -128,6 +134,9 @@ namespace Device.Net.UnitTests
                     usbPermissionBroadcastReceiver.OnReceive(contextMock.Object, intentMock.Object);
                 }
             }
+
+            //This is probably not necessary. But, grabbed the device in case we want to do more stuff with it before disposing it
+            device.Dispose();
 
             //Verify that the interface was disposed
             usbInterfaceMock.Verify(i => i.Dispose(), Times.Once);

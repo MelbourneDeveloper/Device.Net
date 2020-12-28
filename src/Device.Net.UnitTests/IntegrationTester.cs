@@ -12,7 +12,7 @@ namespace Device.Net.UnitTests
         public IntegrationTester(
             IDeviceFactory deviceFactory) => _deviceFactory = deviceFactory ?? throw new ArgumentNullException(nameof(deviceFactory));
 
-        public async Task TestAsync(byte[] writeData, Func<TransferResult, IDevice, Task> assertFunc, int expectedDataLength)
+        public async Task<IDevice> TestAsync(byte[] writeData, Func<TransferResult, IDevice, Task> assertFunc, int expectedDataLength, bool dispose = true)
         {
             var devices = await _deviceFactory.GetConnectedDeviceDefinitionsAsync();
 
@@ -22,7 +22,7 @@ namespace Device.Net.UnitTests
             //Ensure that it gets picked up
             Assert.IsNotNull(deviceDefinition);
 
-            using var device = await _deviceFactory.GetDeviceAsync(deviceDefinition);
+            var device = await _deviceFactory.GetDeviceAsync(deviceDefinition);
 
             //Initialize the device
             await device.InitializeAsync();
@@ -33,6 +33,10 @@ namespace Device.Net.UnitTests
             Assert.AreEqual(expectedDataLength, result.Data.Length);
 
             await assertFunc(result, device);
+
+            if (dispose) device.Dispose();
+
+            return device;
         }
     }
 }
