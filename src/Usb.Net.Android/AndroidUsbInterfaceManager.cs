@@ -1,4 +1,3 @@
-using Android.Content;
 using Android.Hardware.Usb;
 using Device.Net;
 using Device.Net.Exceptions;
@@ -106,7 +105,7 @@ namespace Usb.Net.Android
         }
 
         public void Close() => _UsbDeviceConnection?.Close();
-        
+
         public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             if (disposed) throw new DeviceException(Messages.DeviceDisposedErrorMessage);
