@@ -44,12 +44,22 @@ namespace Usb.Net.Android
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetUsbInterfaceManager getUsbInterfaceManager = null,
         ushort? readBufferSize = null,
-        ushort? writeBufferSize = null
+        ushort? writeBufferSize = null,
+        IAndroidFactory androidFactory = null
         )
         {
             if (usbManager == null) throw new ArgumentNullException(nameof(usbManager));
             if (context == null) throw new ArgumentNullException(nameof(context));
             loggerFactory ??= NullLoggerFactory.Instance;
+
+            if (androidFactory == null)
+            {
+#if __ANDROID__
+                androidFactory = new AndroidFactory();
+#else
+                throw new ArgumentNullException(nameof(androidFactory));
+#endif
+            }
 
             getConnectedDeviceDefinitionsAsync ??= (cancellationToken) =>
             {
@@ -82,6 +92,7 @@ namespace Usb.Net.Android
                     context,
                     //TODO: throw a validation message
                     int.Parse(a, IntParsingCulture),
+                    androidFactory,
                     loggerFactory,
                     readBufferSize,
                     writeBufferSize

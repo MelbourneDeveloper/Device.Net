@@ -19,7 +19,7 @@
     <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
     <AndroidUseAapt2>true</AndroidUseAapt2>
-    <DocumentationFile>Usb.Net.Android.xml</DocumentationFile>    
+    <DocumentationFile>Usb.Net.Android.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -49,10 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AndroidFactory.cs" />
     <Compile Include="AndroidUsbEndpoint.cs" />
     <Compile Include="AndroidUsbFactoryExtensions.cs" />
     <Compile Include="AndroidUsbInterface.cs" />
     <Compile Include="AndroidUsbInterfaceManager.cs" />
+    <Compile Include="IAndroidFactory.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UsbPermissionBroadcastReceiver.cs" />

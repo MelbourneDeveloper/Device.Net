@@ -15,18 +15,21 @@ namespace Usb.Net.Android
         #region Fields
         private bool disposed;
         private readonly UsbDeviceConnection _UsbDeviceConnection;
+        private readonly IAndroidFactory _androidFactory;
         #endregion
 
         #region Constructor
         public AndroidUsbInterface(
             UsbInterface usbInterface,
             UsbDeviceConnection usbDeviceConnection,
+            IAndroidFactory androidFactory,
             ILogger logger = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null) : base(logger, readBufferSize, writeBufferSize)
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
             _UsbDeviceConnection = usbDeviceConnection ?? throw new ArgumentNullException(nameof(usbDeviceConnection));
+            _androidFactory = androidFactory;
         }
         #endregion
 
@@ -51,7 +54,7 @@ namespace Usb.Net.Android
                         nameof(ReadAsync),
                         endpoint.EndpointNumber);
                     var byteBuffer = ByteBuffer.Allocate((int)bufferLength);
-                    var request = new UsbRequest();
+                    var request = _androidFactory.CreateUsbRequest();
                     _ = request.Initialize(_UsbDeviceConnection, endpoint);
 #pragma warning disable CS0618
                     _ = request.Queue(byteBuffer, (int)bufferLength);
@@ -94,7 +97,7 @@ namespace Usb.Net.Android
                 {
                     //TODO: Perhaps we should implement Batch Begin/Complete so that the UsbRequest is not created again and again. This will be expensive
 
-                    var request = new UsbRequest();
+                    var request = _androidFactory.CreateUsbRequest();
                     var endpoint = ((AndroidUsbEndpoint)WriteEndpoint).UsbEndpoint;
 
                     using var logScope = Logger.BeginScope("UsbInterface: {usbInterface} Endpoint: {endpoint} Call: {call} Data Length: {writeLength}", UsbInterface.Id, endpoint.Address, nameof(WriteAsync), data.Length);

@@ -23,7 +23,7 @@ namespace Usb.Net.Android
         private bool disposed;
         private ushort? ReadBufferSizeProtected { get; set; }
         private ushort? WriteBufferSizeProtected { get; set; }
-
+        private readonly IAndroidFactory _androidFactory;
         #endregion
 
         #region Public Override Properties
@@ -49,6 +49,7 @@ namespace Usb.Net.Android
             UsbManager usbManager,
             Context androidContext,
             int deviceNumberId,
+            IAndroidFactory androidFactory,
             ILoggerFactory loggerFactory = null,
             ushort? readBufferLength = null,
             ushort? writeBufferLength = null) : base(loggerFactory)
@@ -58,6 +59,7 @@ namespace Usb.Net.Android
             UsbManager = usbManager ?? throw new ArgumentNullException(nameof(usbManager));
             AndroidContext = androidContext ?? throw new ArgumentNullException(nameof(androidContext));
             DeviceNumberId = deviceNumberId;
+            _androidFactory = androidFactory;
 
             Logger.LogInformation("read buffer size: {readBufferLength} writeBufferLength {writeBufferLength}", readBufferLength, writeBufferLength);
         }
@@ -163,7 +165,13 @@ namespace Usb.Net.Android
                         //TODO: This is the default interface but other interfaces might be needed so this needs to be changed.
                         var usbInterface = _UsbDevice.GetInterface(interfaceNumber);
 
-                        var androidUsbInterface = new AndroidUsbInterface(usbInterface, _UsbDeviceConnection, LoggerFactory.CreateLogger<AndroidUsbInterface>(), ReadBufferSizeProtected, WriteBufferSizeProtected);
+                        var androidUsbInterface = new AndroidUsbInterface(
+                            usbInterface,
+                            _UsbDeviceConnection,
+                            _androidFactory,
+                            LoggerFactory.CreateLogger<AndroidUsbInterface>(),
+                            ReadBufferSizeProtected,
+                            WriteBufferSizeProtected);
 
                         Logger.LogInformation("Interface found. Id: {id} Endpoint Count: {endpointCount} Interface Class: {interfaceclass} Interface Subclass: {interfacesubclass} Name: {name}", usbInterface.Id, usbInterface.EndpointCount, usbInterface.InterfaceClass, usbInterface.InterfaceSubclass, usbInterface.Name);
 
@@ -230,6 +238,7 @@ namespace Usb.Net.Android
                 UsbManager,
                 _UsbDevice,
                 AndroidContext,
+                _androidFactory,
                 LoggerFactory.CreateLogger<UsbPermissionBroadcastReceiver>());
             usbPermissionBroadcastReceiver.Received += (sender, eventArgs) => taskCompletionSource.SetResult(usbPermissionBroadcastReceiver.IsPermissionGranted);
 

@@ -10,6 +10,7 @@
     <Compile Include="..\Usb.Net.Android\AndroidUsbFactoryExtensions.cs" Link="AndroidUsbFactoryExtensions.cs" />
     <Compile Include="..\Usb.Net.Android\AndroidUsbInterface.cs" Link="AndroidUsbInterface.cs" />
     <Compile Include="..\Usb.Net.Android\AndroidUsbInterfaceManager.cs" Link="AndroidUsbInterfaceManager.cs" />
+    <Compile Include="..\Usb.Net.Android\IAndroidFactory.cs" Link="IAndroidFactory.cs" />
     <Compile Include="..\Usb.Net.Android\UsbPermissionBroadcastReceiver.cs" Link="UsbPermissionBroadcastReceiver.cs" />
   </ItemGroup>
 
