@@ -110,12 +110,17 @@ namespace Usb.Net
 
             Logger.LogInformation(Messages.InformationMessageDisposingDevice, nameof(UsbInterfaceManager));
 
+            Close();
+
+            GC.SuppressFinalize(this);
+        }
+
+        public virtual void Close()
+        {
             foreach (var usbInterface in UsbInterfaces)
             {
                 usbInterface.Dispose();
             }
-
-            GC.SuppressFinalize(this);
         }
         #endregion
     }

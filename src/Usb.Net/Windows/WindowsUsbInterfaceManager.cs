@@ -1,4 +1,4 @@
-﻿using Device.Net;
+using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
@@ -218,17 +218,12 @@ namespace Usb.Net.Windows
                 );
         }
 
-        public void Close()
+        public override void Close()
         {
-            foreach (var usbInterface in UsbInterfaces)
-            {
-                usbInterface.Dispose();
-            }
-
-            UsbInterfaces.Clear();
-
             _DeviceHandle?.Dispose();
             _DeviceHandle = null;
+
+            base.Close();
         }
 
         public override void Dispose()

@@ -129,8 +129,8 @@ namespace Device.Net.UnitTests
                 }
             }
 
-            //TODO: Check that the device and the interface were disposed... We don't have access to these currently.
-
+            //Verify that the interface was disposed
+            usbInterfaceMock.Verify(i => i.Dispose(), Times.Once);
         }
     }
 }
