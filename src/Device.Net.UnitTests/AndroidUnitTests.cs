@@ -120,7 +120,9 @@ namespace Device.Net.UnitTests
                     FakeReceiveAsync(usbPermissionBroadcastReceiver);
 
                     return usbPermissionBroadcastReceiver;
-                }), ExpectedDataLength, false
+                },
+                //TODO: We shouldn't have to specify this. We should pick this up automatically. This is basically a bug on Android
+                writeBufferSize: ExpectedDataLength), ExpectedDataLength, false
             );
 
             ///Keeps running until the received event fires which allows code elsewhere to continue
@@ -134,6 +136,10 @@ namespace Device.Net.UnitTests
                     usbPermissionBroadcastReceiver.OnReceive(contextMock.Object, intentMock.Object);
                 }
             }
+
+            var theUsbDevice = (Usb.Net.IUsbDevice)device;
+
+            Assert.AreEqual(ExpectedDataLength, theUsbDevice.UsbInterfaceManager.WriteBufferSize);
 
             //This is probably not necessary. But, grabbed the device in case we want to do more stuff with it before disposing it
             device.Dispose();
