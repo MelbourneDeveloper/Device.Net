@@ -1,4 +1,4 @@
-﻿using Device.Net;
+using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
@@ -142,11 +142,23 @@ namespace Usb.Net.Windows
             var retVal = new WindowsUsbInterface(interfaceHandle, interfaceDescriptor.bInterfaceNumber, Logger, ReadBufferSizeProtected, WriteBufferSizeProtected);
             _ = WindowsHelpers.HandleError(isSuccess, "Couldn't query interface", Logger);
 
+            Logger.LogInformation(
+                "Found Interface Number: {interfaceNumber} Endpoint count: {endpointCount} Class:{class} Subclass: {subClass}",
+                interfaceDescriptor.bInterfaceNumber,
+                interfaceDescriptor.bNumEndpoints,
+                interfaceDescriptor.bInterfaceClass,
+                interfaceDescriptor.bInterfaceSubClass);
+
             for (byte i = 0; i < interfaceDescriptor.bNumEndpoints; i++)
             {
                 isSuccess = WinUsbApiCalls.WinUsb_QueryPipe(interfaceHandle, 0, i, out var pipeInfo);
                 _ = WindowsHelpers.HandleError(isSuccess, "Couldn't query endpoint", Logger);
-                retVal.UsbInterfaceEndpoints.Add(new WindowsUsbInterfaceEndpoint(pipeInfo.PipeId, pipeInfo.PipeType));
+
+                Logger.LogInformation("Found PipeId: {pipeId} PipeType: {pipeType} MaxPacketSize: {maxPacketSize}", pipeInfo.PipeId, pipeInfo.PipeType, pipeInfo.MaximumPacketSize);
+
+                //TODO: We are dropping the max packet size here...
+
+                retVal.UsbInterfaceEndpoints.Add(new WindowsUsbInterfaceEndpoint(pipeInfo.PipeId, pipeInfo.PipeType, pipeInfo.MaximumPacketSize));
             }
 
             return retVal;
@@ -206,17 +218,12 @@ namespace Usb.Net.Windows
                 );
         }
 
-        public void Close()
+        public override void Close()
         {
-            foreach (var usbInterface in UsbInterfaces)
-            {
-                usbInterface.Dispose();
-            }
-
-            UsbInterfaces.Clear();
-
             _DeviceHandle?.Dispose();
             _DeviceHandle = null;
+
+            base.Close();
         }
 
         public override void Dispose()

@@ -1,4 +1,5 @@
 using Device.Net;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ namespace Usb.Net
     /// <summary>
     /// Manages USB interfaces
     /// </summary>
-    public interface IUsbInterfaceManager
+    public interface IUsbInterfaceManager : IDisposable
     {
         /// <summary>
         /// Usb interface for reading from the device. Note: this will default to the first read Bulk interface. If this is incorrect, inspect the UsbInterfaces property.

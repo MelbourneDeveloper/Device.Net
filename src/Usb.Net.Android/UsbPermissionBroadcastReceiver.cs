@@ -11,7 +11,7 @@ namespace Usb.Net.Android
     /// <summary>
     /// 
     /// </summary>
-    public class UsbPermissionBroadcastReceiver : BroadcastReceiver
+    public class UsbPermissionBroadcastReceiver : BroadcastReceiver, IUsbPermissionBroadcastReceiver
     {
         #region Fields
         /// <summary>
@@ -22,6 +22,7 @@ namespace Usb.Net.Android
         private readonly usbDevice _Device;
         private readonly Context _Context;
         private readonly ILogger _logger;
+        private readonly IAndroidFactory _androidFactory;
         #endregion
 
         #region Public Properties
@@ -37,21 +38,23 @@ namespace Usb.Net.Android
             UsbManager manager,
             usbDevice device,
             Context context,
+            IAndroidFactory androidFactory,
             ILogger logger = null)
         {
             _Manager = manager ?? throw new ArgumentNullException(nameof(manager));
             _Device = device ?? throw new ArgumentNullException(nameof(device));
             _Context = context ?? throw new ArgumentNullException(nameof(context));
             _logger = logger ?? NullLogger.Instance;
+            _androidFactory = androidFactory;
         }
         #endregion
 
         #region Public Methods
         public void Register()
         {
-            _ = _Context.RegisterReceiver(this, new IntentFilter(RequestUsbIntentAction));
+            _ = _Context.RegisterReceiver(this, _androidFactory.CreateIntentFilter(RequestUsbIntentAction));
             _logger.LogInformation("Receiver registered", IsPermissionGranted, _Device.DeviceId);
-            var pendingIntent = PendingIntent.GetBroadcast(_Context, 0, new Intent(RequestUsbIntentAction), 0);
+            var pendingIntent = PendingIntent.GetBroadcast(_Context, 0, _androidFactory.CreateIntent(RequestUsbIntentAction), 0);
             _Manager.RequestPermission(_Device, pendingIntent);
             _logger.LogInformation("Permission requested", IsPermissionGranted, _Device.DeviceId);
         }

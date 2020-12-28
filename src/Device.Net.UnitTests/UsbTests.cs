@@ -107,6 +107,24 @@ namespace Device.Net.UnitTests
             Assert.Fail();
         }
 
+        //TODO: Reenable
+
+        //[TestMethod]
+        //public void TestInterfacesAreDisposed()
+        //{
+        //    //Arrange
+        //    var interfaceManagerMock = new Mock<IUsbInterfaceManager>();
+        //    var usbDevice = new UsbDevice("Asd", interfaceManagerMock.Object);
+        //    var usbInterfaceMock = new Mock<IUsbInterface>();
+        //    _ = interfaceManagerMock.Setup(m => m.UsbInterfaces).Returns(new List<IUsbInterface> { usbInterfaceMock.Object });
+
+        //    //Act
+        //    usbDevice.Dispose();
+
+        //    //Assert
+        //    usbInterfaceMock.Verify(m => m.Dispose(), Times.Once);
+        //}
+
         [TestMethod]
         public void TestValidationExceptionInvalidWriteEndpoint()
         {

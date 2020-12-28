@@ -73,11 +73,13 @@ namespace Usb.Net
 
             try
             {
-                UsbInterfaceManager?.Close();
+                //TODO: The manager needs to be thrown away and recreated. This is probably ok because it should be done as part of initialization
+                //However not sure if maybe this method should be called Close?
+                UsbInterfaceManager.Dispose();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Logging
+                Logger.LogError(ex, "Error disposing");
             }
 
             _IsClosing = false;

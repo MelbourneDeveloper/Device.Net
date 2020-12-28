@@ -1,5 +1,6 @@
 ﻿using Android.Content;
 using Android.Hardware.Usb;
+using AndroidUsbDevice = Android.Hardware.Usb.UsbDevice;
 using Device.Net;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -15,14 +16,16 @@ namespace Usb.Net.Android
     public static class AndroidUsbFactoryExtensions
     {
         public static IDeviceFactory CreateAndroidUsbDeviceFactory(
-        FilterDeviceDefinition filterDeviceDefinition,
+        this FilterDeviceDefinition filterDeviceDefinition,
         UsbManager usbManager,
         Context context,
         ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetUsbInterfaceManager getUsbInterfaceManager = null,
         ushort? readBufferSize = null,
-        ushort? writeBufferSize = null
+        ushort? writeBufferSize = null,
+        IAndroidFactory androidFactory = null,
+        Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver> getUsbPermissionBroadcastReceiver = null
         )
         {
             return CreateAndroidUsbDeviceFactory(
@@ -33,7 +36,9 @@ namespace Usb.Net.Android
                 getConnectedDeviceDefinitionsAsync,
                 getUsbInterfaceManager,
                 readBufferSize,
-                writeBufferSize);
+                writeBufferSize,
+                androidFactory,
+                getUsbPermissionBroadcastReceiver);
         }
 
         public static IDeviceFactory CreateAndroidUsbDeviceFactory(
@@ -44,44 +49,75 @@ namespace Usb.Net.Android
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetUsbInterfaceManager getUsbInterfaceManager = null,
         ushort? readBufferSize = null,
-        ushort? writeBufferSize = null
+        ushort? writeBufferSize = null,
+        IAndroidFactory androidFactory = null,
+        Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver> getUsbPermissionBroadcastReceiver = null
         )
         {
             if (usbManager == null) throw new ArgumentNullException(nameof(usbManager));
             if (context == null) throw new ArgumentNullException(nameof(context));
             loggerFactory ??= NullLoggerFactory.Instance;
 
-            getConnectedDeviceDefinitionsAsync ??= (cancellationToken) =>
+#if __ANDROID__
+            if (androidFactory == null)
             {
-                return Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>
-                (
-                    new ReadOnlyCollection<ConnectedDeviceDefinition>
+                androidFactory = new AndroidFactory();
+            }
+
+            if (getUsbPermissionBroadcastReceiver == null)
+            {
+                getUsbPermissionBroadcastReceiver = new Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver>((ud) =>
+                    new UsbPermissionBroadcastReceiver(
+                    usbManager,
+                    ud,
+                    context,
+                    androidFactory,
+                    loggerFactory.CreateLogger<UsbPermissionBroadcastReceiver>()));
+            }
+#else
+            if (androidFactory == null)
+            {
+                throw new ArgumentNullException(nameof(androidFactory));
+            }
+
+            if (getUsbPermissionBroadcastReceiver == null)
+            {
+                throw new ArgumentNullException(nameof(getUsbPermissionBroadcastReceiver));
+            }
+#endif
+
+            getConnectedDeviceDefinitionsAsync ??= (cancellationToken) =>
+                {
+                    return Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>
                     (
-                        usbManager
-                        .DeviceList
-                        .Select(kvp => kvp.Value)
-                        .Where
+                        new ReadOnlyCollection<ConnectedDeviceDefinition>
                         (
-                            d => filterDeviceDefinitions
-                            .FirstOrDefault
+                            usbManager
+                            .DeviceList
+                            .Select(kvp => kvp.Value)
+                            .Where
                             (
-                                f =>
-                                    (!f.VendorId.HasValue || f.VendorId.Value == d.VendorId) &&
-                                    (!f.ProductId.HasValue || f.ProductId.Value == d.ProductId)
-                            ) != null
+                                d => filterDeviceDefinitions
+                                .FirstOrDefault
+                                (
+                                    f =>
+                                        (!f.VendorId.HasValue || f.VendorId.Value == d.VendorId) &&
+                                        (!f.ProductId.HasValue || f.ProductId.Value == d.ProductId)
+                                ) != null
+                            )
+                            .Select(AndroidUsbInterfaceManager.GetAndroidDeviceDefinition)
+                            .ToList()
                         )
-                        .Select(AndroidUsbInterfaceManager.GetAndroidDeviceDefinition)
-                        .ToList()
-                    )
-                );
-            };
+                    );
+                };
 
             getUsbInterfaceManager ??= (a, cancellationToken) => Task.FromResult<IUsbInterfaceManager>(
                 new AndroidUsbInterfaceManager(
                     usbManager,
-                    context,
                     //TODO: throw a validation message
                     int.Parse(a, IntParsingCulture),
+                    androidFactory,
+                    getUsbPermissionBroadcastReceiver,
                     loggerFactory,
                     readBufferSize,
                     writeBufferSize

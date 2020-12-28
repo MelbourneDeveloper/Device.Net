@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Usb.Net;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 #if !WINDOWS_UWP
 using Device.Net.LibUsb;
@@ -19,12 +20,14 @@ using Hid.Net.UWP;
 namespace Device.Net.UnitTests
 {
     [TestClass]
+    [TestCategory("Integration")]
     public class IntegrationTests
     {
         private const byte STATE_DFU_IDLE = 0x02;
         private const byte STATE_DFU_ERROR = 0x0A;
         private const byte STATUS_errTARGET = 0x01;
-
+        public const int TrezorVendorId = 0x1209;
+        public const int TrezorOneProductId = 0x53C1;
         private readonly ILoggerFactory loggerFactory
 #if NET45
 ;
@@ -126,7 +129,7 @@ namespace Device.Net.UnitTests
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorLibUsb()
-            => TestWriteAndReadFromTrezor(new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53C1, label: "Trezor One Firmware 1.7.x")
+            => TestWriteAndReadFromTrezor(new FilterDeviceDefinition(vendorId: TrezorVendorId, productId: TrezorOneProductId, label: "Trezor One Firmware 1.7.x")
             .CreateLibUsbDeviceFactory(loggerFactory)
         );
 #endif
@@ -143,7 +146,7 @@ namespace Device.Net.UnitTests
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(
-            new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53C1, label: "Trezor One Firmware 1.7.x")
+            new FilterDeviceDefinition(vendorId: TrezorVendorId, productId: TrezorOneProductId, label: "Trezor One Firmware 1.7.x")
             .GetUsbDeviceFactory(loggerFactory)
         );
 
@@ -161,7 +164,7 @@ namespace Device.Net.UnitTests
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorModelTUsb() => TestWriteAndReadFromTrezor(
-        new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53c1)
+        new FilterDeviceDefinition(vendorId: TrezorVendorId, productId: TrezorOneProductId)
             .GetUsbDeviceFactory(loggerFactory)
             );
 
@@ -322,10 +325,12 @@ namespace Device.Net.UnitTests
                 dfuRequestResult.Data[4] != STATE_DFU_ERROR);
         }
 
-        private static Task AssertTrezorResult(TransferResult responseData, IDevice device)
+        public static Task AssertTrezorResult(TransferResult responseData, IDevice device)
         {
             //Specify the response part of the Message Contract
             var expectedResult = new byte[] { 63, 35, 35 };
+
+            Debug.WriteLine("new byte[] {" + string.Join(", ", responseData.Data) + "}");
 
             //Assert that the response part meets the specification
             Assert.IsTrue(expectedResult.SequenceEqual(responseData.Data.Take(3)));

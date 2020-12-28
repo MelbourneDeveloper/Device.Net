@@ -15,18 +15,24 @@ namespace Usb.Net.Android
         #region Fields
         private bool disposed;
         private readonly UsbDeviceConnection _UsbDeviceConnection;
+        private readonly IAndroidFactory _androidFactory;
+        private readonly int? _timeout;
         #endregion
 
         #region Constructor
         public AndroidUsbInterface(
             UsbInterface usbInterface,
             UsbDeviceConnection usbDeviceConnection,
+            IAndroidFactory androidFactory,
             ILogger logger = null,
             ushort? readBufferSize = null,
-            ushort? writeBufferSize = null) : base(logger, readBufferSize, writeBufferSize)
+            ushort? writeBufferSize = null,
+            int? timeout = null) : base(logger, readBufferSize, writeBufferSize)
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
             _UsbDeviceConnection = usbDeviceConnection ?? throw new ArgumentNullException(nameof(usbDeviceConnection));
+            _androidFactory = androidFactory;
+            _timeout = timeout;
         }
         #endregion
 
@@ -51,12 +57,16 @@ namespace Usb.Net.Android
                         nameof(ReadAsync),
                         endpoint.EndpointNumber);
                     var byteBuffer = ByteBuffer.Allocate((int)bufferLength);
-                    var request = new UsbRequest();
+                    var request = _androidFactory.CreateUsbRequest();
                     _ = request.Initialize(_UsbDeviceConnection, endpoint);
 #pragma warning disable CS0618
                     _ = request.Queue(byteBuffer, (int)bufferLength);
 #pragma warning restore CS0618
-                    _ = await _UsbDeviceConnection.RequestWaitAsync();
+
+                    _ = _timeout.HasValue
+                        //Note: two versions here in case they have different functionality. When both code paths are tested it's probably possible to remove one
+                        ? await _UsbDeviceConnection.RequestWaitAsync(_timeout.Value)
+                        : await _UsbDeviceConnection.RequestWaitAsync();
 
                     //TODO: Get the actual length of the data read instead of just returning the length of the array
 
@@ -94,7 +104,7 @@ namespace Usb.Net.Android
                 {
                     //TODO: Perhaps we should implement Batch Begin/Complete so that the UsbRequest is not created again and again. This will be expensive
 
-                    var request = new UsbRequest();
+                    var request = _androidFactory.CreateUsbRequest();
                     var endpoint = ((AndroidUsbEndpoint)WriteEndpoint).UsbEndpoint;
 
                     using var logScope = Logger.BeginScope("UsbInterface: {usbInterface} Endpoint: {endpoint} Call: {call} Data Length: {writeLength}", UsbInterface.Id, endpoint.Address, nameof(WriteAsync), data.Length);
@@ -148,9 +158,21 @@ namespace Usb.Net.Android
                 : Task.FromResult(true);
         }
 
-#pragma warning disable IDE0060 // Remove unused parameter
-        public Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default) => throw new NotImplementedException();
-#pragma warning restore IDE0060 // Remove unused parameter
-        #endregion
+        public async Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default)
+        {
+
+            var bytesTransferred = await _UsbDeviceConnection.ControlTransferAsync(
+                setupPacket.RequestType.Direction == RequestDirection.In ? UsbAddressing.In : UsbAddressing.Out,
+                setupPacket.Request,
+                setupPacket.Value,
+                setupPacket.Index,
+                buffer,
+                setupPacket.Length,
+                _timeout ?? 0
+                ).ConfigureAwait(false);
+
+            return new TransferResult(buffer, (uint)bytesTransferred);
+        }
     }
+    #endregion
 }
