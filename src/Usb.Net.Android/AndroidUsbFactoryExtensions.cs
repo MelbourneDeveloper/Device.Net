@@ -24,7 +24,8 @@ namespace Usb.Net.Android
         GetUsbInterfaceManager getUsbInterfaceManager = null,
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null,
-        IAndroidFactory androidFactory = null
+        IAndroidFactory androidFactory = null,
+        Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver> getUsbPermissionBroadcastReceiver = null
         )
         {
             return CreateAndroidUsbDeviceFactory(
@@ -36,7 +37,8 @@ namespace Usb.Net.Android
                 getUsbInterfaceManager,
                 readBufferSize,
                 writeBufferSize,
-                androidFactory);
+                androidFactory,
+                getUsbPermissionBroadcastReceiver);
         }
 
         public static IDeviceFactory CreateAndroidUsbDeviceFactory(
@@ -49,13 +51,12 @@ namespace Usb.Net.Android
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null,
         IAndroidFactory androidFactory = null,
-        Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver> usbPermissionBroadcastReceiver = null
+        Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver> getUsbPermissionBroadcastReceiver = null
         )
         {
             if (usbManager == null) throw new ArgumentNullException(nameof(usbManager));
             if (context == null) throw new ArgumentNullException(nameof(context));
             loggerFactory ??= NullLoggerFactory.Instance;
-
 
 #if __ANDROID__
             if (androidFactory == null)
@@ -63,9 +64,9 @@ namespace Usb.Net.Android
                 androidFactory = new AndroidFactory();
             }
 
-            if (usbPermissionBroadcastReceiver == null)
+            if (getUsbPermissionBroadcastReceiver == null)
             {
-                usbPermissionBroadcastReceiver = new Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver>((ud) =>
+                getUsbPermissionBroadcastReceiver = new Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver>((ud) =>
                     new UsbPermissionBroadcastReceiver(
                     usbManager,
                     ud,
@@ -77,6 +78,11 @@ namespace Usb.Net.Android
             if (androidFactory == null)
             {
                 throw new ArgumentNullException(nameof(androidFactory));
+            }
+
+            if (getUsbPermissionBroadcastReceiver == null)
+            {
+                throw new ArgumentNullException(nameof(getUsbPermissionBroadcastReceiver));
             }
 #endif
 
@@ -112,7 +118,7 @@ namespace Usb.Net.Android
                     //TODO: throw a validation message
                     int.Parse(a, IntParsingCulture),
                     androidFactory,
-                    usbPermissionBroadcastReceiver,
+                    getUsbPermissionBroadcastReceiver,
                     loggerFactory,
                     readBufferSize,
                     writeBufferSize

@@ -299,6 +299,7 @@ namespace Device.Net.UnitTests
             var contextMock = new Mock<Context>();
             var androidFactoryMock = new Mock<IAndroidFactory>();
             var usbDevice = new Mock<AndroidUsbDevice>();
+            var intentMock = new Mock<Intent>();
 
             //Set up the Trezor usb device as being connected
             _ = usbDevice.Setup(ud => ud.ProductId).Returns(TrezorOneProductId);
@@ -316,8 +317,33 @@ namespace Device.Net.UnitTests
             .CreateAndroidUsbDeviceFactory(usbManagerMock.Object,
                 contextMock.Object,
                 loggerFactory,
-                androidFactory: androidFactoryMock.Object)
+                androidFactory: androidFactoryMock.Object,
+                getUsbPermissionBroadcastReceiver: (ud)
+                =>
+                {
+                    //Why do we have to do this?
+
+                    //We return the receiver but...
+                    var usbPermissionBroadcastReceiver = new UsbPermissionBroadcastReceiver(usbManagerMock.Object, ud, contextMock.Object, androidFactoryMock.Object);
+
+                    //We run this and send a receive until the received event fires
+                    FakeReceiveAsync(usbPermissionBroadcastReceiver);
+
+                    return usbPermissionBroadcastReceiver;
+                })
             );
+
+            ///Keeps running until the received event fires which allows code elsewhere to continue
+            async Task FakeReceiveAsync(UsbPermissionBroadcastReceiver usbPermissionBroadcastReceiver)
+            {
+                var received = false;
+                usbPermissionBroadcastReceiver.Received += (s, e) => { received = true; };
+                while (!received)
+                {
+                    await Task.Delay(10);
+                    usbPermissionBroadcastReceiver.OnReceive(contextMock.Object, intentMock.Object);
+                }
+            }
         }
 #endif
         #region Private Methods
