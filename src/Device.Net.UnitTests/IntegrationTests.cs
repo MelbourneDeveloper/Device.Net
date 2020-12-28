@@ -17,6 +17,7 @@ using Device.Net.Windows;
 using Usb.Net.Android;
 using UsbManager = Android.Hardware.Usb.UsbManager;
 using AndroidUsbDevice = Android.Hardware.Usb.UsbDevice;
+using AndroidUsbDeviceConnection = Android.Hardware.Usb.UsbDeviceConnection;
 using Android.Content;
 using Moq;
 #endif
@@ -300,6 +301,7 @@ namespace Device.Net.UnitTests
             var androidFactoryMock = new Mock<IAndroidFactory>();
             var usbDevice = new Mock<AndroidUsbDevice>();
             var intentMock = new Mock<Intent>();
+            var usbDeviceConnection = new Mock<AndroidUsbDeviceConnection>();
 
             //Set up the Trezor usb device as being connected
             _ = usbDevice.Setup(ud => ud.ProductId).Returns(TrezorOneProductId);
@@ -308,6 +310,12 @@ namespace Device.Net.UnitTests
             {
                 {"asd", usbDevice.Object }
             });
+
+            //The intent should return permission true
+            _ = intentMock.Setup(i => i.GetBooleanExtra(It.IsAny<string>(), false)).Returns(true);
+
+            //Set up the usb device connection            
+            _ = usbManagerMock.Setup(um => um.OpenDevice(usbDevice.Object)).Returns(usbDeviceConnection.Object);
 
             await TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition(
