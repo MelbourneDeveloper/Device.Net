@@ -12,16 +12,6 @@ using Device.Net.LibUsb;
 using Hid.Net.Windows;
 using Usb.Net.Windows;
 using Device.Net.Windows;
-
-#if !NET45
-using Usb.Net.Android;
-using UsbManager = Android.Hardware.Usb.UsbManager;
-using AndroidUsbDevice = Android.Hardware.Usb.UsbDevice;
-using AndroidUsbDeviceConnection = Android.Hardware.Usb.UsbDeviceConnection;
-using Android.Content;
-using Moq;
-#endif
-
 #else
 using Hid.Net.UWP;
 #endif
@@ -34,8 +24,8 @@ namespace Device.Net.UnitTests
         private const byte STATE_DFU_IDLE = 0x02;
         private const byte STATE_DFU_ERROR = 0x0A;
         private const byte STATUS_errTARGET = 0x01;
-        private const int TrezorVendorId = 0x1209;
-        private const int TrezorOneProductId = 0x53C1;
+        public const int TrezorVendorId = 0x1209;
+        public const int TrezorOneProductId = 0x53C1;
         private readonly ILoggerFactory loggerFactory
 #if NET45
 ;
@@ -292,68 +282,6 @@ namespace Device.Net.UnitTests
         }
         #endregion
 
-#if !WINDOWS_UWP && !NET45
-        [TestMethod]
-        public async Task TestWriteAndReadFromTrezorUsbAndroid()
-        {
-            var usbManagerMock = new Mock<UsbManager>();
-            var contextMock = new Mock<Context>();
-            var androidFactoryMock = new Mock<IAndroidFactory>();
-            var usbDevice = new Mock<AndroidUsbDevice>();
-            var intentMock = new Mock<Intent>();
-            var usbDeviceConnection = new Mock<AndroidUsbDeviceConnection>();
-
-            //Set up the Trezor usb device as being connected
-            _ = usbDevice.Setup(ud => ud.ProductId).Returns(TrezorOneProductId);
-            _ = usbDevice.Setup(ud => ud.VendorId).Returns(TrezorVendorId);
-            _ = usbManagerMock.Setup(um => um.DeviceList).Returns(new Dictionary<string, AndroidUsbDevice>
-            {
-                {"asd", usbDevice.Object }
-            });
-
-            //The intent should return permission true
-            _ = intentMock.Setup(i => i.GetBooleanExtra(It.IsAny<string>(), false)).Returns(true);
-
-            //Set up the usb device connection            
-            _ = usbManagerMock.Setup(um => um.OpenDevice(usbDevice.Object)).Returns(usbDeviceConnection.Object);
-
-            await TestWriteAndReadFromTrezor(
-            new FilterDeviceDefinition(
-                vendorId: TrezorVendorId,
-                productId: TrezorOneProductId,
-                label: "Trezor One Firmware 1.7.x")
-            .CreateAndroidUsbDeviceFactory(usbManagerMock.Object,
-                contextMock.Object,
-                loggerFactory,
-                androidFactory: androidFactoryMock.Object,
-                getUsbPermissionBroadcastReceiver: (ud)
-                =>
-                {
-                    //Why do we have to do this?
-
-                    //We return the receiver but...
-                    var usbPermissionBroadcastReceiver = new UsbPermissionBroadcastReceiver(usbManagerMock.Object, ud, contextMock.Object, androidFactoryMock.Object);
-
-                    //We run this and send a receive until the received event fires
-                    FakeReceiveAsync(usbPermissionBroadcastReceiver);
-
-                    return usbPermissionBroadcastReceiver;
-                })
-            );
-
-            ///Keeps running until the received event fires which allows code elsewhere to continue
-            async Task FakeReceiveAsync(UsbPermissionBroadcastReceiver usbPermissionBroadcastReceiver)
-            {
-                var received = false;
-                usbPermissionBroadcastReceiver.Received += (s, e) => { received = true; };
-                while (!received)
-                {
-                    await Task.Delay(10);
-                    usbPermissionBroadcastReceiver.OnReceive(contextMock.Object, intentMock.Object);
-                }
-            }
-        }
-#endif
         #region Private Methods
         private static async Task PerformStmDfTest(IUsbDevice stmDfuDevice)
         {
@@ -395,7 +323,7 @@ namespace Device.Net.UnitTests
                 dfuRequestResult.Data[4] != STATE_DFU_ERROR);
         }
 
-        private static Task AssertTrezorResult(TransferResult responseData, IDevice device)
+        public static Task AssertTrezorResult(TransferResult responseData, IDevice device)
         {
             //Specify the response part of the Message Contract
             var expectedResult = new byte[] { 63, 35, 35 };
