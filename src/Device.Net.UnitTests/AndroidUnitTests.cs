@@ -24,6 +24,7 @@ namespace Device.Net.UnitTests
 
             var integrationTester = new IntegrationTester(
                 deviceFactory);
+
             await integrationTester.TestAsync(request, IntegrationTests.AssertTrezorResult, expectedDataLength);
         }
 

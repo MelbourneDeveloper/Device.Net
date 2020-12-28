@@ -146,7 +146,12 @@ namespace Usb.Net.Windows
             {
                 isSuccess = WinUsbApiCalls.WinUsb_QueryPipe(interfaceHandle, 0, i, out var pipeInfo);
                 _ = WindowsHelpers.HandleError(isSuccess, "Couldn't query endpoint", Logger);
-                retVal.UsbInterfaceEndpoints.Add(new WindowsUsbInterfaceEndpoint(pipeInfo.PipeId, pipeInfo.PipeType));
+
+                Logger.LogInformation("Found PipeId: {pipeId} PipeType: {pipeType} MaxPacketSize: {maxPacketSize}", pipeInfo.PipeId, pipeInfo.PipeType, pipeInfo.MaximumPacketSize);
+
+                //TODO: We are dropping the max packet size here...
+
+                retVal.UsbInterfaceEndpoints.Add(new WindowsUsbInterfaceEndpoint(pipeInfo.PipeId, pipeInfo.PipeType, pipeInfo.MaximumPacketSize));
             }
 
             return retVal;
