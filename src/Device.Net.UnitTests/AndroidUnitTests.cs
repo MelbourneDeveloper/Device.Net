@@ -45,6 +45,8 @@ namespace Device.Net.UnitTests
             var intentMock = new Mock<Intent>();
             var usbDeviceConnection = new Mock<UsbDeviceConnection>();
             var usbInterfaceMock = new Mock<UsbInterface>();
+            var firstEndpointMock = new Mock<UsbEndpoint>();
+            var secondEndpointMock = new Mock<UsbEndpoint>();
 
             //Set up the Trezor usb device
             _ = usbDevice.Setup(ud => ud.ProductId).Returns(IntegrationTests.TrezorOneProductId);
@@ -53,13 +55,18 @@ namespace Device.Net.UnitTests
             _ = usbDevice.Setup(ud => ud.InterfaceCount).Returns(1);
             _ = usbDevice.Setup(ud => ud.GetInterface(0)).Returns(usbInterfaceMock.Object);
 
+            //There are 2 endpoints
+            _ = usbInterfaceMock.Setup(ui => ui.EndpointCount).Returns(2);
+            _ = usbInterfaceMock.Setup(ui => ui.GetEndpoint(0)).Returns(firstEndpointMock.Object);
+            _ = usbInterfaceMock.Setup(ui => ui.GetEndpoint(1)).Returns(secondEndpointMock.Object);
+
             //Return list of devices including the Trezor
             _ = usbManagerMock.Setup(um => um.DeviceList).Returns(new Dictionary<string, UsbDevice>
             {
                 {"asd", usbDevice.Object }
             });
 
-            //All the interface to be claimed
+            //Allow the interface to be claimed
             _ = usbDeviceConnection.Setup(udc => udc.ClaimInterface(usbInterfaceMock.Object, true)).Returns(true);
 
             //The intent should return permission true
@@ -67,6 +74,18 @@ namespace Device.Net.UnitTests
 
             //Set up the usb device connection            
             _ = usbManagerMock.Setup(um => um.OpenDevice(usbDevice.Object)).Returns(usbDeviceConnection.Object);
+
+            //Set up the endpoints
+            _ = firstEndpointMock.Setup(e => e.MaxPacketSize).Returns(64);
+            _ = firstEndpointMock.Setup(e => e.Address).Returns(UsbAddressing.XferInterrupt);
+            _ = firstEndpointMock.Setup(e => e.Direction).Returns(UsbAddressing.In);
+
+            _ = secondEndpointMock.Setup(e => e.MaxPacketSize).Returns(64);
+            _ = secondEndpointMock.Setup(e => e.Address).Returns(UsbAddressing.XferInterrupt);
+            _ = secondEndpointMock.Setup(e => e.Direction).Returns(UsbAddressing.Out);
+
+            //Return a usb request
+            _ = androidFactoryMock.Setup(f => f.CreateUsbRequest()).Returns(new Mock<UsbRequest>().Object);
 
             await TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition(
