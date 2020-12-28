@@ -41,7 +41,7 @@ namespace Device.Net.UnitTests
              });
 
             //Set the return value of the static method
-            ByteBuffer.AllocateFunc = new Func<int, ByteBuffer>((c) => new Mock<ByteBuffer>().Object);
+            ByteBuffer.AllocateFunc = new Func<int, ByteBuffer>((c) => new TrezorResponseByteBuffer());
             ByteBuffer.WrapFunc = new Func<byte[]?, ByteBuffer>((c) => new Mock<ByteBuffer>().Object);
 
             var usbManagerMock = new Mock<UsbManager>();
