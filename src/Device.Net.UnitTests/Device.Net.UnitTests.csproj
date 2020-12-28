@@ -27,6 +27,8 @@
     <PackageReference Include="Microsoft.Extensions.Logging">
       <Version>3.1.8</Version>
     </PackageReference>
+    <ProjectReference Include="..\Usb.Net.Android.Fakes\Usb.Net.Android.Fakes.csproj" />
+    <ProjectReference Include="..\Usb.Net.Android.Standard\Usb.Net.Android.Standard.csproj" />    
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">

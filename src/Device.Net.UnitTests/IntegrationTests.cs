@@ -12,6 +12,14 @@ using Device.Net.LibUsb;
 using Hid.Net.Windows;
 using Usb.Net.Windows;
 using Device.Net.Windows;
+
+#if !NET45
+using Usb.Net.Android;
+using UsbManager = Android.Hardware.Usb.UsbManager;
+using Android.Content;
+using Moq;
+#endif
+
 #else
 using Hid.Net.UWP;
 #endif
@@ -281,6 +289,23 @@ namespace Device.Net.UnitTests
         }
         #endregion
 
+#if !WINDOWS_UWP && !NET45
+        [TestMethod]
+        public async Task TestWriteAndReadFromTrezorUsbAndroid()
+        {
+            var usbManagerMock = new Mock<UsbManager>();
+            var contextMock = new Mock<Context>();
+            var androidFactoryMock = new Mock<IAndroidFactory>();
+
+            await TestWriteAndReadFromTrezor(
+            new FilterDeviceDefinition(
+                vendorId: 0x1209,
+                productId: 0x53C1,
+                label: "Trezor One Firmware 1.7.x")
+            .CreateAndroidUsbDeviceFactory(usbManagerMock.Object, contextMock.Object, androidFactory: androidFactoryMock.Object)
+            );
+        }
+#endif
         #region Private Methods
         private static async Task PerformStmDfTest(IUsbDevice stmDfuDevice)
         {

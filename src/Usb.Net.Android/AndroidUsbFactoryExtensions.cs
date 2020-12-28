@@ -15,14 +15,15 @@ namespace Usb.Net.Android
     public static class AndroidUsbFactoryExtensions
     {
         public static IDeviceFactory CreateAndroidUsbDeviceFactory(
-        FilterDeviceDefinition filterDeviceDefinition,
+        this FilterDeviceDefinition filterDeviceDefinition,
         UsbManager usbManager,
         Context context,
         ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetUsbInterfaceManager getUsbInterfaceManager = null,
         ushort? readBufferSize = null,
-        ushort? writeBufferSize = null
+        ushort? writeBufferSize = null,
+        IAndroidFactory androidFactory = null
         )
         {
             return CreateAndroidUsbDeviceFactory(
@@ -33,7 +34,8 @@ namespace Usb.Net.Android
                 getConnectedDeviceDefinitionsAsync,
                 getUsbInterfaceManager,
                 readBufferSize,
-                writeBufferSize);
+                writeBufferSize,
+                androidFactory);
         }
 
         public static IDeviceFactory CreateAndroidUsbDeviceFactory(
