@@ -33,7 +33,7 @@ namespace Usb.Net.Android
 
         #region Public Properties
         public UsbManager UsbManager { get; }
-        public Context AndroidContext { get; private set; }
+        public Context AndroidContext { get; }
         public ushort WriteBufferSize => WriteBufferSizeProtected == null && WriteUsbInterface == null
                     ? throw new InvalidOperationException("WriteBufferSize was not specified, and no write usb interface has been selected")
                     : WriteBufferSizeProtected ?? WriteUsbInterface.ReadBufferSize;

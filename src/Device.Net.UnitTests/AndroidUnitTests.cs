@@ -128,6 +128,9 @@ namespace Device.Net.UnitTests
                     usbPermissionBroadcastReceiver.OnReceive(contextMock.Object, intentMock.Object);
                 }
             }
+
+            //TODO: Check that the device and the interface were disposed... We don't have access to these currently.
+
         }
     }
 }
