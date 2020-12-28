@@ -8,7 +8,7 @@ namespace Android.Hardware.Usb
 #pragma warning restore IDE1006 // Naming Styles
     {
         void Close();
-        bool ClaimInterface(UsbInterface usbInterface, bool v);
+        bool ClaimInterface(UsbInterface usbInterface, bool force);
         Task<UsbRequest?> RequestWaitAsync();
     }
 }

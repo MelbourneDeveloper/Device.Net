@@ -44,14 +44,23 @@ namespace Device.Net.UnitTests
             var usbDevice = new Mock<UsbDevice>();
             var intentMock = new Mock<Intent>();
             var usbDeviceConnection = new Mock<UsbDeviceConnection>();
+            var usbInterfaceMock = new Mock<UsbInterface>();
 
-            //Set up the Trezor usb device as being connected
+            //Set up the Trezor usb device
             _ = usbDevice.Setup(ud => ud.ProductId).Returns(IntegrationTests.TrezorOneProductId);
             _ = usbDevice.Setup(ud => ud.VendorId).Returns(IntegrationTests.TrezorVendorId);
+            //Trezor has one interface
+            _ = usbDevice.Setup(ud => ud.InterfaceCount).Returns(1);
+            _ = usbDevice.Setup(ud => ud.GetInterface(0)).Returns(usbInterfaceMock.Object);
+
+            //Return list of devices including the Trezor
             _ = usbManagerMock.Setup(um => um.DeviceList).Returns(new Dictionary<string, UsbDevice>
             {
                 {"asd", usbDevice.Object }
             });
+
+            //All the interface to be claimed
+            _ = usbDeviceConnection.Setup(udc => udc.ClaimInterface(usbInterfaceMock.Object, true)).Returns(true);
 
             //The intent should return permission true
             _ = intentMock.Setup(i => i.GetBooleanExtra(It.IsAny<string>(), false)).Returns(true);
