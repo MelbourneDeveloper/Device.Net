@@ -164,22 +164,28 @@ namespace Usb.Net.Android
                 ? throw new DeviceException("could not claim interface")
                 : Task.FromResult(true);
         }
+        #endregion
 
-        private static async Task<TransferResult> PerformControlTransferAsync2(UsbDeviceConnection _UsbDeviceConnection, SetupPacket setupPacket, byte[] buffer = null, int? _timeout = null)
+        #region Private Methods
+        private static async Task<TransferResult> PerformControlTransferAsync2(
+            UsbDeviceConnection usbDeviceConnection,
+            SetupPacket setupPacket,
+            byte[] buffer = null,
+            int? timeout = null)
         {
 
-            var bytesTransferred = await _UsbDeviceConnection.ControlTransferAsync(
+            var bytesTransferred = await usbDeviceConnection.ControlTransferAsync(
                 setupPacket.RequestType.Direction == RequestDirection.In ? UsbAddressing.In : UsbAddressing.Out,
                 setupPacket.Request,
                 setupPacket.Value,
                 setupPacket.Index,
                 buffer,
                 setupPacket.Length,
-                _timeout ?? 0
+                timeout ?? 0
                 ).ConfigureAwait(false);
 
             return new TransferResult(buffer, (uint)bytesTransferred);
         }
+        #endregion
     }
-    #endregion
 }
