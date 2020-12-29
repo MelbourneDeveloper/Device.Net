@@ -28,7 +28,16 @@ namespace Device.Net.LibUsb
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null,
             ILogger logger = null,
-            int timeout = 1000) : base(logger, readBufferSize, writeBufferSize)
+            int timeout = 1000,
+            Func<LibUsbDotNet.UsbDevice, SetupPacket, byte[], int?, Task<TransferResult>> performControlTransferAsync = null)
+            : base(
+                  performControlTransferAsync != null ?
+                  //A func was passed in
+                  new PerformControlTransferAsync((sb, data, c) => performControlTransferAsync(usbDevice, sb, data, timeout)) :
+                  //Use the default
+                  new PerformControlTransferAsync((sb, data, c) => PerformControlTransferLibUsbAsync(usbDevice, sb, data, c)),
+
+                   logger, readBufferSize, writeBufferSize)
         {
             _usbDevice = usbDevice ?? throw new ArgumentNullException(nameof(usbDevice));
             Timeout = timeout;
@@ -81,22 +90,27 @@ namespace Device.Net.LibUsb
                 throw new IOException(message);
             }, cancellationToken);
         }
+        #endregion
 
-        public Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default)
+        #region Private Methods
+        private static Task<TransferResult> PerformControlTransferLibUsbAsync(LibUsbDotNet.UsbDevice usbDevice, SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default)
         {
-            if (setupPacket == null) throw new ArgumentNullException(nameof(setupPacket));
-            buffer ??= new byte[setupPacket.Length];
+            return Task.Run(() =>
+            {
+                if (setupPacket == null) throw new ArgumentNullException(nameof(setupPacket));
+                buffer ??= new byte[setupPacket.Length];
 
-            var sp = new UsbSetupPacket(
-                (byte)setupPacket.RequestType.Type,
-                setupPacket.Request,
-                setupPacket.Value,
-                setupPacket.Index,
-                setupPacket.Length);
+                var sp = new UsbSetupPacket(
+                    (byte)setupPacket.RequestType.Type,
+                    setupPacket.Request,
+                    setupPacket.Value,
+                    setupPacket.Index,
+                    setupPacket.Length);
 
-            var isSuccess = _usbDevice.ControlTransfer(ref sp, buffer, buffer.Length, out var length);
+                var isSuccess = usbDevice.ControlTransfer(ref sp, buffer, buffer.Length, out var length);
 
-            return !isSuccess ? throw new ControlTransferException("LibUsb says no") : Task.FromResult(new TransferResult(buffer, (uint)length));
+                return !isSuccess ? throw new ControlTransferException("LibUsb says no") : Task.FromResult(new TransferResult(buffer, (uint)length));
+            }, cancellationToken);
         }
         #endregion
     }

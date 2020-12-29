@@ -18,6 +18,7 @@ namespace Usb.Net.UWP
         private bool disposed;
         private readonly ushort? _WriteBufferSize;
         private readonly ushort? _ReadBufferSize;
+        private readonly Func<windowsUsbDevice, SetupPacket, byte[], CancellationToken, Task<TransferResult>> _performControlTransferAsync;
         #endregion
 
         #region Public Properties
@@ -46,6 +47,7 @@ namespace Usb.Net.UWP
         #region Constructors
         public UWPUsbInterfaceManager(
             ConnectedDeviceDefinition connectedDeviceDefinition,
+            Func<windowsUsbDevice, SetupPacket, byte[], CancellationToken, Task<TransferResult>> performControlTransferAsync,
             ILoggerFactory loggerFactory = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null) : base(connectedDeviceDefinition?.DeviceId, loggerFactory, (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UWPUsbInterfaceManager>())
@@ -54,6 +56,7 @@ namespace Usb.Net.UWP
             UsbInterfaceHandler = new UsbInterfaceManager(loggerFactory);
             _WriteBufferSize = writeBufferSize;
             _ReadBufferSize = readBufferSize;
+            _performControlTransferAsync = performControlTransferAsync;
         }
         #endregion
 
@@ -75,7 +78,15 @@ namespace Usb.Net.UWP
                 var interfaceIndex = 0;
                 foreach (var usbInterface in ConnectedDevice.Configuration.UsbInterfaces)
                 {
-                    var uwpUsbInterface = new UWPUsbInterface(usbInterface, Logger, _ReadBufferSize, _WriteBufferSize);
+                    var uwpUsbInterface = new UWPUsbInterface(
+                        usbInterface,
+                        _performControlTransferAsync != null ?
+                        new PerformControlTransferAsync((sp, data, c) => _performControlTransferAsync(ConnectedDevice, sp, data, c)) :
+                        //TODO: Fill in the UWP control transfer here
+                        (sp, data, c) => throw new NotImplementedException(),
+                        Logger,
+                        _ReadBufferSize,
+                        _WriteBufferSize);
 
                     UsbInterfaceHandler.UsbInterfaces.Add(uwpUsbInterface);
                     interfaceIndex++;
