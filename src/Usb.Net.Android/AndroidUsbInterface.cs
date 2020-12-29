@@ -34,7 +34,7 @@ namespace Usb.Net.Android
                   //A func was passed in
                   new PerformControlTransferAsync((sb, data, c) => performControlTransferAsync(usbDeviceConnection, sb, data, timeout)) :
                   //Use the default
-                  new PerformControlTransferAsync((sb, data, c) => PerformControlTransferAndroid(usbDeviceConnection, sb, data, timeout)),
+                  new PerformControlTransferAsync((sb, data, c) => PerformControlTransferAndroid(usbDeviceConnection, sb, data, timeout, c)),
                 logger,
                 readBufferSize,
                 writeBufferSize)
@@ -173,25 +173,29 @@ namespace Usb.Net.Android
         /// <summary>
         /// This is the low level call to do a control transfer at the Android level. This can be overriden in the contructor
         /// </summary>
-        private static async Task<TransferResult> PerformControlTransferAndroid(
+        private static Task<TransferResult> PerformControlTransferAndroid(
             UsbDeviceConnection usbDeviceConnection,
             SetupPacket setupPacket,
             byte[] buffer = null,
-            int? timeout = null)
-        {
+            int? timeout = null,
+            CancellationToken cancellationToken = default)
+        =>
+            //Use Task.Run so we can pass the cancellation token in instead of using the async control transfer method which doesn't have a cancellation token
+            Task.Run(() =>
+            {
+                var bytesTransferred = usbDeviceConnection.ControlTransfer(
+                    setupPacket.RequestType.Direction == RequestDirection.In ? UsbAddressing.In : UsbAddressing.Out,
+                    setupPacket.Request,
+                    setupPacket.Value,
+                    setupPacket.Index,
+                    buffer,
+                    setupPacket.Length,
+                    timeout ?? 0
+                    );
 
-            var bytesTransferred = await usbDeviceConnection.ControlTransferAsync(
-                setupPacket.RequestType.Direction == RequestDirection.In ? UsbAddressing.In : UsbAddressing.Out,
-                setupPacket.Request,
-                setupPacket.Value,
-                setupPacket.Index,
-                buffer,
-                setupPacket.Length,
-                timeout ?? 0
-                ).ConfigureAwait(false);
+                return new TransferResult(buffer, (uint)bytesTransferred);
+            }, cancellationToken);
 
-            return new TransferResult(buffer, (uint)bytesTransferred);
-        }
         #endregion
     }
 }
