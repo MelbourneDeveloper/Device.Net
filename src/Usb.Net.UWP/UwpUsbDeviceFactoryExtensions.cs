@@ -4,8 +4,10 @@ using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using wde = Windows.Devices.Enumeration;
+using windowsUsbDevice = Windows.Devices.Usb.UsbDevice;
 
 namespace Usb.Net.UWP
 {
@@ -37,7 +39,8 @@ namespace Usb.Net.UWP
         GetUsbInterfaceManager getUsbInterfaceManager = null,
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null,
-        Func<wde.DeviceInformation, bool> deviceInformationFilter = null)
+        Func<wde.DeviceInformation, bool> deviceInformationFilter = null,
+        Func<windowsUsbDevice, SetupPacket, byte[], CancellationToken, Task<TransferResult>> performControlTransferAsync = null)
         {
             if (getConnectedDeviceDefinitionsAsync == null)
             {
@@ -63,6 +66,7 @@ namespace Usb.Net.UWP
                     new UWPUsbInterfaceManager(
                         //TODO: no idea if this is OK...
                         new ConnectedDeviceDefinition(deviceId, DeviceType.Usb),
+                        performControlTransferAsync,
                         loggerFactory,
                         readBufferSize,
                         writeBufferSize));

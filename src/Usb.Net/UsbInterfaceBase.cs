@@ -131,25 +131,36 @@ namespace Usb.Net
 
                 var transferBuffer = new byte[setupPacket.Length];
 
-                //uint bytesTransferred = 0;
-
                 if (setupPacket.Length > 0)
                 {
                     if (setupPacket.RequestType.Direction == RequestDirection.Out)
                     {
-                        ////Make a copy so we don't mess with the array passed in
+                        //Make a copy so we don't mess with the array passed in
                         Array.Copy(buffer, transferBuffer, buffer.Length);
                     }
                 }
 
                 var transferResult = await _performControlTransferAsync(setupPacket, transferBuffer, cancellationToken).ConfigureAwait(false);
 
-                Logger.LogTrace(new Trace(setupPacket.RequestType.Direction == RequestDirection.Out, transferBuffer));
+                if (setupPacket.RequestType.Direction == RequestDirection.Out)
+                {
+                    //Trace the write to the device
+                    Logger.LogTrace(new Trace(true, transferBuffer));
+                }
+
                 Logger.LogInformation("Control Transfer complete {setupPacket}", setupPacket);
 
-                return transferResult.BytesTransferred != setupPacket.Length && setupPacket.RequestType.Direction == RequestDirection.In
+                var returnValue = transferResult.BytesTransferred != setupPacket.Length && setupPacket.RequestType.Direction == RequestDirection.In
                     ? throw new ControlTransferException($"Requested {setupPacket.Length} bytes but received {transferResult.BytesTransferred }")
                     : transferResult;
+
+                if (setupPacket.RequestType.Direction == RequestDirection.In)
+                {
+                    //Trace the read from the device
+                    Logger.LogTrace(new Trace(false, transferBuffer));
+                }
+
+                return returnValue;
             }
             catch (Exception ex)
             {

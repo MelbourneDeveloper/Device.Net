@@ -30,8 +30,11 @@ namespace Usb.Net.Android
             int? timeout = null,
             Func<UsbDeviceConnection, SetupPacket, byte[], int?, Task<TransferResult>> performControlTransferAsync = null)
             : base(
-                  new PerformControlTransferAsync((sb, data, c) => performControlTransferAsync(usbDeviceConnection, sb, data, timeout)) ??
-                  new PerformControlTransferAsync((sb, data, c) => PerformControlTransferAsync2(usbDeviceConnection, sb, data, timeout)),
+                  performControlTransferAsync != null ?
+                  //A func was passed in
+                  new PerformControlTransferAsync((sb, data, c) => performControlTransferAsync(usbDeviceConnection, sb, data, timeout)) :
+                  //Use the default
+                  new PerformControlTransferAsync((sb, data, c) => PerformControlTransferAndroid(usbDeviceConnection, sb, data, timeout)),
                 logger,
                 readBufferSize,
                 writeBufferSize)
@@ -167,7 +170,10 @@ namespace Usb.Net.Android
         #endregion
 
         #region Private Methods
-        private static async Task<TransferResult> PerformControlTransferAsync2(
+        /// <summary>
+        /// This is the low level call to do a control transfer at the Android level. This can be overriden in the contructor
+        /// </summary>
+        private static async Task<TransferResult> PerformControlTransferAndroid(
             UsbDeviceConnection usbDeviceConnection,
             SetupPacket setupPacket,
             byte[] buffer = null,
