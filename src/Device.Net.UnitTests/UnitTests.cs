@@ -193,6 +193,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
+        [TestCategory("NotPipelineReady")]
         [DataRow(true, true, MockHidDeviceVendorId, MockHidDeviceProductId)]
         [DataRow(true, false, MockHidDeviceVendorId, MockHidDeviceProductId)]
         public async Task TestWriteAndReadThreadSafety(bool isHidConnected, bool isUsbConnected, uint vid, uint pid)
@@ -365,6 +366,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
+        [TestCategory("NotPipelineReady")]
         public async Task TestCancellationException()
         {
             try

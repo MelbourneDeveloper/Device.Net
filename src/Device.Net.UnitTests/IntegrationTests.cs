@@ -20,7 +20,7 @@ using Hid.Net.UWP;
 namespace Device.Net.UnitTests
 {
     [TestClass]
-    [TestCategory("Integration")]
+    [TestCategory("NotPipelineReady")]
     public class IntegrationTests
     {
         private const byte STATE_DFU_IDLE = 0x02;

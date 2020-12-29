@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Device.Net.UnitTests
 {
     [TestClass]
-    [TestCategory("Integration")]
+    [TestCategory("NotPipelineReady")]
     public class IntegrationTestsSerialPort
     {
         private const string DeviceId = @"\\.\COM4";
