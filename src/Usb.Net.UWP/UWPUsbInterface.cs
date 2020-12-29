@@ -28,9 +28,15 @@ namespace Usb.Net.UWP
         #region Constructor
         public UWPUsbInterface(
             windowsUsbInterface usbInterface,
+            PerformControlTransferAsync performControlTransferAsync,
             ILogger logger = null,
             ushort? readBuffersize = null,
-            ushort? writeBufferSize = null) : base(logger, readBuffersize, writeBufferSize)
+            ushort? writeBufferSize = null
+            ) : base(
+                performControlTransferAsync,
+                logger,
+                readBuffersize,
+                writeBufferSize)
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
 

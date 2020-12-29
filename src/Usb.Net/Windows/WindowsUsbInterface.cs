@@ -1,6 +1,7 @@
 ﻿using Device.Net;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Threading;
@@ -29,7 +30,17 @@ namespace Usb.Net.Windows
             byte interfaceNumber,
             ILogger logger = null,
             ushort? readBufferSize = null,
-            ushort? writeBufferSzie = null) : base(logger, readBufferSize, writeBufferSzie)
+            ushort? writeBufferSzie = null,
+            Func<SafeFileHandle, SetupPacket, byte[], CancellationToken, Task<TransferResult>> performControlTransferAsync = null) :
+            base(
+                  performControlTransferAsync != null ?
+                  //A func was passed in
+                  new PerformControlTransferAsync((sb, data, c) => performControlTransferAsync(handle, sb, data, c)) :
+                  //Use the default
+                  new PerformControlTransferAsync((sb, data, c) => PerformControlTransferWindowsAsync(handle, sb, data, logger ?? NullLogger.Instance, c)),
+                logger,
+                readBufferSize,
+                writeBufferSzie)
         {
             _SafeFileHandle = handle;
             InterfaceNumber = interfaceNumber;
@@ -82,57 +93,28 @@ namespace Usb.Net.Windows
 
             GC.SuppressFinalize(this);
         }
+        #endregion
 
-        public Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
+        #region Private Methods
+        private static Task<TransferResult> PerformControlTransferWindowsAsync(SafeFileHandle safeFileHandle, SetupPacket setupPacket, byte[] buffer, ILogger logger, CancellationToken cancellationToken = default)
         {
-            return setupPacket == null
-                ? throw new ArgumentNullException(nameof(setupPacket)) :
-            Task.Run(() =>
+            return Task.Run(() =>
             {
-                using var scope = Logger.BeginScope("Perfoming Control Transfer {setupPacket}", setupPacket);
+                uint bytesTransferred = 0; ;
 
-                try
-                {
+                var isSuccess = WinUsbApiCalls.WinUsb_ControlTransfer(safeFileHandle.DangerousGetHandle(),
+                    setupPacket.ToWindowsSetupPacket(),
+                    buffer,
+                    (uint)buffer.Length,
+                    ref bytesTransferred,
+                    IntPtr.Zero);
 
-                    var transferBuffer = new byte[setupPacket.Length];
+                _ = WindowsHelpers.HandleError(isSuccess, "Couldn't do a control transfer", logger);
 
-                    uint bytesTransferred = 0;
-
-                    if (setupPacket.Length > 0)
-                    {
-                        if (setupPacket.RequestType.Direction == RequestDirection.Out)
-                        {
-                            ////Make a copy so we don't mess with the array passed in
-                            Array.Copy(buffer, transferBuffer, buffer.Length);
-                        }
-                    }
-
-                    var isSuccess = WinUsbApiCalls.WinUsb_ControlTransfer(_SafeFileHandle.DangerousGetHandle(),
-                        setupPacket.ToWindowsSetupPacket(),
-                        transferBuffer,
-                        (uint)transferBuffer.Length,
-                        ref bytesTransferred,
-                        IntPtr.Zero);
-
-                    _ = WindowsHelpers.HandleError(isSuccess, "Couldn't do a control transfer", Logger);
-
-                    Logger.LogTrace(new Trace(setupPacket.RequestType.Direction == RequestDirection.Out, transferBuffer));
-                    Logger.LogInformation("Control Transfer complete {setupPacket}", setupPacket);
-
-                    return bytesTransferred != setupPacket.Length && setupPacket.RequestType.Direction == RequestDirection.In
-                        ? throw new ControlTransferException($"Requested {setupPacket.Length} bytes but received {bytesTransferred}")
-                        : new TransferResult(transferBuffer, bytesTransferred);
-                }
-                catch (Exception ex)
-                {
-                    Logger.LogError(ex, $"Error on {nameof(PerformControlTransferAsync)}");
-
-                    throw;
-                }
+                return new TransferResult(buffer, bytesTransferred);
 
             }, cancellationToken);
         }
-
         #endregion
     }
 }

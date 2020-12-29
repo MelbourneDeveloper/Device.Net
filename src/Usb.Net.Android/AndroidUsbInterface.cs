@@ -27,7 +27,17 @@ namespace Usb.Net.Android
             ILogger logger = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null,
-            int? timeout = null) : base(logger, readBufferSize, writeBufferSize)
+            int? timeout = null,
+            Func<UsbDeviceConnection, SetupPacket, byte[], int?, Task<TransferResult>> performControlTransferAsync = null)
+            : base(
+                  performControlTransferAsync != null ?
+                  //A func was passed in
+                  new PerformControlTransferAsync((sb, data, c) => performControlTransferAsync(usbDeviceConnection, sb, data, timeout)) :
+                  //Use the default
+                  new PerformControlTransferAsync((sb, data, c) => PerformControlTransferAndroid(usbDeviceConnection, sb, data, timeout)),
+                logger,
+                readBufferSize,
+                writeBufferSize)
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
             _UsbDeviceConnection = usbDeviceConnection ?? throw new ArgumentNullException(nameof(usbDeviceConnection));
@@ -157,22 +167,31 @@ namespace Usb.Net.Android
                 ? throw new DeviceException("could not claim interface")
                 : Task.FromResult(true);
         }
+        #endregion
 
-        public async Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default)
+        #region Private Methods
+        /// <summary>
+        /// This is the low level call to do a control transfer at the Android level. This can be overriden in the contructor
+        /// </summary>
+        private static async Task<TransferResult> PerformControlTransferAndroid(
+            UsbDeviceConnection usbDeviceConnection,
+            SetupPacket setupPacket,
+            byte[] buffer = null,
+            int? timeout = null)
         {
 
-            var bytesTransferred = await _UsbDeviceConnection.ControlTransferAsync(
+            var bytesTransferred = await usbDeviceConnection.ControlTransferAsync(
                 setupPacket.RequestType.Direction == RequestDirection.In ? UsbAddressing.In : UsbAddressing.Out,
                 setupPacket.Request,
                 setupPacket.Value,
                 setupPacket.Index,
                 buffer,
                 setupPacket.Length,
-                _timeout ?? 0
+                timeout ?? 0
                 ).ConfigureAwait(false);
 
             return new TransferResult(buffer, (uint)bytesTransferred);
         }
+        #endregion
     }
-    #endregion
 }
