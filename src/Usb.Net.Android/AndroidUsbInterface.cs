@@ -160,7 +160,6 @@ namespace Usb.Net.Android
 
         public async Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default)
         {
-
             var bytesTransferred = await _UsbDeviceConnection.ControlTransferAsync(
                 setupPacket.RequestType.Direction == RequestDirection.In ? UsbAddressing.In : UsbAddressing.Out,
                 setupPacket.Request,
