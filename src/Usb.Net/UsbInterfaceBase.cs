@@ -5,16 +5,18 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Usb.Net
 {
     /// <summary>
-    /// Represents a USB interfacxe
+    /// Represents a USB interface
     /// </summary>
     public abstract class UsbInterfaceBase
     {
         #region Fields
+        private readonly PerformControlTransferAsync _performControlTransferAsync;
         private IUsbInterfaceEndpoint _ReadEndpoint;
         private IUsbInterfaceEndpoint _WriteEndpoint;
         private IUsbInterfaceEndpoint _WriteInterruptEndpoint;
@@ -116,14 +118,58 @@ namespace Usb.Net
 #pragma warning restore CS1998 
         {
         }
+
+        public async Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
+        {
+            if (setupPacket == null)
+                throw new ArgumentNullException(nameof(setupPacket));
+
+            using var scope = Logger.BeginScope("Perfoming Control Transfer {setupPacket}", setupPacket);
+
+            try
+            {
+
+                var transferBuffer = new byte[setupPacket.Length];
+
+                //uint bytesTransferred = 0;
+
+                if (setupPacket.Length > 0)
+                {
+                    if (setupPacket.RequestType.Direction == RequestDirection.Out)
+                    {
+                        ////Make a copy so we don't mess with the array passed in
+                        Array.Copy(buffer, transferBuffer, buffer.Length);
+                    }
+                }
+
+                var transferResult = await _performControlTransferAsync(setupPacket, transferBuffer, cancellationToken).ConfigureAwait(false);
+
+                Logger.LogTrace(new Trace(setupPacket.RequestType.Direction == RequestDirection.Out, transferBuffer));
+                Logger.LogInformation("Control Transfer complete {setupPacket}", setupPacket);
+
+                return transferResult.BytesTransferred != setupPacket.Length && setupPacket.RequestType.Direction == RequestDirection.In
+                    ? throw new ControlTransferException($"Requested {setupPacket.Length} bytes but received {transferResult.BytesTransferred }")
+                    : transferResult;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, $"Error on {nameof(PerformControlTransferAsync)}");
+                throw;
+            }
+        }
         #endregion
 
         #region Constructor
-        protected UsbInterfaceBase(ILogger logger = null, ushort? readBufferSize = null, ushort? writeBufferSize = null)
+        protected UsbInterfaceBase(
+            PerformControlTransferAsync performControlTransferAsync,
+            ILogger logger = null,
+            ushort? readBufferSize = null,
+            ushort? writeBufferSize = null)
         {
             Logger = logger ?? NullLogger.Instance;
             _ReadBufferSize = readBufferSize;
             _WriteBufferSize = writeBufferSize;
+            _performControlTransferAsync = performControlTransferAsync;
         }
         #endregion
     }

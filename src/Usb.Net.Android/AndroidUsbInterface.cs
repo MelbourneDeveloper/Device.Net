@@ -27,7 +27,14 @@ namespace Usb.Net.Android
             ILogger logger = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null,
-            int? timeout = null) : base(logger, readBufferSize, writeBufferSize)
+            int? timeout = null,
+            Func<UsbDeviceConnection, SetupPacket, byte[], int?, Task<TransferResult>> performControlTransferAsync = null)
+            : base(
+                  new PerformControlTransferAsync((sb, data, c) => performControlTransferAsync(usbDeviceConnection, sb, data, timeout)) ??
+                  new PerformControlTransferAsync((sb, data, c) => PerformControlTransferAsync2(usbDeviceConnection, sb, data, timeout)),
+                logger,
+                readBufferSize,
+                writeBufferSize)
         {
             UsbInterface = usbInterface ?? throw new ArgumentNullException(nameof(usbInterface));
             _UsbDeviceConnection = usbDeviceConnection ?? throw new ArgumentNullException(nameof(usbDeviceConnection));
@@ -158,7 +165,7 @@ namespace Usb.Net.Android
                 : Task.FromResult(true);
         }
 
-        public async Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default)
+        private static async Task<TransferResult> PerformControlTransferAsync2(UsbDeviceConnection _UsbDeviceConnection, SetupPacket setupPacket, byte[] buffer = null, int? _timeout = null)
         {
 
             var bytesTransferred = await _UsbDeviceConnection.ControlTransferAsync(
