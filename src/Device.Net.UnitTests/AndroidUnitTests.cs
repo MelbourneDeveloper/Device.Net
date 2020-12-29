@@ -18,6 +18,7 @@ namespace Device.Net.UnitTests
     {
         #region Fields
         private const int ExpectedTrezorDataLength = 64;
+        private const int TrezorEndpointCount = 2;
         private ILoggerFactory loggerFactory;
         private readonly Mock<UsbManager> usbManagerMock = new Mock<UsbManager>();
         private readonly Mock<Context> contextMock = new Mock<Context>();
@@ -54,7 +55,7 @@ namespace Device.Net.UnitTests
             _ = usbDevice.Setup(ud => ud.GetInterface(0)).Returns(usbInterfaceMock.Object);
 
             //There are 2 endpoints
-            _ = usbInterfaceMock.Setup(ui => ui.EndpointCount).Returns(2);
+            _ = usbInterfaceMock.Setup(ui => ui.EndpointCount).Returns(TrezorEndpointCount);
             _ = usbInterfaceMock.Setup(ui => ui.GetEndpoint(0)).Returns(firstEndpointMock.Object);
             _ = usbInterfaceMock.Setup(ui => ui.GetEndpoint(1)).Returns(secondEndpointMock.Object);
 
@@ -131,13 +132,20 @@ namespace Device.Net.UnitTests
 
             var theUsbDevice = (Usb.Net.IUsbDevice)device;
 
+            //Asserts about the device
             Assert.AreEqual(ExpectedTrezorDataLength, theUsbDevice.UsbInterfaceManager.WriteBufferSize);
+            Assert.IsNotNull(theUsbDevice.ConnectedDeviceDefinition);
+            Assert.AreEqual(IntegrationTests.TrezorOneProductId, (int)theUsbDevice.ConnectedDeviceDefinition.ProductId);
+            Assert.AreEqual(IntegrationTests.TrezorVendorId, (int)theUsbDevice.ConnectedDeviceDefinition.VendorId);
 
             //This is probably not necessary. But, grabbed the device in case we want to do more stuff with it before disposing it
             device.Dispose();
 
             //Verify that the interface was disposed
             usbInterfaceMock.Verify(i => i.Dispose(), Times.Once);
+
+            //Verify we get the exact number of endpoints
+            usbInterfaceMock.Verify(i => i.GetEndpoint(It.IsAny<int>()), Times.Exactly(TrezorEndpointCount));
         }
         #endregion
 
