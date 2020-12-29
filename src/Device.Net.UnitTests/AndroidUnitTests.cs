@@ -16,49 +16,35 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class AndroidUnitTests
     {
-        private Task<IDevice> TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, bool dispose = true)
+        #region Fields
+        private const int ExpectedTrezorDataLength = 64;
+        private ILoggerFactory loggerFactory;
+        private readonly Mock<UsbManager> usbManagerMock = new Mock<UsbManager>();
+        private readonly Mock<Context> contextMock = new Mock<Context>();
+        private readonly Mock<IAndroidFactory> androidFactoryMock = new Mock<IAndroidFactory>();
+        private readonly Mock<UsbDevice> usbDevice = new Mock<UsbDevice>();
+        private readonly Mock<Intent> intentMock = new Mock<Intent>();
+        private readonly Mock<UsbDeviceConnection> usbDeviceConnection = new Mock<UsbDeviceConnection>();
+        private readonly Mock<UsbInterface> usbInterfaceMock = new Mock<UsbInterface>();
+        private readonly Mock<UsbEndpoint> firstEndpointMock = new Mock<UsbEndpoint>();
+        private readonly Mock<UsbEndpoint> secondEndpointMock = new Mock<UsbEndpoint>();
+        #endregion
+
+        #region Setup
+        [TestInitialize]
+        public void Setup()
         {
-            //Send the request part of the Message Contract
-            var integrationTester = new IntegrationTester(
-                deviceFactory);
-
-            return integrationTester.TestAsync(GetTrezorRequest(), IntegrationTests.AssertTrezorResult, expectedDataLength, dispose);
-        }
-
-        private static byte[] GetTrezorRequest()
-        {
-            var request = new byte[64];
-            request[0] = 0x3f;
-            request[1] = 0x23;
-            request[2] = 0x23;
-            return request;
-        }
-
-        [TestMethod]
-        public async Task TestWriteAndReadFromTrezorUsbAndroid()
-        {
-            const int ExpectedDataLength = 64;
-
-            var loggerFactory = LoggerFactory.Create(builder =>
-             {
-                 _ = builder.AddConsole()
-                 .AddDebug()
-                 .SetMinimumLevel(LogLevel.Trace);
-             });
+            loggerFactory = LoggerFactory.Create(builder =>
+            {
+                _ = builder.AddConsole()
+                .AddDebug()
+                .SetMinimumLevel(LogLevel.Trace);
+            });
 
             //Set the return value of the static method
             ByteBuffer.AllocateFunc = new Func<int, ByteBuffer>((c) => new TrezorResponseByteBuffer());
             ByteBuffer.WrapFunc = new Func<byte[]?, ByteBuffer>((c) => new Mock<ByteBuffer>().Object);
 
-            var usbManagerMock = new Mock<UsbManager>();
-            var contextMock = new Mock<Context>();
-            var androidFactoryMock = new Mock<IAndroidFactory>();
-            var usbDevice = new Mock<UsbDevice>();
-            var intentMock = new Mock<Intent>();
-            var usbDeviceConnection = new Mock<UsbDeviceConnection>();
-            var usbInterfaceMock = new Mock<UsbInterface>();
-            var firstEndpointMock = new Mock<UsbEndpoint>();
-            var secondEndpointMock = new Mock<UsbEndpoint>();
 
             //Set up the Trezor usb device
             _ = usbDevice.Setup(ud => ud.ProductId).Returns(IntegrationTests.TrezorOneProductId);
@@ -98,7 +84,13 @@ namespace Device.Net.UnitTests
 
             //Return a usb request
             _ = androidFactoryMock.Setup(f => f.CreateUsbRequest()).Returns(new Mock<UsbRequest>().Object);
+        }
+        #endregion
 
+        #region Tests
+        [TestMethod]
+        public async Task TestWriteAndReadFromTrezorUsbAndroid()
+        {
             var device = await TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition(
                 vendorId: IntegrationTests.TrezorVendorId,
@@ -122,7 +114,7 @@ namespace Device.Net.UnitTests
                     return usbPermissionBroadcastReceiver;
                 },
                 //TODO: We shouldn't have to specify this. We should pick this up automatically. This is basically a bug on Android
-                writeBufferSize: ExpectedDataLength), ExpectedDataLength, false
+                writeBufferSize: ExpectedTrezorDataLength), ExpectedTrezorDataLength, false
             );
 
             ///Keeps running until the received event fires which allows code elsewhere to continue
@@ -139,7 +131,7 @@ namespace Device.Net.UnitTests
 
             var theUsbDevice = (Usb.Net.IUsbDevice)device;
 
-            Assert.AreEqual(ExpectedDataLength, theUsbDevice.UsbInterfaceManager.WriteBufferSize);
+            Assert.AreEqual(ExpectedTrezorDataLength, theUsbDevice.UsbInterfaceManager.WriteBufferSize);
 
             //This is probably not necessary. But, grabbed the device in case we want to do more stuff with it before disposing it
             device.Dispose();
@@ -147,6 +139,29 @@ namespace Device.Net.UnitTests
             //Verify that the interface was disposed
             usbInterfaceMock.Verify(i => i.Dispose(), Times.Once);
         }
+        #endregion
+
+        #region Private Methods
+        //TODO: there is duplicate code here
+
+        private Task<IDevice> TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, bool dispose = true)
+        {
+            //Send the request part of the Message Contract
+            var integrationTester = new IntegrationTester(
+                deviceFactory);
+
+            return integrationTester.TestAsync(GetTrezorRequest(), IntegrationTests.AssertTrezorResult, expectedDataLength, dispose);
+        }
+
+        private static byte[] GetTrezorRequest()
+        {
+            var request = new byte[64];
+            request[0] = 0x3f;
+            request[1] = 0x23;
+            request[2] = 0x23;
+            return request;
+        }
+        #endregion
     }
 }
 #endif
