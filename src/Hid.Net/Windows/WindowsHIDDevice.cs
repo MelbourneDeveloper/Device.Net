@@ -44,7 +44,16 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidDevice(string deviceId, ushort? writeBufferSize = null, ushort? readBufferSize = null, ILoggerFactory loggerFactory = null, IHidApiService hidService = null, byte? defaultReportId = null) : base(deviceId, loggerFactory, (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidDevice>())
+        public WindowsHidDevice(
+            string deviceId,
+            ushort? writeBufferSize = null,
+            ushort? readBufferSize = null,
+            ILoggerFactory loggerFactory = null,
+            IHidApiService hidService = null,
+            byte? defaultReportId = null) : base(
+                deviceId,
+                loggerFactory,
+                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidDevice>())
         {
             _WriteBufferSize = writeBufferSize;
             _ReadBufferSize = readBufferSize;
@@ -298,11 +307,6 @@ namespace Hid.Net.Windows
                 throw;
             }
         }
-        #endregion
-
-        #region Finalizer
-        ~WindowsHidDevice() => Dispose();
-
         #endregion
     }
 }

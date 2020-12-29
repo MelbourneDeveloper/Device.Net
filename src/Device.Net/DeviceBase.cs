@@ -156,10 +156,5 @@ namespace Device.Net
             return numberAsInteger;
         }
         #endregion
-
-        #region Finalizer
-        ~DeviceBase() => Dispose();
-
-        #endregion
     }
 }
