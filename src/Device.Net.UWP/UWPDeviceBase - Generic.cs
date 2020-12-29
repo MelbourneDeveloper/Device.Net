@@ -125,11 +125,5 @@ namespace Device.Net.UWP
             _IsClosing = false;
         }
         #endregion
-
-        #region Finaliser
-        ~UWPDeviceBase() => Dispose();
-
-        #endregion
-
     }
 }

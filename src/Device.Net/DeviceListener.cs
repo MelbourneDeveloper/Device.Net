@@ -210,13 +210,6 @@ namespace Device.Net
             GC.SuppressFinalize(this);
         }
         #endregion
-
-        #region Finalizer
-        ~DeviceListener() => Dispose();
-
-        #endregion
     }
-
-
 }
 

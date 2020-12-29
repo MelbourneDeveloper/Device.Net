@@ -104,10 +104,5 @@ namespace Usb.Net
             GC.SuppressFinalize(this);
         }
         #endregion
-
-        #region Finalizer
-        ~UsbDevice() => Dispose();
-
-        #endregion
     }
 }
