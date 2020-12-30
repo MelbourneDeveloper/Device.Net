@@ -28,6 +28,8 @@ namespace Device.Net.UnitTests
         private const byte STATUS_errTARGET = 0x01;
         public const int TrezorVendorId = 0x1209;
         public const int TrezorOneProductId = 0x53C1;
+        public const int StmDfuVendorId = 0x0483;
+        public const int StmDfuProductId = 0xdf11;
         private readonly ILoggerFactory loggerFactory
 #if NET45
 ;
@@ -46,7 +48,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestFindSTMDFUModeWithFactory()
         {
-            var deviceFactory = new FilterDeviceDefinition(0x0483, 0xdf11)
+            var deviceFactory = new FilterDeviceDefinition(StmDfuVendorId, StmDfuProductId)
                 .CreateWindowsUsbDeviceFactory(classGuid: WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE);
 
             var devices = await deviceFactory.GetConnectedDeviceDefinitionsAsync();
@@ -57,7 +59,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestFindSTMDFUModeWithFactory2()
         {
-            var device = await new FilterDeviceDefinition(0x0483, 0xdf11)
+            var device = await new FilterDeviceDefinition(StmDfuVendorId, StmDfuProductId)
                 .CreateWindowsUsbDeviceFactory(classGuid: WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE)
                 .GetFirstDeviceAsync();
 
@@ -107,7 +109,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestSTMDFUModePerformControlTransferSend_DefaultGuid_WinUSBGuid()
         {
-            var stmDfuDevice = await new FilterDeviceDefinition(0x0483, 0xdf11)
+            var stmDfuDevice = await new FilterDeviceDefinition(StmDfuVendorId, StmDfuProductId)
                 .CreateWindowsUsbDeviceFactory(loggerFactory)
                 .ConnectFirstAsync();
 
@@ -137,7 +139,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestSTMDFUModePerformControlTransferSend_LibUsb()
         {
-            var stmDfuDevice = await new FilterDeviceDefinition(0x0483, 0xdf11)
+            var stmDfuDevice = await new FilterDeviceDefinition(StmDfuVendorId, StmDfuProductId)
                 .GetUsbDeviceFactory(loggerFactory)
                 .ConnectFirstAsync();
 
@@ -285,7 +287,7 @@ namespace Device.Net.UnitTests
         #endregion
 
         #region Private Methods
-        private static async Task PerformStmDfTest(IUsbDevice stmDfuDevice)
+        public static async Task PerformStmDfTest(IUsbDevice stmDfuDevice)
         {
             ////////////////////////////////////////////////////////////
             // required to perform a DFU Clear Status request beforehand

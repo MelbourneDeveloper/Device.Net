@@ -143,7 +143,7 @@ namespace Usb.Net.Windows
             _ = WindowsHelpers.HandleError(isSuccess, "Couldn't query interface", Logger);
 
             Logger.LogInformation(
-                "Found Interface Number: {interfaceNumber} Endpoint count: {endpointCount} Class:{class} Subclass: {subClass}",
+                "Found Interface Number: {interfaceNumber} Endpoint count: {endpointCount} Class: {class} Subclass: {subClass}",
                 interfaceDescriptor.bInterfaceNumber,
                 interfaceDescriptor.bNumEndpoints,
                 interfaceDescriptor.bInterfaceClass,
