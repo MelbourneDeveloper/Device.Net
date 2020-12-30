@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <LangVersion>9.0</LangVersion>
         <TargetFrameworks>netstandard2.0;net45;</TargetFrameworks>
         <NoWarn>NU5125</NoWarn>
         <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
         <DocumentationFile>Device.Net.xml</DocumentationFile>
         <Version>4.0.7-alpha</Version>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
         <DebugType>embedded</DebugType>
         <DebugSymbols>true</DebugSymbols>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>

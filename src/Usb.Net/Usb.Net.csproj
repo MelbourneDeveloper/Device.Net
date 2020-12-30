@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-        <LangVersion>Latest</LangVersion>
         <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
         <NoWarn>1701;1702;NU5125</NoWarn>
         <DocumentationFile>Usb.Net.xml</DocumentationFile>
