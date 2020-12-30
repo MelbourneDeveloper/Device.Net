@@ -1,6 +1,10 @@
 <Project>
- <PropertyGroup>
-   <Deterministic>true</Deterministic>
-   <LangVersion>Latest</LangVersion>
- </PropertyGroup>
+    <PropertyGroup>
+        <Deterministic>true</Deterministic>
+        <LangVersion>Latest</LangVersion>
+        <DebugSymbols>true</DebugSymbols>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    </PropertyGroup>
 </Project>
