@@ -15,10 +15,8 @@ AppPackages
 *.CodeAnalysisLog.xml
 *.lastcodeanalysissucceeded
 *.targets
-*.props
 *.csproj.bak
 *.targets
-*.props
 file_paths.xml
 /NuGet/netstandard2.0/Hid.Net.deps.json
 *.nupkg
