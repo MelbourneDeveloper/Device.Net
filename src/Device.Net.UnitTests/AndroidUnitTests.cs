@@ -89,15 +89,15 @@ namespace Device.Net.UnitTests
 
             //Allow the interface to be claimed
             _ = usbDeviceConnection.Setup(udc => udc.ClaimInterface(trezorUsbInterfaceMock.Object, true)).Returns(true);
-            _ = usbDeviceConnection.Setup(udc => udc.ControlTransferAsync(
-                It.IsAny<UsbAddressing>(),
-                 It.IsAny<int>(),
-                 It.IsAny<int>(),
-                 It.IsAny<int>(),
-                 It.IsAny<byte[]?>(),
-                 It.IsAny<int>(),
-                 It.IsAny<int>()))
-            .Returns<UsbAddressing, int, int, int, byte[]?, int, int>((a, b, c, d, e, f, g) => Task.FromResult(f));
+            //_ = usbDeviceConnection.Setup(udc => udc.ControlTransferAsync(
+            //    It.IsAny<UsbAddressing>(),
+            //     It.IsAny<int>(),
+            //     It.IsAny<int>(),
+            //     It.IsAny<int>(),
+            //     It.IsAny<byte[]?>(),
+            //     It.IsAny<int>(),
+            //     It.IsAny<int>()))
+            //.Returns<UsbAddressing, int, int, int, byte[]?, int, int>((a, b, c, d, e, f, g) => Task.FromResult(f));
 
             //Set up the usb device connection            
             _ = usbManagerMock.Setup(um => um.OpenDevice(trezorUsbDevice.Object)).Returns(usbDeviceConnection.Object);
@@ -148,13 +148,13 @@ namespace Device.Net.UnitTests
             trezorUsbInterfaceMock.Verify(i => i.GetEndpoint(It.IsAny<int>()), Times.Exactly(TrezorEndpointCount));
         }
 
-        [TestMethod]
-        public async Task TestSTMDFUModePerformControlTransferSend_DefaultGuid_WinUSBGuid()
-        {
-            var stmDfuDevice = (IusbDevice)await GetAndroidDeviceFactory(new FilterDeviceDefinition(0x0483, 0xdf11)).ConnectFirstAsync();
+        //[TestMethod]
+        //public async Task TestSTMDFUModePerformControlTransferSend_DefaultGuid_WinUSBGuid()
+        //{
+        //    var stmDfuDevice = (IusbDevice)await GetAndroidDeviceFactory(new FilterDeviceDefinition(0x0483, 0xdf11)).ConnectFirstAsync();
 
-            await IntegrationTests.PerformStmDfTest(stmDfuDevice);
-        }
+        //    await IntegrationTests.PerformStmDfTest(stmDfuDevice);
+        //}
         #endregion
 
         #region Private Methods
