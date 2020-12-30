@@ -104,7 +104,11 @@ namespace Usb.Net.Android
             GC.SuppressFinalize(this);
         }
 
-        public void Close() => _UsbDeviceConnection?.Close();
+        public override void Close()
+        {
+            _UsbDeviceConnection?.Close();
+            base.Close();
+        }
 
         public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {

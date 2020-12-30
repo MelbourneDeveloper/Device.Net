@@ -6,5 +6,6 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 </Project>
