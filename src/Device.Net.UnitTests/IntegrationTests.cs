@@ -48,7 +48,7 @@ namespace Device.Net.UnitTests
 
             var devices = await deviceFactory.GetConnectedDeviceDefinitionsAsync();
 
-            Assert.IsTrue(devices.Count() > 0);
+            Assert.IsTrue(devices.Any());
         }
 
         [TestMethod]
@@ -183,7 +183,7 @@ namespace Device.Net.UnitTests
             Assert.IsTrue(devices.Any());
         }
 
-        private async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64)
+        private static async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64)
         {
             //Send the request part of the Message Contract
             var request = new byte[64];

@@ -463,7 +463,9 @@ namespace Device.Net.UnitTests
                 if (stopWatch.Elapsed > new TimeSpan(0, 0, seconds))
                 {
                     Console.WriteLine("Timeout occurred");
+#pragma warning disable CA2201 // Do not raise reserved exception types
                     throw new Exception("Timed out");
+#pragma warning restore CA2201 // Do not raise reserved exception types
                 }
 
                 await Task.Delay(500);

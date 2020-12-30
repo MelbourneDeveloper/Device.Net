@@ -199,7 +199,7 @@ namespace Device.Net.UnitTests
             }
         }
 
-        private Task<IDevice> TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, bool dispose = true)
+        private static Task<IDevice> TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, bool dispose = true)
         {
             //Send the request part of the Message Contract
             var integrationTester = new IntegrationTester(

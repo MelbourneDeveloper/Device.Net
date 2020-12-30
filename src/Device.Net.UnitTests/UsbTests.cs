@@ -13,7 +13,9 @@ using Moq;
 namespace Device.Net.UnitTests
 {
     [TestClass]
+#pragma warning disable CA1001 // Types that own disposable fields should be disposable
     public class UsbTests
+#pragma warning restore CA1001 // Types that own disposable fields should be disposable
     {
         #region Fields
 #if !NET45
