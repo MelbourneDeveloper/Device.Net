@@ -4,7 +4,7 @@
         <LangVersion>Latest</LangVersion>
         <DebugSymbols>true</DebugSymbols>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
     </PropertyGroup>
 </Project>
