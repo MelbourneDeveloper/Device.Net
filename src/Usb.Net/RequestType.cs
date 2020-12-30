@@ -7,7 +7,7 @@ namespace Usb.Net
     /// Defines the type of USB device request.
     /// </summary>
     /// <remarks>
-    /// See 9.3 of the Universal Serial Bus (USB) specification (<see cref="www.usb.org"/>)
+    /// See 9.3 of the Universal Serial Bus (USB) specification (<see href="http://www.usb.org"/>)
     /// </remarks>
     public enum RequestType
     {

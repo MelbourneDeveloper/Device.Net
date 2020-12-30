@@ -30,16 +30,11 @@ namespace Device.Net.UnitTests
         public const int TrezorOneProductId = 0x53C1;
         public const int StmDfuVendorId = 0x0483;
         public const int StmDfuProductId = 0xdf11;
-        private readonly ILoggerFactory loggerFactory
-#if NET45
-;
+
+#if !NET45
+        private readonly ILoggerFactory _loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 #else
-         = LoggerFactory.Create(builder =>
-        {
-            _ = builder.AddConsole()
-            .AddDebug()
-            .SetMinimumLevel(LogLevel.Trace);
-        });
+        private readonly ILoggerFactory _loggerFactory;
 #endif
 
         #region Tests

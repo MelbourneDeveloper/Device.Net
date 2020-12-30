@@ -137,7 +137,11 @@ namespace Device.Net.LibUsb
         #endregion
 
         #region Implementation
-        public void Close() => UsbDevice?.Close();
+        public override void Close()
+        {
+            _ = (UsbDevice?.Close());
+            base.Close();
+        }
 
         public override void Dispose()
         {
