@@ -32,9 +32,9 @@ namespace Device.Net.UnitTests
         public const int StmDfuProductId = 0xdf11;
 
 #if !NET45
-        private readonly ILoggerFactory _loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
+        private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 #else
-        private readonly ILoggerFactory _loggerFactory;
+        private readonly ILoggerFactory loggerFactory;
 #endif
 
         #region Tests
