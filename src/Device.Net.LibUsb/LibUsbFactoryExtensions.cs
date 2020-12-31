@@ -58,11 +58,11 @@ namespace Device.Net.LibUsb
                 ((c, cancellationToken) => Task.FromResult(c.DeviceType == DeviceType.Usb))
             );
 
-        public static async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(
+        public static Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(
             IReadOnlyList<FilterDeviceDefinition> filterDeviceDefinitions,
             CancellationToken cancellationToken = default)
-        {
-            return await Task.Run<IEnumerable<ConnectedDeviceDefinition>>(
+        =>
+            Task.Run<IEnumerable<ConnectedDeviceDefinition>>(
                 () =>
            {
                IEnumerable<UsbRegistry> devices = UsbDevice.AllDevices;
@@ -86,8 +86,7 @@ namespace Device.Net.LibUsb
                    productId: (uint)usbRegistry.Pid,
                    deviceType: DeviceType.Usb
                )).ToList();
-           }, cancellationToken).ConfigureAwait(false);
-        }
+           }, cancellationToken);
 
         public static UsbDevice GetDevice(ConnectedDeviceDefinition deviceDefinition)
         {
