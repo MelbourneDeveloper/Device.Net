@@ -52,9 +52,9 @@ namespace Usb.Net.Android
         #endregion
 
         #region Public Methods
-        public async Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
+        public Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
         {
-            return await Task.Run(async () =>
+            return Task.Run(async () =>
             {
                 try
                 {
@@ -75,8 +75,8 @@ namespace Usb.Net.Android
 
                     _ = _timeout.HasValue
                         //Note: two versions here in case they have different functionality. When both code paths are tested it's probably possible to remove one
-                        ? await _UsbDeviceConnection.RequestWaitAsync(_timeout.Value)
-                        : await _UsbDeviceConnection.RequestWaitAsync();
+                        ? await _UsbDeviceConnection.RequestWaitAsync(_timeout.Value).ConfigureAwait(false)
+                        : await _UsbDeviceConnection.RequestWaitAsync().ConfigureAwait(false);
 
                     //TODO: Get the actual length of the data read instead of just returning the length of the array
 
@@ -127,7 +127,7 @@ namespace Usb.Net.Android
                     _ = request.Queue(byteBuffer, data.Length);
 #pragma warning restore CS0618
 
-                    _ = await _UsbDeviceConnection.RequestWaitAsync();
+                    _ = await _UsbDeviceConnection.RequestWaitAsync().ConfigureAwait(false);
 
                     //TODO: It's not clear if there is a way to count the number of bytes transferred here. This is a bug in a sense...
 

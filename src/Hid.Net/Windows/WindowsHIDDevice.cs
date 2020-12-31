@@ -177,7 +177,7 @@ namespace Hid.Net.Windows
             _IsClosing = false;
         }
 
-        public override void Dispose()
+        public sealed override void Dispose()
         {
             if (disposed)
             {

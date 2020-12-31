@@ -121,8 +121,7 @@ namespace Usb.Net
 
         public async Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
         {
-            if (setupPacket == null)
-                throw new ArgumentNullException(nameof(setupPacket));
+            if (setupPacket == null) throw new ArgumentNullException(nameof(setupPacket));
 
             using var scope = Logger.BeginScope("Perfoming Control Transfer {setupPacket}", setupPacket);
 
@@ -135,6 +134,8 @@ namespace Usb.Net
                 {
                     if (setupPacket.RequestType.Direction == RequestDirection.Out)
                     {
+                        if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+
                         //Make a copy so we don't mess with the array passed in
                         Array.Copy(buffer, transferBuffer, buffer.Length);
                     }

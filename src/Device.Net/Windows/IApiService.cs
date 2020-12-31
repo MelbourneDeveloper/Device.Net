@@ -1,6 +1,8 @@
 ﻿using Microsoft.Win32.SafeHandles;
 
+#pragma warning disable CA1707 // Identifiers should not contain underscores
 #pragma warning disable CA1021 // Avoid out parameters
+#pragma warning disable CA1045 // Do not pass types by reference
 
 namespace Device.Net.Windows
 {

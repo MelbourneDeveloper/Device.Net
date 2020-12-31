@@ -66,7 +66,7 @@ namespace Usb.Net.Android
 
         #region Public Methods 
 
-        public override void Dispose()
+        public sealed override void Dispose()
         {
             if (disposed)
             {
@@ -139,7 +139,7 @@ namespace Usb.Net.Android
 
                     Logger.LogInformation("Found device: {deviceName} Id: {deviceId}", _UsbDevice.DeviceName, _UsbDevice.DeviceId);
 
-                    var isPermissionGranted = await RequestPermissionAsync();
+                    var isPermissionGranted = await RequestPermissionAsync().ConfigureAwait(false);
                     if (!isPermissionGranted.HasValue)
                     {
                         throw new DeviceException("User did not respond to permission request");
@@ -185,7 +185,7 @@ namespace Usb.Net.Android
                             androidUsbInterface.UsbInterfaceEndpoints.Add(androidUsbEndpoint);
                         }
 
-                        await androidUsbInterface.ClaimInterface();
+                        await androidUsbInterface.ClaimInterface().ConfigureAwait(false);
                     }
 
                     RegisterDefaultInterfaces();

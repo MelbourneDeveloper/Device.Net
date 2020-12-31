@@ -16,8 +16,8 @@ namespace Device.Net.LibUsb
         #region Fields
         private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         private bool disposed;
-        private ushort? _writeBufferSize { get; }
-        private ushort? _readBufferSize { get; }
+        private readonly ushort? _writeBufferSize;
+        private readonly ushort? _readBufferSize;
         #endregion
 
         #region Public Properties
@@ -143,7 +143,7 @@ namespace Device.Net.LibUsb
             base.Close();
         }
 
-        public override void Dispose()
+        public sealed override void Dispose()
         {
             if (disposed)
             {

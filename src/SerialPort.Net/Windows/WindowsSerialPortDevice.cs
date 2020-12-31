@@ -58,10 +58,10 @@ namespace SerialPort.Net.Windows
             if ((byteSize == 5 && stopBits == StopBits.Two) || (stopBits == StopBits.OnePointFive && byteSize > 5))
                 throw new ArgumentException(Messages.ErrorInvalidByteSizeAndStopBitsCombo);
 
-            if (byteSize < 5 || byteSize > 8)
+            if (byteSize is < 5 or > 8)
                 throw new ArgumentOutOfRangeException(nameof(byteSize), Messages.ErrorByteSizeMustBeFiveToEight);
 
-            if (baudRate < 110 || baudRate > 256000)
+            if (baudRate is < 110 or > 256000)
                 throw new ArgumentOutOfRangeException(nameof(baudRate), Messages.ErrorBaudRateInvalid);
 
             if (stopBits == StopBits.None)
