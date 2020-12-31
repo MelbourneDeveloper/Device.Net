@@ -16,4 +16,3 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>", Scope = "member", Target = "~M:Device.Net.TransferResult.op_Implicit(System.Byte[])~Device.Net.TransferResult")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2225:Operator overloads have named alternates", Justification = "<Pending>", Scope = "member", Target = "~M:Device.Net.TransferResult.op_Implicit(System.Byte[])~Device.Net.TransferResult")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2225:Operator overloads have named alternates", Justification = "<Pending>", Scope = "member", Target = "~M:Device.Net.TransferResult.op_Implicit(Device.Net.TransferResult)~System.Byte[]")]
-

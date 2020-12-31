@@ -4,6 +4,8 @@
 // ReSharper disable InconsistentNaming
 // ReSharper disable IdentifierTypo
 
+#pragma warning disable CA1707 // Identifiers should not contain underscores
+
 namespace Usb.Net.Windows
 {
     public static partial class WinUsbApiCalls
@@ -17,3 +19,5 @@ namespace Usb.Net.Windows
         }
     }
 }
+
+#pragma warning restore CA1707 // Identifiers should not contain underscores

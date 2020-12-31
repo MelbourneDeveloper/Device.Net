@@ -12,53 +12,14 @@ csharp_style_var_elsewhere = true:error
 # IDE0008: Use explicit type
 csharp_style_var_for_built_in_types = true:error
 
-
-
-
-
-
-
-dotnet_diagnostic.IDE0058.severity = warning
-
-# CA1063: Implement IDisposable Correctly
-dotnet_diagnostic.CA1063.severity = warning
-
-
-
-dotnet_diagnostic.CA2237.severity = none
-
 # IDE0008: Use explicit type
 csharp_style_var_when_type_is_apparent = true:error
-
-
-
-# CA1401: P/Invokes should not be visible
-dotnet_diagnostic.CA1401.severity = warning
-
-# CA1707: Identifiers should not contain underscores
-dotnet_diagnostic.CA1707.severity = none
-
-
-dotnet_diagnostic.CA1724.severity = warning
-
-# CA1031: Do not catch general exception types
-dotnet_diagnostic.CA1031.severity = warning
 
 # IDE0022: Use block body for methods
 csharp_style_expression_bodied_methods = when_on_single_line:error
 
 # IDE0074: Use compound assignment
 dotnet_style_prefer_compound_assignment = true:error
-dotnet_diagnostic.IDE0074.severity = warning
-
-
-dotnet_diagnostic.CA1010.severity = suggestion
-
-# CA1816: Dispose methods should call SuppressFinalize
-dotnet_diagnostic.CA1816.severity = suggestion
-
-# CA1065: Do not raise exceptions in unexpected locations
-dotnet_diagnostic.CA1065.severity = warning
 
 # IDE0023: Use block body for operators
 csharp_style_expression_bodied_operators = true:error
@@ -66,11 +27,18 @@ csharp_style_expression_bodied_operators = true:error
 # IDE0021: Use block body for constructors
 csharp_style_expression_bodied_constructors = true:error
 
-# IDE1006: Naming Styles
-dotnet_diagnostic.IDE1006.severity = suggestion
-
 # CS1998: Async method lacks 'await' operators and will run synchronously
 dotnet_diagnostic.CS1998.severity = error
 
 
-dotnet_diagnostic.CS1591.severity = suggestion
+######################## Warnings. TODO: Fix these #################
+
+
+# CS1591: Missing XML comment for publicly visible type or member
+dotnet_diagnostic.CS1591.severity = warning
+
+# CA1401: P/Invokes should not be visible
+dotnet_diagnostic.CA1401.severity = warning
+
+# CA1816: Dispose methods should call SuppressFinalize
+dotnet_diagnostic.CA1816.severity = warning

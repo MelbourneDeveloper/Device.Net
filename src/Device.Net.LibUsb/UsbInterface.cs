@@ -79,7 +79,7 @@ namespace Device.Net.LibUsb
             {
                 var writeEndpoint = (WriteEndpoint)WriteEndpoint;
                 var errorCode = writeEndpoint.UsbEndpointWriter.Write(data, Timeout, out var bytesWritten);
-                if (errorCode == ErrorCode.Ok || errorCode == ErrorCode.Success)
+                if (errorCode is ErrorCode.Ok or ErrorCode.Success)
                 {
                     Logger.LogTrace(new Trace(true, data));
                     return (uint)bytesWritten;

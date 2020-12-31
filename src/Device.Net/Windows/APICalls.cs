@@ -5,6 +5,8 @@ using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
 
+#pragma warning disable CA1707 // Identifiers should not contain underscores
+
 namespace Device.Net.Windows
 {
     public static class APICalls
@@ -52,3 +54,5 @@ namespace Device.Net.Windows
         #endregion
     }
 }
+
+#pragma warning restore CA1707 // Identifiers should not contain underscores
