@@ -17,6 +17,10 @@ using Device.Net.Windows;
 using Hid.Net.UWP;
 #endif
 
+#if NET45
+using Microsoft.Extensions.Logging.Abstractions;
+#endif
+
 namespace Device.Net.UnitTests
 {
     [TestClass]
@@ -34,7 +38,7 @@ namespace Device.Net.UnitTests
 #if !NET45
         private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 #else
-        private readonly ILoggerFactory loggerFactory;
+        private readonly ILoggerFactory loggerFactory = NullLoggerFactory.Instance;
 #endif
 
         #region Tests
