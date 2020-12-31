@@ -196,7 +196,7 @@ namespace Hid.Net.UWP
 
         public async Task<TransferResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
         {
-            await _WriteAndReadLock.WaitAsync();
+            await _WriteAndReadLock.WaitAsync(cancellationToken);
 
             using var logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteAndReadAsync));
 

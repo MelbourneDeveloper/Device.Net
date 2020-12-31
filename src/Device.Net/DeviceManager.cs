@@ -70,7 +70,7 @@ namespace Device.Net
 
         public async Task<IDevice> GetDeviceAsync(ConnectedDeviceDefinition connectedDeviceDefinition, CancellationToken cancellationToken = default)
              => connectedDeviceDefinition == null ? throw new ArgumentNullException(nameof(connectedDeviceDefinition)) :
-            await (await DeviceFactories.FirstOrDefaultAsync(f => f.SupportsDeviceAsync(connectedDeviceDefinition), cancellationToken).ConfigureAwait(false)
+            await (await DeviceFactories.FirstOrDefaultAsync(f => f.SupportsDeviceAsync(connectedDeviceDefinition, cancellationToken), cancellationToken).ConfigureAwait(false)
             ?? throw new DeviceException(Messages.ErrorMessageCouldntGetDevice))
             .GetDeviceAsync(connectedDeviceDefinition, cancellationToken).ConfigureAwait(false);
 

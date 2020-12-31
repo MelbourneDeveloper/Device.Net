@@ -45,8 +45,8 @@ namespace Device.Net.UWP
         public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default)
         {
             var deviceInformationCollection = aqsFilter != null
-                ? await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask()
-                : await wde.DeviceInformation.FindAllAsync().AsTask();
+                ? await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask(cancellationToken)
+                : await wde.DeviceInformation.FindAllAsync().AsTask(cancellationToken);
 
             var deviceDefinitions = deviceInformationCollection
                 .Where(_deviceInformationFilter)

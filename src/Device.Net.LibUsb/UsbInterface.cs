@@ -69,7 +69,7 @@ namespace Device.Net.LibUsb
                 _ = readEndpoint.UsbEndpointReader.Read(buffer, Timeout, out var bytesRead);
                 Logger.LogTrace(new Trace(false, buffer));
                 return new TransferResult(buffer, (uint)bytesRead);
-            });
+            }, cancellationToken);
 
         public Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken) =>
             Task.Run(() =>
