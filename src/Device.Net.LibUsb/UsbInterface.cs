@@ -61,9 +61,8 @@ namespace Device.Net.LibUsb
             _ = _usbDevice.Close();
         }
 
-        public Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken)
-        {
-            return Task.Run(() =>
+        public Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken) =>
+            Task.Run(() =>
             {
                 var readEndpoint = (ReadEndpoint)ReadEndpoint;
                 var buffer = new byte[bufferLength];
@@ -71,11 +70,9 @@ namespace Device.Net.LibUsb
                 Logger.LogTrace(new Trace(false, buffer));
                 return new TransferResult(buffer, (uint)bytesRead);
             });
-        }
 
-        public Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken)
-        {
-            return Task.Run(() =>
+        public Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken) =>
+            Task.Run(() =>
             {
                 var writeEndpoint = (WriteEndpoint)WriteEndpoint;
                 var errorCode = writeEndpoint.UsbEndpointWriter.Write(data, Timeout, out var bytesWritten);
@@ -89,13 +86,12 @@ namespace Device.Net.LibUsb
                 Logger.LogError(new IOException(message), message, errorCode);
                 throw new IOException(message);
             }, cancellationToken);
-        }
+
         #endregion
 
         #region Private Methods
-        private static Task<TransferResult> PerformControlTransferLibUsbAsync(LibUsbDotNet.UsbDevice usbDevice, SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default)
-        {
-            return Task.Run(() =>
+        private static Task<TransferResult> PerformControlTransferLibUsbAsync(LibUsbDotNet.UsbDevice usbDevice, SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default) =>
+            Task.Run(() =>
             {
                 if (setupPacket == null) throw new ArgumentNullException(nameof(setupPacket));
                 buffer ??= new byte[setupPacket.Length];
@@ -111,7 +107,7 @@ namespace Device.Net.LibUsb
 
                 return !isSuccess ? throw new ControlTransferException("LibUsb says no") : Task.FromResult(new TransferResult(buffer, (uint)length));
             }, cancellationToken);
-        }
+
         #endregion
     }
 }
