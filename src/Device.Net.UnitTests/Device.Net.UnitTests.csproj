@@ -4,6 +4,7 @@
 		<TargetFrameworks>netcoreapp3.1;net45</TargetFrameworks>
 		<IsPackable>false</IsPackable>
 		<EnableNETAnalyzers>false</EnableNETAnalyzers>
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
 	</PropertyGroup>
 
 	<ItemGroup>

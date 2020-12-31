@@ -13,6 +13,10 @@ using System.Threading.Tasks;
 using Usb.Net;
 using Usb.Net.Windows;
 
+#if NET45
+using Microsoft.Extensions.Logging.Abstractions;
+#endif
+
 namespace Device.Net.UnitTests
 {
     [TestClass]
@@ -33,11 +37,10 @@ namespace Device.Net.UnitTests
         /// Dummy logger factory for now
         /// TODO: remove this because the factory is no longer a required parameter
         /// </summary>
-        private readonly ILoggerFactory _loggerFactory
 #if !NET45
-            = LoggerFactory.Create(builder => { });
+        private readonly ILoggerFactory _loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 #else
-            ;
+        private readonly ILoggerFactory _loggerFactory = NullLoggerFactory.Instance;
 #endif
 
         #endregion

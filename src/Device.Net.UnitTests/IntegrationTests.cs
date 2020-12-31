@@ -197,7 +197,7 @@ namespace Device.Net.UnitTests
 
             var integrationTester = new IntegrationTester(
                 deviceFactory);
-            await integrationTester.TestAsync(request, AssertTrezorResult, expectedDataLength);
+            _ = await integrationTester.TestAsync(request, AssertTrezorResult, expectedDataLength);
         }
 
         [TestMethod]

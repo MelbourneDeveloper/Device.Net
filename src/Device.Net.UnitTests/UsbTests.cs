@@ -10,6 +10,10 @@ using Device.Net.Exceptions;
 using Moq;
 #endif
 
+#if NET45
+using Microsoft.Extensions.Logging.Abstractions;
+#endif
+
 namespace Device.Net.UnitTests
 {
     [TestClass]
@@ -21,7 +25,7 @@ namespace Device.Net.UnitTests
 #if !NET45
         private readonly ILoggerFactory _loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 #else
-        private readonly ILoggerFactory _loggerFactory;
+        private readonly ILoggerFactory _loggerFactory = NullLoggerFactory.Instance;
 #endif
 
         private UsbDevice _UsbDevice;
