@@ -4,8 +4,6 @@
         <NoWarn>NU5125</NoWarn>
         <DocumentationFile>Device.Net.xml</DocumentationFile>
         <Version>4.0.7-alpha</Version>
-		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<AnalysisLevel>latest</AnalysisLevel>
         <DebugType>embedded</DebugType>
     </PropertyGroup>
     <ItemGroup>

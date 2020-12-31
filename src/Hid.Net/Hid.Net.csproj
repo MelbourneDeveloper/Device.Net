@@ -3,9 +3,7 @@
         <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
         <NoWarn>1701;1702;NU5125</NoWarn>
         <DocumentationFile>Hid.Net.xml</DocumentationFile>
-        <Version>4.0.7-alpha</Version>
-		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<AnalysisLevel>latest</AnalysisLevel>        
+        <Version>4.0.7-alpha</Version>     
         <DebugType>embedded</DebugType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -8,7 +8,7 @@ namespace Usb.Net
     /// The recipient is defined in the setup packet of the control request.
     /// </summary>
     /// <remarks>
-    /// See Table 9.2 of section 9.3 of the Universal Serial Bus (USB) specification (<see href="http://www.usb.org"/>)
+    /// See Table 9.2 of section 9.3 of the Universal Serial Bus (USB) specification (<see href="www.usb.org"/>)
     /// </remarks>
     public enum RequestRecipient
     {
