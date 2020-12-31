@@ -3,8 +3,9 @@
 // ReSharper disable FieldCanBeMadeReadOnly.Global
 
 #pragma warning disable CA1815 // Override equals and operator equals on value types
-#pragma warning restore CA1815 // Override equals and operator equals on value types
+#pragma warning disable CA1815 // Override equals and operator equals on value types
 #pragma warning disable CA1707 // Identifiers should not contain underscores
+#pragma warning disable CA1051
 
 namespace Usb.Net.Windows
 {
@@ -24,6 +25,7 @@ namespace Usb.Net.Windows
 }
 
 
-#pragma warning disable CA1051 // Do not declare visible instance fields
+#pragma warning restore CA1051
+#pragma warning restore CA1051 // Do not declare visible instance fields
 #pragma warning restore CA1051 // Do not declare visible instance fields
 #pragma warning restore CA1707 // Identifiers should not contain underscores
