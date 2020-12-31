@@ -148,6 +148,9 @@ namespace Device.Net.UnitTests
 
             //Verify we get the exact number of endpoints
             trezorUsbInterfaceMock.Verify(i => i.GetEndpoint(It.IsAny<int>()), Times.Exactly(TrezorEndpointCount));
+
+            //The connection should be closed once
+            usbDeviceConnection.Verify(i => i.Close(), Times.Once);
         }
 
         //[TestMethod]
