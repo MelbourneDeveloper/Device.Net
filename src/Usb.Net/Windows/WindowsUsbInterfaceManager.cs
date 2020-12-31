@@ -166,7 +166,8 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Methods
-        public static ConnectedDeviceDefinition GetDeviceDefinition(SafeFileHandle defaultInterfaceHandle, string deviceId, ILogger logger)
+
+        private static ConnectedDeviceDefinition GetDeviceDefinition(SafeFileHandle defaultInterfaceHandle, string deviceId, ILogger logger)
         {
             var bufferLength = (uint)Marshal.SizeOf(typeof(USB_DEVICE_DESCRIPTOR));
 #pragma warning disable IDE0059 // Unnecessary assignment of a value

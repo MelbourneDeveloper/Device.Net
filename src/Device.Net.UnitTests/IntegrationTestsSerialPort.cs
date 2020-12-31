@@ -40,7 +40,7 @@ namespace Device.Net.UnitTests
         public async Task ConnectedTestEnumerateAsync()
         {
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
-            var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
+            _ = await GetConnectedDevicesAsync();
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
         }
 
@@ -58,7 +58,7 @@ namespace Device.Net.UnitTests
         public async Task ConnectedTestGetDevicesAsync()
         {
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
-            var connectedDeviceDefinitions = await GetConnectedDevicesAsync();
+            _ = await GetConnectedDevicesAsync();
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
             var devices = await windowsSerialPortDeviceFactory.GetConnectedDeviceDefinitionsAsync();
 

@@ -97,7 +97,7 @@ namespace Usb.Net.Windows
         private static Task<TransferResult> PerformControlTransferWindowsAsync(SafeFileHandle safeFileHandle, SetupPacket setupPacket, byte[] buffer, ILogger logger, CancellationToken cancellationToken = default) =>
             Task.Run(() =>
             {
-                uint bytesTransferred = 0; ;
+                uint bytesTransferred = 0;
 
                 var isSuccess = WinUsbApiCalls.WinUsb_ControlTransfer(safeFileHandle.DangerousGetHandle(),
                     setupPacket.ToWindowsSetupPacket(),
