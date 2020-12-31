@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 #pragma warning disable CA1707 // Identifiers should not contain underscores
+#pragma warning disable CA1021 // Avoid out parameters
 
 namespace Usb.Net.Windows
 {
@@ -85,5 +86,3 @@ namespace Usb.Net.Windows
         #endregion
     }
 }
-
-#pragma warning restore CA1707 // Identifiers should not contain underscores

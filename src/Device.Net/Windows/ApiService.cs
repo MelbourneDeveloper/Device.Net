@@ -4,6 +4,8 @@ using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
 
+#pragma warning disable CA1021 // Avoid out parameters
+
 namespace Device.Net.Windows
 {
     public class ApiService : IApiService

@@ -30,6 +30,45 @@ csharp_style_expression_bodied_constructors = true:error
 # CS1998: Async method lacks 'await' operators and will run synchronously
 dotnet_diagnostic.CS1998.severity = error
 
+######################## All the ones what don't come by default #################
+
+dotnet_diagnostic.CA1047.severity = error
+dotnet_diagnostic.CA1040.severity = error
+dotnet_diagnostic.CA1000.severity = error
+dotnet_diagnostic.CA1001.severity = error
+dotnet_diagnostic.CA1002.severity = error
+dotnet_diagnostic.CA1003.severity = error
+dotnet_diagnostic.CA1005.severity = error
+dotnet_diagnostic.CA1008.severity = error
+dotnet_diagnostic.CA1010.severity = error
+dotnet_diagnostic.CA1012.severity = error
+dotnet_diagnostic.CA1014.severity = error
+dotnet_diagnostic.CA1016.severity = error
+dotnet_diagnostic.CA1017.severity = error
+dotnet_diagnostic.CA1018.severity = error
+dotnet_diagnostic.CA1019.severity = error
+dotnet_diagnostic.CA1021.severity = error
+dotnet_diagnostic.CA1024.severity = error
+dotnet_diagnostic.CA1027.severity = error
+dotnet_diagnostic.CA1028.severity = error
+dotnet_diagnostic.CA1030.severity = error
+
+# Modify 'Start' to catch a more specific allowed exception type, or rethrow the exception
+# dotnet_diagnostic.CA1031.severity = error
+
+dotnet_diagnostic.CA1032.severity = error
+dotnet_diagnostic.CA1033.severity = error
+dotnet_diagnostic.CA1034.severity = error
+dotnet_diagnostic.CA1036.severity = error
+dotnet_diagnostic.CA1040.severity = error
+dotnet_diagnostic.CA1041.severity = error
+dotnet_diagnostic.CA1043.severity = error
+dotnet_diagnostic.CA1044.severity = error
+
+dotnet_diagnostic.CA1303.severity = error
+
+
+
 
 ######################## Warnings. TODO: Fix these #################
 

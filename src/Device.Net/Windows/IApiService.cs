@@ -1,5 +1,7 @@
 ﻿using Microsoft.Win32.SafeHandles;
 
+#pragma warning disable CA1021 // Avoid out parameters
+
 namespace Device.Net.Windows
 {
     public interface IApiService

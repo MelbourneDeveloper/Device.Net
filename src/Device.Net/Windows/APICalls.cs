@@ -6,6 +6,7 @@ using System;
 using System.Runtime.InteropServices;
 
 #pragma warning disable CA1707 // Identifiers should not contain underscores
+#pragma warning disable CA1021 // Avoid out parameters
 
 namespace Device.Net.Windows
 {
@@ -54,5 +55,3 @@ namespace Device.Net.Windows
         #endregion
     }
 }
-
-#pragma warning restore CA1707 // Identifiers should not contain underscores
