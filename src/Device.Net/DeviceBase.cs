@@ -97,6 +97,12 @@ namespace Device.Net
 
         public virtual void Dispose()
         {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool dispose)
+        {
             if (disposed)
             {
                 Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, DeviceId);

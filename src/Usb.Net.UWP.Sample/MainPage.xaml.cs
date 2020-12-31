@@ -52,21 +52,21 @@ namespace Usb.Net.UWP.Sample
         #region Event Handlers
         private void DeviceConnectionExample_TrezorDisconnected(object sender, System.EventArgs e)
         {
-            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                SetButtonColor(Colors.Red);
-                OutputBox.Text = string.Empty;
-                DevicePanel.DataContext = null;
-            });
+            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+              {
+                  SetButtonColor(Colors.Red);
+                  OutputBox.Text = string.Empty;
+                  DevicePanel.DataContext = null;
+              });
         }
 
         private void DeviceConnectionExample_TrezorInitialized(object sender, System.EventArgs e)
         {
-            Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-            {
-                SetButtonColor(Colors.Green);
-                DisplayDataAsync(false);
-            });
+            _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+               {
+                   SetButtonColor(Colors.Green);
+                   await DisplayDataAsync(false);
+               });
         }
 
 #pragma warning disable IDE0060 // Remove unused parameter
