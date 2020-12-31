@@ -10,23 +10,28 @@ using Device.Net.Exceptions;
 using Moq;
 #endif
 
+#if NET45
+using Microsoft.Extensions.Logging.Abstractions;
+#endif
+
 namespace Device.Net.UnitTests
 {
     [TestClass]
+#pragma warning disable CA1001 // Types that own disposable fields should be disposable
     public class UsbTests
+#pragma warning restore CA1001 // Types that own disposable fields should be disposable
     {
         #region Fields
-        private readonly ILoggerFactory _loggerFactory;
+#if !NET45
+        private readonly ILoggerFactory _loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
+#else
+        private readonly ILoggerFactory _loggerFactory = NullLoggerFactory.Instance;
+#endif
+
         private UsbDevice _UsbDevice;
         private const string deviceId = "test";
         private readonly byte[] testreadpacket = { 1, 2, 3 };
         #endregion
-
-#if !NET45
-        public UsbTests() =>
-            //Easier than mocking at this point...
-            _loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
-#endif
 
         #region Tests
         [TestMethod]

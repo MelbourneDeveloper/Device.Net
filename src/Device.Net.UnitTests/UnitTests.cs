@@ -13,6 +13,10 @@ using System.Threading.Tasks;
 using Usb.Net;
 using Usb.Net.Windows;
 
+#if NET45
+using Microsoft.Extensions.Logging.Abstractions;
+#endif
+
 namespace Device.Net.UnitTests
 {
     [TestClass]
@@ -33,11 +37,10 @@ namespace Device.Net.UnitTests
         /// Dummy logger factory for now
         /// TODO: remove this because the factory is no longer a required parameter
         /// </summary>
-        private readonly ILoggerFactory _loggerFactory
 #if !NET45
-            = LoggerFactory.Create(builder => { });
+        private readonly ILoggerFactory _loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 #else
-            ;
+        private readonly ILoggerFactory _loggerFactory = NullLoggerFactory.Instance;
 #endif
 
         #endregion
@@ -463,7 +466,9 @@ namespace Device.Net.UnitTests
                 if (stopWatch.Elapsed > new TimeSpan(0, 0, seconds))
                 {
                     Console.WriteLine("Timeout occurred");
+#pragma warning disable CA2201 // Do not raise reserved exception types
                     throw new Exception("Timed out");
+#pragma warning restore CA2201 // Do not raise reserved exception types
                 }
 
                 await Task.Delay(500);

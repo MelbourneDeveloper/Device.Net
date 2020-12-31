@@ -3,6 +3,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
+#pragma warning disable CA2016
+
 namespace Device.Net.UnitTests
 {
     public abstract class MockDeviceBase : DeviceBase, IDevice
@@ -10,7 +12,7 @@ namespace Device.Net.UnitTests
         public override ushort WriteBufferSize => 64;
         public override ushort ReadBufferSize => 64;
 
-        protected bool _IsInitialized;
+        protected bool _IsInitialized { get; private set; }
 
         public override bool IsInitialized => _IsInitialized;
 
@@ -66,3 +68,4 @@ namespace Device.Net.UnitTests
         }
     }
 }
+#pragma warning restore CA2016

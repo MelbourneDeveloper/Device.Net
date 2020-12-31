@@ -6,10 +6,6 @@
         <DocumentationFile>Device.Net.LibUsb.xml</DocumentationFile>
         <Version>4.0.7-alpha</Version>       
         <DebugType>embedded</DebugType>
-        <DebugSymbols>true</DebugSymbols>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <ContinuousIntegrationBuild>True</ContinuousIntegrationBuild>
-        <EmbedUntrackedSources>true</EmbedUntrackedSources>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="LibUsbDotNet" Version="2.2.29" />

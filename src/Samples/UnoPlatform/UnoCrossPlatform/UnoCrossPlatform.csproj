@@ -4,7 +4,6 @@
     <TargetFrameworks>uap10.0.16299;;MonoAndroid90;monoandroid10.0</TargetFrameworks>
     <!-- Ensures the .xr.xml files are generated in a proper layout folder -->
     <GenerateLibraryLayout>true</GenerateLibraryLayout>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>    
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.1">

@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <NoWarn>1701;1702;NU5125</NoWarn>
         <DocumentationFile>Hid.Net.xml</DocumentationFile>
         <Version>4.0.7-alpha</Version>     

@@ -48,7 +48,9 @@ namespace Device.Net.UnitTests
 
             //Set the return value of the static method
             ByteBuffer.AllocateFunc = new Func<int, ByteBuffer>((c) => new TrezorResponseByteBuffer());
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
             ByteBuffer.WrapFunc = new Func<byte[]?, ByteBuffer>((c) => new Mock<ByteBuffer>().Object);
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
 
             //--------------------Trezor------------------
 
@@ -146,6 +148,9 @@ namespace Device.Net.UnitTests
 
             //Verify we get the exact number of endpoints
             trezorUsbInterfaceMock.Verify(i => i.GetEndpoint(It.IsAny<int>()), Times.Exactly(TrezorEndpointCount));
+
+            //The connection should be closed once
+            usbDeviceConnection.Verify(i => i.Close(), Times.Once);
         }
 
         //[TestMethod]
@@ -175,7 +180,9 @@ namespace Device.Net.UnitTests
                     var usbPermissionBroadcastReceiver = new UsbPermissionBroadcastReceiver(usbManagerMock.Object, ud, contextMock.Object, androidFactoryMock.Object);
 
                     //We run this and send a receive until the received event fires
-                    FakeReceiveAsync(usbPermissionBroadcastReceiver);
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    _ = FakeReceiveAsync(usbPermissionBroadcastReceiver);
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 
                     return usbPermissionBroadcastReceiver;
                 },
@@ -195,7 +202,7 @@ namespace Device.Net.UnitTests
             }
         }
 
-        private Task<IDevice> TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, bool dispose = true)
+        private static Task<IDevice> TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, bool dispose = true)
         {
             //Send the request part of the Message Contract
             var integrationTester = new IntegrationTester(

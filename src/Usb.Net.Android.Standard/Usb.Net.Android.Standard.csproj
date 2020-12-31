@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugType>Full</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,16 +15,6 @@
     <Compile Include="..\Usb.Net.Android\IAndroidFactory.cs" Link="IAndroidFactory.cs" />
     <Compile Include="..\Usb.Net.Android\IUsbPermissionBroadcastReceiver.cs" Link="IUsbPermissionBroadcastReceiver.cs" />
     <Compile Include="..\Usb.Net.Android\UsbPermissionBroadcastReceiver.cs" Link="UsbPermissionBroadcastReceiver.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
     <ProjectReference Include="..\Usb.Net.Android.Fakes\Usb.Net.Android.Fakes.csproj" />
     <ProjectReference Include="..\Usb.Net\Usb.Net.csproj" />

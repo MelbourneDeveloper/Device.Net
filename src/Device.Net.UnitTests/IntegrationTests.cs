@@ -17,6 +17,10 @@ using Device.Net.Windows;
 using Hid.Net.UWP;
 #endif
 
+#if NET45
+using Microsoft.Extensions.Logging.Abstractions;
+#endif
+
 namespace Device.Net.UnitTests
 {
     [TestClass]
@@ -30,16 +34,11 @@ namespace Device.Net.UnitTests
         public const int TrezorOneProductId = 0x53C1;
         public const int StmDfuVendorId = 0x0483;
         public const int StmDfuProductId = 0xdf11;
-        private readonly ILoggerFactory loggerFactory
-#if NET45
-;
+
+#if !NET45
+        private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 #else
-         = LoggerFactory.Create(builder =>
-        {
-            _ = builder.AddConsole()
-            .AddDebug()
-            .SetMinimumLevel(LogLevel.Trace);
-        });
+        private readonly ILoggerFactory loggerFactory = NullLoggerFactory.Instance;
 #endif
 
         #region Tests
@@ -53,7 +52,7 @@ namespace Device.Net.UnitTests
 
             var devices = await deviceFactory.GetConnectedDeviceDefinitionsAsync();
 
-            Assert.IsTrue(devices.Count() > 0);
+            Assert.IsTrue(devices.Any());
         }
 
         [TestMethod]
@@ -188,7 +187,7 @@ namespace Device.Net.UnitTests
             Assert.IsTrue(devices.Any());
         }
 
-        private async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64)
+        private static async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64)
         {
             //Send the request part of the Message Contract
             var request = new byte[64];
@@ -198,7 +197,7 @@ namespace Device.Net.UnitTests
 
             var integrationTester = new IntegrationTester(
                 deviceFactory);
-            await integrationTester.TestAsync(request, AssertTrezorResult, expectedDataLength);
+            _ = await integrationTester.TestAsync(request, AssertTrezorResult, expectedDataLength);
         }
 
         [TestMethod]

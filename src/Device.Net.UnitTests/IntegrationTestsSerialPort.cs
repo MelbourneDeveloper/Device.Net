@@ -67,7 +67,7 @@ namespace Device.Net.UnitTests
                 Assert.AreEqual(DeviceType.SerialPort, device.DeviceType);
             }
 
-            Assert.IsTrue(devices.Count() > 0);
+            Assert.IsTrue(devices.Any());
         }
 
         [TestMethod]
@@ -89,7 +89,7 @@ namespace Device.Net.UnitTests
         #endregion
 
         #region Helpers
-        private async Task<List<ConnectedDeviceDefinition>> GetConnectedDevicesAsync()
+        private static async Task<List<ConnectedDeviceDefinition>> GetConnectedDevicesAsync()
         {
             if (windowsSerialPortDeviceFactory == null)
             {

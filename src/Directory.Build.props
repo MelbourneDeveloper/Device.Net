@@ -8,5 +8,6 @@
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 </Project>
