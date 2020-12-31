@@ -6,5 +6,7 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
     </PropertyGroup>
 </Project>

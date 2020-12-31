@@ -2,11 +2,9 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;net45;</TargetFrameworks>
         <NoWarn>NU5125</NoWarn>
-        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <DocumentationFile>Device.Net.xml</DocumentationFile>
         <Version>4.0.7-alpha</Version>
-		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<AnalysisLevel>latest</AnalysisLevel>
         <DebugType>embedded</DebugType>
     </PropertyGroup>
     <ItemGroup>
