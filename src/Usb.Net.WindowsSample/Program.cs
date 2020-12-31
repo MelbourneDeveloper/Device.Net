@@ -16,6 +16,8 @@ using Device.Net.Windows;
 using Device.Net.LibUsb;
 #endif
 
+#pragma warning disable CA1303 // Do not pass literals as localized parameters
+
 namespace Usb.Net.WindowsSample
 {
     internal class Program
@@ -62,25 +64,25 @@ namespace Usb.Net.WindowsSample
             _DeviceConnectionExample.TrezorInitialized += DeviceConnectionExample_TrezorInitialized;
             _DeviceConnectionExample.TrezorDisconnected += DeviceConnectionExample_TrezorDisconnected;
 
-            await GoAsync();
+            await GoAsync().ConfigureAwait(false);
         }
 
         private static async Task GoAsync()
         {
-            var menuOption = await MenuAsync();
+            var menuOption = await MenuAsync().ConfigureAwait(false);
 
             switch (menuOption)
             {
                 case 1:
                     try
                     {
-                        await _DeviceConnectionExample.InitializeTrezorAsync();
-                        await DisplayDataAsync();
+                        await _DeviceConnectionExample.InitializeTrezorAsync().ConfigureAwait(false);
+                        await DisplayDataAsync().ConfigureAwait(false);
                         _DeviceConnectionExample.Dispose();
 
                         GC.Collect();
 
-                        await Task.Delay(10000);
+                        await Task.Delay(10000).ConfigureAwait(false);
                     }
                     catch (Exception ex)
                     {
@@ -98,10 +100,10 @@ namespace Usb.Net.WindowsSample
                 case 3:
 
                     Console.Clear();
-                    await DisplayTemperature();
+                    await DisplayTemperature().ConfigureAwait(false);
                     while (true)
                     {
-                        await Task.Delay(1000);
+                        await Task.Delay(1000).ConfigureAwait(false);
                     }
 #endif
                 default:
@@ -131,7 +133,7 @@ namespace Usb.Net.WindowsSample
                 .Select(temperatureTimesOneHundred => Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven));
 
             //Subscribe to the observable
-            observable.Subscribe(t => Console.WriteLine($"Temperature is {t}"));
+            _ = observable.Subscribe(t => Console.WriteLine($"Temperature is {t}"));
 
             //Note: in a real scenario, we would dispose of the subscription afterwards. This method runs forever.
         }
@@ -154,7 +156,7 @@ namespace Usb.Net.WindowsSample
             try
             {
                 Console.Clear();
-                await DisplayDataAsync();
+                await DisplayDataAsync().ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -174,7 +176,7 @@ namespace Usb.Net.WindowsSample
                 Console.Clear();
 
 #if !LIBUSB
-                var devices = await _allFactories.GetConnectedDeviceDefinitionsAsync();
+                var devices = await _allFactories.GetConnectedDeviceDefinitionsAsync().ConfigureAwait(false);
 
                 Console.WriteLine("Currently connected devices:\r\n");
                 Console.WriteLine(string.Join("\r\n",
@@ -198,7 +200,7 @@ namespace Usb.Net.WindowsSample
 
         private static async Task DisplayDataAsync()
         {
-            var bytes = await _DeviceConnectionExample.WriteAndReadFromDeviceAsync();
+            var bytes = await _DeviceConnectionExample.WriteAndReadFromDeviceAsync().ConfigureAwait(false);
             Console.Clear();
             Console.WriteLine("Device connected. Output:");
             DisplayData(bytes);
@@ -207,7 +209,7 @@ namespace Usb.Net.WindowsSample
         private static void DisplayData(byte[] readBuffer)
         {
             Console.WriteLine(string.Join(' ', readBuffer));
-            Console.ReadKey();
+            _ = Console.ReadKey();
         }
 
         private static void DisplayWaitMessage() => Console.WriteLine("Waiting for device to be plugged in...");

@@ -22,9 +22,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Device", "Device", "{7347DAE2-4F5E-46C9-ADA8-037B96742F2B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "USB", "USB", "{5B0BD0A9-5246-42CF-9D47-50DD072FEC47}"
-	ProjectSection(SolutionItems) = preProject
-		Device.Net.LibUsb\Device.Net.LibUsb.csproj = Device.Net.LibUsb\Device.Net.LibUsb.csproj
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hid", "Hid", "{1E56E335-09DE-435F-9189-5DE50835D54F}"
 EndProject
@@ -41,6 +38,13 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SerialPort.Net", "SerialPort.Net\SerialPort.Net.csproj", "{8558F197-2CBC-4D5C-B416-3F0E16A766E9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Device.Net.Reactive", "Device.Net.Reactive\Device.Net.Reactive.csproj", "{C0548AF1-813D-4446-AD65-9E2E78BD5CD1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D6E84B82-D0DE-43A8-B5B7-E44649E5B9BD}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Device.Net.LibUsb", "Device.Net.LibUsb\Device.Net.LibUsb.csproj", "{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -276,6 +280,22 @@ Global
 		{C0548AF1-813D-4446-AD65-9E2E78BD5CD1}.Release|x64.Build.0 = Release|Any CPU
 		{C0548AF1-813D-4446-AD65-9E2E78BD5CD1}.Release|x86.ActiveCfg = Release|Any CPU
 		{C0548AF1-813D-4446-AD65-9E2E78BD5CD1}.Release|x86.Build.0 = Release|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Debug|ARM.Build.0 = Debug|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Debug|x64.Build.0 = Debug|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Debug|x86.Build.0 = Debug|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Release|ARM.ActiveCfg = Release|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Release|ARM.Build.0 = Release|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Release|x64.ActiveCfg = Release|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Release|x64.Build.0 = Release|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Release|x86.ActiveCfg = Release|Any CPU
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -294,6 +314,7 @@ Global
 		{9C0BF960-4593-4A16-B68F-D74574E32AB8} = {32ED0A31-ACE0-46FC-8644-41F4A94E2FFC}
 		{8558F197-2CBC-4D5C-B416-3F0E16A766E9} = {3EDD6BA6-BBA7-4675-B489-2D34A04BD6B2}
 		{C0548AF1-813D-4446-AD65-9E2E78BD5CD1} = {7347DAE2-4F5E-46C9-ADA8-037B96742F2B}
+		{D0E1DB86-1D9C-4FCB-9D94-8963AEDF002A} = {5B0BD0A9-5246-42CF-9D47-50DD072FEC47}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D478184-6FEC-4951-ADB3-C72F3B712B72}

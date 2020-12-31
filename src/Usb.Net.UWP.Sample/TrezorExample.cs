@@ -74,13 +74,13 @@ namespace Usb.Net.Sample
         public async Task InitializeTrezorAsync()
         {
             //Get the first available device and connect to it
-            var devices = await DeviceListener.DeviceFactory.GetConnectedDeviceDefinitionsAsync();
+            var devices = await DeviceListener.DeviceFactory.GetConnectedDeviceDefinitionsAsync().ConfigureAwait(false);
             var firstConnectedDeviceDefinition = devices.FirstOrDefault();
-            TrezorDevice = await DeviceListener.DeviceFactory.GetDeviceAsync(firstConnectedDeviceDefinition);
+            TrezorDevice = await DeviceListener.DeviceFactory.GetDeviceAsync(firstConnectedDeviceDefinition).ConfigureAwait(false);
 
             if (TrezorDevice == null) throw new Exception("There were no devices found");
 
-            await TrezorDevice.InitializeAsync();
+            await TrezorDevice.InitializeAsync().ConfigureAwait(false);
         }
 
         public async Task<byte[]> WriteAndReadFromDeviceAsync()
@@ -92,7 +92,7 @@ namespace Usb.Net.Sample
             writeBuffer[2] = 0x23;
 
             //Write the data to the device
-            return await TrezorDevice.WriteAndReadAsync(writeBuffer);
+            return await TrezorDevice.WriteAndReadAsync(writeBuffer).ConfigureAwait(false);
         }
 
         public void Dispose()
