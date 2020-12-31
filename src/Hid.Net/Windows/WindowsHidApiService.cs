@@ -88,7 +88,6 @@ namespace Hid.Net.Windows
                 vendorId: (ushort)hidAttributes.VendorId,
                 versionNumber: (ushort)hidAttributes.VersionNumber,
                 classGuid: GetHidGuid());
-            ;
         }
 
         public string GetManufacturer(SafeFileHandle safeFileHandle) => GetHidString(safeFileHandle, HidD_GetManufacturerString, Logger);

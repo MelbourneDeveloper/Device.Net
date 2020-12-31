@@ -48,17 +48,15 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Public Methods
-        public async Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default)
-        {
-            return await Task.Run(() =>
+        public Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken = default) =>
+            Task.Run(() =>
             {
                 var bytes = new byte[bufferLength];
                 var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_SafeFileHandle, ReadEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
                 _ = WindowsHelpers.HandleError(isSuccess, "Couldn't read data", Logger);
                 Logger.LogTrace(new Trace(false, bytes));
                 return new TransferResult(bytes, bytesRead);
-            }, cancellationToken).ConfigureAwait(false);
-        }
+            }, cancellationToken);
 
         public Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
             => Task.Run(() =>
@@ -96,9 +94,8 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Private Methods
-        private static Task<TransferResult> PerformControlTransferWindowsAsync(SafeFileHandle safeFileHandle, SetupPacket setupPacket, byte[] buffer, ILogger logger, CancellationToken cancellationToken = default)
-        {
-            return Task.Run(() =>
+        private static Task<TransferResult> PerformControlTransferWindowsAsync(SafeFileHandle safeFileHandle, SetupPacket setupPacket, byte[] buffer, ILogger logger, CancellationToken cancellationToken = default) =>
+            Task.Run(() =>
             {
                 uint bytesTransferred = 0; ;
 
@@ -114,7 +111,7 @@ namespace Usb.Net.Windows
                 return new TransferResult(buffer, bytesTransferred);
 
             }, cancellationToken);
-        }
+
         #endregion
     }
 }

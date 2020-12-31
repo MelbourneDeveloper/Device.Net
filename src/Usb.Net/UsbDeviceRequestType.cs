@@ -28,13 +28,11 @@ namespace Usb.Net
             Recipient = recipient;
         }
 
-        public byte ToByte()
-        {
-            return (byte)(
-            ((byte)Direction << 7) +
-            ((byte)Type << 5) +
-            (byte)Recipient);
-        }
+        public byte ToByte() =>
+            (byte)(
+                ((byte)Direction << 7) +
+                ((byte)Type << 5) +
+                (byte)Recipient);
 
         public override string ToString() => $"RequestType: {Type} RequestDirection: {Direction} RequestRecipient: {Recipient}";
     }

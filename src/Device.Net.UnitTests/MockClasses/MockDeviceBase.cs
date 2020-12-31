@@ -12,9 +12,9 @@ namespace Device.Net.UnitTests
         public override ushort WriteBufferSize => 64;
         public override ushort ReadBufferSize => 64;
 
-        protected bool _IsInitialized { get; private set; }
+        protected bool IsInitializedProtected { get; private set; }
 
-        public override bool IsInitialized => _IsInitialized;
+        public override bool IsInitialized => IsInitializedProtected;
 
         protected MockDeviceBase(string deviceId, ILoggerFactory loggerFactory, ILogger logger) : base(deviceId, loggerFactory, logger)
         {
@@ -27,7 +27,7 @@ namespace Device.Net.UnitTests
 
         public Task InitializeAsync(CancellationToken cancellationToken = default)
         {
-            _IsInitialized = true;
+            IsInitializedProtected = true;
             return Task.FromResult(true);
         }
 

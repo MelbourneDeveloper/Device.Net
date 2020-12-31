@@ -50,19 +50,15 @@ namespace Usb.Net
             ConnectedDeviceDefinition = await UsbInterfaceManager.GetConnectedDeviceDefinitionAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
-        {
-            return UsbInterfaceManager.ReadUsbInterface == null
+        public override Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default) =>
+            UsbInterfaceManager.ReadUsbInterface == null
                 ? throw new DeviceException(Messages.ErrorMessageNoReadInterfaceSpecified)
-                : await UsbInterfaceManager.ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken).ConfigureAwait(false);
-        }
+                : UsbInterfaceManager.ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
 
-        public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
-        {
-            return UsbInterfaceManager.WriteUsbInterface == null
+        public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default) =>
+            UsbInterfaceManager.WriteUsbInterface == null
                 ? throw new DeviceException(Messages.ErrorMessageNoWriteInterfaceSpecified)
                 : UsbInterfaceManager.WriteUsbInterface.WriteAsync(data, cancellationToken);
-        }
 
         public void Close()
         {

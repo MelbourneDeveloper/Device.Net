@@ -26,9 +26,8 @@ namespace Usb.Net.Android
         ushort? writeBufferSize = null,
         IAndroidFactory androidFactory = null,
         Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver> getUsbPermissionBroadcastReceiver = null
-        )
-        {
-            return CreateAndroidUsbDeviceFactory(
+        ) =>
+            CreateAndroidUsbDeviceFactory(
                 new ReadOnlyCollection<FilterDeviceDefinition>(new List<FilterDeviceDefinition> { filterDeviceDefinition }),
                 usbManager,
                 context,
@@ -39,7 +38,6 @@ namespace Usb.Net.Android
                 writeBufferSize,
                 androidFactory,
                 getUsbPermissionBroadcastReceiver);
-        }
 
         public static IDeviceFactory CreateAndroidUsbDeviceFactory(
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
@@ -59,21 +57,15 @@ namespace Usb.Net.Android
             loggerFactory ??= NullLoggerFactory.Instance;
 
 #if __ANDROID__
-            if (androidFactory == null)
-            {
-                androidFactory = new AndroidFactory();
-            }
+            androidFactory ??= new AndroidFactory();
 
-            if (getUsbPermissionBroadcastReceiver == null)
-            {
-                getUsbPermissionBroadcastReceiver = new Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver>((ud) =>
-                    new UsbPermissionBroadcastReceiver(
+            getUsbPermissionBroadcastReceiver ??= new Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver>((ud) =>
+                new UsbPermissionBroadcastReceiver(
                     usbManager,
                     ud,
                     context,
                     androidFactory,
                     loggerFactory.CreateLogger<UsbPermissionBroadcastReceiver>()));
-            }
 #else
             if (androidFactory == null)
             {

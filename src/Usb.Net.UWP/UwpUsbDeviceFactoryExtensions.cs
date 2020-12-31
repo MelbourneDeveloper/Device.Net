@@ -21,16 +21,14 @@ namespace Usb.Net.UWP
             GetUsbInterfaceManager getUsbInterfaceManager = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null
-            )
-        {
-            return CreateUwpUsbDeviceFactory(
+            ) =>
+            CreateUwpUsbDeviceFactory(
                 new List<FilterDeviceDefinition> { filterDeviceDefinitions },
                 loggerFactory,
                 getConnectedDeviceDefinitionsAsync,
                 getUsbInterfaceManager,
                 readBufferSize,
                 writeBufferSize);
-        }
 
         public static IDeviceFactory CreateUwpUsbDeviceFactory(
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,

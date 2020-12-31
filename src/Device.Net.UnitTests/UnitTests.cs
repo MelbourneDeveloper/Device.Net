@@ -398,8 +398,7 @@ namespace Device.Net.UnitTests
 
         #region Helpers
 #if !NET45
-        private static void CheckLogMessageText(Mock<ILogger> loggerMock, string containsText, LogLevel logLevel, Times times)
-        {
+        private static void CheckLogMessageText(Mock<ILogger> loggerMock, string containsText, LogLevel logLevel, Times times) =>
             loggerMock.Verify
             (
                 l => l.Log
@@ -413,15 +412,14 @@ namespace Device.Net.UnitTests
                         //This confirms that the correct log message was sent to the logger. {OriginalFormat} should match the value passed to the logger
                         //Note: messages should be retrieved from a service that will probably store the strings in a resource file
                         ((string)GetValue(state, "{OriginalFormat}")).Contains(containsText)
-                ),
-                //Confirm the exception type
-                It.IsAny<Exception>(),
-                //Accept any valid Func here. The Func is specified by the extension methods
-                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                    ),
+                    //Confirm the exception type
+                    It.IsAny<Exception>(),
+                    //Accept any valid Func here. The Func is specified by the extension methods
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
                 //Make sure the message was logged the correct number of times
                 times
             );
-        }
 
         private static object GetValue(object state, string key)
         {
