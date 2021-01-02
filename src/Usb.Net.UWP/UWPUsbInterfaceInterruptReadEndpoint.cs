@@ -89,7 +89,8 @@ namespace Usb.Net.UWP
                     {
                         _logger.LogDebug("Awaiting completion source...");
                         bytes = await _readChunkTaskCompletionSource.Task;
-                        _logger.LogDebug("Completion source finished");
+                        _readChunkTaskCompletionSource = null;
+                        _logger.LogDebug(Messages.DebugMessageCompletionSourceNulled);
                     }
                 }
                 else
@@ -106,8 +107,6 @@ namespace Usb.Net.UWP
             }
             finally
             {
-                _logger.LogDebug(Messages.DebugMessageCompletionSourceNulled);
-                _readChunkTaskCompletionSource = null;
                 _ = _readLock.Release();
             }
         }
