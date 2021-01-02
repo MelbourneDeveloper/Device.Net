@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +13,7 @@ namespace Usb.Net.UWP
     public class UWPUsbInterfaceInterruptReadEndpoint : UWPUsbInterfaceEndpoint<UsbInterruptInPipe>, IDisposable
     {
         #region Fields
-        private readonly Collection<byte[]> _Chunks = new Collection<byte[]>();
+        private readonly Stack<byte[]> _Chunks = new Stack<byte[]>();
         private readonly SemaphoreSlim _ReadLock = new SemaphoreSlim(1, 1);
         private readonly SemaphoreSlim _DataReceivedLock = new SemaphoreSlim(1, 1);
         private bool disposed;
@@ -36,22 +36,19 @@ namespace Usb.Net.UWP
         {
             try
             {
+                var bytes = args?.InterruptData?.ToArray();
+
+                _logger.LogInformation("{bytesLength} read on interrupt pipe {endpointNumber}", bytes?.Length, UsbInterruptInPipe.EndpointDescriptor.EndpointNumber);
+
                 await _DataReceivedLock.WaitAsync();
 
-                var bytes = args.InterruptData.ToArray();
-                _Chunks.Add(bytes);
-
-                if (bytes != null)
-                {
-                    _logger.LogInformation("{bytesLength} read on interrupt pipe {endpointNumber}", bytes.Length, UsbInterruptInPipe.EndpointDescriptor.EndpointNumber);
-                }
+                _Chunks.Push(bytes);
 
                 if (_ReadChunkTaskCompletionSource == null || _ReadChunkTaskCompletionSource.Task.Status == TaskStatus.RanToCompletion) return;
 
                 //In this case there should be no chunks. TODO: Put some unit tests around this.
                 //The read method wil be waiting on this
-                var result = _Chunks[0];
-                _Chunks.RemoveAt(0);
+                var result = _Chunks.Pop();
                 _ReadChunkTaskCompletionSource.SetResult(result);
                 _logger.LogInformation("Completion source result set");
             }
@@ -84,6 +81,8 @@ namespace Usb.Net.UWP
         {
             using var logScope = _logger.BeginScope("Endpoint descriptor: {endpointDescriptor} Call: {call}", UsbInterruptInPipe.EndpointDescriptor?.ToString(), nameof(ReadAsync));
 
+            _logger.LogInformation($"Calling {nameof(ReadAsync)}");
+
             try
             {
                 await _ReadLock.WaitAsync(cancellationToken);
@@ -97,9 +96,8 @@ namespace Usb.Net.UWP
 
                     if (_Chunks.Count > 0)
                     {
-                        retVal = _Chunks[0];
+                        retVal = _Chunks.Pop();
                         _logger.LogTrace(new Trace(false, retVal));
-                        _Chunks.RemoveAt(0);
                         _logger.LogDebug(Messages.DebugMessageReadFirstChunk);
                         return retVal;
                     }
