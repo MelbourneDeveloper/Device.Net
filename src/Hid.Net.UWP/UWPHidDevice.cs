@@ -1,4 +1,4 @@
-﻿using Device.Net;
+using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
@@ -43,7 +43,10 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPHidDevice(ConnectedDeviceDefinition connectedDeviceDefinition, ILoggerFactory loggerFactory = null, byte? defaultReportId = null) : base(connectedDeviceDefinition.DeviceId, loggerFactory, (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UWPHidDevice>())
+        public UWPHidDevice(
+            ConnectedDeviceDefinition connectedDeviceDefinition,
+            ILoggerFactory loggerFactory = null,
+            byte? defaultReportId = null) : base(connectedDeviceDefinition.DeviceId, loggerFactory, (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UWPHidDevice>())
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             DefaultReportId = defaultReportId;
@@ -60,7 +63,7 @@ namespace Hid.Net.UWP
             {
                 if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
-                Logger?.LogDebug(Messages.InformationMessageInitializingDevice);
+                Logger.LogDebug(Messages.InformationMessageInitializingDevice);
 
                 await GetDeviceAsync(DeviceId, cancellationToken);
 
@@ -75,7 +78,7 @@ namespace Hid.Net.UWP
             }
             catch (Exception ex)
             {
-                Logger?.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
+                Logger.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
                 throw;
             }
         }
@@ -148,7 +151,7 @@ namespace Hid.Net.UWP
                 }
                 else
                 {
-                    Logger?.LogError(Messages.GetErrorMessageInvalidWriteLength(bytes.Length, count) + "{length} {count}", bytes.Length, count, GetType().Name);
+                    Logger.LogError(Messages.GetErrorMessageInvalidWriteLength(bytes.Length, count) + "{length} {count}", bytes.Length, count, GetType().Name);
                     throw new IOException(Messages.GetErrorMessageInvalidWriteLength(bytes.Length, count));
                 }
 
@@ -198,19 +201,19 @@ namespace Hid.Net.UWP
         {
             await _WriteAndReadLock.WaitAsync(cancellationToken);
 
-            using var logScope = Logger?.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteAndReadAsync));
+            using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteAndReadAsync));
 
             try
             {
                 _ = await WriteAsync(writeBuffer, cancellationToken);
                 var retVal = await ReadAsync(cancellationToken);
 
-                Logger?.LogDebug(Messages.SuccessMessageWriteAndReadCalled);
+                Logger.LogDebug(Messages.SuccessMessageWriteAndReadCalled);
                 return retVal;
             }
             catch (Exception ex)
             {
-                Logger?.LogError(ex, Messages.ErrorMessageReadWrite);
+                Logger.LogError(ex, Messages.ErrorMessageReadWrite);
                 throw;
             }
             finally

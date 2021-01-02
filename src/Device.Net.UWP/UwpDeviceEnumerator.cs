@@ -44,6 +44,8 @@ namespace Device.Net.UWP
         #region Public Methods
         public async Task<IEnumerable<ConnectedDeviceDefinition>> GetConnectedDeviceDefinitionsAsync(CancellationToken cancellationToken = default)
         {
+            _logger.LogInformation("Filtering devices with AQS filter:\r\n{aqs}", aqsFilter);
+
             var deviceInformationCollection = aqsFilter != null
                 ? await wde.DeviceInformation.FindAllAsync(aqsFilter).AsTask(cancellationToken)
                 : await wde.DeviceInformation.FindAllAsync().AsTask(cancellationToken);
@@ -52,10 +54,14 @@ namespace Device.Net.UWP
                 .Where(_deviceInformationFilter)
                 .Select(d => DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(d.Id, _deviceType, _logger));
 
+            if (!deviceDefinitions.Any()) _logger.LogInformation("Found no devices");
+
             var deviceDefinitionList = new List<ConnectedDeviceDefinition>();
 
             foreach (var deviceDef in deviceDefinitions)
             {
+                _logger.LogInformation("Testing connection for device Id {deviceId}", deviceDef.DeviceId);
+
                 var connectionInformation = await TestConnection(deviceDef.DeviceId, cancellationToken);
                 if (connectionInformation.CanConnect)
                 {
@@ -69,7 +75,11 @@ namespace Device.Net.UWP
 
                     deviceDefinitionList.Add(connectedDeviceDefinition);
 
-                    _logger.LogInformation("Found connected device {deviceId} {connectedDeviceDefinition}", deviceDef.DeviceId, connectedDeviceDefinition);
+                    _logger.LogInformation("Test connection succeeded for connected device {deviceId} {connectedDeviceDefinition}", deviceDef.DeviceId, connectedDeviceDefinition);
+                }
+                else
+                {
+                    _logger.LogWarning("Connection test failed for {deviceId}", deviceDef.DeviceId);
                 }
             }
 

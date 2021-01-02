@@ -57,7 +57,7 @@ namespace Device.Net.UWP
                 if (Chunks.Count > 0)
                 {
                     var data2 = Chunks[0];
-                    Logger?.LogDebug("Received data from device Region: {region}", GetType().Name);
+                    Logger.LogDebug("Received data from device Region: {region}", GetType().Name);
                     Chunks.RemoveAt(0);
                     Logger.LogTrace(new Trace(false, data2));
                     return data2;
@@ -119,7 +119,7 @@ namespace Device.Net.UWP
 #pragma warning restore CA1031 
             {
                 //Log and move on
-                Logger?.LogError(ex, Messages.ErrorMessageCantClose, DeviceId, GetType().Name);
+                Logger.LogError(ex, Messages.ErrorMessageCantClose, DeviceId, GetType().Name);
             }
 
             _IsClosing = false;
