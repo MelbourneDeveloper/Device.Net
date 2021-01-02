@@ -13,11 +13,10 @@ namespace Usb.Net.UWP
     public class UWPUsbInterfaceInterruptReadEndpoint : UWPUsbInterfaceEndpoint<UsbInterruptInPipe>, IDisposable
     {
         #region Fields
-        private readonly Stack<byte[]> _Chunks = new Stack<byte[]>();
-        private readonly SemaphoreSlim _ReadLock = new SemaphoreSlim(1, 1);
-        private readonly SemaphoreSlim _DataReceivedLock = new SemaphoreSlim(1, 1);
+        private readonly Queue<byte[]> _chunks = new Queue<byte[]>();
+        private readonly SemaphoreSlim _readLock = new SemaphoreSlim(1, 1);
         private bool disposed;
-        private TaskCompletionSource<byte[]> _ReadChunkTaskCompletionSource;
+        private TaskCompletionSource<byte[]> _readChunkTaskCompletionSource;
         private readonly ILogger _logger;
         #endregion
 
@@ -32,30 +31,14 @@ namespace Usb.Net.UWP
         //TODO: Put unit tests around locking here somehow
 
         #region Events
-        private async void UsbInterruptInPipe_DataReceived(UsbInterruptInPipe sender, UsbInterruptInEventArgs args)
+        private void UsbInterruptInPipe_DataReceived(UsbInterruptInPipe sender, UsbInterruptInEventArgs args)
         {
-            try
-            {
-                var bytes = args?.InterruptData?.ToArray();
+            var bytes = args?.InterruptData?.ToArray();
 
-                _logger.LogInformation("{bytesLength} read on interrupt pipe {endpointNumber}", bytes?.Length, UsbInterruptInPipe.EndpointDescriptor.EndpointNumber);
+            _logger.LogInformation("{bytesLength} read on interrupt pipe {endpointNumber}", bytes?.Length, UsbInterruptInPipe.EndpointDescriptor.EndpointNumber);
 
-                await _DataReceivedLock.WaitAsync();
-
-                _Chunks.Push(bytes);
-
-                if (_ReadChunkTaskCompletionSource == null || _ReadChunkTaskCompletionSource.Task.Status == TaskStatus.RanToCompletion) return;
-
-                //In this case there should be no chunks. TODO: Put some unit tests around this.
-                //The read method wil be waiting on this
-                var result = _Chunks.Pop();
-                _ReadChunkTaskCompletionSource.SetResult(result);
-                _logger.LogInformation("Completion source result set");
-            }
-            finally
-            {
-                _ = _DataReceivedLock.Release();
-            }
+            if (_readChunkTaskCompletionSource != null) _readChunkTaskCompletionSource.SetResult(bytes);
+            else _chunks.Enqueue(bytes);
         }
         #endregion
 
@@ -72,8 +55,7 @@ namespace Usb.Net.UWP
 
             _logger.LogInformation(Messages.InformationMessageDisposingDevice, Pipe?.ToString());
 
-            _ReadLock.Dispose();
-            _DataReceivedLock.Dispose();
+            _readLock.Dispose();
             GC.SuppressFinalize(this);
         }
 
@@ -85,54 +67,36 @@ namespace Usb.Net.UWP
 
             try
             {
-                await _ReadLock.WaitAsync(cancellationToken);
+                await _readLock.WaitAsync(cancellationToken);
 
-                byte[] retVal = null;
+                byte[] bytes = null;
 
-                try
+                if (_chunks.Count == 0)
                 {
-                    //Don't let any datas be added to the chunks here
-                    await _DataReceivedLock.WaitAsync(cancellationToken);
+                    _readChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
 
-                    if (_Chunks.Count > 0)
+                    //Cancel the completion source if the token is canceled
+                    using (cancellationToken.Register(() => _readChunkTaskCompletionSource.TrySetCanceled()))
                     {
-                        retVal = _Chunks.Pop();
-                        _logger.LogTrace(new Trace(false, retVal));
-                        _logger.LogDebug(Messages.DebugMessageReadFirstChunk);
-                        return retVal;
+                        bytes = await _readChunkTaskCompletionSource.Task;
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    _logger.LogError(ex, Messages.ErrorMessageRead);
-                    throw;
-                }
-                finally
-                {
-                    _ = _DataReceivedLock.Release();
+                    //We already have the data
+                    bytes = _chunks.Dequeue();
                 }
 
-                //Wait for the event here. Once the event occurs, this should return and the semaphore should be released
-                _ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
+                _logger.LogTrace(new Trace(false, bytes));
+                _logger.LogDebug(Messages.DebugMessageReadFirstChunk);
 
-                _logger.LogDebug(Messages.DebugMessageLockReleased);
-
-                //Cancel the completion source if the token is canceled
-                using (cancellationToken.Register(() => _ReadChunkTaskCompletionSource.TrySetCanceled()))
-                {
-                    _ = await _ReadChunkTaskCompletionSource.Task;
-                }
-
-                _ReadChunkTaskCompletionSource = null;
-
-                _logger.LogDebug(Messages.DebugMessageCompletionSourceNulled);
-
-                _logger.LogTrace(new Trace(false, retVal));
-                return retVal;
+                return bytes;
             }
             finally
             {
-                _ = _ReadLock.Release();
+                _logger.LogDebug(Messages.DebugMessageCompletionSourceNulled);
+                _readChunkTaskCompletionSource = null;
+                _ = _readLock.Release();
             }
         }
         #endregion

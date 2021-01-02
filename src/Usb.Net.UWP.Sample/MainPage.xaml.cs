@@ -52,7 +52,7 @@ namespace Usb.Net.UWP.Sample
         #endregion
 
         #region Event Handlers
-        private void DeviceConnectionExample_TrezorDisconnected(object sender, System.EventArgs e)
+        private void DeviceConnectionExample_TrezorDisconnected(object sender, EventArgs e)
         {
             _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
               {
@@ -62,7 +62,7 @@ namespace Usb.Net.UWP.Sample
               });
         }
 
-        private void DeviceConnectionExample_TrezorInitialized(object sender, System.EventArgs e)
+        private void DeviceConnectionExample_TrezorInitialized(object sender, EventArgs e)
         {
             _ = Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                {
