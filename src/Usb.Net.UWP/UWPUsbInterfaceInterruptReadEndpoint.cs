@@ -105,8 +105,15 @@ namespace Usb.Net.UWP
 
                 return bytes;
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error reading");
+                throw;
+            }
             finally
             {
+                //Just in case
+                _readChunkTaskCompletionSource = null;
                 _ = _readLock.Release();
             }
         }
