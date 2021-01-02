@@ -37,8 +37,16 @@ namespace Usb.Net.UWP
 
             _logger.LogInformation("{bytesLength} read on interrupt pipe {endpointNumber}", bytes?.Length, UsbInterruptInPipe.EndpointDescriptor.EndpointNumber);
 
-            if (_readChunkTaskCompletionSource != null) _readChunkTaskCompletionSource.SetResult(bytes);
-            else _chunks.Enqueue(bytes);
+            if (_readChunkTaskCompletionSource != null)
+            {
+                _logger.LogDebug("Setting result of task completion source");
+                _readChunkTaskCompletionSource.SetResult(bytes);
+            }
+            else
+            {
+                _logger.LogDebug("Enqueing data...");
+                _chunks.Enqueue(bytes);
+            }
         }
         #endregion
 
@@ -73,18 +81,22 @@ namespace Usb.Net.UWP
 
                 if (_chunks.Count == 0)
                 {
+                    _logger.LogDebug("Creating a completion source...");
                     _readChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
 
                     //Cancel the completion source if the token is canceled
                     using (cancellationToken.Register(() => _readChunkTaskCompletionSource.TrySetCanceled()))
                     {
+                        _logger.LogDebug("Awaiting completion source...");
                         bytes = await _readChunkTaskCompletionSource.Task;
+                        _logger.LogDebug("Completion source finished");
                     }
                 }
                 else
                 {
                     //We already have the data
                     bytes = _chunks.Dequeue();
+                    _logger.LogDebug("Dequeued data");
                 }
 
                 _logger.LogTrace(new Trace(false, bytes));

@@ -38,7 +38,7 @@ namespace Device.Net
         public const string ErrorMessageReentry = "Reentry. This method is not thread safe";
         public const string ErrorMessageOperationNotSupportedOnPlatform = "You can't use this class on this platform";
         public const string InformationMessageFoundDevice = "Found device";
-        public const string DebugMessageCompletionSourceNulled = "Completion source nulled";
+        public const string DebugMessageCompletionSourceNulled = "Completion source nulled and lock released";
         public const string InformationMessageDisposingDevice = "Disposing ... DeviceId: {deviceId}";
         #endregion
 

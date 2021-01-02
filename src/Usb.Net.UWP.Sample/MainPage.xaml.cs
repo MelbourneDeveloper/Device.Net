@@ -31,7 +31,7 @@ namespace Usb.Net.UWP.Sample
         {
             InitializeComponent();
 
-            var loggerFactory = LoggerFactory.Create((builder) => builder.AddDebug());
+            var loggerFactory = LoggerFactory.Create((builder) => builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 
             _DeviceManager = new List<IDeviceFactory>
             {
