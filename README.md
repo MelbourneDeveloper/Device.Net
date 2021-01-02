@@ -61,8 +61,7 @@ public async Task InitializeTrezorAsync()
 ```
 
 ## Donate
-
-All my libraries are open source and free. Your donations will contribute to making sure that these libraries keep up with the latest firmware, functions are implemented, and the quality is maintained.
+This project needs money. If you use Device.Net, please contribute.
 
 | Coin           | Address |
 | -------------  |:-------------:|
