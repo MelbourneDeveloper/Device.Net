@@ -1,11 +1,13 @@
 ﻿using Device.Net;
 using Hid.Net.UWP;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Usb.Net.Sample;
 using Windows.UI;
 using Windows.UI.Core;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -96,11 +98,15 @@ namespace Usb.Net.UWP.Sample
             {
                 if (initialize) await _DeviceConnectionExample.InitializeTrezorAsync();
                 var readBuffer = await _DeviceConnectionExample.WriteAndReadFromDeviceAsync();
+
+                if (readBuffer == null) throw new Exception("No data returned");
+
                 DevicePanel.DataContext = _DeviceConnectionExample.TrezorDevice.ConnectedDeviceDefinition;
                 OutputBox.Text = string.Join(' ', readBuffer);
             }
-            catch
+            catch (Exception ex)
             {
+                _ = await new MessageDialog(ex.Message, "Error").ShowAsync();
             }
 
             TheProgressRing.IsActive = false;

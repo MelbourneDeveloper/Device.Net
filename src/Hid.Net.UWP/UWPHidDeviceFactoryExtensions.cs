@@ -77,7 +77,7 @@ namespace Hid.Net.UWP
                 loggerFactory,
                 getConnectedDeviceDefinitionsAsync,
                 getDevice,
-                (c, cancellationToken) => Task.FromResult(c.DeviceType == DeviceType.Usb && (classGuid == null || classGuid.Value == c.ClassGuid))
+                (c, cancellationToken) => Task.FromResult(c.DeviceType == DeviceType.Hid && (classGuid == null || classGuid.Value == c.ClassGuid))
                 );
         }
     }

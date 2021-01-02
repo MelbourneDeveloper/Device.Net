@@ -59,6 +59,8 @@ namespace Hid.Net.UWP
             //TODO: Put a lock here to stop reentrancy of multiple calls
             using var loggerScope = Logger?.BeginScope("DeviceId: {deviceId} Region: {region}", DeviceId, nameof(UWPHidDevice));
 
+            Logger.LogInformation("Initializing Hid device {deviceId}", DeviceId);
+
             try
             {
                 if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
