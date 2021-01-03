@@ -94,7 +94,9 @@ namespace Usb.Net.UWP
             }
             else
             {
-                throw new DeviceException(Messages.GetErrorMessageCantConnect(DeviceId));
+                var deviceException = new DeviceException(Messages.GetErrorMessageCantConnect(DeviceId));
+                Logger.LogError(deviceException, "Error getting device");
+                throw deviceException;
             }
 
             UsbInterfaceHandler.RegisterDefaultInterfaces();
