@@ -2,7 +2,6 @@
 using Device.Net.Exceptions;
 using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -48,9 +47,10 @@ namespace Usb.Net.UWP
         public UWPUsbInterfaceManager(
             ConnectedDeviceDefinition connectedDeviceDefinition,
             Func<windowsUsbDevice, SetupPacket, byte[], CancellationToken, Task<TransferResult>> performControlTransferAsync,
+            IDataReceiver dataReceiver,
             ILoggerFactory loggerFactory = null,
             ushort? readBufferSize = null,
-            ushort? writeBufferSize = null) : base(connectedDeviceDefinition?.DeviceId, loggerFactory, (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UWPUsbInterfaceManager>())
+            ushort? writeBufferSize = null) : base(connectedDeviceDefinition?.DeviceId, dataReceiver, loggerFactory)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             UsbInterfaceHandler = new UsbInterfaceManager(loggerFactory);
@@ -61,7 +61,7 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Private Methods
-        public override async Task InitializeAsync(CancellationToken cancellationToken = default)
+        public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
@@ -84,6 +84,7 @@ namespace Usb.Net.UWP
                         new PerformControlTransferAsync((sp, data, c) => _performControlTransferAsync(ConnectedDevice, sp, data, c)) :
                         //TODO: Fill in the UWP control transfer here
                         (sp, data, c) => throw new NotImplementedException(),
+                        DataReceiver,
                         Logger,
                         _ReadBufferSize,
                         _WriteBufferSize);
@@ -94,7 +95,9 @@ namespace Usb.Net.UWP
             }
             else
             {
-                throw new DeviceException(Messages.GetErrorMessageCantConnect(DeviceId));
+                var deviceException = new DeviceException(Messages.GetErrorMessageCantConnect(DeviceId));
+                Logger.LogError(deviceException, "Error getting device");
+                throw deviceException;
             }
 
             UsbInterfaceHandler.RegisterDefaultInterfaces();
@@ -117,6 +120,8 @@ namespace Usb.Net.UWP
         public Task WriteAsync(byte[] data) => WriteUsbInterface.WriteAsync(data);
 
         public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync(CancellationToken cancellationToken = default) => Task.FromResult(ConnectedDeviceDefinition);
+
+        public override Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default) => ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
         #endregion
     }
 }

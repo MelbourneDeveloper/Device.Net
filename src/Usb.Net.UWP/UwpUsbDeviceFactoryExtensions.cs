@@ -38,7 +38,8 @@ namespace Usb.Net.UWP
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null,
         Func<wde.DeviceInformation, bool> deviceInformationFilter = null,
-        Func<windowsUsbDevice, SetupPacket, byte[], CancellationToken, Task<TransferResult>> performControlTransferAsync = null)
+        Func<windowsUsbDevice, SetupPacket, byte[], CancellationToken, Task<TransferResult>> performControlTransferAsync = null,
+        IDataReceiver dataReceiver = null)
         {
             if (getConnectedDeviceDefinitionsAsync == null)
             {
@@ -65,6 +66,9 @@ namespace Usb.Net.UWP
                         //TODO: no idea if this is OK...
                         new ConnectedDeviceDefinition(deviceId, DeviceType.Usb),
                         performControlTransferAsync,
+                        dataReceiver ?? new UWPDataReceiver(
+                            new Observable<TransferResult>(),
+                            loggerFactory.CreateLogger<UWPDataReceiver>()),
                         loggerFactory,
                         readBufferSize,
                         writeBufferSize));

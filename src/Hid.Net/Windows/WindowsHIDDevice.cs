@@ -203,13 +203,11 @@ namespace Hid.Net.Windows
             await Task.Run(Initialize, cancellationToken).ConfigureAwait(false);
         }
 
-
-
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             var readReport = await ReadReportAsync(cancellationToken).ConfigureAwait(false);
-            Logger.LogTrace(new Trace(false, readReport.Data));
-            return new TransferResult(readReport.Data, readReport.BytesRead);
+            Logger.LogDataTransfer(new Trace(false, readReport.Data));
+            return readReport.Data;
         }
 
         public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
@@ -244,7 +242,7 @@ namespace Hid.Net.Windows
 
             var retVal = ReadBufferHasReportId ? RemoveFirstByte(bytes) : bytes;
 
-            return new ReadReport(reportId, retVal, bytesRead);
+            return new ReadReport(reportId, new TransferResult(retVal, bytesRead));
         }
 
         public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
@@ -287,7 +285,7 @@ namespace Hid.Net.Windows
                     try
                     {
                         await _WriteFileStream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
-                        Logger.LogTrace(new Trace(true, bytes));
+                        Logger.LogDataTransfer(new Trace(true, bytes));
                     }
                     catch (Exception ex)
                     {

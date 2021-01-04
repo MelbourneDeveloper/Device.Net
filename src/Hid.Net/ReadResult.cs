@@ -1,16 +1,16 @@
-﻿namespace Hid.Net
+﻿using Device.Net;
+
+namespace Hid.Net
 {
     public class ReadReport
     {
-        public byte[] Data { get; }
+        public TransferResult Data { get; }
         public byte? ReportId { get; }
-        public uint BytesRead { get; }
 
-        public ReadReport(byte? reportId, byte[] data, uint bytesRead)
+        public ReadReport(byte? reportId, TransferResult transferResult)
         {
-            Data = data;
+            Data = transferResult;
             ReportId = reportId;
-            BytesRead = bytesRead;
         }
     }
 }

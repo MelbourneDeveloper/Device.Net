@@ -146,7 +146,7 @@ namespace Usb.Net
                 if (setupPacket.RequestType.Direction == RequestDirection.Out)
                 {
                     //Trace the write to the device
-                    Logger.LogTrace(new Trace(true, transferBuffer));
+                    Logger.LogDataTransfer(new Trace(true, transferBuffer));
                 }
 
                 Logger.LogInformation("Control Transfer complete {setupPacket}", setupPacket);
@@ -158,7 +158,7 @@ namespace Usb.Net
                 if (setupPacket.RequestType.Direction == RequestDirection.In)
                 {
                     //Trace the read from the device
-                    Logger.LogTrace(new Trace(false, transferBuffer));
+                    Logger.LogDataTransfer(new Trace(false, returnValue));
                 }
 
                 return returnValue;

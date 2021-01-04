@@ -2,7 +2,6 @@ using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -23,7 +22,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Properties
-        public bool DataHasExtraByte { get; set; }
+        public bool DataHasExtraByte { get; set; } = true;
         public byte? DefaultReportId { get; }
         #endregion
 
@@ -39,14 +38,26 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Event Handlers
-        private void HidDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args) => HandleDataReceived(GetReadReport(args).Data);
+        private void ConnectedDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args)
+        {
+            Logger.LogDebug("Received Hid report Id: {id}", args?.Report?.Id);
+
+            using var stream = args.Report.Data.AsStream();
+
+            var bytes = new byte[args.Report.Data.Length];
+
+            var bytesRead = (uint)stream.Read(bytes, 0, (int)args.Report.Data.Length);
+
+            DataReceiver.DataReceived(new TransferResult(bytes, bytesRead));
+        }
         #endregion
 
         #region Constructors
         public UWPHidDevice(
             ConnectedDeviceDefinition connectedDeviceDefinition,
+            IDataReceiver dataReceiver,
             ILoggerFactory loggerFactory = null,
-            byte? defaultReportId = null) : base(connectedDeviceDefinition.DeviceId, loggerFactory, (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UWPHidDevice>())
+            byte? defaultReportId = null) : base(connectedDeviceDefinition.DeviceId, dataReceiver, loggerFactory)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             DefaultReportId = defaultReportId;
@@ -54,7 +65,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Private Methods
-        public override async Task InitializeAsync(CancellationToken cancellationToken = default)
+        public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
             using var loggerScope = Logger?.BeginScope("DeviceId: {deviceId} Region: {region}", DeviceId, nameof(UWPHidDevice));
@@ -71,7 +82,7 @@ namespace Hid.Net.UWP
 
                 if (ConnectedDevice != null)
                 {
-                    ConnectedDevice.InputReportReceived += HidDevice_InputReportReceived;
+                    ConnectedDevice.InputReportReceived += ConnectedDevice_InputReportReceived;
                 }
                 else
                 {
@@ -88,21 +99,6 @@ namespace Hid.Net.UWP
         protected override IAsyncOperation<HidDevice> FromIdAsync(string id) => GetHidDevice(id);
         #endregion
 
-        #region Private Static Methods
-        private static ReadReport GetReadReport(HidInputReportReceivedEventArgs args)
-        {
-            byte[] bytes;
-            uint bytesRead;
-            using (var stream = args.Report.Data.AsStream())
-            {
-                bytes = new byte[args.Report.Data.Length];
-                bytesRead = (uint)stream.Read(bytes, 0, (int)args.Report.Data.Length);
-            }
-
-            return new ReadReport((byte)args.Report.Id, bytes, bytesRead);
-        }
-        #endregion
-
         #region Public Methods
         public override void Dispose()
         {
@@ -116,7 +112,9 @@ namespace Hid.Net.UWP
 
             Logger.LogInformation(Messages.InformationMessageDisposingDevice, DeviceId);
 
+            DataReceiver.Dispose();
             _WriteAndReadLock.Dispose();
+            ConnectedDevice.InputReportReceived -= ConnectedDevice_InputReportReceived;
 
             base.Dispose();
         }
@@ -126,6 +124,8 @@ namespace Hid.Net.UWP
         public async Task<uint> WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
+
+            if (DataReceiver.HasData) Logger.LogWarning("Writing to device but data has already been received that has not been read");
 
             byte[] bytes;
             if (DataHasExtraByte)
@@ -149,7 +149,7 @@ namespace Hid.Net.UWP
                 var count = await operation.AsTask(cancellationToken);
                 if (count == bytes.Length)
                 {
-                    Logger.LogTrace(new Trace(true, bytes));
+                    Logger.LogDataTransfer(new Trace(true, bytes));
                 }
                 else
                 {
@@ -177,22 +177,22 @@ namespace Hid.Net.UWP
         public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
         {
             byte? reportId = null;
-            var bytes = await base.ReadAsync(cancellationToken);
+            var transferResult = await ReadAsync(cancellationToken);
 
             if (DataHasExtraByte)
             {
-                reportId = bytes.Data[0];
-                bytes = DeviceBase.RemoveFirstByte(bytes);
+                reportId = transferResult.Data[0];
+                transferResult = new TransferResult(DeviceBase.RemoveFirstByte(transferResult), transferResult.BytesTransferred);
             }
 
-            return new ReadReport(reportId, bytes, bytes.BytesTransferred);
+            return new ReadReport(reportId, new TransferResult(transferResult, transferResult.BytesTransferred));
         }
 
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
-            var data = (await ReadReportAsync(cancellationToken)).Data;
-            Logger.LogTrace(new Trace(false, data));
-            return data;
+            var transferResult = await DataReceiver.ReadAsync(cancellationToken);
+            Logger.LogDataTransfer(new Trace(false, transferResult));
+            return transferResult;
         }
         #endregion
 

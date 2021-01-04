@@ -54,8 +54,9 @@ namespace Usb.Net.Windows
                 var bytes = new byte[bufferLength];
                 var isSuccess = WinUsbApiCalls.WinUsb_ReadPipe(_SafeFileHandle, ReadEndpoint.PipeId, bytes, bufferLength, out var bytesRead, IntPtr.Zero);
                 _ = WindowsHelpers.HandleError(isSuccess, "Couldn't read data", Logger);
-                Logger.LogTrace(new Trace(false, bytes));
-                return new TransferResult(bytes, bytesRead);
+                var transferResult = new TransferResult(bytes, bytesRead);
+                Logger.LogDataTransfer(new Trace(false, transferResult));
+                return transferResult;
             }, cancellationToken);
 
         public Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
@@ -69,7 +70,7 @@ namespace Usb.Net.Windows
                     out var bytesWritten,
                     IntPtr.Zero);
                 _ = WindowsHelpers.HandleError(isSuccess, "Couldn't write data", Logger);
-                Logger.LogTrace(new Trace(true, data));
+                Logger.LogDataTransfer(new Trace(true, data));
                 return bytesWritten;
             }, cancellationToken);
 

@@ -29,10 +29,10 @@ namespace Usb.Net.UWP
         public UWPUsbInterface(
             windowsUsbInterface usbInterface,
             PerformControlTransferAsync performControlTransferAsync,
+            IDataReceiver dataReceiver,
             ILogger logger = null,
             ushort? readBuffersize = null,
-            ushort? writeBufferSize = null
-            ) : base(
+            ushort? writeBufferSize = null) : base(
                 performControlTransferAsync,
                 logger,
                 readBuffersize,
@@ -42,7 +42,11 @@ namespace Usb.Net.UWP
 
             foreach (var inPipe in usbInterface.InterruptInPipes)
             {
-                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceInterruptReadEndpoint(inPipe, Logger);
+                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceInterruptReadEndpoint(
+                    inPipe,
+                    dataReceiver,
+                    Logger);
+
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
                 InterruptReadEndpoint ??= uwpUsbInterfaceEndpoint;
             }
@@ -81,15 +85,16 @@ namespace Usb.Net.UWP
             {
                 buffer = new wss.Buffer(bufferLength);
                 _ = await usbBulkInPipe.Pipe.InputStream.ReadAsync(buffer, bufferLength, InputStreamOptions.None).AsTask(cancellationToken);
+                //TODO: Seems there is no way to figure out how much data was read?
+                return new TransferResult(buffer.ToArray(), buffer.Length);
             }
             else
             {
                 return InterruptReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe
-                    ? (TransferResult)await usbInterruptInPipe.ReadAsync(cancellationToken)
+                    ? await usbInterruptInPipe.ReadAsync(cancellationToken)
                     : throw new DeviceException(Messages.ErrorMessageReadEndpointNotRecognized);
             }
 
-            return buffer.ToArray();
         }
 
         public async Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
@@ -127,7 +132,7 @@ namespace Usb.Net.UWP
 
                 if (count == data.Length)
                 {
-                    Logger.LogTrace(new Trace(true, data));
+                    Logger.LogDataTransfer(new Trace(true, data));
                 }
                 else
                 {
