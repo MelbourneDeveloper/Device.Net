@@ -1,5 +1,4 @@
-﻿using Device.Net.Exceptions;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Threading;
@@ -8,7 +7,7 @@ using Windows.Foundation;
 
 namespace Device.Net.UWP
 {
-    public abstract class UWPDeviceBase<T> : UWPDeviceBase
+    public abstract class UWPDeviceBase<T>
     {
         #region Fields
         private bool _IsClosing;
@@ -19,6 +18,11 @@ namespace Device.Net.UWP
         protected T ConnectedDevice { get; private set; }
         public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; protected set; }
         protected ILoggerFactory LoggerFactory { get; private set; }
+        protected ILogger<UWPDeviceBase<T>> Logger { get; }
+        #endregion
+
+        #region Public
+        public string DeviceId { get; }
         #endregion
 
         #region Public Abstract
@@ -27,7 +31,14 @@ namespace Device.Net.UWP
         #endregion
 
         #region Constructor
-        protected UWPDeviceBase(string deviceId, ILoggerFactory loggerFactory, ILogger logger) : base(deviceId, logger) => LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
+        protected UWPDeviceBase(
+            string deviceId,
+            ILoggerFactory loggerFactory)
+        {
+            DeviceId = deviceId;
+            LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
+            Logger = loggerFactory.CreateLogger<UWPDeviceBase<T>>();
+        }
         #endregion
 
         #region Protected Methods
@@ -44,40 +55,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Public Overrides
-        public virtual async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
-        {
-            if (IsReading)
-            {
-                throw new AsyncException(Messages.ErrorMessageReentry);
-            }
-
-            //TODO: this should be a semaphore not a lock
-            lock (Chunks)
-            {
-                if (Chunks.Count > 0)
-                {
-                    var data2 = Chunks[0];
-                    Logger.LogDebug("Received data from device Region: {region}", GetType().Name);
-                    Chunks.RemoveAt(0);
-                    Logger.LogTrace(new Trace(false, data2));
-                    return data2;
-                }
-            }
-
-            IsReading = true;
-
-            ReadChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
-
-            //Cancel the completion source if the token is canceled
-            using (cancellationToken.Register(() => ReadChunkTaskCompletionSource.TrySetCanceled()))
-            {
-                _ = await ReadChunkTaskCompletionSource.Task;
-            }
-
-            var data = await ReadChunkTaskCompletionSource.Task;
-            Logger.LogTrace(new Trace(false, data));
-            return data;
-        }
+        public abstract Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default);
         #endregion
 
         #region Public Override Properties
@@ -98,7 +76,6 @@ namespace Device.Net.UWP
             Logger.LogInformation(Messages.InformationMessageDisposingDevice, DeviceId);
 
             Close();
-            ReadChunkTaskCompletionSource?.Task?.Dispose();
 
             GC.SuppressFinalize(this);
         }

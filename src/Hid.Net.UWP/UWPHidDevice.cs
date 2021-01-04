@@ -2,7 +2,6 @@ using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -46,7 +45,7 @@ namespace Hid.Net.UWP
         public UWPHidDevice(
             ConnectedDeviceDefinition connectedDeviceDefinition,
             ILoggerFactory loggerFactory = null,
-            byte? defaultReportId = null) : base(connectedDeviceDefinition.DeviceId, loggerFactory, (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UWPHidDevice>())
+            byte? defaultReportId = null) : base(connectedDeviceDefinition.DeviceId, loggerFactory)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             DefaultReportId = defaultReportId;
@@ -54,7 +53,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Private Methods
-        public override async Task InitializeAsync(CancellationToken cancellationToken = default)
+        public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
             using var loggerScope = Logger?.BeginScope("DeviceId: {deviceId} Region: {region}", DeviceId, nameof(UWPHidDevice));
@@ -117,6 +116,7 @@ namespace Hid.Net.UWP
             Logger.LogInformation(Messages.InformationMessageDisposingDevice, DeviceId);
 
             _WriteAndReadLock.Dispose();
+            ConnectedDevice.InputReportReceived -= HidDevice_InputReportReceived;
 
             base.Dispose();
         }
