@@ -40,5 +40,7 @@
             BytesTransferred = bytesRead;
         }
         #endregion
+
+        public override string ToString() => $"Bytes transferred: {BytesTransferred}\r\n{string.Join(", ", Data)}";
     }
 }

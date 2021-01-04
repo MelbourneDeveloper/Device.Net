@@ -6,14 +6,14 @@ namespace Device.Net
         public Trace(bool isWrite, TransferResult transferResult)
         {
             IsWrite = isWrite;
-            Data = transferResult;
+            TransferResult = transferResult;
         }
 
 #pragma warning disable CA1819 // Properties should not return arrays
-        public TransferResult Data { get; }
+        public TransferResult TransferResult { get; }
 #pragma warning restore CA1819 // Properties should not return arrays
         public bool IsWrite { get; }
 
-        public override string ToString() => $"{(IsWrite ? "Write" : "Read")} - Bytes transferred: {Data.BytesTransferred} - {string.Join(", ", Data)}";
+        public override string ToString() => $"{(IsWrite ? "Write" : "Read")} - {TransferResult}";
     }
 }
