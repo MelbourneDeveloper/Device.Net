@@ -40,7 +40,7 @@ namespace Hid.Net.UWP
         #region Event Handlers
         private void ConnectedDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args)
         {
-            Logger.LogDebug("Received Hid report Id: {id} Report: {report}", args?.Report?.Id, args?.Report);
+            Logger.LogDebug("Received Hid report Id: {id}", args?.Report?.Id);
 
             using var stream = args.Report.Data.AsStream();
 
@@ -188,8 +188,12 @@ namespace Hid.Net.UWP
             return new ReadReport(reportId, new TransferResult(transferResult, transferResult.BytesTransferred));
         }
 
-        public override Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
-            => DataReceiver.ReadAsync(cancellationToken);
+        public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
+        {
+            var transferResult = await DataReceiver.ReadAsync(cancellationToken);
+            Logger.LogDataTransfer(new Trace(false, transferResult));
+            return transferResult;
+        }
         #endregion
 
         #region Public Static Methods

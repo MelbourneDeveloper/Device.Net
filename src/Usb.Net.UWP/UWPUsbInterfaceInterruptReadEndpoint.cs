@@ -59,7 +59,12 @@ namespace Usb.Net.UWP
             GC.SuppressFinalize(this);
         }
 
-        public Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default) => _dataReceiver.ReadAsync(cancellationToken);
+        public async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
+        {
+            var transferResult = await _dataReceiver.ReadAsync(cancellationToken);
+            _logger.LogDataTransfer(new Trace(false, transferResult));
+            return transferResult;
+        }
         #endregion
     }
 }
