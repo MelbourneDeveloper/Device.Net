@@ -47,15 +47,16 @@ namespace Hid.Net.UWP
             //TODO: We are ignoring bytes read here...
             var bytesRead = (uint)stream.Read(bytes, 0, (int)args.Report.Data.Length);
 
-            DataReceivedObservable.OnNext(bytes);
+            UWPDataReceiver.DataReceived(bytes);
         }
         #endregion
 
         #region Constructors
         public UWPHidDevice(
             ConnectedDeviceDefinition connectedDeviceDefinition,
+            IDataReceiver dataReceiver,
             ILoggerFactory loggerFactory = null,
-            byte? defaultReportId = null) : base(connectedDeviceDefinition.DeviceId, loggerFactory)
+            byte? defaultReportId = null) : base(connectedDeviceDefinition.DeviceId, dataReceiver, loggerFactory)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             DefaultReportId = defaultReportId;

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Device.Net.UWP
 {
-    public class UWPDataReceiver : IDisposable
+    public class UWPDataReceiver : IDisposable, IDataReceiver
     {
         #region Fields
         private readonly Queue<byte[]> _readQueue = new Queue<byte[]>();
@@ -30,10 +30,13 @@ namespace Device.Net.UWP
         }
         #endregion
 
-        #region Events
-        private void DataReceived(byte[] bytes)
+        #region Public Methods
+        public void DataReceived(byte[] bytes)
         {
-            _logger.LogInformation("{bytesLength} bytes received", bytes?.Length);
+            _logger.LogDebug("Received data - Length: {dataLength}. {infoMessage} {state}",
+                bytes.Length,
+                _readChunkTaskCompletionSource != null ? "Setting completion source..." : "Enqueuing data"
+                , new Trace(false, bytes));
 
             if (_readChunkTaskCompletionSource != null)
             {
@@ -42,28 +45,8 @@ namespace Device.Net.UWP
             }
             else
             {
-                var state = new Trace(false, bytes);
-
-                _logger.Log(LogLevel.Debug, default, state, null, (s, e) => $"Enqueing data... {state}");
-
                 _readQueue.Enqueue(bytes);
             }
-        }
-        #endregion
-
-        #region Public Methods
-        public void Dispose()
-        {
-            if (disposed)
-            {
-                _logger.LogWarning(Messages.WarningMessageAlreadyDisposed, nameof(UWPDataReceiver));
-                return;
-            }
-
-            disposed = true;
-            _logger.LogInformation(Messages.InformationMessageDisposingDevice, nameof(UWPDataReceiver));
-            _dataReceivedSubscription.Dispose();
-            _readLock.Dispose();
         }
 
         public async Task<byte[]> ReadAsync(CancellationToken cancellationToken = default)
@@ -98,7 +81,6 @@ namespace Device.Net.UWP
                 }
 
                 _logger.LogTrace(new Trace(false, bytes));
-                _logger.LogDebug(Messages.DebugMessageReadFirstChunk);
 
                 return bytes;
             }
@@ -113,6 +95,20 @@ namespace Device.Net.UWP
                 _readChunkTaskCompletionSource = null;
                 _ = _readLock.Release();
             }
+        }
+
+        public void Dispose()
+        {
+            if (disposed)
+            {
+                _logger.LogWarning(Messages.WarningMessageAlreadyDisposed, nameof(UWPDataReceiver));
+                return;
+            }
+
+            disposed = true;
+            _logger.LogInformation(Messages.InformationMessageDisposingDevice, nameof(UWPDataReceiver));
+            _dataReceivedSubscription.Dispose();
+            _readLock.Dispose();
         }
         #endregion
     }

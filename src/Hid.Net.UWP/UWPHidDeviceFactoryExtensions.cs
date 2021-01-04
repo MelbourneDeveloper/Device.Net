@@ -33,11 +33,21 @@ namespace Hid.Net.UWP
         GetDeviceAsync getDevice = null,
         byte? defaultReportId = null,
         Guid? classGuid = null,
-        Func<wde.DeviceInformation, bool> deviceInformationFilter = null)
+        Func<wde.DeviceInformation, bool> deviceInformationFilter = null,
+        IDataReceiver dataReceiver = null)
         {
             loggerFactory ??= NullLoggerFactory.Instance;
 
-            getDevice ??= (c, cancellationToken) => Task.FromResult<IDevice>(new UWPHidDevice(c, loggerFactory, defaultReportId));
+            getDevice ??= (c, cancellationToken) => Task.FromResult<IDevice>(
+                new UWPHidDevice
+                (
+                    c,
+                    dataReceiver ??
+                    new UWPDataReceiver(
+                        new Observable<byte[]>(),
+                        loggerFactory.CreateLogger<UWPDataReceiver>()),
+                    loggerFactory,
+                    defaultReportId));
 
             var aqs = AqsHelpers.GetAqs(filterDeviceDefinitions, DeviceType.Hid);
 

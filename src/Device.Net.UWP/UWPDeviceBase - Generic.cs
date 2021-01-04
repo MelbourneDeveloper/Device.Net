@@ -15,8 +15,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Protected Properties
-        protected readonly Observable<byte[]> DataReceivedObservable;
-        protected readonly UWPDataReceiver UWPDataReceiver;
+        protected readonly IDataReceiver UWPDataReceiver;
         protected T ConnectedDevice { get; private set; }
         public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; protected set; }
         protected ILoggerFactory LoggerFactory { get; private set; }
@@ -35,15 +34,13 @@ namespace Device.Net.UWP
         #region Constructor
         protected UWPDeviceBase(
             string deviceId,
+            IDataReceiver dataReceiver,
             ILoggerFactory loggerFactory)
         {
             DeviceId = deviceId;
             LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             Logger = loggerFactory.CreateLogger<UWPDeviceBase<T>>();
-            DataReceivedObservable = new Observable<byte[]>();
-            UWPDataReceiver = new UWPDataReceiver(
-                DataReceivedObservable,
-                LoggerFactory.CreateLogger<UWPDataReceiver>());
+            UWPDataReceiver = dataReceiver;
         }
         #endregion
 
@@ -78,6 +75,8 @@ namespace Device.Net.UWP
             }
 
             disposed = true;
+
+            UWPDataReceiver.Dispose();
 
             Logger.LogInformation(Messages.InformationMessageDisposingDevice, DeviceId);
 

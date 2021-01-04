@@ -47,9 +47,10 @@ namespace Usb.Net.UWP
         public UWPUsbInterfaceManager(
             ConnectedDeviceDefinition connectedDeviceDefinition,
             Func<windowsUsbDevice, SetupPacket, byte[], CancellationToken, Task<TransferResult>> performControlTransferAsync,
+            IDataReceiver dataReceiver,
             ILoggerFactory loggerFactory = null,
             ushort? readBufferSize = null,
-            ushort? writeBufferSize = null) : base(connectedDeviceDefinition?.DeviceId, loggerFactory)
+            ushort? writeBufferSize = null) : base(connectedDeviceDefinition?.DeviceId, dataReceiver, loggerFactory)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             UsbInterfaceHandler = new UsbInterfaceManager(loggerFactory);
@@ -83,7 +84,6 @@ namespace Usb.Net.UWP
                         new PerformControlTransferAsync((sp, data, c) => _performControlTransferAsync(ConnectedDevice, sp, data, c)) :
                         //TODO: Fill in the UWP control transfer here
                         (sp, data, c) => throw new NotImplementedException(),
-                        DataReceivedObservable,
                         UWPDataReceiver,
                         Logger,
                         _ReadBufferSize,
