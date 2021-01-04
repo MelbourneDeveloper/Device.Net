@@ -99,10 +99,9 @@ namespace SerialPort.Net.Windows
             {
                 var buffer = new byte[_ReadBufferSize];
                 var bytesRead = Read(buffer);
-
-                Logger.LogTrace(new Trace(false, buffer));
-
-                return new TransferResult(buffer, bytesRead);
+                var transferResult = new TransferResult(buffer, bytesRead);
+                Logger.LogTrace(new Trace(false, transferResult));
+                return transferResult;
             }, cancellationToken);
         }
 

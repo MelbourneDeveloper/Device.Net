@@ -158,7 +158,7 @@ namespace Usb.Net
                 if (setupPacket.RequestType.Direction == RequestDirection.In)
                 {
                     //Trace the read from the device
-                    Logger.LogTrace(new Trace(false, transferBuffer));
+                    Logger.LogTrace(new Trace(false, returnValue));
                 }
 
                 return returnValue;

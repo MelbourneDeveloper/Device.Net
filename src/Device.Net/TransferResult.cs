@@ -25,6 +25,10 @@
         #region Conversion Operators
         public static implicit operator byte[](TransferResult TransferResult) => TransferResult.Data;
 
+        /// <summary>
+        /// This automatically converts an array of bytes to <see cref="TransferResult"/>. TODO: Remove this because it is too easy to swallow up the information of how many bytes were actually read
+        /// </summary>
+        /// <param name="data"></param>
         public static implicit operator TransferResult(byte[] data) =>
             new TransferResult(data, data != null ? (uint)data.Length : 0);
         #endregion

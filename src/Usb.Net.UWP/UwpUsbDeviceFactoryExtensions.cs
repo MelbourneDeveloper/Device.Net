@@ -67,7 +67,7 @@ namespace Usb.Net.UWP
                         new ConnectedDeviceDefinition(deviceId, DeviceType.Usb),
                         performControlTransferAsync,
                         dataReceiver ?? new UWPDataReceiver(
-                            new Observable<byte[]>(),
+                            new Observable<TransferResult>(),
                             loggerFactory.CreateLogger<UWPDataReceiver>()),
                         loggerFactory,
                         readBufferSize,

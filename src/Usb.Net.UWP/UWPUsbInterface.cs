@@ -85,15 +85,16 @@ namespace Usb.Net.UWP
             {
                 buffer = new wss.Buffer(bufferLength);
                 _ = await usbBulkInPipe.Pipe.InputStream.ReadAsync(buffer, bufferLength, InputStreamOptions.None).AsTask(cancellationToken);
+                //TODO: Seems there is no way to figure out how much data was read?
+                return new TransferResult(buffer.ToArray(), buffer.Length);
             }
             else
             {
                 return InterruptReadEndpoint is UWPUsbInterfaceInterruptReadEndpoint usbInterruptInPipe
-                    ? (TransferResult)await usbInterruptInPipe.ReadAsync(cancellationToken)
+                    ? await usbInterruptInPipe.ReadAsync(cancellationToken)
                     : throw new DeviceException(Messages.ErrorMessageReadEndpointNotRecognized);
             }
 
-            return buffer.ToArray();
         }
 
         public async Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)

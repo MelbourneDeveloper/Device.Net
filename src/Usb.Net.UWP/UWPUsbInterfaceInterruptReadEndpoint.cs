@@ -37,7 +37,7 @@ namespace Usb.Net.UWP
             UsbInterruptInEventArgs args)
         {
             var bytes = args?.InterruptData?.ToArray();
-            if (bytes != null) _dataReceiver.DataReceived(bytes);
+            if (bytes != null) _dataReceiver.DataReceived(new TransferResult(bytes, args.InterruptData.Length));
         }
         #endregion
 
@@ -59,7 +59,7 @@ namespace Usb.Net.UWP
             GC.SuppressFinalize(this);
         }
 
-        public Task<byte[]> ReadAsync(CancellationToken cancellationToken = default) => _dataReceiver.ReadAsync(cancellationToken);
+        public Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default) => _dataReceiver.ReadAsync(cancellationToken);
         #endregion
     }
 }

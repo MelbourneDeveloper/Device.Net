@@ -44,10 +44,9 @@ namespace Hid.Net.UWP
 
             var bytes = new byte[args.Report.Data.Length];
 
-            //TODO: We are ignoring bytes read here...
             var bytesRead = (uint)stream.Read(bytes, 0, (int)args.Report.Data.Length);
 
-            DataReceiver.DataReceived(bytes);
+            DataReceiver.DataReceived(new TransferResult(bytes, bytesRead));
         }
         #endregion
 
@@ -174,22 +173,19 @@ namespace Hid.Net.UWP
         public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
         {
             byte? reportId = null;
-            var bytes = await ReadAsync(cancellationToken);
+            var transferResult = await ReadAsync(cancellationToken);
 
             if (DataHasExtraByte)
             {
-                reportId = bytes.Data[0];
-                bytes = DeviceBase.RemoveFirstByte(bytes);
+                reportId = transferResult.Data[0];
+                transferResult = new TransferResult(DeviceBase.RemoveFirstByte(transferResult), transferResult.BytesTransferred);
             }
 
-            return new ReadReport(reportId, bytes, bytes.BytesTransferred);
+            return new ReadReport(reportId, new TransferResult(transferResult, transferResult.BytesTransferred));
         }
 
-        public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
-        {
-            var result = await DataReceiver.ReadAsync(cancellationToken);
-            return new TransferResult(result, (uint)result.Length);
-        }
+        public override Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
+            => DataReceiver.ReadAsync(cancellationToken);
         #endregion
 
         #region Public Static Methods

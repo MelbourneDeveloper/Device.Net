@@ -14,12 +14,12 @@ namespace Device.Net
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<byte[]> ReadAsync(CancellationToken cancellationToken = default);
+        Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Manually set the data that appears at the source
         /// </summary>
         /// <param name="bytes"></param>
-        void DataReceived(byte[] bytes);
+        void DataReceived(TransferResult bytes);
     }
 }

@@ -44,7 +44,7 @@ namespace Hid.Net.UWP
                     c,
                     dataReceiver ??
                     new UWPDataReceiver(
-                        new Observable<byte[]>(),
+                        new Observable<TransferResult>(),
                         loggerFactory.CreateLogger<UWPDataReceiver>()),
                     loggerFactory,
                     defaultReportId));

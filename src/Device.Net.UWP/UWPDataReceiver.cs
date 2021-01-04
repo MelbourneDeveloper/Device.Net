@@ -10,31 +10,31 @@ namespace Device.Net.UWP
     public class UWPDataReceiver : IDisposable, IDataReceiver
     {
         #region Fields
-        private readonly Queue<byte[]> _readQueue = new Queue<byte[]>();
+        private readonly Queue<TransferResult> _readQueue = new Queue<TransferResult>();
         private readonly SemaphoreSlim _readLock = new SemaphoreSlim(1, 1);
         private bool disposed;
-        private TaskCompletionSource<byte[]> _readChunkTaskCompletionSource;
+        private TaskCompletionSource<TransferResult> _readChunkTaskCompletionSource;
         private readonly ILogger _logger;
         private readonly IDisposable _dataReceivedSubscription;
-        private readonly IObserver<byte[]> _dataReceived;
+        private readonly IObserver<TransferResult> _dataReceived;
         #endregion
 
         #region Constructor
         public UWPDataReceiver(
-            IObservable<byte[]> dataRecievedObservable,
+            IObservable<TransferResult> dataRecievedObservable,
             ILogger logger = null)
         {
             _logger = logger ?? NullLogger.Instance;
-            _dataReceived = new Observer<byte[]>(DataReceived);
+            _dataReceived = new Observer<TransferResult>(DataReceived);
             _dataReceivedSubscription = dataRecievedObservable.Subscribe(_dataReceived);
         }
         #endregion
 
         #region Public Methods
-        public void DataReceived(byte[] bytes)
+        public void DataReceived(TransferResult bytes)
         {
-            _logger.LogDebug("Received data - Length: {dataLength}. {infoMessage} {state}",
-                bytes.Length,
+            _logger.LogDebug("Received data - Bytes transferred: {dataLength}. {infoMessage} {state}",
+                bytes.BytesTransferred,
                 _readChunkTaskCompletionSource != null ? "Setting completion source..." : "Enqueuing data"
                 , new Trace(false, bytes));
 
@@ -49,7 +49,7 @@ namespace Device.Net.UWP
             }
         }
 
-        public async Task<byte[]> ReadAsync(CancellationToken cancellationToken = default)
+        public async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             _logger.LogInformation($"Calling {nameof(ReadAsync)}");
 
@@ -57,12 +57,12 @@ namespace Device.Net.UWP
             {
                 await _readLock.WaitAsync(cancellationToken);
 
-                byte[] bytes = null;
+                TransferResult bytes = default;
 
                 if (_readQueue.Count == 0)
                 {
                     _logger.LogDebug("Creating a completion source...");
-                    _readChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
+                    _readChunkTaskCompletionSource = new TaskCompletionSource<TransferResult>();
 
                     //Cancel the completion source if the token is canceled
                     using (cancellationToken.Register(() => _readChunkTaskCompletionSource.TrySetCanceled()))
@@ -79,8 +79,6 @@ namespace Device.Net.UWP
                     bytes = _readQueue.Dequeue();
                     _logger.LogDebug("Dequeued data");
                 }
-
-                _logger.LogTrace(new Trace(false, bytes));
 
                 return bytes;
             }
