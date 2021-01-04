@@ -118,6 +118,8 @@ namespace Usb.Net.UWP
         public Task WriteAsync(byte[] data) => WriteUsbInterface.WriteAsync(data);
 
         public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync(CancellationToken cancellationToken = default) => Task.FromResult(ConnectedDeviceDefinition);
+
+        public override Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default) => ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
         #endregion
     }
 }

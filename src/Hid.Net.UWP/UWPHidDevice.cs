@@ -19,6 +19,8 @@ namespace Hid.Net.UWP
         #region Fields
         private bool disposed;
         private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        private readonly Observable<byte[]> _dataReceivedObservable;
+        private readonly UWPDataReceiver _UWPDataReceiver;
         #endregion
 
         #region Public Properties
@@ -38,7 +40,17 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Event Handlers
-        private void HidDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args) => HandleDataReceived(GetReadReport(args).Data);
+        private void ConnectedDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args)
+        {
+            using var stream = args.Report.Data.AsStream();
+
+            var bytes = new byte[args.Report.Data.Length];
+
+            //TODO: We are ignoring bytes read here...
+            var bytesRead = (uint)stream.Read(bytes, 0, (int)args.Report.Data.Length);
+
+            _dataReceivedObservable.OnNext(bytes);
+        }
         #endregion
 
         #region Constructors
@@ -49,6 +61,10 @@ namespace Hid.Net.UWP
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             DefaultReportId = defaultReportId;
+            _dataReceivedObservable = new Observable<byte[]>();
+            _UWPDataReceiver = new UWPDataReceiver(
+                _dataReceivedObservable,
+                LoggerFactory.CreateLogger<UWPDataReceiver>());
         }
         #endregion
 
@@ -70,7 +86,7 @@ namespace Hid.Net.UWP
 
                 if (ConnectedDevice != null)
                 {
-                    ConnectedDevice.InputReportReceived += HidDevice_InputReportReceived;
+                    ConnectedDevice.InputReportReceived += ConnectedDevice_InputReportReceived;
                 }
                 else
                 {
@@ -87,21 +103,6 @@ namespace Hid.Net.UWP
         protected override IAsyncOperation<HidDevice> FromIdAsync(string id) => GetHidDevice(id);
         #endregion
 
-        #region Private Static Methods
-        private static ReadReport GetReadReport(HidInputReportReceivedEventArgs args)
-        {
-            byte[] bytes;
-            uint bytesRead;
-            using (var stream = args.Report.Data.AsStream())
-            {
-                bytes = new byte[args.Report.Data.Length];
-                bytesRead = (uint)stream.Read(bytes, 0, (int)args.Report.Data.Length);
-            }
-
-            return new ReadReport((byte)args.Report.Id, bytes, bytesRead);
-        }
-        #endregion
-
         #region Public Methods
         public override void Dispose()
         {
@@ -115,8 +116,9 @@ namespace Hid.Net.UWP
 
             Logger.LogInformation(Messages.InformationMessageDisposingDevice, DeviceId);
 
+            _UWPDataReceiver.Dispose();
             _WriteAndReadLock.Dispose();
-            ConnectedDevice.InputReportReceived -= HidDevice_InputReportReceived;
+            ConnectedDevice.InputReportReceived -= ConnectedDevice_InputReportReceived;
 
             base.Dispose();
         }
@@ -177,7 +179,7 @@ namespace Hid.Net.UWP
         public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
         {
             byte? reportId = null;
-            var bytes = await base.ReadAsync(cancellationToken);
+            var bytes = await ReadAsync(cancellationToken);
 
             if (DataHasExtraByte)
             {
@@ -190,9 +192,8 @@ namespace Hid.Net.UWP
 
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
-            var data = (await ReadReportAsync(cancellationToken)).Data;
-            Logger.LogTrace(new Trace(false, data));
-            return data;
+            var result = await _UWPDataReceiver.ReadAsync(cancellationToken);
+            return new TransferResult(result, (uint)result.Length);
         }
         #endregion
 
