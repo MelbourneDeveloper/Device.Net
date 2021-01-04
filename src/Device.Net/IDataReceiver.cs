@@ -21,5 +21,10 @@ namespace Device.Net
         /// </summary>
         /// <param name="bytes"></param>
         void DataReceived(TransferResult bytes);
+
+        /// <summary>
+        /// Whether or not data has already been received that has not yet been read
+        /// </summary>
+        bool HasData { get; }
     }
 }

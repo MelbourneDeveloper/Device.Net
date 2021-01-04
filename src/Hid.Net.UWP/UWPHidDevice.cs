@@ -123,6 +123,8 @@ namespace Hid.Net.UWP
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
+            if (DataReceiver.HasData) Logger.LogWarning("Writing to device but data has already been received that has not been read");
+
             byte[] bytes;
             if (DataHasExtraByte)
             {

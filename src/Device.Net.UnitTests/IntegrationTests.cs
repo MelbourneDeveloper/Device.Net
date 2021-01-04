@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Usb.Net;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 #if !WINDOWS_UWP
 using Device.Net.LibUsb;
@@ -330,8 +329,6 @@ namespace Device.Net.UnitTests
         {
             //Specify the response part of the Message Contract
             var expectedResult = new byte[] { 63, 35, 35 };
-
-            Debug.WriteLine("new byte[] {" + string.Join(", ", responseData.Data) + "}");
 
             //Assert that the response part meets the specification
             Assert.IsTrue(expectedResult.SequenceEqual(responseData.Data.Take(3)));

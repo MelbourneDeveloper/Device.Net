@@ -19,6 +19,10 @@ namespace Device.Net.UWP
         private readonly IObserver<TransferResult> _dataReceived;
         #endregion
 
+        #region Public Properties
+        public bool HasData => _readQueue.Count > 0;
+        #endregion
+
         #region Constructor
         public UWPDataReceiver(
             IObservable<TransferResult> dataRecievedObservable,
@@ -33,9 +37,8 @@ namespace Device.Net.UWP
         #region Public Methods
         public void DataReceived(TransferResult bytes)
         {
-            _logger.LogDebug("Received data - Bytes transferred: {dataLength}. {infoMessage} {state}",
-                bytes.BytesTransferred,
-                _readChunkTaskCompletionSource != null ? "Setting completion source..." : "Enqueuing data"
+            _logger.LogTrace("{infoMessage}{trace}",
+                _readChunkTaskCompletionSource != null ? "Setting completion source..." : "Enqueuing data..."
                 , new Trace(false, bytes));
 
             if (_readChunkTaskCompletionSource != null)

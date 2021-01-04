@@ -203,8 +203,6 @@ namespace Hid.Net.Windows
             await Task.Run(Initialize, cancellationToken).ConfigureAwait(false);
         }
 
-
-
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             var readReport = await ReadReportAsync(cancellationToken).ConfigureAwait(false);

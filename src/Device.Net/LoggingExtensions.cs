@@ -1,18 +1,11 @@
-﻿#if !NET45
-
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace Device.Net
 {
     public static class LoggingExtensions
     {
-        public static void LogDataTransfer(this ILogger logger, Trace trace, string message = null)
-            => logger?.LogTrace(
-            "Trace - {message} Data: {state}",
-             message,
-             trace);
+        public static void LogDataTransfer(this ILogger logger, Trace trace)
+            => logger?.LogDebug("{trace}", trace);
     }
 }
-
-#endif
 
