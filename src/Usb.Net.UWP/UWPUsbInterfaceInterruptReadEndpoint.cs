@@ -13,7 +13,7 @@ namespace Usb.Net.UWP
     public class UWPUsbInterfaceInterruptReadEndpoint : UWPUsbInterfaceEndpoint<UsbInterruptInPipe>, IDisposable
     {
         #region Fields
-        private readonly Queue<byte[]> _chunks = new Queue<byte[]>();
+        private readonly Queue<byte[]> _readQueue = new Queue<byte[]>();
         private readonly SemaphoreSlim _readLock = new SemaphoreSlim(1, 1);
         private bool disposed;
         private TaskCompletionSource<byte[]> _readChunkTaskCompletionSource;
@@ -44,8 +44,11 @@ namespace Usb.Net.UWP
             }
             else
             {
-                _logger.LogDebug("Enqueing data...");
-                _chunks.Enqueue(bytes);
+                var state = new Trace(false, bytes);
+
+                _logger.Log(LogLevel.Debug, default, state, null, (s, e) => $"Enqueing data... {state}");
+
+                _readQueue.Enqueue(bytes);
             }
         }
         #endregion
@@ -79,7 +82,7 @@ namespace Usb.Net.UWP
 
                 byte[] bytes = null;
 
-                if (_chunks.Count == 0)
+                if (_readQueue.Count == 0)
                 {
                     _logger.LogDebug("Creating a completion source...");
                     _readChunkTaskCompletionSource = new TaskCompletionSource<byte[]>();
@@ -96,7 +99,7 @@ namespace Usb.Net.UWP
                 else
                 {
                     //We already have the data
-                    bytes = _chunks.Dequeue();
+                    bytes = _readQueue.Dequeue();
                     _logger.LogDebug("Dequeued data");
                 }
 
