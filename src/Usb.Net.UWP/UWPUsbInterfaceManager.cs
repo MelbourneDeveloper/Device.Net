@@ -83,6 +83,8 @@ namespace Usb.Net.UWP
                         new PerformControlTransferAsync((sp, data, c) => _performControlTransferAsync(ConnectedDevice, sp, data, c)) :
                         //TODO: Fill in the UWP control transfer here
                         (sp, data, c) => throw new NotImplementedException(),
+                        DataReceivedObservable,
+                        UWPDataReceiver,
                         Logger,
                         _ReadBufferSize,
                         _WriteBufferSize);

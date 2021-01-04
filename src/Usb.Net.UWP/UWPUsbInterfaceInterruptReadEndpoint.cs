@@ -15,19 +15,21 @@ namespace Usb.Net.UWP
         #region Fields
         private bool disposed;
         private readonly ILogger _logger;
-        private readonly UWPDataReceiver _UWPDataReceiver;
         private readonly Observable<byte[]> _dataRecievedObservable;
+        private readonly UWPDataReceiver _UWPDataReceiver;
         #endregion
 
         #region Constructor
         public UWPUsbInterfaceInterruptReadEndpoint(
             UsbInterruptInPipe pipe,
+            Observable<byte[]> dataRecievedObservable,
+            UWPDataReceiver uwpDataReceiver,
             ILogger logger = null) : base(pipe)
         {
             _logger = logger ?? NullLogger.Instance;
             UsbInterruptInPipe.DataReceived += UsbInterruptInPipe_DataReceived;
-            _dataRecievedObservable = new Observable<byte[]>();
-            _UWPDataReceiver = new UWPDataReceiver(_dataRecievedObservable, _logger);
+            _dataRecievedObservable = dataRecievedObservable;
+            _UWPDataReceiver = uwpDataReceiver;
         }
         #endregion
 
@@ -53,8 +55,6 @@ namespace Usb.Net.UWP
             }
 
             disposed = true;
-
-            _UWPDataReceiver.Dispose();
 
             _logger.LogInformation(Messages.InformationMessageDisposingDevice, Pipe?.ToString());
 

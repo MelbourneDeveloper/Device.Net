@@ -19,8 +19,6 @@ namespace Hid.Net.UWP
         #region Fields
         private bool disposed;
         private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
-        private readonly Observable<byte[]> _dataReceivedObservable;
-        private readonly UWPDataReceiver _UWPDataReceiver;
         #endregion
 
         #region Public Properties
@@ -49,7 +47,7 @@ namespace Hid.Net.UWP
             //TODO: We are ignoring bytes read here...
             var bytesRead = (uint)stream.Read(bytes, 0, (int)args.Report.Data.Length);
 
-            _dataReceivedObservable.OnNext(bytes);
+            DataReceivedObservable.OnNext(bytes);
         }
         #endregion
 
@@ -61,10 +59,6 @@ namespace Hid.Net.UWP
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             DefaultReportId = defaultReportId;
-            _dataReceivedObservable = new Observable<byte[]>();
-            _UWPDataReceiver = new UWPDataReceiver(
-                _dataReceivedObservable,
-                LoggerFactory.CreateLogger<UWPDataReceiver>());
         }
         #endregion
 
@@ -116,7 +110,7 @@ namespace Hid.Net.UWP
 
             Logger.LogInformation(Messages.InformationMessageDisposingDevice, DeviceId);
 
-            _UWPDataReceiver.Dispose();
+            UWPDataReceiver.Dispose();
             _WriteAndReadLock.Dispose();
             ConnectedDevice.InputReportReceived -= ConnectedDevice_InputReportReceived;
 
@@ -192,7 +186,7 @@ namespace Hid.Net.UWP
 
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
-            var result = await _UWPDataReceiver.ReadAsync(cancellationToken);
+            var result = await UWPDataReceiver.ReadAsync(cancellationToken);
             return new TransferResult(result, (uint)result.Length);
         }
         #endregion

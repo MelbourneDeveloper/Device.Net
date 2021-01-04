@@ -1,5 +1,6 @@
 ﻿using Device.Net;
 using Device.Net.Exceptions;
+using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
@@ -29,10 +30,11 @@ namespace Usb.Net.UWP
         public UWPUsbInterface(
             windowsUsbInterface usbInterface,
             PerformControlTransferAsync performControlTransferAsync,
+            Observable<byte[]> dataRecievedObservable,
+            UWPDataReceiver UWPDataReceiver,
             ILogger logger = null,
             ushort? readBuffersize = null,
-            ushort? writeBufferSize = null
-            ) : base(
+            ushort? writeBufferSize = null) : base(
                 performControlTransferAsync,
                 logger,
                 readBuffersize,
@@ -42,7 +44,12 @@ namespace Usb.Net.UWP
 
             foreach (var inPipe in usbInterface.InterruptInPipes)
             {
-                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceInterruptReadEndpoint(inPipe, Logger);
+                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceInterruptReadEndpoint(
+                    inPipe,
+                    dataRecievedObservable,
+                    UWPDataReceiver,
+                    Logger);
+
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
                 InterruptReadEndpoint ??= uwpUsbInterfaceEndpoint;
             }
