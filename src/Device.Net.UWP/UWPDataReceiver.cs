@@ -43,7 +43,6 @@ namespace Device.Net.UWP
 
             if (_readChunkTaskCompletionSource != null)
             {
-                _logger.LogDebug("Setting result of task completion source");
                 _readChunkTaskCompletionSource.SetResult(bytes);
             }
             else
