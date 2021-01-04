@@ -1,5 +1,4 @@
 ﻿using Device.Net;
-using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
@@ -15,18 +14,18 @@ namespace Usb.Net.UWP
         #region Fields
         private bool disposed;
         private readonly ILogger _logger;
-        private readonly IDataReceiver _UWPDataReceiver;
+        private readonly IDataReceiver _dataReceiver;
         #endregion
 
         #region Constructor
         public UWPUsbInterfaceInterruptReadEndpoint(
             UsbInterruptInPipe pipe,
-            IDataReceiver uwpDataReceiver,
+            IDataReceiver dataReceiver,
             ILogger logger = null) : base(pipe)
         {
             _logger = logger ?? NullLogger.Instance;
             UsbInterruptInPipe.DataReceived += UsbInterruptInPipe_DataReceived;
-            _UWPDataReceiver = uwpDataReceiver;
+            _dataReceiver = dataReceiver;
         }
         #endregion
 
@@ -38,7 +37,7 @@ namespace Usb.Net.UWP
             UsbInterruptInEventArgs args)
         {
             var bytes = args?.InterruptData?.ToArray();
-            if (bytes != null) _UWPDataReceiver.DataReceived(bytes);
+            if (bytes != null) _dataReceiver.DataReceived(bytes);
         }
         #endregion
 
@@ -60,7 +59,7 @@ namespace Usb.Net.UWP
             GC.SuppressFinalize(this);
         }
 
-        public Task<byte[]> ReadAsync(CancellationToken cancellationToken = default) => _UWPDataReceiver.ReadAsync(cancellationToken);
+        public Task<byte[]> ReadAsync(CancellationToken cancellationToken = default) => _dataReceiver.ReadAsync(cancellationToken);
         #endregion
     }
 }

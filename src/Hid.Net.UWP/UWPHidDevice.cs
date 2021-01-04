@@ -22,7 +22,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Properties
-        public bool DataHasExtraByte { get; set; }
+        public bool DataHasExtraByte { get; set; } = true;
         public byte? DefaultReportId { get; }
         #endregion
 
@@ -47,7 +47,7 @@ namespace Hid.Net.UWP
             //TODO: We are ignoring bytes read here...
             var bytesRead = (uint)stream.Read(bytes, 0, (int)args.Report.Data.Length);
 
-            UWPDataReceiver.DataReceived(bytes);
+            DataReceiver.DataReceived(bytes);
         }
         #endregion
 
@@ -111,7 +111,7 @@ namespace Hid.Net.UWP
 
             Logger.LogInformation(Messages.InformationMessageDisposingDevice, DeviceId);
 
-            UWPDataReceiver.Dispose();
+            DataReceiver.Dispose();
             _WriteAndReadLock.Dispose();
             ConnectedDevice.InputReportReceived -= ConnectedDevice_InputReportReceived;
 
@@ -187,7 +187,7 @@ namespace Hid.Net.UWP
 
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
-            var result = await UWPDataReceiver.ReadAsync(cancellationToken);
+            var result = await DataReceiver.ReadAsync(cancellationToken);
             return new TransferResult(result, (uint)result.Length);
         }
         #endregion

@@ -15,7 +15,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Protected Properties
-        protected readonly IDataReceiver UWPDataReceiver;
+        protected readonly IDataReceiver DataReceiver;
         protected T ConnectedDevice { get; private set; }
         public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; protected set; }
         protected ILoggerFactory LoggerFactory { get; private set; }
@@ -40,7 +40,7 @@ namespace Device.Net.UWP
             DeviceId = deviceId;
             LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             Logger = loggerFactory.CreateLogger<UWPDeviceBase<T>>();
-            UWPDataReceiver = dataReceiver;
+            DataReceiver = dataReceiver;
         }
         #endregion
 
@@ -76,7 +76,7 @@ namespace Device.Net.UWP
 
             disposed = true;
 
-            UWPDataReceiver.Dispose();
+            DataReceiver.Dispose();
 
             Logger.LogInformation(Messages.InformationMessageDisposingDevice, DeviceId);
 
