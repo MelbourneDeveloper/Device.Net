@@ -74,10 +74,11 @@ namespace Usb.Net.Windows
                 Logger.LogInformation(Messages.SuccessMessageGotWriteAndReadHandle);
 
 #pragma warning disable CA2000 //We need to hold on to this handle
-                var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var defaultInterfaceHandle);
+                var isSuccess = WinUsbApiCalls.WinUsb_Initialize(_DeviceHandle, out var interfaceHandle);
 #pragma warning restore CA2000
                 _ = WindowsHelpers.HandleError(isSuccess, Messages.ErrorMessageCouldntIntializeDevice, Logger);
 
+                var defaultInterfaceHandle = new SafeFileHandle(interfaceHandle, false);
                 var connectedDeviceDefinition = GetDeviceDefinition(defaultInterfaceHandle, DeviceId, Logger);
 
                 if (!WriteBufferSizeProtected.HasValue)

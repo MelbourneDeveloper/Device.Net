@@ -50,7 +50,7 @@ namespace Usb.Net.Windows
         public static extern bool WinUsb_Free(SafeFileHandle InterfaceHandle);
 
         [DllImport("winusb.dll", SetLastError = true)]
-        public static extern bool WinUsb_Initialize(SafeFileHandle DeviceHandle, out SafeFileHandle InterfaceHandle);
+        public static extern bool WinUsb_Initialize(SafeFileHandle DeviceHandle, out IntPtr InterfaceHandle);
 
         [DllImport("winusb.dll", SetLastError = true)]
         public static extern bool WinUsb_QueryDeviceInformation(IntPtr InterfaceHandle, uint InformationType, ref uint BufferLength, ref byte Buffer);
