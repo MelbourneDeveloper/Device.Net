@@ -92,7 +92,7 @@ namespace Usb.Net.Android
 
                     //Marshal.Copy(byteBuffer.GetDirectBufferAddress(), buffers, 0, ReadBufferLength);
 
-                    Logger.LogTrace(new Trace(false, buffers));
+                    Logger.LogDataTransfer(new Trace(false, buffers));
 
                     return buffers;
                 }
@@ -131,7 +131,7 @@ namespace Usb.Net.Android
 
                     //TODO: It's not clear if there is a way to count the number of bytes transferred here. This is a bug in a sense...
 
-                    Logger.LogTrace(new Trace(true, data), $"Write endpoint: {endpoint.Address}");
+                    Logger.LogDataTransfer(new Trace(true, data), $"Write endpoint: {endpoint.Address}");
 
                     return (uint)data.Length;
                 }

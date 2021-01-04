@@ -132,7 +132,7 @@ namespace Usb.Net.UWP
 
                 if (count == data.Length)
                 {
-                    Logger.LogTrace(new Trace(true, data));
+                    Logger.LogDataTransfer(new Trace(true, data));
                 }
                 else
                 {

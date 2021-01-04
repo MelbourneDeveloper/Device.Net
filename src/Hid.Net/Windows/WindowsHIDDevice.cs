@@ -208,7 +208,7 @@ namespace Hid.Net.Windows
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             var readReport = await ReadReportAsync(cancellationToken).ConfigureAwait(false);
-            Logger.LogTrace(new Trace(false, readReport.Data));
+            Logger.LogDataTransfer(new Trace(false, readReport.Data));
             return readReport.Data;
         }
 
@@ -287,7 +287,7 @@ namespace Hid.Net.Windows
                     try
                     {
                         await _WriteFileStream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
-                        Logger.LogTrace(new Trace(true, bytes));
+                        Logger.LogDataTransfer(new Trace(true, bytes));
                     }
                     catch (Exception ex)
                     {

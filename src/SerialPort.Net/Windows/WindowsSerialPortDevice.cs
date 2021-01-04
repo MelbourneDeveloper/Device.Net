@@ -86,7 +86,7 @@ namespace SerialPort.Net.Windows
             return Task.Run(() =>
             {
                 var bytesWritten = Write(data);
-                Logger.LogTrace(new Trace(false, data));
+                Logger.LogDataTransfer(new Trace(false, data));
                 return bytesWritten;
             }, cancellationToken);
         }
@@ -100,7 +100,7 @@ namespace SerialPort.Net.Windows
                 var buffer = new byte[_ReadBufferSize];
                 var bytesRead = Read(buffer);
                 var transferResult = new TransferResult(buffer, bytesRead);
-                Logger.LogTrace(new Trace(false, transferResult));
+                Logger.LogDataTransfer(new Trace(false, transferResult));
                 return transferResult;
             }, cancellationToken);
         }

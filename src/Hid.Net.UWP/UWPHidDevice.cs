@@ -145,7 +145,7 @@ namespace Hid.Net.UWP
                 var count = await operation.AsTask(cancellationToken);
                 if (count == bytes.Length)
                 {
-                    Logger.LogTrace(new Trace(true, bytes));
+                    Logger.LogDataTransfer(new Trace(true, bytes));
                 }
                 else
                 {

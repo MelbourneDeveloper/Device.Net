@@ -68,7 +68,7 @@ namespace Device.Net.LibUsb
                 var buffer = new byte[bufferLength];
                 _ = readEndpoint.UsbEndpointReader.Read(buffer, Timeout, out var bytesRead);
                 var transferResult = new TransferResult(buffer, (uint)bytesRead);
-                Logger.LogTrace(new Trace(false, transferResult));
+                Logger.LogDataTransfer(new Trace(false, transferResult));
                 return transferResult;
             }, cancellationToken);
 
@@ -79,7 +79,7 @@ namespace Device.Net.LibUsb
                 var errorCode = writeEndpoint.UsbEndpointWriter.Write(data, Timeout, out var bytesWritten);
                 if (errorCode is ErrorCode.Ok or ErrorCode.Success)
                 {
-                    Logger.LogTrace(new Trace(true, data));
+                    Logger.LogDataTransfer(new Trace(true, data));
                     return (uint)bytesWritten;
                 }
 

@@ -6,11 +6,11 @@ namespace Device.Net
 {
     public static class LoggingExtensions
     {
-        public static void LogTrace<T>(this ILogger logger, T state, string message = null)
+        public static void LogDataTransfer(this ILogger logger, Trace trace, string message = null)
             => logger?.LogTrace(
             "Trace - {message} Data: {state}",
              message,
-             state);
+             trace);
     }
 }
 
