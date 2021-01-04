@@ -40,6 +40,8 @@ namespace Hid.Net.UWP
         #region Event Handlers
         private void ConnectedDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args)
         {
+            Logger.LogDebug("Received Hid report Id: {id} Report: {report}", args?.Report?.Id, args?.Report);
+
             using var stream = args.Report.Data.AsStream();
 
             var bytes = new byte[args.Report.Data.Length];
