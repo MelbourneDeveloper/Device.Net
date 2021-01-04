@@ -154,7 +154,7 @@ namespace Device.Net.UnitTests
 
             try
             {
-                new DeviceManager(new List<IDeviceFactory>(), _loggerFactory);
+                _ = new DeviceManager(new List<IDeviceFactory>(), _loggerFactory);
             }
             catch (InvalidOperationException)
             {
@@ -357,7 +357,7 @@ namespace Device.Net.UnitTests
             try
             {
                 var deviceManager = new DeviceManager(new List<IDeviceFactory> { new Mock<IDeviceFactory>().Object }, _LoggerFactoryMock.Object);
-                await deviceManager.GetDeviceAsync(new ConnectedDeviceDefinition("a", DeviceType.Hid));
+                _ = await deviceManager.GetDeviceAsync(new ConnectedDeviceDefinition("a", DeviceType.Hid));
             }
             catch (DeviceException dex)
             {

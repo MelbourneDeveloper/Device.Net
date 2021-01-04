@@ -112,6 +112,7 @@
   <ItemGroup>
     <Compile Include="ConnectionInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UWPDataReceiver.cs" />
     <Compile Include="UWPDeviceBase - Generic.cs" />
     <Compile Include="UWPDeviceBase.cs" />
     <Compile Include="UwpDeviceEnumerator.cs" />
