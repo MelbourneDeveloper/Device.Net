@@ -114,6 +114,16 @@ namespace Device.Net.UnitTests
 
             await PerformStmDfTest((IUsbDevice)stmDfuDevice);
         }
+#else
+        [TestMethod]
+        public async Task TestSTMDFUModePerformControlTransfer_GUID_DEVINTERFACE_USB_DEVICE_NoFactory()
+        {
+            const string DeviceId = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
+            var usbDevice = new UsbDevice(DeviceId,
+                new Usb.Net.UWP.UWPUsbInterfaceManager(new ConnectedDeviceDefinition(DeviceId, DeviceType.Usb)));
+
+            await PerformStmDfTest(usbDevice);
+        }
 #endif
 
         [TestMethod]

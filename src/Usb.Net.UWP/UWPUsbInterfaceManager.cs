@@ -2,6 +2,7 @@ using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -50,17 +51,23 @@ namespace Usb.Net.UWP
         #region Constructors
         public UWPUsbInterfaceManager(
             ConnectedDeviceDefinition connectedDeviceDefinition,
-            Func<windowsUsbDevice, SetupPacket, byte[], CancellationToken, Task<TransferResult>> performControlTransferAsync,
-            IDataReceiver dataReceiver,
+            IDataReceiver dataReceiver = null,
+            Func<windowsUsbDevice, SetupPacket, byte[], CancellationToken, Task<TransferResult>> performControlTransferAsync = null,
             ILoggerFactory loggerFactory = null,
             ushort? readBufferSize = null,
-            ushort? writeBufferSize = null) : base(connectedDeviceDefinition?.DeviceId, dataReceiver, loggerFactory)
+            ushort? writeBufferSize = null) :
+            base(
+                connectedDeviceDefinition?.DeviceId,
+                dataReceiver ??
+                new UWPDataReceiver(
+                    new Observable<TransferResult>(),
+                    (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UWPDataReceiver>()), loggerFactory ?? NullLoggerFactory.Instance)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             UsbInterfaceHandler = new UsbInterfaceManager(loggerFactory);
             _WriteBufferSize = writeBufferSize;
             _ReadBufferSize = readBufferSize;
-            _performControlTransferAsync = performControlTransferAsync;
+            _performControlTransferAsync = performControlTransferAsync ?? PerformControlTransferAsync;
         }
         #endregion
 
@@ -91,9 +98,7 @@ namespace Usb.Net.UWP
                 {
                     var uwpUsbInterface = new UWPUsbInterface(
                         usbInterface,
-                        _performControlTransferAsync != null ?
-                        new PerformControlTransferAsync((sp, data, c) => _performControlTransferAsync(ConnectedDevice, sp, data, c)) :
-                        new PerformControlTransferAsync(PerformControlTransferAsync),
+                        (sp, data, c) => _performControlTransferAsync(ConnectedDevice, sp, data, c),
                         DataReceiver,
                         LoggerFactory,
                         _ReadBufferSize,
@@ -130,7 +135,7 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Private Methods
-        private async Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
+        private static async Task<TransferResult> PerformControlTransferAsync(windowsUsbDevice ConnectedDevice, SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
         {
             var uwpSetupPacket = new usbSetupPacket
             {
