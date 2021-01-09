@@ -125,32 +125,37 @@ namespace Usb.Net.UWP
         #region Private Methods
         private async Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
         {
+            var uwpSetupPacket = new usbSetupPacket
+            {
+                Index = setupPacket.Index,
+                Length = setupPacket.Length,
+                Request = setupPacket.Request,
+                RequestType = new usbControlRequestType
+                {
+                    ControlTransferType = setupPacket.RequestType.Type switch
+                    {
+                        RequestType.Standard => usbControlTransferType.Standard,
+                        RequestType.Class => usbControlTransferType.Class,
+                        RequestType.Vendor => usbControlTransferType.Vendor,
+                        _ => throw new NotImplementedException()
+                    }
+                },
+                Value = setupPacket.Value
+            };
+
             if (setupPacket.RequestType.Direction == RequestDirection.In)
             {
-                var uwpSetupPacket = new usbSetupPacket
-                {
-                    Index = setupPacket.Index,
-                    Length = setupPacket.Length,
-                    Request = setupPacket.Request,
-                    RequestType = new usbControlRequestType
-                    {
-                        ControlTransferType = setupPacket.RequestType.Type switch
-                        {
-                            RequestType.Standard => usbControlTransferType.Standard,
-                            RequestType.Class => usbControlTransferType.Class,
-                            RequestType.Vendor => usbControlTransferType.Vendor,
-                            _ => throw new NotImplementedException()
-                        }
-                    },
-                    Value = setupPacket.Value
-                };
-
+                //Read
                 var readBuffer = await ConnectedDevice.SendControlInTransferAsync(uwpSetupPacket);
 
                 return new TransferResult(readBuffer.ToArray(), readBuffer.Length);
             }
-
-            return default;
+            else
+            {
+                //Write
+                var bytesWritten = await ConnectedDevice.SendControlOutTransferAsync(uwpSetupPacket);
+                return new TransferResult(buffer, bytesWritten);
+            }
         }
         #endregion
 
