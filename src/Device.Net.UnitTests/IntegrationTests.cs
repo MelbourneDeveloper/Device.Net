@@ -126,7 +126,6 @@ namespace Device.Net.UnitTests
             await PerformStmDfTest((IUsbDevice)stmDfuDevice);
         }
 
-#if !WINDOWS_UWP
         [TestMethod]
         public async Task TestSTMDFUModePerformControlTransfer_GUID_DEVINTERFACE_USB_DEVICE()
         {
@@ -136,7 +135,6 @@ namespace Device.Net.UnitTests
 
             await PerformStmDfTest((IUsbDevice)stmDfuDevice);
         }
-#endif
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(

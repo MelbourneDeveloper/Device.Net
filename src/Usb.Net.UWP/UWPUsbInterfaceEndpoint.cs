@@ -1,9 +1,12 @@
-﻿using Windows.Devices.Usb;
+﻿using Microsoft.Extensions.Logging;
+using Windows.Devices.Usb;
 
 namespace Usb.Net.UWP
 {
     public class UWPUsbInterfaceEndpoint<T> : IUsbInterfaceEndpoint
     {
+        private readonly ILogger _logger;
+
         #region Public Properties
         public UsbBulkOutPipe UsbBulkOutPipe => Pipe as UsbBulkOutPipe;
         public UsbInterruptOutPipe UsbInterruptOutPipe => Pipe as UsbInterruptOutPipe;
@@ -20,8 +23,9 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Constructor
-        public UWPUsbInterfaceEndpoint(T pipe)
+        public UWPUsbInterfaceEndpoint(T pipe, ILogger<UWPUsbInterfaceEndpoint<T>> logger)
         {
+            _logger = logger;
             Pipe = pipe;
             var endpointDescriptorProperty = pipe.GetType().GetProperty(nameof(UsbBulkOutPipe.EndpointDescriptor));
             var endpointDescriptor = endpointDescriptorProperty.GetValue(pipe);
@@ -30,6 +34,7 @@ namespace Usb.Net.UWP
             var maxPacketSizeProperty = endpointDescriptor.GetType().GetProperty(nameof(UsbBulkOutEndpointDescriptor.MaxPacketSize));
             var maxPacketSize = (uint)maxPacketSizeProperty.GetValue(endpointDescriptor);
             MaxPacketSize = (ushort)maxPacketSize;
+            _logger.LogInformation("Found pipe: {pipeId} MaxPacketSize: {maxPacketSize}", PipeId, MaxPacketSize);
         }
         #endregion
 

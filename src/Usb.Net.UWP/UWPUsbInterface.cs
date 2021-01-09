@@ -30,11 +30,11 @@ namespace Usb.Net.UWP
             windowsUsbInterface usbInterface,
             PerformControlTransferAsync performControlTransferAsync,
             IDataReceiver dataReceiver,
-            ILogger logger = null,
+            ILoggerFactory loggerFactory,
             ushort? readBuffersize = null,
             ushort? writeBufferSize = null) : base(
                 performControlTransferAsync,
-                logger,
+                loggerFactory.CreateLogger<UWPUsbInterface>(),
                 readBuffersize,
                 writeBufferSize)
         {
@@ -45,7 +45,7 @@ namespace Usb.Net.UWP
                 var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceInterruptReadEndpoint(
                     inPipe,
                     dataReceiver,
-                    Logger);
+                    loggerFactory.CreateLogger<UWPUsbInterfaceInterruptReadEndpoint>());
 
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
                 InterruptReadEndpoint ??= uwpUsbInterfaceEndpoint;
@@ -53,26 +53,29 @@ namespace Usb.Net.UWP
 
             foreach (var outPipe in usbInterface.InterruptOutPipes)
             {
-                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbInterruptOutPipe>(outPipe);
+                var uwpUsbInterfaceEndpoint =
+                    new UWPUsbInterfaceEndpoint<UsbInterruptOutPipe>(
+                        outPipe,
+                        loggerFactory.CreateLogger<UWPUsbInterfaceEndpoint<UsbInterruptOutPipe>>());
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
                 InterruptWriteEndpoint ??= uwpUsbInterfaceEndpoint;
             }
 
             foreach (var inPipe in usbInterface.BulkInPipes)
             {
-                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbBulkInPipe>(inPipe);
+                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbBulkInPipe>(inPipe,
+                        loggerFactory.CreateLogger<UWPUsbInterfaceEndpoint<UsbBulkInPipe>>());
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
                 ReadEndpoint ??= uwpUsbInterfaceEndpoint;
             }
 
             foreach (var outPipe in usbInterface.BulkOutPipes)
             {
-                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbBulkOutPipe>(outPipe);
+                var uwpUsbInterfaceEndpoint = new UWPUsbInterfaceEndpoint<UsbBulkOutPipe>(outPipe,
+                        loggerFactory.CreateLogger<UWPUsbInterfaceEndpoint<UsbBulkOutPipe>>());
                 UsbInterfaceEndpoints.Add(uwpUsbInterfaceEndpoint);
                 WriteEndpoint ??= uwpUsbInterfaceEndpoint;
             }
-
-            //TODO: Why does not UWP not support Control Transfer?
         }
         #endregion
 

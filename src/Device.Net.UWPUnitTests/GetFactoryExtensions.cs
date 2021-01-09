@@ -20,7 +20,9 @@ namespace Device.Net.UnitTests
 
         public static IDeviceFactory GetUsbDeviceFactory(
             this FilterDeviceDefinition filterDeviceDefinition,
-            ILoggerFactory loggerFactory)
+#pragma warning disable IDE0060 // Remove unused parameter
+            ILoggerFactory loggerFactory, object classGuid = null)
+#pragma warning restore IDE0060 // Remove unused parameter
             => filterDeviceDefinition.CreateUwpUsbDeviceFactory(loggerFactory);
 
         public static IDeviceFactory GetHidDeviceFactory(

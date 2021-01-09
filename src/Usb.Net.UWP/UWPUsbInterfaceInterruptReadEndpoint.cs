@@ -21,9 +21,9 @@ namespace Usb.Net.UWP
         public UWPUsbInterfaceInterruptReadEndpoint(
             UsbInterruptInPipe pipe,
             IDataReceiver dataReceiver,
-            ILogger logger = null) : base(pipe)
+            ILogger<UWPUsbInterfaceInterruptReadEndpoint> logger = null) : base(pipe, logger)
         {
-            _logger = logger ?? NullLogger.Instance;
+            _logger = logger ?? (ILogger)NullLogger.Instance;
             UsbInterruptInPipe.DataReceived += UsbInterruptInPipe_DataReceived;
             _dataReceiver = dataReceiver;
         }

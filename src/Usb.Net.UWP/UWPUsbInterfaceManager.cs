@@ -69,10 +69,17 @@ namespace Usb.Net.UWP
         {
             if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
+            const string message = "Initialising {deviceId}";
+
+            using var scope = Logger.BeginScope(message, DeviceId);
+            Logger.LogInformation(message, DeviceId);
+
             await GetDeviceAsync(DeviceId, cancellationToken);
 
             if (ConnectedDevice != null)
             {
+                Logger.LogInformation("Got device {deviceId}", DeviceId);
+
                 if (ConnectedDevice.Configuration.UsbInterfaces == null || ConnectedDevice.Configuration.UsbInterfaces.Count == 0)
                 {
                     ConnectedDevice.Dispose();
@@ -88,7 +95,7 @@ namespace Usb.Net.UWP
                         new PerformControlTransferAsync((sp, data, c) => _performControlTransferAsync(ConnectedDevice, sp, data, c)) :
                         new PerformControlTransferAsync(PerformControlTransferAsync),
                         DataReceiver,
-                        Logger,
+                        LoggerFactory,
                         _ReadBufferSize,
                         _WriteBufferSize);
 
