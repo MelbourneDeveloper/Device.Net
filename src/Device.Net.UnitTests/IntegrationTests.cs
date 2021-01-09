@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Usb.Net;
 using System.Collections.Generic;
+using Device.Net.Windows;
 
 #if !WINDOWS_UWP
 using Device.Net.LibUsb;
 using Hid.Net.Windows;
 using Usb.Net.Windows;
-using Device.Net.Windows;
 #else
 using Hid.Net.UWP;
 #endif
@@ -73,26 +73,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestSTMDFUModePerformControlTransferReceive_GUID_DEVINTERFACE_USB_DEVICE()
-        {
-            const string deviceID = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
-            var windowsUsbDevice = new UsbDevice(deviceID, new WindowsUsbInterfaceManager(deviceID, loggerFactory: loggerFactory));
-            await windowsUsbDevice.InitializeAsync();
-
-            await windowsUsbDevice.ClearStatusAsync();
-
-            var dfuStatus = await windowsUsbDevice.PerformControlTransferWithRetry(ud => windowsUsbDevice.GetStatusAsync());
-
-            //TODO: This sometimes fails. Perhaps it should be part of the retry?
-
-            // Assert that the received buffer has the requested lenght ADN that DFU State (at position 4) is STATE_DFU_IDLE
-            Assert.IsTrue(
-                dfuStatus.BytesTransferred == StmDfuExtensions.GetStatusPacketLength &&
-                dfuStatus.Data[4] == STATE_DFU_IDLE);
-        }
-
-        [TestMethod]
-        public async Task TestSTMDFUModePerformControlTransferSend_GUID_DEVINTERFACE_USB_DEVICE()
+        public async Task TestSTMDFUModePerformControlTransfer_GUID_DEVINTERFACE_USB_DEVICE_NoFactory()
         {
             const string deviceID = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
             var stmDfuDevice = new UsbDevice(deviceID,
@@ -105,7 +86,7 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestSTMDFUModePerformControlTransferSend_Zadig()
+        public async Task TestSTMDFUModePerformControlTransfer_Zadig_NoFactory()
         {
             //This is the Zadig driver on my machine apparently...
             const string deviceID = @"\\\\?\\usb#vid_0483&pid_df11#00000008ffff#{f1e6f51b-72ea-43e1-b267-30056cd69e81}";
@@ -122,27 +103,40 @@ namespace Device.Net.UnitTests
             => TestWriteAndReadFromTrezor(new FilterDeviceDefinition(vendorId: TrezorVendorId, productId: TrezorOneProductId, label: "Trezor One Firmware 1.7.x")
             .CreateLibUsbDeviceFactory(loggerFactory)
         );
-#endif
 
-        [TestMethod]
-        public async Task TestSTMDFUModePerformControlTransferSend_DefaultGuid_WinUSBGuid()
-        {
-            var stmDfuDevice = await new FilterDeviceDefinition(StmDfuVendorId, StmDfuProductId)
-                .GetUsbDeviceFactory(loggerFactory)
-                .ConnectFirstAsync();
-
-            await PerformStmDfTest((IUsbDevice)stmDfuDevice);
-        }
 
         [TestMethod]
         public async Task TestSTMDFUModePerformControlTransferSend_LibUsb()
         {
             var stmDfuDevice = await new FilterDeviceDefinition(StmDfuVendorId, StmDfuProductId)
                 .GetUsbDeviceFactory(loggerFactory)
-                .ConnectFirstAsync();
+                .ConnectFirstAsync(loggerFactory.CreateLogger<FilterDeviceDefinition>());
 
             await PerformStmDfTest((IUsbDevice)stmDfuDevice);
         }
+#endif
+
+        [TestMethod]
+        public async Task TestSTMDFUModePerformControlTransfer_DefaultGuid_WinUSBGuid()
+        {
+            var stmDfuDevice = await new FilterDeviceDefinition(StmDfuVendorId, StmDfuProductId)
+                .GetUsbDeviceFactory(loggerFactory)
+                .ConnectFirstAsync(loggerFactory.CreateLogger<FilterDeviceDefinition>());
+
+            await PerformStmDfTest((IUsbDevice)stmDfuDevice);
+        }
+
+#if !WINDOWS_UWP
+        [TestMethod]
+        public async Task TestSTMDFUModePerformControlTransfer_GUID_DEVINTERFACE_USB_DEVICE()
+        {
+            var stmDfuDevice = await new FilterDeviceDefinition(StmDfuVendorId, StmDfuProductId, classGuid: WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE)
+                .GetUsbDeviceFactory(loggerFactory, classGuid: WindowsDeviceConstants.GUID_DEVINTERFACE_USB_DEVICE)
+                .ConnectFirstAsync(loggerFactory.CreateLogger<FilterDeviceDefinition>());
+
+            await PerformStmDfTest((IUsbDevice)stmDfuDevice);
+        }
+#endif
 
         [TestMethod]
         public Task TestWriteAndReadFromTrezorUsb() => TestWriteAndReadFromTrezor(

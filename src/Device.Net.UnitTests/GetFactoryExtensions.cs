@@ -1,6 +1,7 @@
 ﻿
 using Hid.Net.Windows;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using Usb.Net.Windows;
 
@@ -10,14 +11,15 @@ namespace Device.Net.UnitTests
     {
         public static IDeviceFactory GetUsbDeviceFactory(
             this FilterDeviceDefinition filterDeviceDefinition,
-            ILoggerFactory loggerFactory)
-            => filterDeviceDefinition.CreateWindowsUsbDeviceFactory(loggerFactory);
+            ILoggerFactory loggerFactory,
+            Guid? classGuid = null)
+            => filterDeviceDefinition.CreateWindowsUsbDeviceFactory(loggerFactory, classGuid: classGuid);
 
         public static IDeviceFactory GetUsbDeviceFactory(
             this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
-            ILoggerFactory loggerFactory)
-            => filterDeviceDefinitions.CreateWindowsUsbDeviceFactory(loggerFactory);
-
+            ILoggerFactory loggerFactory,
+            Guid? classGuid = null)
+            => filterDeviceDefinitions.CreateWindowsUsbDeviceFactory(loggerFactory, classGuid: classGuid);
 
         public static IDeviceFactory GetHidDeviceFactory(
             this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,

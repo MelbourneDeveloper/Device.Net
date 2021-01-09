@@ -1,4 +1,6 @@
+using Device.Net.Exceptions;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -69,9 +71,21 @@ namespace Device.Net
             await deviceFactory.GetDeviceAsync(await (await deviceFactory.GetConnectedDeviceDefinitionsAsync().ConfigureAwait(false)).FirstOrDefaultAsync().ConfigureAwait(false)).ConfigureAwait(false)
             : throw new ArgumentNullException(nameof(deviceFactory));
 
-        public static async Task<IDevice> ConnectFirstAsync(this IDeviceFactory deviceFactory)
+        public static async Task<IDevice> ConnectFirstAsync(this IDeviceFactory deviceFactory, ILogger logger)
         {
+            logger ??= NullLogger.Instance;
+
             var device = await GetFirstDeviceAsync(deviceFactory).ConfigureAwait(false);
+
+            if (device == null)
+            {
+                var deviceException = new DeviceException(Messages.ErrorMessageCouldntGetDevice);
+
+                logger.LogError(deviceException, "No devices found");
+
+                throw deviceException;
+            }
+
             await device.InitializeAsync().ConfigureAwait(false);
             return device;
         }
