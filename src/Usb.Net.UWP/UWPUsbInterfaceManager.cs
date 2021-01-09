@@ -1,12 +1,16 @@
-﻿using Device.Net;
+using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.UWP;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using usbControlRequestType = Windows.Devices.Usb.UsbControlRequestType;
+using usbControlTransferType = Windows.Devices.Usb.UsbControlTransferType;
+using usbSetupPacket = Windows.Devices.Usb.UsbSetupPacket;
 using windowsUsbDevice = Windows.Devices.Usb.UsbDevice;
 
 namespace Usb.Net.UWP
@@ -60,7 +64,7 @@ namespace Usb.Net.UWP
         }
         #endregion
 
-        #region Private Methods
+        #region Public Methods
         public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
@@ -82,8 +86,7 @@ namespace Usb.Net.UWP
                         usbInterface,
                         _performControlTransferAsync != null ?
                         new PerformControlTransferAsync((sp, data, c) => _performControlTransferAsync(ConnectedDevice, sp, data, c)) :
-                        //TODO: Fill in the UWP control transfer here
-                        (sp, data, c) => throw new NotImplementedException(),
+                        new PerformControlTransferAsync(PerformControlTransferAsync),
                         DataReceiver,
                         Logger,
                         _ReadBufferSize,
@@ -103,11 +106,6 @@ namespace Usb.Net.UWP
             UsbInterfaceHandler.RegisterDefaultInterfaces();
         }
 
-        protected override IAsyncOperation<windowsUsbDevice> FromIdAsync(string id) => windowsUsbDevice.FromIdAsync(id);
-
-        #endregion
-
-        #region Public Methods
         public override void Dispose()
         {
             if (disposed) return;
@@ -122,6 +120,42 @@ namespace Usb.Net.UWP
         public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync(CancellationToken cancellationToken = default) => Task.FromResult(ConnectedDeviceDefinition);
 
         public override Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default) => ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
+        #endregion
+
+        #region Private Methods
+        private async Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
+        {
+            if (setupPacket.RequestType.Direction == RequestDirection.In)
+            {
+                var uwpSetupPacket = new usbSetupPacket
+                {
+                    Index = setupPacket.Index,
+                    Length = setupPacket.Length,
+                    Request = setupPacket.Request,
+                    RequestType = new usbControlRequestType
+                    {
+                        ControlTransferType = setupPacket.RequestType.Type switch
+                        {
+                            RequestType.Standard => usbControlTransferType.Standard,
+                            RequestType.Class => usbControlTransferType.Class,
+                            RequestType.Vendor => usbControlTransferType.Vendor,
+                            _ => throw new NotImplementedException()
+                        }
+                    },
+                    Value = setupPacket.Value
+                };
+
+                var readBuffer = await ConnectedDevice.SendControlInTransferAsync(uwpSetupPacket);
+
+                return new TransferResult(readBuffer.ToArray(), readBuffer.Length);
+            }
+
+            return default;
+        }
+        #endregion
+
+        #region Protected Methods
+        protected override IAsyncOperation<windowsUsbDevice> FromIdAsync(string id) => windowsUsbDevice.FromIdAsync(id);
         #endregion
     }
 }
