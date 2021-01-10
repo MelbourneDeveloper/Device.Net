@@ -60,8 +60,8 @@ public async Task InitializeTrezorAsync()
 }
 ```
 
-## Donate
-This project needs money. If you use Device.Net, please contribute.
+## Sponsor
+This project needs money. If you use Device.Net, please contribute by [sponsoring me here](https://github.com/sponsors/MelbourneDeveloper).
 
 | Coin           | Address |
 | -------------  |:-------------:|
