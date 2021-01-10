@@ -6,7 +6,7 @@
 
 This framework provides a common task-based Async interface across platforms and device types. This allows for dependency injection to use different types of devices on any platform with the same code. The supported device types are Hid, Serial Port, and USB. We will add Bluetooth in the future, and we are looking for Bluetooth programmers to help. Please join the community on Discord [here](https://discord.gg/ZcvXARm).
 
-[## Sponsor This Project](https://github.com/sponsors/MelbourneDeveloper)
+## [Sponsor This Project](https://github.com/sponsors/MelbourneDeveloper)
 This project requires funding to become sustainable. Contribute with a monthly sponsorship.
 
 ## Hid.Net
