@@ -61,8 +61,7 @@ public async Task InitializeTrezorAsync()
 ```
 
 ## Donate
-
-All my libraries are open source and free. Your donations will contribute to making sure that these libraries keep up with the latest firmware, functions are implemented, and the quality is maintained.
+This project needs money. If you use Device.Net, please contribute.
 
 | Coin           | Address |
 | -------------  |:-------------:|
@@ -80,11 +79,11 @@ All my libraries are open source and free. Your donations will contribute to mak
 
 ## Contact
 
-- Join us on [Slack](https://join.slack.com/t/hardwarewallets/shared_invite/enQtNjA5MDgxMzE2Nzg2LWUyODIzY2U0ODE5OTFlMmI3MGYzY2VkZGJjNTc0OTUwNDliMTg2MzRiNTU1MTVjZjI0YWVhNjQzNjUwMjEyNzQ)
-
 - Follow, or message me on [Twitter](https://twitter.com/CFDevelop)
 
 - Follow my app Hardfolio on [Twitter](https://twitter.com/HardfolioApp)
+
+- [Join the conversation](https://discord.gg/ZcvXARm) on Discord
 
 - Read my [blog](https://christianfindlay.wordpress.com)
 
