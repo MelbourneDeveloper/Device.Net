@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class LoggingExtensions
+    <title>Class UnsubscribeDisposable
    </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class LoggingExtensions
+    <meta name="title" content="Class UnsubscribeDisposable
    ">
     <meta name="generator" content="docfx 2.56.6.0">
     
@@ -68,17 +68,21 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Device.Net.LoggingExtensions">
+            <article class="content wrap" id="_content" data-uid="Device.Net.UnsubscribeDisposable">
   
   
-  <h1 id="Device_Net_LoggingExtensions" data-uid="Device.Net.LoggingExtensions" class="text-break">Class LoggingExtensions
+  <h1 id="Device_Net_UnsubscribeDisposable" data-uid="Device.Net.UnsubscribeDisposable" class="text-break">Class UnsubscribeDisposable
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">LoggingExtensions</span></div>
+    <div class="level1"><span class="xref">UnsubscribeDisposable</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -106,26 +110,26 @@
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Device.Net.html">Device.Net</a></h6>
   <h6><strong>Assembly</strong>: Device.Net.dll</h6>
-  <h5 id="Device_Net_LoggingExtensions_syntax">Syntax</h5>
+  <h5 id="Device_Net_UnsubscribeDisposable_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static class LoggingExtensions</code></pre>
+    <pre><code class="lang-csharp hljs">public class UnsubscribeDisposable : IDisposable</code></pre>
   </div>
-  <h3 id="methods">Methods
+  <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LoggingExtensions_LogDataTransfer_Microsoft_Extensions_Logging_ILogger_Device_Net_Trace_.md&amp;value=---%0Auid%3A%20Device.Net.LoggingExtensions.LogDataTransfer(Microsoft.Extensions.Logging.ILogger%2CDevice.Net.Trace)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_UnsubscribeDisposable__ctor_System_Action_.md&amp;value=---%0Auid%3A%20Device.Net.UnsubscribeDisposable.%23ctor(System.Action)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/LoggingExtensions.cs/#L7">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/UnsubscribeDisposable.cs/#L9">View Source</a>
   </span>
-  <a id="Device_Net_LoggingExtensions_LogDataTransfer_" data-uid="Device.Net.LoggingExtensions.LogDataTransfer*"></a>
-  <h4 id="Device_Net_LoggingExtensions_LogDataTransfer_Microsoft_Extensions_Logging_ILogger_Device_Net_Trace_" data-uid="Device.Net.LoggingExtensions.LogDataTransfer(Microsoft.Extensions.Logging.ILogger,Device.Net.Trace)">LogDataTransfer(ILogger, Trace)</h4>
+  <a id="Device_Net_UnsubscribeDisposable__ctor_" data-uid="Device.Net.UnsubscribeDisposable.#ctor*"></a>
+  <h4 id="Device_Net_UnsubscribeDisposable__ctor_System_Action_" data-uid="Device.Net.UnsubscribeDisposable.#ctor(System.Action)">UnsubscribeDisposable(Action)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static void LogDataTransfer(this ILogger logger, Trace trace)</code></pre>
+    <pre><code class="lang-csharp hljs">public UnsubscribeDisposable(Action unsubscribe)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -138,17 +142,33 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Microsoft.Extensions.Logging.ILogger</span></td>
-        <td><span class="parametername">logger</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Device.Net.Trace.html">Trace</a></td>
-        <td><span class="parametername">trace</span></td>
+        <td><span class="xref">System.Action</span></td>
+        <td><span class="parametername">unsubscribe</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_UnsubscribeDisposable_Dispose.md&amp;value=---%0Auid%3A%20Device.Net.UnsubscribeDisposable.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/UnsubscribeDisposable.cs/#L11">View Source</a>
+  </span>
+  <a id="Device_Net_UnsubscribeDisposable_Dispose_" data-uid="Device.Net.UnsubscribeDisposable.Dispose*"></a>
+  <h4 id="Device_Net_UnsubscribeDisposable_Dispose" data-uid="Device.Net.UnsubscribeDisposable.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
 </article>
           </div>
           
@@ -157,10 +177,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LoggingExtensions.md&amp;value=---%0Auid%3A%20Device.Net.LoggingExtensions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_UnsubscribeDisposable.md&amp;value=---%0Auid%3A%20Device.Net.UnsubscribeDisposable%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/LoggingExtensions.cs/#L5" class="contribution-link">View Source</a>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/UnsubscribeDisposable.cs/#L5" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

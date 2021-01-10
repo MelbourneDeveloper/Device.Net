@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class Resource.Attribute
+    <title>Delegate PerformControlTransferAsync
    </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class Resource.Attribute
+    <meta name="title" content="Delegate PerformControlTransferAsync
    ">
     <meta name="generator" content="docfx 2.56.6.0">
     
@@ -68,48 +68,61 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Usb.Net.Android.Resource.Attribute">
+            <article class="content wrap" id="_content" data-uid="Usb.Net.PerformControlTransferAsync">
   
   
-  <h1 id="Usb_Net_Android_Resource_Attribute" data-uid="Usb.Net.Android.Resource.Attribute" class="text-break">Class Resource.Attribute
+  <h1 id="Usb_Net_PerformControlTransferAsync" data-uid="Usb.Net.PerformControlTransferAsync" class="text-break">Delegate PerformControlTransferAsync
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
-  <div class="inheritance">
-    <h5>Inheritance</h5>
-    <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">Resource.Attribute</span></div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-  </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Usb.Net.Android.html">Usb.Net.Android</a></h6>
-  <h6><strong>Assembly</strong>: Usb.Net.Android.dll</h6>
-  <h5 id="Usb_Net_Android_Resource_Attribute_syntax">Syntax</h5>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Usb.Net.html">Usb.Net</a></h6>
+  <h6><strong>Assembly</strong>: Usb.Net.dll</h6>
+  <h5 id="Usb_Net_PerformControlTransferAsync_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Attribute</code></pre>
+    <pre><code class="lang-csharp hljs">public delegate Task&lt;TransferResult&gt; PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default(CancellationToken));</code></pre>
   </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Usb.Net.SetupPacket.html">SetupPacket</a></td>
+        <td><span class="parametername">setupPacket</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">buffer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.CancellationToken</span></td>
+        <td><span class="parametername">cancellationToken</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           
@@ -118,10 +131,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_Android_Resource_Attribute.md&amp;value=---%0Auid%3A%20Usb.Net.Android.Resource.Attribute%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_PerformControlTransferAsync.md&amp;value=---%0Auid%3A%20Usb.Net.PerformControlTransferAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net.Android/obj/Release/90/designtime/Resource.designer.cs/#L26" class="contribution-link">View Source</a>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/Delegates.cs/#L7" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>

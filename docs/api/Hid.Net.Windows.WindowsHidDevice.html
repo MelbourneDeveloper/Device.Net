@@ -112,6 +112,9 @@
       <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_RemoveFirstByte_System_Byte___">DeviceBase.RemoveFirstByte(Byte[])</a>
     </div>
     <div>
+      <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_Dispose_System_Boolean_">DeviceBase.Dispose(Boolean)</a>
+    </div>
+    <div>
       <a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_GetDeviceDefinitionFromWindowsDeviceId_System_String_Device_Net_DeviceType_Microsoft_Extensions_Logging_ILogger_System_Nullable_System_Guid__">DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(String, DeviceType, ILogger, Nullable&lt;Guid&gt;)</a>
     </div>
     <div>
@@ -396,7 +399,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_Windows_WindowsHidDevice_Close.md&amp;value=---%0Auid%3A%20Hid.Net.Windows.WindowsHidDevice.Close%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/Windows/WindowsHIDDevice.cs/#L137">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/Windows/WindowsHIDDevice.cs/#L146">View Source</a>
   </span>
   <a id="Hid_Net_Windows_WindowsHidDevice_Close_" data-uid="Hid.Net.Windows.WindowsHidDevice.Close*"></a>
   <h4 id="Hid_Net_Windows_WindowsHidDevice_Close" data-uid="Hid.Net.Windows.WindowsHidDevice.Close">Close()</h4>
@@ -411,7 +414,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_Windows_WindowsHidDevice_Dispose.md&amp;value=---%0Auid%3A%20Hid.Net.Windows.WindowsHidDevice.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/Windows/WindowsHIDDevice.cs/#L171">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/Windows/WindowsHIDDevice.cs/#L180">View Source</a>
   </span>
   <a id="Hid_Net_Windows_WindowsHidDevice_Dispose_" data-uid="Hid.Net.Windows.WindowsHidDevice.Dispose*"></a>
   <h4 id="Hid_Net_Windows_WindowsHidDevice_Dispose" data-uid="Hid.Net.Windows.WindowsHidDevice.Dispose">Dispose()</h4>
@@ -419,31 +422,16 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public override void Dispose()</code></pre>
+    <pre><code class="lang-csharp hljs">public override sealed void Dispose()</code></pre>
   </div>
   <h5 class="overrides">Overrides</h5>
   <div><a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_Dispose">DeviceBase.Dispose()</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_Windows_WindowsHidDevice_Finalize.md&amp;value=---%0Auid%3A%20Hid.Net.Windows.WindowsHidDevice.Finalize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/Windows/WindowsHIDDevice.cs/#L304">View Source</a>
-  </span>
-  <a id="Hid_Net_Windows_WindowsHidDevice_Finalize_" data-uid="Hid.Net.Windows.WindowsHidDevice.Finalize*"></a>
-  <h4 id="Hid_Net_Windows_WindowsHidDevice_Finalize" data-uid="Hid.Net.Windows.WindowsHidDevice.Finalize">Finalize()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected void Finalize()</code></pre>
-  </div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_Windows_WindowsHidDevice_InitializeAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.Windows.WindowsHidDevice.InitializeAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/Windows/WindowsHIDDevice.cs/#L190">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/Windows/WindowsHIDDevice.cs/#L199">View Source</a>
   </span>
   <a id="Hid_Net_Windows_WindowsHidDevice_InitializeAsync_" data-uid="Hid.Net.Windows.WindowsHidDevice.InitializeAsync*"></a>
   <h4 id="Hid_Net_Windows_WindowsHidDevice_InitializeAsync_System_Threading_CancellationToken_" data-uid="Hid.Net.Windows.WindowsHidDevice.InitializeAsync(System.Threading.CancellationToken)">InitializeAsync(CancellationToken)</h4>
@@ -492,7 +480,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_Windows_WindowsHidDevice_ReadAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.Windows.WindowsHidDevice.ReadAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/Windows/WindowsHIDDevice.cs/#L199">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/Windows/WindowsHIDDevice.cs/#L206">View Source</a>
   </span>
   <a id="Hid_Net_Windows_WindowsHidDevice_ReadAsync_" data-uid="Hid.Net.Windows.WindowsHidDevice.ReadAsync*"></a>
   <h4 id="Hid_Net_Windows_WindowsHidDevice_ReadAsync_System_Threading_CancellationToken_" data-uid="Hid.Net.Windows.WindowsHidDevice.ReadAsync(System.Threading.CancellationToken)">ReadAsync(CancellationToken)</h4>
@@ -541,7 +529,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_Windows_WindowsHidDevice_ReadReportAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.Windows.WindowsHidDevice.ReadReportAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/Windows/WindowsHIDDevice.cs/#L206">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/Windows/WindowsHIDDevice.cs/#L213">View Source</a>
   </span>
   <a id="Hid_Net_Windows_WindowsHidDevice_ReadReportAsync_" data-uid="Hid.Net.Windows.WindowsHidDevice.ReadReportAsync*"></a>
   <h4 id="Hid_Net_Windows_WindowsHidDevice_ReadReportAsync_System_Threading_CancellationToken_" data-uid="Hid.Net.Windows.WindowsHidDevice.ReadReportAsync(System.Threading.CancellationToken)">ReadReportAsync(CancellationToken)</h4>
@@ -588,7 +576,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_Windows_WindowsHidDevice_WriteAsync_System_Byte___System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.Windows.WindowsHidDevice.WriteAsync(System.Byte%5B%5D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/Windows/WindowsHIDDevice.cs/#L241">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/Windows/WindowsHIDDevice.cs/#L248">View Source</a>
   </span>
   <a id="Hid_Net_Windows_WindowsHidDevice_WriteAsync_" data-uid="Hid.Net.Windows.WindowsHidDevice.WriteAsync*"></a>
   <h4 id="Hid_Net_Windows_WindowsHidDevice_WriteAsync_System_Byte___System_Threading_CancellationToken_" data-uid="Hid.Net.Windows.WindowsHidDevice.WriteAsync(System.Byte[],System.Threading.CancellationToken)">WriteAsync(Byte[], CancellationToken)</h4>
@@ -642,7 +630,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_Windows_WindowsHidDevice_WriteReportAsync_System_Byte___System_Nullable_System_Byte__System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.Windows.WindowsHidDevice.WriteReportAsync(System.Byte%5B%5D%2CSystem.Nullable%7BSystem.Byte%7D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/Windows/WindowsHIDDevice.cs/#L243">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/Windows/WindowsHIDDevice.cs/#L250">View Source</a>
   </span>
   <a id="Hid_Net_Windows_WindowsHidDevice_WriteReportAsync_" data-uid="Hid.Net.Windows.WindowsHidDevice.WriteReportAsync*"></a>
   <h4 id="Hid_Net_Windows_WindowsHidDevice_WriteReportAsync_System_Byte___System_Nullable_System_Byte__System_Threading_CancellationToken_" data-uid="Hid.Net.Windows.WindowsHidDevice.WriteReportAsync(System.Byte[],System.Nullable{System.Byte},System.Threading.CancellationToken)">WriteReportAsync(Byte[], Nullable&lt;Byte&gt;, CancellationToken)</h4>

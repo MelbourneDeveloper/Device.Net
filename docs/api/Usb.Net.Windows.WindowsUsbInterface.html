@@ -119,6 +119,9 @@
       <a class="xref" href="Usb.Net.UsbInterfaceBase.html#Usb_Net_UsbInterfaceBase_ClaimInterface">UsbInterfaceBase.ClaimInterface()</a>
     </div>
     <div>
+      <a class="xref" href="Usb.Net.UsbInterfaceBase.html#Usb_Net_UsbInterfaceBase_PerformControlTransferAsync_Usb_Net_SetupPacket_System_Byte___System_Threading_CancellationToken_">UsbInterfaceBase.PerformControlTransferAsync(SetupPacket, Byte[], CancellationToken)</a>
+    </div>
+    <div>
       <span class="xref">System.Object.Equals(System.Object)</span>
     </div>
     <div>
@@ -150,18 +153,18 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_Windows_WindowsUsbInterface__ctor_Microsoft_Win32_SafeHandles_SafeFileHandle_System_Byte_Microsoft_Extensions_Logging_ILogger_System_Nullable_System_UInt16__System_Nullable_System_UInt16__.md&amp;value=---%0Auid%3A%20Usb.Net.Windows.WindowsUsbInterface.%23ctor(Microsoft.Win32.SafeHandles.SafeFileHandle%2CSystem.Byte%2CMicrosoft.Extensions.Logging.ILogger%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Nullable%7BSystem.UInt16%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_Windows_WindowsUsbInterface__ctor_Microsoft_Win32_SafeHandles_SafeFileHandle_System_Byte_Microsoft_Extensions_Logging_ILogger_System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Microsoft_Win32_SafeHandles_SafeFileHandle_Usb_Net_SetupPacket_System_Byte___System_Threading_CancellationToken_System_Threading_Tasks_Task_Device_Net_TransferResult___.md&amp;value=---%0Auid%3A%20Usb.Net.Windows.WindowsUsbInterface.%23ctor(Microsoft.Win32.SafeHandles.SafeFileHandle%2CSystem.Byte%2CMicrosoft.Extensions.Logging.ILogger%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Func%7BMicrosoft.Win32.SafeHandles.SafeFileHandle%2CUsb.Net.SetupPacket%2CSystem.Byte%5B%5D%2CSystem.Threading.CancellationToken%2CSystem.Threading.Tasks.Task%7BDevice.Net.TransferResult%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/Windows/WindowsUsbInterface.cs/#L27">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/Windows/WindowsUsbInterface.cs/#L28">View Source</a>
   </span>
   <a id="Usb_Net_Windows_WindowsUsbInterface__ctor_" data-uid="Usb.Net.Windows.WindowsUsbInterface.#ctor*"></a>
-  <h4 id="Usb_Net_Windows_WindowsUsbInterface__ctor_Microsoft_Win32_SafeHandles_SafeFileHandle_System_Byte_Microsoft_Extensions_Logging_ILogger_System_Nullable_System_UInt16__System_Nullable_System_UInt16__" data-uid="Usb.Net.Windows.WindowsUsbInterface.#ctor(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,Microsoft.Extensions.Logging.ILogger,System.Nullable{System.UInt16},System.Nullable{System.UInt16})">WindowsUsbInterface(SafeFileHandle, Byte, ILogger, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;)</h4>
+  <h4 id="Usb_Net_Windows_WindowsUsbInterface__ctor_Microsoft_Win32_SafeHandles_SafeFileHandle_System_Byte_Microsoft_Extensions_Logging_ILogger_System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Microsoft_Win32_SafeHandles_SafeFileHandle_Usb_Net_SetupPacket_System_Byte___System_Threading_CancellationToken_System_Threading_Tasks_Task_Device_Net_TransferResult___" data-uid="Usb.Net.Windows.WindowsUsbInterface.#ctor(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,Microsoft.Extensions.Logging.ILogger,System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Microsoft.Win32.SafeHandles.SafeFileHandle,Usb.Net.SetupPacket,System.Byte[],System.Threading.CancellationToken,System.Threading.Tasks.Task{Device.Net.TransferResult}})">WindowsUsbInterface(SafeFileHandle, Byte, ILogger, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;, Func&lt;SafeFileHandle, SetupPacket, Byte[], CancellationToken, Task&lt;TransferResult&gt;&gt;)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public WindowsUsbInterface(SafeFileHandle handle, byte interfaceNumber, ILogger logger = null, ushort? readBufferSize = default(ushort? ), ushort? writeBufferSzie = default(ushort? ))</code></pre>
+    <pre><code class="lang-csharp hljs">public WindowsUsbInterface(SafeFileHandle handle, byte interfaceNumber, ILogger logger = null, ushort? readBufferSize = default(ushort? ), ushort? writeBufferSzie = default(ushort? ), Func&lt;SafeFileHandle, SetupPacket, byte[], CancellationToken, Task&lt;TransferResult&gt;&gt; performControlTransferAsync = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -198,6 +201,11 @@
         <td><span class="parametername">writeBufferSzie</span></td>
         <td></td>
       </tr>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;<span class="xref">Microsoft.Win32.SafeHandles.SafeFileHandle</span>, <a class="xref" href="Usb.Net.SetupPacket.html">SetupPacket</a>, <span class="xref">System.Byte</span>[], <span class="xref">System.Threading.CancellationToken</span>, <span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;&gt;</td>
+        <td><span class="parametername">performControlTransferAsync</span></td>
+        <td></td>
+      </tr>
     </tbody>
   </table>
   <h3 id="properties">Properties
@@ -207,7 +215,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_Windows_WindowsUsbInterface_InterfaceNumber.md&amp;value=---%0Auid%3A%20Usb.Net.Windows.WindowsUsbInterface.InterfaceNumber%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/Windows/WindowsUsbInterface.cs/#L23">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/Windows/WindowsUsbInterface.cs/#L24">View Source</a>
   </span>
   <a id="Usb_Net_Windows_WindowsUsbInterface_InterfaceNumber_" data-uid="Usb.Net.Windows.WindowsUsbInterface.InterfaceNumber*"></a>
   <h4 id="Usb_Net_Windows_WindowsUsbInterface_InterfaceNumber" data-uid="Usb.Net.Windows.WindowsUsbInterface.InterfaceNumber">InterfaceNumber</h4>
@@ -242,7 +250,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_Windows_WindowsUsbInterface_Dispose.md&amp;value=---%0Auid%3A%20Usb.Net.Windows.WindowsUsbInterface.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/Windows/WindowsUsbInterface.cs/#L67">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/Windows/WindowsUsbInterface.cs/#L77">View Source</a>
   </span>
   <a id="Usb_Net_Windows_WindowsUsbInterface_Dispose_" data-uid="Usb.Net.Windows.WindowsUsbInterface.Dispose*"></a>
   <h4 id="Usb_Net_Windows_WindowsUsbInterface_Dispose" data-uid="Usb.Net.Windows.WindowsUsbInterface.Dispose">Dispose()</h4>
@@ -254,67 +262,10 @@
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_Windows_WindowsUsbInterface_PerformControlTransferAsync_Usb_Net_SetupPacket_System_Byte___System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Usb.Net.Windows.WindowsUsbInterface.PerformControlTransferAsync(Usb.Net.SetupPacket%2CSystem.Byte%5B%5D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/Windows/WindowsUsbInterface.cs/#L86">View Source</a>
-  </span>
-  <a id="Usb_Net_Windows_WindowsUsbInterface_PerformControlTransferAsync_" data-uid="Usb.Net.Windows.WindowsUsbInterface.PerformControlTransferAsync*"></a>
-  <h4 id="Usb_Net_Windows_WindowsUsbInterface_PerformControlTransferAsync_Usb_Net_SetupPacket_System_Byte___System_Threading_CancellationToken_" data-uid="Usb.Net.Windows.WindowsUsbInterface.PerformControlTransferAsync(Usb.Net.SetupPacket,System.Byte[],System.Threading.CancellationToken)">PerformControlTransferAsync(SetupPacket, Byte[], CancellationToken)</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;TransferResult&gt; PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default(CancellationToken))</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Usb.Net.SetupPacket.html">SetupPacket</a></td>
-        <td><span class="parametername">setupPacket</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Byte</span>[]</td>
-        <td><span class="parametername">buffer</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Threading.CancellationToken</span></td>
-        <td><span class="parametername">cancellationToken</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_Windows_WindowsUsbInterface_ReadAsync_System_UInt32_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Usb.Net.Windows.WindowsUsbInterface.ReadAsync(System.UInt32%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/Windows/WindowsUsbInterface.cs/#L40">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/Windows/WindowsUsbInterface.cs/#L51">View Source</a>
   </span>
   <a id="Usb_Net_Windows_WindowsUsbInterface_ReadAsync_" data-uid="Usb.Net.Windows.WindowsUsbInterface.ReadAsync*"></a>
   <h4 id="Usb_Net_Windows_WindowsUsbInterface_ReadAsync_System_UInt32_System_Threading_CancellationToken_" data-uid="Usb.Net.Windows.WindowsUsbInterface.ReadAsync(System.UInt32,System.Threading.CancellationToken)">ReadAsync(UInt32, CancellationToken)</h4>
@@ -366,7 +317,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_Windows_WindowsUsbInterface_WriteAsync_System_Byte___System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Usb.Net.Windows.WindowsUsbInterface.WriteAsync(System.Byte%5B%5D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/Windows/WindowsUsbInterface.cs/#L52">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/Windows/WindowsUsbInterface.cs/#L62">View Source</a>
   </span>
   <a id="Usb_Net_Windows_WindowsUsbInterface_WriteAsync_" data-uid="Usb.Net.Windows.WindowsUsbInterface.WriteAsync*"></a>
   <h4 id="Usb_Net_Windows_WindowsUsbInterface_WriteAsync_System_Byte___System_Threading_CancellationToken_" data-uid="Usb.Net.Windows.WindowsUsbInterface.WriteAsync(System.Byte[],System.Threading.CancellationToken)">WriteAsync(Byte[], CancellationToken)</h4>
@@ -431,7 +382,7 @@
                     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_Windows_WindowsUsbInterface.md&amp;value=---%0Auid%3A%20Usb.Net.Windows.WindowsUsbInterface%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/Windows/WindowsUsbInterface.cs/#L11" class="contribution-link">View Source</a>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net/Windows/WindowsUsbInterface.cs/#L12" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
