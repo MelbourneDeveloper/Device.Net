@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Hid.Net.Windows
 {
     ///<inheritdoc cref="IHidDevice"/>
-    public sealed class WindowsHidDevice : WindowsDeviceBase, IHidDevice
+    public sealed class WindowsHidDevice : DeviceBase, IHidDevice
     {
         #region Fields
         private Stream _ReadFileStream;
@@ -196,7 +196,7 @@ namespace Hid.Net.Windows
             base.Dispose();
         }
 
-        public override async Task InitializeAsync(CancellationToken cancellationToken = default)
+        public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
