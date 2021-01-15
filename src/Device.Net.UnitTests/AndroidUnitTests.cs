@@ -128,7 +128,7 @@ namespace Device.Net.UnitTests
                 vendorId: IntegrationTests.TrezorVendorId,
                 productId: IntegrationTests.TrezorOneProductId,
                 label: "Trezor One Firmware 1.7.x"), ExpectedTrezorDataLength)
-            , ExpectedTrezorDataLength, false
+            , ExpectedTrezorDataLength, dispose: false
             );
 
             //Asserts about the device
@@ -202,13 +202,13 @@ namespace Device.Net.UnitTests
             }
         }
 
-        private static Task<IDevice> TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, bool dispose = true)
+        private static Task<IDevice> TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, uint? expectedTransferLength = null, bool dispose = true)
         {
             //Send the request part of the Message Contract
             var integrationTester = new IntegrationTester(
                 deviceFactory);
 
-            return integrationTester.TestAsync(GetTrezorRequest(), IntegrationTests.AssertTrezorResult, expectedDataLength, dispose);
+            return integrationTester.TestAsync(GetTrezorRequest(), IntegrationTests.AssertTrezorResult, expectedDataLength, expectedTransferLength, dispose);
         }
 
         private static byte[] GetTrezorRequest()

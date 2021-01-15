@@ -155,7 +155,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition(vendorId: 0x534C, productId: 0x0001, label: "Trezor One Firmware 1.6.x", usagePage: 65280)
-            .GetHidDeviceFactory(loggerFactory, 0)
+            .GetHidDeviceFactory(loggerFactory, 0), 64, 65
             );
 
         [TestMethod]
@@ -188,7 +188,7 @@ namespace Device.Net.UnitTests
             Assert.IsTrue(devices.Any());
         }
 
-        private static async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64)
+        private static async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, uint? expectedTransferLength = null)
         {
             //Send the request part of the Message Contract
             var request = new byte[64];
@@ -198,7 +198,7 @@ namespace Device.Net.UnitTests
 
             var integrationTester = new IntegrationTester(
                 deviceFactory);
-            _ = await integrationTester.TestAsync(request, AssertTrezorResult, expectedDataLength);
+            _ = await integrationTester.TestAsync(request, AssertTrezorResult, expectedDataLength, expectedTransferLength);
         }
 
         [TestMethod]
