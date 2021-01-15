@@ -148,7 +148,7 @@ namespace Hid.Net.Windows
             return new DeviceFactory(
                 loggerFactory,
                 getConnectedDeviceDefinitionsAsync,
-                (c, cancellationToken) => Task.FromResult<IDevice>(new WindowsHidDevice
+                (c, cancellationToken) => Task.FromResult<IDevice>(new HidDevice
                 (
                     new WindowsHidHandler(c.DeviceId, writeBufferSize, readBufferSize, hidApiService, loggerFactory),
                     loggerFactory: loggerFactory,

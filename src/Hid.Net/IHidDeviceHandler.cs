@@ -3,7 +3,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hid.Net.Windows
+namespace Hid.Net
 {
     public interface IHidDeviceHandler : IDisposable
     {
@@ -12,7 +12,6 @@ namespace Hid.Net.Windows
         ushort? ReadBufferSize { get; }
         ushort? WriteBufferSize { get; }
         string DeviceId { get; }
-
         void Initialize();
         Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default);
         Task<uint> WriteAsync(byte[] bytes, CancellationToken cancellationToken = default);

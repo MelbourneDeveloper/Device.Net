@@ -8,11 +8,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hid.Net.Windows
+namespace Hid.Net
 {
-
     ///<inheritdoc cref="IHidDevice"/>
-    public sealed class WindowsHidDevice : DeviceBase, IHidDevice
+    public sealed class HidDevice
+        : DeviceBase, IHidDevice
     {
         private readonly IHidDeviceHandler _hidDeviceHandler;
 
@@ -37,13 +37,13 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidDevice(
+        public HidDevice(
             IHidDeviceHandler hidDeviceHandler,
             ILoggerFactory loggerFactory = null,
             byte? defaultReportId = null) : base(
                 hidDeviceHandler != null ? hidDeviceHandler.DeviceId : throw new ArgumentNullException(nameof(hidDeviceHandler)),
                 loggerFactory,
-                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidDevice>())
+                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<HidDevice>())
         {
             _hidDeviceHandler = hidDeviceHandler;
             DefaultReportId = defaultReportId;
@@ -80,7 +80,7 @@ namespace Hid.Net.Windows
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, Messages.ErrorMessageCantClose, DeviceId, nameof(WindowsHidDevice));
+                Logger.LogError(ex, Messages.ErrorMessageCantClose, DeviceId, nameof(HidDevice));
             }
 
             _IsClosing = false;
