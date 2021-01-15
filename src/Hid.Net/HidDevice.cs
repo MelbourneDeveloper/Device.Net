@@ -26,7 +26,7 @@ namespace Hid.Net
         #endregion
 
         #region Public Overrides
-        public override bool IsInitialized => _hidDeviceHandler != null;
+        public override bool IsInitialized => _hidDeviceHandler.IsInitialized;
         public override ushort WriteBufferSize => _hidDeviceHandler.WriteBufferSize ?? throw new InvalidOperationException("Write buffer size unknown");
         public override ushort ReadBufferSize => _hidDeviceHandler.ReadBufferSize ?? throw new InvalidOperationException("Read buffer size unknown");
         public bool? IsReadOnly => _hidDeviceHandler.IsReadOnly;
@@ -51,13 +51,13 @@ namespace Hid.Net
         #endregion
 
         #region Private Methods
-        private void Initialize()
+        private Task InitializeAsync()
         {
-            using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(Initialize));
+            using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(InitializeAsync));
 
             try
             {
-                _hidDeviceHandler.Initialize();
+                return _hidDeviceHandler.InitializeAsync();
             }
             catch (Exception ex)
             {
@@ -109,7 +109,7 @@ namespace Hid.Net
         {
             if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
-            await Task.Run(Initialize, cancellationToken).ConfigureAwait(false);
+            await InitializeAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)

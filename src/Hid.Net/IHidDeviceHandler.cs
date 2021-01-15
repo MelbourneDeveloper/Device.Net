@@ -12,8 +12,9 @@ namespace Hid.Net
         ushort? ReadBufferSize { get; }
         ushort? WriteBufferSize { get; }
         string DeviceId { get; }
-        void Initialize();
+        Task InitializeAsync();
         Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default);
         Task<uint> WriteAsync(byte[] bytes, CancellationToken cancellationToken = default);
+        public bool IsInitialized { get; }
     }
 }

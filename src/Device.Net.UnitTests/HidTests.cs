@@ -1,5 +1,6 @@
 ﻿#if !NET45
 
+using Hid.Net;
 using Hid.Net.Windows;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,7 +21,7 @@ namespace Device.Net.UnitTests
         {
             try
             {
-                _ = new WindowsHidDevice(null, null);
+                _ = new WindowsHidHandler(null, null);
             }
             catch (ArgumentNullException ane)
             {
@@ -47,7 +48,7 @@ namespace Device.Net.UnitTests
         }
 
 
-        private static async Task<WindowsHidDevice> InitializeWindowsHidDevice(bool isReadonly)
+        private static async Task<WindowsHidHandler> InitializeWindowsHidDevice(bool isReadonly)
         {
             const string deviceId = "test";
             var hidService = Substitute.For<IHidApiService>();
@@ -67,12 +68,12 @@ namespace Device.Net.UnitTests
             _ = hidService.OpenWrite(null, 0).ReturnsForAnyArgs(writeStream);
 
             var loggerFactory = new Mock<ILoggerFactory>();
-            var logger = new Mock<ILogger<WindowsHidDevice>>();
+            var logger = new Mock<ILogger<HidDevice>>();
             _ = logger.Setup(l => l.BeginScope(It.IsAny<It.IsAnyType>())).Returns(new Mock<IDisposable>().Object);
 
             _ = loggerFactory.Setup(f => f.CreateLogger(It.IsAny<string>())).Returns(logger.Object);
 
-            var windowsHidDevice = new WindowsHidDevice(deviceId, loggerFactory: loggerFactory.Object, hidService: hidService);
+            var windowsHidDevice = new WindowsHidHandler(deviceId, loggerFactory: loggerFactory.Object, hidApiService: hidService);
             await windowsHidDevice.InitializeAsync();
 
             //TODO: Fix this
