@@ -150,11 +150,8 @@ namespace Hid.Net.Windows
                 getConnectedDeviceDefinitionsAsync,
                 (c, cancellationToken) => Task.FromResult<IDevice>(new WindowsHidDevice
                 (
-                    c.DeviceId,
+                    new WindowsHidHandler(c.DeviceId, writeBufferSize, readBufferSize, hidApiService, loggerFactory),
                     loggerFactory: loggerFactory,
-                    hidService: selectedHidApiService,
-                    readBufferSize: readBufferSize,
-                    writeBufferSize: writeBufferSize,
                     defaultReportId: defaultReportId
                 )),
                 (c, cancellationToken) => Task.FromResult(c.DeviceType == DeviceType.Hid));
