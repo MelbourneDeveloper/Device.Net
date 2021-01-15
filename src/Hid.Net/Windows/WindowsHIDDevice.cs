@@ -25,8 +25,8 @@ namespace Hid.Net.Windows
         private SafeFileHandle _WriteSafeFileHandle;
         private readonly ILogger Logger;
         private readonly IHidApiService HidService;
-        private readonly ushort? _writeBufferSize;
-        private readonly ushort? _readBufferSize;
+        private ushort? _writeBufferSize;
+        private ushort? _readBufferSize;
 
         public WindowsHidHandle(
             string deviceId,
@@ -70,16 +70,16 @@ namespace Hid.Net.Windows
 
             ConnectedDeviceDefinition = HidService.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
 
-            var readBufferSize = _readBufferSize ?? (ushort?)ConnectedDeviceDefinition.ReadBufferSize;
-            var writeBufferSize = _writeBufferSize ?? (ushort?)ConnectedDeviceDefinition.WriteBufferSize;
+            _readBufferSize ??= (ushort?)ConnectedDeviceDefinition.ReadBufferSize;
+            _writeBufferSize ??= (ushort?)ConnectedDeviceDefinition.WriteBufferSize;
 
-            if (!readBufferSize.HasValue)
+            if (!_readBufferSize.HasValue)
             {
                 throw new ValidationException(
                     $"ReadBufferSize must be specified. HidD_GetAttributes may have failed or returned an InputReportByteLength of 0. Please specify this argument in the constructor");
             }
 
-            _ReadFileStream = HidService.OpenRead(_ReadSafeFileHandle, readBufferSize.Value);
+            _ReadFileStream = HidService.OpenRead(_ReadSafeFileHandle, _readBufferSize.Value);
 
             if (_ReadFileStream.CanRead)
             {
@@ -92,14 +92,14 @@ namespace Hid.Net.Windows
 
             if (IsReadOnly.Value) return;
 
-            if (!writeBufferSize.HasValue)
+            if (!_writeBufferSize.HasValue)
             {
                 throw new ValidationException(
                     $"WriteBufferSize must be specified. HidD_GetAttributes may have failed or returned an OutputReportByteLength of 0. Please specify this argument in the constructor");
             }
 
             //Don't open if this is a read only connection
-            _WriteFileStream = HidService.OpenWrite(_WriteSafeFileHandle, writeBufferSize.Value);
+            _WriteFileStream = HidService.OpenWrite(_WriteSafeFileHandle, _writeBufferSize.Value);
 
             if (_WriteFileStream.CanWrite)
             {
@@ -108,6 +108,40 @@ namespace Hid.Net.Windows
             else
             {
                 Logger.LogWarning(Messages.WarningMessageWriteFileStreamCantWrite);
+            }
+        }
+
+        public async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
+        {
+            if (_ReadFileStream == null)
+            {
+                throw new NotInitializedException(Messages.ErrorMessageNotInitialized);
+            }
+
+            var bytes = new byte[_readBufferSize.Value];
+
+            var bytesRead = (uint)await _ReadFileStream.ReadAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
+
+            return new TransferResult(bytes, bytesRead);
+        }
+
+        public async Task<uint> WriteAsync(byte[] bytes, CancellationToken cancellationToken = default)
+        {
+            if (bytes == null) throw new ArgumentNullException(nameof(bytes));
+
+            if (_WriteFileStream == null)
+            {
+                throw new NotInitializedException("The device has not been initialized");
+            }
+
+            if (_WriteFileStream.CanWrite)
+            {
+                await _WriteFileStream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
+                return (uint)bytes.Length;
+            }
+            else
+            {
+                throw new IOException("The file stream cannot be written to");
             }
         }
 
@@ -257,19 +291,13 @@ namespace Hid.Net.Windows
         public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
         {
             byte? reportId = null;
-
-            if (_ReadFileStream == null)
-            {
-                throw new NotInitializedException(Messages.ErrorMessageNotInitialized);
-            }
-
-            var bytes = new byte[ReadBufferSize];
-
-            uint bytesRead;
+            byte[] bytes;
+            TransferResult actualTransferResult;
 
             try
             {
-                bytesRead = (uint)await _ReadFileStream.ReadAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
+                actualTransferResult = await _WindowsHidHandle.ReadAsync(cancellationToken).ConfigureAwait(false);
+                bytes = actualTransferResult.Data;
             }
             catch (OperationCanceledException oce)
             {
@@ -286,7 +314,7 @@ namespace Hid.Net.Windows
 
             var retVal = ReadBufferHasReportId ? RemoveFirstByte(bytes) : bytes;
 
-            return new ReadReport(reportId, new TransferResult(retVal, bytesRead));
+            return new ReadReport(reportId, new TransferResult(retVal, actualTransferResult.BytesTransferred));
         }
 
         public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
@@ -297,6 +325,7 @@ namespace Hid.Net.Windows
 
             try
             {
+                uint bytesWritten = 0;
 
                 if (IsReadOnly.HasValue && IsReadOnly.Value)
                 {
@@ -304,11 +333,6 @@ namespace Hid.Net.Windows
                 }
 
                 if (data == null) throw new ArgumentNullException(nameof(data));
-
-                if (_WriteFileStream == null)
-                {
-                    throw new NotInitializedException("The device has not been initialized");
-                }
 
                 byte[] bytes;
                 if (reportId.HasValue)
@@ -324,24 +348,17 @@ namespace Hid.Net.Windows
                     bytes = data;
                 }
 
-                if (_WriteFileStream.CanWrite)
+                try
                 {
-                    try
-                    {
-                        await _WriteFileStream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
-                        Logger.LogDataTransfer(new Trace(true, bytes));
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new IOException(Messages.WriteErrorMessage, ex);
-                    }
+                    bytesWritten = await _WindowsHidHandle.WriteAsync(bytes, cancellationToken).ConfigureAwait(false);
+                    Logger.LogDataTransfer(new Trace(true, bytes));
                 }
-                else
+                catch (Exception ex)
                 {
-                    throw new IOException("The file stream cannot be written to");
+                    throw new IOException(Messages.WriteErrorMessage, ex);
                 }
 
-                return (uint)bytes.Length;
+                return bytesWritten;
             }
             catch (Exception ex)
             {
