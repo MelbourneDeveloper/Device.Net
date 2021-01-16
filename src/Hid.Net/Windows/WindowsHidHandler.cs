@@ -25,8 +25,6 @@ namespace Hid.Net
 
 namespace Hid.Net.Windows
 {
-
-
     public class WindowsHidHandler : IHidDeviceHandler
     {
 
@@ -47,12 +45,12 @@ namespace Hid.Net.Windows
 
         public WindowsHidHandler(
             string deviceId,
-            Func<TransferResult, ReadReport> readTransferTransform,
-            Func<byte[], byte, byte[]> writeTransferTransform,
             ushort? writeBufferSize = null,
             ushort? readBufferSize = null,
             IHidApiService hidApiService = null,
-            ILoggerFactory loggerFactory = null)
+            ILoggerFactory loggerFactory = null,
+            Func<TransferResult, ReadReport> readTransferTransform = null,
+            Func<byte[], byte, byte[]> writeTransferTransform = null)
         {
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
 

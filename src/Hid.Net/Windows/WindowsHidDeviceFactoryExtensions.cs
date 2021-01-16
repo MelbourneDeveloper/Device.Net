@@ -156,12 +156,12 @@ namespace Hid.Net.Windows
                 (
                     new WindowsHidHandler(
                         c.DeviceId,
-                        readTransferTransform,
-                        writeTransferTransform,
                         writeBufferSize,
                         readBufferSize,
                         hidApiService,
-                        loggerFactory),
+                        loggerFactory,
+                        readTransferTransform,
+                        writeTransferTransform),
                     loggerFactory,
                     defaultWriteReportId
                 )),
