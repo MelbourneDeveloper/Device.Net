@@ -9,12 +9,12 @@ namespace Device.Net.UnitTests
 {
     public abstract class MockDeviceBase : DeviceBase, IDevice
     {
-        public override ushort WriteBufferSize => 64;
-        public override ushort ReadBufferSize => 64;
+        public ushort WriteBufferSize => 64;
+        public ushort ReadBufferSize => 64;
 
         protected bool IsInitializedProtected { get; private set; }
 
-        public override bool IsInitialized => IsInitializedProtected;
+        public bool IsInitialized => IsInitializedProtected;
         public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; set; }
 
         protected MockDeviceBase(string deviceId, ILoggerFactory loggerFactory, ILogger logger) : base(deviceId, loggerFactory, logger)

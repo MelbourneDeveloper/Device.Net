@@ -41,10 +41,10 @@ namespace Hid.Net
 
         public ConnectedDeviceDefinition ConnectedDeviceDefinition => _hidDeviceHandler.ConnectedDeviceDefinition;
         public byte? DefaultReportId { get; }
-        public override bool IsInitialized => _hidDeviceHandler.IsInitialized;
+        public bool IsInitialized => _hidDeviceHandler.IsInitialized;
         public bool? IsReadOnly => _hidDeviceHandler.IsReadOnly;
-        public override ushort ReadBufferSize => _hidDeviceHandler.ReadBufferSize ?? throw new InvalidOperationException("Read buffer size unknown");
-        public override ushort WriteBufferSize => _hidDeviceHandler.WriteBufferSize ?? throw new InvalidOperationException("Write buffer size unknown");
+        public ushort ReadBufferSize => _hidDeviceHandler.ReadBufferSize ?? throw new InvalidOperationException("Read buffer size unknown");
+        public ushort WriteBufferSize => _hidDeviceHandler.WriteBufferSize ?? throw new InvalidOperationException("Write buffer size unknown");
 
         #endregion Public Properties
 

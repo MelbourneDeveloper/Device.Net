@@ -21,12 +21,6 @@ namespace Device.Net
         protected ILoggerFactory LoggerFactory { get; }
         #endregion
 
-        #region Public Abstract Properties
-        public abstract ushort WriteBufferSize { get; }
-        public abstract ushort ReadBufferSize { get; }
-        public abstract bool IsInitialized { get; }
-        #endregion
-
         #region Public Properties
         public string DeviceId { get; }
         #endregion
