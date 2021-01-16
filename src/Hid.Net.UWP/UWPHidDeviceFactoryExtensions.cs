@@ -11,24 +11,72 @@ using wde = Windows.Devices.Enumeration;
 namespace Hid.Net.UWP
 {
     /// <summary>
-    /// TODO: Merge this factory class with other factory classes. I.e. create a DeviceFactoryBase class
+    /// Instantiates UWP Hid Factories. Use these methods as extension methods with <see cref="FilterDeviceDefinition"/> or directly to get all devices
     /// </summary>
     public static class UwpHidDeviceFactoryExtensions
     {
 
+        #region Public Methods
+
+        /// <summary>
+        /// Creates a <see cref="IDeviceFactory"/> for UWP Hid devices
+        /// </summary>
+        /// <param name="filterDeviceDefinition">Devices must match this</param>
+        /// <param name="loggerFactory"><see href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.iloggerfactory"/></param>
+        /// <param name="classGuid">Filters by specified class guid</param>
+        /// <param name="deviceInformationFilter"></param>
+        /// <param name="dataReceiver"></param>
+        /// <param name="readBufferSize">Override the input report size</param>
+        /// <param name="readTransferTransform">Exposes the raw data from the device (including Report Id) on reads and allows you to format the returned <see cref="TransferResult"/></param>
+        /// <param name="writeTransferTransform">Given the Report Id and data supplied for the write, allow you to format the raw data that is sent to the device</param>
+        /// <param name="writeBufferSize">Override the output report size</param>
+        /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
+        /// <param name="getDevice"></param>
+        /// <param name="defaultReportId"></param>
+        /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateUwpHidDeviceFactory(
-        this FilterDeviceDefinition filterDeviceDefinitions,
+        this FilterDeviceDefinition filterDeviceDefinition,
         ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetDeviceAsync getDevice = null,
-        byte defaultReportId = 0) => CreateUwpHidDeviceFactory(
-            new List<FilterDeviceDefinition> { filterDeviceDefinitions },
+        byte defaultReportId = 0,
+        Guid? classGuid = null,
+        Func<wde.DeviceInformation, bool> deviceInformationFilter = null,
+        IDataReceiver dataReceiver = null,
+        ushort? writeBufferSize = null,
+        ushort? readBufferSize = null,
+        Func<TransferResult, ReadReport> readTransferTransform = null,
+        Func<byte[], byte, byte[]> writeTransferTransform = null) => CreateUwpHidDeviceFactory(
+            new List<FilterDeviceDefinition> { filterDeviceDefinition },
             loggerFactory,
             getConnectedDeviceDefinitionsAsync,
             getDevice,
-            defaultReportId);
+            defaultReportId,
+            classGuid,
+            deviceInformationFilter,
+            dataReceiver,
+            writeBufferSize,
+            readBufferSize,
+            readTransferTransform,
+            writeTransferTransform);
 
 
+        /// <summary>
+        /// Creates a <see cref="IDeviceFactory"/> for UWP Hid devices
+        /// </summary>
+        /// <param name="filterDeviceDefinitions">Devices must match these</param>
+        /// <param name="loggerFactory"><see href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.iloggerfactory"/></param>
+        /// <param name="classGuid">Filters by specified class guid</param>
+        /// <param name="deviceInformationFilter"></param>
+        /// <param name="dataReceiver"></param>
+        /// <param name="readBufferSize">Override the input report size</param>
+        /// <param name="readTransferTransform">Exposes the raw data from the device (including Report Id) on reads and allows you to format the returned <see cref="TransferResult"/></param>
+        /// <param name="writeTransferTransform">Given the Report Id and data supplied for the write, allow you to format the raw data that is sent to the device</param>
+        /// <param name="writeBufferSize">Override the output report size</param>
+        /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
+        /// <param name="getDevice"></param>
+        /// <param name="defaultReportId"></param>
+        /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateUwpHidDeviceFactory(
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
         ILoggerFactory loggerFactory = null,
@@ -39,7 +87,9 @@ namespace Hid.Net.UWP
         Func<wde.DeviceInformation, bool> deviceInformationFilter = null,
         IDataReceiver dataReceiver = null,
         ushort? writeBufferSize = null,
-        ushort? readBufferSize = null)
+        ushort? readBufferSize = null,
+        Func<TransferResult, ReadReport> readTransferTransform = null,
+        Func<byte[], byte, byte[]> writeTransferTransform = null)
         {
             loggerFactory ??= NullLoggerFactory.Instance;
 
@@ -54,7 +104,9 @@ namespace Hid.Net.UWP
                         loggerFactory.CreateLogger<UwpDataReceiver>()),
                     loggerFactory,
                     writeBufferSize,
-                    readBufferSize), loggerFactory, defaultReportId));
+                    readBufferSize,
+                    readTransferTransform,
+                    writeTransferTransform), loggerFactory, defaultReportId));
 
             var aqs = AqsHelpers.GetAqs(filterDeviceDefinitions, DeviceType.Hid);
 
@@ -97,5 +149,7 @@ namespace Hid.Net.UWP
                 (c, cancellationToken) => Task.FromResult(c.DeviceType == DeviceType.Hid && (classGuid == null || classGuid.Value == c.ClassGuid))
                 );
         }
+
+        #endregion Public Methods
     }
 }

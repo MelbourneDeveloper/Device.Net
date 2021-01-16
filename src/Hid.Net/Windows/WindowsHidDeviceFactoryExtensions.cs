@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
+    /// <summary>
+    /// Instantiates Windows Hid Factories. Use these methods as extension methods with <see cref="FilterDeviceDefinition"/> or directly to get all devices
+    /// </summary>
     public static class WindowsHidDeviceFactoryExtensions
     {
         #region Public Methods
@@ -18,16 +21,16 @@ namespace Hid.Net.Windows
         /// <summary>
         /// Creates a <see cref="IDeviceFactory"/> for Windows Hid devices
         /// </summary>
-        /// <param name="loggerFactory"></param>
-        /// <param name="hidApiService"></param>
+        /// <param name="loggerFactory"><see href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.iloggerfactory"/></param>
+        /// <param name="hidApiService">Abstraction for raw api level interation</param>
         /// <param name="classGuid">Filters by specified class guid</param>
-        /// <param name="readBufferSize"></param>
-        /// <param name="writeBufferSize"></param>
+        /// <param name="readBufferSize">Override the input report size</param>
+        /// <param name="writeBufferSize">Override the output report size</param>
         /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
         /// <param name="defaultWriteReportId">The default Hid Report Id when WriteAsync is called instead of WriteReportAsync</param>
         /// <param name="readTransferTransform">Exposes the raw data from the device (including Report Id) on reads and allows you to format the returned <see cref="TransferResult"/></param>
         /// <param name="writeTransferTransform">Given the Report Id and data supplied for the write, allow you to format the raw data that is sent to the device</param>
-        /// <returns></returns>
+        /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
         ILoggerFactory loggerFactory = null,
         IHidApiService hidApiService = null,
@@ -54,19 +57,19 @@ namespace Hid.Net.Windows
         }
 
         /// <summary>
-        /// Creates a factory Hid devices
+        /// Creates a <see cref="IDeviceFactory"/> for Windows Hid devices
         /// </summary>
-        /// <param name="filterDeviceDefinition"></param>
-        /// <param name="loggerFactory"></param>
-        /// <param name="hidApiService"></param>
-        /// <param name="classGuid"></param>
-        /// <param name="readBufferSize"></param>
-        /// <param name="writeBufferSize"></param>
-        /// <param name="getConnectedDeviceDefinitionsAsync"></param>
+        /// <param name="filterDeviceDefinition">Devices must match this</param>
+        /// <param name="loggerFactory"><see href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.iloggerfactory"/></param>
+        /// <param name="hidApiService">Abstraction for Hid interaction</param>
+        /// <param name="classGuid">Filters by specified class guid</param>
+        /// <param name="readBufferSize">Override the input report size</param>
+        /// <param name="writeBufferSize">Override the output report size</param>
+        /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
         /// <param name="defaultWriteReportId">The default Hid Report Id when WriteAsync is called instead of WriteReportAsync</param>
         /// <param name="readTransferTransform">Exposes the raw data from the device (including Report Id) on reads and allows you to format the returned <see cref="TransferResult"/></param>
         /// <param name="writeTransferTransform">Given the Report Id and data supplied for the write, allow you to format the raw data that is sent to the device</param>
-        /// <returns></returns>
+        /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
         this FilterDeviceDefinition filterDeviceDefinition,
         ILoggerFactory loggerFactory = null,
@@ -96,17 +99,17 @@ namespace Hid.Net.Windows
         /// <summary>
         /// Creates a factory Hid devices
         /// </summary>
-        /// <param name="filterDeviceDefinitions"></param>
-        /// <param name="loggerFactory"></param>
-        /// <param name="hidApiService"></param>
-        /// <param name="classGuid"></param>
-        /// <param name="readBufferSize"></param>
-        /// <param name="writeBufferSize"></param>
-        /// <param name="getConnectedDeviceDefinitionsAsync">Specify custom code for getting the device definitions</param>
+        /// <param name="filterDeviceDefinitions">Devices must match these</param>
+        /// <param name="loggerFactory"><see href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.iloggerfactory"/></param>
+        /// <param name="hidApiService">Abstraction for Hid interaction</param>
+        /// <param name="classGuid">Filters by specified class guid</param>
+        /// <param name="readBufferSize">Override the input report size</param>
+        /// <param name="writeBufferSize">Override the output report size</param>
+        /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
         /// <param name="defaultWriteReportId">The default Hid Report Id when WriteAsync is called instead of WriteReportAsync</param>
         /// <param name="readTransferTransform">Exposes the raw data from the device (including Report Id) on reads and allows you to format the returned <see cref="TransferResult"/></param>
         /// <param name="writeTransferTransform">Given the Report Id and data supplied for the write, allow you to format the raw data that is sent to the device</param>
-        /// <returns></returns>
+        /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
             this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
             ILoggerFactory loggerFactory = null,
