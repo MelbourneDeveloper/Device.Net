@@ -26,7 +26,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Properties
-        public byte? DefaultReportId { get; }
+        public byte DefaultWriteReportId { get; }
         #endregion
 
         #region Public Override Properties
@@ -59,10 +59,10 @@ namespace Hid.Net.UWP
             ILoggerFactory loggerFactory = null,
             ushort? writeBufferSize = null,
             ushort? readBufferSize = null,
-            byte? defaultReportId = 0) : base(connectedDeviceDefinition.DeviceId, dataReceiver, loggerFactory)
+            byte defaultWriteReportId = 0) : base(connectedDeviceDefinition.DeviceId, dataReceiver, loggerFactory)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
-            DefaultReportId = defaultReportId;
+            DefaultWriteReportId = defaultWriteReportId;
             _writeBufferSize = writeBufferSize;
             _writeBufferSize = readBufferSize;
         }
@@ -135,8 +135,7 @@ namespace Hid.Net.UWP
         }
 
         public Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
-            => data == null || data.Length == 0 ? throw new InvalidOperationException("You must specify a report id") :
-            WriteReportAsync(data, data[0], cancellationToken);
+            => WriteReportAsync(data, DefaultWriteReportId, cancellationToken);
 
         public async Task<uint> WriteReportAsync(byte[] data, byte reportId, CancellationToken cancellationToken = default)
         {
@@ -149,7 +148,6 @@ namespace Hid.Net.UWP
             bytes = new byte[data.Length + 1];
             Array.Copy(data, 0, bytes, 1, data.Length);
             bytes[0] = reportId;
-
 
             var buffer = bytes.AsBuffer();
             var outReport = ConnectedDevice.CreateOutputReport();

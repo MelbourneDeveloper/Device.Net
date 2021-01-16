@@ -21,7 +21,12 @@ namespace Hid.Net.UWP
         ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetDeviceAsync getDevice = null,
-        byte? defaultReportId = null) => CreateUwpHidDeviceFactory(new List<FilterDeviceDefinition> { filterDeviceDefinitions }, loggerFactory, getConnectedDeviceDefinitionsAsync, getDevice, defaultReportId);
+        byte defaultReportId = 0) => CreateUwpHidDeviceFactory(
+            new List<FilterDeviceDefinition> { filterDeviceDefinitions },
+            loggerFactory,
+            getConnectedDeviceDefinitionsAsync,
+            getDevice,
+            defaultReportId);
 
         /// <summary>
         /// TODO: This is wrong. It will only search for one device
@@ -31,10 +36,12 @@ namespace Hid.Net.UWP
         ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetDeviceAsync getDevice = null,
-        byte? defaultReportId = null,
+        byte defaultReportId = 0,
         Guid? classGuid = null,
         Func<wde.DeviceInformation, bool> deviceInformationFilter = null,
-        IDataReceiver dataReceiver = null)
+        IDataReceiver dataReceiver = null,
+        ushort? writeBufferSize = null,
+        ushort? readBufferSize = null)
         {
             loggerFactory ??= NullLoggerFactory.Instance;
 
@@ -47,6 +54,8 @@ namespace Hid.Net.UWP
                         new Observable<TransferResult>(),
                         loggerFactory.CreateLogger<UWPDataReceiver>()),
                     loggerFactory,
+                    writeBufferSize,
+                    readBufferSize,
                     defaultReportId));
 
             var aqs = AqsHelpers.GetAqs(filterDeviceDefinitions, DeviceType.Hid);
