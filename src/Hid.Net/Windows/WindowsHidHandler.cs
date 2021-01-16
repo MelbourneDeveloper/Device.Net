@@ -23,7 +23,7 @@ namespace Hid.Net.Windows
         private Stream _writeFileStream;
         private SafeFileHandle _writeSafeFileHandle;
         private readonly Func<TransferResult, ReadReport> _readTransferTransform;
-        private readonly Func<byte[], byte[]> _writeTransferTransform;
+        private readonly Func<byte[], byte, byte[]> _writeTransferTransform;
 
         #endregion Private Fields
 
@@ -32,7 +32,7 @@ namespace Hid.Net.Windows
         public WindowsHidHandler(
             string deviceId,
             Func<TransferResult, ReadReport> readTransferTransform,
-            Func<byte[], byte[]> writeTransferTransform,
+            Func<byte[], byte, byte[]> writeTransferTransform,
             ushort? writeBufferSize = null,
             ushort? readBufferSize = null,
             IHidApiService hidApiService = null,
@@ -182,7 +182,7 @@ namespace Hid.Net.Windows
 
             if (_writeFileStream.CanWrite)
             {
-                var transformedData = _writeTransferTransform(data);
+                var transformedData = _writeTransferTransform(data, reportId);
                 await _writeFileStream.WriteAsync(transformedData, 0, transformedData.Length, cancellationToken).ConfigureAwait(false);
                 return (uint)data.Length;
             }

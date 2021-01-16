@@ -211,7 +211,7 @@ namespace Device.Net.UnitTests
         public async Task TestWriteAndReadFromTemperHid()
         {
             //Send the request part of the Message Contract
-            var request = new byte[TemperBufferSize] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 };
+            var request = new byte[] { 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 };
 
             var filterDeviceDefinition = new FilterDeviceDefinition(vendorId: 0x413d, productId: 0x2107, usagePage: 65280);
 
@@ -250,12 +250,11 @@ namespace Device.Net.UnitTests
         public async Task TestWriteAndReadFromNanoHid()
         {
             //Send the request part of the Message Contract
-            var request = new byte[NanoTransferSize];
-            request[0] = 63;
-            request[1] = 62;
+            var request = new byte[NanoBufferSize];
+            request[0] = 62;
+            request[1] = 1;
             request[2] = 1;
             request[3] = 1;
-            request[4] = 1;
 
             var filterDeviceDefinition = new FilterDeviceDefinition(productId: 4112, vendorId: 10741);
 

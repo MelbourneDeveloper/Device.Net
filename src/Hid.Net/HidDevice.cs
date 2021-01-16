@@ -24,12 +24,17 @@ namespace Hid.Net
 
         public HidDevice(
             IHidDeviceHandler hidDeviceHandler,
-            ILoggerFactory loggerFactory = null
+            ILoggerFactory loggerFactory = null,
+            byte defaultWriteReportId = 0
             ) :
             base(
                 hidDeviceHandler != null ? hidDeviceHandler.DeviceId : throw new ArgumentNullException(nameof(hidDeviceHandler)),
                 loggerFactory,
-                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<HidDevice>()) => _hidDeviceHandler = hidDeviceHandler;
+                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<HidDevice>())
+        {
+            _hidDeviceHandler = hidDeviceHandler;
+            DefaultWriteReportId = defaultWriteReportId;
+        }
 
         #endregion Public Constructors
 
@@ -40,6 +45,7 @@ namespace Hid.Net
         public bool? IsReadOnly => _hidDeviceHandler.IsReadOnly;
         public ushort ReadBufferSize => _hidDeviceHandler.ReadBufferSize ?? throw new InvalidOperationException("Read buffer size unknown");
         public ushort WriteBufferSize => _hidDeviceHandler.WriteBufferSize ?? throw new InvalidOperationException("Write buffer size unknown");
+        public byte DefaultWriteReportId { get; }
 
         #endregion Public Properties
 
@@ -125,8 +131,7 @@ namespace Hid.Net
         }
 
         public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
-            => data == null || data.Length == 0 ? throw new InvalidOperationException("You must specify a report id") :
-            WriteReportAsync(data, data[0], cancellationToken);
+            => WriteReportAsync(data, DefaultWriteReportId, cancellationToken);
 
         public async Task<uint> WriteReportAsync(byte[] data, byte reportId, CancellationToken cancellationToken = default)
         {
