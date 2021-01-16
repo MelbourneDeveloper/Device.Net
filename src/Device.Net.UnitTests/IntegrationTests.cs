@@ -258,7 +258,7 @@ namespace Device.Net.UnitTests
 
             var filterDeviceDefinition = new FilterDeviceDefinition(productId: 4112, vendorId: 10741);
 
-            var integrationTester = new IntegrationTester(filterDeviceDefinition.GetHidDeviceFactory(loggerFactory));
+            var integrationTester = new IntegrationTester(filterDeviceDefinition.GetHidDeviceFactory(loggerFactory, 63));
 
             await integrationTester.TestAsync(request, (result, device) =>
              {
