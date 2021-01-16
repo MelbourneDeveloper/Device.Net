@@ -18,7 +18,7 @@ using System.Runtime.InteropServices;
 
 namespace Hid.Net.Windows
 {
-    public class WindowsHidApiService : ApiService, IHidApiService
+    internal class WindowsHidApiService : ApiService, IHidApiService
     {
         #region Private Static Fields
         private static Guid? _HidGuid;

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
-    public class WindowsHidHandler : IHidDeviceHandler
+    internal class WindowsHidHandler : IHidDeviceHandler
     {
 
         #region Private Fields
