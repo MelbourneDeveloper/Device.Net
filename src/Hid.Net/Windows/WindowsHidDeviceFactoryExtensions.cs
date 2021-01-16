@@ -113,6 +113,8 @@ namespace Hid.Net.Windows
         /// <param name="writeBufferSize"></param>
         /// <param name="getConnectedDeviceDefinitionsAsync">Specify custom code for getting the device definitions</param>
         /// <param name="defaultWriteReportId">The default Hid Report Id when WriteAsync is called instead of WriteReportAsync</param>
+        /// <param name="readTransferTransform">Exposes the raw data from the device (including Report Id) on reads and allows you to format the returned <see cref="TransferResult"/></param>
+        /// <param name="writeTransferTransform">Given the Report Id and data supplied for the write, allow you to format the raw data that is sent to the device</param>
         /// <returns></returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
             this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
@@ -122,7 +124,10 @@ namespace Hid.Net.Windows
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null,
             GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-            byte defaultWriteReportId = 0)
+            byte defaultWriteReportId = 0,
+            Func<TransferResult, ReadReport> readTransferTransform = null,
+            Func<byte[], byte, byte[]> writeTransferTransform = null
+            )
         {
             if (filterDeviceDefinitions == null) throw new ArgumentNullException(nameof(filterDeviceDefinitions));
 
@@ -151,30 +156,8 @@ namespace Hid.Net.Windows
                 (
                     new WindowsHidHandler(
                         c.DeviceId,
-                        (tr) =>
-                        {
-                            //Grab the report id
-                            var reportId = tr.Data[0];
-
-                            //Create a new array and copy the data to it without the report id
-                            var data = TrimFirstByte(tr);
-
-                            //Convert to a read report
-                            return new ReadReport(reportId, new TransferResult(data, tr.BytesTransferred));
-                        },
-                        (data, reportId) =>
-                        {
-                            //Create a new array which is one byte larger 
-                            var transformedData = new byte[data.Length + 1];
-
-                            //Set the report id at index 0
-                            transformedData[0] = reportId;
-
-                            //copy the data to it without the report id at index 1
-                            Array.Copy(data, 0, transformedData, 1, data.Length);
-
-                            return transformedData;
-                        },
+                        readTransferTransform,
+                        writeTransferTransform,
                         writeBufferSize,
                         readBufferSize,
                         hidApiService,
@@ -183,14 +166,6 @@ namespace Hid.Net.Windows
                     defaultWriteReportId
                 )),
                 (c, cancellationToken) => Task.FromResult(c.DeviceType == DeviceType.Hid));
-        }
-
-        private static byte[] TrimFirstByte(TransferResult tr)
-        {
-            var length = tr.Data.Length - 1;
-            var data = new byte[length];
-            Array.Copy(tr.Data, 1, data, 0, length);
-            return data;
         }
 
         private static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, IHidApiService HidService, ILogger logger)

@@ -17,52 +17,70 @@ namespace Hid.Net.UWP
     ///<inheritdoc cref="IHidDevice"/>
     public class UwpHidDeviceHandler : UwpDeviceHandler<hidDevice>, IHidDeviceHandler
     {
-        #region Fields
-        private bool disposed;
+
+        #region Private Fields
+
+        //private readonly Func<TransferResult, ReadReport> _readTransferTransform;
         private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
-        private ushort? _writeBufferSize = null;
+        //private readonly Func<byte[], byte, byte[]> _writeTransferTransform;
         private ushort? _readBufferSize = null;
-        #endregion
+        private ushort? _writeBufferSize = null;
+        private bool disposed;
 
-        #region Public Override Properties
-        /// <summary>
-        /// TODO: These vales are completely wrong. 
-        /// </summary>
-        public ushort? WriteBufferSize => _writeBufferSize ?? throw new InvalidOperationException("Not initialized");
-        public ushort? ReadBufferSize => _readBufferSize ?? throw new InvalidOperationException("Not initialized");
-        public bool? IsReadOnly => false;
-        #endregion
+        #endregion Private Fields
 
-        #region Event Handlers
-        private void ConnectedDevice_InputReportReceived(hidDevice sender, HidInputReportReceivedEventArgs args)
-        {
-            Logger.LogDebug("Received Hid report Id: {id}", args?.Report?.Id);
+        #region Public Constructors
 
-            using var stream = args.Report.Data.AsStream();
-
-            var bytes = new byte[args.Report.Data.Length];
-
-            var bytesRead = (uint)stream.Read(bytes, 0, (int)args.Report.Data.Length);
-
-            DataReceiver.DataReceived(new TransferResult(bytes, bytesRead));
-        }
-        #endregion
-
-        #region Constructors
         public UwpHidDeviceHandler(
-            ConnectedDeviceDefinition connectedDeviceDefinition,
-            IDataReceiver dataReceiver,
-            ILoggerFactory loggerFactory = null,
-            ushort? writeBufferSize = null,
-            ushort? readBufferSize = null) : base(connectedDeviceDefinition.DeviceId, dataReceiver, loggerFactory)
+                    ConnectedDeviceDefinition connectedDeviceDefinition,
+                    IDataReceiver dataReceiver,
+                    ILoggerFactory loggerFactory = null,
+                    ushort? writeBufferSize = null,
+                    ushort? readBufferSize = null) : base(connectedDeviceDefinition.DeviceId, dataReceiver, loggerFactory)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             _writeBufferSize = writeBufferSize;
             _writeBufferSize = readBufferSize;
         }
-        #endregion
 
-        #region Private Methods
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public bool? IsReadOnly => false;
+
+        public ushort? ReadBufferSize => _readBufferSize ?? throw new InvalidOperationException("Not initialized");
+
+        /// <summary>
+        /// TODO: These vales are completely wrong. 
+        /// </summary>
+        public ushort? WriteBufferSize => _writeBufferSize ?? throw new InvalidOperationException("Not initialized");
+
+        #endregion Public Properties
+
+        #region Public Methods
+
+        public static IAsyncOperation<hidDevice> GetHidDevice(string id) => hidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
+
+        public override void Dispose()
+        {
+            if (disposed)
+            {
+                Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, DeviceId);
+                return;
+            }
+
+            disposed = true;
+
+            Logger.LogInformation(Messages.InformationMessageDisposingDevice, DeviceId);
+
+            DataReceiver.Dispose();
+            _WriteAndReadLock.Dispose();
+            ConnectedDevice.InputReportReceived -= ConnectedDevice_InputReportReceived;
+
+            base.Dispose();
+        }
+
         public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
@@ -105,27 +123,20 @@ namespace Hid.Net.UWP
             }
         }
 
-        protected override IAsyncOperation<hidDevice> FromIdAsync(string id) => GetHidDevice(id);
-        #endregion
-
-        #region Public Methods
-        public override void Dispose()
+        public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
         {
-            if (disposed)
-            {
-                Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, DeviceId);
-                return;
-            }
+            var transferResult = await DataReceiver.ReadAsync(cancellationToken);
 
-            disposed = true;
+            var length = transferResult.Data.Length - 1;
+            var data = new byte[length];
+            Array.Copy(transferResult.Data, 1, data, 0, length);
+            transferResult = new TransferResult(data, transferResult.BytesTransferred);
 
-            Logger.LogInformation(Messages.InformationMessageDisposingDevice, DeviceId);
+            Logger.LogDataTransfer(new Trace(false, transferResult));
 
-            DataReceiver.Dispose();
-            _WriteAndReadLock.Dispose();
-            ConnectedDevice.InputReportReceived -= ConnectedDevice_InputReportReceived;
+            var reportId = transferResult.Data[0];
 
-            base.Dispose();
+            return new ReadReport(reportId, new TransferResult(transferResult, transferResult.BytesTransferred));
         }
 
         public async Task<uint> WriteReportAsync(byte[] data, byte reportId, CancellationToken cancellationToken = default)
@@ -171,29 +182,30 @@ namespace Hid.Net.UWP
             }
         }
 
+        #endregion Public Methods
 
-        #endregion
+        #region Protected Methods
 
-        #region Public Overrides
-        public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
+        protected override IAsyncOperation<hidDevice> FromIdAsync(string id) => GetHidDevice(id);
+
+        #endregion Protected Methods
+
+        #region Private Methods
+
+        private void ConnectedDevice_InputReportReceived(hidDevice sender, HidInputReportReceivedEventArgs args)
         {
-            var transferResult = await DataReceiver.ReadAsync(cancellationToken);
+            Logger.LogDebug("Received Hid report Id: {id}", args?.Report?.Id);
 
-            var length = transferResult.Data.Length - 1;
-            var data = new byte[length];
-            Array.Copy(transferResult.Data, 1, data, 0, length);
-            transferResult = new TransferResult(data, transferResult.BytesTransferred);
+            using var stream = args.Report.Data.AsStream();
 
-            Logger.LogDataTransfer(new Trace(false, transferResult));
+            var bytes = new byte[args.Report.Data.Length];
 
-            var reportId = transferResult.Data[0];
+            var bytesRead = (uint)stream.Read(bytes, 0, (int)args.Report.Data.Length);
 
-            return new ReadReport(reportId, new TransferResult(transferResult, transferResult.BytesTransferred));
+            DataReceiver.DataReceived(new TransferResult(bytes, bytesRead));
         }
-        #endregion
 
-        #region Public Static Methods
-        public static IAsyncOperation<hidDevice> GetHidDevice(string id) => hidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
-        #endregion
+        #endregion Private Methods
+
     }
 }
