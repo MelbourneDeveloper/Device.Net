@@ -207,7 +207,7 @@ namespace Device.Net.UnitTests
 
 #if !NET45
             _ = _loggerMock.Setup(l => l.Log(
-              LogLevel.Trace,
+              LogLevel.Debug,
               It.IsAny<EventId>(),
               It.IsAny<It.IsAnyType>(),
               It.IsAny<Exception>(),
