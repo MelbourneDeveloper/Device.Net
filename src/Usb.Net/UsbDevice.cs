@@ -21,6 +21,7 @@ namespace Usb.Net
         public IUsbInterfaceManager UsbInterfaceManager { get; }
         public override ushort WriteBufferSize => UsbInterfaceManager.WriteBufferSize;
         public override ushort ReadBufferSize => UsbInterfaceManager.ReadBufferSize;
+        public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; private set; }
         #endregion
 
         #region Constructor

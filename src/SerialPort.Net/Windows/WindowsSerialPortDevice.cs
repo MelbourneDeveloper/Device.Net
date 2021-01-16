@@ -31,6 +31,7 @@ namespace SerialPort.Net.Windows
         public override ushort WriteBufferSize => 0;
         public override ushort ReadBufferSize => _ReadBufferSize;
         public IApiService ApiService { get; }
+        public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; private set; }
         #endregion
 
         #region Constructor

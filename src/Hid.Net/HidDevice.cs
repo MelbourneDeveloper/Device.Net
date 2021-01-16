@@ -11,8 +11,7 @@ using System.Threading.Tasks;
 namespace Hid.Net
 {
     ///<inheritdoc cref="IHidDevice"/>
-    public sealed class HidDevice
-        : DeviceBase, IHidDevice
+    public sealed class HidDevice : DeviceBase, IHidDevice
     {
         #region Private Fields
 
@@ -40,6 +39,7 @@ namespace Hid.Net
 
         #region Public Properties
 
+        public ConnectedDeviceDefinition ConnectedDeviceDefinition => _hidDeviceHandler.ConnectedDeviceDefinition;
         public byte? DefaultReportId { get; }
         public override bool IsInitialized => _hidDeviceHandler.IsInitialized;
         public bool? IsReadOnly => _hidDeviceHandler.IsReadOnly;
