@@ -342,7 +342,7 @@ namespace Device.Net.UnitTests
         public void TestNullLoggers()
         {
             _ = new UsbDevice("asd", new Mock<IUsbInterfaceManager>().Object);
-            _ = new WindowsHidHandler("asd", (a) => default);
+            _ = new WindowsHidHandler("asd", (a) => default, (a) => default);
             _ = new WindowsUsbInterface(default, 0);
             _ = new WindowsUsbInterfaceManager("asd");
         }

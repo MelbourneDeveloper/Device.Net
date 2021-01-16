@@ -24,22 +24,18 @@ namespace Hid.Net
 
         public HidDevice(
             IHidDeviceHandler hidDeviceHandler,
-            ILoggerFactory loggerFactory = null,
-            byte? defaultReportId = null) : base(
+            ILoggerFactory loggerFactory = null
+            ) :
+            base(
                 hidDeviceHandler != null ? hidDeviceHandler.DeviceId : throw new ArgumentNullException(nameof(hidDeviceHandler)),
                 loggerFactory,
-                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<HidDevice>())
-        {
-            _hidDeviceHandler = hidDeviceHandler;
-            DefaultReportId = defaultReportId;
-        }
+                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<HidDevice>()) => _hidDeviceHandler = hidDeviceHandler;
 
         #endregion Public Constructors
 
         #region Public Properties
 
         public ConnectedDeviceDefinition ConnectedDeviceDefinition => _hidDeviceHandler.ConnectedDeviceDefinition;
-        public byte? DefaultReportId { get; }
         public bool IsInitialized => _hidDeviceHandler.IsInitialized;
         public bool? IsReadOnly => _hidDeviceHandler.IsReadOnly;
         public ushort ReadBufferSize => _hidDeviceHandler.ReadBufferSize ?? throw new InvalidOperationException("Read buffer size unknown");
@@ -128,9 +124,11 @@ namespace Hid.Net
             }
         }
 
-        public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
+        public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+            => data == null || data.Length == 0 ? throw new InvalidOperationException("You must specify a report id") :
+            WriteReportAsync(data, data[0], cancellationToken);
 
-        public async Task<uint> WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
+        public async Task<uint> WriteReportAsync(byte[] data, byte reportId, CancellationToken cancellationToken = default)
         {
             using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(WriteReportAsync));
 
@@ -145,24 +143,10 @@ namespace Hid.Net
 
                 if (data == null) throw new ArgumentNullException(nameof(data));
 
-                byte[] bytes;
-                if (reportId.HasValue)
-                {
-                    //Copy the data to a new array that is one byte larger and shif the data to the right by 1
-                    bytes = new byte[WriteBufferSize];
-                    Array.Copy(data, 0, bytes, 1, data.Length);
-                    //Put the report Id at the first index
-                    bytes[0] = reportId.Value;
-                }
-                else
-                {
-                    bytes = data;
-                }
-
                 try
                 {
-                    bytesWritten = await _hidDeviceHandler.WriteReportAsync(bytes, reportId, cancellationToken).ConfigureAwait(false);
-                    Logger.LogDataTransfer(new Trace(true, bytes));
+                    bytesWritten = await _hidDeviceHandler.WriteReportAsync(data, reportId, cancellationToken).ConfigureAwait(false);
+                    Logger.LogDataTransfer(new Trace(true, data));
                 }
                 catch (Exception ex)
                 {

@@ -26,7 +26,6 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Properties
-        public bool DataHasExtraByte => ReadBufferSize == 65;
         public byte? DefaultReportId { get; }
         #endregion
 
@@ -135,25 +134,22 @@ namespace Hid.Net.UWP
             base.Dispose();
         }
 
-        public virtual Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
+        public Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
+            => data == null || data.Length == 0 ? throw new InvalidOperationException("You must specify a report id") :
+            WriteReportAsync(data, data[0], cancellationToken);
 
-        public async Task<uint> WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
+        public async Task<uint> WriteReportAsync(byte[] data, byte reportId, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
             if (DataReceiver.HasData) Logger.LogWarning("Writing to device but data has already been received that has not been read");
 
             byte[] bytes;
-            if (DataHasExtraByte)
-            {
-                bytes = new byte[data.Length + 1];
-                Array.Copy(data, 0, bytes, 1, data.Length);
-                bytes[0] = reportId.Value;
-            }
-            else
-            {
-                bytes = data;
-            }
+
+            bytes = new byte[data.Length + 1];
+            Array.Copy(data, 0, bytes, 1, data.Length);
+            bytes[0] = reportId;
+
 
             var buffer = bytes.AsBuffer();
             var outReport = ConnectedDevice.CreateOutputReport();
@@ -192,15 +188,9 @@ namespace Hid.Net.UWP
         #region Public Overrides
         public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
         {
-            byte reportId = 0;
             var transferResult = await ReadAsync(cancellationToken);
-
-            if (DataHasExtraByte)
-            {
-                reportId = transferResult.Data[0];
-                transferResult = new TransferResult(DeviceBase.RemoveFirstByte(transferResult), transferResult.BytesTransferred);
-            }
-
+            var reportId = transferResult.Data[0];
+            transferResult = new TransferResult(DeviceBase.RemoveFirstByte(transferResult), transferResult.BytesTransferred);
             return new ReadReport(reportId, new TransferResult(transferResult, transferResult.BytesTransferred));
         }
 
@@ -208,15 +198,12 @@ namespace Hid.Net.UWP
         {
             var transferResult = await DataReceiver.ReadAsync(cancellationToken);
 
-            if (DataHasExtraByte)
-            {
-                //Remove the first byte
-                //TODO: This should get refactored away when this is merged in to HidDevice
-                var length = transferResult.Data.Length - 1;
-                var data = new byte[length];
-                Array.Copy(transferResult.Data, 1, data, 0, length);
-                transferResult = new TransferResult(data, transferResult.BytesTransferred);
-            }
+            //Remove the first byte
+            //TODO: This should get refactored away when this is merged in to HidDevice
+            var length = transferResult.Data.Length - 1;
+            var data = new byte[length];
+            Array.Copy(transferResult.Data, 1, data, 0, length);
+            transferResult = new TransferResult(data, transferResult.BytesTransferred);
 
             Logger.LogDataTransfer(new Trace(false, transferResult));
             return transferResult;

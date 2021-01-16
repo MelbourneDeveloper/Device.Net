@@ -23,6 +23,7 @@ namespace Hid.Net.Windows
         private Stream _writeFileStream;
         private SafeFileHandle _writeSafeFileHandle;
         private readonly Func<TransferResult, ReadReport> _readTransferTransform;
+        private readonly Func<byte[], byte[]> _writeTransferTransform;
 
         #endregion Private Fields
 
@@ -31,6 +32,7 @@ namespace Hid.Net.Windows
         public WindowsHidHandler(
             string deviceId,
             Func<TransferResult, ReadReport> readTransferTransform,
+            Func<byte[], byte[]> writeTransferTransform,
             ushort? writeBufferSize = null,
             ushort? readBufferSize = null,
             IHidApiService hidApiService = null,
@@ -38,6 +40,7 @@ namespace Hid.Net.Windows
         {
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
             _readTransferTransform = readTransferTransform ?? throw new ArgumentNullException(nameof(readTransferTransform));
+            _writeTransferTransform = writeTransferTransform ?? throw new ArgumentNullException(nameof(writeTransferTransform));
             _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidHandler>();
             _hidService = hidApiService ?? new WindowsHidApiService(loggerFactory);
             WriteBufferSize = writeBufferSize;
@@ -168,7 +171,7 @@ namespace Hid.Net.Windows
             return _readTransferTransform(new TransferResult(bytes, bytesRead));
         }
 
-        public async Task<uint> WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
+        public async Task<uint> WriteReportAsync(byte[] data, byte reportId, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
@@ -179,7 +182,8 @@ namespace Hid.Net.Windows
 
             if (_writeFileStream.CanWrite)
             {
-                await _writeFileStream.WriteAsync(data, 0, data.Length, cancellationToken).ConfigureAwait(false);
+                var transformedData = _writeTransferTransform(data);
+                await _writeFileStream.WriteAsync(transformedData, 0, transformedData.Length, cancellationToken).ConfigureAwait(false);
                 return (uint)data.Length;
             }
             else

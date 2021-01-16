@@ -41,7 +41,6 @@ namespace Hid.Net.Windows
                 classGuid,
                 readBufferSize,
                 writeBufferSize,
-                null,
                 getConnectedDeviceDefinitionsAsync
                 );
         }
@@ -78,7 +77,6 @@ namespace Hid.Net.Windows
         /// <param name="classGuid"></param>
         /// <param name="readBufferSize"></param>
         /// <param name="writeBufferSize"></param>
-        /// <param name="defaultReportId"></param>
         /// <param name="getConnectedDeviceDefinitionsAsync"></param>
         /// <returns></returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
@@ -88,7 +86,6 @@ namespace Hid.Net.Windows
         Guid? classGuid = null,
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null,
-        byte? defaultReportId = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null)
         {
             return CreateWindowsHidDeviceFactory(
@@ -98,7 +95,6 @@ namespace Hid.Net.Windows
                 classGuid,
                 readBufferSize,
                 writeBufferSize,
-                defaultReportId,
                 getConnectedDeviceDefinitionsAsync
                 );
         }
@@ -112,7 +108,6 @@ namespace Hid.Net.Windows
         /// <param name="classGuid"></param>
         /// <param name="readBufferSize"></param>
         /// <param name="writeBufferSize"></param>
-        /// <param name="defaultReportId"></param>
         /// <param name="getConnectedDeviceDefinitionsAsync">Specify custom code for getting the device definitions</param>
         /// <returns></returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
@@ -122,7 +117,6 @@ namespace Hid.Net.Windows
             Guid? classGuid = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null,
-            byte? defaultReportId = null,
             GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null)
         {
             if (filterDeviceDefinitions == null) throw new ArgumentNullException(nameof(filterDeviceDefinitions));
@@ -158,21 +152,28 @@ namespace Hid.Net.Windows
                             var reportId = tr.Data[0];
 
                             //Create a new array and copy the data to it without the report id
-                            var length = tr.Data.Length - 1;
-                            var data = new byte[length];
-                            Array.Copy(tr.Data, 1, data, 0, length);
+                            var data = TrimFirstByte(tr);
 
                             //Convert to a read report
                             return new ReadReport(reportId, new TransferResult(data, tr.BytesTransferred));
                         },
+                        //Remove the report id from the array
+                        (data) => TrimFirstByte(data),
                         writeBufferSize,
                         readBufferSize,
                         hidApiService,
                         loggerFactory),
-                    loggerFactory: loggerFactory,
-                    defaultReportId: defaultReportId
+                    loggerFactory: loggerFactory
                 )),
                 (c, cancellationToken) => Task.FromResult(c.DeviceType == DeviceType.Hid));
+        }
+
+        private static byte[] TrimFirstByte(TransferResult tr)
+        {
+            var length = tr.Data.Length - 1;
+            var data = new byte[length];
+            Array.Copy(tr.Data, 1, data, 0, length);
+            return data;
         }
 
         private static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, IHidApiService HidService, ILogger logger)

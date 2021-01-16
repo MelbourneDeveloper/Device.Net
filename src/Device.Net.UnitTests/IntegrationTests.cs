@@ -161,7 +161,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition(vendorId: 0x534C, productId: 0x0001, label: "Trezor One Firmware 1.6.x", usagePage: 65280)
-            .GetHidDeviceFactory(loggerFactory, 0), 64, 65
+            .GetHidDeviceFactory(loggerFactory), 64, 65
             );
 
         [TestMethod]

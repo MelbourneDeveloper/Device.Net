@@ -27,7 +27,7 @@ namespace Hid.Net
         /// <param name="reportId"></param>
         /// <param name="cancellationToken">Allows you to cancel the operation</param>
         /// <returns></returns>
-        Task<uint> WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default);
+        Task<uint> WriteReportAsync(byte[] data, byte reportId, CancellationToken cancellationToken = default);
 
         public bool IsInitialized { get; }
         public void Close();
