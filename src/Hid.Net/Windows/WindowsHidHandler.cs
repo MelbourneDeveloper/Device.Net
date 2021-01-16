@@ -16,12 +16,12 @@ namespace Hid.Net.Windows
 
         #region Private Fields
 
-        private readonly IHidApiService HidService;
-        private readonly ILogger Logger;
-        private Stream _ReadFileStream;
-        private SafeFileHandle _ReadSafeFileHandle;
-        private Stream _WriteFileStream;
-        private SafeFileHandle _WriteSafeFileHandle;
+        private readonly IHidApiService _hidService;
+        private readonly ILogger _logger;
+        private Stream _readFileStream;
+        private SafeFileHandle _readSafeFileHandle;
+        private Stream _writeFileStream;
+        private SafeFileHandle _writeSafeFileHandle;
 
         #endregion Private Fields
 
@@ -35,8 +35,8 @@ namespace Hid.Net.Windows
             ILoggerFactory loggerFactory = null)
         {
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
-            Logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidHandler>();
-            HidService = hidApiService ?? new WindowsHidApiService(loggerFactory);
+            _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidHandler>();
+            _hidService = hidApiService ?? new WindowsHidApiService(loggerFactory);
 
             WriteBufferSize = writeBufferSize;
             ReadBufferSize = readBufferSize;
@@ -59,22 +59,22 @@ namespace Hid.Net.Windows
 
         public void Close()
         {
-            _ReadFileStream?.Dispose();
-            _WriteFileStream?.Dispose();
+            _readFileStream?.Dispose();
+            _writeFileStream?.Dispose();
 
-            _ReadFileStream = null;
-            _WriteFileStream = null;
+            _readFileStream = null;
+            _writeFileStream = null;
 
-            if (_ReadSafeFileHandle != null)
+            if (_readSafeFileHandle != null)
             {
-                _ReadSafeFileHandle.Dispose();
-                _ReadSafeFileHandle = null;
+                _readSafeFileHandle.Dispose();
+                _readSafeFileHandle = null;
             }
 
-            if (_WriteSafeFileHandle != null)
+            if (_writeSafeFileHandle != null)
             {
-                _WriteSafeFileHandle.Dispose();
-                _WriteSafeFileHandle = null;
+                _writeSafeFileHandle.Dispose();
+                _writeSafeFileHandle = null;
             }
         }
 
@@ -82,7 +82,7 @@ namespace Hid.Net.Windows
         {
             return Task.Run(() =>
               {
-                  using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(InitializeAsync));
+                  using var logScope = _logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(InitializeAsync));
 
                   if (string.IsNullOrEmpty(DeviceId))
                   {
@@ -90,22 +90,22 @@ namespace Hid.Net.Windows
                           $"{nameof(DeviceId)} must be specified before {nameof(InitializeAsync)} can be called.");
                   }
 
-                  _ReadSafeFileHandle = HidService.CreateReadConnection(DeviceId, FileAccessRights.GenericRead);
-                  _WriteSafeFileHandle = HidService.CreateWriteConnection(DeviceId);
+                  _readSafeFileHandle = _hidService.CreateReadConnection(DeviceId, FileAccessRights.GenericRead);
+                  _writeSafeFileHandle = _hidService.CreateWriteConnection(DeviceId);
 
-                  if (_ReadSafeFileHandle.IsInvalid)
+                  if (_readSafeFileHandle.IsInvalid)
                   {
                       throw new ApiException(Messages.ErrorMessageCantOpenRead);
                   }
 
-                  IsReadOnly = _WriteSafeFileHandle.IsInvalid;
+                  IsReadOnly = _writeSafeFileHandle.IsInvalid;
 
                   if (IsReadOnly.Value)
                   {
-                      Logger.LogWarning(Messages.WarningMessageOpeningInReadonlyMode, DeviceId);
+                      _logger.LogWarning(Messages.WarningMessageOpeningInReadonlyMode, DeviceId);
                   }
 
-                  ConnectedDeviceDefinition = HidService.GetDeviceDefinition(DeviceId, _ReadSafeFileHandle);
+                  ConnectedDeviceDefinition = _hidService.GetDeviceDefinition(DeviceId, _readSafeFileHandle);
 
                   ReadBufferSize ??= (ushort?)ConnectedDeviceDefinition.ReadBufferSize;
                   WriteBufferSize ??= (ushort?)ConnectedDeviceDefinition.WriteBufferSize;
@@ -116,15 +116,15 @@ namespace Hid.Net.Windows
                           $"ReadBufferSize must be specified. HidD_GetAttributes may have failed or returned an InputReportByteLength of 0. Please specify this argument in the constructor");
                   }
 
-                  _ReadFileStream = HidService.OpenRead(_ReadSafeFileHandle, ReadBufferSize.Value);
+                  _readFileStream = _hidService.OpenRead(_readSafeFileHandle, ReadBufferSize.Value);
 
-                  if (_ReadFileStream.CanRead)
+                  if (_readFileStream.CanRead)
                   {
-                      Logger.LogInformation(Messages.SuccessMessageReadFileStreamOpened);
+                      _logger.LogInformation(Messages.SuccessMessageReadFileStreamOpened);
                   }
                   else
                   {
-                      Logger.LogWarning(Messages.WarningMessageReadFileStreamCantRead);
+                      _logger.LogWarning(Messages.WarningMessageReadFileStreamCantRead);
                   }
 
                   if (IsReadOnly.Value) return;
@@ -136,15 +136,15 @@ namespace Hid.Net.Windows
                   }
 
                   //Don't open if this is a read only connection
-                  _WriteFileStream = HidService.OpenWrite(_WriteSafeFileHandle, WriteBufferSize.Value);
+                  _writeFileStream = _hidService.OpenWrite(_writeSafeFileHandle, WriteBufferSize.Value);
 
-                  if (_WriteFileStream.CanWrite)
+                  if (_writeFileStream.CanWrite)
                   {
-                      Logger.LogInformation(Messages.SuccessMessageWriteFileStreamOpened);
+                      _logger.LogInformation(Messages.SuccessMessageWriteFileStreamOpened);
                   }
                   else
                   {
-                      Logger.LogWarning(Messages.WarningMessageWriteFileStreamCantWrite);
+                      _logger.LogWarning(Messages.WarningMessageWriteFileStreamCantWrite);
                   }
 
                   IsInitialized = true;
@@ -153,14 +153,14 @@ namespace Hid.Net.Windows
 
         public async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
-            if (_ReadFileStream == null)
+            if (_readFileStream == null)
             {
                 throw new NotInitializedException(Messages.ErrorMessageNotInitialized);
             }
 
             var bytes = new byte[ReadBufferSize.Value];
 
-            var bytesRead = (uint)await _ReadFileStream.ReadAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
+            var bytesRead = (uint)await _readFileStream.ReadAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
 
             return new TransferResult(bytes, bytesRead);
         }
@@ -169,14 +169,14 @@ namespace Hid.Net.Windows
         {
             if (bytes == null) throw new ArgumentNullException(nameof(bytes));
 
-            if (_WriteFileStream == null)
+            if (_writeFileStream == null)
             {
                 throw new NotInitializedException("The device has not been initialized");
             }
 
-            if (_WriteFileStream.CanWrite)
+            if (_writeFileStream.CanWrite)
             {
-                await _WriteFileStream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
+                await _writeFileStream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
                 return (uint)bytes.Length;
             }
             else

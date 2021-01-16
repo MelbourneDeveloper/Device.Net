@@ -14,29 +14,16 @@ namespace Hid.Net
     public sealed class HidDevice
         : DeviceBase, IHidDevice
     {
-        private readonly IHidDeviceHandler _hidDeviceHandler;
+        #region Private Fields
 
-        #region Fields
+        private readonly IHidDeviceHandler _hidDeviceHandler;
         private bool _IsClosing;
         private bool disposed;
-        #endregion
 
-        #region Private Properties
-        private bool ReadBufferHasReportId => ReadBufferSize == 65;
-        #endregion
+        #endregion Private Fields
 
-        #region Public Overrides
-        public override bool IsInitialized => _hidDeviceHandler.IsInitialized;
-        public override ushort WriteBufferSize => _hidDeviceHandler.WriteBufferSize ?? throw new InvalidOperationException("Write buffer size unknown");
-        public override ushort ReadBufferSize => _hidDeviceHandler.ReadBufferSize ?? throw new InvalidOperationException("Read buffer size unknown");
-        public bool? IsReadOnly => _hidDeviceHandler.IsReadOnly;
-        #endregion
+        #region Public Constructors
 
-        #region Public Properties
-        public byte? DefaultReportId { get; }
-        #endregion
-
-        #region Constructor
         public HidDevice(
             IHidDeviceHandler hidDeviceHandler,
             ILoggerFactory loggerFactory = null,
@@ -48,9 +35,27 @@ namespace Hid.Net
             _hidDeviceHandler = hidDeviceHandler;
             DefaultReportId = defaultReportId;
         }
-        #endregion
+
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public byte? DefaultReportId { get; }
+        public override bool IsInitialized => _hidDeviceHandler.IsInitialized;
+        public bool? IsReadOnly => _hidDeviceHandler.IsReadOnly;
+        public override ushort ReadBufferSize => _hidDeviceHandler.ReadBufferSize ?? throw new InvalidOperationException("Read buffer size unknown");
+        public override ushort WriteBufferSize => _hidDeviceHandler.WriteBufferSize ?? throw new InvalidOperationException("Write buffer size unknown");
+
+        #endregion Public Properties
+
+        #region Private Properties
+
+        private bool ReadBufferHasReportId => ReadBufferSize == 65;
+
+        #endregion Private Properties
 
         #region Public Methods
+
         public void Close()
         {
             if (_IsClosing) return;
@@ -190,6 +195,8 @@ namespace Hid.Net
                 throw;
             }
         }
-        #endregion
+
+        #endregion Public Methods
+
     }
 }
