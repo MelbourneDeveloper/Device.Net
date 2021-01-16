@@ -22,6 +22,7 @@ namespace Hid.Net.Windows
         private SafeFileHandle _readSafeFileHandle;
         private Stream _writeFileStream;
         private SafeFileHandle _writeSafeFileHandle;
+        private readonly Func<TransferResult, ReadReport> _readTransferTransform;
 
         #endregion Private Fields
 
@@ -29,15 +30,16 @@ namespace Hid.Net.Windows
 
         public WindowsHidHandler(
             string deviceId,
+            Func<TransferResult, ReadReport> readTransferTransform,
             ushort? writeBufferSize = null,
             ushort? readBufferSize = null,
             IHidApiService hidApiService = null,
             ILoggerFactory loggerFactory = null)
         {
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
+            _readTransferTransform = readTransferTransform ?? throw new ArgumentNullException(nameof(readTransferTransform));
             _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidHandler>();
             _hidService = hidApiService ?? new WindowsHidApiService(loggerFactory);
-
             WriteBufferSize = writeBufferSize;
             ReadBufferSize = readBufferSize;
         }
@@ -151,23 +153,24 @@ namespace Hid.Net.Windows
               }, cancellationToken);
         }
 
-        public async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
+        public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
         {
             if (_readFileStream == null)
             {
                 throw new NotInitializedException(Messages.ErrorMessageNotInitialized);
             }
 
+            //Read the data
             var bytes = new byte[ReadBufferSize.Value];
-
             var bytesRead = (uint)await _readFileStream.ReadAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
 
-            return new TransferResult(bytes, bytesRead);
+            //Transform to a ReadReport
+            return _readTransferTransform(new TransferResult(bytes, bytesRead));
         }
 
-        public async Task<uint> WriteAsync(byte[] bytes, CancellationToken cancellationToken = default)
+        public async Task<uint> WriteReportAsync(byte[] data, byte? reportId, CancellationToken cancellationToken = default)
         {
-            if (bytes == null) throw new ArgumentNullException(nameof(bytes));
+            if (data == null) throw new ArgumentNullException(nameof(data));
 
             if (_writeFileStream == null)
             {
@@ -176,15 +179,14 @@ namespace Hid.Net.Windows
 
             if (_writeFileStream.CanWrite)
             {
-                await _writeFileStream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
-                return (uint)bytes.Length;
+                await _writeFileStream.WriteAsync(data, 0, data.Length, cancellationToken).ConfigureAwait(false);
+                return (uint)data.Length;
             }
             else
             {
                 throw new IOException("The file stream cannot be written to");
             }
         }
-
         #endregion Public Methods
     }
 }

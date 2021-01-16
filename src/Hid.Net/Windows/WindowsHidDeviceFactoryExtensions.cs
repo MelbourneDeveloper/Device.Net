@@ -150,7 +150,25 @@ namespace Hid.Net.Windows
                 getConnectedDeviceDefinitionsAsync,
                 (c, cancellationToken) => Task.FromResult<IDevice>(new HidDevice
                 (
-                    new WindowsHidHandler(c.DeviceId, writeBufferSize, readBufferSize, hidApiService, loggerFactory),
+                    new WindowsHidHandler(
+                        c.DeviceId,
+                        (tr) =>
+                        {
+                            //Grab the report id
+                            var reportId = tr.Data[0];
+
+                            //Create a new array and copy the data to it without the report id
+                            var length = tr.Data.Length - 1;
+                            var data = new byte[length];
+                            Array.Copy(tr.Data, 1, data, 0, length);
+
+                            //Convert to a read report
+                            return new ReadReport(reportId, new TransferResult(data, tr.BytesTransferred));
+                        },
+                        writeBufferSize,
+                        readBufferSize,
+                        hidApiService,
+                        loggerFactory),
                     loggerFactory: loggerFactory,
                     defaultReportId: defaultReportId
                 )),

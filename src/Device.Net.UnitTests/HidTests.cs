@@ -72,7 +72,7 @@ namespace Device.Net.UnitTests
 
             _ = loggerFactory.Setup(f => f.CreateLogger(It.IsAny<string>())).Returns(logger.Object);
 
-            var windowsHidDevice = new WindowsHidHandler(deviceId, loggerFactory: loggerFactory.Object, hidApiService: hidService.Object);
+            var windowsHidDevice = new WindowsHidHandler(deviceId, (a) => default, loggerFactory: loggerFactory.Object, hidApiService: hidService.Object);
             await windowsHidDevice.InitializeAsync();
 
             //TODO: Fix this

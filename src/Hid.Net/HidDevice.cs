@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -47,12 +46,6 @@ namespace Hid.Net
         public ushort WriteBufferSize => _hidDeviceHandler.WriteBufferSize ?? throw new InvalidOperationException("Write buffer size unknown");
 
         #endregion Public Properties
-
-        #region Private Properties
-
-        private bool ReadBufferHasReportId => ReadBufferSize == 65;
-
-        #endregion Private Properties
 
         #region Public Methods
 
@@ -119,14 +112,9 @@ namespace Hid.Net
 
         public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
         {
-            byte? reportId = null;
-            byte[] bytes;
-            TransferResult actualTransferResult;
-
             try
             {
-                actualTransferResult = await _hidDeviceHandler.ReadAsync(cancellationToken).ConfigureAwait(false);
-                bytes = actualTransferResult.Data;
+                return await _hidDeviceHandler.ReadReportAsync(cancellationToken).ConfigureAwait(false);
             }
             catch (OperationCanceledException oce)
             {
@@ -138,12 +126,6 @@ namespace Hid.Net
                 Logger.LogError(ex, Messages.ErrorMessageRead);
                 throw new IOException(Messages.ErrorMessageRead, ex);
             }
-
-            if (ReadBufferHasReportId) reportId = bytes.First();
-
-            var retVal = ReadBufferHasReportId ? RemoveFirstByte(bytes) : bytes;
-
-            return new ReadReport(reportId, new TransferResult(retVal, actualTransferResult.BytesTransferred));
         }
 
         public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default) => WriteReportAsync(data, DefaultReportId, cancellationToken);
@@ -179,7 +161,7 @@ namespace Hid.Net
 
                 try
                 {
-                    bytesWritten = await _hidDeviceHandler.WriteAsync(bytes, cancellationToken).ConfigureAwait(false);
+                    bytesWritten = await _hidDeviceHandler.WriteReportAsync(bytes, reportId, cancellationToken).ConfigureAwait(false);
                     Logger.LogDataTransfer(new Trace(true, bytes));
                 }
                 catch (Exception ex)

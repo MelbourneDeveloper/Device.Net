@@ -34,6 +34,11 @@ namespace Device.Net.UnitTests
         public const int StmDfuVendorId = 0x0483;
         public const int StmDfuProductId = 0xdf11;
 
+
+        //Line 159 Main.cs loops through 63 bytes of data
+        private const int NanoBufferSize = 63;
+        private const int NanoTransferSize = 64;
+
 #if !NET45
         private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 #else
@@ -244,7 +249,7 @@ namespace Device.Net.UnitTests
         public async Task TestWriteAndReadFromNanoHid()
         {
             //Send the request part of the Message Contract
-            var request = new byte[64];
+            var request = new byte[NanoTransferSize];
             request[0] = 63;
             request[1] = 62;
             request[2] = 1;
@@ -257,9 +262,11 @@ namespace Device.Net.UnitTests
 
             await integrationTester.TestAsync(request, (result, device) =>
              {
-                 Assert.AreEqual(64, result.Data.Length);
-                 Assert.AreEqual(63, result.Data[0]);
-                 Assert.AreEqual(62, result.Data[1]);
+                 Assert.AreEqual(NanoBufferSize, result.Data.Length);
+
+                 //TODO: we should check that the report id is 63 for Hid
+
+                 Assert.AreEqual(62, result.Data[0]);
 
 #if WINDOWS_UWP
                  var windowsHidDevice = (UWPHidDevice)device;
@@ -271,18 +278,18 @@ namespace Device.Net.UnitTests
                  Assert.AreEqual(filterDeviceDefinition.ProductId, device.ConnectedDeviceDefinition.ProductId);
                  Assert.AreEqual(filterDeviceDefinition.VendorId, device.ConnectedDeviceDefinition.VendorId);
                  Assert.AreEqual("STS-170", device.ConnectedDeviceDefinition.ProductName);
-                 Assert.AreEqual(64, device.ConnectedDeviceDefinition.ReadBufferSize);
-                 Assert.AreEqual(64, device.ConnectedDeviceDefinition.WriteBufferSize);
+                 Assert.AreEqual(NanoTransferSize, device.ConnectedDeviceDefinition.ReadBufferSize);
+                 Assert.AreEqual(NanoTransferSize, device.ConnectedDeviceDefinition.WriteBufferSize);
                  Assert.AreEqual("000000000001", device.ConnectedDeviceDefinition.SerialNumber);
                  Assert.AreEqual((ushort)1, device.ConnectedDeviceDefinition.Usage);
                  Assert.AreEqual((ushort)65280, device.ConnectedDeviceDefinition.UsagePage);
                  Assert.AreEqual((ushort)256, device.ConnectedDeviceDefinition.VersionNumber);
-                 Assert.AreEqual(64, windowsHidDevice.ReadBufferSize);
-                 Assert.AreEqual(64, windowsHidDevice.WriteBufferSize);
+                 Assert.AreEqual(NanoTransferSize, windowsHidDevice.ReadBufferSize);
+                 Assert.AreEqual(NanoTransferSize, windowsHidDevice.WriteBufferSize);
 #endif
                  return Task.FromResult(true);
 
-             }, 64);
+             }, NanoBufferSize, NanoTransferSize);
         }
         #endregion
 
