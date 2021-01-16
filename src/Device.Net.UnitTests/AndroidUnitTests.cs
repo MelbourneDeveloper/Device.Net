@@ -208,16 +208,7 @@ namespace Device.Net.UnitTests
             var integrationTester = new IntegrationTester(
                 deviceFactory);
 
-            return integrationTester.TestAsync(GetTrezorRequest(), IntegrationTests.AssertTrezorResult, expectedDataLength, expectedTransferLength, dispose);
-        }
-
-        private static byte[] GetTrezorRequest()
-        {
-            var request = new byte[64];
-            request[0] = 0x3f;
-            request[1] = 0x23;
-            request[2] = 0x23;
-            return request;
+            return integrationTester.TestAsync(IntegrationTests.GetTrezorRequest(), IntegrationTests.AssertTrezorResult, expectedDataLength, expectedTransferLength, dispose);
         }
         #endregion
     }

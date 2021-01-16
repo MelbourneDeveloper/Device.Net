@@ -197,14 +197,20 @@ namespace Device.Net.UnitTests
         private static async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, uint? expectedTransferLength = null)
         {
             //Send the request part of the Message Contract
-            var request = new byte[64];
-            request[0] = 0x3f;
-            request[1] = 0x23;
-            request[2] = 0x23;
+            var request = GetTrezorRequest();
 
             var integrationTester = new IntegrationTester(
                 deviceFactory);
             _ = await integrationTester.TestAsync(request, AssertTrezorResult, expectedDataLength, expectedTransferLength);
+        }
+
+        public static byte[] GetTrezorRequest()
+        {
+            var request = new byte[64];
+            request[0] = 0x3f;
+            request[1] = 0x23;
+            request[2] = 0x23;
+            return request;
         }
 
         [TestMethod]
