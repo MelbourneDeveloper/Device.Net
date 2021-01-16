@@ -50,23 +50,6 @@ namespace Hid.Net
         }
         #endregion
 
-        #region Private Methods
-        private Task InitializeAsync()
-        {
-            using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(InitializeAsync));
-
-            try
-            {
-                return _hidDeviceHandler.InitializeAsync();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
-                throw;
-            }
-        }
-        #endregion
-
         #region Public Methods
         public void Close()
         {
@@ -76,7 +59,7 @@ namespace Hid.Net
 
             try
             {
-                _hidDeviceHandler.Dispose();
+                _hidDeviceHandler.Close();
             }
             catch (Exception ex)
             {
@@ -105,11 +88,21 @@ namespace Hid.Net
             base.Dispose();
         }
 
-        public async Task InitializeAsync(CancellationToken cancellationToken = default)
+        public Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
-            await InitializeAsync(cancellationToken).ConfigureAwait(false);
+            using var logScope = Logger.BeginScope("DeviceId: {deviceId} Call: {call}", DeviceId, nameof(InitializeAsync));
+
+            try
+            {
+                return _hidDeviceHandler.InitializeAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, Messages.ErrorMessageCouldntIntializeDevice);
+                throw;
+            }
         }
 
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)

@@ -13,20 +13,20 @@ namespace Hid.Net.Windows
 {
     public class WindowsHidHandler : IHidDeviceHandler
     {
-        public string DeviceId { get; }
-        public bool? IsReadOnly { get; private set; }
-        public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; private set; }
-        public ushort? WriteBufferSize { get; private set; }
-        public ushort? ReadBufferSize { get; private set; }
-        public bool IsInitialized { get; private set; }
 
-        private bool disposed;
-        private Stream _ReadFileStream;
-        private Stream _WriteFileStream;
-        private SafeFileHandle _ReadSafeFileHandle;
-        private SafeFileHandle _WriteSafeFileHandle;
-        private readonly ILogger Logger;
+        #region Private Fields
+
         private readonly IHidApiService HidService;
+        private readonly ILogger Logger;
+        private Stream _ReadFileStream;
+        private SafeFileHandle _ReadSafeFileHandle;
+        private Stream _WriteFileStream;
+        private SafeFileHandle _WriteSafeFileHandle;
+
+        #endregion Private Fields
+
+        #region Public Constructors
+
         public WindowsHidHandler(
             string deviceId,
             ushort? writeBufferSize = null,
@@ -42,7 +42,43 @@ namespace Hid.Net.Windows
             ReadBufferSize = readBufferSize;
         }
 
-        public Task InitializeAsync()
+        #endregion Public Constructors
+
+        #region Public Properties
+
+        public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; private set; }
+        public string DeviceId { get; }
+        public bool IsInitialized { get; private set; }
+        public bool? IsReadOnly { get; private set; }
+        public ushort? ReadBufferSize { get; private set; }
+        public ushort? WriteBufferSize { get; private set; }
+
+        #endregion Public Properties
+
+        #region Public Methods
+
+        public void Close()
+        {
+            _ReadFileStream?.Dispose();
+            _WriteFileStream?.Dispose();
+
+            _ReadFileStream = null;
+            _WriteFileStream = null;
+
+            if (_ReadSafeFileHandle != null)
+            {
+                _ReadSafeFileHandle.Dispose();
+                _ReadSafeFileHandle = null;
+            }
+
+            if (_WriteSafeFileHandle != null)
+            {
+                _WriteSafeFileHandle.Dispose();
+                _WriteSafeFileHandle = null;
+            }
+        }
+
+        public Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             return Task.Run(() =>
               {
@@ -112,7 +148,7 @@ namespace Hid.Net.Windows
                   }
 
                   IsInitialized = true;
-              });
+              }, cancellationToken);
         }
 
         public async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
@@ -149,29 +185,6 @@ namespace Hid.Net.Windows
             }
         }
 
-        public void Dispose()
-        {
-            if (disposed) return;
-
-            disposed = true;
-
-            _ReadFileStream?.Dispose();
-            _WriteFileStream?.Dispose();
-
-            _ReadFileStream = null;
-            _WriteFileStream = null;
-
-            if (_ReadSafeFileHandle != null)
-            {
-                _ReadSafeFileHandle.Dispose();
-                _ReadSafeFileHandle = null;
-            }
-
-            if (_WriteSafeFileHandle != null)
-            {
-                _WriteSafeFileHandle.Dispose();
-                _WriteSafeFileHandle = null;
-            }
-        }
+        #endregion Public Methods
     }
 }
