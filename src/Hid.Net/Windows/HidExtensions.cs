@@ -3,7 +3,7 @@ using System;
 
 namespace Hid.Net
 {
-    public static class HidExtensions
+    internal static class HidExtensions
     {
         private static byte[] TrimFirstByte(this TransferResult tr)
         {

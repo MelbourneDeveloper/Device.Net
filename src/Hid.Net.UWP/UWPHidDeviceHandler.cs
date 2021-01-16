@@ -15,7 +15,7 @@ using hidDevice = Windows.Devices.HumanInterfaceDevice.HidDevice;
 namespace Hid.Net.UWP
 {
     ///<inheritdoc cref="IHidDevice"/>
-    public class UwpHidDeviceHandler : UwpDeviceHandler<hidDevice>, IHidDeviceHandler
+    internal class UwpHidDeviceHandler : UwpDeviceHandler<hidDevice>, IHidDeviceHandler
     {
 
         #region Private Fields
