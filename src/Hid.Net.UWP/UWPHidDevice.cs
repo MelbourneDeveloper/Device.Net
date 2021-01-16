@@ -20,22 +20,22 @@ namespace Hid.Net.UWP
         #region Fields
         private bool disposed;
         private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+
+        private ushort? _writeBufferSize = null;
+        private ushort? _readBufferSize = null;
         #endregion
 
         #region Public Properties
-        public bool DataHasExtraByte { get; set; } = true;
+        public bool DataHasExtraByte => ReadBufferSize == 65;
         public byte? DefaultReportId { get; }
         #endregion
 
         #region Public Override Properties
         /// <summary>
-        /// TODO: These vales are completely wrong and not being used anyway...
+        /// TODO: These vales are completely wrong. 
         /// </summary>
-        public override ushort WriteBufferSize => 64;
-        /// <summary>
-        /// TODO: These vales are completely wrong and not being used anyway...
-        /// </summary>
-        public override ushort ReadBufferSize => 64;
+        public override ushort WriteBufferSize => _writeBufferSize ?? throw new InvalidOperationException("Not initialized");
+        public override ushort ReadBufferSize => _readBufferSize ?? throw new InvalidOperationException("Not initialized");
         #endregion
 
         #region Event Handlers
@@ -58,10 +58,14 @@ namespace Hid.Net.UWP
             ConnectedDeviceDefinition connectedDeviceDefinition,
             IDataReceiver dataReceiver,
             ILoggerFactory loggerFactory = null,
-            byte? defaultReportId = null) : base(connectedDeviceDefinition.DeviceId, dataReceiver, loggerFactory)
+            ushort? writeBufferSize = null,
+            ushort? readBufferSize = null,
+            byte? defaultReportId = 0) : base(connectedDeviceDefinition.DeviceId, dataReceiver, loggerFactory)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             DefaultReportId = defaultReportId;
+            _writeBufferSize = writeBufferSize;
+            _writeBufferSize = readBufferSize;
         }
         #endregion
 
@@ -80,6 +84,17 @@ namespace Hid.Net.UWP
                 Logger.LogDebug(Messages.InformationMessageInitializingDevice);
 
                 await GetDeviceAsync(DeviceId, cancellationToken);
+
+                if (_writeBufferSize == null)
+                {
+                    //I can't figure out how to get device descriptors for Hid on UWP...
+                    //We can create an output report and get the length which should give us the size the write buffer size
+                    //and then we guess that the read buffer size is the same?
+
+                    var hidOutputReport = ConnectedDevice.CreateOutputReport();
+                    _writeBufferSize = (ushort)hidOutputReport.Data.ToArray().Length;
+                    _readBufferSize = _writeBufferSize;
+                }
 
                 if (ConnectedDevice != null)
                 {
@@ -192,6 +207,17 @@ namespace Hid.Net.UWP
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             var transferResult = await DataReceiver.ReadAsync(cancellationToken);
+
+            if (DataHasExtraByte)
+            {
+                //Remove the first byte
+                //TODO: This should get refactored away when this is merged in to HidDevice
+                var length = transferResult.Data.Length - 1;
+                var data = new byte[length];
+                Array.Copy(transferResult.Data, 1, data, 0, length);
+                transferResult = new TransferResult(data, transferResult.BytesTransferred);
+            }
+
             Logger.LogDataTransfer(new Trace(false, transferResult));
             return transferResult;
         }
