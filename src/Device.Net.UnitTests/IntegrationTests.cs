@@ -194,14 +194,14 @@ namespace Device.Net.UnitTests
             Assert.IsTrue(devices.Any());
         }
 
-        private static async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, uint? expectedTransferLength = null)
+        public static Task<IDevice> TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, uint? expectedTransferLength = null, bool dispose = true)
         {
             //Send the request part of the Message Contract
             var request = GetTrezorRequest();
 
             var integrationTester = new IntegrationTester(
                 deviceFactory);
-            _ = await integrationTester.TestAsync(request, AssertTrezorResult, expectedDataLength, expectedTransferLength);
+            return integrationTester.TestAsync(request, AssertTrezorResult, expectedDataLength, expectedTransferLength, dispose);
         }
 
         public static byte[] GetTrezorRequest()

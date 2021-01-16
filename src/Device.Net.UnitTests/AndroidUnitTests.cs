@@ -122,7 +122,7 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public async Task TestWriteAndReadFromTrezorUsbAndroid()
         {
-            var device = (IusbDevice)await TestWriteAndReadFromTrezor(
+            var device = (IusbDevice)await IntegrationTests.TestWriteAndReadFromTrezor(
             GetAndroidDeviceFactory(
                 new FilterDeviceDefinition(
                 vendorId: IntegrationTests.TrezorVendorId,
@@ -200,15 +200,6 @@ namespace Device.Net.UnitTests
                     usbPermissionBroadcastReceiver.OnReceive(contextMock.Object, intentMock.Object);
                 }
             }
-        }
-
-        private static Task<IDevice> TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, uint? expectedTransferLength = null, bool dispose = true)
-        {
-            //Send the request part of the Message Contract
-            var integrationTester = new IntegrationTester(
-                deviceFactory);
-
-            return integrationTester.TestAsync(IntegrationTests.GetTrezorRequest(), IntegrationTests.AssertTrezorResult, expectedDataLength, expectedTransferLength, dispose);
         }
         #endregion
     }
