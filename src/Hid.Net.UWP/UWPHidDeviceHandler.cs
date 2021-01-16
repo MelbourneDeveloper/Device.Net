@@ -20,9 +20,9 @@ namespace Hid.Net.UWP
 
         #region Private Fields
 
-        //private readonly Func<TransferResult, ReadReport> _readTransferTransform;
+        private readonly Func<TransferResult, ReadReport> _readTransferTransform;
         private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
-        //private readonly Func<byte[], byte, byte[]> _writeTransferTransform;
+        private readonly Func<byte[], byte, byte[]> _writeTransferTransform;
         private ushort? _readBufferSize = null;
         private ushort? _writeBufferSize = null;
         private bool disposed;
@@ -36,11 +36,20 @@ namespace Hid.Net.UWP
                     IDataReceiver dataReceiver,
                     ILoggerFactory loggerFactory = null,
                     ushort? writeBufferSize = null,
-                    ushort? readBufferSize = null) : base(connectedDeviceDefinition.DeviceId, dataReceiver, loggerFactory)
+                    ushort? readBufferSize = null,
+                    Func<TransferResult, ReadReport> readTransferTransform = null,
+                    Func<byte[], byte, byte[]> writeTransferTransform = null
+            ) : base(connectedDeviceDefinition.DeviceId, dataReceiver, loggerFactory)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             _writeBufferSize = writeBufferSize;
             _writeBufferSize = readBufferSize;
+
+            _readTransferTransform = readTransferTransform ?? new Func<TransferResult, ReadReport>((tr) => tr.ToReadReport());
+
+            _writeTransferTransform = writeTransferTransform ??
+                new Func<byte[], byte, byte[]>(
+                (data, reportId) => data.AddReportIdToIndexZero(reportId));
         }
 
         #endregion Public Constructors
@@ -124,20 +133,7 @@ namespace Hid.Net.UWP
         }
 
         public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
-        {
-            var transferResult = await DataReceiver.ReadAsync(cancellationToken);
-
-            var length = transferResult.Data.Length - 1;
-            var data = new byte[length];
-            Array.Copy(transferResult.Data, 1, data, 0, length);
-            transferResult = new TransferResult(data, transferResult.BytesTransferred);
-
-            Logger.LogDataTransfer(new Trace(false, transferResult));
-
-            var reportId = transferResult.Data[0];
-
-            return new ReadReport(reportId, new TransferResult(transferResult, transferResult.BytesTransferred));
-        }
+            => _readTransferTransform(await DataReceiver.ReadAsync(cancellationToken));
 
         public async Task<uint> WriteReportAsync(byte[] data, byte reportId, CancellationToken cancellationToken = default)
         {
@@ -145,13 +141,9 @@ namespace Hid.Net.UWP
 
             if (DataReceiver.HasData) Logger.LogWarning("Writing to device but data has already been received that has not been read");
 
-            byte[] bytes;
+            var tranformedData = _writeTransferTransform(data, reportId);
 
-            bytes = new byte[data.Length + 1];
-            Array.Copy(data, 0, bytes, 1, data.Length);
-            bytes[0] = reportId;
-
-            var buffer = bytes.AsBuffer();
+            var buffer = tranformedData.AsBuffer();
             var outReport = ConnectedDevice.CreateOutputReport();
             outReport.Data = buffer;
 
@@ -159,14 +151,14 @@ namespace Hid.Net.UWP
             {
                 var operation = ConnectedDevice.SendOutputReportAsync(outReport);
                 var count = await operation.AsTask(cancellationToken);
-                if (count == bytes.Length)
+                if (count == tranformedData.Length)
                 {
-                    Logger.LogDataTransfer(new Trace(true, bytes));
+                    Logger.LogDataTransfer(new Trace(true, tranformedData));
                 }
                 else
                 {
-                    Logger.LogError(Messages.GetErrorMessageInvalidWriteLength(bytes.Length, count) + "{length} {count}", bytes.Length, count, GetType().Name);
-                    throw new IOException(Messages.GetErrorMessageInvalidWriteLength(bytes.Length, count));
+                    Logger.LogError(Messages.GetErrorMessageInvalidWriteLength(tranformedData.Length, count) + "{length} {count}", tranformedData.Length, count, GetType().Name);
+                    throw new IOException(Messages.GetErrorMessageInvalidWriteLength(tranformedData.Length, count));
                 }
 
                 return count;
@@ -176,7 +168,7 @@ namespace Hid.Net.UWP
                 //TODO: Check the string is nasty. Validation on the size of the array being sent should be done earlier anyway
                 if (string.Equals(ex.Message, "Value does not fall within the expected range.", StringComparison.Ordinal))
                 {
-                    throw new IOException("It seems that the data being sent to the device does not match the accepted size. Have you checked DataHasExtraByte?", ex);
+                    throw new IOException("It seems that the data being sent to the device does not match the accepted size. Try specifying a write transfer transform", ex);
                 }
                 throw;
             }
