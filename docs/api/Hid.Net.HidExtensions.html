@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class AndroidFactory
+    <title>Class HidExtensions
    </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class AndroidFactory
+    <meta name="title" content="Class HidExtensions
    ">
     <meta name="generator" content="docfx 2.56.6.0">
     
@@ -68,21 +68,17 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            <article class="content wrap" id="_content" data-uid="Usb.Net.Android.AndroidFactory">
+            <article class="content wrap" id="_content" data-uid="Hid.Net.HidExtensions">
   
   
-  <h1 id="Usb_Net_Android_AndroidFactory" data-uid="Usb.Net.Android.AndroidFactory" class="text-break">Class AndroidFactory
+  <h1 id="Hid_Net_HidExtensions" data-uid="Hid.Net.HidExtensions" class="text-break">Class HidExtensions
   </h1>
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="inheritance">
     <h5>Inheritance</h5>
     <div class="level0"><span class="xref">System.Object</span></div>
-    <div class="level1"><span class="xref">AndroidFactory</span></div>
-  </div>
-  <div classs="implements">
-    <h5>Implements</h5>
-    <div><a class="xref" href="Usb.Net.Android.IAndroidFactory.html">IAndroidFactory</a></div>
+    <div class="level1"><span class="xref">HidExtensions</span></div>
   </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
@@ -102,34 +98,34 @@
       <span class="xref">System.Object.MemberwiseClone()</span>
     </div>
     <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-    <div>
       <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
     </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Usb.Net.Android.html">Usb.Net.Android</a></h6>
-  <h6><strong>Assembly</strong>: Usb.Net.Android.dll</h6>
-  <h5 id="Usb_Net_Android_AndroidFactory_syntax">Syntax</h5>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Hid.Net.html">Hid.Net</a></h6>
+  <h6><strong>Assembly</strong>: Hid.Net.dll</h6>
+  <h5 id="Hid_Net_HidExtensions_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class AndroidFactory : IAndroidFactory</code></pre>
+    <pre><code class="lang-csharp hljs">public static class HidExtensions</code></pre>
   </div>
   <h3 id="methods">Methods
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Usb_Net_Android_AndroidFactory_CreateIntent_System_String_.md&amp;value=---%0Auid%3A%20Usb.Net.Android.AndroidFactory.CreateIntent(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidExtensions_AddReportIdToIndexZero_System_Byte___System_Byte_.md&amp;value=---%0Auid%3A%20Hid.Net.HidExtensions.AddReportIdToIndexZero(System.Byte%5B%5D%2CSystem.Byte)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Usb.Net.Android/AndroidFactory.cs/#L8">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/Windows/HidExtensions.cs/#L28">View Source</a>
   </span>
-  <a id="Usb_Net_Android_AndroidFactory_CreateIntent_" data-uid="Usb.Net.Android.AndroidFactory.CreateIntent*"></a>
-  <h4 id="Usb_Net_Android_AndroidFactory_CreateIntent_System_String_" data-uid="Usb.Net.Android.AndroidFactory.CreateIntent(System.String)">CreateIntent(String)</h4>
+  <a id="Hid_Net_HidExtensions_AddReportIdToIndexZero_" data-uid="Hid.Net.HidExtensions.AddReportIdToIndexZero*"></a>
+  <h4 id="Hid_Net_HidExtensions_AddReportIdToIndexZero_System_Byte___System_Byte_" data-uid="Hid.Net.HidExtensions.AddReportIdToIndexZero(System.Byte[],System.Byte)">AddReportIdToIndexZero(Byte[], Byte)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Intent CreateIntent(string action)</code></pre>
+    <pre><code class="lang-csharp hljs">public static byte[] AddReportIdToIndexZero(this byte[] data, byte reportId)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -142,8 +138,13 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">action</span></td>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">data</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span></td>
+        <td><span class="parametername">reportId</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -158,25 +159,25 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Android.Content.Intent</span></td>
+        <td><span class="xref">System.Byte</span>[]</td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Usb_Net_Android_AndroidFactory_CreateIntentFilter_System_String_.md&amp;value=---%0Auid%3A%20Usb.Net.Android.AndroidFactory.CreateIntentFilter(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidExtensions_ToReadReport_Device_Net_TransferResult_.md&amp;value=---%0Auid%3A%20Hid.Net.HidExtensions.ToReadReport(Device.Net.TransferResult)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Usb.Net.Android/AndroidFactory.cs/#L9">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/Windows/HidExtensions.cs/#L16">View Source</a>
   </span>
-  <a id="Usb_Net_Android_AndroidFactory_CreateIntentFilter_" data-uid="Usb.Net.Android.AndroidFactory.CreateIntentFilter*"></a>
-  <h4 id="Usb_Net_Android_AndroidFactory_CreateIntentFilter_System_String_" data-uid="Usb.Net.Android.AndroidFactory.CreateIntentFilter(System.String)">CreateIntentFilter(String)</h4>
+  <a id="Hid_Net_HidExtensions_ToReadReport_" data-uid="Hid.Net.HidExtensions.ToReadReport*"></a>
+  <h4 id="Hid_Net_HidExtensions_ToReadReport_Device_Net_TransferResult_" data-uid="Hid.Net.HidExtensions.ToReadReport(Device.Net.TransferResult)">ToReadReport(TransferResult)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public IntentFilter CreateIntentFilter(string action)</code></pre>
+    <pre><code class="lang-csharp hljs">public static ReadReport ToReadReport(this TransferResult tr)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -189,8 +190,8 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
-        <td><span class="parametername">action</span></td>
+        <td><a class="xref" href="Device.Net.TransferResult.html">TransferResult</a></td>
+        <td><span class="parametername">tr</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -205,45 +206,11 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Android.Content.IntentFilter</span></td>
+        <td><a class="xref" href="Hid.Net.ReadReport.html">ReadReport</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Usb_Net_Android_AndroidFactory_CreateUsbRequest.md&amp;value=---%0Auid%3A%20Usb.Net.Android.AndroidFactory.CreateUsbRequest%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Usb.Net.Android/AndroidFactory.cs/#L10">View Source</a>
-  </span>
-  <a id="Usb_Net_Android_AndroidFactory_CreateUsbRequest_" data-uid="Usb.Net.Android.AndroidFactory.CreateUsbRequest*"></a>
-  <h4 id="Usb_Net_Android_AndroidFactory_CreateUsbRequest" data-uid="Usb.Net.Android.AndroidFactory.CreateUsbRequest">CreateUsbRequest()</h4>
-  <div class="markdown level1 summary"></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public UsbRequest CreateUsbRequest()</code></pre>
-  </div>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">Android.Hardware.Usb.UsbRequest</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <a class="xref" href="Usb.Net.Android.IAndroidFactory.html">IAndroidFactory</a>
-  </div>
 </article>
           </div>
           
@@ -252,10 +219,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Usb_Net_Android_AndroidFactory.md&amp;value=---%0Auid%3A%20Usb.Net.Android.AndroidFactory%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidExtensions.md&amp;value=---%0Auid%3A%20Hid.Net.HidExtensions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Usb.Net.Android/AndroidFactory.cs/#L6" class="contribution-link">View Source</a>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/Windows/HidExtensions.cs/#L6" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
