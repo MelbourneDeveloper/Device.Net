@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32.SafeHandles;
 using Moq;
-using NSubstitute;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -51,21 +50,21 @@ namespace Device.Net.UnitTests
         private static async Task<WindowsHidHandler> InitializeWindowsHidDevice(bool isReadonly)
         {
             const string deviceId = "test";
-            var hidService = Substitute.For<IHidApiService>();
+            var hidService = new Mock<IHidApiService>();
             var invalidSafeFileHandle = new SafeFileHandle((IntPtr)(-1), true);
             var validSafeFileHandle = new SafeFileHandle((IntPtr)100, true);
-            _ = hidService.CreateReadConnection("", Windows.FileAccessRights.None).ReturnsForAnyArgs(validSafeFileHandle);
-            _ = hidService.CreateWriteConnection("").ReturnsForAnyArgs(!isReadonly ? validSafeFileHandle : invalidSafeFileHandle);
-            _ = hidService.GetDeviceDefinition(deviceId, validSafeFileHandle).ReturnsForAnyArgs(
-                new ConnectedDeviceDefinition(deviceId, DeviceType.Hid, readBufferSize: 64, writeBufferSize: 64));
 
-            var readStream = Substitute.For<Stream>();
-            _ = readStream.CanRead.ReturnsForAnyArgs(true);
-            _ = hidService.OpenRead(null, 0).ReturnsForAnyArgs(readStream);
+            _ = hidService.Setup(s => s.CreateReadConnection(deviceId, Windows.FileAccessRights.GenericRead)).Returns(validSafeFileHandle);
+            _ = hidService.Setup(s => s.CreateWriteConnection(deviceId)).Returns(!isReadonly ? validSafeFileHandle : invalidSafeFileHandle);
+            _ = hidService.Setup(s => s.GetDeviceDefinition(deviceId, validSafeFileHandle)).Returns(new ConnectedDeviceDefinition(deviceId, DeviceType.Hid, readBufferSize: 64, writeBufferSize: 64));
 
-            var writeStream = Substitute.For<Stream>();
-            _ = writeStream.CanWrite.ReturnsForAnyArgs(true);
-            _ = hidService.OpenWrite(null, 0).ReturnsForAnyArgs(writeStream);
+            var readStream = new Mock<Stream>();
+            _ = readStream.Setup(s => s.CanRead).Returns(true);
+            _ = hidService.Setup(s => s.OpenRead(It.IsAny<SafeFileHandle>(), It.IsAny<ushort>())).Returns(readStream.Object);
+
+            var writeStream = new Mock<Stream>();
+            _ = readStream.Setup(s => s.CanWrite).Returns(!isReadonly);
+            _ = hidService.Setup(s => s.OpenWrite(It.IsAny<SafeFileHandle>(), It.IsAny<ushort>())).Returns(readStream.Object);
 
             var loggerFactory = new Mock<ILoggerFactory>();
             var logger = new Mock<ILogger<HidDevice>>();
@@ -73,7 +72,7 @@ namespace Device.Net.UnitTests
 
             _ = loggerFactory.Setup(f => f.CreateLogger(It.IsAny<string>())).Returns(logger.Object);
 
-            var windowsHidDevice = new WindowsHidHandler(deviceId, loggerFactory: loggerFactory.Object, hidApiService: hidService);
+            var windowsHidDevice = new WindowsHidHandler(deviceId, loggerFactory: loggerFactory.Object, hidApiService: hidService.Object);
             await windowsHidDevice.InitializeAsync();
 
             //TODO: Fix this
@@ -89,7 +88,13 @@ namespace Device.Net.UnitTests
                 //logger.Received().Log(Messages.WarningMessageOpeningInReadonlyMode(deviceId), nameof(WindowsHidDevice), null, LogLevel.Warning);
             }
 
-            Assert.AreEqual(true, windowsHidDevice.IsInitialized);
+            hidService.Verify(s => s.OpenRead(It.IsAny<SafeFileHandle>(), It.IsAny<ushort>()));
+
+            if (!isReadonly)
+            {
+                hidService.Verify(s => s.OpenWrite(It.IsAny<SafeFileHandle>(), It.IsAny<ushort>()));
+            }
+
             return windowsHidDevice;
         }
 

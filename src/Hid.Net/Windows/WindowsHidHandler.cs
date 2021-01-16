@@ -18,7 +18,7 @@ namespace Hid.Net.Windows
         public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; private set; }
         public ushort? WriteBufferSize { get; private set; }
         public ushort? ReadBufferSize { get; private set; }
-        public bool IsInitialized { get; }
+        public bool IsInitialized { get; private set; }
 
         private bool disposed;
         private Stream _ReadFileStream;
@@ -34,7 +34,7 @@ namespace Hid.Net.Windows
             IHidApiService hidApiService = null,
             ILoggerFactory loggerFactory = null)
         {
-            DeviceId = deviceId;
+            DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
             Logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidHandler>();
             HidService = hidApiService ?? new WindowsHidApiService(loggerFactory);
 
@@ -110,6 +110,8 @@ namespace Hid.Net.Windows
                   {
                       Logger.LogWarning(Messages.WarningMessageWriteFileStreamCantWrite);
                   }
+
+                  IsInitialized = true;
               });
         }
 
