@@ -9,20 +9,6 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Hid.Net
-{
-    public static class HidExtensions
-    {
-        public static byte[] TrimFirstByte(this TransferResult tr)
-        {
-            var length = tr.Data.Length - 1;
-            var data = new byte[length];
-            Array.Copy(tr.Data, 1, data, 0, length);
-            return data;
-        }
-    }
-}
-
 namespace Hid.Net.Windows
 {
     public class WindowsHidHandler : IHidDeviceHandler
@@ -32,12 +18,12 @@ namespace Hid.Net.Windows
 
         private readonly IHidApiService _hidService;
         private readonly ILogger _logger;
+        private readonly Func<TransferResult, ReadReport> _readTransferTransform;
+        private readonly Func<byte[], byte, byte[]> _writeTransferTransform;
         private Stream _readFileStream;
         private SafeFileHandle _readSafeFileHandle;
         private Stream _writeFileStream;
         private SafeFileHandle _writeSafeFileHandle;
-        private readonly Func<TransferResult, ReadReport> _readTransferTransform;
-        private readonly Func<byte[], byte, byte[]> _writeTransferTransform;
 
         #endregion Private Fields
 
@@ -55,34 +41,11 @@ namespace Hid.Net.Windows
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
 
             _readTransferTransform = readTransferTransform ??
-                new Func<TransferResult, ReadReport>(
-                (tr) =>
-                {
-                    //Grab the report id
-                    var reportId = tr.Data[0];
-
-                    //Create a new array and copy the data to it without the report id
-                    var data = tr.TrimFirstByte();
-
-                    //Convert to a read report
-                    return new ReadReport(reportId, new TransferResult(data, tr.BytesTransferred));
-                });
+                new Func<TransferResult, ReadReport>((tr) => tr.ToReadReport());
 
             _writeTransferTransform = writeTransferTransform ??
                 new Func<byte[], byte, byte[]>(
-                (data, reportId) =>
-                {
-                    //Create a new array which is one byte larger 
-                    var transformedData = new byte[data.Length + 1];
-
-                    //Set the report id at index 0
-                    transformedData[0] = reportId;
-
-                    //copy the data to it without the report id at index 1
-                    Array.Copy(data, 0, transformedData, 1, data.Length);
-
-                    return transformedData;
-                });
+                (data, reportId) => data.AddReportIdToIndexZero(reportId));
 
             _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidHandler>();
             _hidService = hidApiService ?? new WindowsHidApiService(loggerFactory);
@@ -234,6 +197,8 @@ namespace Hid.Net.Windows
                 throw new IOException("The file stream cannot be written to");
             }
         }
+
         #endregion Public Methods
+
     }
 }
