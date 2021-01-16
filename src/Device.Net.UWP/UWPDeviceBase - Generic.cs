@@ -26,11 +26,6 @@ namespace Device.Net.UWP
         public string DeviceId { get; }
         #endregion
 
-        #region Public Abstract
-        public abstract ushort WriteBufferSize { get; }
-        public abstract ushort ReadBufferSize { get; }
-        #endregion
-
         #region Constructor
         protected UWPDeviceBase(
             string deviceId,
@@ -55,10 +50,6 @@ namespace Device.Net.UWP
 
         #region Protected Abstract Methods
         protected abstract IAsyncOperation<T> FromIdAsync(string id);
-        #endregion
-
-        #region Public Overrides
-        public abstract Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default);
         #endregion
 
         #region Public Override Properties

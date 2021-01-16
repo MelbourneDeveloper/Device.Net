@@ -30,8 +30,8 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Override Properties
-        public override ushort WriteBufferSize => _WriteBufferSize ?? WriteUsbInterface.WriteBufferSize;
-        public override ushort ReadBufferSize => _ReadBufferSize ?? ReadUsbInterface.WriteBufferSize;
+        public ushort WriteBufferSize => _WriteBufferSize ?? WriteUsbInterface.WriteBufferSize;
+        public ushort ReadBufferSize => _ReadBufferSize ?? ReadUsbInterface.WriteBufferSize;
 
         public IUsbInterface ReadUsbInterface
         {
@@ -131,7 +131,7 @@ namespace Usb.Net.UWP
 
         public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync(CancellationToken cancellationToken = default) => Task.FromResult(ConnectedDeviceDefinition);
 
-        public override Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default) => ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
+        public Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default) => ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
         #endregion
 
         #region Private Methods

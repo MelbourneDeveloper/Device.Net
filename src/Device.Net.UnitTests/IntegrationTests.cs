@@ -7,11 +7,11 @@ using Microsoft.Extensions.Logging;
 using Usb.Net;
 using System.Collections.Generic;
 using Device.Net.Windows;
+using Hid.Net;
 
 #if !WINDOWS_UWP
 using Device.Net.LibUsb;
 using Usb.Net.Windows;
-using Hid.Net;
 #else
 using Hid.Net.UWP;
 #endif
@@ -231,10 +231,9 @@ namespace Device.Net.UnitTests
                 //I think my room should pretty much always be between these temperatures
                 Assert.IsTrue(temp is > 10 and < 35);
 
-#if WINDOWS_UWP
-                var windowsHidDevice = (UWPHidDevice)device;
-#else
                 var windowsHidDevice = (HidDevice)device;
+#if WINDOWS_UWP
+#else
                 //TODO: Share these with UWP
                 Assert.AreEqual(TemperBufferSize, device.ConnectedDeviceDefinition.ReadBufferSize);
                 Assert.AreEqual(TemperBufferSize, device.ConnectedDeviceDefinition.WriteBufferSize);
@@ -268,10 +267,10 @@ namespace Device.Net.UnitTests
 
                  Assert.AreEqual(62, result.Data[0]);
 
-#if WINDOWS_UWP
-                 var windowsHidDevice = (UWPHidDevice)device;
-#else
                  var windowsHidDevice = (HidDevice)device;
+
+#if WINDOWS_UWP
+#else
                  //TODO: share this with UWP
                  Assert.AreEqual(DeviceType.Hid, device.ConnectedDeviceDefinition.DeviceType);
                  Assert.AreEqual("AirNetix", device.ConnectedDeviceDefinition.Manufacturer);

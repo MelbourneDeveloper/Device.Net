@@ -46,8 +46,9 @@ namespace Hid.Net.UWP
             loggerFactory ??= NullLoggerFactory.Instance;
 
             getDevice ??= (c, cancellationToken) => Task.FromResult<IDevice>(
-                new UWPHidDevice
+                new HidDevice
                 (
+                    new UWPHidDeviceHandler(
                     c,
                     dataReceiver ??
                     new UWPDataReceiver(
@@ -55,8 +56,7 @@ namespace Hid.Net.UWP
                         loggerFactory.CreateLogger<UWPDataReceiver>()),
                     loggerFactory,
                     writeBufferSize,
-                    readBufferSize,
-                    defaultReportId));
+                    readBufferSize), loggerFactory, defaultReportId));
 
             var aqs = AqsHelpers.GetAqs(filterDeviceDefinitions, DeviceType.Hid);
 
@@ -76,7 +76,7 @@ namespace Hid.Net.UWP
                     DeviceType.Hid,
                     async (deviceId, cancellationToken) =>
                     {
-                        using var hidDevice = await UWPHidDevice.GetHidDevice(deviceId).AsTask(cancellationToken);
+                        using var hidDevice = await UWPHidDeviceHandler.GetHidDevice(deviceId).AsTask(cancellationToken);
 
                         var canConnect = hidDevice != null;
 
