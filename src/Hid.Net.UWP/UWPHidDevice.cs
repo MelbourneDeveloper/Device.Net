@@ -192,7 +192,7 @@ namespace Hid.Net.UWP
         #region Public Overrides
         public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
         {
-            byte? reportId = null;
+            byte reportId = 0;
             var transferResult = await ReadAsync(cancellationToken);
 
             if (DataHasExtraByte)
