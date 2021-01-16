@@ -26,6 +26,7 @@ namespace Device.Net.UnitTests
     [TestCategory("NotPipelineReady")]
     public class IntegrationTests
     {
+        #region Fields
         private const byte STATE_DFU_IDLE = 0x02;
         private const byte STATE_DFU_ERROR = 0x0A;
         private const byte STATUS_errTARGET = 0x01;
@@ -45,6 +46,7 @@ namespace Device.Net.UnitTests
 #else
         private readonly ILoggerFactory loggerFactory = NullLoggerFactory.Instance;
 #endif
+        #endregion
 
         #region Tests
 
@@ -194,25 +196,6 @@ namespace Device.Net.UnitTests
             Assert.IsTrue(devices.Any());
         }
 
-        public static Task<IDevice> TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, uint? expectedTransferLength = null, bool dispose = true)
-        {
-            //Send the request part of the Message Contract
-            var request = GetTrezorRequest();
-
-            var integrationTester = new IntegrationTester(
-                deviceFactory);
-            return integrationTester.TestAsync(request, AssertTrezorResult, expectedDataLength, expectedTransferLength, dispose);
-        }
-
-        public static byte[] GetTrezorRequest()
-        {
-            var request = new byte[64];
-            request[0] = 0x3f;
-            request[1] = 0x23;
-            request[2] = 0x23;
-            return request;
-        }
-
         [TestMethod]
         public async Task TestWriteAndReadFromTemperHid()
         {
@@ -295,6 +278,27 @@ namespace Device.Net.UnitTests
                  return Task.FromResult(true);
 
              }, NanoBufferSize, NanoTransferSize);
+        }
+        #endregion
+
+        #region Public Static Methods
+        public static Task<IDevice> TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, uint? expectedTransferLength = null, bool dispose = true)
+        {
+            //Send the request part of the Message Contract
+            var request = GetTrezorRequest();
+
+            var integrationTester = new IntegrationTester(
+                deviceFactory);
+            return integrationTester.TestAsync(request, AssertTrezorResult, expectedDataLength, expectedTransferLength, dispose);
+        }
+
+        public static byte[] GetTrezorRequest()
+        {
+            var request = new byte[64];
+            request[0] = 0x3f;
+            request[1] = 0x23;
+            request[2] = 0x23;
+            return request;
         }
         #endregion
 
