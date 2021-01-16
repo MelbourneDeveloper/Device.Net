@@ -7,7 +7,7 @@ using Windows.Foundation;
 
 namespace Device.Net.UWP
 {
-    public abstract class UWPDeviceBase<T>
+    public abstract class UwpDeviceHandler<T>
     {
         #region Fields
         private bool _IsClosing;
@@ -19,7 +19,7 @@ namespace Device.Net.UWP
         protected T ConnectedDevice { get; private set; }
         public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; protected set; }
         protected ILoggerFactory LoggerFactory { get; private set; }
-        protected ILogger<UWPDeviceBase<T>> Logger { get; }
+        protected ILogger<UwpDeviceHandler<T>> Logger { get; }
         #endregion
 
         #region Public
@@ -27,14 +27,14 @@ namespace Device.Net.UWP
         #endregion
 
         #region Constructor
-        protected UWPDeviceBase(
+        protected UwpDeviceHandler(
             string deviceId,
             IDataReceiver dataReceiver,
             ILoggerFactory loggerFactory)
         {
             DeviceId = deviceId;
             LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
-            Logger = loggerFactory.CreateLogger<UWPDeviceBase<T>>();
+            Logger = loggerFactory.CreateLogger<UwpDeviceHandler<T>>();
             DataReceiver = dataReceiver;
         }
         #endregion

@@ -13,7 +13,7 @@ namespace Hid.Net.UWP
     /// <summary>
     /// TODO: Merge this factory class with other factory classes. I.e. create a DeviceFactoryBase class
     /// </summary>
-    public static class UWPHidDeviceFactoryExtensions
+    public static class UwpHidDeviceFactoryExtensions
     {
 
         public static IDeviceFactory CreateUwpHidDeviceFactory(
@@ -28,8 +28,6 @@ namespace Hid.Net.UWP
             getDevice,
             defaultReportId);
 
-
-        //TODO: This is wrong. It will only search for one device
 
         public static IDeviceFactory CreateUwpHidDeviceFactory(
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
@@ -51,9 +49,9 @@ namespace Hid.Net.UWP
                     new UWPHidDeviceHandler(
                     c,
                     dataReceiver ??
-                    new UWPDataReceiver(
+                    new UwpDataReceiver(
                         new Observable<TransferResult>(),
-                        loggerFactory.CreateLogger<UWPDataReceiver>()),
+                        loggerFactory.CreateLogger<UwpDataReceiver>()),
                     loggerFactory,
                     writeBufferSize,
                     readBufferSize), loggerFactory, defaultReportId));

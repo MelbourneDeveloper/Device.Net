@@ -15,7 +15,7 @@ using hidDevice = Windows.Devices.HumanInterfaceDevice.HidDevice;
 namespace Hid.Net.UWP
 {
     ///<inheritdoc cref="IHidDevice"/>
-    public class UWPHidDeviceHandler : UWPDeviceBase<hidDevice>, IHidDeviceHandler
+    public class UWPHidDeviceHandler : UwpDeviceHandler<hidDevice>, IHidDeviceHandler
     {
         #region Fields
         private bool disposed;

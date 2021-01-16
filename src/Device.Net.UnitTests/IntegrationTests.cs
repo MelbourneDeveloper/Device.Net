@@ -128,7 +128,7 @@ namespace Device.Net.UnitTests
         {
             const string DeviceId = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
             var usbDevice = new UsbDevice(DeviceId,
-                new Usb.Net.UWP.UWPUsbInterfaceManager(new ConnectedDeviceDefinition(DeviceId, DeviceType.Usb)));
+                new Usb.Net.UWP.UwpUsbInterfaceManager(new ConnectedDeviceDefinition(DeviceId, DeviceType.Usb)));
 
             await PerformStmDfTest(usbDevice);
         }

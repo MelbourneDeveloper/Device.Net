@@ -111,7 +111,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UWPHidDeviceHandler.cs" />
-    <Compile Include="UWPHidDeviceFactoryExtensions.cs" />
+    <Compile Include="UwpHidDeviceFactoryExtensions.cs" />
     <EmbeddedResource Include="Properties\Hid.Net.UWP.rd.xml" />
   </ItemGroup>
   <ItemGroup>
