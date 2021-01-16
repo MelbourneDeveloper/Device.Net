@@ -28,9 +28,9 @@ namespace Hid.Net.UWP
             getDevice,
             defaultReportId);
 
-        /// <summary>
-        /// TODO: This is wrong. It will only search for one device
-        /// </summary>
+
+        //TODO: This is wrong. It will only search for one device
+
         public static IDeviceFactory CreateUwpHidDeviceFactory(
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
         ILoggerFactory loggerFactory = null,
