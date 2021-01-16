@@ -15,7 +15,7 @@ using hidDevice = Windows.Devices.HumanInterfaceDevice.HidDevice;
 namespace Hid.Net.UWP
 {
     ///<inheritdoc cref="IHidDevice"/>
-    public class UWPHidDeviceHandler : UwpDeviceHandler<hidDevice>, IHidDeviceHandler
+    public class UwpHidDeviceHandler : UwpDeviceHandler<hidDevice>, IHidDeviceHandler
     {
         #region Fields
         private bool disposed;
@@ -49,7 +49,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPHidDeviceHandler(
+        public UwpHidDeviceHandler(
             ConnectedDeviceDefinition connectedDeviceDefinition,
             IDataReceiver dataReceiver,
             ILoggerFactory loggerFactory = null,
@@ -66,7 +66,7 @@ namespace Hid.Net.UWP
         public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             //TODO: Put a lock here to stop reentrancy of multiple calls
-            using var loggerScope = Logger?.BeginScope("DeviceId: {deviceId} Region: {region}", DeviceId, nameof(UWPHidDeviceHandler));
+            using var loggerScope = Logger?.BeginScope("DeviceId: {deviceId} Region: {region}", DeviceId, nameof(UwpHidDeviceHandler));
 
             Logger.LogInformation("Initializing Hid device {deviceId}", DeviceId);
 

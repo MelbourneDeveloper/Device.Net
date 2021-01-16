@@ -46,7 +46,7 @@ namespace Hid.Net.UWP
             getDevice ??= (c, cancellationToken) => Task.FromResult<IDevice>(
                 new HidDevice
                 (
-                    new UWPHidDeviceHandler(
+                    new UwpHidDeviceHandler(
                     c,
                     dataReceiver ??
                     new UwpDataReceiver(
@@ -74,7 +74,7 @@ namespace Hid.Net.UWP
                     DeviceType.Hid,
                     async (deviceId, cancellationToken) =>
                     {
-                        using var hidDevice = await UWPHidDeviceHandler.GetHidDevice(deviceId).AsTask(cancellationToken);
+                        using var hidDevice = await UwpHidDeviceHandler.GetHidDevice(deviceId).AsTask(cancellationToken);
 
                         var canConnect = hidDevice != null;
 
