@@ -10,8 +10,8 @@ using Device.Net.Windows;
 
 #if !WINDOWS_UWP
 using Device.Net.LibUsb;
-using Hid.Net.Windows;
 using Usb.Net.Windows;
+using Hid.Net;
 #else
 using Hid.Net.UWP;
 #endif
@@ -228,7 +228,7 @@ namespace Device.Net.UnitTests
 #if WINDOWS_UWP
                 var windowsHidDevice = (UWPHidDevice)device;
 #else
-                var windowsHidDevice = (WindowsHidDevice)device;
+                var windowsHidDevice = (HidDevice)device;
                 //TODO: Share these with UWP
                 Assert.AreEqual(9, device.ConnectedDeviceDefinition.ReadBufferSize);
                 Assert.AreEqual(9, device.ConnectedDeviceDefinition.WriteBufferSize);
@@ -264,7 +264,7 @@ namespace Device.Net.UnitTests
 #if WINDOWS_UWP
                  var windowsHidDevice = (UWPHidDevice)device;
 #else
-                 var windowsHidDevice = (WindowsHidDevice)device;
+                 var windowsHidDevice = (HidDevice)device;
                  //TODO: share this with UWP
                  Assert.AreEqual(DeviceType.Hid, device.ConnectedDeviceDefinition.DeviceType);
                  Assert.AreEqual("AirNetix", device.ConnectedDeviceDefinition.Manufacturer);

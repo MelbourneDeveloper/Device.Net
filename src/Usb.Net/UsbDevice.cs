@@ -17,10 +17,11 @@ namespace Usb.Net
         #endregion
 
         #region Public Overrride Properties
-        public override bool IsInitialized => UsbInterfaceManager.IsInitialized;
+        public bool IsInitialized => UsbInterfaceManager.IsInitialized;
         public IUsbInterfaceManager UsbInterfaceManager { get; }
-        public override ushort WriteBufferSize => UsbInterfaceManager.WriteBufferSize;
-        public override ushort ReadBufferSize => UsbInterfaceManager.ReadBufferSize;
+        public ushort WriteBufferSize => UsbInterfaceManager.WriteBufferSize;
+        public ushort ReadBufferSize => UsbInterfaceManager.ReadBufferSize;
+        public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; private set; }
         #endregion
 
         #region Constructor

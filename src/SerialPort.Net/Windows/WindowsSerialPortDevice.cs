@@ -19,18 +19,16 @@ namespace SerialPort.Net.Windows
         private readonly Parity _Parity;
         private SafeFileHandle _ReadSafeFileHandle;
         private readonly StopBits _StopBits;
-        private readonly ushort _ReadBufferSize;
+        private ushort ReadBufferSize { get; }
         #endregion
 
         #region Public Properties
-        //public DeviceType DeviceType => DeviceType.SerialPort;
-        public override bool IsInitialized => _ReadSafeFileHandle != null && !_ReadSafeFileHandle.IsInvalid;
+        public bool IsInitialized => _ReadSafeFileHandle != null && !_ReadSafeFileHandle.IsInvalid;
         /// <summary>
         /// TODO: No need to implement this. The property probably shouldn't exist at the base level
         /// </summary>
-        public override ushort WriteBufferSize => 0;
-        public override ushort ReadBufferSize => _ReadBufferSize;
         public IApiService ApiService { get; }
+        public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; private set; }
         #endregion
 
         #region Constructor
@@ -67,7 +65,7 @@ namespace SerialPort.Net.Windows
             if (stopBits == StopBits.None)
                 throw new ArgumentException(Messages.ErrorMessageStopBitsMustBeSpecified, nameof(stopBits));
 
-            _ReadBufferSize = readBufferSize;
+            ReadBufferSize = readBufferSize;
             _BaudRate = baudRate;
             _ByteSize = byteSize;
             _StopBits = stopBits;
@@ -97,7 +95,7 @@ namespace SerialPort.Net.Windows
 
             return Task.Run(() =>
             {
-                var buffer = new byte[_ReadBufferSize];
+                var buffer = new byte[ReadBufferSize];
                 var bytesRead = Read(buffer);
                 var transferResult = new TransferResult(buffer, bytesRead);
                 Logger.LogDataTransfer(new Trace(false, transferResult));

@@ -10,11 +10,12 @@ using System.Threading.Tasks;
 using Windows.Devices.HumanInterfaceDevice;
 using Windows.Foundation;
 using Windows.Storage;
+using hidDevice = Windows.Devices.HumanInterfaceDevice.HidDevice;
 
 namespace Hid.Net.UWP
 {
     ///<inheritdoc cref="IHidDevice"/>
-    public class UWPHidDevice : UWPDeviceBase<HidDevice>, IHidDevice
+    public class UWPHidDevice : UWPDeviceBase<hidDevice>, IHidDevice
     {
         #region Fields
         private bool disposed;
@@ -38,7 +39,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Event Handlers
-        private void ConnectedDevice_InputReportReceived(HidDevice sender, HidInputReportReceivedEventArgs args)
+        private void ConnectedDevice_InputReportReceived(hidDevice sender, HidInputReportReceivedEventArgs args)
         {
             Logger.LogDebug("Received Hid report Id: {id}", args?.Report?.Id);
 
@@ -96,7 +97,7 @@ namespace Hid.Net.UWP
             }
         }
 
-        protected override IAsyncOperation<HidDevice> FromIdAsync(string id) => GetHidDevice(id);
+        protected override IAsyncOperation<hidDevice> FromIdAsync(string id) => GetHidDevice(id);
         #endregion
 
         #region Public Methods
@@ -197,7 +198,7 @@ namespace Hid.Net.UWP
         #endregion
 
         #region Public Static Methods
-        public static IAsyncOperation<HidDevice> GetHidDevice(string id) => HidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
+        public static IAsyncOperation<hidDevice> GetHidDevice(string id) => hidDevice.FromIdAsync(id, FileAccessMode.ReadWrite);
 
         public async Task<TransferResult> WriteAndReadAsync(byte[] writeBuffer, CancellationToken cancellationToken = default)
         {
