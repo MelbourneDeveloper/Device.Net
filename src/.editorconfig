@@ -763,6 +763,9 @@ dotnet_diagnostic.IL3000.severity = error
 # IL3001: Avoid using accessing Assembly file path when publishing as a single-file
 dotnet_diagnostic.IL3001.severity = error
 
+# CA1815: Override equals and operator equals on value types
+dotnet_diagnostic.CA1815.severity = error
+
 ######################## Warnings #################
 
 # CS1591: Missing XML comment for publicly visible type or member
@@ -770,9 +773,6 @@ dotnet_diagnostic.CS1591.severity = warning
 
 # CA1816: Dispose methods should call SuppressFinalize
 dotnet_diagnostic.CA1816.severity = warning
-
-# CA1815: Override equals and operator equals on value types
-dotnet_diagnostic.CA1815.severity = warning
 
 # CA1063: Implement IDisposable Correctly
 dotnet_diagnostic.CA1063.severity = warning

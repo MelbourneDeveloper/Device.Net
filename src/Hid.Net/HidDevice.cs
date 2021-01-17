@@ -17,6 +17,7 @@ namespace Hid.Net
         private readonly IHidDeviceHandler _hidDeviceHandler;
         private bool _IsClosing;
         private bool disposed;
+        private readonly Func<ReadReport, TransferResult> _readReportTransform;
 
         #endregion Private Fields
 
@@ -25,7 +26,8 @@ namespace Hid.Net
         public HidDevice(
             IHidDeviceHandler hidDeviceHandler,
             ILoggerFactory loggerFactory = null,
-            byte? defaultWriteReportId = 0
+            byte? defaultWriteReportId = 0,
+            Func<ReadReport, TransferResult> readReportTransform = null
             ) :
             base(
                 hidDeviceHandler != null ? hidDeviceHandler.DeviceId : throw new ArgumentNullException(nameof(hidDeviceHandler)),
@@ -34,6 +36,8 @@ namespace Hid.Net
         {
             _hidDeviceHandler = hidDeviceHandler;
             DefaultWriteReportId = defaultWriteReportId;
+
+            _readReportTransform = readReportTransform ?? new Func<ReadReport, TransferResult>((readReport) => readReport.ToTransferResult());
         }
 
         #endregion Public Constructors
@@ -108,8 +112,8 @@ namespace Hid.Net
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             var readReport = await ReadReportAsync(cancellationToken).ConfigureAwait(false);
-            Logger.LogDataTransfer(new Trace(false, readReport.Data));
-            return readReport.Data;
+            Logger.LogDataTransfer(new Trace(false, readReport.TransferResult));
+            return _readReportTransform(readReport);
         }
 
         public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)

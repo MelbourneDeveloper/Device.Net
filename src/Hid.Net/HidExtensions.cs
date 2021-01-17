@@ -40,5 +40,14 @@ namespace Hid.Net
 
             return transformedData;
         }
+
+        public static TransferResult ToTransferResult(this ReadReport readReport)
+        {
+            var rawData = new byte[readReport.TransferResult.Data.Length + 1];
+
+            Array.Copy(readReport.TransferResult.Data, 0, rawData, 1, readReport.TransferResult.Data.Length);
+
+            return new TransferResult(rawData, readReport.TransferResult.BytesTransferred);
+        }
     }
 }

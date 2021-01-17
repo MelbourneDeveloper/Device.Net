@@ -33,6 +33,7 @@ namespace Hid.Net.UWP
         /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
         /// <param name="getDevice"></param>
         /// <param name="defaultWriteReportId">The default Hid Report Id when WriteAsync is called instead of WriteReportAsync. If you specify null, the Report Id will come from the byte at index 0 of the array.</param>
+        /// <param name="readReportTransform">Allows you to manually convert the <see cref="ReadReport"/> in to a <see cref="TransferResult"/> so that the Report Id is not discarded on ReadAsync. By default, this inserts the Report Id at index zero of the array.</param>
         /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateUwpHidDeviceFactory(
         this FilterDeviceDefinition filterDeviceDefinition,
@@ -45,6 +46,7 @@ namespace Hid.Net.UWP
         IDataReceiver dataReceiver = null,
         ushort? writeBufferSize = null,
         ushort? readBufferSize = null,
+        Func<ReadReport, TransferResult> readReportTransform = null,
         Func<TransferResult, ReadReport> readTransferTransform = null,
         Func<byte[], byte, byte[]> writeTransferTransform = null) => CreateUwpHidDeviceFactory(
             new List<FilterDeviceDefinition> { filterDeviceDefinition },
@@ -57,6 +59,7 @@ namespace Hid.Net.UWP
             dataReceiver,
             writeBufferSize,
             readBufferSize,
+            readReportTransform,
             readTransferTransform,
             writeTransferTransform);
 
@@ -76,6 +79,7 @@ namespace Hid.Net.UWP
         /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
         /// <param name="getDevice"></param>
         /// <param name="defaultWriteReportId">The default Hid Report Id when WriteAsync is called instead of WriteReportAsync. If you specify null, the Report Id will come from the byte at index 0 of the array.</param>
+        /// <param name="readReportTransform">Allows you to manually convert the <see cref="ReadReport"/> in to a <see cref="TransferResult"/> so that the Report Id is not discarded on ReadAsync. By default, this inserts the Report Id at index zero of the array.</param>
         /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateUwpHidDeviceFactory(
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
@@ -88,14 +92,14 @@ namespace Hid.Net.UWP
         IDataReceiver dataReceiver = null,
         ushort? writeBufferSize = null,
         ushort? readBufferSize = null,
+        Func<ReadReport, TransferResult> readReportTransform = null,
         Func<TransferResult, ReadReport> readTransferTransform = null,
         Func<byte[], byte, byte[]> writeTransferTransform = null)
         {
             loggerFactory ??= NullLoggerFactory.Instance;
 
             getDevice ??= (c, cancellationToken) => Task.FromResult<IDevice>(
-                new HidDevice
-                (
+                new HidDevice(
                     new UwpHidDeviceHandler(
                     c,
                     dataReceiver ??
@@ -106,7 +110,10 @@ namespace Hid.Net.UWP
                     writeBufferSize,
                     readBufferSize,
                     readTransferTransform,
-                    writeTransferTransform), loggerFactory, defaultWriteReportId));
+                    writeTransferTransform),
+                loggerFactory,
+                defaultWriteReportId,
+                readReportTransform));
 
             var aqs = AqsHelpers.GetAqs(filterDeviceDefinitions, DeviceType.Hid);
 
