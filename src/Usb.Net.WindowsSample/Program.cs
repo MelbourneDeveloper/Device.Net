@@ -119,7 +119,7 @@ namespace Usb.Net.WindowsSample
         {
             //Connect to the device by product id and vendor id
             var temperDevice = await new FilterDeviceDefinition(vendorId: 0x413d, productId: 0x2107, usagePage: 65280)
-                .CreateWindowsHidDeviceManager(_loggerFactory)
+                .CreateWindowsHidDeviceFactory(_loggerFactory)
                 .ConnectFirstAsync()
                 .ConfigureAwait(false);
 

@@ -71,7 +71,7 @@ namespace Device.Net
             await deviceFactory.GetDeviceAsync(await (await deviceFactory.GetConnectedDeviceDefinitionsAsync().ConfigureAwait(false)).FirstOrDefaultAsync().ConfigureAwait(false)).ConfigureAwait(false)
             : throw new ArgumentNullException(nameof(deviceFactory));
 
-        public static async Task<IDevice> ConnectFirstAsync(this IDeviceFactory deviceFactory, ILogger logger)
+        public static async Task<IDevice> ConnectFirstAsync(this IDeviceFactory deviceFactory, ILogger logger = null)
         {
             logger ??= NullLogger.Instance;
 
