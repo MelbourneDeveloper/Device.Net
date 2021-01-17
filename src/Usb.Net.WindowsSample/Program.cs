@@ -23,7 +23,12 @@ namespace Usb.Net.WindowsSample
     internal class Program
     {
         #region Fields
-        private static ILoggerFactory _loggerFactory;
+        private static readonly ILoggerFactory _loggerFactory = LoggerFactory.Create((builder) =>
+        {
+            _ = builder.AddDebug();
+            _ = builder.SetMinimumLevel(LogLevel.Trace);
+        });
+
         private static IDeviceFactory _trezorFactories;
 
 #if !LIBUSB
@@ -39,12 +44,6 @@ namespace Usb.Net.WindowsSample
         #region Main
         private static async Task Main()
         {
-            _loggerFactory = LoggerFactory.Create((builder) =>
-            {
-                builder.AddDebug();
-                builder.SetMinimumLevel(LogLevel.Trace);
-            });
-
             //Register the factories for creating Usb devices. This only needs to be done once.
 #if LIBUSB
             _trezorFactories = new List<IDeviceFactory>
