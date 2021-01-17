@@ -2,7 +2,7 @@
 
 namespace Device.Net
 {
-    public static class LoggingExtensions
+    internal static class LoggingExtensions
     {
         public static void LogDataTransfer(this ILogger logger, Trace trace)
             => logger?.LogDebug("{trace}", trace);

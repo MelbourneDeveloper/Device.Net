@@ -6,7 +6,7 @@ namespace Device.Net
     /// This class is a fill in for the Reactive extensions so that we don't need to depend on those at the low level
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class Observer<T> : IObserver<T>
+    internal class Observer<T> : IObserver<T>
     {
         private readonly Action<T> _onNext;
         private readonly Action<Exception> _onError;

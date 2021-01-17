@@ -7,7 +7,7 @@ namespace Device.Net
     /// Basic observable which does thib of the Rx extensions so that we don't have to add that dependency
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class Observable<T> : IObservable<T>
+    internal class Observable<T> : IObservable<T>
     {
         #region Fields
         private readonly List<IObserver<T>> _observers = new List<IObserver<T>>();

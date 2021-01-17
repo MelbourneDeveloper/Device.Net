@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Device.Net
 {
-    public static class AsyncExtensions
+    internal static class AsyncExtensions
     {
 
         /// <summary>
