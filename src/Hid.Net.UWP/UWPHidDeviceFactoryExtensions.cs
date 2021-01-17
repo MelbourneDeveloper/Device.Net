@@ -32,14 +32,14 @@ namespace Hid.Net.UWP
         /// <param name="writeBufferSize">Override the output report size</param>
         /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
         /// <param name="getDevice"></param>
-        /// <param name="defaultReportId"></param>
+        /// <param name="defaultWriteReportId">The default Hid Report Id when WriteAsync is called instead of WriteReportAsync. If you specify null, the Report Id will come from the byte at index 0 of the array.</param>
         /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateUwpHidDeviceFactory(
         this FilterDeviceDefinition filterDeviceDefinition,
         ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetDeviceAsync getDevice = null,
-        byte defaultReportId = 0,
+        byte? defaultWriteReportId = 0,
         Guid? classGuid = null,
         Func<wde.DeviceInformation, bool> deviceInformationFilter = null,
         IDataReceiver dataReceiver = null,
@@ -51,7 +51,7 @@ namespace Hid.Net.UWP
             loggerFactory,
             getConnectedDeviceDefinitionsAsync,
             getDevice,
-            defaultReportId,
+            defaultWriteReportId,
             classGuid,
             deviceInformationFilter,
             dataReceiver,
@@ -75,14 +75,14 @@ namespace Hid.Net.UWP
         /// <param name="writeBufferSize">Override the output report size</param>
         /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
         /// <param name="getDevice"></param>
-        /// <param name="defaultReportId"></param>
+        /// <param name="defaultWriteReportId">The default Hid Report Id when WriteAsync is called instead of WriteReportAsync. If you specify null, the Report Id will come from the byte at index 0 of the array.</param>
         /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateUwpHidDeviceFactory(
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
         ILoggerFactory loggerFactory = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
         GetDeviceAsync getDevice = null,
-        byte defaultReportId = 0,
+        byte? defaultWriteReportId = 0,
         Guid? classGuid = null,
         Func<wde.DeviceInformation, bool> deviceInformationFilter = null,
         IDataReceiver dataReceiver = null,
@@ -106,7 +106,7 @@ namespace Hid.Net.UWP
                     writeBufferSize,
                     readBufferSize,
                     readTransferTransform,
-                    writeTransferTransform), loggerFactory, defaultReportId));
+                    writeTransferTransform), loggerFactory, defaultWriteReportId));
 
             var aqs = AqsHelpers.GetAqs(filterDeviceDefinitions, DeviceType.Hid);
 

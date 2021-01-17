@@ -29,7 +29,7 @@ namespace Device.Net.UnitTests
             this FilterDeviceDefinition filterDeviceDefinition,
             ILoggerFactory loggerFactory,
             byte defultReportId = 0)
-            => filterDeviceDefinition.CreateUwpHidDeviceFactory(loggerFactory, defaultReportId: defultReportId);
+            => filterDeviceDefinition.CreateUwpHidDeviceFactory(loggerFactory, defaultWriteReportId: defultReportId);
     }
 }
 

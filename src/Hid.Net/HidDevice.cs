@@ -25,7 +25,7 @@ namespace Hid.Net
         public HidDevice(
             IHidDeviceHandler hidDeviceHandler,
             ILoggerFactory loggerFactory = null,
-            byte defaultWriteReportId = 0
+            byte? defaultWriteReportId = 0
             ) :
             base(
                 hidDeviceHandler != null ? hidDeviceHandler.DeviceId : throw new ArgumentNullException(nameof(hidDeviceHandler)),
@@ -45,7 +45,7 @@ namespace Hid.Net
         public bool? IsReadOnly => _hidDeviceHandler.IsReadOnly;
         public ushort ReadBufferSize => _hidDeviceHandler.ReadBufferSize ?? throw new InvalidOperationException("Read buffer size unknown");
         public ushort WriteBufferSize => _hidDeviceHandler.WriteBufferSize ?? throw new InvalidOperationException("Write buffer size unknown");
-        public byte DefaultWriteReportId { get; }
+        public byte? DefaultWriteReportId { get; }
 
         #endregion Public Properties
 
@@ -130,8 +130,20 @@ namespace Hid.Net
             }
         }
 
+        /// <summary>
+        /// Write a report. The report Id comes from DefaultReportId, or the first byte in the array if the DefaultReportId is null
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
-            => WriteReportAsync(data, DefaultWriteReportId, cancellationToken);
+            =>
+            //Validate
+            data == null || data.Length == 0 ? throw new InvalidOperationException("You must specify a default Report Id, or pass the Report Id as the first byte in the array")
+            :
+            //Write a report based on the default report id or the first byte in the array
+            WriteReportAsync(data, DefaultWriteReportId ?? data[0], cancellationToken);
+
 
         public async Task<uint> WriteReportAsync(byte[] data, byte reportId, CancellationToken cancellationToken = default)
         {
