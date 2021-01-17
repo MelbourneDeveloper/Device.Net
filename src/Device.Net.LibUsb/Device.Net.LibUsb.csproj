@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-        <Version>4.0.7-alpha</Version>
+        <Version>4.0.8-alpha</Version>
         <NoWarn>1701;1702;CA1063</NoWarn>
         <DocumentationFile>Device.Net.LibUsb.xml</DocumentationFile>
-        <Version>4.0.7-alpha</Version>       
+        <Version>4.0.8-alpha</Version>       
         <DebugType>embedded</DebugType>
     </PropertyGroup>
     <ItemGroup>
