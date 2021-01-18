@@ -5,11 +5,11 @@ namespace Hid.Net
 {
     internal static class HidExtensions
     {
-        private static byte[] TrimFirstByte(this TransferResult tr)
+        public static byte[] TrimFirstByte(this byte[] inputData)
         {
-            var length = tr.Data.Length - 1;
+            var length = inputData.Length - 1;
             var data = new byte[length];
-            Array.Copy(tr.Data, 1, data, 0, length);
+            Array.Copy(inputData, 1, data, 0, length);
             return data;
         }
 
@@ -19,7 +19,7 @@ namespace Hid.Net
             var reportId = tr.Data[0];
 
             //Create a new array and copy the data to it without the report id
-            var data = tr.TrimFirstByte();
+            var data = tr.Data.TrimFirstByte();
 
             //Convert to a read report
             return new ReadReport(reportId, new TransferResult(data, tr.BytesTransferred));

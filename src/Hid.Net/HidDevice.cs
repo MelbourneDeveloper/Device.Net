@@ -18,6 +18,7 @@ namespace Hid.Net
         private bool _IsClosing;
         private bool disposed;
         private readonly Func<ReadReport, TransferResult> _readReportTransform;
+        private readonly WriteReportTransform _writeReportTransform;
 
         #endregion Private Fields
 
@@ -27,7 +28,8 @@ namespace Hid.Net
             IHidDeviceHandler hidDeviceHandler,
             ILoggerFactory loggerFactory = null,
             byte? defaultWriteReportId = 0,
-            Func<ReadReport, TransferResult> readReportTransform = null
+            Func<ReadReport, TransferResult> readReportTransform = null,
+            WriteReportTransform writeReportTransform = null
             ) :
             base(
                 hidDeviceHandler != null ? hidDeviceHandler.DeviceId : throw new ArgumentNullException(nameof(hidDeviceHandler)),
@@ -38,6 +40,11 @@ namespace Hid.Net
             DefaultWriteReportId = defaultWriteReportId;
 
             _readReportTransform = readReportTransform ?? new Func<ReadReport, TransferResult>((readReport) => readReport.ToTransferResult());
+            _writeReportTransform = writeReportTransform ?? new WriteReportTransform((data, defaultReportId)
+                => DefaultWriteReportId.HasValue ?
+                new ReadReport(DefaultWriteReportId.Value, data) :
+                (data == null || data.Length == 0) ? throw new InvalidOperationException("You must specify a Report Id") :
+                new ReadReport(data[0], data.TrimFirstByte()));
         }
 
         #endregion Public Constructors
@@ -141,12 +148,12 @@ namespace Hid.Net
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
-            =>
-            //Validate
-            data == null || data.Length == 0 ? throw new InvalidOperationException("You must specify a default Report Id, or pass the Report Id as the first byte in the array")
-            :
+        {
+            var hidReport = _writeReportTransform(data, DefaultWriteReportId);
+
             //Write a report based on the default report id or the first byte in the array
-            WriteReportAsync(data, DefaultWriteReportId ?? data[0], cancellationToken);
+            return WriteReportAsync(hidReport.TransferResult.Data, hidReport.ReportId, cancellationToken);
+        }
 
 
         public async Task<uint> WriteReportAsync(byte[] data, byte reportId, CancellationToken cancellationToken = default)
