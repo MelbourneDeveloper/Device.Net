@@ -17,7 +17,6 @@ namespace Hid.Net.UWP
     ///<inheritdoc cref="IHidDevice"/>
     internal class UwpHidDeviceHandler : UwpDeviceHandler<hidDevice>, IHidDeviceHandler
     {
-
         #region Private Fields
 
         private readonly Func<TransferResult, ReadReport> _readTransferTransform;
@@ -49,7 +48,7 @@ namespace Hid.Net.UWP
 
             _writeTransferTransform = writeTransferTransform ??
                 new Func<byte[], byte, byte[]>(
-                (data, reportId) => data.AddReportIdToIndexZero(reportId));
+                (data, reportId) => data);
         }
 
         #endregion Public Constructors

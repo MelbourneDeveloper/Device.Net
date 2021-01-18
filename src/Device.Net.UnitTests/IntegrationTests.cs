@@ -200,7 +200,7 @@ namespace Device.Net.UnitTests
         public async Task TestWriteAndReadFromTemperHid()
         {
             //Send the request part of the Message Contract
-            var request = new byte[] { 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 };
+            var request = new byte[9] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 };
 
             var filterDeviceDefinition = new FilterDeviceDefinition(vendorId: 0x413d, productId: 0x2107, usagePage: 65280);
 
@@ -214,7 +214,7 @@ namespace Device.Net.UnitTests
             {
                 Assert.IsTrue(device.IsInitialized);
 
-                var temperatureTimesOneHundred = (result.Data[3] & 0xFF) + (result.Data[2] << 8);
+                var temperatureTimesOneHundred = (result.Data[4] & 0xFF) + (result.Data[3] << 8);
                 var temp = Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven);
 
                 //I think my room should pretty much always be between these temperatures
@@ -231,7 +231,7 @@ namespace Device.Net.UnitTests
 #endif
                 return Task.FromResult(true);
 
-            }, 8, TemperBufferSize);
+            }, TemperBufferSize);
         }
 
         [TestMethod]

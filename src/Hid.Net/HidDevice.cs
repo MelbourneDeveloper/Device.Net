@@ -27,7 +27,7 @@ namespace Hid.Net
         public HidDevice(
             IHidDeviceHandler hidDeviceHandler,
             ILoggerFactory loggerFactory = null,
-            byte? defaultWriteReportId = 0,
+            byte? defaultWriteReportId = null,
             Func<ReadReport, TransferResult> readReportTransform = null,
             WriteReportTransform writeReportTransform = null
             ) :

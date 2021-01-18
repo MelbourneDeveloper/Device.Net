@@ -29,7 +29,7 @@ namespace Device.Net.UnitTests
         public static IDeviceFactory GetHidDeviceFactory(
             this FilterDeviceDefinition filterDeviceDefinition,
             ILoggerFactory loggerFactory,
-            byte defaultWriteReportId = 0)
+            byte? defaultWriteReportId = null)
             => filterDeviceDefinition.CreateWindowsHidDeviceFactory(loggerFactory, defaultWriteReportId: defaultWriteReportId);
     }
 }

@@ -39,7 +39,7 @@ namespace Hid.Net.Windows
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-        byte? defaultWriteReportId = 0,
+        byte? defaultWriteReportId = null,
         Func<ReadReport, TransferResult> readReportTransform = null,
         Func<TransferResult, ReadReport> readTransferTransform = null,
         Func<byte[], byte, byte[]> writeTransferTransform = null)
@@ -81,7 +81,7 @@ namespace Hid.Net.Windows
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null,
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-        byte? defaultWriteReportId = 0,
+        byte? defaultWriteReportId = null,
         Func<ReadReport, TransferResult> readReportTransform = null,
         Func<TransferResult, ReadReport> readTransferTransform = null,
         Func<byte[], byte, byte[]> writeTransferTransform = null)
@@ -123,7 +123,7 @@ namespace Hid.Net.Windows
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null,
             GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-            byte? defaultWriteReportId = 0,
+            byte? defaultWriteReportId = null,
             Func<ReadReport, TransferResult> readReportTransform = null,
             Func<TransferResult, ReadReport> readTransferTransform = null,
             Func<byte[], byte, byte[]> writeTransferTransform = null)
