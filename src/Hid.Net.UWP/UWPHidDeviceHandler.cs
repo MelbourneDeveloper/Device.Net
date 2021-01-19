@@ -48,7 +48,9 @@ namespace Hid.Net.UWP
 
             _writeTransferTransform = writeTransferTransform ??
                 new Func<byte[], byte, byte[]>(
-                (data, reportId) => data);
+                //By default we put the Report Id back at index zero and shift the array 1 to the right
+                //In effect, we do exactly the same thing as windows
+                (data, reportId) => data.InsertReportIdAtIndexZero(reportId));
         }
 
         #endregion Public Constructors
@@ -143,7 +145,11 @@ namespace Hid.Net.UWP
             var tranformedData = _writeTransferTransform(data, reportId);
 
             var buffer = tranformedData.AsBuffer();
-            var outReport = ConnectedDevice.CreateOutputReport();
+
+            //We pass the report id. All this does is sets the array at index zero to the report id
+            //This gets overwritten by the tranform anyway
+            //It would probably be nice to set the values in outReport.Data from index 1-Length but it doesn't seem possible to do that
+            var outReport = ConnectedDevice.CreateOutputReport(reportId);
             outReport.Data = buffer;
 
             try

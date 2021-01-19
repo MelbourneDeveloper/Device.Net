@@ -1,10 +1,15 @@
-﻿using Device.Net;
+using Device.Net;
 using System;
 
 namespace Hid.Net
 {
     internal static class HidExtensions
     {
+        /// <summary>
+        /// Removes the first byte of the array and shifts other elements to the left
+        /// </summary>
+        /// <param name="inputData"></param>
+        /// <returns></returns>
         public static byte[] TrimFirstByte(this byte[] inputData)
         {
             var length = inputData.Length - 1;
@@ -25,15 +30,24 @@ namespace Hid.Net
             return new ReadReport(reportId, new TransferResult(data, tr.BytesTransferred));
         }
 
-        public static byte[] AddReportIdToIndexZero(this byte[] data, byte reportId)
+        public static byte[] InsertReportIdAtIndexZero(this byte[] data, byte reportId)
+        {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
+            var transformedData = InsertZeroAtIndexZero(data);
+
+            //Set the report id at index 0
+            transformedData[0] = reportId;
+
+            return transformedData;
+        }
+
+        public static byte[] InsertZeroAtIndexZero(this byte[] data)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
             //Create a new array which is one byte larger 
             var transformedData = new byte[data.Length + 1];
-
-            //Set the report id at index 0
-            transformedData[0] = reportId;
 
             //copy the data to it without the report id at index 1
             Array.Copy(data, 0, transformedData, 1, data.Length);

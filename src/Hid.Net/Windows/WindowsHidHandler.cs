@@ -45,7 +45,7 @@ namespace Hid.Net.Windows
 
             _writeTransferTransform = writeTransferTransform ??
                 new Func<byte[], byte, byte[]>(
-                (data, reportId) => data.AddReportIdToIndexZero(reportId));
+                (data, reportId) => data.InsertReportIdAtIndexZero(reportId));
 
             _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidHandler>();
             _hidService = hidApiService ?? new WindowsHidApiService(loggerFactory);
