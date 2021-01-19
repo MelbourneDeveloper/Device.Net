@@ -47,6 +47,8 @@ namespace Hid.Net
 
             Array.Copy(readReport.TransferResult.Data, 0, rawData, 1, readReport.TransferResult.Data.Length);
 
+            rawData[0] = readReport.ReportId;
+
             return new TransferResult(rawData, readReport.TransferResult.BytesTransferred);
         }
     }

@@ -42,7 +42,7 @@ namespace Device.Net.UnitTests
         private const int TemperBufferSize = 9;
 
 #if !NET45
-        private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
+        private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().AddConsole().SetMinimumLevel(LogLevel.Trace));
 #else
         private readonly ILoggerFactory loggerFactory = NullLoggerFactory.Instance;
 #endif
