@@ -173,8 +173,13 @@ namespace Hid.Net.Windows
             var bytes = new byte[ReadBufferSize.Value];
             var bytesRead = (uint)await _readFileStream.ReadAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
 
+            var transferResult = new TransferResult(bytes, bytesRead);
+
+            //Log the data read
+            _logger.LogDataTransfer(new Trace(false, transferResult));
+
             //Transform to a ReadReport
-            return _readTransferTransform(new TransferResult(bytes, bytesRead));
+            return _readTransferTransform(transferResult);
         }
 
         public async Task<uint> WriteReportAsync(byte[] data, byte reportId, CancellationToken cancellationToken = default)
@@ -190,6 +195,7 @@ namespace Hid.Net.Windows
             {
                 var transformedData = _writeTransferTransform(data, reportId);
                 await _writeFileStream.WriteAsync(transformedData, 0, transformedData.Length, cancellationToken).ConfigureAwait(false);
+                _logger.LogDataTransfer(new Trace(true, transformedData));
                 return (uint)data.Length;
             }
             else

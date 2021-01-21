@@ -119,7 +119,6 @@ namespace Hid.Net
         public override async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
         {
             var readReport = await ReadReportAsync(cancellationToken).ConfigureAwait(false);
-            Logger.LogDataTransfer(new Trace(false, readReport.TransferResult));
             return _readReportTransform(readReport);
         }
 
@@ -174,7 +173,6 @@ namespace Hid.Net
                 try
                 {
                     bytesWritten = await _hidDeviceHandler.WriteReportAsync(data, reportId, cancellationToken).ConfigureAwait(false);
-                    Logger.LogDataTransfer(new Trace(true, data));
                 }
                 catch (Exception ex)
                 {

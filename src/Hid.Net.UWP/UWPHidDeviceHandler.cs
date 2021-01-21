@@ -134,7 +134,14 @@ namespace Hid.Net.UWP
         }
 
         public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
-            => _readTransferTransform(await DataReceiver.ReadAsync(cancellationToken));
+        {
+            var transferResult = await DataReceiver.ReadAsync(cancellationToken);
+
+            //Log the actual data read
+            Logger.LogDataTransfer(new Trace(false, transferResult));
+
+            return _readTransferTransform(transferResult);
+        }
 
         public async Task<uint> WriteReportAsync(byte[] data, byte reportId, CancellationToken cancellationToken = default)
         {
@@ -158,7 +165,9 @@ namespace Hid.Net.UWP
                 var count = await operation.AsTask(cancellationToken);
                 if (count == tranformedData.Length)
                 {
-                    Logger.LogDataTransfer(new Trace(true, tranformedData));
+                    //Get the actual data sent, and the actual number of bytes written and log them
+                    var transferResult = new TransferResult(outReport.Data.ToArray(), count);
+                    Logger.LogDataTransfer(new Trace(true, transferResult));
                 }
                 else
                 {
