@@ -145,18 +145,18 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidDevice__ctor_Hid_Net_IHidDeviceHandler_Microsoft_Extensions_Logging_ILoggerFactory_System_Byte_.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.%23ctor(Hid.Net.IHidDeviceHandler%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CSystem.Byte)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice__ctor_Hid_Net_IHidDeviceHandler_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Byte__System_Func_Hid_Net_ReadReport_Device_Net_TransferResult__Hid_Net_WriteReportTransform_.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.%23ctor(Hid.Net.IHidDeviceHandler%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CSystem.Nullable%7BSystem.Byte%7D%2CSystem.Func%7BHid.Net.ReadReport%2CDevice.Net.TransferResult%7D%2CHid.Net.WriteReportTransform)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/HidDevice.cs/#L25">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L27">View Source</a>
   </span>
   <a id="Hid_Net_HidDevice__ctor_" data-uid="Hid.Net.HidDevice.#ctor*"></a>
-  <h4 id="Hid_Net_HidDevice__ctor_Hid_Net_IHidDeviceHandler_Microsoft_Extensions_Logging_ILoggerFactory_System_Byte_" data-uid="Hid.Net.HidDevice.#ctor(Hid.Net.IHidDeviceHandler,Microsoft.Extensions.Logging.ILoggerFactory,System.Byte)">HidDevice(IHidDeviceHandler, ILoggerFactory, Byte)</h4>
+  <h4 id="Hid_Net_HidDevice__ctor_Hid_Net_IHidDeviceHandler_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Byte__System_Func_Hid_Net_ReadReport_Device_Net_TransferResult__Hid_Net_WriteReportTransform_" data-uid="Hid.Net.HidDevice.#ctor(Hid.Net.IHidDeviceHandler,Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.Byte},System.Func{Hid.Net.ReadReport,Device.Net.TransferResult},Hid.Net.WriteReportTransform)">HidDevice(IHidDeviceHandler, ILoggerFactory, Nullable&lt;Byte&gt;, Func&lt;ReadReport, TransferResult&gt;, WriteReportTransform)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public HidDevice(IHidDeviceHandler hidDeviceHandler, ILoggerFactory loggerFactory = null, byte defaultWriteReportId = 0)</code></pre>
+    <pre><code class="lang-csharp hljs">public HidDevice(IHidDeviceHandler hidDeviceHandler, ILoggerFactory loggerFactory = null, byte? defaultWriteReportId = default(byte? ), Func&lt;ReadReport, TransferResult&gt; readReportTransform = null, WriteReportTransform writeReportTransform = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -179,8 +179,18 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Byte</span></td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
         <td><span class="parametername">defaultWriteReportId</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;<a class="xref" href="Hid.Net.ReadReport.html">ReadReport</a>, <a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
+        <td><span class="parametername">readReportTransform</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Hid.Net.WriteReportTransform.html">WriteReportTransform</a></td>
+        <td><span class="parametername">writeReportTransform</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -189,10 +199,10 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidDevice_ConnectedDeviceDefinition.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.ConnectedDeviceDefinition%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice_ConnectedDeviceDefinition.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.ConnectedDeviceDefinition%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/HidDevice.cs/#L43">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L54">View Source</a>
   </span>
   <a id="Hid_Net_HidDevice_ConnectedDeviceDefinition_" data-uid="Hid.Net.HidDevice.ConnectedDeviceDefinition*"></a>
   <h4 id="Hid_Net_HidDevice_ConnectedDeviceDefinition" data-uid="Hid.Net.HidDevice.ConnectedDeviceDefinition">ConnectedDeviceDefinition</h4>
@@ -219,10 +229,10 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidDevice_DefaultWriteReportId.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.DefaultWriteReportId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice_DefaultWriteReportId.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.DefaultWriteReportId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/HidDevice.cs/#L48">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L59">View Source</a>
   </span>
   <a id="Hid_Net_HidDevice_DefaultWriteReportId_" data-uid="Hid.Net.HidDevice.DefaultWriteReportId*"></a>
   <h4 id="Hid_Net_HidDevice_DefaultWriteReportId" data-uid="Hid.Net.HidDevice.DefaultWriteReportId">DefaultWriteReportId</h4>
@@ -230,7 +240,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public byte DefaultWriteReportId { get; }</code></pre>
+    <pre><code class="lang-csharp hljs">public byte? DefaultWriteReportId { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -242,17 +252,17 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Byte</span></td>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidDevice_IsInitialized.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.IsInitialized%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice_IsInitialized.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.IsInitialized%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/HidDevice.cs/#L44">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L55">View Source</a>
   </span>
   <a id="Hid_Net_HidDevice_IsInitialized_" data-uid="Hid.Net.HidDevice.IsInitialized*"></a>
   <h4 id="Hid_Net_HidDevice_IsInitialized" data-uid="Hid.Net.HidDevice.IsInitialized">IsInitialized</h4>
@@ -279,10 +289,10 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidDevice_IsReadOnly.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.IsReadOnly%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice_IsReadOnly.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.IsReadOnly%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/HidDevice.cs/#L45">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L56">View Source</a>
   </span>
   <a id="Hid_Net_HidDevice_IsReadOnly_" data-uid="Hid.Net.HidDevice.IsReadOnly*"></a>
   <h4 id="Hid_Net_HidDevice_IsReadOnly" data-uid="Hid.Net.HidDevice.IsReadOnly">IsReadOnly</h4>
@@ -309,10 +319,10 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidDevice_ReadBufferSize.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.ReadBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice_ReadBufferSize.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.ReadBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/HidDevice.cs/#L46">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L57">View Source</a>
   </span>
   <a id="Hid_Net_HidDevice_ReadBufferSize_" data-uid="Hid.Net.HidDevice.ReadBufferSize*"></a>
   <h4 id="Hid_Net_HidDevice_ReadBufferSize" data-uid="Hid.Net.HidDevice.ReadBufferSize">ReadBufferSize</h4>
@@ -339,10 +349,10 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidDevice_WriteBufferSize.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.WriteBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice_WriteBufferSize.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.WriteBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/HidDevice.cs/#L47">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L58">View Source</a>
   </span>
   <a id="Hid_Net_HidDevice_WriteBufferSize_" data-uid="Hid.Net.HidDevice.WriteBufferSize*"></a>
   <h4 id="Hid_Net_HidDevice_WriteBufferSize" data-uid="Hid.Net.HidDevice.WriteBufferSize">WriteBufferSize</h4>
@@ -371,10 +381,10 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidDevice_Close.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.Close%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice_Close.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.Close%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/HidDevice.cs/#L54">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L65">View Source</a>
   </span>
   <a id="Hid_Net_HidDevice_Close_" data-uid="Hid.Net.HidDevice.Close*"></a>
   <h4 id="Hid_Net_HidDevice_Close" data-uid="Hid.Net.HidDevice.Close">Close()</h4>
@@ -386,10 +396,10 @@
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidDevice_Dispose.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice_Dispose.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/HidDevice.cs/#L72">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L83">View Source</a>
   </span>
   <a id="Hid_Net_HidDevice_Dispose_" data-uid="Hid.Net.HidDevice.Dispose*"></a>
   <h4 id="Hid_Net_HidDevice_Dispose" data-uid="Hid.Net.HidDevice.Dispose">Dispose()</h4>
@@ -403,10 +413,10 @@
   <div><a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_Dispose">DeviceBase.Dispose()</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidDevice_InitializeAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.InitializeAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice_InitializeAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.InitializeAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/HidDevice.cs/#L91">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L102">View Source</a>
   </span>
   <a id="Hid_Net_HidDevice_InitializeAsync_" data-uid="Hid.Net.HidDevice.InitializeAsync*"></a>
   <h4 id="Hid_Net_HidDevice_InitializeAsync_System_Threading_CancellationToken_" data-uid="Hid.Net.HidDevice.InitializeAsync(System.Threading.CancellationToken)">InitializeAsync(CancellationToken)</h4>
@@ -450,10 +460,10 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidDevice_ReadAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.ReadAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice_ReadAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.ReadAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/HidDevice.cs/#L108">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L119">View Source</a>
   </span>
   <a id="Hid_Net_HidDevice_ReadAsync_" data-uid="Hid.Net.HidDevice.ReadAsync*"></a>
   <h4 id="Hid_Net_HidDevice_ReadAsync_System_Threading_CancellationToken_" data-uid="Hid.Net.HidDevice.ReadAsync(System.Threading.CancellationToken)">ReadAsync(CancellationToken)</h4>
@@ -499,10 +509,10 @@
   <div><a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_ReadAsync_System_Threading_CancellationToken_">DeviceBase.ReadAsync(CancellationToken)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidDevice_ReadReportAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.ReadReportAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice_ReadReportAsync_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.ReadReportAsync(System.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/HidDevice.cs/#L115">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L125">View Source</a>
   </span>
   <a id="Hid_Net_HidDevice_ReadReportAsync_" data-uid="Hid.Net.HidDevice.ReadReportAsync*"></a>
   <h4 id="Hid_Net_HidDevice_ReadReportAsync_System_Threading_CancellationToken_" data-uid="Hid.Net.HidDevice.ReadReportAsync(System.Threading.CancellationToken)">ReadReportAsync(CancellationToken)</h4>
@@ -546,14 +556,15 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidDevice_WriteAsync_System_Byte___System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.WriteAsync(System.Byte%5B%5D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice_WriteAsync_System_Byte___System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.WriteAsync(System.Byte%5B%5D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/HidDevice.cs/#L133">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L149">View Source</a>
   </span>
   <a id="Hid_Net_HidDevice_WriteAsync_" data-uid="Hid.Net.HidDevice.WriteAsync*"></a>
   <h4 id="Hid_Net_HidDevice_WriteAsync_System_Byte___System_Threading_CancellationToken_" data-uid="Hid.Net.HidDevice.WriteAsync(System.Byte[],System.Threading.CancellationToken)">WriteAsync(Byte[], CancellationToken)</h4>
-  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 summary"><p>Write a report. The report Id comes from DefaultReportId, or the first byte in the array if the DefaultReportId is null</p>
+</div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
@@ -600,10 +611,10 @@
   <div><a class="xref" href="Device.Net.DeviceBase.html#Device_Net_DeviceBase_WriteAsync_System_Byte___System_Threading_CancellationToken_">DeviceBase.WriteAsync(Byte[], CancellationToken)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidDevice_WriteReportAsync_System_Byte___System_Byte_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.WriteReportAsync(System.Byte%5B%5D%2CSystem.Byte%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice_WriteReportAsync_System_Byte___System_Byte_System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.WriteReportAsync(System.Byte%5B%5D%2CSystem.Byte%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/HidDevice.cs/#L136">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L158">View Source</a>
   </span>
   <a id="Hid_Net_HidDevice_WriteReportAsync_" data-uid="Hid.Net.HidDevice.WriteReportAsync*"></a>
   <h4 id="Hid_Net_HidDevice_WriteReportAsync_System_Byte___System_Byte_System_Threading_CancellationToken_" data-uid="Hid.Net.HidDevice.WriteReportAsync(System.Byte[],System.Byte,System.Threading.CancellationToken)">WriteReportAsync(Byte[], Byte, CancellationToken)</h4>
@@ -673,10 +684,10 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/RefactorWindowsHid2/apiSpec/new?filename=Hid_Net_HidDevice.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/RefactorWindowsHid2/src/Hid.Net/HidDevice.cs/#L13" class="contribution-link">View Source</a>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L13" class="contribution-link">View Source</a>
                   </li>
                 </ul>
               </div>
