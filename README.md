@@ -8,7 +8,7 @@
 
 ## [Version 4 Documentation](https://melbournedeveloper.github.io/Device.Net/index.html)
 
-**Version 4 is going to be a big version. The Github documentation here is currently out of date. See the Version 4 documentation (work in progress) above. Grab the prerelease version on Nuget for the latest and greatest alpha version. Check out the [plan](https://github.com/MelbourneDeveloper/Device.Net/projects/11). Many enhancements, including standard [`ILogger`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger?view=dotnet-plat-ext-3.1), USB control transfer, improved public API are already complete, and I'm in the middle of testing with more real devices with real apps. Pull Requests are super welcome!**
+**Version 4 is going to be a big version. The Github documentation and samples here are currently out of date. See the Version 4 documentation (work in progress) above. Grab the prerelease version on Nuget for the latest and greatest alpha version. Check out the [plan](https://github.com/MelbourneDeveloper/Device.Net/projects/11). Many enhancements, including standard [`ILogger`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger?view=dotnet-plat-ext-3.1), USB control transfer, improved public API are already complete, and I'm in the middle of testing with more real devices with real apps. Pull Requests are super welcome!**
 
 **Cross platform C# framework for talking to connected devices such as Usb, Serial Port and Hid devices.**
 
@@ -24,7 +24,7 @@ This framework provides a common Task based Async interface across platforms and
 | UWP            | Yes | Yes                                                                                                 | No          |
 | Linux, MacOS*  |  No | [(Via LibUsbDotNet)](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support) | No          |
 
-Note: Bluetooth, Linux, and macOS support are on the radar. If you can sponsor this project, you might be able to help get there faster.
+*Note: Bluetooth, Linux, and macOS support are on the radar. If you can sponsor this project, you might be able to help get there faster.*
 
 ## [Quick Start](https://github.com/MelbourneDeveloper/Device.Net/wiki/Quick-Start)
 
