@@ -8,7 +8,7 @@
 
 ## [Version 4 Documentation](https://melbournedeveloper.github.io/Device.Net/index.html)
 
-**Version 4 is going to be a big version. Control Transfers are [almost there](https://github.com/MelbourneDeveloper/Device.Net/pull/165)! Check out the [plan](https://github.com/MelbourneDeveloper/Device.Net/projects/11). Many enhancements including Reactive support, standard [`ILogger`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger?view=dotnet-plat-ext-3.1) throughout, are already done and I'm in the middle of testing with more real devices with real apps. The framework is currently getting a thrashing with an app I'm working on. Pull Requests are super welcome!**
+**Version 4 is going to be a big version. The Github documentation here is currently out of date. See the Version 4 documentation (work in progress) above. Grab the prerelease version on Nuget for the latest and greatest alpha version. Check out the [plan](https://github.com/MelbourneDeveloper/Device.Net/projects/11). Many enhancements, including standard [`ILogger`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger?view=dotnet-plat-ext-3.1), USB control transfer, improved public API are already complete, and I'm in the middle of testing with more real devices with real apps. Pull Requests are super welcome!**
 
 **Cross platform C# framework for talking to connected devices such as Usb, Serial Port and Hid devices.**
 
