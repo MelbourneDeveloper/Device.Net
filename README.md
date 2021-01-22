@@ -83,8 +83,6 @@ This project needs money. If you use Device.Net, please contribute by [sponsorin
 
 - Follow, or message me on [Twitter](https://twitter.com/CFDevelop)
 
-- Follow my app Hardfolio on [Twitter](https://twitter.com/HardfolioApp)
-
 - [Join the conversation](https://discord.gg/ZcvXARm) on Discord
 
 - Read my [blog](https://christianfindlay.wordpress.com)
