@@ -8,7 +8,7 @@
 
 ## [Version 4 Documentation](https://melbournedeveloper.github.io/Device.Net/index.html)
 
-**Version 4 is going to be a big version. Control Transfers are [almost there](https://github.com/MelbourneDeveloper/Device.Net/pull/165)! Check out the [plan](https://github.com/MelbourneDeveloper/Device.Net/projects/11). Many enhancements including Reactive support, standard [`ILogger`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger?view=dotnet-plat-ext-3.1) throughout, are already done and I'm in the middle of testing with more real devices with real apps. The framework is currently getting a thrashing with an app I'm working on. Pull Requests are super welcome!**
+**Version 4 is going to be a big version. The Github documentation and samples here are currently out of date. See the Version 4 documentation (work in progress) above. Grab the prerelease version on Nuget for the latest and greatest alpha version. Check out the [plan](https://github.com/MelbourneDeveloper/Device.Net/projects/11). Many enhancements, including standard [`ILogger`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger?view=dotnet-plat-ext-3.1), USB control transfer, improved public API are already complete, and I'm in the middle of testing with more real devices with real apps. Pull Requests are super welcome!**
 
 **Cross platform C# framework for talking to connected devices such as Usb, Serial Port and Hid devices.**
 
@@ -16,13 +16,15 @@ This framework provides a common Task based Async interface across platforms and
 
 ### Currently supports:
 
-| Platform | Device Types |
-| ------------- |:-------------:|
-| .NET Framework     | Hid, USB, Serial Port |
-| .NET Core      | Hid, USB, Serial Port  |
-| Android | USB |
-| UWP | Hid, USB   |
-| Linux, MacOS* | [USB (Via LibUsbDotNet)](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support)  |
+| Platform       | Hid | USB                                                                                                 | Serial Port |
+|----------------|:---:|-----------------------------------------------------------------------------------------------------|-------------|
+| .NET Framework | Yes | Yes                                                                                                 | Yes         |
+| .NET Core      | Yes | Yes                                                                                                 | Yes         |
+| Android        | Yes | Yes                                                                                                 | No          |
+| UWP            | Yes | Yes                                                                                                 | No          |
+| Linux, MacOS*  |  No | [(Via LibUsbDotNet)](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support) | No          |
+
+*Note: Bluetooth, Linux, and macOS support are on the radar. If you can sponsor this project, you might be able to help get there faster.*
 
 ## [Quick Start](https://github.com/MelbourneDeveloper/Device.Net/wiki/Quick-Start)
 
@@ -80,8 +82,6 @@ This project needs money. If you use Device.Net, please contribute by [sponsorin
 ## Contact
 
 - Follow, or message me on [Twitter](https://twitter.com/CFDevelop)
-
-- Follow my app Hardfolio on [Twitter](https://twitter.com/HardfolioApp)
 
 - [Join the conversation](https://discord.gg/ZcvXARm) on Discord
 
