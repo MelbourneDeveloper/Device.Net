@@ -7,11 +7,11 @@ using Microsoft.Extensions.Logging;
 using Usb.Net;
 using System.Collections.Generic;
 using Device.Net.Windows;
+using Hid.Net;
 
 #if !WINDOWS_UWP
 using Device.Net.LibUsb;
 using Usb.Net.Windows;
-using Hid.Net;
 #else
 using Hid.Net.UWP;
 #endif
@@ -26,6 +26,7 @@ namespace Device.Net.UnitTests
     [TestCategory("NotPipelineReady")]
     public class IntegrationTests
     {
+        #region Fields
         private const byte STATE_DFU_IDLE = 0x02;
         private const byte STATE_DFU_ERROR = 0x0A;
         private const byte STATUS_errTARGET = 0x01;
@@ -34,11 +35,18 @@ namespace Device.Net.UnitTests
         public const int StmDfuVendorId = 0x0483;
         public const int StmDfuProductId = 0xdf11;
 
+
+        //Line 159 Main.cs loops through 63 bytes of data
+        //But, we remove one byte for the report id
+        private const int NanoBufferSize = 64;
+        private const int TemperBufferSize = 9;
+
 #if !NET45
-        private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
+        private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().AddConsole().SetMinimumLevel(LogLevel.Trace));
 #else
         private readonly ILoggerFactory loggerFactory = NullLoggerFactory.Instance;
 #endif
+        #endregion
 
         #region Tests
 
@@ -120,7 +128,7 @@ namespace Device.Net.UnitTests
         {
             const string DeviceId = @"\\?\usb#vid_0483&pid_df11#00000008ffff#{a5dcbf10-6530-11d2-901f-00c04fb951ed}";
             var usbDevice = new UsbDevice(DeviceId,
-                new Usb.Net.UWP.UWPUsbInterfaceManager(new ConnectedDeviceDefinition(DeviceId, DeviceType.Usb)));
+                new Usb.Net.UWP.UwpUsbInterfaceManager(new ConnectedDeviceDefinition(DeviceId, DeviceType.Usb)));
 
             await PerformStmDfTest(usbDevice);
         }
@@ -155,7 +163,19 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition(vendorId: 0x534C, productId: 0x0001, label: "Trezor One Firmware 1.6.x", usagePage: 65280)
-            .GetHidDeviceFactory(loggerFactory, 0), 64, 65
+            .GetHidDeviceFactory(
+                loggerFactory,
+                //Default the read report to 0.
+                //I.e. stick 0 at index 0 and shift the rest of the array to the right
+                0,
+                (readReport)
+                //We expect to get back 64 bytes but ReadAsync would normally add the Report Id back index 0
+                //In the case of Trezor we just take the 64 bytes and don't put the Report Id back at index 0
+                => new TransferResult(readReport.TransferResult.Data, readReport.TransferResult.BytesTransferred)
+                )
+            ,
+            64,
+            65
             );
 
         [TestMethod]
@@ -188,19 +208,6 @@ namespace Device.Net.UnitTests
             Assert.IsTrue(devices.Any());
         }
 
-        private static async Task TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, uint? expectedTransferLength = null)
-        {
-            //Send the request part of the Message Contract
-            var request = new byte[64];
-            request[0] = 0x3f;
-            request[1] = 0x23;
-            request[2] = 0x23;
-
-            var integrationTester = new IntegrationTester(
-                deviceFactory);
-            _ = await integrationTester.TestAsync(request, AssertTrezorResult, expectedDataLength, expectedTransferLength);
-        }
-
         [TestMethod]
         public async Task TestWriteAndReadFromTemperHid()
         {
@@ -225,26 +232,25 @@ namespace Device.Net.UnitTests
                 //I think my room should pretty much always be between these temperatures
                 Assert.IsTrue(temp is > 10 and < 35);
 
-#if WINDOWS_UWP
-                var windowsHidDevice = (UWPHidDevice)device;
-#else
                 var windowsHidDevice = (HidDevice)device;
+#if WINDOWS_UWP
+#else
                 //TODO: Share these with UWP
-                Assert.AreEqual(9, device.ConnectedDeviceDefinition.ReadBufferSize);
-                Assert.AreEqual(9, device.ConnectedDeviceDefinition.WriteBufferSize);
-                Assert.AreEqual(9, windowsHidDevice.ReadBufferSize);
-                Assert.AreEqual(9, windowsHidDevice.WriteBufferSize);
+                Assert.AreEqual(TemperBufferSize, device.ConnectedDeviceDefinition.ReadBufferSize);
+                Assert.AreEqual(TemperBufferSize, device.ConnectedDeviceDefinition.WriteBufferSize);
+                Assert.AreEqual(TemperBufferSize, windowsHidDevice.ReadBufferSize);
+                Assert.AreEqual(TemperBufferSize, windowsHidDevice.WriteBufferSize);
 #endif
                 return Task.FromResult(true);
 
-            }, 9);
+            }, TemperBufferSize);
         }
 
         [TestMethod]
         public async Task TestWriteAndReadFromNanoHid()
         {
             //Send the request part of the Message Contract
-            var request = new byte[64];
+            var request = new byte[NanoBufferSize];
             request[0] = 63;
             request[1] = 62;
             request[2] = 1;
@@ -257,32 +263,53 @@ namespace Device.Net.UnitTests
 
             await integrationTester.TestAsync(request, (result, device) =>
              {
-                 Assert.AreEqual(64, result.Data.Length);
+                 Assert.AreEqual(NanoBufferSize, result.Data.Length);
                  Assert.AreEqual(63, result.Data[0]);
                  Assert.AreEqual(62, result.Data[1]);
 
-#if WINDOWS_UWP
-                 var windowsHidDevice = (UWPHidDevice)device;
-#else
                  var windowsHidDevice = (HidDevice)device;
+
+#if WINDOWS_UWP
+#else
                  //TODO: share this with UWP
                  Assert.AreEqual(DeviceType.Hid, device.ConnectedDeviceDefinition.DeviceType);
                  Assert.AreEqual("AirNetix", device.ConnectedDeviceDefinition.Manufacturer);
                  Assert.AreEqual(filterDeviceDefinition.ProductId, device.ConnectedDeviceDefinition.ProductId);
                  Assert.AreEqual(filterDeviceDefinition.VendorId, device.ConnectedDeviceDefinition.VendorId);
                  Assert.AreEqual("STS-170", device.ConnectedDeviceDefinition.ProductName);
-                 Assert.AreEqual(64, device.ConnectedDeviceDefinition.ReadBufferSize);
-                 Assert.AreEqual(64, device.ConnectedDeviceDefinition.WriteBufferSize);
+                 Assert.AreEqual(NanoBufferSize, device.ConnectedDeviceDefinition.ReadBufferSize);
+                 Assert.AreEqual(NanoBufferSize, device.ConnectedDeviceDefinition.WriteBufferSize);
                  Assert.AreEqual("000000000001", device.ConnectedDeviceDefinition.SerialNumber);
                  Assert.AreEqual((ushort)1, device.ConnectedDeviceDefinition.Usage);
                  Assert.AreEqual((ushort)65280, device.ConnectedDeviceDefinition.UsagePage);
                  Assert.AreEqual((ushort)256, device.ConnectedDeviceDefinition.VersionNumber);
-                 Assert.AreEqual(64, windowsHidDevice.ReadBufferSize);
-                 Assert.AreEqual(64, windowsHidDevice.WriteBufferSize);
+                 Assert.AreEqual(NanoBufferSize, windowsHidDevice.ReadBufferSize);
+                 Assert.AreEqual(NanoBufferSize, windowsHidDevice.WriteBufferSize);
 #endif
                  return Task.FromResult(true);
 
-             }, 64);
+             }, NanoBufferSize);
+        }
+        #endregion
+
+        #region Public Static Methods
+        public static Task<IDevice> TestWriteAndReadFromTrezor(IDeviceFactory deviceFactory, int expectedDataLength = 64, uint? expectedTransferLength = null, bool dispose = true)
+        {
+            //Send the request part of the Message Contract
+            var request = GetTrezorRequest();
+
+            var integrationTester = new IntegrationTester(
+                deviceFactory);
+            return integrationTester.TestAsync(request, AssertTrezorResult, expectedDataLength, expectedTransferLength, dispose);
+        }
+
+        public static byte[] GetTrezorRequest()
+        {
+            var request = new byte[64];
+            request[0] = 0x3f;
+            request[1] = 0x23;
+            request[2] = 0x23;
+            return request;
         }
         #endregion
 

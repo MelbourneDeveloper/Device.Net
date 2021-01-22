@@ -16,7 +16,7 @@ using windowsUsbDevice = Windows.Devices.Usb.UsbDevice;
 
 namespace Usb.Net.UWP
 {
-    public class UWPUsbInterfaceManager : UWPDeviceBase<windowsUsbDevice>, IUsbInterfaceManager
+    public class UwpUsbInterfaceManager : UwpDeviceHandler<windowsUsbDevice>, IUsbInterfaceManager
     {
         #region Fields
         private bool disposed;
@@ -30,8 +30,8 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Override Properties
-        public override ushort WriteBufferSize => _WriteBufferSize ?? WriteUsbInterface.WriteBufferSize;
-        public override ushort ReadBufferSize => _ReadBufferSize ?? ReadUsbInterface.WriteBufferSize;
+        public ushort WriteBufferSize => _WriteBufferSize ?? WriteUsbInterface.WriteBufferSize;
+        public ushort ReadBufferSize => _ReadBufferSize ?? ReadUsbInterface.WriteBufferSize;
 
         public IUsbInterface ReadUsbInterface
         {
@@ -49,7 +49,7 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPUsbInterfaceManager(
+        public UwpUsbInterfaceManager(
             ConnectedDeviceDefinition connectedDeviceDefinition,
             IDataReceiver dataReceiver = null,
             Func<windowsUsbDevice, SetupPacket, byte[], CancellationToken, Task<TransferResult>> performControlTransferAsync = null,
@@ -59,9 +59,9 @@ namespace Usb.Net.UWP
             base(
                 connectedDeviceDefinition?.DeviceId,
                 dataReceiver ??
-                new UWPDataReceiver(
+                new UwpDataReceiver(
                     new Observable<TransferResult>(),
-                    (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UWPDataReceiver>()), loggerFactory ?? NullLoggerFactory.Instance)
+                    (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UwpDataReceiver>()), loggerFactory ?? NullLoggerFactory.Instance)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
             UsbInterfaceHandler = new UsbInterfaceManager(loggerFactory);
@@ -96,7 +96,7 @@ namespace Usb.Net.UWP
                 var interfaceIndex = 0;
                 foreach (var usbInterface in ConnectedDevice.Configuration.UsbInterfaces)
                 {
-                    var uwpUsbInterface = new UWPUsbInterface(
+                    var uwpUsbInterface = new UwpUsbInterface(
                         usbInterface,
                         (sp, data, c) => _performControlTransferAsync(ConnectedDevice, sp, data, c),
                         DataReceiver,
@@ -131,7 +131,7 @@ namespace Usb.Net.UWP
 
         public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync(CancellationToken cancellationToken = default) => Task.FromResult(ConnectedDeviceDefinition);
 
-        public override Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default) => ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
+        public Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default) => ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
         #endregion
 
         #region Private Methods

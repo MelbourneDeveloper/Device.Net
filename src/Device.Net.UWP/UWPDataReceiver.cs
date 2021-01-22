@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Device.Net.UWP
 {
-    public class UWPDataReceiver : IDisposable, IDataReceiver
+    public class UwpDataReceiver : IDisposable, IDataReceiver
     {
         #region Fields
         private readonly Queue<TransferResult> _readQueue = new Queue<TransferResult>();
@@ -24,7 +24,7 @@ namespace Device.Net.UWP
         #endregion
 
         #region Constructor
-        public UWPDataReceiver(
+        public UwpDataReceiver(
             IObservable<TransferResult> dataRecievedObservable,
             ILogger logger = null)
         {
@@ -101,12 +101,12 @@ namespace Device.Net.UWP
         {
             if (disposed)
             {
-                _logger.LogWarning(Messages.WarningMessageAlreadyDisposed, nameof(UWPDataReceiver));
+                _logger.LogWarning(Messages.WarningMessageAlreadyDisposed, nameof(UwpDataReceiver));
                 return;
             }
 
             disposed = true;
-            _logger.LogInformation(Messages.InformationMessageDisposingDevice, nameof(UWPDataReceiver));
+            _logger.LogInformation(Messages.InformationMessageDisposingDevice, nameof(UwpDataReceiver));
             _dataReceivedSubscription.Dispose();
             _readLock.Dispose();
         }

@@ -18,7 +18,7 @@ using System.Runtime.InteropServices;
 
 namespace Hid.Net.Windows
 {
-    public class WindowsHidApiService : ApiService, IHidApiService
+    internal class WindowsHidApiService : ApiService, IHidApiService
     {
         #region Private Static Fields
         private static Guid? _HidGuid;
@@ -133,6 +133,9 @@ namespace Hid.Net.Windows
 
             return hidGuid;
         }
+
+        //TODO: These are not opening as async. If we do, we get an error. This is probably why cancellation tokens don't work.
+        //https://github.com/MelbourneDeveloper/Device.Net/issues/188
 
         public Stream OpenRead(SafeFileHandle readSafeFileHandle, ushort readBufferSize) => new FileStream(readSafeFileHandle, FileAccess.Read, readBufferSize, false);
 

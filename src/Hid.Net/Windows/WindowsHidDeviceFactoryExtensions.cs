@@ -11,28 +11,38 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
-
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+    /// <summary>
+    /// Instantiates Windows Hid Factories. Use these methods as extension methods with <see cref="FilterDeviceDefinition"/> or directly to get all devices
+    /// </summary>
     public static class WindowsHidDeviceFactoryExtensions
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
     {
+        #region Public Methods
+
         /// <summary>
         /// Creates a <see cref="IDeviceFactory"/> for Windows Hid devices
         /// </summary>
-        /// <param name="loggerFactory"></param>
-        /// <param name="hidApiService"></param>
+        /// <param name="loggerFactory"><see href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.iloggerfactory"/></param>
+        /// <param name="hidApiService">Abstraction for raw api level interation</param>
         /// <param name="classGuid">Filters by specified class guid</param>
-        /// <param name="readBufferSize"></param>
-        /// <param name="writeBufferSize"></param>
+        /// <param name="readBufferSize">Override the input report size</param>
+        /// <param name="writeBufferSize">Override the output report size</param>
         /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
-        /// <returns></returns>
+        /// <param name="defaultWriteReportId">The default Hid Report Id when WriteAsync is called instead of WriteReportAsync. If you specify null, the Report Id will come from the byte at index 0 of the array.</param>
+        /// <param name="readReportTransform">Allows you to manually convert the <see cref="ReadReport"/> in to a <see cref="TransferResult"/> so that the Report Id is not discarded on ReadAsync. By default, this inserts the Report Id at index zero of the array.</param>
+        /// <param name="readTransferTransform">Exposes the raw data from the device (including Report Id) on reads and allows you to format the returned <see cref="TransferResult"/></param>
+        /// <param name="writeTransferTransform">Given the Report Id and data supplied for the write, allow you to format the raw data that is sent to the device</param>
+        /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
         ILoggerFactory loggerFactory = null,
         IHidApiService hidApiService = null,
         Guid? classGuid = null,
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null,
-        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null)
+        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+        byte? defaultWriteReportId = null,
+        Func<ReadReport, TransferResult> readReportTransform = null,
+        Func<TransferResult, ReadReport> readTransferTransform = null,
+        Func<byte[], byte, byte[]> writeTransferTransform = null)
         {
             return CreateWindowsHidDeviceFactory(
                 new ReadOnlyCollection<FilterDeviceDefinition>(new List<FilterDeviceDefinition>()),
@@ -41,46 +51,28 @@ namespace Hid.Net.Windows
                 classGuid,
                 readBufferSize,
                 writeBufferSize,
-                null,
-                getConnectedDeviceDefinitionsAsync
-                );
-        }
-
-        //TODO: this is named incorrectly. This needs to be fixed
-
-
-        public static IDeviceFactory CreateWindowsHidDeviceManager(
-        this FilterDeviceDefinition filterDeviceDefinition,
-        ILoggerFactory loggerFactory = null,
-        IHidApiService hidApiService = null,
-        Guid? classGuid = null,
-        ushort? readBufferSize = null,
-        ushort? writeBufferSize = null)
-        {
-            var factory = CreateWindowsHidDeviceFactory(
-                filterDeviceDefinition,
-                loggerFactory,
-                hidApiService,
-                classGuid,
-                readBufferSize,
-                writeBufferSize
-                );
-
-            return new DeviceManager(new ReadOnlyCollection<IDeviceFactory>(new List<IDeviceFactory> { factory }), loggerFactory);
+                getConnectedDeviceDefinitionsAsync,
+                defaultWriteReportId,
+                readReportTransform,
+                readTransferTransform,
+                writeTransferTransform);
         }
 
         /// <summary>
-        /// Creates a factory Hid devices
+        /// Creates a <see cref="IDeviceFactory"/> for Windows Hid devices
         /// </summary>
-        /// <param name="filterDeviceDefinition"></param>
-        /// <param name="loggerFactory"></param>
-        /// <param name="hidApiService"></param>
-        /// <param name="classGuid"></param>
-        /// <param name="readBufferSize"></param>
-        /// <param name="writeBufferSize"></param>
-        /// <param name="defaultReportId"></param>
-        /// <param name="getConnectedDeviceDefinitionsAsync"></param>
-        /// <returns></returns>
+        /// <param name="filterDeviceDefinition">Devices must match this</param>
+        /// <param name="loggerFactory"><see href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.iloggerfactory"/></param>
+        /// <param name="hidApiService">Abstraction for Hid interaction</param>
+        /// <param name="classGuid">Filters by specified class guid</param>
+        /// <param name="readBufferSize">Override the input report size</param>
+        /// <param name="writeBufferSize">Override the output report size</param>
+        /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
+        /// <param name="defaultWriteReportId">The default Hid Report Id when WriteAsync is called instead of WriteReportAsync. If you specify null, the Report Id will come from the byte at index 0 of the array.</param>
+        /// <param name="readReportTransform">Allows you to manually convert the <see cref="ReadReport"/> in to a <see cref="TransferResult"/> so that the Report Id is not discarded on ReadAsync. By default, this inserts the Report Id at index zero of the array.</param>
+        /// <param name="readTransferTransform">Exposes the raw data from the device (including Report Id) on reads and allows you to format the returned <see cref="TransferResult"/></param>
+        /// <param name="writeTransferTransform">Given the Report Id and data supplied for the write, allow you to format the raw data that is sent to the device</param>
+        /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
         this FilterDeviceDefinition filterDeviceDefinition,
         ILoggerFactory loggerFactory = null,
@@ -88,8 +80,11 @@ namespace Hid.Net.Windows
         Guid? classGuid = null,
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null,
-        byte? defaultReportId = null,
-        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null)
+        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+        byte? defaultWriteReportId = null,
+        Func<ReadReport, TransferResult> readReportTransform = null,
+        Func<TransferResult, ReadReport> readTransferTransform = null,
+        Func<byte[], byte, byte[]> writeTransferTransform = null)
         {
             return CreateWindowsHidDeviceFactory(
                 new ReadOnlyCollection<FilterDeviceDefinition>(new List<FilterDeviceDefinition> { filterDeviceDefinition }),
@@ -98,23 +93,28 @@ namespace Hid.Net.Windows
                 classGuid,
                 readBufferSize,
                 writeBufferSize,
-                defaultReportId,
-                getConnectedDeviceDefinitionsAsync
-                );
+                getConnectedDeviceDefinitionsAsync,
+                defaultWriteReportId,
+                readReportTransform,
+                readTransferTransform,
+                writeTransferTransform);
         }
 
         /// <summary>
         /// Creates a factory Hid devices
         /// </summary>
-        /// <param name="filterDeviceDefinitions"></param>
-        /// <param name="loggerFactory"></param>
-        /// <param name="hidApiService"></param>
-        /// <param name="classGuid"></param>
-        /// <param name="readBufferSize"></param>
-        /// <param name="writeBufferSize"></param>
-        /// <param name="defaultReportId"></param>
-        /// <param name="getConnectedDeviceDefinitionsAsync">Specify custom code for getting the device definitions</param>
-        /// <returns></returns>
+        /// <param name="filterDeviceDefinitions">Devices must match these</param>
+        /// <param name="loggerFactory"><see href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.iloggerfactory"/></param>
+        /// <param name="hidApiService">Abstraction for Hid interaction</param>
+        /// <param name="classGuid">Filters by specified class guid</param>
+        /// <param name="readBufferSize">Override the input report size</param>
+        /// <param name="writeBufferSize">Override the output report size</param>
+        /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
+        /// <param name="defaultWriteReportId">The default Hid Report Id when WriteAsync is called instead of WriteReportAsync. If you specify null, the Report Id will come from the byte at index 0 of the array.</param>
+        /// <param name="readReportTransform">Allows you to manually convert the <see cref="ReadReport"/> in to a <see cref="TransferResult"/> so that the Report Id is not discarded on ReadAsync. By default, this inserts the Report Id at index zero of the array.</param>
+        /// <param name="readTransferTransform">Exposes the raw data from the device (including Report Id) on reads and allows you to format the returned <see cref="TransferResult"/></param>
+        /// <param name="writeTransferTransform">Given the Report Id and data supplied for the write, allow you to format the raw data that is sent to the device</param>
+        /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
             this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
             ILoggerFactory loggerFactory = null,
@@ -122,8 +122,11 @@ namespace Hid.Net.Windows
             Guid? classGuid = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null,
-            byte? defaultReportId = null,
-            GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null)
+            GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+            byte? defaultWriteReportId = null,
+            Func<ReadReport, TransferResult> readReportTransform = null,
+            Func<TransferResult, ReadReport> readTransferTransform = null,
+            Func<byte[], byte, byte[]> writeTransferTransform = null)
         {
             if (filterDeviceDefinitions == null) throw new ArgumentNullException(nameof(filterDeviceDefinitions));
 
@@ -150,12 +153,24 @@ namespace Hid.Net.Windows
                 getConnectedDeviceDefinitionsAsync,
                 (c, cancellationToken) => Task.FromResult<IDevice>(new HidDevice
                 (
-                    new WindowsHidHandler(c.DeviceId, writeBufferSize, readBufferSize, hidApiService, loggerFactory),
-                    loggerFactory: loggerFactory,
-                    defaultReportId: defaultReportId
+                    new WindowsHidHandler(
+                        c.DeviceId,
+                        writeBufferSize,
+                        readBufferSize,
+                        hidApiService,
+                        loggerFactory,
+                        readTransferTransform,
+                        writeTransferTransform),
+                    loggerFactory,
+                    defaultWriteReportId,
+                    readReportTransform
                 )),
                 (c, cancellationToken) => Task.FromResult(c.DeviceType == DeviceType.Hid));
         }
+
+        #endregion Public Methods
+
+        #region Private Methods
 
         private static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, IHidApiService HidService, ILogger logger)
         {
@@ -179,6 +194,8 @@ namespace Hid.Net.Windows
                 return null;
             }
         }
+
+        #endregion Private Methods
     }
 
 }

@@ -20,7 +20,7 @@ namespace Device.Net.UnitTests
         {
             try
             {
-                _ = new WindowsHidHandler(null, null);
+                _ = new WindowsHidHandler(null, readTransferTransform: (a) => default, writeTransferTransform: (a, b) => default);
             }
             catch (ArgumentNullException ane)
             {
@@ -72,7 +72,7 @@ namespace Device.Net.UnitTests
 
             _ = loggerFactory.Setup(f => f.CreateLogger(It.IsAny<string>())).Returns(logger.Object);
 
-            var windowsHidDevice = new WindowsHidHandler(deviceId, loggerFactory: loggerFactory.Object, hidApiService: hidService.Object);
+            var windowsHidDevice = new WindowsHidHandler(deviceId, loggerFactory: loggerFactory.Object, readTransferTransform: (a) => default, writeTransferTransform: (a, b) => default, hidApiService: hidService.Object);
             await windowsHidDevice.InitializeAsync();
 
             //TODO: Fix this

@@ -2,7 +2,7 @@
 
 namespace Device.Net
 {
-    public static class Messages
+    internal static class Messages
     {
         #region Code Specific Messages
         public const string ObsoleteMessagePlatformSpecificUsbDevice = "Platform specific USB Devices are being deprecated. Please construct a UsbDevice and pass the UsbInterfaceManager in to the constructor. This is to maintain the dependency injection pattern.";

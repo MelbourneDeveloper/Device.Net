@@ -1,6 +1,8 @@
 ﻿
+using Hid.Net;
 using Hid.Net.UWP;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using Usb.Net.UWP;
 
@@ -28,8 +30,12 @@ namespace Device.Net.UnitTests
         public static IDeviceFactory GetHidDeviceFactory(
             this FilterDeviceDefinition filterDeviceDefinition,
             ILoggerFactory loggerFactory,
-            byte? defultReportId = null)
-            => filterDeviceDefinition.CreateUwpHidDeviceFactory(loggerFactory, defaultReportId: defultReportId);
+            byte? defultReportId = null,
+            Func<ReadReport, TransferResult> readReportTransform = null)
+            => filterDeviceDefinition.CreateUwpHidDeviceFactory(
+                loggerFactory,
+                defaultWriteReportId: defultReportId,
+                readReportTransform: readReportTransform);
     }
 }
 

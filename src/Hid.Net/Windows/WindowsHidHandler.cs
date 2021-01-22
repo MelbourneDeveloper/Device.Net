@@ -11,13 +11,15 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
-    public class WindowsHidHandler : IHidDeviceHandler
+    internal class WindowsHidHandler : IHidDeviceHandler
     {
 
         #region Private Fields
 
         private readonly IHidApiService _hidService;
         private readonly ILogger _logger;
+        private readonly Func<TransferResult, ReadReport> _readTransferTransform;
+        private readonly Func<byte[], byte, byte[]> _writeTransferTransform;
         private Stream _readFileStream;
         private SafeFileHandle _readSafeFileHandle;
         private Stream _writeFileStream;
@@ -32,12 +34,21 @@ namespace Hid.Net.Windows
             ushort? writeBufferSize = null,
             ushort? readBufferSize = null,
             IHidApiService hidApiService = null,
-            ILoggerFactory loggerFactory = null)
+            ILoggerFactory loggerFactory = null,
+            Func<TransferResult, ReadReport> readTransferTransform = null,
+            Func<byte[], byte, byte[]> writeTransferTransform = null)
         {
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
+
+            _readTransferTransform = readTransferTransform ??
+                new Func<TransferResult, ReadReport>((tr) => tr.ToReadReport());
+
+            _writeTransferTransform = writeTransferTransform ??
+                new Func<byte[], byte, byte[]>(
+                (data, reportId) => data.InsertReportIdAtIndexZero(reportId));
+
             _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidHandler>();
             _hidService = hidApiService ?? new WindowsHidApiService(loggerFactory);
-
             WriteBufferSize = writeBufferSize;
             ReadBufferSize = readBufferSize;
         }
@@ -151,23 +162,29 @@ namespace Hid.Net.Windows
               }, cancellationToken);
         }
 
-        public async Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default)
+        public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
         {
             if (_readFileStream == null)
             {
                 throw new NotInitializedException(Messages.ErrorMessageNotInitialized);
             }
 
+            //Read the data
             var bytes = new byte[ReadBufferSize.Value];
-
             var bytesRead = (uint)await _readFileStream.ReadAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
 
-            return new TransferResult(bytes, bytesRead);
+            var transferResult = new TransferResult(bytes, bytesRead);
+
+            //Log the data read
+            _logger.LogDataTransfer(new Trace(false, transferResult));
+
+            //Transform to a ReadReport
+            return _readTransferTransform(transferResult);
         }
 
-        public async Task<uint> WriteAsync(byte[] bytes, CancellationToken cancellationToken = default)
+        public async Task<uint> WriteReportAsync(byte[] data, byte reportId, CancellationToken cancellationToken = default)
         {
-            if (bytes == null) throw new ArgumentNullException(nameof(bytes));
+            if (data == null) throw new ArgumentNullException(nameof(data));
 
             if (_writeFileStream == null)
             {
@@ -176,8 +193,10 @@ namespace Hid.Net.Windows
 
             if (_writeFileStream.CanWrite)
             {
-                await _writeFileStream.WriteAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
-                return (uint)bytes.Length;
+                var transformedData = _writeTransferTransform(data, reportId);
+                await _writeFileStream.WriteAsync(transformedData, 0, transformedData.Length, cancellationToken).ConfigureAwait(false);
+                _logger.LogDataTransfer(new Trace(true, transformedData));
+                return (uint)data.Length;
             }
             else
             {
@@ -186,5 +205,6 @@ namespace Hid.Net.Windows
         }
 
         #endregion Public Methods
+
     }
 }

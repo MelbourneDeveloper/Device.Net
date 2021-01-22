@@ -8,7 +8,7 @@
 
 Alpha version. Please use 3.x for a stable release</description>
         <summary>Cross-platform .NET framework for talking to connected devices in a uniform way through dependency injection.</summary>
-        <version>4.0.7-alpha </version>
+        <version>4.0.8-alpha </version>
         <authors>Christian Findlay</authors>
         <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
         <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>

@@ -9,7 +9,7 @@ using Windows.Devices.Usb;
 
 namespace Usb.Net.UWP
 {
-    public class UWPUsbInterfaceInterruptReadEndpoint : UWPUsbInterfaceEndpoint<UsbInterruptInPipe>, IDisposable
+    public class UwpUsbInterfaceInterruptReadEndpoint : UwpUsbInterfaceEndpoint<UsbInterruptInPipe>, IDisposable
     {
         #region Fields
         private bool disposed;
@@ -18,10 +18,10 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Constructor
-        public UWPUsbInterfaceInterruptReadEndpoint(
+        public UwpUsbInterfaceInterruptReadEndpoint(
             UsbInterruptInPipe pipe,
             IDataReceiver dataReceiver,
-            ILogger<UWPUsbInterfaceInterruptReadEndpoint> logger = null) : base(pipe, logger)
+            ILogger<UwpUsbInterfaceInterruptReadEndpoint> logger = null) : base(pipe, logger)
         {
             _logger = logger ?? (ILogger)NullLogger.Instance;
             UsbInterruptInPipe.DataReceived += UsbInterruptInPipe_DataReceived;

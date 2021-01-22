@@ -62,7 +62,7 @@ namespace Usb.Net.UWP
 
             getUsbInterfaceManager ??= (deviceId, cancellationToken) =>
                 Task.FromResult<IUsbInterfaceManager>(
-                    new UWPUsbInterfaceManager(
+                    new UwpUsbInterfaceManager(
                         //TODO: no idea if this is OK...
                         new ConnectedDeviceDefinition(deviceId, DeviceType.Usb),
                         dataReceiver,

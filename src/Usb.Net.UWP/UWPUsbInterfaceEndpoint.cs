@@ -3,7 +3,7 @@ using Windows.Devices.Usb;
 
 namespace Usb.Net.UWP
 {
-    public class UWPUsbInterfaceEndpoint<T> : IUsbInterfaceEndpoint
+    public class UwpUsbInterfaceEndpoint<T> : IUsbInterfaceEndpoint
     {
         private readonly ILogger _logger;
 
@@ -23,7 +23,7 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Constructor
-        public UWPUsbInterfaceEndpoint(T pipe, ILogger<UWPUsbInterfaceEndpoint<T>> logger)
+        public UwpUsbInterfaceEndpoint(T pipe, ILogger<UwpUsbInterfaceEndpoint<T>> logger)
         {
             _logger = logger;
             Pipe = pipe;

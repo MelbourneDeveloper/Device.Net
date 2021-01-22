@@ -3,7 +3,6 @@
 // ReSharper disable MemberCanBePrivate.Global
 
 #pragma warning disable CA1815 // Override equals and operator equals on value types
-#pragma warning restore CA1815 // Override equals and operator equals on value types
 #pragma warning disable CA1707 // Identifiers should not contain underscores
 #pragma warning disable CA1051
 
