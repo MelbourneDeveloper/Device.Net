@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests
@@ -36,7 +38,14 @@ namespace Device.Net.UnitTests
             //Initialize the device
             await device.InitializeAsync();
 
-            var result = await device.WriteAndReadAsync(writeData);
+            //The idea of this is to cancel any operation if the whole thing takes more than a second
+            //However, this basically doesn't work. Some operations simply don't support cancellation tokens
+            //This more or less seems like a bug.
+            //See issue: https://github.com/MelbourneDeveloper/Device.Net/issues/188
+            var cancellationTokenSource = new CancellationTokenSource();
+            cancellationTokenSource.CancelAfter(1000);
+
+            var result = await device.WriteAndReadAsync(writeData, cancellationTokenSource.Token);
 
             Assert.AreEqual(expectedTransferLength.Value, result.BytesTransferred);
             Assert.AreEqual(expectedDataLength, result.Data.Length);
