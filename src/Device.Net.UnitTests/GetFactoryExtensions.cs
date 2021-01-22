@@ -1,4 +1,5 @@
 ﻿
+using Hid.Net;
 using Hid.Net.Windows;
 using Microsoft.Extensions.Logging;
 using System;
@@ -29,8 +30,12 @@ namespace Device.Net.UnitTests
         public static IDeviceFactory GetHidDeviceFactory(
             this FilterDeviceDefinition filterDeviceDefinition,
             ILoggerFactory loggerFactory,
-            byte? defaultWriteReportId = null)
-            => filterDeviceDefinition.CreateWindowsHidDeviceFactory(loggerFactory, defaultWriteReportId: defaultWriteReportId);
+            byte? defaultWriteReportId = null,
+            Func<ReadReport, TransferResult> readReportTransform = null
+            )
+            => filterDeviceDefinition.CreateWindowsHidDeviceFactory(
+                loggerFactory,
+                defaultWriteReportId: defaultWriteReportId, readReportTransform: readReportTransform);
     }
 }
 

@@ -163,7 +163,19 @@ namespace Device.Net.UnitTests
         [TestMethod]
         public Task TestWriteAndReadFromTrezorHid() => TestWriteAndReadFromTrezor(
             new FilterDeviceDefinition(vendorId: 0x534C, productId: 0x0001, label: "Trezor One Firmware 1.6.x", usagePage: 65280)
-            .GetHidDeviceFactory(loggerFactory), 64, 65
+            .GetHidDeviceFactory(
+                loggerFactory,
+                //Default the read report to 0.
+                //I.e. stick 0 at index 0 and shift the rest of the array to the right
+                0,
+                (readReport)
+                //We expect to get back 64 bytes but ReadAsync would normally add the Report Id back index 0
+                //In the case of Trezor we just take the 64 bytes and don't put the Report Id back at index 0
+                => new TransferResult(readReport.TransferResult.Data, readReport.TransferResult.BytesTransferred)
+                )
+            ,
+            64,
+            65
             );
 
         [TestMethod]
