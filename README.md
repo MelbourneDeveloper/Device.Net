@@ -16,13 +16,15 @@ This framework provides a common Task based Async interface across platforms and
 
 ### Currently supports:
 
-| Platform | Device Types |
-| ------------- |:-------------:|
-| .NET Framework     | Hid, USB, Serial Port |
-| .NET Core      | Hid, USB, Serial Port  |
-| Android | USB |
-| UWP | Hid, USB   |
-| Linux, MacOS* | [USB (Via LibUsbDotNet)](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support)  |
+| Platform       | Hid | USB                                                                                                 | Serial Port |
+|----------------|:---:|-----------------------------------------------------------------------------------------------------|-------------|
+| .NET Framework | Yes | Yes                                                                                                 | Yes         |
+| .NET Core      | Yes | Yes                                                                                                 | Yes         |
+| Android        | Yes | Yes                                                                                                 | No          |
+| UWP            | Yes | Yes                                                                                                 | No          |
+| Linux, MacOS*  |  No | [(Via LibUsbDotNet)](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support) | No          |
+
+Note: Bluetooth, Linux, and macOS support are on the radar. If you can sponsor this project, you might be able to help get there faster.
 
 ## [Quick Start](https://github.com/MelbourneDeveloper/Device.Net/wiki/Quick-Start)
 
