@@ -1,6 +1,4 @@
-﻿#if !NET45
-
-using Hid.Net;
+﻿using Hid.Net;
 using Hid.Net.Windows;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,6 +13,15 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class HidTests
     {
+        #region Private Fields
+
+        private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().AddConsole().SetMinimumLevel(LogLevel.Trace));
+
+        #endregion Private Fields
+
+
+        #region Public Methods
+
         [TestMethod]
         public void TestDeviceIdInvalidException()
         {
@@ -33,19 +40,39 @@ namespace Device.Net.UnitTests
 
 
         [TestMethod]
-        public async Task TestInitializeHidDeviceWriteable()
-        {
-            var windowsHidDevice = await InitializeWindowsHidDevice(false);
-            Assert.AreEqual(false, windowsHidDevice.IsReadOnly);
-        }
-
-        [TestMethod]
         public async Task TestInitializeHidDeviceReadOnly()
         {
             var windowsHidDevice = await InitializeWindowsHidDevice(true);
             Assert.AreEqual(true, windowsHidDevice.IsReadOnly);
         }
 
+        [TestMethod]
+        public async Task TestInitializeHidDeviceWriteable()
+        {
+            var windowsHidDevice = await InitializeWindowsHidDevice(false);
+            Assert.AreEqual(false, windowsHidDevice.IsReadOnly);
+        }
+        [TestMethod]
+        public Task TestWriteAndReadFromTrezorHid() => IntegrationTests.TestWriteAndReadFromTrezor(
+            new FilterDeviceDefinition(vendorId: 0x534C, productId: 0x0001, label: "Trezor One Firmware 1.6.x", usagePage: 65280)
+            .GetHidDeviceFactory(
+                loggerFactory,
+                //Default the read report to 0.
+                //I.e. stick 0 at index 0 and shift the rest of the array to the right
+                0,
+                (readReport)
+                //We expect to get back 64 bytes but ReadAsync would normally add the Report Id back index 0
+                //In the case of Trezor we just take the 64 bytes and don't put the Report Id back at index 0
+                => new TransferResult(readReport.TransferResult.Data, readReport.TransferResult.BytesTransferred)
+                )
+            ,
+            64,
+            65
+            );
+
+        #endregion Public Methods
+
+        #region Private Methods
 
         private static async Task<WindowsHidHandler> InitializeWindowsHidDevice(bool isReadonly)
         {
@@ -98,7 +125,7 @@ namespace Device.Net.UnitTests
             return windowsHidDevice;
         }
 
+        #endregion Private Methods
+
     }
 }
-
-#endif
