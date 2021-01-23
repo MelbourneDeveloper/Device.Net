@@ -18,12 +18,12 @@ namespace Device.Net
         /// <returns></returns>
         public static IDeviceFactory Aggregate(this IList<IDeviceFactory> deviceFactories, ILoggerFactory loggerFactory = null)
             => deviceFactories == null ? throw new ArgumentNullException(nameof(deviceFactories)) :
-            new DeviceManager(new ReadOnlyCollection<IDeviceFactory>(deviceFactories), loggerFactory);
+            new AggregateDeviceFactory(new ReadOnlyCollection<IDeviceFactory>(deviceFactories), loggerFactory);
 
 
         public static IDeviceFactory Aggregate(this IDeviceFactory deviceFactory, IDeviceFactory newDeviceFactory, ILoggerFactory loggerFactory = null)
             => deviceFactory == null ? throw new ArgumentNullException(nameof(deviceFactory)) :
-            new DeviceManager(
+            new AggregateDeviceFactory(
                 new ReadOnlyCollection<IDeviceFactory>(
                     new ReadOnlyCollection<IDeviceFactory>(
                         new List<IDeviceFactory> { deviceFactory, newDeviceFactory })), loggerFactory);

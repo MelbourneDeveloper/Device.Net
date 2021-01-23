@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Device.Net
 {
 
-    public class DeviceManager : IDeviceFactory
+    internal class AggregateDeviceFactory : IDeviceFactory
     {
         //TODO: Put logging in here
 
@@ -24,12 +24,12 @@ namespace Device.Net
         #endregion
 
         #region Constructor
-        public DeviceManager(
+        public AggregateDeviceFactory(
             IReadOnlyCollection<IDeviceFactory> deviceFactories,
             ILoggerFactory loggerFactory = null)
         {
             _loggerFactory = loggerFactory ?? new NullLoggerFactory();
-            _logger = _loggerFactory.CreateLogger<DeviceManager>();
+            _logger = _loggerFactory.CreateLogger<AggregateDeviceFactory>();
             DeviceFactories = deviceFactories ?? throw new ArgumentNullException(nameof(deviceFactories));
 
             if (deviceFactories.Count == 0)

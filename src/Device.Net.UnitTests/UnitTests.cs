@@ -105,7 +105,7 @@ namespace Device.Net.UnitTests
         #region DeviceManager 
         [TestMethod]
         public void TestThatDeviceManagerRequiresAFactory() => _ = Assert.ThrowsException<InvalidOperationException>(()
-            => new DeviceManager(new List<IDeviceFactory>()));
+            => new AggregateDeviceFactory(new List<IDeviceFactory>()));
 
         [TestMethod]
         public async Task TestThatDeviceManagerReturnsDevice()
@@ -115,7 +115,7 @@ namespace Device.Net.UnitTests
             const string deviceId = "123";
             _ = deviceFactoryMock.Setup(df => df.GetConnectedDeviceDefinitionsAsync(It.IsAny<CancellationToken>())).Returns(Task.FromResult<IEnumerable<ConnectedDeviceDefinition>>(new List<ConnectedDeviceDefinition> { new ConnectedDeviceDefinition(deviceId, DeviceType.Usb) }));
 
-            var deviceManager = new DeviceManager(new List<IDeviceFactory> { deviceFactoryMock.Object });
+            var deviceManager = new AggregateDeviceFactory(new List<IDeviceFactory> { deviceFactoryMock.Object });
             var devices = await deviceManager.GetConnectedDeviceDefinitionsAsync();
 
             Assert.AreEqual(1, devices.Count());
@@ -154,7 +154,7 @@ namespace Device.Net.UnitTests
 
             try
             {
-                _ = new DeviceManager(new List<IDeviceFactory>(), _loggerFactory);
+                _ = new AggregateDeviceFactory(new List<IDeviceFactory>(), _loggerFactory);
             }
             catch (InvalidOperationException)
             {
@@ -356,7 +356,7 @@ namespace Device.Net.UnitTests
         {
             try
             {
-                var deviceManager = new DeviceManager(new List<IDeviceFactory> { new Mock<IDeviceFactory>().Object }, _LoggerFactoryMock.Object);
+                var deviceManager = new AggregateDeviceFactory(new List<IDeviceFactory> { new Mock<IDeviceFactory>().Object }, _LoggerFactoryMock.Object);
                 _ = await deviceManager.GetDeviceAsync(new ConnectedDeviceDefinition("a", DeviceType.Hid));
             }
             catch (DeviceException dex)
@@ -435,7 +435,7 @@ namespace Device.Net.UnitTests
         {
             var listenTaskCompletionSource = new TaskCompletionSource<bool>();
 
-            var deviceManager = new DeviceManager(deviceFactories, _loggerFactory);
+            var deviceManager = new AggregateDeviceFactory(deviceFactories, _loggerFactory);
 
             var deviceListener = new DeviceListener(
                 deviceManager,
