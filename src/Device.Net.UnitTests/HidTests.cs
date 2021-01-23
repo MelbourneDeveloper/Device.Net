@@ -130,6 +130,18 @@ namespace Device.Net.UnitTests
 
             _ = deviceHandler.Setup(dh => dh.DeviceId).Returns("123");
 
+            var inputReport = new Report
+            (
+                0,
+                new TransferResult(new byte[]
+                { 0, 63, 35, 35, 0, 17, 0, 0, 0, 142, 10, 17, 98, 105, 116, 99, 111, 105, 110, 116, 114, 101, 122, 111, 114, 46, 99, 111, 109, 16, 1, 24, 6, 32, 3, 50, 24, 66, 70, 67, 69, 48, 52, 68, 52, 67, 51, 69, 68, 53, 51, 70, 68, 51, 66, 67, 57, 53, 53, 48, 54, 56, 0, 64, 1 },
+                65)
+            );
+
+            _ = deviceHandler.Setup(dh => dh.ReadReportAsync(It.IsAny<CancellationToken>())).ReturnsAsync(
+                inputReport)
+                ;
+
             //Create an actual device
             var hidDevice = new HidDevice(deviceHandler.Object, loggerFactory, readReportTransform: readReportTransform, defaultWriteReportId: defaultReportId);
 
@@ -144,7 +156,6 @@ namespace Device.Net.UnitTests
 
             return deviceFactory.Object;
         }
-
         #endregion Private Methods
 
     }
