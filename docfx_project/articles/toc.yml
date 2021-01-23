@@ -1,6 +1,9 @@
 - name: Sponsor This Project
   href: https://github.com/sponsors/MelbourneDeveloper
 
+- name: Hid Transfer
+  href: HidTransfer.md  
+
 - name: Build Issues
   href: BuildIssues.md  
 

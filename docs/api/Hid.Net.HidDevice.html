@@ -145,18 +145,18 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice__ctor_Hid_Net_IHidDeviceHandler_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Byte__System_Func_Hid_Net_ReadReport_Device_Net_TransferResult__Hid_Net_WriteReportTransform_.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.%23ctor(Hid.Net.IHidDeviceHandler%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CSystem.Nullable%7BSystem.Byte%7D%2CSystem.Func%7BHid.Net.ReadReport%2CDevice.Net.TransferResult%7D%2CHid.Net.WriteReportTransform)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_HidDevice__ctor_Hid_Net_IHidDeviceHandler_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Byte__System_Func_Hid_Net_Report_Device_Net_TransferResult__Hid_Net_WriteReportTransform_.md&amp;value=---%0Auid%3A%20Hid.Net.HidDevice.%23ctor(Hid.Net.IHidDeviceHandler%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CSystem.Nullable%7BSystem.Byte%7D%2CSystem.Func%7BHid.Net.Report%2CDevice.Net.TransferResult%7D%2CHid.Net.WriteReportTransform)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs/#L27">View Source</a>
   </span>
   <a id="Hid_Net_HidDevice__ctor_" data-uid="Hid.Net.HidDevice.#ctor*"></a>
-  <h4 id="Hid_Net_HidDevice__ctor_Hid_Net_IHidDeviceHandler_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Byte__System_Func_Hid_Net_ReadReport_Device_Net_TransferResult__Hid_Net_WriteReportTransform_" data-uid="Hid.Net.HidDevice.#ctor(Hid.Net.IHidDeviceHandler,Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.Byte},System.Func{Hid.Net.ReadReport,Device.Net.TransferResult},Hid.Net.WriteReportTransform)">HidDevice(IHidDeviceHandler, ILoggerFactory, Nullable&lt;Byte&gt;, Func&lt;ReadReport, TransferResult&gt;, WriteReportTransform)</h4>
+  <h4 id="Hid_Net_HidDevice__ctor_Hid_Net_IHidDeviceHandler_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Byte__System_Func_Hid_Net_Report_Device_Net_TransferResult__Hid_Net_WriteReportTransform_" data-uid="Hid.Net.HidDevice.#ctor(Hid.Net.IHidDeviceHandler,Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.Byte},System.Func{Hid.Net.Report,Device.Net.TransferResult},Hid.Net.WriteReportTransform)">HidDevice(IHidDeviceHandler, ILoggerFactory, Nullable&lt;Byte&gt;, Func&lt;Report, TransferResult&gt;, WriteReportTransform)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public HidDevice(IHidDeviceHandler hidDeviceHandler, ILoggerFactory loggerFactory = null, byte? defaultWriteReportId = default(byte? ), Func&lt;ReadReport, TransferResult&gt; readReportTransform = null, WriteReportTransform writeReportTransform = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public HidDevice(IHidDeviceHandler hidDeviceHandler, ILoggerFactory loggerFactory = null, byte? defaultWriteReportId = default(byte? ), Func&lt;Report, TransferResult&gt; readReportTransform = null, WriteReportTransform writeReportTransform = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -184,7 +184,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Func</span>&lt;<a class="xref" href="Hid.Net.ReadReport.html">ReadReport</a>, <a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
+        <td><span class="xref">System.Func</span>&lt;<a class="xref" href="Hid.Net.Report.html">Report</a>, <a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
         <td><span class="parametername">readReportTransform</span></td>
         <td></td>
       </tr>
@@ -520,7 +520,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public Task&lt;ReadReport&gt; ReadReportAsync(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
+    <pre><code class="lang-csharp hljs">public Task&lt;Report&gt; ReadReportAsync(CancellationToken cancellationToken = default(CancellationToken))</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -549,7 +549,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Hid.Net.ReadReport.html">ReadReport</a>&gt;</td>
+        <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Hid.Net.Report.html">Report</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
