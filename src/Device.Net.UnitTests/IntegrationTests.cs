@@ -40,6 +40,7 @@ namespace Device.Net.UnitTests
         //But, we remove one byte for the report id
         private const int NanoBufferSize = 64;
         private const int TemperBufferSize = 9;
+        private const int DualSenseWriteBufferSize = 48;
 
 #if !NET45
         private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().AddConsole().SetMinimumLevel(LogLevel.Trace));
@@ -289,6 +290,22 @@ namespace Device.Net.UnitTests
                  return Task.FromResult(true);
 
              }, NanoBufferSize);
+        }
+
+        [TestMethod]
+        public async Task TestDualSense()
+        {
+            var filterDeviceDefinition = new FilterDeviceDefinition(productId: 0xCE6, vendorId: 0x54C);
+
+            var integrationTester = new IntegrationTester(filterDeviceDefinition.GetHidDeviceFactory(loggerFactory));
+
+            var request = new byte[DualSenseWriteBufferSize];
+            request[0] = 0;
+
+            _ = await integrationTester.TestAsync(request, (result, device) =>
+              {
+                  return Task.FromResult(true);
+              }, 64);
         }
         #endregion
 
