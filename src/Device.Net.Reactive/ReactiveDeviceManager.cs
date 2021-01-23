@@ -88,11 +88,12 @@ namespace Device.Net.Reactive
         #region Public Methods
         public void Start()
         {
-            Task.Run(async () =>
+            _ = Task.Run(async () =>
             {
                 while (!isDisposed)
                 {
                     var devices = await _getConnectedDevicesAsync();
+                    _logger.LogInformation("Found {deviceCount} devices", devices.Count);
                     _notifyConnectedDevices(devices);
                     await Task.Delay(TimeSpan.FromMilliseconds(_pollMilliseconds));
                 }
@@ -103,11 +104,17 @@ namespace Device.Net.Reactive
         /// Sets the selected device
         /// </summary>
         /// <param name="connectedDevice"></param>
-        public void SelectDevice(DeviceSelectedArgs connectedDevice) => _ = InitializeDeviceAsync(connectedDevice.ConnectedDevice);
+        public void SelectDevice(DeviceSelectedArgs connectedDevice)
+        {
+            _ = connectedDevice == null
+                ? throw new ArgumentNullException(nameof(connectedDevice))
+                : InitializeDeviceAsync(connectedDevice.ConnectedDevice);
+        }
 
         public async Task<TResponse> WriteAndReadAsync<TResponse>(IRequest request, Func<byte[], TResponse> convertFunc)
         {
             if (SelectedDevice == null) return default;
+            if (request == null) throw new ArgumentNullException(nameof(request));
 
             try
             {
@@ -120,7 +127,7 @@ namespace Device.Net.Reactive
             {
                 _logger.LogError(ex, ex.Message);
 
-                if (!(ex is IOException)) throw;
+                if (ex is not IOException) throw;
 
                 _notifyDeviceException(SelectedDevice?.ConnectedDeviceDefinition, ex);
                 //The exception was an IO exception so disconnect the device
@@ -134,7 +141,7 @@ namespace Device.Net.Reactive
             }
             finally
             {
-                _semaphoreSlim.Release();
+                _ = _semaphoreSlim.Release();
             }
         }
 
@@ -146,7 +153,7 @@ namespace Device.Net.Reactive
             if (request == null) throw new ArgumentNullException(nameof(request));
 
             _queuedRequests.Enqueue(request);
-            ProcessQueue();
+            _ = ProcessQueue();
         }
 
         private async Task ProcessQueue()
@@ -168,7 +175,7 @@ namespace Device.Net.Reactive
                     }
                 }
 
-                await WriteAndReadAsync<object>(mostRecentRequest, null);
+                _ = await WriteAndReadAsync<object>(mostRecentRequest, null);
             }
             catch (Exception ex)
             {
@@ -176,7 +183,7 @@ namespace Device.Net.Reactive
             }
             finally
             {
-                _semaphoreSlim2.Release();
+                _ = _semaphoreSlim2.Release();
             }
         }
         #endregion
@@ -207,7 +214,12 @@ namespace Device.Net.Reactive
             }
         }
 
-        public void Dispose() => isDisposed = true;
+        public void Dispose()
+        {
+            isDisposed = true;
+            _semaphoreSlim.Dispose();
+            _semaphoreSlim2.Dispose();
+        }
         #endregion
     }
 }
