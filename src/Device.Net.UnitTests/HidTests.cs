@@ -1,13 +1,13 @@
-﻿#if !NET45
-
-using Hid.Net;
+﻿using Hid.Net;
 using Hid.Net.Windows;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32.SafeHandles;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests
@@ -15,6 +15,16 @@ namespace Device.Net.UnitTests
     [TestClass]
     public class HidTests
     {
+        #region Private Fields
+
+        private Mock<IHidDeviceHandler> _trezorDeviceHandler;
+        private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().AddConsole().SetMinimumLevel(LogLevel.Trace));
+
+        #endregion Private Fields
+
+
+        #region Public Methods
+
         [TestMethod]
         public void TestDeviceIdInvalidException()
         {
@@ -33,6 +43,13 @@ namespace Device.Net.UnitTests
 
 
         [TestMethod]
+        public async Task TestInitializeHidDeviceReadOnly()
+        {
+            var windowsHidDevice = await InitializeWindowsHidDevice(true);
+            Assert.AreEqual(true, windowsHidDevice.IsReadOnly);
+        }
+
+        [TestMethod]
         public async Task TestInitializeHidDeviceWriteable()
         {
             var windowsHidDevice = await InitializeWindowsHidDevice(false);
@@ -40,12 +57,25 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public async Task TestInitializeHidDeviceReadOnly()
+        public async Task TestTrezorHid()
         {
-            var windowsHidDevice = await InitializeWindowsHidDevice(true);
-            Assert.AreEqual(true, windowsHidDevice.IsReadOnly);
+            _ = await IntegrationTests.TestWriteAndReadFromTrezor(
+            GetMockTrezorDeviceFactory(loggerFactory, (readReport)
+                //We expect to get back 64 bytes but ReadAsync would normally add the Report Id back index 0
+                //In the case of Trezor we just take the 64 bytes and don't put the Report Id back at index 0
+                => new TransferResult(readReport.TransferResult.Data, readReport.TransferResult.BytesTransferred), 0),
+            64,
+            65
+            );
+
+            _trezorDeviceHandler.Verify(t => t.InitializeAsync(It.IsAny<CancellationToken>()), Times.Once);
+
+            _trezorDeviceHandler.Verify(t => t.Close(), Times.Once);
         }
 
+        #endregion Public Methods
+
+        #region Private Methods
 
         private static async Task<WindowsHidHandler> InitializeWindowsHidDevice(bool isReadonly)
         {
@@ -98,7 +128,44 @@ namespace Device.Net.UnitTests
             return windowsHidDevice;
         }
 
+        private IDeviceFactory GetMockTrezorDeviceFactory(ILoggerFactory loggerFactory, Func<Report, TransferResult> readReportTransform, byte? defaultReportId)
+        {
+            //TODO: Turn this in to a real device factory with a mocked GetConnectedDeviceDefinitions
+            var deviceFactory = new Mock<IDeviceFactory>();
+
+            //Mock the handler
+            _trezorDeviceHandler = new Mock<IHidDeviceHandler>();
+
+            _ = _trezorDeviceHandler.Setup(dh => dh.DeviceId).Returns("123");
+
+            var inputReport = new Report
+            (
+                0,
+                new TransferResult(new byte[]
+                { 
+                    //Blank out the Report Id because the Windows / UWP handler would do this for us
+                    //0,
+                63, 35, 35, 0, 17, 0, 0, 0, 142, 10, 17, 98, 105, 116, 99, 111, 105, 110, 116, 114, 101, 122, 111, 114, 46, 99, 111, 109, 16, 1, 24, 6, 32, 3, 50, 24, 66, 70, 67, 69, 48, 52, 68, 52, 67, 51, 69, 68, 53, 51, 70, 68, 51, 66, 67, 57, 53, 53, 48, 54, 56, 0, 64, 1 },
+                65)
+            );
+
+            _ = _trezorDeviceHandler.Setup(dh => dh.ReadReportAsync(It.IsAny<CancellationToken>())).ReturnsAsync(inputReport);
+
+            //Create an actual device
+            var hidDevice = new HidDevice(_trezorDeviceHandler.Object, loggerFactory, readReportTransform: readReportTransform, defaultWriteReportId: defaultReportId);
+
+            //Set up the factory calls
+            _ = deviceFactory.Setup(df => df.GetConnectedDeviceDefinitionsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(
+                new List<ConnectedDeviceDefinition>
+                {
+                    new ConnectedDeviceDefinition(_trezorDeviceHandler.Object.DeviceId, DeviceType.Hid)
+                }); ;
+
+            _ = deviceFactory.Setup(df => df.GetDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).ReturnsAsync(hidDevice);
+
+            return deviceFactory.Object;
+        }
+        #endregion Private Methods
+
     }
 }
-
-#endif
