@@ -19,7 +19,7 @@ namespace Hid.Net.UWP
     {
         #region Private Fields
 
-        private readonly Func<TransferResult, ReadReport> _readTransferTransform;
+        private readonly Func<TransferResult, Report> _readTransferTransform;
         private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
         private readonly Func<byte[], byte, byte[]> _writeTransferTransform;
         private ushort? _readBufferSize = null;
@@ -36,7 +36,7 @@ namespace Hid.Net.UWP
                     ILoggerFactory loggerFactory = null,
                     ushort? writeBufferSize = null,
                     ushort? readBufferSize = null,
-                    Func<TransferResult, ReadReport> readTransferTransform = null,
+                    Func<TransferResult, Report> readTransferTransform = null,
                     Func<byte[], byte, byte[]> writeTransferTransform = null
             ) : base(connectedDeviceDefinition.DeviceId, dataReceiver, loggerFactory)
         {
@@ -44,7 +44,7 @@ namespace Hid.Net.UWP
             _writeBufferSize = writeBufferSize;
             _writeBufferSize = readBufferSize;
 
-            _readTransferTransform = readTransferTransform ?? new Func<TransferResult, ReadReport>((tr) => tr.ToReadReport());
+            _readTransferTransform = readTransferTransform ?? new Func<TransferResult, Report>((tr) => tr.ToReadReport());
 
             _writeTransferTransform = writeTransferTransform ??
                 new Func<byte[], byte, byte[]>(
@@ -133,7 +133,7 @@ namespace Hid.Net.UWP
             }
         }
 
-        public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
+        public async Task<Report> ReadReportAsync(CancellationToken cancellationToken = default)
         {
             var transferResult = await DataReceiver.ReadAsync(cancellationToken);
 

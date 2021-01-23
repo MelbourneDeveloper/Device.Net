@@ -31,7 +31,7 @@ namespace Device.Net.UnitTests
             this FilterDeviceDefinition filterDeviceDefinition,
             ILoggerFactory loggerFactory,
             byte? defultReportId = null,
-            Func<ReadReport, TransferResult> readReportTransform = null)
+            Func<Report, TransferResult> readReportTransform = null)
             => filterDeviceDefinition.CreateUwpHidDeviceFactory(
                 loggerFactory,
                 defaultWriteReportId: defultReportId,

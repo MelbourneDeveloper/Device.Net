@@ -18,7 +18,7 @@ namespace Hid.Net
         /// </summary>
         /// <param name="cancellationToken">Allows you to cancel the operation</param>
         /// <returns>The cref="ReadReport"</returns>
-        Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default);
+        Task<Report> ReadReportAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Writes data and allows you to specify the report id

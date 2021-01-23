@@ -17,7 +17,7 @@ namespace Hid.Net
         private readonly IHidDeviceHandler _hidDeviceHandler;
         private bool _IsClosing;
         private bool disposed;
-        private readonly Func<ReadReport, TransferResult> _readReportTransform;
+        private readonly Func<Report, TransferResult> _readReportTransform;
         private readonly WriteReportTransform _writeReportTransform;
 
         #endregion Private Fields
@@ -28,7 +28,7 @@ namespace Hid.Net
             IHidDeviceHandler hidDeviceHandler,
             ILoggerFactory loggerFactory = null,
             byte? defaultWriteReportId = null,
-            Func<ReadReport, TransferResult> readReportTransform = null,
+            Func<Report, TransferResult> readReportTransform = null,
             WriteReportTransform writeReportTransform = null
             ) :
             base(
@@ -39,12 +39,12 @@ namespace Hid.Net
             _hidDeviceHandler = hidDeviceHandler;
             DefaultWriteReportId = defaultWriteReportId;
 
-            _readReportTransform = readReportTransform ?? new Func<ReadReport, TransferResult>((readReport) => readReport.ToTransferResult());
+            _readReportTransform = readReportTransform ?? new Func<Report, TransferResult>((readReport) => readReport.ToTransferResult());
             _writeReportTransform = writeReportTransform ?? new WriteReportTransform((data, defaultReportId)
                 => DefaultWriteReportId.HasValue ?
-                new ReadReport(DefaultWriteReportId.Value, data) :
+                new Report(DefaultWriteReportId.Value, data) :
                 (data == null || data.Length == 0) ? throw new InvalidOperationException("You must specify a Report Id") :
-                new ReadReport(data[0], data.TrimFirstByte()));
+                new Report(data[0], data.TrimFirstByte()));
         }
 
         #endregion Public Constructors
@@ -122,7 +122,7 @@ namespace Hid.Net
             return _readReportTransform(readReport);
         }
 
-        public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
+        public async Task<Report> ReadReportAsync(CancellationToken cancellationToken = default)
         {
             try
             {

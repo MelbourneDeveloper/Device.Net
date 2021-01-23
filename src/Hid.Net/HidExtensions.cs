@@ -18,7 +18,7 @@ namespace Hid.Net
             return data;
         }
 
-        public static ReadReport ToReadReport(this TransferResult tr)
+        public static Report ToReadReport(this TransferResult tr)
         {
             //Grab the report id
             var reportId = tr.Data[0];
@@ -27,7 +27,7 @@ namespace Hid.Net
             var data = tr.Data.TrimFirstByte();
 
             //Convert to a read report
-            return new ReadReport(reportId, new TransferResult(data, tr.BytesTransferred));
+            return new Report(reportId, new TransferResult(data, tr.BytesTransferred));
         }
 
         public static byte[] InsertReportIdAtIndexZero(this byte[] data, byte reportId)
@@ -55,7 +55,7 @@ namespace Hid.Net
             return transformedData;
         }
 
-        public static TransferResult ToTransferResult(this ReadReport readReport)
+        public static TransferResult ToTransferResult(this Report readReport)
         {
             var rawData = new byte[readReport.TransferResult.Data.Length + 1];
 

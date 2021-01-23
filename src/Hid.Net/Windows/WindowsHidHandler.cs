@@ -18,7 +18,7 @@ namespace Hid.Net.Windows
 
         private readonly IHidApiService _hidService;
         private readonly ILogger _logger;
-        private readonly Func<TransferResult, ReadReport> _readTransferTransform;
+        private readonly Func<TransferResult, Report> _readTransferTransform;
         private readonly Func<byte[], byte, byte[]> _writeTransferTransform;
         private Stream _readFileStream;
         private SafeFileHandle _readSafeFileHandle;
@@ -35,13 +35,13 @@ namespace Hid.Net.Windows
             ushort? readBufferSize = null,
             IHidApiService hidApiService = null,
             ILoggerFactory loggerFactory = null,
-            Func<TransferResult, ReadReport> readTransferTransform = null,
+            Func<TransferResult, Report> readTransferTransform = null,
             Func<byte[], byte, byte[]> writeTransferTransform = null)
         {
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
 
             _readTransferTransform = readTransferTransform ??
-                new Func<TransferResult, ReadReport>((tr) => tr.ToReadReport());
+                new Func<TransferResult, Report>((tr) => tr.ToReadReport());
 
             _writeTransferTransform = writeTransferTransform ??
                 new Func<byte[], byte, byte[]>(
@@ -162,7 +162,7 @@ namespace Hid.Net.Windows
               }, cancellationToken);
         }
 
-        public async Task<ReadReport> ReadReportAsync(CancellationToken cancellationToken = default)
+        public async Task<Report> ReadReportAsync(CancellationToken cancellationToken = default)
         {
             if (_readFileStream == null)
             {
