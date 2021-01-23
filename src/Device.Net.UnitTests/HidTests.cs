@@ -17,6 +17,7 @@ namespace Device.Net.UnitTests
     {
         #region Private Fields
 
+        private Mock<IHidDeviceHandler> _trezorDeviceHandler;
         private readonly ILoggerFactory loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().AddConsole().SetMinimumLevel(LogLevel.Trace));
 
         #endregion Private Fields
@@ -56,7 +57,9 @@ namespace Device.Net.UnitTests
         }
 
         [TestMethod]
-        public Task TestTrezorHid() => IntegrationTests.TestWriteAndReadFromTrezor(
+        public async Task TestTrezorHid()
+        {
+            _ = await IntegrationTests.TestWriteAndReadFromTrezor(
             GetMockTrezorDeviceFactory(loggerFactory, (readReport)
                 //We expect to get back 64 bytes but ReadAsync would normally add the Report Id back index 0
                 //In the case of Trezor we just take the 64 bytes and don't put the Report Id back at index 0
@@ -64,6 +67,11 @@ namespace Device.Net.UnitTests
             64,
             65
             );
+
+            _trezorDeviceHandler.Verify(t => t.InitializeAsync(It.IsAny<CancellationToken>()), Times.Once);
+
+            _trezorDeviceHandler.Verify(t => t.Close(), Times.Once);
+        }
 
         #endregion Public Methods
 
@@ -120,15 +128,15 @@ namespace Device.Net.UnitTests
             return windowsHidDevice;
         }
 
-        private static IDeviceFactory GetMockTrezorDeviceFactory(ILoggerFactory loggerFactory, Func<Report, TransferResult> readReportTransform, byte? defaultReportId)
+        private IDeviceFactory GetMockTrezorDeviceFactory(ILoggerFactory loggerFactory, Func<Report, TransferResult> readReportTransform, byte? defaultReportId)
         {
             //TODO: Turn this in to a real device factory with a mocked GetConnectedDeviceDefinitions
             var deviceFactory = new Mock<IDeviceFactory>();
 
             //Mock the handler
-            var deviceHandler = new Mock<IHidDeviceHandler>();
+            _trezorDeviceHandler = new Mock<IHidDeviceHandler>();
 
-            _ = deviceHandler.Setup(dh => dh.DeviceId).Returns("123");
+            _ = _trezorDeviceHandler.Setup(dh => dh.DeviceId).Returns("123");
 
             var inputReport = new Report
             (
@@ -141,16 +149,16 @@ namespace Device.Net.UnitTests
                 65)
             );
 
-            _ = deviceHandler.Setup(dh => dh.ReadReportAsync(It.IsAny<CancellationToken>())).ReturnsAsync(inputReport);
+            _ = _trezorDeviceHandler.Setup(dh => dh.ReadReportAsync(It.IsAny<CancellationToken>())).ReturnsAsync(inputReport);
 
             //Create an actual device
-            var hidDevice = new HidDevice(deviceHandler.Object, loggerFactory, readReportTransform: readReportTransform, defaultWriteReportId: defaultReportId);
+            var hidDevice = new HidDevice(_trezorDeviceHandler.Object, loggerFactory, readReportTransform: readReportTransform, defaultWriteReportId: defaultReportId);
 
             //Set up the factory calls
             _ = deviceFactory.Setup(df => df.GetConnectedDeviceDefinitionsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(
                 new List<ConnectedDeviceDefinition>
                 {
-                    new ConnectedDeviceDefinition(deviceHandler.Object.DeviceId, DeviceType.Hid)
+                    new ConnectedDeviceDefinition(_trezorDeviceHandler.Object.DeviceId, DeviceType.Hid)
                 }); ;
 
             _ = deviceFactory.Setup(df => df.GetDeviceAsync(It.IsAny<ConnectedDeviceDefinition>(), It.IsAny<CancellationToken>())).ReturnsAsync(hidDevice);

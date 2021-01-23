@@ -99,7 +99,7 @@ namespace Hid.Net
             base.Dispose();
         }
 
-        public Task InitializeAsync(CancellationToken cancellationToken = default)
+        public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
@@ -107,7 +107,11 @@ namespace Hid.Net
 
             try
             {
-                return _hidDeviceHandler.InitializeAsync(cancellationToken);
+                Logger.LogInformation("Initializing...");
+
+                await _hidDeviceHandler.InitializeAsync(cancellationToken).ConfigureAwait(false);
+
+                Logger.LogInformation("Initialized");
             }
             catch (Exception ex)
             {
