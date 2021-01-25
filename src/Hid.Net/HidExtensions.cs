@@ -5,17 +5,18 @@ namespace Hid.Net
 {
     internal static class HidExtensions
     {
-        /// <summary>
-        /// Removes the first byte of the array and shifts other elements to the left
-        /// </summary>
-        /// <param name="inputData"></param>
-        /// <returns></returns>
-        public static byte[] TrimFirstByte(this byte[] inputData)
+        #region Public Methods
+
+        public static byte[] InsertReportIdAtIndexZero(this byte[] data, byte reportId)
         {
-            var length = inputData.Length - 1;
-            var data = new byte[length];
-            Array.Copy(inputData, 1, data, 0, length);
-            return data;
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
+            var transformedData = InsertZeroAtIndexZero(data);
+
+            //Set the report id at index 0
+            transformedData[0] = reportId;
+
+            return transformedData;
         }
 
         public static Report ToReadReport(this TransferResult tr)
@@ -30,17 +31,33 @@ namespace Hid.Net
             return new Report(reportId, new TransferResult(data, tr.BytesTransferred));
         }
 
-        public static byte[] InsertReportIdAtIndexZero(this byte[] data, byte reportId)
+        /// <summary>
+        /// Converts a Report to a Tranfer result and inserts the report Id at index 0
+        /// </summary>
+        /// <param name="readReport"></param>
+        /// <returns></returns>
+        public static TransferResult ToTransferResult(this Report readReport)
+            => new TransferResult(
+                InsertReportIdAtIndexZero(
+                    readReport.TransferResult.Data,
+                    readReport.ReportId), readReport.TransferResult.BytesTransferred);
+
+        /// <summary>
+        /// Removes the first byte of the array and shifts other elements to the left
+        /// </summary>
+        /// <param name="inputData"></param>
+        /// <returns></returns>
+        public static byte[] TrimFirstByte(this byte[] inputData)
         {
-            if (data == null) throw new ArgumentNullException(nameof(data));
-
-            var transformedData = InsertZeroAtIndexZero(data);
-
-            //Set the report id at index 0
-            transformedData[0] = reportId;
-
-            return transformedData;
+            var length = inputData.Length - 1;
+            var data = new byte[length];
+            Array.Copy(inputData, 1, data, 0, length);
+            return data;
         }
+
+        #endregion Public Methods
+
+        #region Private Methods
 
         private static byte[] InsertZeroAtIndexZero(this byte[] data)
         {
@@ -55,15 +72,6 @@ namespace Hid.Net
             return transformedData;
         }
 
-        /// <summary>
-        /// Converts a Report to a Tranfer result and inserts the report Id at index 0
-        /// </summary>
-        /// <param name="readReport"></param>
-        /// <returns></returns>
-        public static TransferResult ToTransferResult(this Report readReport)
-            => new TransferResult(
-                InsertReportIdAtIndexZero(
-                    readReport.TransferResult.Data,
-                    readReport.ReportId), readReport.TransferResult.BytesTransferred);
+        #endregion Private Methods
     }
 }

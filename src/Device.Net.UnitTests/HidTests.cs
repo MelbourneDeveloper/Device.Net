@@ -78,7 +78,8 @@ namespace Device.Net.UnitTests
         public void TestToTransferResult()
         {
             //Arrange
-            var report = new Report(1, new TransferResult(new byte[1] { 2 }, 1));
+            const byte reportId = 1;
+            var report = new Report(reportId, new TransferResult(new byte[1] { 2 }, 1));
 
             //Act
             var transferResult = report.ToTransferResult();
@@ -89,7 +90,26 @@ namespace Device.Net.UnitTests
             Assert.AreEqual(transferResult.BytesTransferred, (uint)1);
 
             //Data is intact and report id is inserted at index zero
-            Assert.IsTrue(transferResult.Data.SequenceEqual(new byte[] { 1, 2 }));
+            //Also asserts length of array
+            Assert.IsTrue(transferResult.Data.SequenceEqual(new byte[] { reportId, 2 }));
+        }
+
+        [TestMethod]
+        public void TestInsertReportIdAtIndexZero()
+        {
+            //Arrange
+            const byte reportId = 1;
+
+            //Act
+            var data = new byte[0].InsertReportIdAtIndexZero(reportId);
+
+            //Assert
+
+            //Data length is correct
+            Assert.AreEqual(data.Length, 1);
+
+            //Data is intact and report id is inserted at index zero
+            Assert.IsTrue(data.SequenceEqual(new byte[] { reportId }));
         }
 
         #endregion Public Methods

@@ -40,7 +40,7 @@ namespace Hid.Net
             _readReportTransform = readReportTransform ?? new Func<Report, TransferResult>((readReport)
                 =>
                 {
-                    Logger.LogDebug("Convert Report to Transfer result. Inserted Report Id at index zero of data");
+                    Logger.LogDebug("Converted Report to Transfer result. Inserted Report Id at index zero of data");
                     return readReport.ToTransferResult();
                 }
                 );
