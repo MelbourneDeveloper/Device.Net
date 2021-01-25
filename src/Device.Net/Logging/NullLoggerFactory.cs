@@ -3,7 +3,7 @@ using System;
 
 namespace Microsoft.Extensions.Logging.Abstractions
 {
-    public class NullLoggerFactory : ILoggerFactory
+    internal class NullLoggerFactory : ILoggerFactory
     {
         public static NullLoggerFactory Instance { get; } = new NullLoggerFactory();
 
@@ -12,7 +12,7 @@ namespace Microsoft.Extensions.Logging.Abstractions
         public ILogger CreateLogger(string name) => new NullLogger();
     }
 
-    public class DummyDisposable : IDisposable
+    internal class DummyDisposable : IDisposable
     {
 #pragma warning disable CA1816 // Dispose methods should call SuppressFinalize
         public void Dispose()
@@ -21,7 +21,7 @@ namespace Microsoft.Extensions.Logging.Abstractions
         }
     }
 
-    public class NullLogger : ILogger
+    internal class NullLogger : ILogger
     {
         public static NullLogger Instance { get; } = new NullLogger();
 
