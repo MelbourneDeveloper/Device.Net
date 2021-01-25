@@ -20,7 +20,7 @@ namespace Hid.Net
             //Set the report id at index 0
             transformedData[0] = reportId;
 
-            logger.LogDebug("Shifted data one place to the right and inserted {reportId} at index zero", reportId);
+            logger.LogDebug("Shifted data one place to the right and inserted {reportId} at index zero. Input Length: {inputLength} Output Length: {outputLength}", reportId, data.Length, transformedData.Length);
 
             return transformedData;
         }
@@ -60,7 +60,7 @@ namespace Hid.Net
             var data = new byte[length];
             Array.Copy(inputData, 1, data, 0, length);
 
-            logger.LogDebug("Removed byte at index zero and shifted the array to the left by one place");
+            logger.LogDebug("Removed byte at index zero and shifted the array to the left by one place. Input Length: {inputLength} Output Length: {outputLength}", inputData.Length, data.Length);
 
             return data;
         }
