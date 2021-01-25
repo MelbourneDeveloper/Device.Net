@@ -7,6 +7,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -71,6 +72,24 @@ namespace Device.Net.UnitTests
             _trezorDeviceHandler.Verify(t => t.InitializeAsync(It.IsAny<CancellationToken>()), Times.Once);
 
             _trezorDeviceHandler.Verify(t => t.Close(), Times.Once);
+        }
+
+        [TestMethod]
+        public void TestToTransferResult()
+        {
+            //Arrange
+            var report = new Report(1, new TransferResult(new byte[1] { 2 }, 1));
+
+            //Act
+            var transferResult = report.ToTransferResult();
+
+            //Assert
+
+            //Bytes transferred is intact
+            Assert.AreEqual(transferResult.BytesTransferred, (uint)1);
+
+            //Data is intact and report id is inserted at index zero
+            Assert.IsTrue(transferResult.Data.SequenceEqual(new byte[] { 1, 2 }));
         }
 
         #endregion Public Methods

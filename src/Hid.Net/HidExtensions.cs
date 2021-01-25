@@ -42,7 +42,7 @@ namespace Hid.Net
             return transformedData;
         }
 
-        public static byte[] InsertZeroAtIndexZero(this byte[] data)
+        private static byte[] InsertZeroAtIndexZero(this byte[] data)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
 
@@ -55,15 +55,15 @@ namespace Hid.Net
             return transformedData;
         }
 
+        /// <summary>
+        /// Converts a Report to a Tranfer result and inserts the report Id at index 0
+        /// </summary>
+        /// <param name="readReport"></param>
+        /// <returns></returns>
         public static TransferResult ToTransferResult(this Report readReport)
-        {
-            var rawData = new byte[readReport.TransferResult.Data.Length + 1];
-
-            Array.Copy(readReport.TransferResult.Data, 0, rawData, 1, readReport.TransferResult.Data.Length);
-
-            rawData[0] = readReport.ReportId;
-
-            return new TransferResult(rawData, readReport.TransferResult.BytesTransferred);
-        }
+            => new TransferResult(
+                InsertReportIdAtIndexZero(
+                    readReport.TransferResult.Data,
+                    readReport.ReportId), readReport.TransferResult.BytesTransferred);
     }
 }
