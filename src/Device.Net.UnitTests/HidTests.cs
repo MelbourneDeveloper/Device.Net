@@ -112,6 +112,28 @@ namespace Device.Net.UnitTests
             Assert.IsTrue(data.SequenceEqual(new byte[] { reportId }));
         }
 
+        [TestMethod]
+        public void TestToReadReport()
+        {
+            //Arrange
+            const byte reportId = 1;
+            var transferResult = new TransferResult(new byte[] { reportId, 2 }, 2);
+
+            //Act
+            var report = transferResult.ToReadReport(loggerFactory.CreateLogger<HidTests>());
+
+            //Assert
+
+            //Bytes transferred is intact
+            Assert.AreEqual(report.TransferResult.BytesTransferred, (uint)2);
+
+            //Data is intact and report was removed from index zero
+            //Also asserts length of array
+            Assert.IsTrue(report.TransferResult.Data.SequenceEqual(new byte[] { 2 }));
+
+            //Check the report id
+            Assert.AreEqual(report.ReportId, reportId);
+        }
         #endregion Public Methods
 
         #region Private Methods
