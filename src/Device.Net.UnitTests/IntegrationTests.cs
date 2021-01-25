@@ -169,7 +169,7 @@ namespace Device.Net.UnitTests
                 //We expect to get back 64 bytes but ReadAsync would normally add the Report Id back index 0
                 //In the case of Trezor we just take the 64 bytes and don't put the Report Id back at index 0
                 => new TransferResult(readReport.TransferResult.Data, readReport.TransferResult.BytesTransferred),
-                (a, b) => a.InsertReportIdAtIndexZero(b)
+                (a, b) => a.InsertReportIdAtIndexZero(b, loggerFactory.CreateLogger<IntegrationTests>())
                 )
             ,
             64,

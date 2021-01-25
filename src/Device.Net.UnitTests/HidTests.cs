@@ -82,7 +82,7 @@ namespace Device.Net.UnitTests
             var report = new Report(reportId, new TransferResult(new byte[1] { 2 }, 1));
 
             //Act
-            var transferResult = report.ToTransferResult();
+            var transferResult = report.ToTransferResult(loggerFactory.CreateLogger<HidTests>());
 
             //Assert
 
@@ -101,7 +101,7 @@ namespace Device.Net.UnitTests
             const byte reportId = 1;
 
             //Act
-            var data = new byte[0].InsertReportIdAtIndexZero(reportId);
+            var data = new byte[0].InsertReportIdAtIndexZero(reportId, loggerFactory.CreateLogger<HidTests>());
 
             //Assert
 

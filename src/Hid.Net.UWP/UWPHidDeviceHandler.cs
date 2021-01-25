@@ -44,13 +44,13 @@ namespace Hid.Net.UWP
             _writeBufferSize = writeBufferSize;
             _writeBufferSize = readBufferSize;
 
-            _readTransferTransform = readTransferTransform ?? new Func<TransferResult, Report>((tr) => tr.ToReadReport());
+            _readTransferTransform = readTransferTransform ?? new Func<TransferResult, Report>((tr) => tr.ToReadReport(Logger));
 
             _writeTransferTransform = writeTransferTransform ??
                 new Func<byte[], byte, byte[]>(
                 //By default we put the Report Id back at index zero and shift the array 1 to the right
                 //In effect, we do exactly the same thing as windows
-                (data, reportId) => data.InsertReportIdAtIndexZero(reportId));
+                (data, reportId) => data.InsertReportIdAtIndexZero(reportId, Logger));
         }
 
         #endregion Public Constructors

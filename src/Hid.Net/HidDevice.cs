@@ -38,15 +38,10 @@ namespace Hid.Net
             _hidDeviceHandler = hidDeviceHandler;
 
             _readReportTransform = readReportTransform ?? new Func<Report, TransferResult>((readReport)
-                =>
-                {
-                    Logger.LogDebug("Converted Report to Transfer result. Inserted Report Id at index zero of data");
-                    return readReport.ToTransferResult();
-                }
-                );
+                => readReport.ToTransferResult(Logger));
 
             _writeReportTransform = writeReportTransform ?? new WriteReportTransform((data)
-                => new Report(data[0], data.TrimFirstByte()));
+                => new Report(data[0], data.TrimFirstByte(Logger)));
         }
 
         #endregion Public Constructors
