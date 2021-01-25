@@ -1,4 +1,4 @@
 ﻿namespace Hid.Net
 {
-    public delegate Report WriteReportTransform(byte[] data, byte? defaultReportId);
+    public delegate Report WriteReportTransform(byte[] data);
 }

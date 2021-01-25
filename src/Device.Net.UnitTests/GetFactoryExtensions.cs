@@ -30,12 +30,13 @@ namespace Device.Net.UnitTests
         public static IDeviceFactory GetHidDeviceFactory(
             this FilterDeviceDefinition filterDeviceDefinition,
             ILoggerFactory loggerFactory,
-            byte? defaultWriteReportId = null,
-            Func<Report, TransferResult> readReportTransform = null
+            Func<Report, TransferResult> readReportTransform = null,
+            Func<byte[], byte, byte[]> writeTransferTransform = null
             )
             => filterDeviceDefinition.CreateWindowsHidDeviceFactory(
                 loggerFactory,
-                defaultWriteReportId: defaultWriteReportId, readReportTransform: readReportTransform);
+                readReportTransform: readReportTransform,
+                writeTransferTransform: writeTransferTransform);
     }
 }
 
