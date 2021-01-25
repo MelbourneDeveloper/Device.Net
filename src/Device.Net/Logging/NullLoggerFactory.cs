@@ -35,7 +35,9 @@ namespace Microsoft.Extensions.Logging.Abstractions
         {
         }
 
-        public void LogError(Exception exception, string message, params object[] args) => throw new NotImplementedException();
+        public void LogError(Exception exception, string message, params object[] args)
+        {
+        }
 
         public void LogInformation(string message, params object[] args)
         {
