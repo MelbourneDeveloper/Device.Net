@@ -74,6 +74,8 @@ namespace Device.Net.UnitTests
             _trezorDeviceHandler.Verify(t => t.Close(), Times.Once);
         }
 
+        //TODO : Assert the logging here
+
         [TestMethod]
         public void TestToTransferResult()
         {
@@ -133,6 +135,22 @@ namespace Device.Net.UnitTests
 
             //Check the report id
             Assert.AreEqual(report.ReportId, reportId);
+        }
+
+        [TestMethod]
+        public void TestTrimFirstByte()
+        {
+            //Arrange
+            var data = new byte[] { 1, 2 };
+
+            //Act
+            var trimmeData = data.TrimFirstByte(loggerFactory.CreateLogger<HidTests>());
+
+            //Assert
+
+            //Data is intact and byte was removed from index zero
+            //Also asserts length of array
+            Assert.IsTrue(trimmeData.SequenceEqual(new byte[] { 2 }));
         }
         #endregion Public Methods
 
