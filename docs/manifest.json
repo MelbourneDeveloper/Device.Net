@@ -449,47 +449,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Device.Net.Windows.APICalls.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Device.Net.Windows.APICalls.html",
-          "hash": "j+4nUXjlhV1DUzglCkG5nA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Device.Net.Windows.ApiService.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Device.Net.Windows.ApiService.html",
-          "hash": "peoibaGQe++BuE3nXwFthg=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Device.Net.Windows.AqsHelpers.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Device.Net.Windows.AqsHelpers.html",
-          "hash": "YlUzIUjE+0Eep8IsIcLxjQ=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Device.Net.Windows.CommTimeouts.yml",
       "output": {
         ".html": {
           "relative_path": "api/Device.Net.Windows.CommTimeouts.html",
-          "hash": "B6PPb15IvWRS3PYxuu2BFg=="
+          "hash": "UTWuEzyNDHW+5AkRhXHTNQ=="
         }
       },
       "is_incremental": false,
@@ -501,7 +465,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Device.Net.Windows.Dcb.html",
-          "hash": "PPfS/HE0cOGU+7YSO+6T1Q=="
+          "hash": "E8tZKLfx/5Ste16qEBhAJw=="
         }
       },
       "is_incremental": false,
@@ -545,42 +509,6 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Device.Net.Windows.SpDeviceInfoData.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Device.Net.Windows.SpDeviceInfoData.html",
-          "hash": "OF4PNskPjp7aUc1I3thM4g=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Device.Net.Windows.SpDeviceInterfaceData.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Device.Net.Windows.SpDeviceInterfaceData.html",
-          "hash": "uhI77vdeUmJulO14u5QTAA=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Device.Net.Windows.SpDeviceInterfaceDetailData.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Device.Net.Windows.SpDeviceInterfaceDetailData.html",
-          "hash": "la0y6bnwAqLQR3/Eu3Hy4g=="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
       "source_relative_path": "api/Device.Net.Windows.WindowsDeviceConstants.yml",
       "output": {
         ".html": {
@@ -609,7 +537,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Device.Net.Windows.WindowsHelpers.html",
-          "hash": "J8/kjS/XkoZ+Wzxjf4kNzg=="
+          "hash": "BMR8hqmEXeGRC5W7sEqlNA=="
         }
       },
       "is_incremental": false,
@@ -621,7 +549,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Device.Net.Windows.html",
-          "hash": "BsSn/oXQzdxQWSw68Dvt+w=="
+          "hash": "GuksAGQYmZBE66dkv5K2ug=="
         }
       },
       "is_incremental": false,
@@ -1425,7 +1353,7 @@
       "output": {
         ".html": {
           "relative_path": "api/toc.html",
-          "hash": "47l15pskOymUlG3GwOC2tg=="
+          "hash": "FixshpOoEeLYi5OsY95Liw=="
         }
       },
       "is_incremental": false,
@@ -1440,7 +1368,7 @@
           "hash": "jHHeOul92ZKYPI6Se0pFdg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1455,7 +1383,7 @@
           "hash": "iEY7KJe08F7WcQGFQIhJ3w=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1467,7 +1395,7 @@
           "hash": "rYp8NsAMGNBv0XbF3YWObw=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1479,7 +1407,7 @@
           "hash": "IvQEie5mvQ5a7BoURF1Ncg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1491,7 +1419,7 @@
           "hash": "6Rq6Zx2VTJAUWrowNTYoLw=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1503,7 +1431,7 @@
           "hash": "RbpUzz3XNWYkmdn3kb6RVg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1518,7 +1446,7 @@
           "hash": "vCCOGnaAAlZl+24rEN/9Ww=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1530,7 +1458,7 @@
           "hash": "e512QD81u4o220Iyov0TVA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1542,7 +1470,7 @@
           "hash": "gMEEy/AtYFCFIOjAdc8RJg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1554,7 +1482,7 @@
           "hash": "tQgsjVEk/TUXmk+BtSsSPQ=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1566,7 +1494,7 @@
           "hash": "5bgzLzTgSo797IXNK8kQag=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1612,7 +1540,7 @@
           "hash": "yzochu2CVeC7yw9dIj34cA=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1631,25 +1559,23 @@
   "incremental_info": [
     {
       "status": {
-        "can_incremental": false,
-        "details": "Cannot build incrementally because last build info is missing.",
+        "can_incremental": true,
         "incrementalPhase": "build",
         "total_file_count": 0,
-        "skipped_file_count": 0,
-        "full_build_reason_code": "NoAvailableBuildCache"
+        "skipped_file_count": 0
       },
       "processors": {
         "ConceptualDocumentProcessor": {
-          "can_incremental": false,
+          "can_incremental": true,
           "incrementalPhase": "build",
           "total_file_count": 13,
-          "skipped_file_count": 0
+          "skipped_file_count": 13
         },
         "ManagedReferenceDocumentProcessor": {
-          "can_incremental": false,
+          "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 116,
-          "skipped_file_count": 0
+          "total_file_count": 110,
+          "skipped_file_count": 106
         },
         "ResourceDocumentProcessor": {
           "can_incremental": false,
@@ -1669,8 +1595,8 @@
     },
     {
       "status": {
-        "can_incremental": false,
-        "details": "Cannot support incremental post processing, the reason is: last post processor info is null.",
+        "can_incremental": true,
+        "details": "Can support incremental post processing.",
         "incrementalPhase": "postProcessing",
         "total_file_count": 0,
         "skipped_file_count": 0
