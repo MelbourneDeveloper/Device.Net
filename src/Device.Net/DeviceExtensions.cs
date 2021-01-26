@@ -28,15 +28,6 @@ namespace Device.Net
                     new ReadOnlyCollection<IDeviceFactory>(
                         new List<IDeviceFactory> { deviceFactory, newDeviceFactory })), loggerFactory);
 
-        public static DeviceDataStreamer CreateDeviceDataStreamer(
-            this IDeviceFactory deviceFactory,
-            Func<IDevice, Task> processData,
-            Func<IDevice, Task> initializeFunc = null) =>
-            new DeviceDataStreamer(
-                processData,
-                deviceFactory,
-                initializeFunc: initializeFunc);
-
         /// <summary>
         /// Compares a <see cref="ConnectedDeviceDefinition"/> with a <see cref="FilterDeviceDefinition"/>
         /// </summary>
