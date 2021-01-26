@@ -7,6 +7,9 @@
         <DebugType>embedded</DebugType>
     </PropertyGroup>
     <ItemGroup>
+      <Compile Remove="DeviceDataStreamer.cs" />
+    </ItemGroup>
+    <ItemGroup>
         <None Include="..\..\README.md" Link="README.md" />
         <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.1">
             <PrivateAssets>all</PrivateAssets>
