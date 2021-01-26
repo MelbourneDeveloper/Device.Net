@@ -94,7 +94,7 @@
 <p>The array is copied to an array which is one byte larger, and the Report Id is set at index 0. You get back an array which contains the data as well as the Report Id at index 0.</p>
 <p>The writeTransferTransform works in a similar way. By default, it separates the first byte of the array into the <code>Report</code> output report and sends it to the device.</p>
 <p>You can see the code in the constructor of <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs">HidDevice</a>.</p>
-<p>This <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/1fc877701e22542fb45706997a42bca15fd81a82/src/Device.Net.UnitTests/IntegrationTests.cs#L174">example</a> demonstrates returning the array without the Report Id at index 0.</p>
+<p>This <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/d01cb456438a7622bd581c26af1aa89fc6ab798f/src/Device.Net.UnitTests/IntegrationTests.cs#L164">example</a> overrides the conversion of the input report and defaults the output Report Id to zero.</p>
 </article>
           </div>
           

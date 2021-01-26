@@ -38,4 +38,4 @@ The writeTransferTransform works in a similar way. By default, it separates the 
 
 You can see the code in the constructor of [HidDevice](https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs).
 
-This [example](https://github.com/MelbourneDeveloper/Device.Net/blob/1fc877701e22542fb45706997a42bca15fd81a82/src/Device.Net.UnitTests/IntegrationTests.cs#L174) demonstrates returning the array without the Report Id at index 0.
+This [example](https://github.com/MelbourneDeveloper/Device.Net/blob/d01cb456438a7622bd581c26af1aa89fc6ab798f/src/Device.Net.UnitTests/IntegrationTests.cs#L164) overrides the conversion of the input report and defaults the output Report Id to zero.
