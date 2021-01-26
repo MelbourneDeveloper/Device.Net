@@ -14,6 +14,6 @@ namespace Device.Net
 #pragma warning restore CA1819 // Properties should not return arrays
         public bool IsWrite { get; }
 
-        public override string ToString() => $"{(IsWrite ? "Write" : "Read")} - {TransferResult}";
+        public override string ToString() => $"Physical {(IsWrite ? "Write" : "Read")} - {TransferResult}";
     }
 }

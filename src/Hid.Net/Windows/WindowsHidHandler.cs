@@ -38,16 +38,16 @@ namespace Hid.Net.Windows
             Func<TransferResult, Report> readTransferTransform = null,
             Func<byte[], byte, byte[]> writeTransferTransform = null)
         {
+            _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidHandler>();
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
 
             _readTransferTransform = readTransferTransform ??
-                new Func<TransferResult, Report>((tr) => tr.ToReadReport());
+                new Func<TransferResult, Report>((tr) => tr.ToReadReport(_logger));
 
             _writeTransferTransform = writeTransferTransform ??
                 new Func<byte[], byte, byte[]>(
-                (data, reportId) => data.InsertReportIdAtIndexZero(reportId));
+                (data, reportId) => data.InsertReportIdAtIndexZero(reportId, _logger));
 
-            _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidHandler>();
             _hidService = hidApiService ?? new WindowsHidApiService(loggerFactory);
             WriteBufferSize = writeBufferSize;
             ReadBufferSize = readBufferSize;

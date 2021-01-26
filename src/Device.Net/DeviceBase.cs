@@ -104,7 +104,7 @@ namespace Device.Net
 
             disposed = true;
 
-            Logger.LogInformation(Messages.InformationMessageDisposingDevice, DeviceId);
+            Logger.LogInformation($"{nameof(DeviceBase)}: {Messages.InformationMessageDisposingDevice}", DeviceId);
 
             _WriteAndReadLock.Dispose();
 

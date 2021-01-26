@@ -7,6 +7,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -63,7 +64,7 @@ namespace Device.Net.UnitTests
             GetMockTrezorDeviceFactory(loggerFactory, (readReport)
                 //We expect to get back 64 bytes but ReadAsync would normally add the Report Id back index 0
                 //In the case of Trezor we just take the 64 bytes and don't put the Report Id back at index 0
-                => new TransferResult(readReport.TransferResult.Data, readReport.TransferResult.BytesTransferred), 0),
+                => new TransferResult(readReport.TransferResult.Data, readReport.TransferResult.BytesTransferred)),
             64,
             65
             );
@@ -73,6 +74,84 @@ namespace Device.Net.UnitTests
             _trezorDeviceHandler.Verify(t => t.Close(), Times.Once);
         }
 
+        //TODO : Assert the logging here
+
+        [TestMethod]
+        public void TestToTransferResult()
+        {
+            //Arrange
+            const byte reportId = 1;
+            var report = new Report(reportId, new TransferResult(new byte[1] { 2 }, 1));
+
+            //Act
+            var transferResult = report.ToTransferResult(loggerFactory.CreateLogger<HidTests>());
+
+            //Assert
+
+            //Bytes transferred is intact
+            Assert.AreEqual(transferResult.BytesTransferred, (uint)1);
+
+            //Data is intact and report id is inserted at index zero
+            //Also asserts length of array
+            Assert.IsTrue(transferResult.Data.SequenceEqual(new byte[] { reportId, 2 }));
+        }
+
+        [TestMethod]
+        public void TestInsertReportIdAtIndexZero()
+        {
+            //Arrange
+            const byte reportId = 1;
+
+            //Act
+            var data = new byte[0].InsertReportIdAtIndexZero(reportId, loggerFactory.CreateLogger<HidTests>());
+
+            //Assert
+
+            //Data length is correct
+            Assert.AreEqual(data.Length, 1);
+
+            //Data is intact and report id is inserted at index zero
+            Assert.IsTrue(data.SequenceEqual(new byte[] { reportId }));
+        }
+
+        [TestMethod]
+        public void TestToReadReport()
+        {
+            //Arrange
+            const byte reportId = 1;
+            var transferResult = new TransferResult(new byte[] { reportId, 2 }, 2);
+
+            //Act
+            var report = transferResult.ToReadReport(loggerFactory.CreateLogger<HidTests>());
+
+            //Assert
+
+            //Bytes transferred is intact
+            Assert.AreEqual(report.TransferResult.BytesTransferred, (uint)2);
+
+            //Data is intact and report was removed from index zero
+            //Also asserts length of array
+            Assert.IsTrue(report.TransferResult.Data.SequenceEqual(new byte[] { 2 }));
+
+            //Check the report id
+            Assert.AreEqual(report.ReportId, reportId);
+        }
+
+        [TestMethod]
+        public void TestTrimFirstByte()
+        {
+            //Arrange
+            var data = new byte[] { 1, 2 };
+
+            //Act
+            var trimmeData = data.TrimFirstByte(loggerFactory.CreateLogger<HidTests>());
+
+            //Assert
+
+            //Data is intact and byte was removed from index zero
+            //Also asserts length of array
+            Assert.IsTrue(trimmeData.SequenceEqual(new byte[] { 2 }));
+        }
         #endregion Public Methods
 
         #region Private Methods
@@ -128,7 +207,7 @@ namespace Device.Net.UnitTests
             return windowsHidDevice;
         }
 
-        private IDeviceFactory GetMockTrezorDeviceFactory(ILoggerFactory loggerFactory, Func<Report, TransferResult> readReportTransform, byte? defaultReportId)
+        private IDeviceFactory GetMockTrezorDeviceFactory(ILoggerFactory loggerFactory, Func<Report, TransferResult> readReportTransform)
         {
             //TODO: Turn this in to a real device factory with a mocked GetConnectedDeviceDefinitions
             var deviceFactory = new Mock<IDeviceFactory>();
@@ -152,7 +231,7 @@ namespace Device.Net.UnitTests
             _ = _trezorDeviceHandler.Setup(dh => dh.ReadReportAsync(It.IsAny<CancellationToken>())).ReturnsAsync(inputReport);
 
             //Create an actual device
-            var hidDevice = new HidDevice(_trezorDeviceHandler.Object, loggerFactory, readReportTransform: readReportTransform, defaultWriteReportId: defaultReportId);
+            var hidDevice = new HidDevice(_trezorDeviceHandler.Object, loggerFactory, readReportTransform: readReportTransform);
 
             //Set up the factory calls
             _ = deviceFactory.Setup(df => df.GetConnectedDeviceDefinitionsAsync(It.IsAny<CancellationToken>())).ReturnsAsync(

@@ -27,7 +27,6 @@ namespace Hid.Net
         public HidDevice(
             IHidDeviceHandler hidDeviceHandler,
             ILoggerFactory loggerFactory = null,
-            byte? defaultWriteReportId = null,
             Func<Report, TransferResult> readReportTransform = null,
             WriteReportTransform writeReportTransform = null
             ) :
@@ -37,14 +36,12 @@ namespace Hid.Net
                 (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<HidDevice>())
         {
             _hidDeviceHandler = hidDeviceHandler;
-            DefaultWriteReportId = defaultWriteReportId;
 
-            _readReportTransform = readReportTransform ?? new Func<Report, TransferResult>((readReport) => readReport.ToTransferResult());
-            _writeReportTransform = writeReportTransform ?? new WriteReportTransform((data, defaultReportId)
-                => DefaultWriteReportId.HasValue ?
-                new Report(DefaultWriteReportId.Value, data) :
-                (data == null || data.Length == 0) ? throw new InvalidOperationException("You must specify a Report Id") :
-                new Report(data[0], data.TrimFirstByte()));
+            _readReportTransform = readReportTransform ?? new Func<Report, TransferResult>((readReport)
+                => readReport.ToTransferResult(Logger));
+
+            _writeReportTransform = writeReportTransform ?? new WriteReportTransform((data)
+                => new Report(data[0], data.TrimFirstByte(Logger)));
         }
 
         #endregion Public Constructors
@@ -56,7 +53,6 @@ namespace Hid.Net
         public bool? IsReadOnly => _hidDeviceHandler.IsReadOnly;
         public ushort ReadBufferSize => _hidDeviceHandler.ReadBufferSize ?? throw new InvalidOperationException("Read buffer size unknown");
         public ushort WriteBufferSize => _hidDeviceHandler.WriteBufferSize ?? throw new InvalidOperationException("Write buffer size unknown");
-        public byte? DefaultWriteReportId { get; }
 
         #endregion Public Properties
 
@@ -152,7 +148,7 @@ namespace Hid.Net
         /// <returns></returns>
         public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
-            var hidReport = _writeReportTransform(data, DefaultWriteReportId);
+            var hidReport = _writeReportTransform(data);
 
             //Write a report based on the default report id or the first byte in the array
             return WriteReportAsync(hidReport.TransferResult.Data, hidReport.ReportId, cancellationToken);
