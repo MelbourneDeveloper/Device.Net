@@ -16,15 +16,16 @@ This framework provides a common Task based Async interface across platforms and
 
 ### Currently supports:
 
-| Platform       | Hid | USB                                                                                                 | Serial Port |
-|----------------|:---:|-----------------------------------------------------------------------------------------------------|-------------|
-| .NET Framework | Yes | Yes                                                                                                 | Yes         |
-| .NET Core      | Yes | Yes                                                                                                 | Yes         |
-| Android        | Yes | Yes                                                                                                 | No          |
-| UWP            | Yes | Yes                                                                                                 | No          |
-| Linux, MacOS*  |  No | [(Via LibUsbDotNet)](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support) | No          |
+| Platform       | Hid | USB                                                                                                 | Serial Port | Bluetooth |
+|----------------|:---:|-----------------------------------------------------------------------------------------------------|-------------|-----------|
+| .NET Framework | Yes | Yes                                                                                                 | Yes         | No        |
+| .NET Core      | Yes | Yes                                                                                                 | Yes         | No        |
+| Android        | Yes | Yes                                                                                                 | No          | No        |
+| UWP            | Yes | Yes                                                                                                 | No          | No        |
+| Linux, MacOS*  |  No | [(Via LibUsbDotNet)](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support) | No          | No        |
+| WebAssembly    | No  | No                                                                                                  | No          | No        |
 
-*Note: Bluetooth, Linux, and macOS support are on the radar. If you can sponsor this project, you might be able to help get there faster.*
+*Note: Bluetooth, Linux, and macOS, WebAssembly (via [WebUsb](https://web.dev/usb/)) support are on the radar. If you can sponsor this project, you might be able to help get there faster.*
 
 ## [Quick Start](https://github.com/MelbourneDeveloper/Device.Net/wiki/Quick-Start)
 
