@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 
 namespace Device.Net.Windows
 {
-    public static class APICalls
+    internal static class APICalls
     {
         #region Constants
         public const int DigcfDeviceinterface = 16;

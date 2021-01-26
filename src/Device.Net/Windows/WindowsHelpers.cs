@@ -7,7 +7,7 @@ namespace Device.Net.Windows
 {
     public static class WindowsHelpers
     {
-        public static int HandleError(bool isSuccess, string message, ILogger logger, bool throwException = true)
+        internal static int HandleError(bool isSuccess, string message, ILogger logger, bool throwException = true)
         {
             logger ??= NullLogger.Instance;
 

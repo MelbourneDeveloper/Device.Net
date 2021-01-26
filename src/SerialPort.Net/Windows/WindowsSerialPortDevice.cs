@@ -32,24 +32,20 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsSerialPortDevice(string deviceId) : this(deviceId, new ApiService(null), 9600, StopBits.One, Parity.None, 8, 1024, null)
-        {
-        }
-
         public WindowsSerialPortDevice(
             string deviceId,
-            IApiService apiService,
-            int baudRate,
-            StopBits stopBits,
-            Parity parity,
-            byte byteSize,
-            ushort readBufferSize,
-            ILoggerFactory loggerFactory = null) : base(
+            int baudRate = 9600,
+            StopBits stopBits = StopBits.One,
+            Parity parity = Parity.None,
+            byte byteSize = 8,
+            ushort readBufferSize = 1024,
+            ILoggerFactory loggerFactory = null,
+            IApiService apiService = null) : base(
                 deviceId,
                 loggerFactory,
                 (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsSerialPortDevice>())
         {
-            ApiService = apiService ?? throw new ArgumentNullException(nameof(apiService));
+            ApiService = apiService ?? new ApiService(null);
 
             ConnectedDeviceDefinition = new ConnectedDeviceDefinition(DeviceId, DeviceType.SerialPort);
 

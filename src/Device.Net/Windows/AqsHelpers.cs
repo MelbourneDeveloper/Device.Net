@@ -7,7 +7,7 @@ namespace Device.Net.Windows
     /// <summary>
     /// Advanced Query Syntax is a query syntax for searching for various Windows components. UWP uses this to search for devices.
     /// </summary>
-    public static class AqsHelpers
+    internal static class AqsHelpers
     {
         private const string InterfaceEnabledPart = "System.Devices.InterfaceEnabled:=System.StructuredQueryType.Boolean#True";
         private const string HidVendorFilterName = "System.DeviceInterface.Hid.VendorId";

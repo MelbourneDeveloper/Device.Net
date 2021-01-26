@@ -4,7 +4,7 @@
 namespace Device.Net.Windows
 {
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    public struct SpDeviceInterfaceDetailData
+    internal struct SpDeviceInterfaceDetailData
     {
         public int CbSize;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
