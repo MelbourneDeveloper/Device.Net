@@ -29,6 +29,7 @@ namespace Hid.Net.UWP
         /// <param name="readBufferSize">Override the input report size</param>
         /// <param name="readTransferTransform">Exposes the raw data from the device (including Report Id) on reads and allows you to format the returned <see cref="TransferResult"/></param>
         /// <param name="writeTransferTransform">Given the Report Id and data supplied for the write, allow you to format the raw data that is sent to the device</param>
+        /// <param name="writeReportTransform">Given the data supplied, allow you to divide the data in to a <see cref="Report"/></param>
         /// <param name="writeBufferSize">Override the output report size</param>
         /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
         /// <param name="getDevice"></param>
@@ -46,7 +47,8 @@ namespace Hid.Net.UWP
         ushort? readBufferSize = null,
         Func<Report, TransferResult> readReportTransform = null,
         Func<TransferResult, Report> readTransferTransform = null,
-        Func<byte[], byte, byte[]> writeTransferTransform = null) => CreateUwpHidDeviceFactory(
+        Func<byte[], byte, byte[]> writeTransferTransform = null,
+        WriteReportTransform writeReportTransform = null) => CreateUwpHidDeviceFactory(
             new List<FilterDeviceDefinition> { filterDeviceDefinition },
             loggerFactory,
             getConnectedDeviceDefinitionsAsync,
@@ -58,7 +60,8 @@ namespace Hid.Net.UWP
             readBufferSize,
             readReportTransform,
             readTransferTransform,
-            writeTransferTransform);
+            writeTransferTransform,
+            writeReportTransform);
 
 
         /// <summary>
@@ -72,6 +75,7 @@ namespace Hid.Net.UWP
         /// <param name="readBufferSize">Override the input report size</param>
         /// <param name="readTransferTransform">Exposes the raw data from the device (including Report Id) on reads and allows you to format the returned <see cref="TransferResult"/></param>
         /// <param name="writeTransferTransform">Given the Report Id and data supplied for the write, allow you to format the raw data that is sent to the device</param>
+        /// <param name="writeReportTransform">Given the data supplied, allow you to divide the data in to a <see cref="Report"/></param>
         /// <param name="writeBufferSize">Override the output report size</param>
         /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
         /// <param name="getDevice"></param>
@@ -89,7 +93,8 @@ namespace Hid.Net.UWP
         ushort? readBufferSize = null,
         Func<Report, TransferResult> readReportTransform = null,
         Func<TransferResult, Report> readTransferTransform = null,
-        Func<byte[], byte, byte[]> writeTransferTransform = null)
+        Func<byte[], byte, byte[]> writeTransferTransform = null,
+        WriteReportTransform writeReportTransform = null)
         {
             loggerFactory ??= NullLoggerFactory.Instance;
 
@@ -107,7 +112,8 @@ namespace Hid.Net.UWP
                     readTransferTransform,
                     writeTransferTransform),
                 loggerFactory,
-                readReportTransform));
+                readReportTransform,
+                writeReportTransform));
 
             var aqs = AqsHelpers.GetAqs(filterDeviceDefinitions, DeviceType.Hid);
 

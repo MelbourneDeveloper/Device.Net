@@ -31,11 +31,11 @@ namespace Device.Net.UnitTests
             this FilterDeviceDefinition filterDeviceDefinition,
             ILoggerFactory loggerFactory,
             Func<Report, TransferResult> readReportTransform = null,
-            Func<byte[], byte, byte[]> writeTransferTransform = null)
+            WriteReportTransform writeReportTransform = null)
             => filterDeviceDefinition.CreateUwpHidDeviceFactory(
                 loggerFactory,
                 readReportTransform: readReportTransform,
-                writeTransferTransform: writeTransferTransform);
+                writeReportTransform: writeReportTransform);
     }
 }
 
