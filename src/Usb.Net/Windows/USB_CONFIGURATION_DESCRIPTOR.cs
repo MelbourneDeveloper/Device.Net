@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 namespace Usb.Net.Windows
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct USB_CONFIGURATION_DESCRIPTOR
+    internal struct USB_CONFIGURATION_DESCRIPTOR
     {
         public byte bLength;
         public byte bDescriptorType;

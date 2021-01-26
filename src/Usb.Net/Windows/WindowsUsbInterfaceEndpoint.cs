@@ -15,10 +15,10 @@
         #endregion
 
         #region Constructor
-        internal WindowsUsbInterfaceEndpoint(byte pipeId, WinUsbApiCalls.USBD_PIPE_TYPE usbPipeType, ushort maxPacketSize)
+        internal WindowsUsbInterfaceEndpoint(byte pipeId, USBD_PIPE_TYPE usbPipeType, ushort maxPacketSize)
         {
             PipeId = pipeId;
-            IsInterrupt = usbPipeType == WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeInterrupt;
+            IsInterrupt = usbPipeType == USBD_PIPE_TYPE.UsbdPipeTypeInterrupt;
             MaxPacketSize = maxPacketSize;
         }
         #endregion

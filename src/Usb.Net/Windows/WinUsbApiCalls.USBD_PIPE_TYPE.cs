@@ -8,15 +8,12 @@
 
 namespace Usb.Net.Windows
 {
-    public static partial class WinUsbApiCalls
+    internal enum USBD_PIPE_TYPE
     {
-        public enum USBD_PIPE_TYPE
-        {
-            UsbdPipeTypeControl,
-            UsbdPipeTypeIsochronous,
-            UsbdPipeTypeBulk,
-            UsbdPipeTypeInterrupt
-        }
+        UsbdPipeTypeControl,
+        UsbdPipeTypeIsochronous,
+        UsbdPipeTypeBulk,
+        UsbdPipeTypeInterrupt
     }
 }
 

@@ -9,7 +9,7 @@
 namespace Usb.Net.Windows
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct USB_DEVICE_DESCRIPTOR
+    internal struct USB_DEVICE_DESCRIPTOR
     {
         public byte bLength;
         public byte bDescriptorType;
