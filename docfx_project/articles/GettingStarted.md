@@ -26,7 +26,7 @@ For USB, please see [USB-Initialization: Interfaces And Endpoints](USBInitializa
 
 ### Example Code:
 
-This is UWP code. The only difference for Windows is that you would call WindowsHidDeviceFactory.Register().
+This is a simple Windows console app.
 
 ```cs
 using Device.Net;

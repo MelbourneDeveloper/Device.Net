@@ -1368,7 +1368,7 @@
           "hash": "jHHeOul92ZKYPI6Se0pFdg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1383,7 +1383,7 @@
           "hash": "iEY7KJe08F7WcQGFQIhJ3w=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1395,7 +1395,7 @@
           "hash": "z4y6QdSC1zwh3nO4XAiYfQ=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1407,7 +1407,7 @@
           "hash": "IvQEie5mvQ5a7BoURF1Ncg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1419,7 +1419,7 @@
           "hash": "6Rq6Zx2VTJAUWrowNTYoLw=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1431,7 +1431,7 @@
           "hash": "RbpUzz3XNWYkmdn3kb6RVg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1443,7 +1443,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/GettingStarted.html",
-          "hash": "q4jPhRtVYNGfEow7x5oZBQ=="
+          "hash": "AX8nn176xQP5jy8P7m8VJQ=="
         }
       },
       "is_incremental": false,
@@ -1458,7 +1458,7 @@
           "hash": "McVOQF29qhjo9oQGbGvM7g=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1470,7 +1470,7 @@
           "hash": "gMEEy/AtYFCFIOjAdc8RJg=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1482,7 +1482,7 @@
           "hash": "tQgsjVEk/TUXmk+BtSsSPQ=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
@@ -1494,7 +1494,7 @@
           "hash": "5bgzLzTgSo797IXNK8kQag=="
         }
       },
-      "is_incremental": false,
+      "is_incremental": true,
       "version": ""
     },
     {
