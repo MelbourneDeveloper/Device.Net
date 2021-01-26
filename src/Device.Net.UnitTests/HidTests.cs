@@ -171,7 +171,6 @@ namespace Device.Net.UnitTests
             _ = readStream.Setup(s => s.CanRead).Returns(true);
             _ = hidService.Setup(s => s.OpenRead(It.IsAny<SafeFileHandle>(), It.IsAny<ushort>())).Returns(readStream.Object);
 
-            var writeStream = new Mock<Stream>();
             _ = readStream.Setup(s => s.CanWrite).Returns(!isReadonly);
             _ = hidService.Setup(s => s.OpenWrite(It.IsAny<SafeFileHandle>(), It.IsAny<ushort>())).Returns(readStream.Object);
 
