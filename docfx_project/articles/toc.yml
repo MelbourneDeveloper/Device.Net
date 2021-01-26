@@ -1,6 +1,9 @@
 - name: Sponsor This Project
   href: https://github.com/sponsors/MelbourneDeveloper
 
+- name: Getting Started
+  href: GettingStarted.md
+
 - name: Hid Transfer
   href: HidTransfer.md  
 
@@ -18,9 +21,6 @@
 
 - name: Enumerating Connected Devices
   href: EnumeratingConnectedDevices.md
-
-- name: Getting Started
-  href: GettingStarted.md
 
 - name: Linux and macOS Support
   href: LinuxmacOSSupport.md

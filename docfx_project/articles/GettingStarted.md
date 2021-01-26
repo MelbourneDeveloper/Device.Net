@@ -29,34 +29,70 @@ For USB, please see [USB-Initialization: Interfaces And Endpoints](USBInitializa
 This is UWP code. The only difference for Windows is that you would call WindowsHidDeviceFactory.Register().
 
 ```cs
-private static async Task InitializeTrezor()
+using Device.Net;
+using Hid.Net.Windows;
+using Microsoft.Extensions.Logging;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using Usb.Net.Windows;
+
+namespace Usb.Net.WindowsSample
 {
-    //Register the factory for creating Usb devices. This only needs to be done once.
-    UWPUsbDeviceFactory.Register();
-
-    //Register the factory for creating Usb devices. This only needs to be done once.
-    UWPHidDeviceFactory.Register();
-
-    //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
-    var deviceDefinitions = new List<FilterDeviceDefinition>
+    internal class Program
     {
-        new FilterDeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x" },
-        new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, Label="Trezor One Firmware 1.7.x" },
-        new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C0, Label="Model T" }
-    };
+        private static async Task Main()
+        {
+            var loggerFactory = LoggerFactory.Create((builder) =>
+            {
+                _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
+            });
 
-    //Get the first available device and connect to it
-    var devices = await DeviceManager.Current.GetDevicesAsync(deviceDefinitions);
-    var trezorDevice = devices.FirstOrDefault();
-    await trezorDevice.InitializeAsync();
+            //----------------------
 
-    //Create a buffer with 3 bytes (initialize)
-    var buffer = new byte[64];
-    buffer[0] = 0x3f;
-    buffer[1] = 0x23;
-    buffer[2] = 0x23;
+            // This is Windows specific code. You can replace this with your platform of choice or put this part in the composition root of your app
 
-    //Write and read the data to the device
-    var readBuffer = await trezorDevice.WriteAndReadAsync(buffer);
+            //Register the factory for creating Hid devices. 
+            var hidFactory =
+                new FilterDeviceDefinition(vendorId: 0x534C, productId: 0x0001, label: "Trezor One Firmware 1.6.x", usagePage: 65280)
+                .CreateWindowsHidDeviceFactory(loggerFactory);
+
+            //Register the factory for creating Usb devices.
+            var usbFactory =
+                new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53C1, label: "Trezor One Firmware 1.7.x")
+                .CreateWindowsUsbDeviceFactory(loggerFactory);
+
+            //----------------------
+
+            //Join the factories together so that it picks up either the Hid or USB device
+            var factories = hidFactory.Aggregate(usbFactory);
+
+            //Get connected device definitions
+            var deviceDefinitions = (await hidFactory.GetConnectedDeviceDefinitionsAsync().ConfigureAwait(false)).ToList();
+
+            if (deviceDefinitions.Count == 0)
+            {
+                //No devices were found
+                return;
+            }
+
+            //Get the device from its definition
+            var trezorDevice = await hidFactory.GetDeviceAsync(deviceDefinitions.First()).ConfigureAwait(false);
+
+            //Initialize the device
+            await trezorDevice.InitializeAsync().ConfigureAwait(false);
+
+            //Create the request buffer
+            var buffer = new byte[65];
+            buffer[0] = 0x00;
+            buffer[1] = 0x3f;
+            buffer[2] = 0x23;
+            buffer[3] = 0x23;
+
+            //Write and read the data to the device
+            var readBuffer = await trezorDevice.WriteAndReadAsync(buffer).ConfigureAwait(false);
+        }
+    }
 }
+
 ```
