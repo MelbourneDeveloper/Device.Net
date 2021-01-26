@@ -125,8 +125,8 @@ namespace Usb.Net.WindowsSample
             //Create the observable
             var observable = Observable
                 .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(.1))
-                .SelectMany(_ => Observable.FromAsync(() => temperDevice.WriteAndReadAsync(new byte[] { 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 })))
-                .Select(data => (data.Data[3] & 0xFF) + (data.Data[2] << 8))
+                .SelectMany(_ => Observable.FromAsync(() => temperDevice.WriteAndReadAsync(new byte[] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 })))
+                .Select(data => (data.Data[4] & 0xFF) + (data.Data[3] << 8))
                 //Only display the temperature when it changes
                 .Distinct()
                 .Select(temperatureTimesOneHundred => Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven));
