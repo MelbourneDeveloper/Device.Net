@@ -7,6 +7,9 @@
 - name: Build Issues
   href: BuildIssues.md  
 
+- name: Device Permission Setup
+  href: DevicePermissionSetup.md 
+
 - name: Debugging, Logging and Tracing
   href: DebuggingLoggingTracing.md 
 
