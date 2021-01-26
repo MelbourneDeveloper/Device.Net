@@ -6,7 +6,7 @@ namespace Hid.Net.Windows
 {
     [StructLayout(LayoutKind.Sequential)]
 #pragma warning disable CA1815 // Override equals and operator equals on value types
-    public struct HidCollectionCapabilities
+    internal struct HidCollectionCapabilities
 #pragma warning restore CA1815 // Override equals and operator equals on value types
     {
 #pragma warning disable CA1051 // Do not declare visible instance fields

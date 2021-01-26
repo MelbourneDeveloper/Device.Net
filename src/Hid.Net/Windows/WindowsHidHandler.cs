@@ -205,6 +205,5 @@ namespace Hid.Net.Windows
         }
 
         #endregion Public Methods
-
     }
 }
