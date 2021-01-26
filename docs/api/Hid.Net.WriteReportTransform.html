@@ -79,7 +79,7 @@
   <h6><strong>Assembly</strong>: Hid.Net.dll</h6>
   <h5 id="Hid_Net_WriteReportTransform_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public delegate Report WriteReportTransform(byte[] data, byte? defaultReportId);</code></pre>
+    <pre><code class="lang-csharp hljs">public delegate Report WriteReportTransform(byte[] data);</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -94,11 +94,6 @@
       <tr>
         <td><span class="xref">System.Byte</span>[]</td>
         <td><span class="parametername">data</span></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
-        <td><span class="parametername">defaultReportId</span></td>
         <td></td>
       </tr>
     </tbody>

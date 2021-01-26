@@ -391,54 +391,6 @@ references:
   isSpec: "True"
   fullName: Device.Net.DeviceBase.WriteAsync
   nameWithType: DeviceBase.WriteAsync
-- uid: Device.Net.DeviceDataStreamer
-  name: DeviceDataStreamer
-  href: api/Device.Net.DeviceDataStreamer.html
-  commentId: T:Device.Net.DeviceDataStreamer
-  fullName: Device.Net.DeviceDataStreamer
-  nameWithType: DeviceDataStreamer
-- uid: Device.Net.DeviceDataStreamer.#ctor(System.Func{Device.Net.IDevice,System.Threading.Tasks.Task},Device.Net.IDeviceFactory,System.Nullable{System.TimeSpan},Microsoft.Extensions.Logging.ILoggerFactory,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task})
-  name: DeviceDataStreamer(Func<IDevice, Task>, IDeviceFactory, Nullable<TimeSpan>, ILoggerFactory, Func<IDevice, Task>)
-  href: api/Device.Net.DeviceDataStreamer.html#Device_Net_DeviceDataStreamer__ctor_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__Device_Net_IDeviceFactory_System_Nullable_System_TimeSpan__Microsoft_Extensions_Logging_ILoggerFactory_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__
-  commentId: M:Device.Net.DeviceDataStreamer.#ctor(System.Func{Device.Net.IDevice,System.Threading.Tasks.Task},Device.Net.IDeviceFactory,System.Nullable{System.TimeSpan},Microsoft.Extensions.Logging.ILoggerFactory,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task})
-  name.vb: DeviceDataStreamer(Func(Of IDevice, Task), IDeviceFactory, Nullable(Of TimeSpan), ILoggerFactory, Func(Of IDevice, Task))
-  fullName: Device.Net.DeviceDataStreamer.DeviceDataStreamer(System.Func<Device.Net.IDevice, System.Threading.Tasks.Task>, Device.Net.IDeviceFactory, System.Nullable<System.TimeSpan>, Microsoft.Extensions.Logging.ILoggerFactory, System.Func<Device.Net.IDevice, System.Threading.Tasks.Task>)
-  fullName.vb: Device.Net.DeviceDataStreamer.DeviceDataStreamer(System.Func(Of Device.Net.IDevice, System.Threading.Tasks.Task), Device.Net.IDeviceFactory, System.Nullable(Of System.TimeSpan), Microsoft.Extensions.Logging.ILoggerFactory, System.Func(Of Device.Net.IDevice, System.Threading.Tasks.Task))
-  nameWithType: DeviceDataStreamer.DeviceDataStreamer(Func<IDevice, Task>, IDeviceFactory, Nullable<TimeSpan>, ILoggerFactory, Func<IDevice, Task>)
-  nameWithType.vb: DeviceDataStreamer.DeviceDataStreamer(Func(Of IDevice, Task), IDeviceFactory, Nullable(Of TimeSpan), ILoggerFactory, Func(Of IDevice, Task))
-- uid: Device.Net.DeviceDataStreamer.#ctor*
-  name: DeviceDataStreamer
-  href: api/Device.Net.DeviceDataStreamer.html#Device_Net_DeviceDataStreamer__ctor_
-  commentId: Overload:Device.Net.DeviceDataStreamer.#ctor
-  isSpec: "True"
-  fullName: Device.Net.DeviceDataStreamer.DeviceDataStreamer
-  nameWithType: DeviceDataStreamer.DeviceDataStreamer
-- uid: Device.Net.DeviceDataStreamer.Dispose
-  name: Dispose()
-  href: api/Device.Net.DeviceDataStreamer.html#Device_Net_DeviceDataStreamer_Dispose
-  commentId: M:Device.Net.DeviceDataStreamer.Dispose
-  fullName: Device.Net.DeviceDataStreamer.Dispose()
-  nameWithType: DeviceDataStreamer.Dispose()
-- uid: Device.Net.DeviceDataStreamer.Dispose*
-  name: Dispose
-  href: api/Device.Net.DeviceDataStreamer.html#Device_Net_DeviceDataStreamer_Dispose_
-  commentId: Overload:Device.Net.DeviceDataStreamer.Dispose
-  isSpec: "True"
-  fullName: Device.Net.DeviceDataStreamer.Dispose
-  nameWithType: DeviceDataStreamer.Dispose
-- uid: Device.Net.DeviceDataStreamer.Start
-  name: Start()
-  href: api/Device.Net.DeviceDataStreamer.html#Device_Net_DeviceDataStreamer_Start
-  commentId: M:Device.Net.DeviceDataStreamer.Start
-  fullName: Device.Net.DeviceDataStreamer.Start()
-  nameWithType: DeviceDataStreamer.Start()
-- uid: Device.Net.DeviceDataStreamer.Start*
-  name: Start
-  href: api/Device.Net.DeviceDataStreamer.html#Device_Net_DeviceDataStreamer_Start_
-  commentId: Overload:Device.Net.DeviceDataStreamer.Start
-  isSpec: "True"
-  fullName: Device.Net.DeviceDataStreamer.Start
-  nameWithType: DeviceDataStreamer.Start
 - uid: Device.Net.DeviceEventArgs
   name: DeviceEventArgs
   href: api/Device.Net.DeviceEventArgs.html
@@ -512,22 +464,6 @@ references:
   isSpec: "True"
   fullName: Device.Net.DeviceExtensions.ConnectFirstAsync
   nameWithType: DeviceExtensions.ConnectFirstAsync
-- uid: Device.Net.DeviceExtensions.CreateDeviceDataStreamer(Device.Net.IDeviceFactory,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task},System.Func{Device.Net.IDevice,System.Threading.Tasks.Task})
-  name: CreateDeviceDataStreamer(IDeviceFactory, Func<IDevice, Task>, Func<IDevice, Task>)
-  href: api/Device.Net.DeviceExtensions.html#Device_Net_DeviceExtensions_CreateDeviceDataStreamer_Device_Net_IDeviceFactory_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__
-  commentId: M:Device.Net.DeviceExtensions.CreateDeviceDataStreamer(Device.Net.IDeviceFactory,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task},System.Func{Device.Net.IDevice,System.Threading.Tasks.Task})
-  name.vb: CreateDeviceDataStreamer(IDeviceFactory, Func(Of IDevice, Task), Func(Of IDevice, Task))
-  fullName: Device.Net.DeviceExtensions.CreateDeviceDataStreamer(Device.Net.IDeviceFactory, System.Func<Device.Net.IDevice, System.Threading.Tasks.Task>, System.Func<Device.Net.IDevice, System.Threading.Tasks.Task>)
-  fullName.vb: Device.Net.DeviceExtensions.CreateDeviceDataStreamer(Device.Net.IDeviceFactory, System.Func(Of Device.Net.IDevice, System.Threading.Tasks.Task), System.Func(Of Device.Net.IDevice, System.Threading.Tasks.Task))
-  nameWithType: DeviceExtensions.CreateDeviceDataStreamer(IDeviceFactory, Func<IDevice, Task>, Func<IDevice, Task>)
-  nameWithType.vb: DeviceExtensions.CreateDeviceDataStreamer(IDeviceFactory, Func(Of IDevice, Task), Func(Of IDevice, Task))
-- uid: Device.Net.DeviceExtensions.CreateDeviceDataStreamer*
-  name: CreateDeviceDataStreamer
-  href: api/Device.Net.DeviceExtensions.html#Device_Net_DeviceExtensions_CreateDeviceDataStreamer_
-  commentId: Overload:Device.Net.DeviceExtensions.CreateDeviceDataStreamer
-  isSpec: "True"
-  fullName: Device.Net.DeviceExtensions.CreateDeviceDataStreamer
-  nameWithType: DeviceExtensions.CreateDeviceDataStreamer
 - uid: Device.Net.DeviceExtensions.GetFirstDeviceAsync(Device.Net.IDeviceFactory)
   name: GetFirstDeviceAsync(IDeviceFactory)
   href: api/Device.Net.DeviceExtensions.html#Device_Net_DeviceExtensions_GetFirstDeviceAsync_Device_Net_IDeviceFactory_
@@ -714,86 +650,6 @@ references:
   isSpec: "True"
   fullName: Device.Net.DeviceListener.Stop
   nameWithType: DeviceListener.Stop
-- uid: Device.Net.DeviceManager
-  name: DeviceManager
-  href: api/Device.Net.DeviceManager.html
-  commentId: T:Device.Net.DeviceManager
-  fullName: Device.Net.DeviceManager
-  nameWithType: DeviceManager
-- uid: Device.Net.DeviceManager.#ctor(System.Collections.Generic.IReadOnlyCollection{Device.Net.IDeviceFactory},Microsoft.Extensions.Logging.ILoggerFactory)
-  name: DeviceManager(IReadOnlyCollection<IDeviceFactory>, ILoggerFactory)
-  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager__ctor_System_Collections_Generic_IReadOnlyCollection_Device_Net_IDeviceFactory__Microsoft_Extensions_Logging_ILoggerFactory_
-  commentId: M:Device.Net.DeviceManager.#ctor(System.Collections.Generic.IReadOnlyCollection{Device.Net.IDeviceFactory},Microsoft.Extensions.Logging.ILoggerFactory)
-  name.vb: DeviceManager(IReadOnlyCollection(Of IDeviceFactory), ILoggerFactory)
-  fullName: Device.Net.DeviceManager.DeviceManager(System.Collections.Generic.IReadOnlyCollection<Device.Net.IDeviceFactory>, Microsoft.Extensions.Logging.ILoggerFactory)
-  fullName.vb: Device.Net.DeviceManager.DeviceManager(System.Collections.Generic.IReadOnlyCollection(Of Device.Net.IDeviceFactory), Microsoft.Extensions.Logging.ILoggerFactory)
-  nameWithType: DeviceManager.DeviceManager(IReadOnlyCollection<IDeviceFactory>, ILoggerFactory)
-  nameWithType.vb: DeviceManager.DeviceManager(IReadOnlyCollection(Of IDeviceFactory), ILoggerFactory)
-- uid: Device.Net.DeviceManager.#ctor*
-  name: DeviceManager
-  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager__ctor_
-  commentId: Overload:Device.Net.DeviceManager.#ctor
-  isSpec: "True"
-  fullName: Device.Net.DeviceManager.DeviceManager
-  nameWithType: DeviceManager.DeviceManager
-- uid: Device.Net.DeviceManager.DeviceFactories
-  name: DeviceFactories
-  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_DeviceFactories
-  commentId: P:Device.Net.DeviceManager.DeviceFactories
-  fullName: Device.Net.DeviceManager.DeviceFactories
-  nameWithType: DeviceManager.DeviceFactories
-- uid: Device.Net.DeviceManager.DeviceFactories*
-  name: DeviceFactories
-  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_DeviceFactories_
-  commentId: Overload:Device.Net.DeviceManager.DeviceFactories
-  isSpec: "True"
-  fullName: Device.Net.DeviceManager.DeviceFactories
-  nameWithType: DeviceManager.DeviceFactories
-- uid: Device.Net.DeviceManager.GetConnectedDeviceDefinitionsAsync(System.Threading.CancellationToken)
-  name: GetConnectedDeviceDefinitionsAsync(CancellationToken)
-  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_GetConnectedDeviceDefinitionsAsync_System_Threading_CancellationToken_
-  commentId: M:Device.Net.DeviceManager.GetConnectedDeviceDefinitionsAsync(System.Threading.CancellationToken)
-  fullName: Device.Net.DeviceManager.GetConnectedDeviceDefinitionsAsync(System.Threading.CancellationToken)
-  nameWithType: DeviceManager.GetConnectedDeviceDefinitionsAsync(CancellationToken)
-- uid: Device.Net.DeviceManager.GetConnectedDeviceDefinitionsAsync*
-  name: GetConnectedDeviceDefinitionsAsync
-  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_GetConnectedDeviceDefinitionsAsync_
-  commentId: Overload:Device.Net.DeviceManager.GetConnectedDeviceDefinitionsAsync
-  isSpec: "True"
-  fullName: Device.Net.DeviceManager.GetConnectedDeviceDefinitionsAsync
-  nameWithType: DeviceManager.GetConnectedDeviceDefinitionsAsync
-- uid: Device.Net.DeviceManager.GetDeviceAsync(Device.Net.ConnectedDeviceDefinition,System.Threading.CancellationToken)
-  name: GetDeviceAsync(ConnectedDeviceDefinition, CancellationToken)
-  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_GetDeviceAsync_Device_Net_ConnectedDeviceDefinition_System_Threading_CancellationToken_
-  commentId: M:Device.Net.DeviceManager.GetDeviceAsync(Device.Net.ConnectedDeviceDefinition,System.Threading.CancellationToken)
-  fullName: Device.Net.DeviceManager.GetDeviceAsync(Device.Net.ConnectedDeviceDefinition, System.Threading.CancellationToken)
-  nameWithType: DeviceManager.GetDeviceAsync(ConnectedDeviceDefinition, CancellationToken)
-- uid: Device.Net.DeviceManager.GetDeviceAsync*
-  name: GetDeviceAsync
-  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_GetDeviceAsync_
-  commentId: Overload:Device.Net.DeviceManager.GetDeviceAsync
-  isSpec: "True"
-  fullName: Device.Net.DeviceManager.GetDeviceAsync
-  nameWithType: DeviceManager.GetDeviceAsync
-- uid: Device.Net.DeviceManager.ObsoleteMessage
-  name: ObsoleteMessage
-  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_ObsoleteMessage
-  commentId: F:Device.Net.DeviceManager.ObsoleteMessage
-  fullName: Device.Net.DeviceManager.ObsoleteMessage
-  nameWithType: DeviceManager.ObsoleteMessage
-- uid: Device.Net.DeviceManager.SupportsDeviceAsync(Device.Net.ConnectedDeviceDefinition,System.Threading.CancellationToken)
-  name: SupportsDeviceAsync(ConnectedDeviceDefinition, CancellationToken)
-  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_SupportsDeviceAsync_Device_Net_ConnectedDeviceDefinition_System_Threading_CancellationToken_
-  commentId: M:Device.Net.DeviceManager.SupportsDeviceAsync(Device.Net.ConnectedDeviceDefinition,System.Threading.CancellationToken)
-  fullName: Device.Net.DeviceManager.SupportsDeviceAsync(Device.Net.ConnectedDeviceDefinition, System.Threading.CancellationToken)
-  nameWithType: DeviceManager.SupportsDeviceAsync(ConnectedDeviceDefinition, CancellationToken)
-- uid: Device.Net.DeviceManager.SupportsDeviceAsync*
-  name: SupportsDeviceAsync
-  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_SupportsDeviceAsync_
-  commentId: Overload:Device.Net.DeviceManager.SupportsDeviceAsync
-  isSpec: "True"
-  fullName: Device.Net.DeviceManager.SupportsDeviceAsync
-  nameWithType: DeviceManager.SupportsDeviceAsync
 - uid: Device.Net.DeviceType
   name: DeviceType
   href: api/Device.Net.DeviceType.html
@@ -3387,15 +3243,15 @@ references:
   commentId: T:Hid.Net.HidDevice
   fullName: Hid.Net.HidDevice
   nameWithType: HidDevice
-- uid: Hid.Net.HidDevice.#ctor(Hid.Net.IHidDeviceHandler,Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.Byte},System.Func{Hid.Net.Report,Device.Net.TransferResult},Hid.Net.WriteReportTransform)
-  name: HidDevice(IHidDeviceHandler, ILoggerFactory, Nullable<Byte>, Func<Report, TransferResult>, WriteReportTransform)
-  href: api/Hid.Net.HidDevice.html#Hid_Net_HidDevice__ctor_Hid_Net_IHidDeviceHandler_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Byte__System_Func_Hid_Net_Report_Device_Net_TransferResult__Hid_Net_WriteReportTransform_
-  commentId: M:Hid.Net.HidDevice.#ctor(Hid.Net.IHidDeviceHandler,Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.Byte},System.Func{Hid.Net.Report,Device.Net.TransferResult},Hid.Net.WriteReportTransform)
-  name.vb: HidDevice(IHidDeviceHandler, ILoggerFactory, Nullable(Of Byte), Func(Of Report, TransferResult), WriteReportTransform)
-  fullName: Hid.Net.HidDevice.HidDevice(Hid.Net.IHidDeviceHandler, Microsoft.Extensions.Logging.ILoggerFactory, System.Nullable<System.Byte>, System.Func<Hid.Net.Report, Device.Net.TransferResult>, Hid.Net.WriteReportTransform)
-  fullName.vb: Hid.Net.HidDevice.HidDevice(Hid.Net.IHidDeviceHandler, Microsoft.Extensions.Logging.ILoggerFactory, System.Nullable(Of System.Byte), System.Func(Of Hid.Net.Report, Device.Net.TransferResult), Hid.Net.WriteReportTransform)
-  nameWithType: HidDevice.HidDevice(IHidDeviceHandler, ILoggerFactory, Nullable<Byte>, Func<Report, TransferResult>, WriteReportTransform)
-  nameWithType.vb: HidDevice.HidDevice(IHidDeviceHandler, ILoggerFactory, Nullable(Of Byte), Func(Of Report, TransferResult), WriteReportTransform)
+- uid: Hid.Net.HidDevice.#ctor(Hid.Net.IHidDeviceHandler,Microsoft.Extensions.Logging.ILoggerFactory,System.Func{Hid.Net.Report,Device.Net.TransferResult},Hid.Net.WriteReportTransform)
+  name: HidDevice(IHidDeviceHandler, ILoggerFactory, Func<Report, TransferResult>, WriteReportTransform)
+  href: api/Hid.Net.HidDevice.html#Hid_Net_HidDevice__ctor_Hid_Net_IHidDeviceHandler_Microsoft_Extensions_Logging_ILoggerFactory_System_Func_Hid_Net_Report_Device_Net_TransferResult__Hid_Net_WriteReportTransform_
+  commentId: M:Hid.Net.HidDevice.#ctor(Hid.Net.IHidDeviceHandler,Microsoft.Extensions.Logging.ILoggerFactory,System.Func{Hid.Net.Report,Device.Net.TransferResult},Hid.Net.WriteReportTransform)
+  name.vb: HidDevice(IHidDeviceHandler, ILoggerFactory, Func(Of Report, TransferResult), WriteReportTransform)
+  fullName: Hid.Net.HidDevice.HidDevice(Hid.Net.IHidDeviceHandler, Microsoft.Extensions.Logging.ILoggerFactory, System.Func<Hid.Net.Report, Device.Net.TransferResult>, Hid.Net.WriteReportTransform)
+  fullName.vb: Hid.Net.HidDevice.HidDevice(Hid.Net.IHidDeviceHandler, Microsoft.Extensions.Logging.ILoggerFactory, System.Func(Of Hid.Net.Report, Device.Net.TransferResult), Hid.Net.WriteReportTransform)
+  nameWithType: HidDevice.HidDevice(IHidDeviceHandler, ILoggerFactory, Func<Report, TransferResult>, WriteReportTransform)
+  nameWithType.vb: HidDevice.HidDevice(IHidDeviceHandler, ILoggerFactory, Func(Of Report, TransferResult), WriteReportTransform)
 - uid: Hid.Net.HidDevice.#ctor*
   name: HidDevice
   href: api/Hid.Net.HidDevice.html#Hid_Net_HidDevice__ctor_
@@ -3429,19 +3285,6 @@ references:
   isSpec: "True"
   fullName: Hid.Net.HidDevice.ConnectedDeviceDefinition
   nameWithType: HidDevice.ConnectedDeviceDefinition
-- uid: Hid.Net.HidDevice.DefaultWriteReportId
-  name: DefaultWriteReportId
-  href: api/Hid.Net.HidDevice.html#Hid_Net_HidDevice_DefaultWriteReportId
-  commentId: P:Hid.Net.HidDevice.DefaultWriteReportId
-  fullName: Hid.Net.HidDevice.DefaultWriteReportId
-  nameWithType: HidDevice.DefaultWriteReportId
-- uid: Hid.Net.HidDevice.DefaultWriteReportId*
-  name: DefaultWriteReportId
-  href: api/Hid.Net.HidDevice.html#Hid_Net_HidDevice_DefaultWriteReportId_
-  commentId: Overload:Hid.Net.HidDevice.DefaultWriteReportId
-  isSpec: "True"
-  fullName: Hid.Net.HidDevice.DefaultWriteReportId
-  nameWithType: HidDevice.DefaultWriteReportId
 - uid: Hid.Net.HidDevice.Dispose
   name: Dispose()
   href: api/Hid.Net.HidDevice.html#Hid_Net_HidDevice_Dispose
@@ -3809,24 +3652,24 @@ references:
   commentId: T:Hid.Net.UWP.UwpHidDeviceFactoryExtensions
   fullName: Hid.Net.UWP.UwpHidDeviceFactoryExtensions
   nameWithType: UwpHidDeviceFactoryExtensions
-- uid: Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(Device.Net.FilterDeviceDefinition,Microsoft.Extensions.Logging.ILoggerFactory,Device.Net.GetConnectedDeviceDefinitionsAsync,Device.Net.GetDeviceAsync,System.Nullable{System.Byte},System.Nullable{System.Guid},System.Func{Windows.Devices.Enumeration.DeviceInformation,System.Boolean},Device.Net.IDataReceiver,System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]})
-  name: CreateUwpHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable<Byte>, Nullable<Guid>, Func<DeviceInformation, Boolean>, IDataReceiver, Nullable<UInt16>, Nullable<UInt16>, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>)
-  href: api/Hid.Net.UWP.UwpHidDeviceFactoryExtensions.html#Hid_Net_UWP_UwpHidDeviceFactoryExtensions_CreateUwpHidDeviceFactory_Device_Net_FilterDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Device_Net_GetDeviceAsync_System_Nullable_System_Byte__System_Nullable_System_Guid__System_Func_Windows_Devices_Enumeration_DeviceInformation_System_Boolean__Device_Net_IDataReceiver_System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Hid_Net_Report_Device_Net_TransferResult__System_Func_Device_Net_TransferResult_Hid_Net_Report__System_Func_System_Byte___System_Byte_System_Byte____
-  commentId: M:Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(Device.Net.FilterDeviceDefinition,Microsoft.Extensions.Logging.ILoggerFactory,Device.Net.GetConnectedDeviceDefinitionsAsync,Device.Net.GetDeviceAsync,System.Nullable{System.Byte},System.Nullable{System.Guid},System.Func{Windows.Devices.Enumeration.DeviceInformation,System.Boolean},Device.Net.IDataReceiver,System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]})
-  name.vb: CreateUwpHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable(Of Byte), Nullable(Of Guid), Func(Of DeviceInformation, Boolean), IDataReceiver, Nullable(Of UInt16), Nullable(Of UInt16), Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()))
-  fullName: Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(Device.Net.FilterDeviceDefinition, Microsoft.Extensions.Logging.ILoggerFactory, Device.Net.GetConnectedDeviceDefinitionsAsync, Device.Net.GetDeviceAsync, System.Nullable<System.Byte>, System.Nullable<System.Guid>, System.Func<Windows.Devices.Enumeration.DeviceInformation, System.Boolean>, Device.Net.IDataReceiver, System.Nullable<System.UInt16>, System.Nullable<System.UInt16>, System.Func<Hid.Net.Report, Device.Net.TransferResult>, System.Func<Device.Net.TransferResult, Hid.Net.Report>, System.Func<System.Byte[], System.Byte, System.Byte[]>)
-  fullName.vb: Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(Device.Net.FilterDeviceDefinition, Microsoft.Extensions.Logging.ILoggerFactory, Device.Net.GetConnectedDeviceDefinitionsAsync, Device.Net.GetDeviceAsync, System.Nullable(Of System.Byte), System.Nullable(Of System.Guid), System.Func(Of Windows.Devices.Enumeration.DeviceInformation, System.Boolean), Device.Net.IDataReceiver, System.Nullable(Of System.UInt16), System.Nullable(Of System.UInt16), System.Func(Of Hid.Net.Report, Device.Net.TransferResult), System.Func(Of Device.Net.TransferResult, Hid.Net.Report), System.Func(Of System.Byte(), System.Byte, System.Byte()))
-  nameWithType: UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable<Byte>, Nullable<Guid>, Func<DeviceInformation, Boolean>, IDataReceiver, Nullable<UInt16>, Nullable<UInt16>, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>)
-  nameWithType.vb: UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable(Of Byte), Nullable(Of Guid), Func(Of DeviceInformation, Boolean), IDataReceiver, Nullable(Of UInt16), Nullable(Of UInt16), Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()))
-- uid: Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(System.Collections.Generic.IEnumerable{Device.Net.FilterDeviceDefinition},Microsoft.Extensions.Logging.ILoggerFactory,Device.Net.GetConnectedDeviceDefinitionsAsync,Device.Net.GetDeviceAsync,System.Nullable{System.Byte},System.Nullable{System.Guid},System.Func{Windows.Devices.Enumeration.DeviceInformation,System.Boolean},Device.Net.IDataReceiver,System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]})
-  name: CreateUwpHidDeviceFactory(IEnumerable<FilterDeviceDefinition>, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable<Byte>, Nullable<Guid>, Func<DeviceInformation, Boolean>, IDataReceiver, Nullable<UInt16>, Nullable<UInt16>, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>)
-  href: api/Hid.Net.UWP.UwpHidDeviceFactoryExtensions.html#Hid_Net_UWP_UwpHidDeviceFactoryExtensions_CreateUwpHidDeviceFactory_System_Collections_Generic_IEnumerable_Device_Net_FilterDeviceDefinition__Microsoft_Extensions_Logging_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Device_Net_GetDeviceAsync_System_Nullable_System_Byte__System_Nullable_System_Guid__System_Func_Windows_Devices_Enumeration_DeviceInformation_System_Boolean__Device_Net_IDataReceiver_System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Hid_Net_Report_Device_Net_TransferResult__System_Func_Device_Net_TransferResult_Hid_Net_Report__System_Func_System_Byte___System_Byte_System_Byte____
-  commentId: M:Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(System.Collections.Generic.IEnumerable{Device.Net.FilterDeviceDefinition},Microsoft.Extensions.Logging.ILoggerFactory,Device.Net.GetConnectedDeviceDefinitionsAsync,Device.Net.GetDeviceAsync,System.Nullable{System.Byte},System.Nullable{System.Guid},System.Func{Windows.Devices.Enumeration.DeviceInformation,System.Boolean},Device.Net.IDataReceiver,System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]})
-  name.vb: CreateUwpHidDeviceFactory(IEnumerable(Of FilterDeviceDefinition), ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable(Of Byte), Nullable(Of Guid), Func(Of DeviceInformation, Boolean), IDataReceiver, Nullable(Of UInt16), Nullable(Of UInt16), Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()))
-  fullName: Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(System.Collections.Generic.IEnumerable<Device.Net.FilterDeviceDefinition>, Microsoft.Extensions.Logging.ILoggerFactory, Device.Net.GetConnectedDeviceDefinitionsAsync, Device.Net.GetDeviceAsync, System.Nullable<System.Byte>, System.Nullable<System.Guid>, System.Func<Windows.Devices.Enumeration.DeviceInformation, System.Boolean>, Device.Net.IDataReceiver, System.Nullable<System.UInt16>, System.Nullable<System.UInt16>, System.Func<Hid.Net.Report, Device.Net.TransferResult>, System.Func<Device.Net.TransferResult, Hid.Net.Report>, System.Func<System.Byte[], System.Byte, System.Byte[]>)
-  fullName.vb: Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(System.Collections.Generic.IEnumerable(Of Device.Net.FilterDeviceDefinition), Microsoft.Extensions.Logging.ILoggerFactory, Device.Net.GetConnectedDeviceDefinitionsAsync, Device.Net.GetDeviceAsync, System.Nullable(Of System.Byte), System.Nullable(Of System.Guid), System.Func(Of Windows.Devices.Enumeration.DeviceInformation, System.Boolean), Device.Net.IDataReceiver, System.Nullable(Of System.UInt16), System.Nullable(Of System.UInt16), System.Func(Of Hid.Net.Report, Device.Net.TransferResult), System.Func(Of Device.Net.TransferResult, Hid.Net.Report), System.Func(Of System.Byte(), System.Byte, System.Byte()))
-  nameWithType: UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(IEnumerable<FilterDeviceDefinition>, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable<Byte>, Nullable<Guid>, Func<DeviceInformation, Boolean>, IDataReceiver, Nullable<UInt16>, Nullable<UInt16>, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>)
-  nameWithType.vb: UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(IEnumerable(Of FilterDeviceDefinition), ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable(Of Byte), Nullable(Of Guid), Func(Of DeviceInformation, Boolean), IDataReceiver, Nullable(Of UInt16), Nullable(Of UInt16), Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()))
+- uid: Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(Device.Net.FilterDeviceDefinition,Microsoft.Extensions.Logging.ILoggerFactory,Device.Net.GetConnectedDeviceDefinitionsAsync,Device.Net.GetDeviceAsync,System.Nullable{System.Guid},System.Func{Windows.Devices.Enumeration.DeviceInformation,System.Boolean},Device.Net.IDataReceiver,System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]},Hid.Net.WriteReportTransform)
+  name: CreateUwpHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable<Guid>, Func<DeviceInformation, Boolean>, IDataReceiver, Nullable<UInt16>, Nullable<UInt16>, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>, WriteReportTransform)
+  href: api/Hid.Net.UWP.UwpHidDeviceFactoryExtensions.html#Hid_Net_UWP_UwpHidDeviceFactoryExtensions_CreateUwpHidDeviceFactory_Device_Net_FilterDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Device_Net_GetDeviceAsync_System_Nullable_System_Guid__System_Func_Windows_Devices_Enumeration_DeviceInformation_System_Boolean__Device_Net_IDataReceiver_System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Hid_Net_Report_Device_Net_TransferResult__System_Func_Device_Net_TransferResult_Hid_Net_Report__System_Func_System_Byte___System_Byte_System_Byte____Hid_Net_WriteReportTransform_
+  commentId: M:Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(Device.Net.FilterDeviceDefinition,Microsoft.Extensions.Logging.ILoggerFactory,Device.Net.GetConnectedDeviceDefinitionsAsync,Device.Net.GetDeviceAsync,System.Nullable{System.Guid},System.Func{Windows.Devices.Enumeration.DeviceInformation,System.Boolean},Device.Net.IDataReceiver,System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]},Hid.Net.WriteReportTransform)
+  name.vb: CreateUwpHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable(Of Guid), Func(Of DeviceInformation, Boolean), IDataReceiver, Nullable(Of UInt16), Nullable(Of UInt16), Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()), WriteReportTransform)
+  fullName: Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(Device.Net.FilterDeviceDefinition, Microsoft.Extensions.Logging.ILoggerFactory, Device.Net.GetConnectedDeviceDefinitionsAsync, Device.Net.GetDeviceAsync, System.Nullable<System.Guid>, System.Func<Windows.Devices.Enumeration.DeviceInformation, System.Boolean>, Device.Net.IDataReceiver, System.Nullable<System.UInt16>, System.Nullable<System.UInt16>, System.Func<Hid.Net.Report, Device.Net.TransferResult>, System.Func<Device.Net.TransferResult, Hid.Net.Report>, System.Func<System.Byte[], System.Byte, System.Byte[]>, Hid.Net.WriteReportTransform)
+  fullName.vb: Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(Device.Net.FilterDeviceDefinition, Microsoft.Extensions.Logging.ILoggerFactory, Device.Net.GetConnectedDeviceDefinitionsAsync, Device.Net.GetDeviceAsync, System.Nullable(Of System.Guid), System.Func(Of Windows.Devices.Enumeration.DeviceInformation, System.Boolean), Device.Net.IDataReceiver, System.Nullable(Of System.UInt16), System.Nullable(Of System.UInt16), System.Func(Of Hid.Net.Report, Device.Net.TransferResult), System.Func(Of Device.Net.TransferResult, Hid.Net.Report), System.Func(Of System.Byte(), System.Byte, System.Byte()), Hid.Net.WriteReportTransform)
+  nameWithType: UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable<Guid>, Func<DeviceInformation, Boolean>, IDataReceiver, Nullable<UInt16>, Nullable<UInt16>, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>, WriteReportTransform)
+  nameWithType.vb: UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable(Of Guid), Func(Of DeviceInformation, Boolean), IDataReceiver, Nullable(Of UInt16), Nullable(Of UInt16), Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()), WriteReportTransform)
+- uid: Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(System.Collections.Generic.IEnumerable{Device.Net.FilterDeviceDefinition},Microsoft.Extensions.Logging.ILoggerFactory,Device.Net.GetConnectedDeviceDefinitionsAsync,Device.Net.GetDeviceAsync,System.Nullable{System.Guid},System.Func{Windows.Devices.Enumeration.DeviceInformation,System.Boolean},Device.Net.IDataReceiver,System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]},Hid.Net.WriteReportTransform)
+  name: CreateUwpHidDeviceFactory(IEnumerable<FilterDeviceDefinition>, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable<Guid>, Func<DeviceInformation, Boolean>, IDataReceiver, Nullable<UInt16>, Nullable<UInt16>, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>, WriteReportTransform)
+  href: api/Hid.Net.UWP.UwpHidDeviceFactoryExtensions.html#Hid_Net_UWP_UwpHidDeviceFactoryExtensions_CreateUwpHidDeviceFactory_System_Collections_Generic_IEnumerable_Device_Net_FilterDeviceDefinition__Microsoft_Extensions_Logging_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Device_Net_GetDeviceAsync_System_Nullable_System_Guid__System_Func_Windows_Devices_Enumeration_DeviceInformation_System_Boolean__Device_Net_IDataReceiver_System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Hid_Net_Report_Device_Net_TransferResult__System_Func_Device_Net_TransferResult_Hid_Net_Report__System_Func_System_Byte___System_Byte_System_Byte____Hid_Net_WriteReportTransform_
+  commentId: M:Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(System.Collections.Generic.IEnumerable{Device.Net.FilterDeviceDefinition},Microsoft.Extensions.Logging.ILoggerFactory,Device.Net.GetConnectedDeviceDefinitionsAsync,Device.Net.GetDeviceAsync,System.Nullable{System.Guid},System.Func{Windows.Devices.Enumeration.DeviceInformation,System.Boolean},Device.Net.IDataReceiver,System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]},Hid.Net.WriteReportTransform)
+  name.vb: CreateUwpHidDeviceFactory(IEnumerable(Of FilterDeviceDefinition), ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable(Of Guid), Func(Of DeviceInformation, Boolean), IDataReceiver, Nullable(Of UInt16), Nullable(Of UInt16), Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()), WriteReportTransform)
+  fullName: Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(System.Collections.Generic.IEnumerable<Device.Net.FilterDeviceDefinition>, Microsoft.Extensions.Logging.ILoggerFactory, Device.Net.GetConnectedDeviceDefinitionsAsync, Device.Net.GetDeviceAsync, System.Nullable<System.Guid>, System.Func<Windows.Devices.Enumeration.DeviceInformation, System.Boolean>, Device.Net.IDataReceiver, System.Nullable<System.UInt16>, System.Nullable<System.UInt16>, System.Func<Hid.Net.Report, Device.Net.TransferResult>, System.Func<Device.Net.TransferResult, Hid.Net.Report>, System.Func<System.Byte[], System.Byte, System.Byte[]>, Hid.Net.WriteReportTransform)
+  fullName.vb: Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(System.Collections.Generic.IEnumerable(Of Device.Net.FilterDeviceDefinition), Microsoft.Extensions.Logging.ILoggerFactory, Device.Net.GetConnectedDeviceDefinitionsAsync, Device.Net.GetDeviceAsync, System.Nullable(Of System.Guid), System.Func(Of Windows.Devices.Enumeration.DeviceInformation, System.Boolean), Device.Net.IDataReceiver, System.Nullable(Of System.UInt16), System.Nullable(Of System.UInt16), System.Func(Of Hid.Net.Report, Device.Net.TransferResult), System.Func(Of Device.Net.TransferResult, Hid.Net.Report), System.Func(Of System.Byte(), System.Byte, System.Byte()), Hid.Net.WriteReportTransform)
+  nameWithType: UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(IEnumerable<FilterDeviceDefinition>, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable<Guid>, Func<DeviceInformation, Boolean>, IDataReceiver, Nullable<UInt16>, Nullable<UInt16>, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>, WriteReportTransform)
+  nameWithType.vb: UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(IEnumerable(Of FilterDeviceDefinition), ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable(Of Guid), Func(Of DeviceInformation, Boolean), IDataReceiver, Nullable(Of UInt16), Nullable(Of UInt16), Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()), WriteReportTransform)
 - uid: Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory*
   name: CreateUwpHidDeviceFactory
   href: api/Hid.Net.UWP.UwpHidDeviceFactoryExtensions.html#Hid_Net_UWP_UwpHidDeviceFactoryExtensions_CreateUwpHidDeviceFactory_
@@ -3840,138 +3683,6 @@ references:
   commentId: N:Hid.Net.Windows
   fullName: Hid.Net.Windows
   nameWithType: Hid.Net.Windows
-- uid: Hid.Net.Windows.HidAttributes
-  name: HidAttributes
-  href: api/Hid.Net.Windows.HidAttributes.html
-  commentId: T:Hid.Net.Windows.HidAttributes
-  fullName: Hid.Net.Windows.HidAttributes
-  nameWithType: HidAttributes
-- uid: Hid.Net.Windows.HidAttributes.ProductId
-  name: ProductId
-  href: api/Hid.Net.Windows.HidAttributes.html#Hid_Net_Windows_HidAttributes_ProductId
-  commentId: F:Hid.Net.Windows.HidAttributes.ProductId
-  fullName: Hid.Net.Windows.HidAttributes.ProductId
-  nameWithType: HidAttributes.ProductId
-- uid: Hid.Net.Windows.HidAttributes.Size
-  name: Size
-  href: api/Hid.Net.Windows.HidAttributes.html#Hid_Net_Windows_HidAttributes_Size
-  commentId: F:Hid.Net.Windows.HidAttributes.Size
-  fullName: Hid.Net.Windows.HidAttributes.Size
-  nameWithType: HidAttributes.Size
-- uid: Hid.Net.Windows.HidAttributes.VendorId
-  name: VendorId
-  href: api/Hid.Net.Windows.HidAttributes.html#Hid_Net_Windows_HidAttributes_VendorId
-  commentId: F:Hid.Net.Windows.HidAttributes.VendorId
-  fullName: Hid.Net.Windows.HidAttributes.VendorId
-  nameWithType: HidAttributes.VendorId
-- uid: Hid.Net.Windows.HidAttributes.VersionNumber
-  name: VersionNumber
-  href: api/Hid.Net.Windows.HidAttributes.html#Hid_Net_Windows_HidAttributes_VersionNumber
-  commentId: F:Hid.Net.Windows.HidAttributes.VersionNumber
-  fullName: Hid.Net.Windows.HidAttributes.VersionNumber
-  nameWithType: HidAttributes.VersionNumber
-- uid: Hid.Net.Windows.HidCollectionCapabilities
-  name: HidCollectionCapabilities
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html
-  commentId: T:Hid.Net.Windows.HidCollectionCapabilities
-  fullName: Hid.Net.Windows.HidCollectionCapabilities
-  nameWithType: HidCollectionCapabilities
-- uid: Hid.Net.Windows.HidCollectionCapabilities.FeatureReportByteLength
-  name: FeatureReportByteLength
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_FeatureReportByteLength
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.FeatureReportByteLength
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.FeatureReportByteLength
-  nameWithType: HidCollectionCapabilities.FeatureReportByteLength
-- uid: Hid.Net.Windows.HidCollectionCapabilities.InputReportByteLength
-  name: InputReportByteLength
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_InputReportByteLength
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.InputReportByteLength
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.InputReportByteLength
-  nameWithType: HidCollectionCapabilities.InputReportByteLength
-- uid: Hid.Net.Windows.HidCollectionCapabilities.NumberFeatureButtonCaps
-  name: NumberFeatureButtonCaps
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_NumberFeatureButtonCaps
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.NumberFeatureButtonCaps
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.NumberFeatureButtonCaps
-  nameWithType: HidCollectionCapabilities.NumberFeatureButtonCaps
-- uid: Hid.Net.Windows.HidCollectionCapabilities.NumberFeatureDataIndices
-  name: NumberFeatureDataIndices
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_NumberFeatureDataIndices
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.NumberFeatureDataIndices
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.NumberFeatureDataIndices
-  nameWithType: HidCollectionCapabilities.NumberFeatureDataIndices
-- uid: Hid.Net.Windows.HidCollectionCapabilities.NumberFeatureValueCaps
-  name: NumberFeatureValueCaps
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_NumberFeatureValueCaps
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.NumberFeatureValueCaps
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.NumberFeatureValueCaps
-  nameWithType: HidCollectionCapabilities.NumberFeatureValueCaps
-- uid: Hid.Net.Windows.HidCollectionCapabilities.NumberInputButtonCaps
-  name: NumberInputButtonCaps
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_NumberInputButtonCaps
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.NumberInputButtonCaps
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.NumberInputButtonCaps
-  nameWithType: HidCollectionCapabilities.NumberInputButtonCaps
-- uid: Hid.Net.Windows.HidCollectionCapabilities.NumberInputDataIndices
-  name: NumberInputDataIndices
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_NumberInputDataIndices
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.NumberInputDataIndices
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.NumberInputDataIndices
-  nameWithType: HidCollectionCapabilities.NumberInputDataIndices
-- uid: Hid.Net.Windows.HidCollectionCapabilities.NumberInputValueCaps
-  name: NumberInputValueCaps
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_NumberInputValueCaps
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.NumberInputValueCaps
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.NumberInputValueCaps
-  nameWithType: HidCollectionCapabilities.NumberInputValueCaps
-- uid: Hid.Net.Windows.HidCollectionCapabilities.NumberLinkCollectionNodes
-  name: NumberLinkCollectionNodes
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_NumberLinkCollectionNodes
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.NumberLinkCollectionNodes
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.NumberLinkCollectionNodes
-  nameWithType: HidCollectionCapabilities.NumberLinkCollectionNodes
-- uid: Hid.Net.Windows.HidCollectionCapabilities.NumberOutputButtonCaps
-  name: NumberOutputButtonCaps
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_NumberOutputButtonCaps
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.NumberOutputButtonCaps
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.NumberOutputButtonCaps
-  nameWithType: HidCollectionCapabilities.NumberOutputButtonCaps
-- uid: Hid.Net.Windows.HidCollectionCapabilities.NumberOutputDataIndices
-  name: NumberOutputDataIndices
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_NumberOutputDataIndices
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.NumberOutputDataIndices
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.NumberOutputDataIndices
-  nameWithType: HidCollectionCapabilities.NumberOutputDataIndices
-- uid: Hid.Net.Windows.HidCollectionCapabilities.NumberOutputValueCaps
-  name: NumberOutputValueCaps
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_NumberOutputValueCaps
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.NumberOutputValueCaps
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.NumberOutputValueCaps
-  nameWithType: HidCollectionCapabilities.NumberOutputValueCaps
-- uid: Hid.Net.Windows.HidCollectionCapabilities.OutputReportByteLength
-  name: OutputReportByteLength
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_OutputReportByteLength
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.OutputReportByteLength
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.OutputReportByteLength
-  nameWithType: HidCollectionCapabilities.OutputReportByteLength
-- uid: Hid.Net.Windows.HidCollectionCapabilities.Reserved
-  name: Reserved
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_Reserved
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.Reserved
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.Reserved
-  nameWithType: HidCollectionCapabilities.Reserved
-- uid: Hid.Net.Windows.HidCollectionCapabilities.Usage
-  name: Usage
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_Usage
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.Usage
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.Usage
-  nameWithType: HidCollectionCapabilities.Usage
-- uid: Hid.Net.Windows.HidCollectionCapabilities.UsagePage
-  name: UsagePage
-  href: api/Hid.Net.Windows.HidCollectionCapabilities.html#Hid_Net_Windows_HidCollectionCapabilities_UsagePage
-  commentId: F:Hid.Net.Windows.HidCollectionCapabilities.UsagePage
-  fullName: Hid.Net.Windows.HidCollectionCapabilities.UsagePage
-  nameWithType: HidCollectionCapabilities.UsagePage
 - uid: Hid.Net.Windows.IHidApiService
   name: IHidApiService
   href: api/Hid.Net.Windows.IHidApiService.html
@@ -3991,32 +3702,6 @@ references:
   isSpec: "True"
   fullName: Hid.Net.Windows.IHidApiService.GetDeviceDefinition
   nameWithType: IHidApiService.GetDeviceDefinition
-- uid: Hid.Net.Windows.IHidApiService.GetHidAttributes(Microsoft.Win32.SafeHandles.SafeFileHandle)
-  name: GetHidAttributes(SafeFileHandle)
-  href: api/Hid.Net.Windows.IHidApiService.html#Hid_Net_Windows_IHidApiService_GetHidAttributes_Microsoft_Win32_SafeHandles_SafeFileHandle_
-  commentId: M:Hid.Net.Windows.IHidApiService.GetHidAttributes(Microsoft.Win32.SafeHandles.SafeFileHandle)
-  fullName: Hid.Net.Windows.IHidApiService.GetHidAttributes(Microsoft.Win32.SafeHandles.SafeFileHandle)
-  nameWithType: IHidApiService.GetHidAttributes(SafeFileHandle)
-- uid: Hid.Net.Windows.IHidApiService.GetHidAttributes*
-  name: GetHidAttributes
-  href: api/Hid.Net.Windows.IHidApiService.html#Hid_Net_Windows_IHidApiService_GetHidAttributes_
-  commentId: Overload:Hid.Net.Windows.IHidApiService.GetHidAttributes
-  isSpec: "True"
-  fullName: Hid.Net.Windows.IHidApiService.GetHidAttributes
-  nameWithType: IHidApiService.GetHidAttributes
-- uid: Hid.Net.Windows.IHidApiService.GetHidCapabilities(Microsoft.Win32.SafeHandles.SafeFileHandle)
-  name: GetHidCapabilities(SafeFileHandle)
-  href: api/Hid.Net.Windows.IHidApiService.html#Hid_Net_Windows_IHidApiService_GetHidCapabilities_Microsoft_Win32_SafeHandles_SafeFileHandle_
-  commentId: M:Hid.Net.Windows.IHidApiService.GetHidCapabilities(Microsoft.Win32.SafeHandles.SafeFileHandle)
-  fullName: Hid.Net.Windows.IHidApiService.GetHidCapabilities(Microsoft.Win32.SafeHandles.SafeFileHandle)
-  nameWithType: IHidApiService.GetHidCapabilities(SafeFileHandle)
-- uid: Hid.Net.Windows.IHidApiService.GetHidCapabilities*
-  name: GetHidCapabilities
-  href: api/Hid.Net.Windows.IHidApiService.html#Hid_Net_Windows_IHidApiService_GetHidCapabilities_
-  commentId: Overload:Hid.Net.Windows.IHidApiService.GetHidCapabilities
-  isSpec: "True"
-  fullName: Hid.Net.Windows.IHidApiService.GetHidCapabilities
-  nameWithType: IHidApiService.GetHidCapabilities
 - uid: Hid.Net.Windows.IHidApiService.GetHidGuid
   name: GetHidGuid()
   href: api/Hid.Net.Windows.IHidApiService.html#Hid_Net_Windows_IHidApiService_GetHidGuid
@@ -4101,33 +3786,33 @@ references:
   commentId: T:Hid.Net.Windows.WindowsHidDeviceFactoryExtensions
   fullName: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions
   nameWithType: WindowsHidDeviceFactoryExtensions
-- uid: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Device.Net.FilterDeviceDefinition,Microsoft.Extensions.Logging.ILoggerFactory,Hid.Net.Windows.IHidApiService,System.Nullable{System.Guid},System.Nullable{System.UInt16},System.Nullable{System.UInt16},Device.Net.GetConnectedDeviceDefinitionsAsync,System.Nullable{System.Byte},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]})
-  name: CreateWindowsHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, IHidApiService, Nullable<Guid>, Nullable<UInt16>, Nullable<UInt16>, GetConnectedDeviceDefinitionsAsync, Nullable<Byte>, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>)
-  href: api/Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.html#Hid_Net_Windows_WindowsHidDeviceFactoryExtensions_CreateWindowsHidDeviceFactory_Device_Net_FilterDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_Hid_Net_Windows_IHidApiService_System_Nullable_System_Guid__System_Nullable_System_UInt16__System_Nullable_System_UInt16__Device_Net_GetConnectedDeviceDefinitionsAsync_System_Nullable_System_Byte__System_Func_Hid_Net_Report_Device_Net_TransferResult__System_Func_Device_Net_TransferResult_Hid_Net_Report__System_Func_System_Byte___System_Byte_System_Byte____
-  commentId: M:Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Device.Net.FilterDeviceDefinition,Microsoft.Extensions.Logging.ILoggerFactory,Hid.Net.Windows.IHidApiService,System.Nullable{System.Guid},System.Nullable{System.UInt16},System.Nullable{System.UInt16},Device.Net.GetConnectedDeviceDefinitionsAsync,System.Nullable{System.Byte},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]})
-  name.vb: CreateWindowsHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, IHidApiService, Nullable(Of Guid), Nullable(Of UInt16), Nullable(Of UInt16), GetConnectedDeviceDefinitionsAsync, Nullable(Of Byte), Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()))
-  fullName: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Device.Net.FilterDeviceDefinition, Microsoft.Extensions.Logging.ILoggerFactory, Hid.Net.Windows.IHidApiService, System.Nullable<System.Guid>, System.Nullable<System.UInt16>, System.Nullable<System.UInt16>, Device.Net.GetConnectedDeviceDefinitionsAsync, System.Nullable<System.Byte>, System.Func<Hid.Net.Report, Device.Net.TransferResult>, System.Func<Device.Net.TransferResult, Hid.Net.Report>, System.Func<System.Byte[], System.Byte, System.Byte[]>)
-  fullName.vb: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Device.Net.FilterDeviceDefinition, Microsoft.Extensions.Logging.ILoggerFactory, Hid.Net.Windows.IHidApiService, System.Nullable(Of System.Guid), System.Nullable(Of System.UInt16), System.Nullable(Of System.UInt16), Device.Net.GetConnectedDeviceDefinitionsAsync, System.Nullable(Of System.Byte), System.Func(Of Hid.Net.Report, Device.Net.TransferResult), System.Func(Of Device.Net.TransferResult, Hid.Net.Report), System.Func(Of System.Byte(), System.Byte, System.Byte()))
-  nameWithType: WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, IHidApiService, Nullable<Guid>, Nullable<UInt16>, Nullable<UInt16>, GetConnectedDeviceDefinitionsAsync, Nullable<Byte>, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>)
-  nameWithType.vb: WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, IHidApiService, Nullable(Of Guid), Nullable(Of UInt16), Nullable(Of UInt16), GetConnectedDeviceDefinitionsAsync, Nullable(Of Byte), Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()))
-- uid: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Microsoft.Extensions.Logging.ILoggerFactory,Hid.Net.Windows.IHidApiService,System.Nullable{System.Guid},System.Nullable{System.UInt16},System.Nullable{System.UInt16},Device.Net.GetConnectedDeviceDefinitionsAsync,System.Nullable{System.Byte},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]})
-  name: CreateWindowsHidDeviceFactory(ILoggerFactory, IHidApiService, Nullable<Guid>, Nullable<UInt16>, Nullable<UInt16>, GetConnectedDeviceDefinitionsAsync, Nullable<Byte>, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>)
-  href: api/Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.html#Hid_Net_Windows_WindowsHidDeviceFactoryExtensions_CreateWindowsHidDeviceFactory_Microsoft_Extensions_Logging_ILoggerFactory_Hid_Net_Windows_IHidApiService_System_Nullable_System_Guid__System_Nullable_System_UInt16__System_Nullable_System_UInt16__Device_Net_GetConnectedDeviceDefinitionsAsync_System_Nullable_System_Byte__System_Func_Hid_Net_Report_Device_Net_TransferResult__System_Func_Device_Net_TransferResult_Hid_Net_Report__System_Func_System_Byte___System_Byte_System_Byte____
-  commentId: M:Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Microsoft.Extensions.Logging.ILoggerFactory,Hid.Net.Windows.IHidApiService,System.Nullable{System.Guid},System.Nullable{System.UInt16},System.Nullable{System.UInt16},Device.Net.GetConnectedDeviceDefinitionsAsync,System.Nullable{System.Byte},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]})
-  name.vb: CreateWindowsHidDeviceFactory(ILoggerFactory, IHidApiService, Nullable(Of Guid), Nullable(Of UInt16), Nullable(Of UInt16), GetConnectedDeviceDefinitionsAsync, Nullable(Of Byte), Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()))
-  fullName: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Microsoft.Extensions.Logging.ILoggerFactory, Hid.Net.Windows.IHidApiService, System.Nullable<System.Guid>, System.Nullable<System.UInt16>, System.Nullable<System.UInt16>, Device.Net.GetConnectedDeviceDefinitionsAsync, System.Nullable<System.Byte>, System.Func<Hid.Net.Report, Device.Net.TransferResult>, System.Func<Device.Net.TransferResult, Hid.Net.Report>, System.Func<System.Byte[], System.Byte, System.Byte[]>)
-  fullName.vb: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Microsoft.Extensions.Logging.ILoggerFactory, Hid.Net.Windows.IHidApiService, System.Nullable(Of System.Guid), System.Nullable(Of System.UInt16), System.Nullable(Of System.UInt16), Device.Net.GetConnectedDeviceDefinitionsAsync, System.Nullable(Of System.Byte), System.Func(Of Hid.Net.Report, Device.Net.TransferResult), System.Func(Of Device.Net.TransferResult, Hid.Net.Report), System.Func(Of System.Byte(), System.Byte, System.Byte()))
-  nameWithType: WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(ILoggerFactory, IHidApiService, Nullable<Guid>, Nullable<UInt16>, Nullable<UInt16>, GetConnectedDeviceDefinitionsAsync, Nullable<Byte>, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>)
-  nameWithType.vb: WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(ILoggerFactory, IHidApiService, Nullable(Of Guid), Nullable(Of UInt16), Nullable(Of UInt16), GetConnectedDeviceDefinitionsAsync, Nullable(Of Byte), Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()))
-- uid: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(System.Collections.Generic.IEnumerable{Device.Net.FilterDeviceDefinition},Microsoft.Extensions.Logging.ILoggerFactory,Hid.Net.Windows.IHidApiService,System.Nullable{System.Guid},System.Nullable{System.UInt16},System.Nullable{System.UInt16},Device.Net.GetConnectedDeviceDefinitionsAsync,System.Nullable{System.Byte},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]})
-  name: CreateWindowsHidDeviceFactory(IEnumerable<FilterDeviceDefinition>, ILoggerFactory, IHidApiService, Nullable<Guid>, Nullable<UInt16>, Nullable<UInt16>, GetConnectedDeviceDefinitionsAsync, Nullable<Byte>, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>)
-  href: api/Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.html#Hid_Net_Windows_WindowsHidDeviceFactoryExtensions_CreateWindowsHidDeviceFactory_System_Collections_Generic_IEnumerable_Device_Net_FilterDeviceDefinition__Microsoft_Extensions_Logging_ILoggerFactory_Hid_Net_Windows_IHidApiService_System_Nullable_System_Guid__System_Nullable_System_UInt16__System_Nullable_System_UInt16__Device_Net_GetConnectedDeviceDefinitionsAsync_System_Nullable_System_Byte__System_Func_Hid_Net_Report_Device_Net_TransferResult__System_Func_Device_Net_TransferResult_Hid_Net_Report__System_Func_System_Byte___System_Byte_System_Byte____
-  commentId: M:Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(System.Collections.Generic.IEnumerable{Device.Net.FilterDeviceDefinition},Microsoft.Extensions.Logging.ILoggerFactory,Hid.Net.Windows.IHidApiService,System.Nullable{System.Guid},System.Nullable{System.UInt16},System.Nullable{System.UInt16},Device.Net.GetConnectedDeviceDefinitionsAsync,System.Nullable{System.Byte},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]})
-  name.vb: CreateWindowsHidDeviceFactory(IEnumerable(Of FilterDeviceDefinition), ILoggerFactory, IHidApiService, Nullable(Of Guid), Nullable(Of UInt16), Nullable(Of UInt16), GetConnectedDeviceDefinitionsAsync, Nullable(Of Byte), Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()))
-  fullName: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(System.Collections.Generic.IEnumerable<Device.Net.FilterDeviceDefinition>, Microsoft.Extensions.Logging.ILoggerFactory, Hid.Net.Windows.IHidApiService, System.Nullable<System.Guid>, System.Nullable<System.UInt16>, System.Nullable<System.UInt16>, Device.Net.GetConnectedDeviceDefinitionsAsync, System.Nullable<System.Byte>, System.Func<Hid.Net.Report, Device.Net.TransferResult>, System.Func<Device.Net.TransferResult, Hid.Net.Report>, System.Func<System.Byte[], System.Byte, System.Byte[]>)
-  fullName.vb: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(System.Collections.Generic.IEnumerable(Of Device.Net.FilterDeviceDefinition), Microsoft.Extensions.Logging.ILoggerFactory, Hid.Net.Windows.IHidApiService, System.Nullable(Of System.Guid), System.Nullable(Of System.UInt16), System.Nullable(Of System.UInt16), Device.Net.GetConnectedDeviceDefinitionsAsync, System.Nullable(Of System.Byte), System.Func(Of Hid.Net.Report, Device.Net.TransferResult), System.Func(Of Device.Net.TransferResult, Hid.Net.Report), System.Func(Of System.Byte(), System.Byte, System.Byte()))
-  nameWithType: WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(IEnumerable<FilterDeviceDefinition>, ILoggerFactory, IHidApiService, Nullable<Guid>, Nullable<UInt16>, Nullable<UInt16>, GetConnectedDeviceDefinitionsAsync, Nullable<Byte>, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>)
-  nameWithType.vb: WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(IEnumerable(Of FilterDeviceDefinition), ILoggerFactory, IHidApiService, Nullable(Of Guid), Nullable(Of UInt16), Nullable(Of UInt16), GetConnectedDeviceDefinitionsAsync, Nullable(Of Byte), Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()))
+- uid: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Device.Net.FilterDeviceDefinition,Microsoft.Extensions.Logging.ILoggerFactory,Hid.Net.Windows.IHidApiService,System.Nullable{System.Guid},System.Nullable{System.UInt16},System.Nullable{System.UInt16},Device.Net.GetConnectedDeviceDefinitionsAsync,System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]},Hid.Net.WriteReportTransform)
+  name: CreateWindowsHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, IHidApiService, Nullable<Guid>, Nullable<UInt16>, Nullable<UInt16>, GetConnectedDeviceDefinitionsAsync, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>, WriteReportTransform)
+  href: api/Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.html#Hid_Net_Windows_WindowsHidDeviceFactoryExtensions_CreateWindowsHidDeviceFactory_Device_Net_FilterDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_Hid_Net_Windows_IHidApiService_System_Nullable_System_Guid__System_Nullable_System_UInt16__System_Nullable_System_UInt16__Device_Net_GetConnectedDeviceDefinitionsAsync_System_Func_Hid_Net_Report_Device_Net_TransferResult__System_Func_Device_Net_TransferResult_Hid_Net_Report__System_Func_System_Byte___System_Byte_System_Byte____Hid_Net_WriteReportTransform_
+  commentId: M:Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Device.Net.FilterDeviceDefinition,Microsoft.Extensions.Logging.ILoggerFactory,Hid.Net.Windows.IHidApiService,System.Nullable{System.Guid},System.Nullable{System.UInt16},System.Nullable{System.UInt16},Device.Net.GetConnectedDeviceDefinitionsAsync,System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]},Hid.Net.WriteReportTransform)
+  name.vb: CreateWindowsHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, IHidApiService, Nullable(Of Guid), Nullable(Of UInt16), Nullable(Of UInt16), GetConnectedDeviceDefinitionsAsync, Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()), WriteReportTransform)
+  fullName: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Device.Net.FilterDeviceDefinition, Microsoft.Extensions.Logging.ILoggerFactory, Hid.Net.Windows.IHidApiService, System.Nullable<System.Guid>, System.Nullable<System.UInt16>, System.Nullable<System.UInt16>, Device.Net.GetConnectedDeviceDefinitionsAsync, System.Func<Hid.Net.Report, Device.Net.TransferResult>, System.Func<Device.Net.TransferResult, Hid.Net.Report>, System.Func<System.Byte[], System.Byte, System.Byte[]>, Hid.Net.WriteReportTransform)
+  fullName.vb: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Device.Net.FilterDeviceDefinition, Microsoft.Extensions.Logging.ILoggerFactory, Hid.Net.Windows.IHidApiService, System.Nullable(Of System.Guid), System.Nullable(Of System.UInt16), System.Nullable(Of System.UInt16), Device.Net.GetConnectedDeviceDefinitionsAsync, System.Func(Of Hid.Net.Report, Device.Net.TransferResult), System.Func(Of Device.Net.TransferResult, Hid.Net.Report), System.Func(Of System.Byte(), System.Byte, System.Byte()), Hid.Net.WriteReportTransform)
+  nameWithType: WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, IHidApiService, Nullable<Guid>, Nullable<UInt16>, Nullable<UInt16>, GetConnectedDeviceDefinitionsAsync, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>, WriteReportTransform)
+  nameWithType.vb: WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, IHidApiService, Nullable(Of Guid), Nullable(Of UInt16), Nullable(Of UInt16), GetConnectedDeviceDefinitionsAsync, Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()), WriteReportTransform)
+- uid: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Microsoft.Extensions.Logging.ILoggerFactory,Hid.Net.Windows.IHidApiService,System.Nullable{System.Guid},System.Nullable{System.UInt16},System.Nullable{System.UInt16},Device.Net.GetConnectedDeviceDefinitionsAsync,System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]},Hid.Net.WriteReportTransform)
+  name: CreateWindowsHidDeviceFactory(ILoggerFactory, IHidApiService, Nullable<Guid>, Nullable<UInt16>, Nullable<UInt16>, GetConnectedDeviceDefinitionsAsync, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>, WriteReportTransform)
+  href: api/Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.html#Hid_Net_Windows_WindowsHidDeviceFactoryExtensions_CreateWindowsHidDeviceFactory_Microsoft_Extensions_Logging_ILoggerFactory_Hid_Net_Windows_IHidApiService_System_Nullable_System_Guid__System_Nullable_System_UInt16__System_Nullable_System_UInt16__Device_Net_GetConnectedDeviceDefinitionsAsync_System_Func_Hid_Net_Report_Device_Net_TransferResult__System_Func_Device_Net_TransferResult_Hid_Net_Report__System_Func_System_Byte___System_Byte_System_Byte____Hid_Net_WriteReportTransform_
+  commentId: M:Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Microsoft.Extensions.Logging.ILoggerFactory,Hid.Net.Windows.IHidApiService,System.Nullable{System.Guid},System.Nullable{System.UInt16},System.Nullable{System.UInt16},Device.Net.GetConnectedDeviceDefinitionsAsync,System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]},Hid.Net.WriteReportTransform)
+  name.vb: CreateWindowsHidDeviceFactory(ILoggerFactory, IHidApiService, Nullable(Of Guid), Nullable(Of UInt16), Nullable(Of UInt16), GetConnectedDeviceDefinitionsAsync, Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()), WriteReportTransform)
+  fullName: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Microsoft.Extensions.Logging.ILoggerFactory, Hid.Net.Windows.IHidApiService, System.Nullable<System.Guid>, System.Nullable<System.UInt16>, System.Nullable<System.UInt16>, Device.Net.GetConnectedDeviceDefinitionsAsync, System.Func<Hid.Net.Report, Device.Net.TransferResult>, System.Func<Device.Net.TransferResult, Hid.Net.Report>, System.Func<System.Byte[], System.Byte, System.Byte[]>, Hid.Net.WriteReportTransform)
+  fullName.vb: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(Microsoft.Extensions.Logging.ILoggerFactory, Hid.Net.Windows.IHidApiService, System.Nullable(Of System.Guid), System.Nullable(Of System.UInt16), System.Nullable(Of System.UInt16), Device.Net.GetConnectedDeviceDefinitionsAsync, System.Func(Of Hid.Net.Report, Device.Net.TransferResult), System.Func(Of Device.Net.TransferResult, Hid.Net.Report), System.Func(Of System.Byte(), System.Byte, System.Byte()), Hid.Net.WriteReportTransform)
+  nameWithType: WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(ILoggerFactory, IHidApiService, Nullable<Guid>, Nullable<UInt16>, Nullable<UInt16>, GetConnectedDeviceDefinitionsAsync, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>, WriteReportTransform)
+  nameWithType.vb: WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(ILoggerFactory, IHidApiService, Nullable(Of Guid), Nullable(Of UInt16), Nullable(Of UInt16), GetConnectedDeviceDefinitionsAsync, Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()), WriteReportTransform)
+- uid: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(System.Collections.Generic.IEnumerable{Device.Net.FilterDeviceDefinition},Microsoft.Extensions.Logging.ILoggerFactory,Hid.Net.Windows.IHidApiService,System.Nullable{System.Guid},System.Nullable{System.UInt16},System.Nullable{System.UInt16},Device.Net.GetConnectedDeviceDefinitionsAsync,System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]},Hid.Net.WriteReportTransform)
+  name: CreateWindowsHidDeviceFactory(IEnumerable<FilterDeviceDefinition>, ILoggerFactory, IHidApiService, Nullable<Guid>, Nullable<UInt16>, Nullable<UInt16>, GetConnectedDeviceDefinitionsAsync, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>, WriteReportTransform)
+  href: api/Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.html#Hid_Net_Windows_WindowsHidDeviceFactoryExtensions_CreateWindowsHidDeviceFactory_System_Collections_Generic_IEnumerable_Device_Net_FilterDeviceDefinition__Microsoft_Extensions_Logging_ILoggerFactory_Hid_Net_Windows_IHidApiService_System_Nullable_System_Guid__System_Nullable_System_UInt16__System_Nullable_System_UInt16__Device_Net_GetConnectedDeviceDefinitionsAsync_System_Func_Hid_Net_Report_Device_Net_TransferResult__System_Func_Device_Net_TransferResult_Hid_Net_Report__System_Func_System_Byte___System_Byte_System_Byte____Hid_Net_WriteReportTransform_
+  commentId: M:Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(System.Collections.Generic.IEnumerable{Device.Net.FilterDeviceDefinition},Microsoft.Extensions.Logging.ILoggerFactory,Hid.Net.Windows.IHidApiService,System.Nullable{System.Guid},System.Nullable{System.UInt16},System.Nullable{System.UInt16},Device.Net.GetConnectedDeviceDefinitionsAsync,System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]},Hid.Net.WriteReportTransform)
+  name.vb: CreateWindowsHidDeviceFactory(IEnumerable(Of FilterDeviceDefinition), ILoggerFactory, IHidApiService, Nullable(Of Guid), Nullable(Of UInt16), Nullable(Of UInt16), GetConnectedDeviceDefinitionsAsync, Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()), WriteReportTransform)
+  fullName: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(System.Collections.Generic.IEnumerable<Device.Net.FilterDeviceDefinition>, Microsoft.Extensions.Logging.ILoggerFactory, Hid.Net.Windows.IHidApiService, System.Nullable<System.Guid>, System.Nullable<System.UInt16>, System.Nullable<System.UInt16>, Device.Net.GetConnectedDeviceDefinitionsAsync, System.Func<Hid.Net.Report, Device.Net.TransferResult>, System.Func<Device.Net.TransferResult, Hid.Net.Report>, System.Func<System.Byte[], System.Byte, System.Byte[]>, Hid.Net.WriteReportTransform)
+  fullName.vb: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(System.Collections.Generic.IEnumerable(Of Device.Net.FilterDeviceDefinition), Microsoft.Extensions.Logging.ILoggerFactory, Hid.Net.Windows.IHidApiService, System.Nullable(Of System.Guid), System.Nullable(Of System.UInt16), System.Nullable(Of System.UInt16), Device.Net.GetConnectedDeviceDefinitionsAsync, System.Func(Of Hid.Net.Report, Device.Net.TransferResult), System.Func(Of Device.Net.TransferResult, Hid.Net.Report), System.Func(Of System.Byte(), System.Byte, System.Byte()), Hid.Net.WriteReportTransform)
+  nameWithType: WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(IEnumerable<FilterDeviceDefinition>, ILoggerFactory, IHidApiService, Nullable<Guid>, Nullable<UInt16>, Nullable<UInt16>, GetConnectedDeviceDefinitionsAsync, Func<Report, TransferResult>, Func<TransferResult, Report>, Func<Byte[], Byte, Byte[]>, WriteReportTransform)
+  nameWithType.vb: WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory(IEnumerable(Of FilterDeviceDefinition), ILoggerFactory, IHidApiService, Nullable(Of Guid), Nullable(Of UInt16), Nullable(Of UInt16), GetConnectedDeviceDefinitionsAsync, Func(Of Report, TransferResult), Func(Of TransferResult, Report), Func(Of Byte(), Byte, Byte()), WriteReportTransform)
 - uid: Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.CreateWindowsHidDeviceFactory*
   name: CreateWindowsHidDeviceFactory
   href: api/Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.html#Hid_Net_Windows_WindowsHidDeviceFactoryExtensions_CreateWindowsHidDeviceFactory_
@@ -9302,18 +8987,6 @@ references:
   commentId: F:Usb.Net.Android.Resource.String.abc_toolbar_collapse_description
   fullName: Usb.Net.Android.Resource.String.abc_toolbar_collapse_description
   nameWithType: Resource.String.abc_toolbar_collapse_description
-- uid: Usb.Net.Android.Resource.String.app_name
-  name: app_name
-  href: api/Usb.Net.Android.Resource.String.html#Usb_Net_Android_Resource_String_app_name
-  commentId: F:Usb.Net.Android.Resource.String.app_name
-  fullName: Usb.Net.Android.Resource.String.app_name
-  nameWithType: Resource.String.app_name
-- uid: Usb.Net.Android.Resource.String.hello
-  name: hello
-  href: api/Usb.Net.Android.Resource.String.html#Usb_Net_Android_Resource_String_hello
-  commentId: F:Usb.Net.Android.Resource.String.hello
-  fullName: Usb.Net.Android.Resource.String.hello
-  nameWithType: Resource.String.hello
 - uid: Usb.Net.Android.Resource.String.search_menu_title
   name: search_menu_title
   href: api/Usb.Net.Android.Resource.String.html#Usb_Net_Android_Resource_String_search_menu_title
@@ -15731,234 +15404,6 @@ references:
   commentId: N:Usb.Net.Windows
   fullName: Usb.Net.Windows
   nameWithType: Usb.Net.Windows
-- uid: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR
-  name: USB_CONFIGURATION_DESCRIPTOR
-  href: api/Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.html
-  commentId: T:Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR
-  fullName: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR
-  nameWithType: USB_CONFIGURATION_DESCRIPTOR
-- uid: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.bConfigurationValue
-  name: bConfigurationValue
-  href: api/Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.html#Usb_Net_Windows_USB_CONFIGURATION_DESCRIPTOR_bConfigurationValue
-  commentId: F:Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.bConfigurationValue
-  fullName: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.bConfigurationValue
-  nameWithType: USB_CONFIGURATION_DESCRIPTOR.bConfigurationValue
-- uid: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.bDescriptorType
-  name: bDescriptorType
-  href: api/Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.html#Usb_Net_Windows_USB_CONFIGURATION_DESCRIPTOR_bDescriptorType
-  commentId: F:Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.bDescriptorType
-  fullName: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.bDescriptorType
-  nameWithType: USB_CONFIGURATION_DESCRIPTOR.bDescriptorType
-- uid: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.bLength
-  name: bLength
-  href: api/Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.html#Usb_Net_Windows_USB_CONFIGURATION_DESCRIPTOR_bLength
-  commentId: F:Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.bLength
-  fullName: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.bLength
-  nameWithType: USB_CONFIGURATION_DESCRIPTOR.bLength
-- uid: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.bmAttributes
-  name: bmAttributes
-  href: api/Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.html#Usb_Net_Windows_USB_CONFIGURATION_DESCRIPTOR_bmAttributes
-  commentId: F:Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.bmAttributes
-  fullName: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.bmAttributes
-  nameWithType: USB_CONFIGURATION_DESCRIPTOR.bmAttributes
-- uid: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.bNumInterfaces
-  name: bNumInterfaces
-  href: api/Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.html#Usb_Net_Windows_USB_CONFIGURATION_DESCRIPTOR_bNumInterfaces
-  commentId: F:Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.bNumInterfaces
-  fullName: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.bNumInterfaces
-  nameWithType: USB_CONFIGURATION_DESCRIPTOR.bNumInterfaces
-- uid: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.iConfiguration
-  name: iConfiguration
-  href: api/Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.html#Usb_Net_Windows_USB_CONFIGURATION_DESCRIPTOR_iConfiguration
-  commentId: F:Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.iConfiguration
-  fullName: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.iConfiguration
-  nameWithType: USB_CONFIGURATION_DESCRIPTOR.iConfiguration
-- uid: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.MaxPower
-  name: MaxPower
-  href: api/Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.html#Usb_Net_Windows_USB_CONFIGURATION_DESCRIPTOR_MaxPower
-  commentId: F:Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.MaxPower
-  fullName: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.MaxPower
-  nameWithType: USB_CONFIGURATION_DESCRIPTOR.MaxPower
-- uid: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.wTotalLength
-  name: wTotalLength
-  href: api/Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.html#Usb_Net_Windows_USB_CONFIGURATION_DESCRIPTOR_wTotalLength
-  commentId: F:Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.wTotalLength
-  fullName: Usb.Net.Windows.USB_CONFIGURATION_DESCRIPTOR.wTotalLength
-  nameWithType: USB_CONFIGURATION_DESCRIPTOR.wTotalLength
-- uid: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR
-  name: USB_DEVICE_DESCRIPTOR
-  href: api/Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.html
-  commentId: T:Usb.Net.Windows.USB_DEVICE_DESCRIPTOR
-  fullName: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR
-  nameWithType: USB_DEVICE_DESCRIPTOR
-- uid: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bcdDevice
-  name: bcdDevice
-  href: api/Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.html#Usb_Net_Windows_USB_DEVICE_DESCRIPTOR_bcdDevice
-  commentId: F:Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bcdDevice
-  fullName: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bcdDevice
-  nameWithType: USB_DEVICE_DESCRIPTOR.bcdDevice
-- uid: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bcdUSB
-  name: bcdUSB
-  href: api/Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.html#Usb_Net_Windows_USB_DEVICE_DESCRIPTOR_bcdUSB
-  commentId: F:Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bcdUSB
-  fullName: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bcdUSB
-  nameWithType: USB_DEVICE_DESCRIPTOR.bcdUSB
-- uid: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bDescriptorType
-  name: bDescriptorType
-  href: api/Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.html#Usb_Net_Windows_USB_DEVICE_DESCRIPTOR_bDescriptorType
-  commentId: F:Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bDescriptorType
-  fullName: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bDescriptorType
-  nameWithType: USB_DEVICE_DESCRIPTOR.bDescriptorType
-- uid: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bDeviceClass
-  name: bDeviceClass
-  href: api/Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.html#Usb_Net_Windows_USB_DEVICE_DESCRIPTOR_bDeviceClass
-  commentId: F:Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bDeviceClass
-  fullName: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bDeviceClass
-  nameWithType: USB_DEVICE_DESCRIPTOR.bDeviceClass
-- uid: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bDeviceProtocol
-  name: bDeviceProtocol
-  href: api/Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.html#Usb_Net_Windows_USB_DEVICE_DESCRIPTOR_bDeviceProtocol
-  commentId: F:Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bDeviceProtocol
-  fullName: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bDeviceProtocol
-  nameWithType: USB_DEVICE_DESCRIPTOR.bDeviceProtocol
-- uid: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bDeviceSubClass
-  name: bDeviceSubClass
-  href: api/Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.html#Usb_Net_Windows_USB_DEVICE_DESCRIPTOR_bDeviceSubClass
-  commentId: F:Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bDeviceSubClass
-  fullName: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bDeviceSubClass
-  nameWithType: USB_DEVICE_DESCRIPTOR.bDeviceSubClass
-- uid: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bLength
-  name: bLength
-  href: api/Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.html#Usb_Net_Windows_USB_DEVICE_DESCRIPTOR_bLength
-  commentId: F:Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bLength
-  fullName: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bLength
-  nameWithType: USB_DEVICE_DESCRIPTOR.bLength
-- uid: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bMaxPacketSize0
-  name: bMaxPacketSize0
-  href: api/Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.html#Usb_Net_Windows_USB_DEVICE_DESCRIPTOR_bMaxPacketSize0
-  commentId: F:Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bMaxPacketSize0
-  fullName: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bMaxPacketSize0
-  nameWithType: USB_DEVICE_DESCRIPTOR.bMaxPacketSize0
-- uid: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bNumConfigurations
-  name: bNumConfigurations
-  href: api/Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.html#Usb_Net_Windows_USB_DEVICE_DESCRIPTOR_bNumConfigurations
-  commentId: F:Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bNumConfigurations
-  fullName: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.bNumConfigurations
-  nameWithType: USB_DEVICE_DESCRIPTOR.bNumConfigurations
-- uid: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.idProduct
-  name: idProduct
-  href: api/Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.html#Usb_Net_Windows_USB_DEVICE_DESCRIPTOR_idProduct
-  commentId: F:Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.idProduct
-  fullName: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.idProduct
-  nameWithType: USB_DEVICE_DESCRIPTOR.idProduct
-- uid: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.idVendor
-  name: idVendor
-  href: api/Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.html#Usb_Net_Windows_USB_DEVICE_DESCRIPTOR_idVendor
-  commentId: F:Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.idVendor
-  fullName: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.idVendor
-  nameWithType: USB_DEVICE_DESCRIPTOR.idVendor
-- uid: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.iManufacturer
-  name: iManufacturer
-  href: api/Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.html#Usb_Net_Windows_USB_DEVICE_DESCRIPTOR_iManufacturer
-  commentId: F:Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.iManufacturer
-  fullName: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.iManufacturer
-  nameWithType: USB_DEVICE_DESCRIPTOR.iManufacturer
-- uid: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.iProduct
-  name: iProduct
-  href: api/Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.html#Usb_Net_Windows_USB_DEVICE_DESCRIPTOR_iProduct
-  commentId: F:Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.iProduct
-  fullName: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.iProduct
-  nameWithType: USB_DEVICE_DESCRIPTOR.iProduct
-- uid: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.iSerialNumber
-  name: iSerialNumber
-  href: api/Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.html#Usb_Net_Windows_USB_DEVICE_DESCRIPTOR_iSerialNumber
-  commentId: F:Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.iSerialNumber
-  fullName: Usb.Net.Windows.USB_DEVICE_DESCRIPTOR.iSerialNumber
-  nameWithType: USB_DEVICE_DESCRIPTOR.iSerialNumber
-- uid: Usb.Net.Windows.USB_DEVICE_SPEED
-  name: USB_DEVICE_SPEED
-  href: api/Usb.Net.Windows.USB_DEVICE_SPEED.html
-  commentId: T:Usb.Net.Windows.USB_DEVICE_SPEED
-  fullName: Usb.Net.Windows.USB_DEVICE_SPEED
-  nameWithType: USB_DEVICE_SPEED
-- uid: Usb.Net.Windows.USB_DEVICE_SPEED.UsbFullSpeed
-  name: UsbFullSpeed
-  href: api/Usb.Net.Windows.USB_DEVICE_SPEED.html#Usb_Net_Windows_USB_DEVICE_SPEED_UsbFullSpeed
-  commentId: F:Usb.Net.Windows.USB_DEVICE_SPEED.UsbFullSpeed
-  fullName: Usb.Net.Windows.USB_DEVICE_SPEED.UsbFullSpeed
-  nameWithType: USB_DEVICE_SPEED.UsbFullSpeed
-- uid: Usb.Net.Windows.USB_DEVICE_SPEED.UsbHighSpeed
-  name: UsbHighSpeed
-  href: api/Usb.Net.Windows.USB_DEVICE_SPEED.html#Usb_Net_Windows_USB_DEVICE_SPEED_UsbHighSpeed
-  commentId: F:Usb.Net.Windows.USB_DEVICE_SPEED.UsbHighSpeed
-  fullName: Usb.Net.Windows.USB_DEVICE_SPEED.UsbHighSpeed
-  nameWithType: USB_DEVICE_SPEED.UsbHighSpeed
-- uid: Usb.Net.Windows.USB_DEVICE_SPEED.UsbLowSpeed
-  name: UsbLowSpeed
-  href: api/Usb.Net.Windows.USB_DEVICE_SPEED.html#Usb_Net_Windows_USB_DEVICE_SPEED_UsbLowSpeed
-  commentId: F:Usb.Net.Windows.USB_DEVICE_SPEED.UsbLowSpeed
-  fullName: Usb.Net.Windows.USB_DEVICE_SPEED.UsbLowSpeed
-  nameWithType: USB_DEVICE_SPEED.UsbLowSpeed
-- uid: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR
-  name: USB_INTERFACE_DESCRIPTOR
-  href: api/Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.html
-  commentId: T:Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR
-  fullName: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR
-  nameWithType: USB_INTERFACE_DESCRIPTOR
-- uid: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bAlternateSetting
-  name: bAlternateSetting
-  href: api/Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.html#Usb_Net_Windows_USB_INTERFACE_DESCRIPTOR_bAlternateSetting
-  commentId: F:Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bAlternateSetting
-  fullName: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bAlternateSetting
-  nameWithType: USB_INTERFACE_DESCRIPTOR.bAlternateSetting
-- uid: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bDescriptorType
-  name: bDescriptorType
-  href: api/Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.html#Usb_Net_Windows_USB_INTERFACE_DESCRIPTOR_bDescriptorType
-  commentId: F:Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bDescriptorType
-  fullName: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bDescriptorType
-  nameWithType: USB_INTERFACE_DESCRIPTOR.bDescriptorType
-- uid: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bInterfaceClass
-  name: bInterfaceClass
-  href: api/Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.html#Usb_Net_Windows_USB_INTERFACE_DESCRIPTOR_bInterfaceClass
-  commentId: F:Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bInterfaceClass
-  fullName: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bInterfaceClass
-  nameWithType: USB_INTERFACE_DESCRIPTOR.bInterfaceClass
-- uid: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bInterfaceNumber
-  name: bInterfaceNumber
-  href: api/Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.html#Usb_Net_Windows_USB_INTERFACE_DESCRIPTOR_bInterfaceNumber
-  commentId: F:Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bInterfaceNumber
-  fullName: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bInterfaceNumber
-  nameWithType: USB_INTERFACE_DESCRIPTOR.bInterfaceNumber
-- uid: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bInterfaceProtocol
-  name: bInterfaceProtocol
-  href: api/Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.html#Usb_Net_Windows_USB_INTERFACE_DESCRIPTOR_bInterfaceProtocol
-  commentId: F:Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bInterfaceProtocol
-  fullName: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bInterfaceProtocol
-  nameWithType: USB_INTERFACE_DESCRIPTOR.bInterfaceProtocol
-- uid: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bInterfaceSubClass
-  name: bInterfaceSubClass
-  href: api/Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.html#Usb_Net_Windows_USB_INTERFACE_DESCRIPTOR_bInterfaceSubClass
-  commentId: F:Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bInterfaceSubClass
-  fullName: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bInterfaceSubClass
-  nameWithType: USB_INTERFACE_DESCRIPTOR.bInterfaceSubClass
-- uid: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bLength
-  name: bLength
-  href: api/Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.html#Usb_Net_Windows_USB_INTERFACE_DESCRIPTOR_bLength
-  commentId: F:Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bLength
-  fullName: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bLength
-  nameWithType: USB_INTERFACE_DESCRIPTOR.bLength
-- uid: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bNumEndpoints
-  name: bNumEndpoints
-  href: api/Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.html#Usb_Net_Windows_USB_INTERFACE_DESCRIPTOR_bNumEndpoints
-  commentId: F:Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bNumEndpoints
-  fullName: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.bNumEndpoints
-  nameWithType: USB_INTERFACE_DESCRIPTOR.bNumEndpoints
-- uid: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.iInterface
-  name: iInterface
-  href: api/Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.html#Usb_Net_Windows_USB_INTERFACE_DESCRIPTOR_iInterface
-  commentId: F:Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.iInterface
-  fullName: Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR.iInterface
-  nameWithType: USB_INTERFACE_DESCRIPTOR.iInterface
 - uid: Usb.Net.Windows.WindowsUsbDeviceFactoryExtensions
   name: WindowsUsbDeviceFactoryExtensions
   href: api/Usb.Net.Windows.WindowsUsbDeviceFactoryExtensions.html
@@ -16331,292 +15776,6 @@ references:
   isSpec: "True"
   fullName: Usb.Net.Windows.WindowsUsbInterfaceManager.WriteBufferSizeProtected
   nameWithType: WindowsUsbInterfaceManager.WriteBufferSizeProtected
-- uid: Usb.Net.Windows.WINUSB_PIPE_INFORMATION
-  name: WINUSB_PIPE_INFORMATION
-  href: api/Usb.Net.Windows.WINUSB_PIPE_INFORMATION.html
-  commentId: T:Usb.Net.Windows.WINUSB_PIPE_INFORMATION
-  fullName: Usb.Net.Windows.WINUSB_PIPE_INFORMATION
-  nameWithType: WINUSB_PIPE_INFORMATION
-- uid: Usb.Net.Windows.WINUSB_PIPE_INFORMATION.Interval
-  name: Interval
-  href: api/Usb.Net.Windows.WINUSB_PIPE_INFORMATION.html#Usb_Net_Windows_WINUSB_PIPE_INFORMATION_Interval
-  commentId: F:Usb.Net.Windows.WINUSB_PIPE_INFORMATION.Interval
-  fullName: Usb.Net.Windows.WINUSB_PIPE_INFORMATION.Interval
-  nameWithType: WINUSB_PIPE_INFORMATION.Interval
-- uid: Usb.Net.Windows.WINUSB_PIPE_INFORMATION.MaximumPacketSize
-  name: MaximumPacketSize
-  href: api/Usb.Net.Windows.WINUSB_PIPE_INFORMATION.html#Usb_Net_Windows_WINUSB_PIPE_INFORMATION_MaximumPacketSize
-  commentId: F:Usb.Net.Windows.WINUSB_PIPE_INFORMATION.MaximumPacketSize
-  fullName: Usb.Net.Windows.WINUSB_PIPE_INFORMATION.MaximumPacketSize
-  nameWithType: WINUSB_PIPE_INFORMATION.MaximumPacketSize
-- uid: Usb.Net.Windows.WINUSB_PIPE_INFORMATION.PipeId
-  name: PipeId
-  href: api/Usb.Net.Windows.WINUSB_PIPE_INFORMATION.html#Usb_Net_Windows_WINUSB_PIPE_INFORMATION_PipeId
-  commentId: F:Usb.Net.Windows.WINUSB_PIPE_INFORMATION.PipeId
-  fullName: Usb.Net.Windows.WINUSB_PIPE_INFORMATION.PipeId
-  nameWithType: WINUSB_PIPE_INFORMATION.PipeId
-- uid: Usb.Net.Windows.WINUSB_PIPE_INFORMATION.PipeType
-  name: PipeType
-  href: api/Usb.Net.Windows.WINUSB_PIPE_INFORMATION.html#Usb_Net_Windows_WINUSB_PIPE_INFORMATION_PipeType
-  commentId: F:Usb.Net.Windows.WINUSB_PIPE_INFORMATION.PipeType
-  fullName: Usb.Net.Windows.WINUSB_PIPE_INFORMATION.PipeType
-  nameWithType: WINUSB_PIPE_INFORMATION.PipeType
-- uid: Usb.Net.Windows.WinUsbApiCalls
-  name: WinUsbApiCalls
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html
-  commentId: T:Usb.Net.Windows.WinUsbApiCalls
-  fullName: Usb.Net.Windows.WinUsbApiCalls
-  nameWithType: WinUsbApiCalls
-- uid: Usb.Net.Windows.WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE
-  name: DEFAULT_DESCRIPTOR_TYPE
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_DEFAULT_DESCRIPTOR_TYPE
-  commentId: F:Usb.Net.Windows.WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE
-  fullName: Usb.Net.Windows.WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE
-  nameWithType: WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE
-- uid: Usb.Net.Windows.WinUsbApiCalls.DEVICE_SPEED
-  name: DEVICE_SPEED
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_DEVICE_SPEED
-  commentId: F:Usb.Net.Windows.WinUsbApiCalls.DEVICE_SPEED
-  fullName: Usb.Net.Windows.WinUsbApiCalls.DEVICE_SPEED
-  nameWithType: WinUsbApiCalls.DEVICE_SPEED
-- uid: Usb.Net.Windows.WinUsbApiCalls.EnglishLanguageID
-  name: EnglishLanguageID
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_EnglishLanguageID
-  commentId: F:Usb.Net.Windows.WinUsbApiCalls.EnglishLanguageID
-  fullName: Usb.Net.Windows.WinUsbApiCalls.EnglishLanguageID
-  nameWithType: WinUsbApiCalls.EnglishLanguageID
-- uid: Usb.Net.Windows.WinUsbApiCalls.GetDescriptor(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,System.String,Microsoft.Extensions.Logging.ILogger)
-  name: GetDescriptor(SafeFileHandle, Byte, String, ILogger)
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_GetDescriptor_Microsoft_Win32_SafeHandles_SafeFileHandle_System_Byte_System_String_Microsoft_Extensions_Logging_ILogger_
-  commentId: M:Usb.Net.Windows.WinUsbApiCalls.GetDescriptor(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,System.String,Microsoft.Extensions.Logging.ILogger)
-  fullName: Usb.Net.Windows.WinUsbApiCalls.GetDescriptor(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, System.String, Microsoft.Extensions.Logging.ILogger)
-  nameWithType: WinUsbApiCalls.GetDescriptor(SafeFileHandle, Byte, String, ILogger)
-- uid: Usb.Net.Windows.WinUsbApiCalls.GetDescriptor*
-  name: GetDescriptor
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_GetDescriptor_
-  commentId: Overload:Usb.Net.Windows.WinUsbApiCalls.GetDescriptor
-  isSpec: "True"
-  fullName: Usb.Net.Windows.WinUsbApiCalls.GetDescriptor
-  nameWithType: WinUsbApiCalls.GetDescriptor
-- uid: Usb.Net.Windows.WinUsbApiCalls.USB_ENDPOINT_DIRECTION_MASK
-  name: USB_ENDPOINT_DIRECTION_MASK
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_USB_ENDPOINT_DIRECTION_MASK
-  commentId: F:Usb.Net.Windows.WinUsbApiCalls.USB_ENDPOINT_DIRECTION_MASK
-  fullName: Usb.Net.Windows.WinUsbApiCalls.USB_ENDPOINT_DIRECTION_MASK
-  nameWithType: WinUsbApiCalls.USB_ENDPOINT_DIRECTION_MASK
-- uid: Usb.Net.Windows.WinUsbApiCalls.USB_STRING_DESCRIPTOR_TYPE
-  name: USB_STRING_DESCRIPTOR_TYPE
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_USB_STRING_DESCRIPTOR_TYPE
-  commentId: F:Usb.Net.Windows.WinUsbApiCalls.USB_STRING_DESCRIPTOR_TYPE
-  fullName: Usb.Net.Windows.WinUsbApiCalls.USB_STRING_DESCRIPTOR_TYPE
-  nameWithType: WinUsbApiCalls.USB_STRING_DESCRIPTOR_TYPE
-- uid: Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE
-  name: WinUsbApiCalls.USBD_PIPE_TYPE
-  href: api/Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.html
-  commentId: T:Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE
-  fullName: Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE
-  nameWithType: WinUsbApiCalls.USBD_PIPE_TYPE
-- uid: Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeBulk
-  name: UsbdPipeTypeBulk
-  href: api/Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.html#Usb_Net_Windows_WinUsbApiCalls_USBD_PIPE_TYPE_UsbdPipeTypeBulk
-  commentId: F:Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeBulk
-  fullName: Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeBulk
-  nameWithType: WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeBulk
-- uid: Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeControl
-  name: UsbdPipeTypeControl
-  href: api/Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.html#Usb_Net_Windows_WinUsbApiCalls_USBD_PIPE_TYPE_UsbdPipeTypeControl
-  commentId: F:Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeControl
-  fullName: Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeControl
-  nameWithType: WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeControl
-- uid: Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeInterrupt
-  name: UsbdPipeTypeInterrupt
-  href: api/Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.html#Usb_Net_Windows_WinUsbApiCalls_USBD_PIPE_TYPE_UsbdPipeTypeInterrupt
-  commentId: F:Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeInterrupt
-  fullName: Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeInterrupt
-  nameWithType: WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeInterrupt
-- uid: Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeIsochronous
-  name: UsbdPipeTypeIsochronous
-  href: api/Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.html#Usb_Net_Windows_WinUsbApiCalls_USBD_PIPE_TYPE_UsbdPipeTypeIsochronous
-  commentId: F:Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeIsochronous
-  fullName: Usb.Net.Windows.WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeIsochronous
-  nameWithType: WinUsbApiCalls.USBD_PIPE_TYPE.UsbdPipeTypeIsochronous
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_ControlTransfer(System.IntPtr,Usb.Net.WINUSB_SETUP_PACKET,System.Byte[],System.UInt32,System.UInt32@,System.IntPtr)
-  name: WinUsb_ControlTransfer(IntPtr, WINUSB_SETUP_PACKET, Byte[], UInt32, ref UInt32, IntPtr)
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_ControlTransfer_System_IntPtr_Usb_Net_WINUSB_SETUP_PACKET_System_Byte___System_UInt32_System_UInt32__System_IntPtr_
-  commentId: M:Usb.Net.Windows.WinUsbApiCalls.WinUsb_ControlTransfer(System.IntPtr,Usb.Net.WINUSB_SETUP_PACKET,System.Byte[],System.UInt32,System.UInt32@,System.IntPtr)
-  name.vb: WinUsb_ControlTransfer(IntPtr, WINUSB_SETUP_PACKET, Byte(), UInt32, ByRef UInt32, IntPtr)
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_ControlTransfer(System.IntPtr, Usb.Net.WINUSB_SETUP_PACKET, System.Byte[], System.UInt32, ref System.UInt32, System.IntPtr)
-  fullName.vb: Usb.Net.Windows.WinUsbApiCalls.WinUsb_ControlTransfer(System.IntPtr, Usb.Net.WINUSB_SETUP_PACKET, System.Byte(), System.UInt32, ByRef System.UInt32, System.IntPtr)
-  nameWithType: WinUsbApiCalls.WinUsb_ControlTransfer(IntPtr, WINUSB_SETUP_PACKET, Byte[], UInt32, ref UInt32, IntPtr)
-  nameWithType.vb: WinUsbApiCalls.WinUsb_ControlTransfer(IntPtr, WINUSB_SETUP_PACKET, Byte(), UInt32, ByRef UInt32, IntPtr)
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_ControlTransfer*
-  name: WinUsb_ControlTransfer
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_ControlTransfer_
-  commentId: Overload:Usb.Net.Windows.WinUsbApiCalls.WinUsb_ControlTransfer
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_ControlTransfer
-  nameWithType: WinUsbApiCalls.WinUsb_ControlTransfer
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_Free(Microsoft.Win32.SafeHandles.SafeFileHandle)
-  name: WinUsb_Free(SafeFileHandle)
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_Free_Microsoft_Win32_SafeHandles_SafeFileHandle_
-  commentId: M:Usb.Net.Windows.WinUsbApiCalls.WinUsb_Free(Microsoft.Win32.SafeHandles.SafeFileHandle)
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_Free(Microsoft.Win32.SafeHandles.SafeFileHandle)
-  nameWithType: WinUsbApiCalls.WinUsb_Free(SafeFileHandle)
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_Free*
-  name: WinUsb_Free
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_Free_
-  commentId: Overload:Usb.Net.Windows.WinUsbApiCalls.WinUsb_Free
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_Free
-  nameWithType: WinUsbApiCalls.WinUsb_Free
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetAssociatedInterface(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,Microsoft.Win32.SafeHandles.SafeFileHandle@)
-  name: WinUsb_GetAssociatedInterface(SafeFileHandle, Byte, out SafeFileHandle)
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_GetAssociatedInterface_Microsoft_Win32_SafeHandles_SafeFileHandle_System_Byte_Microsoft_Win32_SafeHandles_SafeFileHandle__
-  commentId: M:Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetAssociatedInterface(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,Microsoft.Win32.SafeHandles.SafeFileHandle@)
-  name.vb: WinUsb_GetAssociatedInterface(SafeFileHandle, Byte, ByRef SafeFileHandle)
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetAssociatedInterface(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, out Microsoft.Win32.SafeHandles.SafeFileHandle)
-  fullName.vb: Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetAssociatedInterface(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, ByRef Microsoft.Win32.SafeHandles.SafeFileHandle)
-  nameWithType: WinUsbApiCalls.WinUsb_GetAssociatedInterface(SafeFileHandle, Byte, out SafeFileHandle)
-  nameWithType.vb: WinUsbApiCalls.WinUsb_GetAssociatedInterface(SafeFileHandle, Byte, ByRef SafeFileHandle)
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetAssociatedInterface*
-  name: WinUsb_GetAssociatedInterface
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_GetAssociatedInterface_
-  commentId: Overload:Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetAssociatedInterface
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetAssociatedInterface
-  nameWithType: WinUsbApiCalls.WinUsb_GetAssociatedInterface
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetDescriptor(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,System.Byte,System.UInt16,System.Byte[],System.UInt32,System.UInt32@)
-  name: WinUsb_GetDescriptor(SafeFileHandle, Byte, Byte, UInt16, Byte[], UInt32, out UInt32)
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_GetDescriptor_Microsoft_Win32_SafeHandles_SafeFileHandle_System_Byte_System_Byte_System_UInt16_System_Byte___System_UInt32_System_UInt32__
-  commentId: M:Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetDescriptor(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,System.Byte,System.UInt16,System.Byte[],System.UInt32,System.UInt32@)
-  name.vb: WinUsb_GetDescriptor(SafeFileHandle, Byte, Byte, UInt16, Byte(), UInt32, ByRef UInt32)
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetDescriptor(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, System.Byte, System.UInt16, System.Byte[], System.UInt32, out System.UInt32)
-  fullName.vb: Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetDescriptor(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, System.Byte, System.UInt16, System.Byte(), System.UInt32, ByRef System.UInt32)
-  nameWithType: WinUsbApiCalls.WinUsb_GetDescriptor(SafeFileHandle, Byte, Byte, UInt16, Byte[], UInt32, out UInt32)
-  nameWithType.vb: WinUsbApiCalls.WinUsb_GetDescriptor(SafeFileHandle, Byte, Byte, UInt16, Byte(), UInt32, ByRef UInt32)
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetDescriptor(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,System.Byte,System.UInt16,Usb.Net.Windows.USB_DEVICE_DESCRIPTOR@,System.UInt32,System.UInt32@)
-  name: WinUsb_GetDescriptor(SafeFileHandle, Byte, Byte, UInt16, out USB_DEVICE_DESCRIPTOR, UInt32, out UInt32)
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_GetDescriptor_Microsoft_Win32_SafeHandles_SafeFileHandle_System_Byte_System_Byte_System_UInt16_Usb_Net_Windows_USB_DEVICE_DESCRIPTOR__System_UInt32_System_UInt32__
-  commentId: M:Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetDescriptor(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,System.Byte,System.UInt16,Usb.Net.Windows.USB_DEVICE_DESCRIPTOR@,System.UInt32,System.UInt32@)
-  name.vb: WinUsb_GetDescriptor(SafeFileHandle, Byte, Byte, UInt16, ByRef USB_DEVICE_DESCRIPTOR, UInt32, ByRef UInt32)
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetDescriptor(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, System.Byte, System.UInt16, out Usb.Net.Windows.USB_DEVICE_DESCRIPTOR, System.UInt32, out System.UInt32)
-  fullName.vb: Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetDescriptor(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, System.Byte, System.UInt16, ByRef Usb.Net.Windows.USB_DEVICE_DESCRIPTOR, System.UInt32, ByRef System.UInt32)
-  nameWithType: WinUsbApiCalls.WinUsb_GetDescriptor(SafeFileHandle, Byte, Byte, UInt16, out USB_DEVICE_DESCRIPTOR, UInt32, out UInt32)
-  nameWithType.vb: WinUsbApiCalls.WinUsb_GetDescriptor(SafeFileHandle, Byte, Byte, UInt16, ByRef USB_DEVICE_DESCRIPTOR, UInt32, ByRef UInt32)
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetDescriptor*
-  name: WinUsb_GetDescriptor
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_GetDescriptor_
-  commentId: Overload:Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetDescriptor
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_GetDescriptor
-  nameWithType: WinUsbApiCalls.WinUsb_GetDescriptor
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_Initialize(Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr@)
-  name: WinUsb_Initialize(SafeFileHandle, out IntPtr)
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_Initialize_Microsoft_Win32_SafeHandles_SafeFileHandle_System_IntPtr__
-  commentId: M:Usb.Net.Windows.WinUsbApiCalls.WinUsb_Initialize(Microsoft.Win32.SafeHandles.SafeFileHandle,System.IntPtr@)
-  name.vb: WinUsb_Initialize(SafeFileHandle, ByRef IntPtr)
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_Initialize(Microsoft.Win32.SafeHandles.SafeFileHandle, out System.IntPtr)
-  fullName.vb: Usb.Net.Windows.WinUsbApiCalls.WinUsb_Initialize(Microsoft.Win32.SafeHandles.SafeFileHandle, ByRef System.IntPtr)
-  nameWithType: WinUsbApiCalls.WinUsb_Initialize(SafeFileHandle, out IntPtr)
-  nameWithType.vb: WinUsbApiCalls.WinUsb_Initialize(SafeFileHandle, ByRef IntPtr)
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_Initialize*
-  name: WinUsb_Initialize
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_Initialize_
-  commentId: Overload:Usb.Net.Windows.WinUsbApiCalls.WinUsb_Initialize
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_Initialize
-  nameWithType: WinUsbApiCalls.WinUsb_Initialize
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryDeviceInformation(System.IntPtr,System.UInt32,System.UInt32@,System.Byte@)
-  name: WinUsb_QueryDeviceInformation(IntPtr, UInt32, ref UInt32, ref Byte)
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_QueryDeviceInformation_System_IntPtr_System_UInt32_System_UInt32__System_Byte__
-  commentId: M:Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryDeviceInformation(System.IntPtr,System.UInt32,System.UInt32@,System.Byte@)
-  name.vb: WinUsb_QueryDeviceInformation(IntPtr, UInt32, ByRef UInt32, ByRef Byte)
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryDeviceInformation(System.IntPtr, System.UInt32, ref System.UInt32, ref System.Byte)
-  fullName.vb: Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryDeviceInformation(System.IntPtr, System.UInt32, ByRef System.UInt32, ByRef System.Byte)
-  nameWithType: WinUsbApiCalls.WinUsb_QueryDeviceInformation(IntPtr, UInt32, ref UInt32, ref Byte)
-  nameWithType.vb: WinUsbApiCalls.WinUsb_QueryDeviceInformation(IntPtr, UInt32, ByRef UInt32, ByRef Byte)
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryDeviceInformation*
-  name: WinUsb_QueryDeviceInformation
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_QueryDeviceInformation_
-  commentId: Overload:Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryDeviceInformation
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryDeviceInformation
-  nameWithType: WinUsbApiCalls.WinUsb_QueryDeviceInformation
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryInterfaceSettings(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR@)
-  name: WinUsb_QueryInterfaceSettings(SafeFileHandle, Byte, out USB_INTERFACE_DESCRIPTOR)
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_QueryInterfaceSettings_Microsoft_Win32_SafeHandles_SafeFileHandle_System_Byte_Usb_Net_Windows_USB_INTERFACE_DESCRIPTOR__
-  commentId: M:Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryInterfaceSettings(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR@)
-  name.vb: WinUsb_QueryInterfaceSettings(SafeFileHandle, Byte, ByRef USB_INTERFACE_DESCRIPTOR)
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryInterfaceSettings(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, out Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR)
-  fullName.vb: Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryInterfaceSettings(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, ByRef Usb.Net.Windows.USB_INTERFACE_DESCRIPTOR)
-  nameWithType: WinUsbApiCalls.WinUsb_QueryInterfaceSettings(SafeFileHandle, Byte, out USB_INTERFACE_DESCRIPTOR)
-  nameWithType.vb: WinUsbApiCalls.WinUsb_QueryInterfaceSettings(SafeFileHandle, Byte, ByRef USB_INTERFACE_DESCRIPTOR)
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryInterfaceSettings*
-  name: WinUsb_QueryInterfaceSettings
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_QueryInterfaceSettings_
-  commentId: Overload:Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryInterfaceSettings
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryInterfaceSettings
-  nameWithType: WinUsbApiCalls.WinUsb_QueryInterfaceSettings
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryPipe(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,System.Byte,Usb.Net.Windows.WINUSB_PIPE_INFORMATION@)
-  name: WinUsb_QueryPipe(SafeFileHandle, Byte, Byte, out WINUSB_PIPE_INFORMATION)
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_QueryPipe_Microsoft_Win32_SafeHandles_SafeFileHandle_System_Byte_System_Byte_Usb_Net_Windows_WINUSB_PIPE_INFORMATION__
-  commentId: M:Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryPipe(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,System.Byte,Usb.Net.Windows.WINUSB_PIPE_INFORMATION@)
-  name.vb: WinUsb_QueryPipe(SafeFileHandle, Byte, Byte, ByRef WINUSB_PIPE_INFORMATION)
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryPipe(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, System.Byte, out Usb.Net.Windows.WINUSB_PIPE_INFORMATION)
-  fullName.vb: Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryPipe(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, System.Byte, ByRef Usb.Net.Windows.WINUSB_PIPE_INFORMATION)
-  nameWithType: WinUsbApiCalls.WinUsb_QueryPipe(SafeFileHandle, Byte, Byte, out WINUSB_PIPE_INFORMATION)
-  nameWithType.vb: WinUsbApiCalls.WinUsb_QueryPipe(SafeFileHandle, Byte, Byte, ByRef WINUSB_PIPE_INFORMATION)
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryPipe*
-  name: WinUsb_QueryPipe
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_QueryPipe_
-  commentId: Overload:Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryPipe
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_QueryPipe
-  nameWithType: WinUsbApiCalls.WinUsb_QueryPipe
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_ReadPipe(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,System.Byte[],System.UInt32,System.UInt32@,System.IntPtr)
-  name: WinUsb_ReadPipe(SafeFileHandle, Byte, Byte[], UInt32, out UInt32, IntPtr)
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_ReadPipe_Microsoft_Win32_SafeHandles_SafeFileHandle_System_Byte_System_Byte___System_UInt32_System_UInt32__System_IntPtr_
-  commentId: M:Usb.Net.Windows.WinUsbApiCalls.WinUsb_ReadPipe(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,System.Byte[],System.UInt32,System.UInt32@,System.IntPtr)
-  name.vb: WinUsb_ReadPipe(SafeFileHandle, Byte, Byte(), UInt32, ByRef UInt32, IntPtr)
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_ReadPipe(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, System.Byte[], System.UInt32, out System.UInt32, System.IntPtr)
-  fullName.vb: Usb.Net.Windows.WinUsbApiCalls.WinUsb_ReadPipe(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, System.Byte(), System.UInt32, ByRef System.UInt32, System.IntPtr)
-  nameWithType: WinUsbApiCalls.WinUsb_ReadPipe(SafeFileHandle, Byte, Byte[], UInt32, out UInt32, IntPtr)
-  nameWithType.vb: WinUsbApiCalls.WinUsb_ReadPipe(SafeFileHandle, Byte, Byte(), UInt32, ByRef UInt32, IntPtr)
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_ReadPipe*
-  name: WinUsb_ReadPipe
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_ReadPipe_
-  commentId: Overload:Usb.Net.Windows.WinUsbApiCalls.WinUsb_ReadPipe
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_ReadPipe
-  nameWithType: WinUsbApiCalls.WinUsb_ReadPipe
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_SetPipePolicy(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,System.UInt32,System.UInt32,System.UInt32@)
-  name: WinUsb_SetPipePolicy(SafeFileHandle, Byte, UInt32, UInt32, ref UInt32)
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_SetPipePolicy_Microsoft_Win32_SafeHandles_SafeFileHandle_System_Byte_System_UInt32_System_UInt32_System_UInt32__
-  commentId: M:Usb.Net.Windows.WinUsbApiCalls.WinUsb_SetPipePolicy(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,System.UInt32,System.UInt32,System.UInt32@)
-  name.vb: WinUsb_SetPipePolicy(SafeFileHandle, Byte, UInt32, UInt32, ByRef UInt32)
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_SetPipePolicy(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, System.UInt32, System.UInt32, ref System.UInt32)
-  fullName.vb: Usb.Net.Windows.WinUsbApiCalls.WinUsb_SetPipePolicy(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, System.UInt32, System.UInt32, ByRef System.UInt32)
-  nameWithType: WinUsbApiCalls.WinUsb_SetPipePolicy(SafeFileHandle, Byte, UInt32, UInt32, ref UInt32)
-  nameWithType.vb: WinUsbApiCalls.WinUsb_SetPipePolicy(SafeFileHandle, Byte, UInt32, UInt32, ByRef UInt32)
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_SetPipePolicy*
-  name: WinUsb_SetPipePolicy
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_SetPipePolicy_
-  commentId: Overload:Usb.Net.Windows.WinUsbApiCalls.WinUsb_SetPipePolicy
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_SetPipePolicy
-  nameWithType: WinUsbApiCalls.WinUsb_SetPipePolicy
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_WritePipe(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,System.Byte[],System.UInt32,System.UInt32@,System.IntPtr)
-  name: WinUsb_WritePipe(SafeFileHandle, Byte, Byte[], UInt32, out UInt32, IntPtr)
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_WritePipe_Microsoft_Win32_SafeHandles_SafeFileHandle_System_Byte_System_Byte___System_UInt32_System_UInt32__System_IntPtr_
-  commentId: M:Usb.Net.Windows.WinUsbApiCalls.WinUsb_WritePipe(Microsoft.Win32.SafeHandles.SafeFileHandle,System.Byte,System.Byte[],System.UInt32,System.UInt32@,System.IntPtr)
-  name.vb: WinUsb_WritePipe(SafeFileHandle, Byte, Byte(), UInt32, ByRef UInt32, IntPtr)
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_WritePipe(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, System.Byte[], System.UInt32, out System.UInt32, System.IntPtr)
-  fullName.vb: Usb.Net.Windows.WinUsbApiCalls.WinUsb_WritePipe(Microsoft.Win32.SafeHandles.SafeFileHandle, System.Byte, System.Byte(), System.UInt32, ByRef System.UInt32, System.IntPtr)
-  nameWithType: WinUsbApiCalls.WinUsb_WritePipe(SafeFileHandle, Byte, Byte[], UInt32, out UInt32, IntPtr)
-  nameWithType.vb: WinUsbApiCalls.WinUsb_WritePipe(SafeFileHandle, Byte, Byte(), UInt32, ByRef UInt32, IntPtr)
-- uid: Usb.Net.Windows.WinUsbApiCalls.WinUsb_WritePipe*
-  name: WinUsb_WritePipe
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WinUsb_WritePipe_
-  commentId: Overload:Usb.Net.Windows.WinUsbApiCalls.WinUsb_WritePipe
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WinUsb_WritePipe
-  nameWithType: WinUsbApiCalls.WinUsb_WritePipe
-- uid: Usb.Net.Windows.WinUsbApiCalls.WritePipeId
-  name: WritePipeId
-  href: api/Usb.Net.Windows.WinUsbApiCalls.html#Usb_Net_Windows_WinUsbApiCalls_WritePipeId
-  commentId: F:Usb.Net.Windows.WinUsbApiCalls.WritePipeId
-  fullName: Usb.Net.Windows.WinUsbApiCalls.WritePipeId
-  nameWithType: WinUsbApiCalls.WritePipeId
 - uid: Usb.Net.WINUSB_SETUP_PACKET
   name: WINUSB_SETUP_PACKET
   href: api/Usb.Net.WINUSB_SETUP_PACKET.html
