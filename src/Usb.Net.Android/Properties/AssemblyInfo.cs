@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 //      Minor Version 
 //      Build Number
 //      Revision
-[assembly: AssemblyVersion("4.0.8")]
+[assembly: AssemblyVersion("4.0.9")]
 #pragma warning disable CS7035 // The specified version string does not conform to the recommended format - major.minor.build.revision
-[assembly: AssemblyFileVersion("4.0.8-alpha")]
+[assembly: AssemblyFileVersion("4.0.9-alpha")]
 #pragma warning restore CS7035 // The specified version string does not conform to the recommended format - major.minor.build.revision

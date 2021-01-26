@@ -9,6 +9,7 @@
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>         
+        <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>   
+        <Version>4.0.9-alpha</Version>            
     </PropertyGroup>
 </Project>

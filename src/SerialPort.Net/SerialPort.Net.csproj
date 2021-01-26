@@ -3,7 +3,6 @@
         <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
         <NoWarn>1701;1702;NU5125</NoWarn>
         <DocumentationFile>SerialPort.Net.xml</DocumentationFile>
-        <Version>4.0.8-alpha</Version>
         <DebugType>embedded</DebugType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
