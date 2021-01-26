@@ -17,56 +17,49 @@ _Note: if the protocol is USB, you need to specify which interface and pipe addr
 That's fine. Just allow for this in the integration test. 
 
 ## Write a Failing Integration Test
-As a starting point, you need to define a contract and write it into a failing Integration Test.  Here is an [example](https://github.com/MelbourneDeveloper/Device.Net/blob/cc28e96559214456a2a0bdbe401019a69dd0a825/src/Device.Net.UnitTests/IntegrationTestsUsb.cs#L16) from the Trezor hardwarewallet. The request only has three bytes of data, but the response is a full array of 64 bytes.
+As a starting point, you need to define a contract and write it into a failing Integration Test.  Here is an [example](https://github.com/MelbourneDeveloper/Device.Net/blob/d01cb456438a7622bd581c26af1aa89fc6ab798f/src/Device.Net.UnitTests/IntegrationTests.cs#L252). The request only has five bytes of data, but the response verifies several properties about the response and the device.
 
 ```cs
 [TestMethod]
-public async Task TestWriteAndReadFromTrezorUsb()
+public async Task TestWriteAndReadFromNanoHid()
 {
-    //Note: creating a LoggerFactory like this is easier than creating a mock
-    var loggerFactory = LoggerFactory.Create((builder) =>
-    {
-        _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
-    });
-
-    var factory = new WindowsUsbDeviceFactory(loggerFactory);
-    var deviceManager = new DeviceManager(loggerFactory);
-    deviceManager.DeviceFactories.Add(factory);
-
-    //Get the filtered devices
-    var devices = await deviceManager.GetDevicesAsync(new List<FilterDeviceDefinition>
-    {
-        new FilterDeviceDefinition
-        {
-            DeviceType= DeviceType.Usb,
-            VendorId= 0x1209,
-            ProductId=0x53C1,
-            //This does not affect the filtering
-            Label="Trezor One Firmware 1.7.x"
-        },
-    });
-
-    //Get the first available device
-    var trezorDevice = devices.FirstOrDefault();
-
-    //Ensure that it gets picked up
-    Assert.IsNotNull(trezorDevice);
-
-    //Initialize the device
-    await trezorDevice.InitializeAsync();
-
     //Send the request part of the Message Contract
-    var request = new byte[64];
-    request[0] = 0x3f;
-    request[1] = 0x23;
-    request[2] = 0x23;
-    var response = await trezorDevice.WriteAndReadAsync(request);
+    var request = new byte[NanoBufferSize];
+    request[0] = 63;
+    request[1] = 62;
+    request[2] = 1;
+    request[3] = 1;
+    request[4] = 1;
 
-    //Specify the response part of the Message Contract
-    var expectedResult = new byte[] { 63, 35, 35, 0, 17, 0, 0, 0, 194, 10, 9, 116, 114, 101, 122, 111, 114, 46, 105, 111, 16, 1, 24, 9, 32, 1, 50, 24, 51, 66, 69, 65, 55, 66, 50, 55, 50, 55, 66, 49, 55, 57, 50, 52, 67, 56, 67, 70, 68, 56, 53, 48, 56, 1, 64, 0, 74, 5, 101, 110, 45, 85, 83, 82 };
+    var filterDeviceDefinition = new FilterDeviceDefinition(productId: 4112, vendorId: 10741);
 
-    //Assert that the response part meets the specification
-    Assert.IsTrue(expectedResult.SequenceEqual(response.Data));
+    var integrationTester = new IntegrationTester(filterDeviceDefinition.GetHidDeviceFactory(loggerFactory));
+
+    await integrationTester.TestAsync(request, (result, device) =>
+        {
+            Assert.AreEqual(NanoBufferSize, result.Data.Length);
+            Assert.AreEqual(63, result.Data[0]);
+            Assert.AreEqual(62, result.Data[1]);
+
+            var windowsHidDevice = (HidDevice)device;
+
+            //TODO: share this with UWP
+            Assert.AreEqual(DeviceType.Hid, device.ConnectedDeviceDefinition.DeviceType);
+            Assert.AreEqual("AirNetix", device.ConnectedDeviceDefinition.Manufacturer);
+            Assert.AreEqual(filterDeviceDefinition.ProductId, device.ConnectedDeviceDefinition.ProductId);
+            Assert.AreEqual(filterDeviceDefinition.VendorId, device.ConnectedDeviceDefinition.VendorId);
+            Assert.AreEqual("STS-170", device.ConnectedDeviceDefinition.ProductName);
+            Assert.AreEqual(NanoBufferSize, device.ConnectedDeviceDefinition.ReadBufferSize);
+            Assert.AreEqual(NanoBufferSize, device.ConnectedDeviceDefinition.WriteBufferSize);
+            Assert.AreEqual("000000000001", device.ConnectedDeviceDefinition.SerialNumber);
+            Assert.AreEqual((ushort)1, device.ConnectedDeviceDefinition.Usage);
+            Assert.AreEqual((ushort)65280, device.ConnectedDeviceDefinition.UsagePage);
+            Assert.AreEqual((ushort)256, device.ConnectedDeviceDefinition.VersionNumber);
+            Assert.AreEqual(NanoBufferSize, windowsHidDevice.ReadBufferSize);
+            Assert.AreEqual(NanoBufferSize, windowsHidDevice.WriteBufferSize);
+            return Task.FromResult(true);
+
+        }, NanoBufferSize);
 }
 ```
 
