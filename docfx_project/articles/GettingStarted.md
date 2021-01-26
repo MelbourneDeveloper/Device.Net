@@ -43,6 +43,7 @@ namespace Usb.Net.WindowsSample
     {
         private static async Task Main()
         {
+            //Create logger factory that will pick up all logs and output them in the debug output window
             var loggerFactory = LoggerFactory.Create((builder) =>
             {
                 _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
@@ -68,7 +69,7 @@ namespace Usb.Net.WindowsSample
             var factories = hidFactory.Aggregate(usbFactory);
 
             //Get connected device definitions
-            var deviceDefinitions = (await hidFactory.GetConnectedDeviceDefinitionsAsync().ConfigureAwait(false)).ToList();
+            var deviceDefinitions = (await factories.GetConnectedDeviceDefinitionsAsync().ConfigureAwait(false)).ToList();
 
             if (deviceDefinitions.Count == 0)
             {
@@ -94,5 +95,4 @@ namespace Usb.Net.WindowsSample
         }
     }
 }
-
 ```
