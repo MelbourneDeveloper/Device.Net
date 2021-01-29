@@ -102,11 +102,11 @@ namespace Device.Net
         /// Sets the selected device
         /// </summary>
         /// <param name="connectedDevice"></param>
-        public void SelectDevice(DeviceSelectedArgs connectedDevice)
+        public void SelectDevice(ConnectedDeviceDefinition connectedDevice)
         {
             _ = connectedDevice == null
                 ? throw new ArgumentNullException(nameof(connectedDevice))
-                : InitializeDeviceAsync(connectedDevice.ConnectedDevice);
+                : InitializeDeviceAsync(connectedDevice);
         }
 
         public async Task<TResponse> WriteAndReadAsync<TResponse>(IRequest request, Func<byte[], TResponse> convertFunc)
