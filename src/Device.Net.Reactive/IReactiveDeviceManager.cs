@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Device.Net.Reactive
+namespace Device.Net
 {
-    public interface IReactiveDeviceManager
+    /// <summary>
+    /// This interface is a work in progress. It is not production ready.
+    /// </summary>
+    public interface IDeviceManager
     {
         void QueueRequest(IRequest request);
 

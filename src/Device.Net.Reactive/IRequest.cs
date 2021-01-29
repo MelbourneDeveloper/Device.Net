@@ -1,4 +1,4 @@
-﻿namespace Device.Net.Reactive
+﻿namespace Device.Net
 {
     public interface IRequest
     {

@@ -6,17 +6,15 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Device.Net.Reactive
+namespace Device.Net
 {
-    public delegate Task<IReadOnlyList<ConnectedDeviceDefinition>> GetConnectedDevicesAsync();
-
     /// <summary>
     /// This class is a work in progress. It is not production ready.
     /// </summary>
-    public class ReactiveDeviceManager : IReactiveDeviceManager, IDisposable
+    public class DeviceManager : IDeviceManager, IDisposable
     {
         #region Fields
-        private readonly ILogger<ReactiveDeviceManager> _logger;
+        private readonly ILogger<DeviceManager> _logger;
         private readonly Func<IDevice, Task> _initializeDeviceAction;
         private IDevice _selectedDevice;
         private readonly Queue<IRequest> _queuedRequests = new Queue<IRequest>();
@@ -62,7 +60,7 @@ namespace Device.Net.Reactive
         /// <param name="getDevice"></param>
         /// <param name="pollMilliseconds"></param>
         /// <param name="loggerFactory"></param>
-        public ReactiveDeviceManager(
+        public DeviceManager(
             DeviceNotify notifyDeviceInitialized,
             DevicesNotify notifyConnectedDevices,
             NotifyDeviceException notifyDeviceException,
@@ -78,7 +76,7 @@ namespace Device.Net.Reactive
             _getConnectedDevicesAsync = getConnectedDevicesAsync ?? throw new ArgumentNullException(nameof(getConnectedDevicesAsync));
             _getDevice = getDevice ?? throw new ArgumentNullException(nameof(getDevice));
 
-            _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<ReactiveDeviceManager>();
+            _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<DeviceManager>();
 
             _initializeDeviceAction = initializeDeviceAction;
             _pollMilliseconds = pollMilliseconds;
