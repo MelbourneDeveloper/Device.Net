@@ -75,7 +75,7 @@
 </code></pre>
 <p>Call and await <code>GetConnectedDeviceDefinitionsAsync()</code> on the factory to enumerate the devices connected to the computer. The get one of the devices, you need to call <code>GetDeviceAsync()</code> on the factory and pass in a definition. This will return an <code>IDevice</code>, and you need to call <code>InitializeAsync()</code> to use the device.</p>
 <p>_Note: it is a good idea to specify a logger during the factory registration. This means that factories will log errors and so on when attempting to connect to enumerate or connect to devices. See the section Debugging, Logging and Tracing.</p>
-<p><em>If you have not already been through the process you will need to <a href="https://melbournedeveloper.github.io/Device.Net/articles/DevicePermissionSetup.html">configure device permissions</a> on Android, or UWP.</em></p>
+<p>If you have not already been through the process you will need to <a href="https://melbournedeveloper.github.io/Device.Net/articles/DevicePermissionSetup.html">configure device permissions</a> on Android, or UWP._</p>
 <h2 id="advanced-workflows">Advanced Workflows</h2>
 <p>Device.Net supports multiple workflows. You may expect your user to connect the device before the app starts and leave it connected, or the user may plug and unplug the device several times. Any approach is possible, but different tools facilitate different approaches.</p>
 <h3 id="single-device-ui">Single Device UI</h3>
