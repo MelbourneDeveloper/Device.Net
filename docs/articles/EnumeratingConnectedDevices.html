@@ -74,13 +74,13 @@
                 .CreateWindowsHidDeviceFactory(loggerFactory);
 </code></pre>
 <p>Call and await <code>GetConnectedDeviceDefinitionsAsync()</code> on the factory to enumerate the devices connected to the computer. The get one of the devices, you need to call <code>GetDeviceAsync()</code> on the factory and pass in a definition. This will return an <code>IDevice</code>, and you need to call <code>InitializeAsync()</code> to use the device.</p>
-<p>_Note: it is a good idea to specify a logger during the factory registration. This means that factories will log errors and so on when attempting to connect to enumerate or connect to devices. See the section Debugging, Logging and Tracing.</p>
-<p>If you have not already been through the process you will need to <a href="https://melbournedeveloper.github.io/Device.Net/articles/DevicePermissionSetup.html">configure device permissions</a> on Android, or UWP._</p>
+<p><em>Note: it is a good idea to specify a logger during the factory registration. This means that factories will log errors and so on when attempting to connect to enumerate or connect to devices. See the section Debugging, Logging and Tracing.</em></p>
+<p><em>If you have not already been through the process you will need to <a href="https://melbournedeveloper.github.io/Device.Net/articles/DevicePermissionSetup.html">configure device permissions</a> on Android, or UWP.</em></p>
 <h2 id="advanced-workflows">Advanced Workflows</h2>
 <p>Device.Net supports multiple workflows. You may expect your user to connect the device before the app starts and leave it connected, or the user may plug and unplug the device several times. Any approach is possible, but different tools facilitate different approaches.</p>
 <h3 id="single-device-ui">Single Device UI</h3>
 <p>This is probably the most common UI workflow that you will implement. An app starts up and shows a wait indicator until a device is connected. The device may be a gamepad, hardwarewallet, or anything that exchanges data with the computer. The app may accept multiple models or Product Ids, but the app works in the same way. Perhaps some functionality is toggled on or off based on the Product Id. The single device interacts with the controls on the screen, and then the UI becomes locked once the device is disconnected. In this scenario, you may have a Combobox to switch between multiple devices if the user connects multiple.</p>
-<p>There are two classes for this: <code>DeviceManager</code>, and <code>DeviceListener</code>. The former is the recommended class, but it is a work in progress and not included in the Device.Net Nuget package. <code>DeviceManager</code> aims at asynchronous messaging while <code>DeviceListener</code> uses traditional .NET events. See the documentation for these classes.</p>
+<p>There are two classes for this: <code>DeviceManager</code>, and <a href="https://melbournedeveloper.github.io/Device.Net/articles/DeviceListener.html"><code>DeviceListener</code></a>. The former is the recommended class, but it is a work in progress and not included in the Device.Net Nuget package. <code>DeviceManager</code> aims at asynchronous messaging while <code>DeviceListener</code> uses traditional .NET events. See the documentation for these classes.</p>
 <h3 id="data-streaming">Data Streaming</h3>
 <p>Some devices don't require you to send complicated messages to the device. In these cases, the device streams data to your computer, but you only send minimal messaging to the device. A good example is a thermometer. Generally, you only send a request for the current temperature, and it returns the result. It does this again and again. In this case, you connect to the device, send a message in a loop, and do something with the result.</p>
 <p>This example uses <a href="https://github.com/dotnet/reactive">.NET reactive extensions</a> to achieve this. The first step gets the first device and then connects to it. The, we create an observable which is configured to poll the device every 100 milliseconds.</p>
@@ -107,6 +107,7 @@
     //Note: in a real scenario, we would dispose of the subscription afterwards. This method runs forever.
 }
 </code></pre>
+<p><em>Note: there is a work in progress called DeviceDataStreamer <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/59e507311a0a4a48917a620a265c8420cbdbdc4e/src/Device.Net/DeviceDataStreamer.cs#L9">here</a>. This class takes care of polling for the device and only sending messages while the device is connected</em></p>
 </article>
           </div>
           

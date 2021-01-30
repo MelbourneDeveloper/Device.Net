@@ -8,9 +8,9 @@ new FilterDeviceDefinition(vendorId: 0x534C, productId: 0x0001, label: "Trezor O
 
 Call and await `GetConnectedDeviceDefinitionsAsync()` on the factory to enumerate the devices connected to the computer. The get one of the devices, you need to call `GetDeviceAsync()` on the factory and pass in a definition. This will return an `IDevice`, and you need to call `InitializeAsync()` to use the device. 
 
-_Note: it is a good idea to specify a logger during the factory registration. This means that factories will log errors and so on when attempting to connect to enumerate or connect to devices. See the section Debugging, Logging and Tracing.
+_Note: it is a good idea to specify a logger during the factory registration. This means that factories will log errors and so on when attempting to connect to enumerate or connect to devices. See the section Debugging, Logging and Tracing._
 
-If you have not already been through the process you will need to [configure device permissions](https://melbournedeveloper.github.io/Device.Net/articles/DevicePermissionSetup.html) on Android, or UWP._
+_If you have not already been through the process you will need to [configure device permissions](https://melbournedeveloper.github.io/Device.Net/articles/DevicePermissionSetup.html) on Android, or UWP._
 
 ## Advanced Workflows
 
@@ -20,7 +20,7 @@ Device.Net supports multiple workflows. You may expect your user to connect the 
 
 This is probably the most common UI workflow that you will implement. An app starts up and shows a wait indicator until a device is connected. The device may be a gamepad, hardwarewallet, or anything that exchanges data with the computer. The app may accept multiple models or Product Ids, but the app works in the same way. Perhaps some functionality is toggled on or off based on the Product Id. The single device interacts with the controls on the screen, and then the UI becomes locked once the device is disconnected. In this scenario, you may have a Combobox to switch between multiple devices if the user connects multiple. 
 
-There are two classes for this: `DeviceManager`, and `DeviceListener`. The former is the recommended class, but it is a work in progress and not included in the Device.Net Nuget package. `DeviceManager` aims at asynchronous messaging while `DeviceListener` uses traditional .NET events. See the documentation for these classes.
+There are two classes for this: `DeviceManager`, and [`DeviceListener`](https://melbournedeveloper.github.io/Device.Net/articles/DeviceListener.html). The former is the recommended class, but it is a work in progress and not included in the Device.Net Nuget package. `DeviceManager` aims at asynchronous messaging while `DeviceListener` uses traditional .NET events. See the documentation for these classes.
 
 ### Data Streaming
 
@@ -52,3 +52,5 @@ private static async Task DisplayTemperature()
     //Note: in a real scenario, we would dispose of the subscription afterwards. This method runs forever.
 }
 ```
+
+_Note: there is a work in progress called DeviceDataStreamer [here](https://github.com/MelbourneDeveloper/Device.Net/blob/59e507311a0a4a48917a620a265c8420cbdbdc4e/src/Device.Net/DeviceDataStreamer.cs#L9). This class takes care of polling for the device and only sending messages while the device is connected_
