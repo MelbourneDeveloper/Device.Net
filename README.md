@@ -28,7 +28,7 @@ This project also needs unit tests, bug fixes and work towards more platforms. P
 
 * [Quick Start](https://melbournedeveloper.github.io/Device.Net/articles/GettingStarted.html)
 
- * [Samples and Unit Tests](https://melbournedeveloper.github.io/Device.Net/articles/SamplesAndUnitTests.html)
+* [Samples and Unit Tests](https://melbournedeveloper.github.io/Device.Net/articles/SamplesAndUnitTests.html)
 
 * [Join the conversation](https://discord.gg/ZcvXARm) on Discord
 
