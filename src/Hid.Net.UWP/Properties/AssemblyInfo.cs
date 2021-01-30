@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Hid.Net.UWP")]
-[assembly: AssemblyCopyright("Copyright © Christian Findlay 2020")]
+[assembly: AssemblyCopyright("Copyright © Christian Findlay 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -23,8 +23,8 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("4.0.9")]
+[assembly: AssemblyVersion("4.0.0")]
 #pragma warning disable CS7035 // The specified version string does not conform to the recommended format - major.minor.build.revision
-[assembly: AssemblyFileVersion("4.0.9-alpha")]
+[assembly: AssemblyFileVersion("4.0.0")]
 #pragma warning restore CS7035 // The specified version string does not conform to the recommended format - major.minor.build.revision
 [assembly: ComVisible(false)]

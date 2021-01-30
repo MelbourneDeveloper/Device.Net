@@ -10,6 +10,6 @@
 		<AnalysisLevel>latest</AnalysisLevel>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>   
-        <Version>4.0.9-alpha</Version>            
+        <Version>4.0.0</Version>            
     </PropertyGroup>
 </Project>
