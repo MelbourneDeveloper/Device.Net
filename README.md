@@ -1,18 +1,40 @@
+
 # Hid.Net, Usb.Net, SerialPort.Net (Device.Net)
-
-## [Join the conversation](https://discord.gg/ZcvXARm) on Discord ##
-
-## [Follow Me on Twitter](https://twitter.com/intent/follow?screen_name=cfdevelop&tw_p=followbutton) ##
 
 ![diagram](https://github.com/MelbourneDeveloper/Device.Net/blob/main/Diagram.png)
 
-## [Version 4 Documentation](https://melbournedeveloper.github.io/Device.Net/index.html)
+**Cross-platform C# framework for talking to connected devices such as USB, Serial Port and Hid devices**
 
-**Version 4 is going to be a big version. The Github documentation and samples here are currently out of date. See the Version 4 documentation (work in progress) above. Grab the prerelease version on Nuget for the latest and greatest alpha version. Check out the [plan](https://github.com/MelbourneDeveloper/Device.Net/projects/11). Many enhancements, including standard [`ILogger`](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.ilogger?view=dotnet-plat-ext-3.1), USB control transfer, improved public API are already complete, and I'm in the middle of testing with more real devices with real apps. Pull Requests are super welcome!**
+Version 4 is live on [Nuget.org](https://www.nuget.org/packages/Device.Net)! Take a look at the [4.0 project](https://github.com/MelbourneDeveloper/Device.Net/projects/11) to see new features and fixes. Version 4 has public interface changes. You will need to read through the documentation to upgrade from version 3 to version 4.
 
-**Cross platform C# framework for talking to connected devices such as Usb, Serial Port and Hid devices.**
+This framework provides a common Task async programming interface across platforms and device types. This allows for dependency injection to use different types of devices on any platform with the same code. The supported device types are Hid, Serial Port, and USB. 
 
-This framework provides a common Task based Async interface across platforms and device types. This allows for dependency injection so that different types of devices can be used on any platform with the same code. The supported device types are Hid, Serial Port, and USB. Other device types such as Bluetooth and so on may be added in future. Hid.Net is specifically for Hid devices that may be Usb devices. Usb.Net is specifically for Usb devices that don't have a Hid interface. Please visit the [documentation page](https://github.com/MelbourneDeveloper/Device.Net/wiki). Would you you like to [contribute?](https://christianfindlay.com/2019/04/28/calling-all-c-crypto-developers/)
+### Contribute
+This project needs funding. Please [sponsor me here](https://github.com/sponsors/MelbourneDeveloper) so that I can contribute more time to improving this framework.
+
+| Coin           | Address |
+| -------------  |:-------------:|
+| Bitcoin        | [33LrG1p81kdzNUHoCnsYGj6EHRprTKWu3U](https://www.blockchain.com/btc/address/33LrG1p81kdzNUHoCnsYGj6EHRprTKWu3U) |
+| Ethereum       | [0x7ba0ea9975ac0efb5319886a287dcf5eecd3038e](https://etherdonation.com/d?to=0x7ba0ea9975ac0efb5319886a287dcf5eecd3038e) |
+| Litecoin       | MVAbLaNPq7meGXvZMU4TwypUsDEuU6stpY |
+
+This project also needs unit tests, bug fixes and work towards more platforms. Please [read this](https://github.com/MelbourneDeveloper/Device.Net/blob/main/CONTRIBUTING.md).
+
+### Get Help
+
+* [Follow me on Twitter](https://twitter.com/intent/follow?screen_name=cfdevelop&tw_p=followbutton)
+
+* [Documentation](https://melbournedeveloper.github.io/Device.Net/index.html)
+
+* [Quick Start](https://melbournedeveloper.github.io/Device.Net/articles/GettingStarted.html)
+
+ * [Samples and Unit Tests](https://melbournedeveloper.github.io/Device.Net/articles/SamplesAndUnitTests.html)
+
+* [Join the conversation](https://discord.gg/ZcvXARm) on Discord
+
+* Check out [my blog](https://christianfindlay.com/) for articles
+
+* [Nuget packages](https://melbournedeveloper.github.io/Device.Net/articles/NuGet.html)
 
 ### Currently supports:
 
@@ -27,72 +49,76 @@ This framework provides a common Task based Async interface across platforms and
 
 *Note: Bluetooth, Linux, and macOS, WebAssembly (via [WebUsb](https://web.dev/usb/)) support are on the radar. If you can sponsor this project, you might be able to help get there faster.*
 
-## [Quick Start](https://github.com/MelbourneDeveloper/Device.Net/wiki/Quick-Start)
+### Example Code
 
-**Important! Before trying this code, see the above Quick Start**
-
-Example Code:
 ```cs
-public async Task InitializeTrezorAsync()
+using Device.Net;
+using Hid.Net.Windows;
+using Microsoft.Extensions.Logging;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using Usb.Net.Windows;
+
+namespace Usb.Net.WindowsSample
 {
-    //Register the factories for creating Usb devices. This only needs to be done once.
-    WindowsUsbDeviceFactory.Register(Logger, Tracer);
-    WindowsHidDeviceFactory.Register(Logger, Tracer);
-
-    //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
-    var deviceDefinitions = new List<FilterDeviceDefinition>
+    internal class Program
     {
-        new FilterDeviceDefinition{ DeviceType= DeviceType.Hid, VendorId= 0x534C, ProductId=0x0001, Label="Trezor One Firmware 1.6.x" },
-        new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, Label="Trezor One Firmware 1.7.x" },
-        new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C0, Label="Model T" }
-    };
+        private static async Task Main()
+        {
+            //Create logger factory that will pick up all logs and output them in the debug output window
+            var loggerFactory = LoggerFactory.Create((builder) =>
+            {
+                _ = builder.AddDebug().SetMinimumLevel(LogLevel.Trace);
+            });
 
-    //Get the first available device and connect to it
-    var devices = await DeviceManager.Current.GetDevicesAsync(deviceDefinitions);
-    var trezorDevice = devices.FirstOrDefault();
-    await trezorDevice.InitializeAsync();
+            //----------------------
 
-    //Create a buffer with 3 bytes (initialize)
-    var buffer = new byte[64];
-    buffer[0] = 0x3f;
-    buffer[1] = 0x23;
-    buffer[2] = 0x23;
+            // This is Windows specific code. You can replace this with your platform of choice or put this part in the composition root of your app
 
-    //Write the data to the device and wait for the response
-    var readBuffer = await trezorDevice.WriteAndReadAsync(buffer);
+            //Register the factory for creating Hid devices. 
+            var hidFactory =
+                new FilterDeviceDefinition(vendorId: 0x534C, productId: 0x0001, label: "Trezor One Firmware 1.6.x", usagePage: 65280)
+                .CreateWindowsHidDeviceFactory(loggerFactory);
+
+            //Register the factory for creating Usb devices.
+            var usbFactory =
+                new FilterDeviceDefinition(vendorId: 0x1209, productId: 0x53C1, label: "Trezor One Firmware 1.7.x")
+                .CreateWindowsUsbDeviceFactory(loggerFactory);
+
+            //----------------------
+
+            //Join the factories together so that it picks up either the Hid or USB device
+            var factories = hidFactory.Aggregate(usbFactory);
+
+            //Get connected device definitions
+            var deviceDefinitions = (await factories.GetConnectedDeviceDefinitionsAsync().ConfigureAwait(false)).ToList();
+
+            if (deviceDefinitions.Count == 0)
+            {
+                //No devices were found
+                return;
+            }
+
+            //Get the device from its definition
+            var trezorDevice = await hidFactory.GetDeviceAsync(deviceDefinitions.First()).ConfigureAwait(false);
+
+            //Initialize the device
+            await trezorDevice.InitializeAsync().ConfigureAwait(false);
+
+            //Create the request buffer
+            var buffer = new byte[65];
+            buffer[0] = 0x00;
+            buffer[1] = 0x3f;
+            buffer[2] = 0x23;
+            buffer[3] = 0x23;
+
+            //Write and read the data to the device
+            var readBuffer = await trezorDevice.WriteAndReadAsync(buffer).ConfigureAwait(false);
+        }
+    }
 }
 ```
-
-## Sponsor
-This project needs money. If you use Device.Net, please contribute by [sponsoring me here](https://github.com/sponsors/MelbourneDeveloper).
-
-| Coin           | Address |
-| -------------  |:-------------:|
-| Bitcoin        | [33LrG1p81kdzNUHoCnsYGj6EHRprTKWu3U](https://www.blockchain.com/btc/address/33LrG1p81kdzNUHoCnsYGj6EHRprTKWu3U) |
-| Ethereum       | [0x7ba0ea9975ac0efb5319886a287dcf5eecd3038e](https://etherdonation.com/d?to=0x7ba0ea9975ac0efb5319886a287dcf5eecd3038e) |
-| Litecoin       | MVAbLaNPq7meGXvZMU4TwypUsDEuU6stpY |
-
-## [Samples & Unit Tests](https://github.com/MelbourneDeveloper/Device.Net/wiki/Samples-and-Unit-Tests)
-
-[Google Play](https://play.google.com/store/apps/details?id=com.Hardfolio)
-
-[Windows Store](https://www.microsoft.com/en-au/p/hardfolio/9p8xx70n5d2j)
-
-## [NuGet](https://github.com/MelbourneDeveloper/Device.Net/wiki/NuGet)
-
-## Contact
-
-- Follow, or message me on [Twitter](https://twitter.com/CFDevelop)
-
-- [Join the conversation](https://discord.gg/ZcvXARm) on Discord
-
-- Read my [blog](https://christianfindlay.wordpress.com)
-
-## [Contribution](https://github.com/MelbourneDeveloper/Device.Net/blob/master/CONTRIBUTING.md)
-
-## Store App Production Usage
-
-**Hardfolio** - Cryptocurrency portfolio app for hardwarewallets. Hid.Net started its life as a project inside the Hardfolio app codebase. The original aim of this app was to support multiple hardwarewallets across multiple platforms. It turned out that Hid.Net and Usb.Net were warranted as libraries in their own right because there really is not other library on the internet that supports all the platforms that were needed for Hardfolio.
 
 ### See Also
 
@@ -103,3 +129,4 @@ This project needs money. If you use Device.Net, please contribute by [sponsorin
 [USB Wikipedia Page](https://en.wikipedia.org/wiki/USB) - as above
 
 Jax Axelson's [USB Page](http://janaxelson.com/usb.htm) - General C# USB Programming
+
