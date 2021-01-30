@@ -1,4 +1,4 @@
-Note: _DeviceListener is no longer the recommended approach for event-driven connection/disconnection. `DeviceManager` is a work in progress and should be used where possible. See the documentation.
+_Note: DeviceListener is no longer the recommended approach for event-driven connection/disconnection. `DeviceManager` is a work in progress and should be used where possible. See the documentation._
 
 See [code reference](https://melbournedeveloper.github.io/Device.Net/api/Device.Net.DeviceListener.html)
 
