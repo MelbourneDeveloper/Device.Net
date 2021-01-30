@@ -13,7 +13,9 @@ using timer = System.Timers.Timer;
 
 namespace Device.Net
 {
-
+    /// <summary>
+    /// Handles connection of devices. This is not the recommended approach. Please use DeviceManager where possible. Documentation href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.iloggerfactory" 
+    /// </summary>
     public sealed class DeviceListener : IDeviceListener
     {
         #region Fields

@@ -10,6 +10,9 @@
 - name: Device Permission Setup
   href: DevicePermissionSetup.md 
 
+- name: Device Listener
+  href: DeviceListener.md 
+
 - name: Debugging, Logging and Tracing
   href: DebuggingLoggingTracing.md 
 
@@ -30,4 +33,3 @@
 
 - name: Samples and Unit Tests
   href: SamplesAndUnitTests.md
-

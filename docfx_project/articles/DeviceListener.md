@@ -1,5 +1,7 @@
 Note: _DeviceListener is no longer the recommended approach for event-driven connection/disconnection. `DeviceManager` is a work in progress and should be used where possible. See the documentation.
 
+See [code reference](https://melbournedeveloper.github.io/Device.Net/api/Device.Net.DeviceListener.html)
+
 A device listener is a platform-independent class that will handle connecting and disconnecting from devices that connect to the computer. Firstly, you must specify the filter definitions for the devices you want to connect to, and create the factories. This works the same way across each platform, but you must register the platform-specific device factories to make this work.
 
 Here is an example for registering both factories on Windows:
