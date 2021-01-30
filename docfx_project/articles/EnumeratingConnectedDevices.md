@@ -1,71 +1,54 @@
-To enumerate connected devices, you must register the factories for the device types. If you're not sure which device type you want to connect to, you should try both USB, and Hid. In this case, you will need to add both [NuGet](https://github.com/MelbourneDeveloper/Device.Net/wiki/NuGet) packages. Using the [DeviceListener](https://github.com/MelbourneDeveloper/Device.Net/wiki/Device-Listener) is probably a better option than simply enumerating devices because it will handle the connecting to (initializing) and from the device for you.
-
-_Note: if you have not already been through the process you will need to [configure device permissions](https://github.com/MelbourneDeveloper/Device.Net/wiki/Device-Permission-Setup) on Android, or UWP._
-
-Here is an example for registering both factories on Windows:
+## The Basics
+To enumerate connected devices, you must register the factories for the device types. A factory is a class that implements `IDeviceFactory`. If you're unsure which device type you want to connect to, you should try both USB and Hid. In this case, you will need to add both [NuGet](https://melbournedeveloper.github.io/Device.Net/articles/NuGet.html) packages. See the getting started guide for creating factories. Creating factories is always platform-specific. One approach is to create these in the composition root of your app. Your cross-platform shared code will not include factory creation. `IDeviceFactory` is a simple interface that puts a layer over the top of listing devices and instantiating them.  Instantiate the factories by calling `Create-` on a FilterDeviceDefinition or an IEnumerable<> of them. E.g.
 
 ```cs
-WindowsUsbDeviceFactory.Register(Logger, Tracer);
-WindowsHidDeviceFactory.Register(Logger, Tracer);
+new FilterDeviceDefinition(vendorId: 0x534C, productId: 0x0001, label: "Trezor One Firmware 1.6.x", usagePage: 65280)
+                .CreateWindowsHidDeviceFactory(loggerFactory);
 ```
 
-_Note: it is a good idea to specify a logger during the factory registration. This means that the factories will log errors and so on when attempting to connect to enumerate or connect to devices. The [DebugLogger](https://github.com/MelbourneDeveloper/Device.Net/blob/master/src/Device.Net/DebugLogger.cs) is a simple example. This will log information to the debug window. More sophisticated logging can be implemented by implementing ILogger._
+Call and await `GetConnectedDeviceDefinitionsAsync()` on the factory to enumerate the devices connected to the computer. The get one of the devices, you need to call `GetDeviceAsync()` on the factory and pass in a definition. This will return an `IDevice`, and you need to call `InitializeAsync()` to use the device. 
 
-[Code Reference](https://github.com/MelbourneDeveloper/Device.Net/blob/3a7324746e01a0e252d2a4d1b630ed4b623f3903/src/Usb.Net.WindowsSample/Program.cs#L105)
+_Note: it is a good idea to specify a logger during the factory registration. This means that factories will log errors and so on when attempting to connect to enumerate or connect to devices. See the section Debugging, Logging and Tracing.
 
-Then, you can use the Device manager to get a list of connected devices.
+_If you have not already been through the process you will need to [configure device permissions](https://melbournedeveloper.github.io/Device.Net/articles/DevicePermissionSetup.html) on Android, or UWP._
+
+## Advanced Workflows
+
+Device.Net supports multiple workflows. You may expect your user to connect the device before the app starts and leave it connected, or the user may plug and unplug the device several times. Any approach is possible, but different tools facilitate different approaches. 
+
+### Single Device UI
+
+This is probably the most common UI workflow that you will implement. An app starts up and shows a wait indicator until a device is connected. The device may be a gamepad, hardwarewallet, or anything that exchanges data with the computer. The app may accept multiple models or Product Ids, but the app works in the same way. Perhaps some functionality is toggled on or off based on the Product Id. The single device interacts with the controls on the screen, and then the UI becomes locked once the device is disconnected. In this scenario, you may have a Combobox to switch between multiple devices if the user connects multiple. 
+
+There are two classes for this: `DeviceManager`, and `DeviceListener`. The former is the recommended class, but it is a work in progress and not included in the Device.Net Nuget package. `DeviceManager` aims at asynchronous messaging while `DeviceListener` uses traditional .NET events. See the documentation for these classes.
+
+### Data Streaming
+
+Some devices don't require you to send complicated messages to the device. In these cases, the device streams data to your computer, but you only send minimal messaging to the device. A good example is a thermometer. Generally, you only send a request for the current temperature, and it returns the result. It does this again and again. In this case, you connect to the device, send a message in a loop, and do something with the result.  
+
+This example uses [.NET reactive extensions](https://github.com/dotnet/reactive) to achieve this. The first step gets the first device and then connects to it. The, we create an observable which is configured to poll the device every 100 milliseconds.
 
 ```cs
-var devices = await DeviceManager.Current.GetConnectedDeviceDefinitionsAsync(null);
-Console.WriteLine("Currently connected devices: ");
-foreach (var device in devices)
+private static async Task DisplayTemperature()
 {
-    Console.WriteLine(device.DeviceId);
-}
-Console.WriteLine();
-```
+    //Connect to the device by product id and vendor id
+    var temperDevice = await new FilterDeviceDefinition(vendorId: 0x413d, productId: 0x2107, usagePage: 65280)
+        .CreateWindowsHidDeviceFactory(_loggerFactory)
+        .ConnectFirstAsync()
+        .ConfigureAwait(false);
 
-**Output:**
-> \\?\usb#vid_1209&pid_53c1&mi_00#6&3344a6c7&1&0000#{dee824ef-729b-4a0e-9c14-b7117d33a817}
+    //Create the observable
+    var observable = Observable
+        .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(.1))
+        .SelectMany(_ => Observable.FromAsync(() => temperDevice.WriteAndReadAsync(new byte[] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 })))
+        .Select(data => (data.Data[4] & 0xFF) + (data.Data[3] << 8))
+        //Only display the temperature when it changes
+        .Distinct()
+        .Select(temperatureTimesOneHundred => Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven));
 
-> \\?\hid#vid_1209&pid_53c1&mi_01#7&317d5c08&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+    //Subscribe to the observable
+    _ = observable.Subscribe(t => Console.WriteLine($"Temperature is {t}"));
 
-As you can see above, these are unique Ids that will allow you to construct IDevice objects that can communicate with the Hid or USB device. In this case, the device with a Vid of 0x1209 and Pid of 0x53C1 has both a USB and a Hid interface. You can construct a device and initialize simply like this:
-
-```cs
-var windowsUsbDevice = new WindowsUsbDevice(devices.First().DeviceId);
-await windowsUsbDevice.InitializeAsync();
-```
-
-**Error Logging**
-
-See [this article](https://github.com/MelbourneDeveloper/Device.Net/wiki/Debugging,-Logging,-and-Tracing)
-
-If devices fail for some reason, the library will try to log the result. However, for logging to be enabled, an ILogger object must be passed with the factory registration like so:
-
-[Code Reference](https://github.com/MelbourneDeveloper/Device.Net/blob/3a7324746e01a0e252d2a4d1b630ed4b623f3903/src/Usb.Net.WindowsSample/Program.cs#L30)
-```cs
-WindowsUsbDeviceFactory.Register(Logger, Tracer);
-```
-The Windows sample uses the default DebugLogger which will simply log results to the debug output window. This will provide useful information about why a device may not connect even though the Device Id appears in the list of Device Ids.
-
-**Using DeviceManager**
-
-Alternatively, you can allow the DeviceManager to create your devices like this. This is generally the easier option.
-
-```cs
-//Define the types of devices to search for.
-var deviceDefinitions = new List<FilterDeviceDefinition>
-{
-    new FilterDeviceDefinition{ DeviceType= DeviceType.Usb, VendorId= 0x1209, ProductId=0x53C1, Label="Trezor One Firmware 1.7.x" }
-};
-
-//Get the first available device and connect to it
-var devices = await DeviceManager.Current.GetDevicesAsync(_DeviceDefinitions);
-using (var trezorDevice = devices.FirstOrDefault())
-{
-    await trezorDevice.InitializeAsync();
+    //Note: in a real scenario, we would dispose of the subscription afterwards. This method runs forever.
 }
 ```
-
-[Code Reference](https://github.com/MelbourneDeveloper/Device.Net/blob/a63ed3781b16f18dbefed13c6f0c9215377cceaa/src/Usb.Net.UWP.Sample/TrezorExample.cs#L70)
