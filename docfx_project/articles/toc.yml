@@ -10,6 +10,9 @@
 - name: Device Permission Setup
   href: DevicePermissionSetup.md 
 
+- name: Device Manager
+  href: DeviceManager.md 
+
 - name: Device Listener
   href: DeviceListener.md 
 

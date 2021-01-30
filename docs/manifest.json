@@ -1368,7 +1368,7 @@
           "hash": "jHHeOul92ZKYPI6Se0pFdg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1383,7 +1383,7 @@
           "hash": "iEY7KJe08F7WcQGFQIhJ3w=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1395,7 +1395,7 @@
           "hash": "z4y6QdSC1zwh3nO4XAiYfQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1407,7 +1407,19 @@
           "hash": "9X0zcKta3d+O/+YCjXUzTg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/DeviceManager.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/DeviceManager.html",
+          "hash": "mSL2QuMIKyCO01rnI/Z1Eg=="
+        }
+      },
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1419,7 +1431,7 @@
           "hash": "6Rq6Zx2VTJAUWrowNTYoLw=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1458,7 +1470,7 @@
           "hash": "McVOQF29qhjo9oQGbGvM7g=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1470,7 +1482,7 @@
           "hash": "gMEEy/AtYFCFIOjAdc8RJg=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1482,7 +1494,7 @@
           "hash": "tQgsjVEk/TUXmk+BtSsSPQ=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1494,7 +1506,7 @@
           "hash": "5bgzLzTgSo797IXNK8kQag=="
         }
       },
-      "is_incremental": true,
+      "is_incremental": false,
       "version": ""
     },
     {
@@ -1503,7 +1515,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/toc.html",
-          "hash": "ZhWJBmxzzLQrDCbyPaPbQg=="
+          "hash": "PjK3WBroaZqiYQv6R7pzPQ=="
         }
       },
       "is_incremental": false,
@@ -1568,8 +1580,8 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": true,
           "incrementalPhase": "build",
-          "total_file_count": 13,
-          "skipped_file_count": 12
+          "total_file_count": 14,
+          "skipped_file_count": 13
         },
         "ManagedReferenceDocumentProcessor": {
           "can_incremental": true,
