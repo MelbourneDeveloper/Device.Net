@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>IHidDevice </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="IHidDevice ">
+    <meta name="generator" content="docfx 2.56.6.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p>Hid devices work slightly differently to USB devices. When you send data (write) to a Hid device, you need to send an <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/hid/sending-hid-reports">Output Report</a>. You can then read the data as an <a href="https://docs.microsoft.com/en-us/windows-hardware/drivers/hid/obtaining-hid-reports">Input Report</a>. A Report includes data and a Report Id. Different platforms take different approaches in sending/receiving data, but Device.Net puts a layer across this, so you don't need to worry about it.</p>
+<h2 id="ihiddevice"><a href="https://melbournedeveloper.github.io/Device.Net/api/Hid.Net.IHidDevice.html">IHidDevice</a></h2>
+<p>The most straightforward approach is to use the device as an IHidDevice. Cast any Hid device to this interface to get access to the Hid methods. The important methods are <code>WriteReportAsync</code> and <code>ReadReportAsync</code>. Use the <code>data</code> parameter to send the data to the device, and the <code>ReportId</code> to specify the report id. The <code>data</code> parameter should not include the Report Id because the platform level API will do this for you when writing to the device. If the device expects 64 bytes, you should send 63 bytes and the Report Id separately.</p>
+<p><code>ReadReportAsync</code> reads an input report from the device. You cannot decide on the Report Id. The method picks up whichever input report is in the queue from the device. The <code>Report</code> contains the data from the device and the Report Id. You can ignore reports if you are not interested in them. By default, the data will contain the raw data from the device's report with the Report Id separated. If the device sends 64 bytes of data, you will receive 63, and the Report Id is available in the <code>Report</code> result.</p>
+<h2 id="use-sendasync-and-readasync">Use SendAsync and ReadAsync</h2>
+<p>If you want to make your code compatible across USB and Hid, you will need to use <code>SendAsync</code> and <code>ReadAsync</code>. These methods transfer raw data which includes the Report Id. These methods don't have a Report Id as part of the argument or response, so they must be included in the raw data array. For example, if you need to send 64 bytes of data to the device, the actual array you send much be 65, and you must place the Report Id at index 0.</p>
+<p>When you receive a <a href="https://melbournedeveloper.github.io/Device.Net/api/Device.Net.TransferResult.html">TransferResult</a> from ReadAsync, it will include the Report Id at the first byte. This allows you to distinguish the Report Id from the device. So, if you receive 65 bytes, you can discard the first byte when you don't care about the Report Id.</p>
+<h2 id="transforms">Transforms</h2>
+<p>You can apply a transform to the data before it is written to the device, and you can transform the data after it has been read back from the device. This allows you to fix further compatibility issues between Hid and USB. For example, you may have a device that supports both Hid and USB. The USB version expects an array of 64, but the Hid version expects an array of 65 with a Report Id of 0. You can achieve this with a tranform. We usually apply transforms via the factory methods, and they get propagated to the device. For example, you can set the readReportTransform on this <a href="https://melbournedeveloper.github.io/Device.Net/api/Hid.Net.Windows.WindowsHidDeviceFactoryExtensions.html">factory method</a>.</p>
+<p>The default transform does this:</p>
+<pre><code class="lang-cs">	_readReportTransform = readReportTransform ?? new Func&lt;Report, TransferResult&gt;((readReport) =&gt; readReport.ToTransferResult());
+</code></pre>
+<pre><code class="lang-cs">public static TransferResult ToTransferResult(this Report readReport)
+{
+    var rawData = new byte[readReport.TransferResult.Data.Length + 1];
+
+    Array.Copy(readReport.TransferResult.Data, 0, rawData, 1, readReport.TransferResult.Data.Length);
+
+    rawData[0] = readReport.ReportId;
+
+    return new TransferResult(rawData, readReport.TransferResult.BytesTransferred);
+}
+</code></pre>
+<p>The array is copied to an array which is one byte larger, and the Report Id is set at index 0. You get back an array which contains the data as well as the Report Id at index 0.</p>
+<p>The writeTransferTransform works in a similar way. By default, it separates the first byte of the array into the <code>Report</code> output report and sends it to the device.</p>
+<p>You can see the code in the constructor of <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net/HidDevice.cs">HidDevice</a>.</p>
+<p>This <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/d01cb456438a7622bd581c26af1aa89fc6ab798f/src/Device.Net.UnitTests/IntegrationTests.cs#L164">example</a> overrides the conversion of the input report and defaults the output Report Id to zero.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/docfx_project/articles/HidTransfer.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

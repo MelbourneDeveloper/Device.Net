@@ -1,4 +1,4 @@
-﻿namespace SerialPort.Net.Windows
+﻿namespace SerialPort.Net
 {
     public enum Parity
     {

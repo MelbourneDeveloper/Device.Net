@@ -105,6 +105,9 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="Usb.Net.UWP.Sample_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -128,13 +131,16 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting">
+      <Version>3.1.7</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.1.9</Version>
+      <Version>6.2.10</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Device.Net.UWP\Device.Net.UWP.csproj">
-      <Project>{45e6e89a-aedb-457a-9c80-310fa2eeaef1}</Project>
+      <Project>{9abe7012-a953-4a9f-8860-c877d8d6f687}</Project>
       <Name>Device.Net.UWP</Name>
     </ProjectReference>
     <ProjectReference Include="..\Device.Net\Device.Net.csproj">
@@ -142,11 +148,15 @@
       <Name>Device.Net</Name>
     </ProjectReference>
     <ProjectReference Include="..\Hid.Net.UWP\Hid.Net.UWP.csproj">
-      <Project>{7618DB72-5741-48EB-A2DC-0823C1817795}</Project>
+      <Project>{bc1dad65-96a7-4772-873a-79895c7a3adf}</Project>
       <Name>Hid.Net.UWP</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Hid.Net\Hid.Net.csproj">
+      <Project>{ecb44ddd-bbfa-459a-9c60-4f65a1014a48}</Project>
+      <Name>Hid.Net</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Usb.Net.UWP\Usb.Net.UWP.csproj">
-      <Project>{8e29e247-78b7-4fc8-af1c-da273050978c}</Project>
+      <Project>{e00509cb-46f2-4dee-abba-2514816afff4}</Project>
       <Name>Usb.Net.UWP</Name>
     </ProjectReference>
     <ProjectReference Include="..\Usb.Net\Usb.Net.csproj">

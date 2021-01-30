@@ -1,10 +1,20 @@
-﻿using Microsoft.Win32.SafeHandles;
+﻿
+// ReSharper disable IdentifierTypo
+
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
 
+#pragma warning disable CA1707 // Identifiers should not contain underscores
+#pragma warning disable CA1021 // Avoid out parameters
+#pragma warning disable CA1401 // P/Invokes should not be visible
+#pragma warning disable CA5392 // Use DefaultDllImportSearchPaths attribute for P/Invokes
+#pragma warning disable CA1045 // Do not pass types by reference
+#pragma warning disable CA1060 // Move pinvokes to native methods class
+
 namespace Device.Net.Windows
 {
-    public static class APICalls
+    internal static class APICalls
     {
         #region Constants
         public const int DigcfDeviceinterface = 16;
@@ -27,13 +37,6 @@ namespace Device.Net.Windows
         #region Kernel32
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         public static extern SafeFileHandle CreateFile(string lpFileName, FileAccessRights dwDesiredAccess, uint dwShareMode, IntPtr lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);
-
-        // Used to read bytes from the serial connection. 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool ReadFile(SafeFileHandle hFile, byte[] lpBuffer, int nNumberOfBytesToRead, out int lpNumberOfBytesRead, int lpOverlapped);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool WriteFile(SafeFileHandle hFile, byte[] lpBuffer, uint nNumberOfBytesToWrite, out uint lpNumberOfBytesWritten, int lpOverlapped);
         #endregion
 
         #region SetupAPI

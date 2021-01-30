@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>    
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
+  </ItemGroup>
+
+</Project>

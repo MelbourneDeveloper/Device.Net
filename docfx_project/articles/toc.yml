@@ -1,0 +1,38 @@
+- name: Sponsor This Project
+  href: https://github.com/sponsors/MelbourneDeveloper
+
+- name: Getting Started
+  href: GettingStarted.md
+
+- name: Build Issues
+  href: BuildIssues.md  
+
+- name: Device Permission Setup
+  href: DevicePermissionSetup.md 
+
+- name: Device Manager
+  href: DeviceManager.md 
+
+- name: Device Listener
+  href: DeviceListener.md 
+
+- name: Debugging, Logging and Tracing
+  href: DebuggingLoggingTracing.md 
+
+- name: Device Firmware Developer Program
+  href: DeviceFirmwareDeveloperProgram.md
+
+- name: Enumerating Connected Devices
+  href: EnumeratingConnectedDevices.md
+
+- name: Hid Transfer
+  href: HidTransfer.md  
+
+- name: Linux and macOS Support
+  href: LinuxmacOSSupport.md
+
+- name: NuGet
+  href: NuGet.md  
+
+- name: Samples and Unit Tests
+  href: SamplesAndUnitTests.md

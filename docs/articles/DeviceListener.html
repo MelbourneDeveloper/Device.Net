@@ -1,0 +1,228 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title> </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content=" ">
+    <meta name="generator" content="docfx 2.56.6.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p><em>Note: DeviceListener is no longer the recommended approach for event-driven connection/disconnection. <code>DeviceManager</code> is a work in progress and should be used where possible. See the documentation.</em></p>
+<p>See <a href="https://melbournedeveloper.github.io/Device.Net/api/Device.Net.DeviceListener.html">code reference</a></p>
+<p>A device listener is a platform-independent class that will handle connecting and disconnecting from devices that connect to the computer. Firstly, you must specify the filter definitions for the devices you want to connect to, and create the factories. This works the same way across each platform, but you must register the platform-specific device factories to make this work.</p>
+<p>Here is an example for registering both factories on Windows:</p>
+<pre><code class="lang-cs">_trezorFactories = new List&lt;IDeviceFactory&gt;
+{
+    TrezorExample.UsbDeviceDefinitions.CreateWindowsUsbDeviceFactory(_loggerFactory),
+    TrezorExample.HidDeviceDefinitions.CreateWindowsHidDeviceFactory(_loggerFactory),
+}.Aggregate(_loggerFactory);
+</code></pre>
+<p><em>Note: if you have not already been through the process you will need to <a href="https://melbournedeveloper.github.io/Device.Net/articles/DevicePermissionSetup.html">configure device permissions</a> on Android, or UWP.</em></p>
+<p>Here is a working example that listens for a device and notifies you when the device is connected or disconnected. All three sample applications (Android, UWP, Windows, and LibUsb) use this same code.</p>
+<pre><code class="lang-cs">using Device.Net;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Usb.Net.Sample
+{
+    internal sealed class TrezorExample : IDisposable
+    {
+        #region Fields
+        private const int PollMilliseconds = 6000;
+
+        //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
+        public static readonly List&lt;FilterDeviceDefinition&gt; HidDeviceDefinitions = new List&lt;FilterDeviceDefinition&gt;
+        {
+            new FilterDeviceDefinition( vendorId: 0x534C, productId:0x0001, label:&quot;Trezor One Firmware 1.6.x&quot;, usagePage:65280 )
+        };
+
+        public static readonly List&lt;FilterDeviceDefinition&gt; UsbDeviceDefinitions = new List&lt;FilterDeviceDefinition&gt;
+        {
+            new FilterDeviceDefinition( vendorId: 0x534C, productId:0x0001, label:&quot;Trezor One Firmware 1.6.x (Android Only)&quot; ),
+            new FilterDeviceDefinition( vendorId: 0x1209, productId:0x53C1, label:&quot;Trezor One Firmware 1.7.x&quot; ),
+            new FilterDeviceDefinition( vendorId: 0x1209, productId:0x53C0, label:&quot;Model T&quot; )
+        };
+        #endregion
+
+        #region Events
+        public event EventHandler TrezorInitialized;
+        public event EventHandler TrezorDisconnected;
+        #endregion
+
+        #region Public Properties
+        public IDevice TrezorDevice { get; private set; }
+        public IDeviceFactory DeviceManager { get; }
+        public DeviceListener DeviceListener { get; }
+        #endregion
+
+        #region Constructor
+        public TrezorExample(IDeviceFactory deviceManager, ILoggerFactory loggerFactory)
+        {
+            DeviceManager = deviceManager;
+            DeviceListener = new DeviceListener(deviceManager, PollMilliseconds, loggerFactory);
+        }
+        #endregion
+
+        #region Event Handlers
+        private void DevicePoller_DeviceInitialized(object sender, DeviceEventArgs e)
+        {
+            TrezorDevice = e.Device;
+            TrezorInitialized?.Invoke(this, new EventArgs());
+        }
+
+        private void DevicePoller_DeviceDisconnected(object sender, DeviceEventArgs e)
+        {
+            TrezorDevice = null;
+            TrezorDisconnected?.Invoke(this, new EventArgs());
+        }
+        #endregion
+
+        #region Public Methods
+        public void StartListening()
+        {
+            TrezorDevice?.Close();
+            DeviceListener.DeviceDisconnected += DevicePoller_DeviceDisconnected;
+            DeviceListener.DeviceInitialized += DevicePoller_DeviceInitialized;
+            DeviceListener.Start();
+        }
+
+        public async Task InitializeTrezorAsync()
+        {
+            //Get the first available device and connect to it
+            var devices = await DeviceListener.DeviceFactory.GetConnectedDeviceDefinitionsAsync().ConfigureAwait(false);
+            var firstConnectedDeviceDefinition = devices.FirstOrDefault();
+            TrezorDevice = await DeviceListener.DeviceFactory.GetDeviceAsync(firstConnectedDeviceDefinition).ConfigureAwait(false);
+
+            if (TrezorDevice == null) throw new Exception(&quot;There were no devices found&quot;);
+
+            await TrezorDevice.InitializeAsync().ConfigureAwait(false);
+        }
+
+        public async Task&lt;byte[]&gt; WriteAndReadFromDeviceAsync()
+        {
+            //Create a buffer with 3 bytes (initialize)
+            var writeBuffer = new byte[64];
+            writeBuffer[0] = 0x3f;
+            writeBuffer[1] = 0x23;
+            writeBuffer[2] = 0x23;
+
+            //Write the data to the device
+            return await TrezorDevice.WriteAndReadAsync(writeBuffer).ConfigureAwait(false);
+        }
+
+        public void Dispose()
+        {
+            DeviceListener.DeviceDisconnected -= DevicePoller_DeviceDisconnected;
+            DeviceListener.DeviceInitialized -= DevicePoller_DeviceInitialized;
+            DeviceListener.Dispose();
+            TrezorDevice?.Dispose();
+        }
+        #endregion
+    }
+}
+</code></pre>
+<p><a href="https://github.com/MelbourneDeveloper/Device.Net/blob/087566e2c0f4dc11a0b9f2177a9a487efbcf181f/src/Usb.Net.UWP.Sample/TrezorExample.cs#L10">Code Reference</a></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/docfx_project/articles/DeviceListener.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

@@ -1,4 +1,12 @@
-﻿using System;
+﻿// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+// ReSharper disable UnusedMember.Global
+// ReSharper disable InconsistentNaming
+// ReSharper disable IdentifierTypo
+
+using System;
+
+#pragma warning disable CA1707 // Identifiers should not contain underscores
 
 namespace Device.Net.Windows
 {
@@ -9,3 +17,5 @@ namespace Device.Net.Windows
         public static Guid WinUSBGuid { get; } = new Guid("dee824ef-729b-4a0e-9c14-b7117d33a817");
     }
 }
+
+#pragma warning restore CA1707 // Identifiers should not contain underscores

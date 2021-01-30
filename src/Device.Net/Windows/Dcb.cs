@@ -1,4 +1,9 @@
 ﻿using System.Runtime.InteropServices;
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+
+#pragma warning disable CA1815 // Override equals and operator equals on value types
+#pragma warning disable CA1051 
 
 namespace Device.Net.Windows
 {
@@ -8,7 +13,6 @@ namespace Device.Net.Windows
     [StructLayout(LayoutKind.Sequential)]
     public struct Dcb
     {
-#pragma warning disable CA1051 
         public int DCBlength;
         public uint BaudRate;
         public uint Flags;
@@ -37,6 +41,5 @@ namespace Device.Net.Windows
         public uint fNull;
         public uint fRtsControl;
         public uint fAbortOnError;
-#pragma warning restore CA1051 
     }
 }

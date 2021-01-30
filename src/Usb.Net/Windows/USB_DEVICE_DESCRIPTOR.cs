@@ -1,11 +1,16 @@
 ﻿using System.Runtime.InteropServices;
+// ReSharper disable FieldCanBeMadeReadOnly.Global
+// ReSharper disable MemberCanBePrivate.Global
+
+#pragma warning disable CA1815 // Override equals and operator equals on value types
+#pragma warning disable CA1707 // Identifiers should not contain underscores
+#pragma warning disable CA1051
 
 namespace Usb.Net.Windows
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct USB_DEVICE_DESCRIPTOR
+    internal struct USB_DEVICE_DESCRIPTOR
     {
-#pragma warning disable CA1051 // Do not declare visible instance fields
         public byte bLength;
         public byte bDescriptorType;
         public ushort bcdUSB;
@@ -20,6 +25,5 @@ namespace Usb.Net.Windows
         public byte iProduct;
         public byte iSerialNumber;
         public byte bNumConfigurations;
-#pragma warning restore CA1051 // Do not declare visible instance fields
     }
 }

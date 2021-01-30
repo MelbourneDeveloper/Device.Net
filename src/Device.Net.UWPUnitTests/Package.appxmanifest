@@ -42,5 +42,59 @@
   <Capabilities>
     <Capability Name="internetClientServer" />
     <Capability Name="privateNetworkClientServer" />
+    <DeviceCapability Name="serialcommunication">
+      <Device Id="any">
+        <Function Type="name:serialPort" />
+      </Device>
+    </DeviceCapability>
+    <DeviceCapability Name="location"/>
+
+
+    <DeviceCapability Name="humaninterfacedevice">
+
+      <!--Airnetix Nano-->
+
+      <Device Id="vidpid:29F5 1010">
+        <Function Type="usage:0005 *" />
+        <Function Type="usage:FF00 0001" />
+        <Function Type="usage:ff00 *" />
+      </Device>
+
+      <!--Trezors-->
+
+      <Device Id="vidpid:534C 0001">
+        <Function Type="usage:0005 *" />
+        <Function Type="usage:FF00 0001" />
+        <Function Type="usage:ff00 *" />
+      </Device>
+
+      <Device Id="vidpid:1209 53C0">
+        <Function Type="usage:0005 *" />
+        <Function Type="usage:FF00 0001" />
+        <Function Type="usage:ff00 *" />
+      </Device>
+
+      <Device Id="vidpid:1209 53C1">
+        <Function Type="usage:0005 *" />
+        <Function Type="usage:FF00 0001" />
+        <Function Type="usage:ff00 *" />
+      </Device>
+
+    </DeviceCapability>
+
+    <DeviceCapability Name="usb">
+
+      <!--Trezor Firmware 1.7.x -->
+      <Device Id="vidpid:1209 53C1">
+        <Function Type="classId:ff * *" />
+      </Device>
+
+      <!--KeepKey-->
+      <Device Id="vidpid:2B24 0002">
+        <Function Type="classId:ff * *" />
+      </Device>
+
+    </DeviceCapability>
+
   </Capabilities>
 </Package>

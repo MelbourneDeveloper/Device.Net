@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType Condition="'$(Configuration)'=='Release'">WinExe</OutputType>
+    <OutputType Condition="'$(Configuration)'=='Debug'">Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup Condition="exists('..\Device.Net.UnoSample.UWP')">
+    <EmbeddedResource Include="..\Device.Net.UnoSample.UWP\Package.appxmanifest" LogicalName="Package.appxmanifest" />
+    <Content Include="..\Device.Net.UnoSample.UWP\Assets\StoreLogo.png" Link="Assets\StoreLogo.png" />
+    <Content Include="Assets\Fonts\uno-fluentui-assets.ttf" />
+  </ItemGroup>
+  <ItemGroup>
+    <UpToDateCheckInput Include="..\Device.Net.UnoSample.Shared\**\*.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Note that for WebAssembly version 1.1.1 of the console logger required -->
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Filter" Version="1.1.1" />
+    <PackageReference Include="Uno.UI.Skia.Gtk" Version="3.3.0" />
+    <PackageReference Include="Uno.UI.RemoteControl" Version="3.3.0" Condition="'$(Configuration)'=='Debug'" />
+  </ItemGroup>
+  <Import Project="..\Device.Net.UnoSample.Shared\Device.Net.UnoSample.Shared.projitems" Label="Shared" />
+</Project>

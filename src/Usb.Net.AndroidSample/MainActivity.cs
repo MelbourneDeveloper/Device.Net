@@ -5,7 +5,7 @@ using Android.Support.Design.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
-using Device.Net;
+using Microsoft.Extensions.Logging;
 using System;
 using Usb.Net.Android;
 using Usb.Net.Sample;
@@ -13,10 +13,18 @@ using Usb.Net.Sample;
 namespace Usb.Net.AndroidSample
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
+    [IntentFilter(new[] { UsbManager.ActionUsbDeviceAttached })]
+    [MetaData(UsbManager.ActionUsbDeviceAttached, Resource = "@xml/device_filter")]
     public class MainActivity : AppCompatActivity
     {
         #region Fields
-        private readonly TrezorExample _TrezorExample = new TrezorExample();
+        private TrezorExample _TrezorExample;
+        #endregion
+
+        #region Constructor
+        public MainActivity()
+        {
+        }
         #endregion
 
         #region Protected Override Methods
@@ -50,12 +58,7 @@ namespace Usb.Net.AndroidSample
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
             var id = item.ItemId;
-            if (id == Resource.Id.action_settings)
-            {
-                return true;
-            }
-
-            return base.OnOptionsItemSelected(item);
+            return id == Resource.Id.action_settings || base.OnOptionsItemSelected(item);
         }
         #endregion
 
@@ -64,20 +67,18 @@ namespace Usb.Net.AndroidSample
         {
             try
             {
-                var usbManager = GetSystemService(UsbService) as UsbManager;
-                if (usbManager == null) throw new Exception("UsbManager is null");
+                if (!(GetSystemService(UsbService) is UsbManager usbManager)) throw new Exception("UsbManager is null");
 
-                //Register the factory for creating Usb devices. This only needs to be done once.
-                AndroidUsbDeviceFactory.Register(usbManager, base.ApplicationContext, new DebugLogger(), new DebugTracer());
+                var loggerFactory = LoggerFactory.Create((builder) => builder.AddDebug().SetMinimumLevel(LogLevel.Trace));
 
-                _TrezorExample.TrezorDisconnected += _TrezorExample_TrezorDisconnected;
-                _TrezorExample.TrezorInitialized += _TrezorExample_TrezorInitialized;
+                var deviceManager = TrezorExample.UsbDeviceDefinitions
+                    .CreateAndroidUsbDeviceFactory(usbManager, base.ApplicationContext, loggerFactory: loggerFactory);
+
+                _TrezorExample = new TrezorExample(deviceManager, loggerFactory);
+
+                _TrezorExample.TrezorDisconnected += TrezorExample_TrezorDisconnected;
+                _TrezorExample.TrezorInitialized += TrezorExample_TrezorInitialized;
                 _TrezorExample.StartListening();
-
-                //var attachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
-                //var detachedReceiver = new UsbDeviceBroadcastReceiver(_TrezorExample.DeviceListener);
-                //RegisterReceiver(attachedReceiver, new IntentFilter(UsbManager.ActionUsbDeviceAttached));
-                //RegisterReceiver(detachedReceiver, new IntentFilter(UsbManager.ActionUsbDeviceDetached));
 
                 DisplayMessage("Waiting for device...");
             }
@@ -87,7 +88,7 @@ namespace Usb.Net.AndroidSample
             }
         }
 
-        private async void _TrezorExample_TrezorInitialized(object sender, EventArgs e)
+        private async void TrezorExample_TrezorInitialized(object sender, EventArgs e)
         {
             try
             {
@@ -108,10 +109,7 @@ namespace Usb.Net.AndroidSample
             }
         }
 
-        private void _TrezorExample_TrezorDisconnected(object sender, EventArgs e)
-        {
-            DisplayMessage("Device disconnected. Waiting for device...");
-        }
+        private void TrezorExample_TrezorDisconnected(object sender, EventArgs e) => DisplayMessage("Device disconnected. Waiting for device...");
         #endregion
 
         #region Private Methods

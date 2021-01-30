@@ -1,10 +1,14 @@
-﻿using Device.Net;
+using Device.Net;
 using Device.Net.Exceptions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Usb.Net
 {
+    ///<inheritdoc cref="IUsbDevice"/>
     public class UsbDevice : DeviceBase, IUsbDevice
     {
         #region Fields
@@ -13,20 +17,27 @@ namespace Usb.Net
         #endregion
 
         #region Public Overrride Properties
-        public override bool IsInitialized => UsbInterfaceManager.IsInitialized;
+        public bool IsInitialized => UsbInterfaceManager.IsInitialized;
         public IUsbInterfaceManager UsbInterfaceManager { get; }
-        public override ushort WriteBufferSize => UsbInterfaceManager.WriteBufferSize;
-        public override ushort ReadBufferSize => UsbInterfaceManager.ReadBufferSize;
+        public ushort WriteBufferSize => UsbInterfaceManager.WriteBufferSize;
+        public ushort ReadBufferSize => UsbInterfaceManager.ReadBufferSize;
+        public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; private set; }
         #endregion
 
         #region Constructor
-        /// <summary>
-        /// TODO: Remove the tracer from the constructor. This will get passed to the handler so there's no need for it on the device itself.
-        /// </summary>
-        public UsbDevice(string deviceId, IUsbInterfaceManager usbInterfaceManager, ILogger logger, ITracer tracer) : base(deviceId, logger, tracer)
+        public UsbDevice(
+            string deviceId,
+            IUsbInterfaceManager usbInterfaceManager) : this(deviceId, usbInterfaceManager, null)
         {
-            UsbInterfaceManager = usbInterfaceManager ?? throw new ArgumentNullException(nameof(usbInterfaceManager));
         }
+
+        public UsbDevice(
+            string deviceId,
+            IUsbInterfaceManager usbInterfaceManager,
+            ILoggerFactory loggerFactory = null) : base(
+                deviceId,
+                loggerFactory,
+                (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UsbDevice>()) => UsbInterfaceManager = usbInterfaceManager ?? throw new ArgumentNullException(nameof(usbInterfaceManager));
         #endregion
 
         #region Private Methods
@@ -34,38 +45,38 @@ namespace Usb.Net
         #endregion
 
         #region Public Methods
-        public async Task InitializeAsync()
+        public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
-            await UsbInterfaceManager.InitializeAsync();
-            ConnectedDeviceDefinition = await UsbInterfaceManager.GetConnectedDeviceDefinitionAsync();
+            await UsbInterfaceManager.InitializeAsync(cancellationToken).ConfigureAwait(false);
+            ConnectedDeviceDefinition = await UsbInterfaceManager.GetConnectedDeviceDefinitionAsync(cancellationToken).ConfigureAwait(false);
         }
 
-        public override async Task<ReadResult> ReadAsync()
-        {
-            if (UsbInterfaceManager.ReadUsbInterface == null) throw new DeviceException(Messages.ErrorMessageNoReadInterfaceSpecified);
+        public override Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default) =>
+            UsbInterfaceManager.ReadUsbInterface == null
+                ? throw new DeviceException(Messages.ErrorMessageNoReadInterfaceSpecified)
+                : UsbInterfaceManager.ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
 
-            return await UsbInterfaceManager.ReadUsbInterface.ReadAsync(ReadBufferSize);
-        }
-
-        public override Task WriteAsync(byte[] data)
-        {
-            if (UsbInterfaceManager.WriteUsbInterface == null) throw new DeviceException(Messages.ErrorMessageNoWriteInterfaceSpecified);
-
-            return UsbInterfaceManager.WriteUsbInterface.WriteAsync(data);
-        }
+        public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default) =>
+            UsbInterfaceManager.WriteUsbInterface == null
+                ? throw new DeviceException(Messages.ErrorMessageNoWriteInterfaceSpecified)
+                : UsbInterfaceManager.WriteUsbInterface.WriteAsync(data, cancellationToken);
 
         public void Close()
         {
             if (_IsClosing) return;
             _IsClosing = true;
 
+            Logger.LogInformation("Closing device ... {deviceId}", DeviceId);
+
             try
             {
-                UsbInterfaceManager?.Close();
+                //TODO: The manager needs to be thrown away and recreated. This is probably ok because it should be done as part of initialization
+                //However not sure if maybe this method should be called Close?
+                UsbInterfaceManager.Dispose();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Logging
+                Logger.LogError(ex, "Error disposing");
             }
 
             _IsClosing = false;
@@ -73,21 +84,21 @@ namespace Usb.Net
 
         public sealed override void Dispose()
         {
-            if (disposed) return;
+            if (disposed)
+            {
+                Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, DeviceId);
+                return;
+            }
+
             disposed = true;
+
+            Logger.LogInformation(Messages.InformationMessageDisposingDevice, DeviceId);
 
             Close();
 
             base.Dispose();
 
             GC.SuppressFinalize(this);
-        }
-        #endregion
-
-        #region Finalizer
-        ~UsbDevice()
-        {
-            Dispose();
         }
         #endregion
     }

@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Device.Net </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Device.Net ">
+    <meta name="generator" content="docfx 2.56.6.0">
+    
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/docfx.vendor.css">
+    <link rel="stylesheet" href="styles/docfx.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="index.html">
+                <img id="logo" class="svg" src="logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="devicenet">Device.Net</h1>
+
+<p><img src="images/Diagram.png" alt="Device.Net Logo"></p>
+<p><strong>Cross-platform .NET framework for talking to connected devices such as USB, Serial Port, and Hid devices uniformly through dependency injection.</strong></p>
+<p>This framework provides a common task-based Async interface across platforms and device types. This allows for dependency injection to use different types of devices on any platform with the same code. The supported device types are Hid, Serial Port, and USB. We will add Bluetooth in the future, and we are looking for Bluetooth programmers to help. Please join the community on Discord <a href="https://discord.gg/ZcvXARm">here</a>.</p>
+<h2 id="sponsor-this-project"><a href="https://github.com/sponsors/MelbourneDeveloper">Sponsor This Project</a></h2>
+<p>This project requires funding to become sustainable. Contribute with a monthly sponsorship.</p>
+<h2 id="hidnet">Hid.Net</h2>
+<p>This is a cross-platform library for talking to HID devices. The library targets .NET and UWP.</p>
+<h2 id="usbnet">Usb.Net</h2>
+<p>This is a cross-platform library for talking to USB devices. The library targets .NET, Android, and UWP.</p>
+<h2 id="serialportnet">SerialPort.Net</h2>
+<p>This is a .NET library for talking to Serial Port / COM devices on Windows. We are looking to expand this library to other platforms soon.</p>
+<h2 id="devicenetlibusb">Device.Net.LibUsb</h2>
+<p>This is a macOS, Windows, and Linux library for talking to USB devices. This uses the library <a href="https://github.com/LibUsbDotNet/LibUsbDotNet">LibUsbDotNet</a> to bridge with Device.Net. This is an underdeveloped library, and we are looking to replace this with native Linux and macOS API calls. Please reach out if you can help.</p>
+<h3 id="currently-supports">Currently supports:</h3>
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th style="text-align: center;">Device Types</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>.NET Framework</td>
+<td style="text-align: center;">Hid, USB, Serial Port</td>
+</tr>
+<tr>
+<td>.NET Core / .NET 5</td>
+<td style="text-align: center;">Hid, USB, Serial Port</td>
+</tr>
+<tr>
+<td>Android*</td>
+<td style="text-align: center;">Hid, USB</td>
+</tr>
+<tr>
+<td>UWP</td>
+<td style="text-align: center;">Hid, USB</td>
+</tr>
+<tr>
+<td>Linux, MacOS*</td>
+<td style="text-align: center;"><a href="https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support">USB (Via LibUsbDotNet)</a></td>
+</tr>
+</tbody>
+</table>
+<p><em>Note: Android treats Hid devices and USB devices as the same thing</em></p>
+<h2 id="hid-example">Hid Example</h2>
+<p>This sample connects to a thermometer device and then continuously polls for temperature changes. Clone the repo and check out the sample <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/33e8fe96f61ae15e5a9fbd06628d2240ce73620d/src/Usb.Net.WindowsSample/Program.cs#L113">here</a>.</p>
+<pre><code class="lang-cs">private static async Task DisplayTemperature()
+{
+    //Connect to the device by product id and vendor id
+    var temperDevice = await new FilterDeviceDefinition(vendorId: 0x413d, productId: 0x2107, usagePage: 65280)
+        .CreateWindowsHidDeviceManager(_loggerFactory)
+        .ConnectFirstAsync()
+        .ConfigureAwait(false);
+
+    //Create the observable
+    var observable = Observable
+        .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(.1))
+        .SelectMany(_ =&gt; Observable.FromAsync(() =&gt; temperDevice.WriteAndReadAsync(new byte[] { 0x00, 0x01, 0x80, 0x33, 0x01, 0x00, 0x00, 0x00, 0x00 })))
+        .Select(data =&gt; (data.Data[4] &amp; 0xFF) + (data.Data[3] &lt;&lt; 8))
+        //Only display the temperature when it changes
+        .Distinct()
+        .Select(temperatureTimesOneHundred =&gt; Math.Round(temperatureTimesOneHundred / 100.0m, 2, MidpointRounding.ToEven));
+
+    //Subscribe to the observable
+    observable.Subscribe(t =&gt; Console.WriteLine($&quot;Temperature is {t}&quot;));
+}
+</code></pre>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/docfx_project/index.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="styles/docfx.js"></script>
+    <script type="text/javascript" src="styles/main.js"></script>
+  </body>
+</html>

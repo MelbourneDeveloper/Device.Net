@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SerialPort.Net.Windows
+namespace SerialPort.Net
 {
     //Is flags correct here?
     [Flags]

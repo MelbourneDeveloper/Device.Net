@@ -1,11 +1,16 @@
-﻿using Device.Net;
+using Device.Net;
 using Device.Net.Exceptions;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Usb.Net
 {
+    /// <summary>
+    /// Keeps track of the existing USB interfaces
+    /// </summary>
     public class UsbInterfaceManager : IDisposable
     {
         #region Fields
@@ -16,11 +21,16 @@ namespace Usb.Net
         private IUsbInterface _WriteInterruptUsbInterface;
         #endregion
 
+        #region Protected Properties
+        protected ILogger Logger { get; }
+        protected ILoggerFactory LoggerFactory { get; }
+        #endregion
+
         #region Constructor
-        public UsbInterfaceManager(ILogger logger, ITracer tracer)
+        public UsbInterfaceManager(ILoggerFactory loggerFactory = null)
         {
-            Tracer = tracer;
-            Logger = logger;
+            LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
+            Logger = LoggerFactory.CreateLogger<UsbInterfaceManager>();
         }
         #endregion
 
@@ -36,19 +46,24 @@ namespace Usb.Net
             WriteUsbInterface = UsbInterfaces.FirstOrDefault(i => i.WriteEndpoint != null);
             ReadInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptReadEndpoint != null);
             WriteInterruptUsbInterface = UsbInterfaces.FirstOrDefault(i => i.InterruptWriteEndpoint != null);
+
+            Logger.LogInformation("Defaults: Read interface: {readInterface} Write interface {writeInterface} Read PipeId: {readPipeId} Write PipeId: {writePipeId}",
+                ReadUsbInterface?.InterfaceNumber,
+                WriteUsbInterface?.InterfaceNumber,
+                ReadUsbInterface?.ReadEndpoint?.PipeId,
+                WriteUsbInterface?.WriteEndpoint?.PipeId
+                );
         }
         #endregion
 
         #region Public Properties        
-        public ITracer Tracer { get; }
-        public ILogger Logger { get; }
         public IList<IUsbInterface> UsbInterfaces { get; } = new List<IUsbInterface>();
         public IUsbInterface ReadUsbInterface
         {
             get => _ReadUsbInterface;
             set
             {
-                if (value!=null && !UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
+                if (value != null && !UsbInterfaces.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidInterface);
                 _ReadUsbInterface = value;
             }
         }
@@ -85,15 +100,27 @@ namespace Usb.Net
 
         public virtual void Dispose()
         {
-            if (disposed) return;
+            if (disposed)
+            {
+                Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, nameof(UsbInterfaceManager));
+                return;
+            }
+
             disposed = true;
 
+            Logger.LogInformation(Messages.InformationMessageDisposingDevice, nameof(UsbInterfaceManager));
+
+            Close();
+
+            GC.SuppressFinalize(this);
+        }
+
+        public virtual void Close()
+        {
             foreach (var usbInterface in UsbInterfaces)
             {
                 usbInterface.Dispose();
             }
-
-            GC.SuppressFinalize(this);
         }
         #endregion
     }

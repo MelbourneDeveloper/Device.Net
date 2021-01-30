@@ -1,20 +1,28 @@
-﻿using Device.Net;
+using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.UWP;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
+using usbControlRequestType = Windows.Devices.Usb.UsbControlRequestType;
+using usbControlTransferType = Windows.Devices.Usb.UsbControlTransferType;
+using usbSetupPacket = Windows.Devices.Usb.UsbSetupPacket;
 using windowsUsbDevice = Windows.Devices.Usb.UsbDevice;
 
 namespace Usb.Net.UWP
 {
-    public class UWPUsbInterfaceManager : UWPDeviceBase<windowsUsbDevice>, IUsbInterfaceManager
+    public class UwpUsbInterfaceManager : UwpDeviceHandler<windowsUsbDevice>, IUsbInterfaceManager
     {
         #region Fields
         private bool disposed;
         private readonly ushort? _WriteBufferSize;
         private readonly ushort? _ReadBufferSize;
+        private readonly Func<windowsUsbDevice, SetupPacket, byte[], CancellationToken, Task<TransferResult>> _performControlTransferAsync;
         #endregion
 
         #region Public Properties
@@ -22,8 +30,8 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Public Override Properties
-        public override ushort WriteBufferSize => _WriteBufferSize ?? WriteUsbInterface.WriteBufferSize;
-        public override ushort ReadBufferSize => _ReadBufferSize ?? ReadUsbInterface.WriteBufferSize;
+        public ushort WriteBufferSize => _WriteBufferSize ?? WriteUsbInterface.WriteBufferSize;
+        public ushort ReadBufferSize => _ReadBufferSize ?? ReadUsbInterface.WriteBufferSize;
 
         public IUsbInterface ReadUsbInterface
         {
@@ -41,32 +49,44 @@ namespace Usb.Net.UWP
         #endregion
 
         #region Constructors
-        public UWPUsbInterfaceManager(ILogger logger, ITracer tracer) : this(null, logger, tracer, null, null)
-        {
-        }
-
-        public UWPUsbInterfaceManager(ConnectedDeviceDefinition deviceDefinition) : this(deviceDefinition, null, null, null, null)
-        {
-        }
-
-        public UWPUsbInterfaceManager(ConnectedDeviceDefinition connectedDeviceDefinition, ILogger logger, ITracer tracer, ushort? readBufferSzie, ushort? writeBufferSize) : base(connectedDeviceDefinition?.DeviceId, logger, tracer)
+        public UwpUsbInterfaceManager(
+            ConnectedDeviceDefinition connectedDeviceDefinition,
+            IDataReceiver dataReceiver = null,
+            Func<windowsUsbDevice, SetupPacket, byte[], CancellationToken, Task<TransferResult>> performControlTransferAsync = null,
+            ILoggerFactory loggerFactory = null,
+            ushort? readBufferSize = null,
+            ushort? writeBufferSize = null) :
+            base(
+                connectedDeviceDefinition?.DeviceId,
+                dataReceiver ??
+                new UwpDataReceiver(
+                    new Observable<TransferResult>(),
+                    (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UwpDataReceiver>()), loggerFactory ?? NullLoggerFactory.Instance)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
-            UsbInterfaceHandler = new UsbInterfaceManager(logger, tracer);
+            UsbInterfaceHandler = new UsbInterfaceManager(loggerFactory);
             _WriteBufferSize = writeBufferSize;
-            _ReadBufferSize = readBufferSzie;
+            _ReadBufferSize = readBufferSize;
+            _performControlTransferAsync = performControlTransferAsync ?? PerformControlTransferAsync;
         }
         #endregion
 
-        #region Private Methods
-        public override async Task InitializeAsync()
+        #region Public Methods
+        public async Task InitializeAsync(CancellationToken cancellationToken = default)
         {
             if (disposed) throw new ValidationException(Messages.DeviceDisposedErrorMessage);
 
-            await GetDeviceAsync(DeviceId);
+            const string message = "Initialising {deviceId}";
+
+            using var scope = Logger.BeginScope(message, DeviceId);
+            Logger.LogInformation(message, DeviceId);
+
+            await GetDeviceAsync(DeviceId, cancellationToken);
 
             if (ConnectedDevice != null)
             {
+                Logger.LogInformation("Got device {deviceId}", DeviceId);
+
                 if (ConnectedDevice.Configuration.UsbInterfaces == null || ConnectedDevice.Configuration.UsbInterfaces.Count == 0)
                 {
                     ConnectedDevice.Dispose();
@@ -76,7 +96,13 @@ namespace Usb.Net.UWP
                 var interfaceIndex = 0;
                 foreach (var usbInterface in ConnectedDevice.Configuration.UsbInterfaces)
                 {
-                    var uwpUsbInterface = new UWPUsbInterface(usbInterface, Logger, Tracer, _ReadBufferSize, _WriteBufferSize);
+                    var uwpUsbInterface = new UwpUsbInterface(
+                        usbInterface,
+                        (sp, data, c) => _performControlTransferAsync(ConnectedDevice, sp, data, c),
+                        DataReceiver,
+                        LoggerFactory,
+                        _ReadBufferSize,
+                        _WriteBufferSize);
 
                     UsbInterfaceHandler.UsbInterfaces.Add(uwpUsbInterface);
                     interfaceIndex++;
@@ -84,20 +110,14 @@ namespace Usb.Net.UWP
             }
             else
             {
-                throw new DeviceException(Messages.GetErrorMessageCantConnect(DeviceId));
+                var deviceException = new DeviceException(Messages.GetErrorMessageCantConnect(DeviceId));
+                Logger.LogError(deviceException, "Error getting device");
+                throw deviceException;
             }
 
             UsbInterfaceHandler.RegisterDefaultInterfaces();
         }
 
-        protected override IAsyncOperation<windowsUsbDevice> FromIdAsync(string id)
-        {
-            return windowsUsbDevice.FromIdAsync(id);
-        }
-
-        #endregion
-
-        #region Public Methods
         public override void Dispose()
         {
             if (disposed) return;
@@ -107,15 +127,52 @@ namespace Usb.Net.UWP
             base.Dispose();
         }
 
-        public Task WriteAsync(byte[] data)
-        {
-            return WriteUsbInterface.WriteAsync(data);
-        }
+        public Task WriteAsync(byte[] data) => WriteUsbInterface.WriteAsync(data);
 
-        public Task<ConnectedDeviceDefinitionBase> GetConnectedDeviceDefinitionAsync()
+        public Task<ConnectedDeviceDefinition> GetConnectedDeviceDefinitionAsync(CancellationToken cancellationToken = default) => Task.FromResult(ConnectedDeviceDefinition);
+
+        public Task<TransferResult> ReadAsync(CancellationToken cancellationToken = default) => ReadUsbInterface.ReadAsync(ReadBufferSize, cancellationToken);
+        #endregion
+
+        #region Private Methods
+        private static async Task<TransferResult> PerformControlTransferAsync(windowsUsbDevice ConnectedDevice, SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(ConnectedDeviceDefinition);
+            var uwpSetupPacket = new usbSetupPacket
+            {
+                Index = setupPacket.Index,
+                Length = setupPacket.Length,
+                Request = setupPacket.Request,
+                RequestType = new usbControlRequestType
+                {
+                    ControlTransferType = setupPacket.RequestType.Type switch
+                    {
+                        RequestType.Standard => usbControlTransferType.Standard,
+                        RequestType.Class => usbControlTransferType.Class,
+                        RequestType.Vendor => usbControlTransferType.Vendor,
+                        _ => throw new NotImplementedException()
+                    }
+                },
+                Value = setupPacket.Value
+            };
+
+            if (setupPacket.RequestType.Direction == RequestDirection.In)
+            {
+                //Read
+                var readBuffer = await ConnectedDevice.SendControlInTransferAsync(uwpSetupPacket);
+
+                return new TransferResult(readBuffer.ToArray(), readBuffer.Length);
+            }
+            else
+            {
+                //Write
+                var bytesWritten = await ConnectedDevice.SendControlOutTransferAsync(uwpSetupPacket);
+                return new TransferResult(buffer, bytesWritten);
+            }
         }
+        #endregion
+
+        #region Protected Methods
+        protected override IAsyncOperation<windowsUsbDevice> FromIdAsync(string id) => windowsUsbDevice.FromIdAsync(id);
         #endregion
     }
 }

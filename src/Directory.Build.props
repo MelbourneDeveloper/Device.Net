@@ -1,0 +1,15 @@
+<Project>
+    <PropertyGroup>
+        <Deterministic>true</Deterministic>
+        <LangVersion>Latest</LangVersion>
+        <DebugSymbols>true</DebugSymbols>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>   
+        <Version>4.0.0</Version>            
+    </PropertyGroup>
+</Project>

@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package
+    xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+    <metadata>
+        <id>Usb.Net</id>
+        <title>Usb.Net</title>
+        <description>Cross-platform .NET library for talking to USB devices. Backed by the Device.Net framework</description>
+        <summary>Cross-platform .NET library for talking to USB devices. Backed by the Device.Net framework</summary>
+        <version>4.0.0</version>
+        <authors>Christian Findlay</authors>
+        <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
+        <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>
+        <copyright>Copyright (c) 2021 Christian Findlay</copyright>
+        <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
+        <repository type="git" url="https://github.com/MelbourneDeveloper/Device.Net" commit="7819b5239f21c084da90f6dc5e7a1f30e5e513e1" />
+        <owners>Christian Findlay</owners>
+        <icon>images/Icon.png</icon>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <license type="expression">MIT</license>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="Device.Net" version="4.0.0" exclude="Build,Analyzers" />
+            </group>
+            <group targetFramework=".NETStandard2.0">
+                <dependency id="Device.Net" version="4.0.0" exclude="Build,Analyzers" />
+            </group>
+            <group targetFramework="UAP10.0.16299">
+                <dependency id="Device.Net" version="4.0.0" exclude="Build,Analyzers" />
+            </group>
+            <group targetFramework="MonoAndroid0.0">
+                <dependency id="Device.Net" version="4.0.0" exclude="Build,Analyzers" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="../Icon.png" target="images\" />
+        <file src="..\..\src\Usb.Net\bin\Release\netstandard2.0\Usb.Net.dll" target="lib/netstandard2.0"/>
+        <file src="..\..\src\Usb.Net\bin\Release\netstandard2.0\Usb.Net.xml" target="lib/netstandard2.0"/>
+        <file src="..\..\src\Usb.Net\bin\Release\net45\Usb.Net.dll" target="lib/net45"/>
+        <file src="..\..\src\Usb.Net\bin\Release\net45\Usb.Net.xml" target="lib/net45"/>
+        <file src="..\..\src\Usb.Net.UWP\bin\Release\Usb.Net.dll" target="lib/uap10.0.16299"/>
+        <file src="..\..\src\Usb.Net.UWP\bin\Release\Usb.Net.xml" target="lib/uap10.0.16299"/>
+        <file src="..\..\src\Usb.Net.UWP\bin\Release\Usb.Net.UWP.dll" target="lib/uap10.0.16299"/>
+        <file src="..\..\src\Usb.Net.UWP\bin\Release\Usb.Net.UWP.xml" target="lib/uap10.0.16299"/>
+        <file src="..\..\src\Usb.Net.Android\bin\Release\Usb.Net.dll" target="lib/MonoAndroid"/>
+        <file src="..\..\src\Usb.Net.Android\bin\Release\Usb.Net.xml" target="lib/MonoAndroid"/>
+        <file src="..\..\src\Usb.Net.Android\bin\Release\Usb.Net.Android.dll" target="lib/MonoAndroid"/>
+        <file src="..\..\src\Usb.Net.Android\bin\Release\Usb.Net.Android.xml" target="lib/MonoAndroid"/>
+    </files>
+</package>

@@ -1,55 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Version>3.1.0</Version>
-    <Authors>Christian Findlay</Authors>
-    <Company>Christian Findlay</Company>
-    <Product>Device.Net.LibUsb</Product>
-    <PackageProjectUrl>https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support</RepositoryUrl>
-    <PackageTags>Hid USB MacOS Linux C#</PackageTags>
-    <Description>Device.Net based library for USB access on Linux, MacOS and Windows. Use Usb.Net, and Hid.Net for Windows, UWP, and Android support. The base interfaces are the same so the code is compatible on all platforms.</Description>
-    <NoWarn>1701;1702;CA1063</NoWarn>
-    <AssemblyVersion>3.1.0.0</AssemblyVersion>
-    <FileVersion>3.1.0.0</FileVersion>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-  </PropertyGroup>
-
-  <Choose>
-    <When Condition=" '$(Configuration)'=='Debug' ">
-      <PropertyGroup>
-        <SignAssembly>false</SignAssembly>
-      </PropertyGroup>
-    </When>
-    <When Condition=" '$(Configuration)'=='Release' ">
-      <PropertyGroup>
-        <SignAssembly>true</SignAssembly>
-        <DelaySign>false</DelaySign>
-        <AssemblyOriginatorKeyFile>../Device.Net/Device.Net.pfx</AssemblyOriginatorKeyFile>
-      </PropertyGroup>
-    </When>
-  </Choose>
-
-  <ItemGroup>
-    <Compile Remove="LibUsbHidDeviceFactory.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="LibUsbDotNet" Version="2.2.29" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
-
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+        <NoWarn>1701;1702;CA1063</NoWarn>
+        <DocumentationFile>Device.Net.LibUsb.xml</DocumentationFile>    
+        <DebugType>embedded</DebugType>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="LibUsbDotNet" Version="2.2.29" />
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Device.Net\Device.Net.csproj" />
+        <ProjectReference Include="..\Usb.Net\Usb.Net.csproj" />
+    </ItemGroup>
 </Project>

@@ -1,15 +1,24 @@
 ﻿using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.Windows;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
+#pragma warning disable CA1707 // Identifiers should not contain underscores
+#pragma warning disable CA1021 // Avoid out parameters
+#pragma warning disable CA1401 // P/Invokes should not be visible
+#pragma warning disable CA5392 // Use DefaultDllImportSearchPaths attribute for P/Invokes
+#pragma warning disable CA1045 // Do not pass types by reference
+#pragma warning disable CA1060 // Move pinvokes to native methods class
+
 namespace Hid.Net.Windows
 {
-    public class WindowsHidApiService : ApiService, IHidApiService
+    internal class WindowsHidApiService : ApiService, IHidApiService
     {
         #region Private Static Fields
         private static Guid? _HidGuid;
@@ -20,7 +29,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsHidApiService(ILogger logger) : base(logger)
+        public WindowsHidApiService(ILoggerFactory loggerFactory) : base((loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidApiService>())
         {
         }
         #endregion
@@ -65,48 +74,39 @@ namespace Hid.Net.Windows
             var serialNumber = GetSerialNumber(safeFileHandle);
             var product = GetProduct(safeFileHandle);
 
-            return new ConnectedDeviceDefinition(deviceId)
-            {
-                WriteBufferSize = hidCollectionCapabilities.OutputReportByteLength,
-                ReadBufferSize = hidCollectionCapabilities.InputReportByteLength,
-                Manufacturer = manufacturer,
-                ProductName = product,
-                ProductId = (ushort)hidAttributes.ProductId,
-                SerialNumber = serialNumber,
-                Usage = hidCollectionCapabilities.Usage,
-                UsagePage = hidCollectionCapabilities.UsagePage,
-                VendorId = (ushort)hidAttributes.VendorId,
-                VersionNumber = (ushort)hidAttributes.VersionNumber,
-                DeviceType = DeviceType.Hid
-            };
+            return new ConnectedDeviceDefinition(
+                deviceId,
+                DeviceType.Hid,
+                writeBufferSize: hidCollectionCapabilities.OutputReportByteLength,
+                readBufferSize: hidCollectionCapabilities.InputReportByteLength,
+                manufacturer: manufacturer,
+                productName: product,
+                productId: (ushort)hidAttributes.ProductId,
+                serialNumber: serialNumber,
+                usage: hidCollectionCapabilities.Usage,
+                usagePage: hidCollectionCapabilities.UsagePage,
+                vendorId: (ushort)hidAttributes.VendorId,
+                versionNumber: (ushort)hidAttributes.VersionNumber,
+                classGuid: GetHidGuid());
         }
 
-        public string GetManufacturer(SafeFileHandle safeFileHandle)
-        {
-            return GetHidString(safeFileHandle, HidD_GetManufacturerString, Logger);
-        }
+        public string GetManufacturer(SafeFileHandle safeFileHandle) => GetHidString(safeFileHandle, HidD_GetManufacturerString, Logger);
 
-        public string GetProduct(SafeFileHandle safeFileHandle)
-        {
-            return GetHidString(safeFileHandle, HidD_GetProductString, Logger);
-        }
+        public string GetProduct(SafeFileHandle safeFileHandle) => GetHidString(safeFileHandle, HidD_GetProductString, Logger);
 
-        public string GetSerialNumber(SafeFileHandle safeFileHandle)
-        {
-            return GetHidString(safeFileHandle, HidD_GetSerialNumberString, Logger);
-        }
+        public string GetSerialNumber(SafeFileHandle safeFileHandle) => GetHidString(safeFileHandle, HidD_GetSerialNumberString, Logger);
 
         public HidAttributes GetHidAttributes(SafeFileHandle safeFileHandle)
         {
             var isSuccess = HidD_GetAttributes(safeFileHandle, out var hidAttributes);
-            WindowsDeviceBase.HandleError(isSuccess, $"Could not get Hid Attributes (Call {nameof(HidD_GetAttributes)})");
+            _ = WindowsHelpers.HandleError(isSuccess, $"Could not get Hid Attributes (Call {nameof(HidD_GetAttributes)})", Logger);
             return hidAttributes;
         }
 
         public HidCollectionCapabilities GetHidCapabilities(SafeFileHandle readSafeFileHandle)
         {
             var isSuccess = HidD_GetPreparsedData(readSafeFileHandle, out var pointerToPreParsedData);
-            WindowsDeviceBase.HandleError(isSuccess, "Could not get pre parsed data");
+            _ = WindowsHelpers.HandleError(isSuccess, "Could not get pre parsed data", Logger);
 
             var result = HidP_GetCaps(pointerToPreParsedData, out var hidCollectionCapabilities);
             if (result != HIDP_STATUS_SUCCESS)
@@ -115,7 +115,7 @@ namespace Hid.Net.Windows
             }
 
             isSuccess = HidD_FreePreparsedData(ref pointerToPreParsedData);
-            WindowsDeviceBase.HandleError(isSuccess, "Could not release handle for getting Hid capabilities");
+            _ = WindowsHelpers.HandleError(isSuccess, "Could not release handle for getting Hid capabilities", Logger);
 
             return hidCollectionCapabilities;
         }
@@ -134,15 +134,12 @@ namespace Hid.Net.Windows
             return hidGuid;
         }
 
-        public Stream OpenRead(SafeFileHandle readSafeFileHandle, ushort readBufferSize)
-        {
-            return new FileStream(readSafeFileHandle, FileAccess.Read, readBufferSize, false);
-        }
+        //TODO: These are not opening as async. If we do, we get an error. This is probably why cancellation tokens don't work.
+        //https://github.com/MelbourneDeveloper/Device.Net/issues/188
 
-        public Stream OpenWrite(SafeFileHandle writeSafeFileHandle, ushort writeBufferSize)
-        {
-            return new FileStream(writeSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
-        }
+        public Stream OpenRead(SafeFileHandle readSafeFileHandle, ushort readBufferSize) => new FileStream(readSafeFileHandle, FileAccess.Read, readBufferSize, false);
+
+        public Stream OpenWrite(SafeFileHandle writeSafeFileHandle, ushort writeBufferSize) => new FileStream(writeSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
         #endregion
 
         #region Private Methods
@@ -152,19 +149,17 @@ namespace Hid.Net.Windows
             {
                 var pointerToBuffer = Marshal.AllocHGlobal(126);
                 var isSuccess = getString(safeFileHandle, pointerToBuffer, 126);
-                Marshal.FreeHGlobal(pointerToBuffer);
-
                 if (!isSuccess)
                 {
-                    logger?.Log($"Could not get Hid string. Caller: {callMemberName}", nameof(WindowsHidApiService), null, LogLevel.Warning);
+                    logger.LogWarning(Messages.ErrorMessagesCouldntGetHidString, "", nameof(GetHidString), callMemberName);
                 }
-
-
-                return Marshal.PtrToStringUni(pointerToBuffer);
+                var text = Marshal.PtrToStringAuto(pointerToBuffer);
+                Marshal.FreeHGlobal(pointerToBuffer);
+                return text;
             }
             catch (Exception ex)
             {
-                logger?.Log($"Could not get Hid string. Message: {ex.Message}", nameof(WindowsHidApiService), ex, LogLevel.Error);
+                logger.LogError(ex, Messages.ErrorMessagesCouldntGetHidString, ex.Message, nameof(GetHidString), callMemberName);
                 return null;
             }
             finally

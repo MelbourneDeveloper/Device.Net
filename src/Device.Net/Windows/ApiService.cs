@@ -1,32 +1,30 @@
-﻿using Microsoft.Win32.SafeHandles;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
 
+#pragma warning disable CA1707 // Identifiers should not contain underscores
+#pragma warning disable CA1021 // Avoid out parameters
+#pragma warning disable CA5392 // Use DefaultDllImportSearchPaths attribute for P/Invokes
+#pragma warning disable CA1060 // Move pinvokes to native methods class
+
 namespace Device.Net.Windows
 {
-    public class ApiService : IApiService
+    internal class ApiService : IApiService
     {
-        #region Public Properties
-        public ILogger Logger { get; }
+        #region Fields
+        protected ILogger Logger { get; }
         #endregion
 
         #region Constructor
-        public ApiService(ILogger logger)
-        {
-            Logger = logger;
-        }
+        public ApiService(ILogger logger = null) => Logger = logger ?? NullLogger.Instance;
         #endregion
 
         #region Implementation
-        public SafeFileHandle CreateWriteConnection(string deviceId)
-        {
-            return CreateConnection(deviceId, FileAccessRights.GenericRead | FileAccessRights.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, APICalls.OpenExisting);
-        }
+        public SafeFileHandle CreateWriteConnection(string deviceId) => CreateConnection(deviceId, FileAccessRights.GenericRead | FileAccessRights.GenericWrite, APICalls.FileShareRead | APICalls.FileShareWrite, APICalls.OpenExisting);
 
-        public SafeFileHandle CreateReadConnection(string deviceId, FileAccessRights desiredAccess)
-        {
-            return CreateConnection(deviceId, desiredAccess, APICalls.FileShareRead | APICalls.FileShareWrite, APICalls.OpenExisting);
-        }
+        public SafeFileHandle CreateReadConnection(string deviceId, FileAccessRights desiredAccess) => CreateConnection(deviceId, desiredAccess, APICalls.FileShareRead | APICalls.FileShareWrite, APICalls.OpenExisting);
 
         public bool AGetCommState(SafeFileHandle hFile, ref Dcb lpDCB) => GetCommState(hFile, ref lpDCB);
         public bool APurgeComm(SafeFileHandle hFile, int dwFlags) => PurgeComm(hFile, dwFlags);
@@ -39,7 +37,7 @@ namespace Device.Net.Windows
         #region Private Methods
         private SafeFileHandle CreateConnection(string deviceId, FileAccessRights desiredAccess, uint shareMode, uint creationDisposition)
         {
-            Logger?.Log($"Calling {nameof(APICalls.CreateFile)} for DeviceId: {deviceId}. Desired Access: {desiredAccess}. Share mode: {shareMode}. Creation Disposition: {creationDisposition}", nameof(ApiService), null, LogLevel.Information);
+            Logger.LogInformation("Calling {call} Area: {area} for DeviceId: {deviceId}. Desired Access: {desiredAccess}. Share mode: {shareMode}. Creation Disposition: {creationDisposition}", nameof(APICalls.CreateFile), nameof(ApiService), deviceId, desiredAccess, shareMode, creationDisposition);
             return APICalls.CreateFile(deviceId, desiredAccess, shareMode, IntPtr.Zero, creationDisposition, 0, IntPtr.Zero);
         }
         #endregion

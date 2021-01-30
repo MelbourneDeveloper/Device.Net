@@ -18,7 +18,7 @@
     <AndroidResgenClass>Resource</AndroidResgenClass>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
@@ -103,6 +103,9 @@
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug">
+      <Version>3.1.7</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.Design" Version="27.0.2.1" />
   </ItemGroup>
   <ItemGroup>
@@ -116,7 +119,7 @@
       <Name>Device.Net</Name>
     </ProjectReference>
     <ProjectReference Include="..\Usb.Net.Android\Usb.Net.Android.csproj">
-      <Project>{a6fb0608-0d21-4892-adce-3e79abcc030d}</Project>
+      <Project>{2230e90b-ae05-412f-8b83-e49627cd666e}</Project>
       <Name>Usb.Net.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\Usb.Net\Usb.Net.csproj">

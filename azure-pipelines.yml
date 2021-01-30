@@ -1,16 +1,37 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
-- main
+  - main
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: "windows-latest"
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+  - task: NuGetCommand@2
+    inputs:
+      command: "restore"
+      restoreSolution: "src/Device.Net.Pipelines.sln"
+      feedsToUse: "select"
 
+  - task: MSBuild@1
+    inputs:
+      solution: "src/Device.Net.Pipelines.sln"
+      configuration: "Release"
 
+  - task: NuGetCommand@2
+    inputs:
+      command: "pack"
+      packagesToPack: "Build/NuSpecs/*.nuspec"
+      versioningScheme: "off"
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'test'
+      projects: 'src/Device.Net.UnitTests/Device.Net.UnitTests.csproj'
+      arguments: '--filter TestCategory!=NotPipelineReady'
+      testRunTitle: 'Unit Tests'
+
+  - task: NuGetCommand@2
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'internal'
+      publishVstsFeed: 'a579837a-f36e-462f-8492-1a622b5cadb9/f3bac9de-5bde-4855-b10a-d1fe458ac336'
