@@ -21,7 +21,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Device.Net.DeviceBase.html",
-          "hash": "g5MDA2Psjn9qRDfjz+ZGvA=="
+          "hash": "0gwHnqP1cYpuLIzLr6OUZQ=="
         }
       },
       "is_incremental": false,
@@ -573,7 +573,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Hid.Net.HidDevice.html",
-          "hash": "+X93/pYMz46PTffX0zQyOw=="
+          "hash": "x7LZjk20IXl6jgoVChpnVw=="
         }
       },
       "is_incremental": false,
@@ -1170,7 +1170,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Usb.Net.UsbDevice.html",
-          "hash": "hDGu10U8sDSLGxAgxtg/4g=="
+          "hash": "808fBhUKCQ9JsH+sWGMWpw=="
         }
       },
       "is_incremental": false,

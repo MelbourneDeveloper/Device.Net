@@ -343,22 +343,6 @@ references:
   isSpec: "True"
   fullName: Device.Net.DeviceBase.ReadAsync
   nameWithType: DeviceBase.ReadAsync
-- uid: Device.Net.DeviceBase.RemoveFirstByte(System.Byte[])
-  name: RemoveFirstByte(Byte[])
-  href: api/Device.Net.DeviceBase.html#Device_Net_DeviceBase_RemoveFirstByte_System_Byte___
-  commentId: M:Device.Net.DeviceBase.RemoveFirstByte(System.Byte[])
-  name.vb: RemoveFirstByte(Byte())
-  fullName: Device.Net.DeviceBase.RemoveFirstByte(System.Byte[])
-  fullName.vb: Device.Net.DeviceBase.RemoveFirstByte(System.Byte())
-  nameWithType: DeviceBase.RemoveFirstByte(Byte[])
-  nameWithType.vb: DeviceBase.RemoveFirstByte(Byte())
-- uid: Device.Net.DeviceBase.RemoveFirstByte*
-  name: RemoveFirstByte
-  href: api/Device.Net.DeviceBase.html#Device_Net_DeviceBase_RemoveFirstByte_
-  commentId: Overload:Device.Net.DeviceBase.RemoveFirstByte
-  isSpec: "True"
-  fullName: Device.Net.DeviceBase.RemoveFirstByte
-  nameWithType: DeviceBase.RemoveFirstByte
 - uid: Device.Net.DeviceBase.WriteAndReadAsync(System.Byte[],System.Threading.CancellationToken)
   name: WriteAndReadAsync(Byte[], CancellationToken)
   href: api/Device.Net.DeviceBase.html#Device_Net_DeviceBase_WriteAndReadAsync_System_Byte___System_Threading_CancellationToken_

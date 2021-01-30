@@ -260,7 +260,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_DeviceBase_Dispose.md&amp;value=---%0Auid%3A%20Device.Net.DeviceBase.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceBase.cs/#L91">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceBase.cs/#L76">View Source</a>
   </span>
   <a id="Device_Net_DeviceBase_Dispose_" data-uid="Device.Net.DeviceBase.Dispose*"></a>
   <h4 id="Device_Net_DeviceBase_Dispose" data-uid="Device.Net.DeviceBase.Dispose">Dispose()</h4>
@@ -275,7 +275,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_DeviceBase_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Device.Net.DeviceBase.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceBase.cs/#L97">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceBase.cs/#L82">View Source</a>
   </span>
   <a id="Device_Net_DeviceBase_Dispose_" data-uid="Device.Net.DeviceBase.Dispose*"></a>
   <h4 id="Device_Net_DeviceBase_Dispose_System_Boolean_" data-uid="Device.Net.DeviceBase.Dispose(System.Boolean)">Dispose(Boolean)</h4>
@@ -354,7 +354,7 @@
     <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_DeviceBase_GetDeviceDefinitionFromWindowsDeviceId_System_String_Device_Net_DeviceType_Microsoft_Extensions_Logging_ILogger_System_Nullable_System_Guid__.md&amp;value=---%0Auid%3A%20Device.Net.DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(System.String%2CDevice.Net.DeviceType%2CMicrosoft.Extensions.Logging.ILogger%2CSystem.Nullable%7BSystem.Guid%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceBase.cs/#L116">View Source</a>
+    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceBase.cs/#L101">View Source</a>
   </span>
   <a id="Device_Net_DeviceBase_GetDeviceDefinitionFromWindowsDeviceId_" data-uid="Device.Net.DeviceBase.GetDeviceDefinitionFromWindowsDeviceId*"></a>
   <h4 id="Device_Net_DeviceBase_GetDeviceDefinitionFromWindowsDeviceId_System_String_Device_Net_DeviceType_Microsoft_Extensions_Logging_ILogger_System_Nullable_System_Guid__" data-uid="Device.Net.DeviceBase.GetDeviceDefinitionFromWindowsDeviceId(System.String,Device.Net.DeviceType,Microsoft.Extensions.Logging.ILogger,System.Nullable{System.Guid})">GetDeviceDefinitionFromWindowsDeviceId(String, DeviceType, ILogger, Nullable&lt;Guid&gt;)</h4>
@@ -454,54 +454,6 @@
     <tbody>
       <tr>
         <td><span class="xref">System.Threading.Tasks.Task</span>&lt;<a class="xref" href="Device.Net.TransferResult.html">TransferResult</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_DeviceBase_RemoveFirstByte_System_Byte___.md&amp;value=---%0Auid%3A%20Device.Net.DeviceBase.RemoveFirstByte(System.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net/DeviceBase.cs/#L79">View Source</a>
-  </span>
-  <a id="Device_Net_DeviceBase_RemoveFirstByte_" data-uid="Device.Net.DeviceBase.RemoveFirstByte*"></a>
-  <h4 id="Device_Net_DeviceBase_RemoveFirstByte_System_Byte___" data-uid="Device.Net.DeviceBase.RemoveFirstByte(System.Byte[])">RemoveFirstByte(Byte[])</h4>
-  <div class="markdown level1 summary"><p>Many Hid devices on Windows have a buffer size that is one byte larger than the logical buffer size. For compatibility with other platforms etc. we need to remove the first byte. See DataHasExtraByte</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static byte[] RemoveFirstByte(byte[] bytes)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Byte</span>[]</td>
-        <td><span class="parametername">bytes</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Byte</span>[]</td>
         <td></td>
       </tr>
     </tbody>
