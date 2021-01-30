@@ -10,11 +10,8 @@ namespace Usb.Net.Sample
     internal sealed class TrezorExample : IDisposable
     {
         #region Fields
-#if LIBUSB
         private const int PollMilliseconds = 6000;
-#else
-        private const int PollMilliseconds = 3000;
-#endif
+
         //Define the types of devices to search for. This particular device can be connected to via USB, or Hid
         public static readonly List<FilterDeviceDefinition> HidDeviceDefinitions = new List<FilterDeviceDefinition>
         {

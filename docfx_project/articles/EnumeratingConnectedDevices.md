@@ -10,7 +10,7 @@ Call and await `GetConnectedDeviceDefinitionsAsync()` on the factory to enumerat
 
 _Note: it is a good idea to specify a logger during the factory registration. This means that factories will log errors and so on when attempting to connect to enumerate or connect to devices. See the section Debugging, Logging and Tracing.
 
-_If you have not already been through the process you will need to [configure device permissions](https://melbournedeveloper.github.io/Device.Net/articles/DevicePermissionSetup.html) on Android, or UWP._
+If you have not already been through the process you will need to [configure device permissions](https://melbournedeveloper.github.io/Device.Net/articles/DevicePermissionSetup.html) on Android, or UWP._
 
 ## Advanced Workflows
 

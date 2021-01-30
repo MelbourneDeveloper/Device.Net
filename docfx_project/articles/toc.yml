@@ -4,9 +4,6 @@
 - name: Getting Started
   href: GettingStarted.md
 
-- name: Hid Transfer
-  href: HidTransfer.md  
-
 - name: Build Issues
   href: BuildIssues.md  
 
@@ -21,6 +18,9 @@
 
 - name: Enumerating Connected Devices
   href: EnumeratingConnectedDevices.md
+
+- name: Hid Transfer
+  href: HidTransfer.md  
 
 - name: Linux and macOS Support
   href: LinuxmacOSSupport.md
