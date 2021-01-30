@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Device.Net
 {
     /// <summary>
-    /// This class is a work in progress. It is not production ready.
+    /// This class is a work in progress. It is not production ready. Documentation: href="https://melbournedeveloper.github.io/Device.Net/articles/DeviceManager.html"
     /// </summary>
     public class DeviceManager : IDeviceManager, IDisposable
     {
