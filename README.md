@@ -47,10 +47,9 @@ This project also needs unit tests, bug fixes and work towards more platforms. P
 | Linux, MacOS*  |  No | [(Via LibUsbDotNet)](https://github.com/MelbourneDeveloper/Device.Net/wiki/Linux-and-MacOS-Support) | No          | No        |
 | WebAssembly    | No  | No                                                                                                  | No          | No        |
 
-*Note: Bluetooth, Linux, and macOS, WebAssembly (via [WebUsb](https://web.dev/usb/)) support are on the radar. If you can sponsor this project, you might be able to help get there faster.
+*Note: Bluetooth, Linux, and macOS, WebAssembly (via [WebUsb](https://web.dev/usb/)) support are on the radar. If you can sponsor this project, you might be able to help get there faster.*
 
-SerialPort.Net and Device.Net.LibUsb are still in alpha mode. You must use the prerelease version
-*
+*SerialPort.Net and Device.Net.LibUsb are still in alpha mode. You must use the prerelease version*
 
 ### Example Code
 
