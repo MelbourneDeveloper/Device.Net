@@ -4,7 +4,7 @@
 
 ## [Follow Me on Twitter](https://twitter.com/intent/follow?screen_name=cfdevelop&tw_p=followbutton) ##
 
-![diagram](https://github.com/MelbourneDeveloper/Device.Net/blob/master/Diagram.png)
+![diagram](https://github.com/MelbourneDeveloper/Device.Net/blob/main/Diagram.png)
 
 ## [Version 4 Documentation](https://melbournedeveloper.github.io/Device.Net/index.html)
 
