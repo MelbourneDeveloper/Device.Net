@@ -3,7 +3,7 @@
 
 ![diagram](https://github.com/MelbourneDeveloper/Device.Net/blob/main/Diagram.png)
 
-**Cross-platform C# framework for talking to connected devices such as USB, Serial Port and Hid devices**
+**Cross-platform .NET framework for talking to connected devices such as USB, Serial Port and Hid devices**
 
 Version 4 is live on [Nuget.org](https://www.nuget.org/packages/Device.Net)! Take a look at the [4.0 project](https://github.com/MelbourneDeveloper/Device.Net/projects/11) to see new features and fixes. Version 4 has public interface changes. You will need to read through the documentation to upgrade from version 3 to version 4.
 
