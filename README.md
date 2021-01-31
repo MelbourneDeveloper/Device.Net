@@ -36,8 +36,6 @@ Device communication is fragmented across platforms and device types. If you nee
 
 * [Quick Start](https://melbournedeveloper.github.io/Device.Net/articles/GettingStarted.html)
 
-* [Samples and Unit Tests](https://melbournedeveloper.github.io/Device.Net/articles/SamplesAndUnitTests.html)
-
 * [Join the conversation](https://discord.gg/ZcvXARm) on Discord
 
 * Check out [my blog](https://christianfindlay.com/) for articles
