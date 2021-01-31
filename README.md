@@ -20,6 +20,10 @@ This project needs funding. Please [sponsor me here](https://github.com/sponsors
 
 This project also needs unit tests, bug fixes and work towards more platforms. Please [read this](https://github.com/MelbourneDeveloper/Device.Net/blob/main/CONTRIBUTING.md).
 
+#### Licensing
+
+This framework uses the [MIT license](https://github.com/MelbourneDeveloper/Device.Net/blob/main/LICENSE). I won't sue you, or your business if you use this for free. If you are developing software for free, I don't expect you to sponsor me. However, if your business makes more than USD 100,000 per year and your software depends on Device.Net, I expect your business to make a serious contribution via sponsorship. 
+
 ### Why Device.Net?
 
 Device communication is fragmented across platforms and device types. If you need to use three different device types across Android, UWP and .NET, you would otherwise need nine different APIs. Device.Net puts a standard layer across all these so that you can share code across all platforms and device types. You don't need to use Windows APIs or learn about Android's API directly. If the device manufacturer decides to switch from USB to Hid, the code remains the same. Write once; run everywhere.
