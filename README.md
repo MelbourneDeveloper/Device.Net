@@ -22,7 +22,7 @@ This project also needs unit tests, bug fixes and work towards more platforms. P
 
 #### Licensing
 
-This framework uses the [MIT license](https://github.com/MelbourneDeveloper/Device.Net/blob/main/LICENSE). I won't sue you, or your business if you use this for free. If you are developing software for free, I don't expect you to sponsor me. However, if your business makes more than USD 100,000 per year and your software depends on Device.Net, I expect your business to make a serious contribution via sponsorship. 
+This framework uses the [MIT license](https://github.com/MelbourneDeveloper/Device.Net/blob/main/LICENSE). I won't sue you, or your business if you use this for free. If you are developing software for free, I don't expect you to sponsor me. However, if your business makes more than USD 100,000 per year and your software depends on Device.Net, I expect your business to make a serious contribution via [sponsorship](https://github.com/sponsors/MelbourneDeveloper). 
 
 ### Why Device.Net?
 
