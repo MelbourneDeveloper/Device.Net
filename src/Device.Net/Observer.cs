@@ -14,13 +14,13 @@ namespace Device.Net
 
         public Observer(
         Action<T> onNext,
-        Action<Exception> onError = null,
-        Action onCompleted = null
+        Action<Exception>? onError = null,
+        Action? onCompleted = null
             )
         {
             _onNext = onNext;
-            _onError = onError;
-            _onCompleted = onCompleted;
+            _onError = onError ??= (e) => { };
+            _onCompleted = onCompleted ??= () => { }; ;
         }
 
 

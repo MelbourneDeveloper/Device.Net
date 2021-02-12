@@ -34,7 +34,7 @@ namespace Device.Net.LibUsb
         public LibUsbInterfaceManager(
             UsbDevice usbDevice,
             int timeout,
-            ILoggerFactory loggerFactory,
+            ILoggerFactory? loggerFactory,
             ushort? writeBufferSize,
             ushort? readBufferSize) : base(loggerFactory)
         {

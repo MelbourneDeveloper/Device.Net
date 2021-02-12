@@ -35,7 +35,7 @@ namespace Device.Net
         /// <summary>
         /// Freeform tag to be used as needed
         /// </summary>
-        public string Label { get; }
+        public string? Label { get; }
 
         /// <summary>
         /// Used to further filter down device definitions on some platforms
@@ -45,17 +45,17 @@ namespace Device.Net
         /// <summary>
         /// The name of the device product according to the Manufacturer
         /// </summary>
-        public string ProductName { get; }
+        public string? ProductName { get; }
 
         /// <summary>
         /// Name of the device's manufacturer
         /// </summary>
-        public string Manufacturer { get; }
+        public string? Manufacturer { get; }
 
         /// <summary>
         /// Unique serial number of the physical device
         /// </summary>
-        public string SerialNumber { get; }
+        public string? SerialNumber { get; }
 
         /// <summary>
         /// 
@@ -84,15 +84,15 @@ namespace Device.Net
             DeviceType deviceType,
             uint? vendorId = null,
             uint? productId = null,
-            string productName = null,
-            string manufacturer = null,
-            string serialNumber = null,
+            string? productName = null,
+            string? manufacturer = null,
+            string? serialNumber = null,
             ushort? usage = null,
             ushort? usagePage = null,
             ushort? versionNumber = null,
             int? writeBufferSize = null,
             int? readBufferSize = null,
-            string label = null,
+            string? label = null,
             Guid? classGuid = null
            )
         {

@@ -14,9 +14,9 @@ namespace Usb.Net.Windows
     {
 
         public static IDeviceFactory CreateWindowsUsbDeviceFactory(
-            ILoggerFactory loggerFactory = null,
-            GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-            GetUsbInterfaceManager getUsbInterfaceManager = null,
+            ILoggerFactory? loggerFactory = null,
+            GetConnectedDeviceDefinitionsAsync? getConnectedDeviceDefinitionsAsync = null,
+            GetUsbInterfaceManager? getUsbInterfaceManager = null,
             Guid? classGuid = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null
@@ -31,9 +31,9 @@ namespace Usb.Net.Windows
 
         public static IDeviceFactory CreateWindowsUsbDeviceFactory(
             this FilterDeviceDefinition filterDeviceDefinition,
-            ILoggerFactory loggerFactory = null,
-            GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-            GetUsbInterfaceManager getUsbInterfaceManager = null,
+            ILoggerFactory? loggerFactory = null,
+            GetConnectedDeviceDefinitionsAsync? getConnectedDeviceDefinitionsAsync = null,
+            GetUsbInterfaceManager? getUsbInterfaceManager = null,
             Guid? classGuid = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null
@@ -48,9 +48,9 @@ namespace Usb.Net.Windows
 
         public static IDeviceFactory CreateWindowsUsbDeviceFactory(
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
-        ILoggerFactory loggerFactory = null,
-        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-        GetUsbInterfaceManager getUsbInterfaceManager = null,
+        ILoggerFactory? loggerFactory = null,
+        GetConnectedDeviceDefinitionsAsync? getConnectedDeviceDefinitionsAsync = null,
+        GetUsbInterfaceManager? getUsbInterfaceManager = null,
         Guid? classGuid = null,
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null

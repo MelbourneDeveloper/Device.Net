@@ -33,16 +33,16 @@ namespace Hid.Net.Windows
         /// <param name="writeReportTransform">Given the data supplied, allow you to divide the data in to a <see cref="Report"/></param>
         /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
-        ILoggerFactory loggerFactory = null,
-        IHidApiService hidApiService = null,
+        ILoggerFactory? loggerFactory = null,
+        IHidApiService? hidApiService = null,
         Guid? classGuid = null,
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null,
-        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-        Func<Report, TransferResult> readReportTransform = null,
-        Func<TransferResult, Report> readTransferTransform = null,
-        Func<byte[], byte, byte[]> writeTransferTransform = null,
-        WriteReportTransform writeReportTransform = null)
+        GetConnectedDeviceDefinitionsAsync? getConnectedDeviceDefinitionsAsync = null,
+        Func<Report, TransferResult>? readReportTransform = null,
+        Func<TransferResult, Report>? readTransferTransform = null,
+        Func<byte[], byte, byte[]>? writeTransferTransform = null,
+        WriteReportTransform? writeReportTransform = null)
         {
             return CreateWindowsHidDeviceFactory(
                 new ReadOnlyCollection<FilterDeviceDefinition>(new List<FilterDeviceDefinition>()),
@@ -75,16 +75,16 @@ namespace Hid.Net.Windows
         /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
         this FilterDeviceDefinition filterDeviceDefinition,
-        ILoggerFactory loggerFactory = null,
-        IHidApiService hidApiService = null,
+        ILoggerFactory? loggerFactory = null,
+        IHidApiService? hidApiService = null,
         Guid? classGuid = null,
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null,
-        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-        Func<Report, TransferResult> readReportTransform = null,
-        Func<TransferResult, Report> readTransferTransform = null,
-        Func<byte[], byte, byte[]> writeTransferTransform = null,
-        WriteReportTransform writeReportTransform = null)
+        GetConnectedDeviceDefinitionsAsync? getConnectedDeviceDefinitionsAsync = null,
+        Func<Report, TransferResult>? readReportTransform = null,
+        Func<TransferResult, Report>? readTransferTransform = null,
+        Func<byte[], byte, byte[]>? writeTransferTransform = null,
+        WriteReportTransform? writeReportTransform = null)
         {
             return CreateWindowsHidDeviceFactory(
                 new ReadOnlyCollection<FilterDeviceDefinition>(new List<FilterDeviceDefinition> { filterDeviceDefinition }),
@@ -117,16 +117,16 @@ namespace Hid.Net.Windows
         /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
             this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
-            ILoggerFactory loggerFactory = null,
-            IHidApiService hidApiService = null,
+            ILoggerFactory? loggerFactory = null,
+            IHidApiService? hidApiService = null,
             Guid? classGuid = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null,
-            GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-            Func<Report, TransferResult> readReportTransform = null,
-            Func<TransferResult, Report> readTransferTransform = null,
-            Func<byte[], byte, byte[]> writeTransferTransform = null,
-            WriteReportTransform writeReportTransform = null)
+            GetConnectedDeviceDefinitionsAsync? getConnectedDeviceDefinitionsAsync = null,
+            Func<Report, TransferResult>? readReportTransform = null,
+            Func<TransferResult, Report>? readTransferTransform = null,
+            Func<byte[], byte, byte[]>? writeTransferTransform = null,
+            WriteReportTransform? writeReportTransform = null)
         {
             if (filterDeviceDefinitions == null) throw new ArgumentNullException(nameof(filterDeviceDefinitions));
 

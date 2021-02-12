@@ -15,10 +15,10 @@ namespace Usb.Net
     {
         #region Fields
         private bool disposed;
-        private IUsbInterface _ReadUsbInterface;
-        private IUsbInterface _WriteUsbInterface;
-        private IUsbInterface _ReadInterruptUsbInterface;
-        private IUsbInterface _WriteInterruptUsbInterface;
+        private IUsbInterface? _ReadUsbInterface;
+        private IUsbInterface? _WriteUsbInterface;
+        private IUsbInterface? _ReadInterruptUsbInterface;
+        private IUsbInterface? _WriteInterruptUsbInterface;
         #endregion
 
         #region Protected Properties
@@ -27,7 +27,7 @@ namespace Usb.Net
         #endregion
 
         #region Constructor
-        public UsbInterfaceManager(ILoggerFactory loggerFactory = null)
+        public UsbInterfaceManager(ILoggerFactory? loggerFactory = null)
         {
             LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
             Logger = LoggerFactory.CreateLogger<UsbInterfaceManager>();

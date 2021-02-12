@@ -35,8 +35,8 @@ namespace Device.Net
         #endregion
 
         #region Events
-        public event EventHandler<DeviceEventArgs> DeviceInitialized;
-        public event EventHandler<DeviceEventArgs> DeviceDisconnected;
+        public event EventHandler<DeviceEventArgs>? DeviceInitialized;
+        public event EventHandler<DeviceEventArgs>? DeviceDisconnected;
         #endregion
 
         #region Constructor

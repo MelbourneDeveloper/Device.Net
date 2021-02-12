@@ -18,7 +18,7 @@ namespace Device.Net.Windows
         #endregion
 
         #region Constructor
-        public ApiService(ILogger logger = null) => Logger = logger ?? NullLogger.Instance;
+        public ApiService(ILogger? logger = null) => Logger = logger ?? NullLogger.Instance;
         #endregion
 
         #region Implementation

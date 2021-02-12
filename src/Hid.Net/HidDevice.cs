@@ -26,9 +26,9 @@ namespace Hid.Net
 
         public HidDevice(
             IHidDeviceHandler hidDeviceHandler,
-            ILoggerFactory loggerFactory = null,
-            Func<Report, TransferResult> readReportTransform = null,
-            WriteReportTransform writeReportTransform = null
+            ILoggerFactory? loggerFactory = null,
+            Func<Report, TransferResult>? readReportTransform = null,
+            WriteReportTransform? writeReportTransform = null
             ) :
             base(
                 hidDeviceHandler != null ? hidDeviceHandler.DeviceId : throw new ArgumentNullException(nameof(hidDeviceHandler)),

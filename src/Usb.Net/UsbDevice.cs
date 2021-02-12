@@ -34,7 +34,7 @@ namespace Usb.Net
         public UsbDevice(
             string deviceId,
             IUsbInterfaceManager usbInterfaceManager,
-            ILoggerFactory loggerFactory = null) : base(
+            ILoggerFactory? loggerFactory = null) : base(
                 deviceId,
                 loggerFactory,
                 (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<UsbDevice>()) => UsbInterfaceManager = usbInterfaceManager ?? throw new ArgumentNullException(nameof(usbInterfaceManager));

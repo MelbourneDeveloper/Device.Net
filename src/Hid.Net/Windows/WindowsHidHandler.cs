@@ -20,10 +20,10 @@ namespace Hid.Net.Windows
         private readonly ILogger _logger;
         private readonly Func<TransferResult, Report> _readTransferTransform;
         private readonly Func<byte[], byte, byte[]> _writeTransferTransform;
-        private Stream _readFileStream;
-        private SafeFileHandle _readSafeFileHandle;
-        private Stream _writeFileStream;
-        private SafeFileHandle _writeSafeFileHandle;
+        private Stream? _readFileStream;
+        private SafeFileHandle? _readSafeFileHandle;
+        private Stream? _writeFileStream;
+        private SafeFileHandle? _writeSafeFileHandle;
 
         #endregion Private Fields
 
@@ -33,10 +33,10 @@ namespace Hid.Net.Windows
             string deviceId,
             ushort? writeBufferSize = null,
             ushort? readBufferSize = null,
-            IHidApiService hidApiService = null,
-            ILoggerFactory loggerFactory = null,
-            Func<TransferResult, Report> readTransferTransform = null,
-            Func<byte[], byte, byte[]> writeTransferTransform = null)
+            IHidApiService? hidApiService = null,
+            ILoggerFactory? loggerFactory = null,
+            Func<TransferResult, Report>? readTransferTransform = null,
+            Func<byte[], byte, byte[]>? writeTransferTransform = null)
         {
             _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidHandler>();
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));

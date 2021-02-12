@@ -28,8 +28,8 @@ namespace Device.Net
         #region Constructor
         protected DeviceBase(
             string deviceId,
-            ILoggerFactory loggerFactory = null,
-            ILogger logger = null)
+            ILoggerFactory? loggerFactory = null,
+            ILogger? logger = null)
         {
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
             Logger = logger ?? NullLogger.Instance;
