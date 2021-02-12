@@ -45,16 +45,14 @@ namespace Device.Net
         /// </summary>
         public DeviceListener(
             IDeviceFactory deviceFactory,
-            int? pollMilliseconds,
-            ILoggerFactory loggerFactory)
+            int? pollMilliseconds = 1000,
+            ILoggerFactory? loggerFactory = null)
         {
             _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<DeviceListener>();
 
             DeviceFactory = deviceFactory ?? throw new ArgumentNullException(nameof(deviceFactory));
 
-            if (!pollMilliseconds.HasValue) return;
-
-            _PollTimer = new timer(pollMilliseconds.Value);
+            _PollTimer = new timer(pollMilliseconds ?? 1000);
             _PollTimer.Elapsed += PollTimer_Elapsed;
         }
         #endregion
@@ -96,7 +94,7 @@ namespace Device.Net
                 {
                     //TODO: What to do if there are multiple?
 
-                    IDevice device = null;
+                    IDevice? device = null;
                     if (_CreatedDevicesByDefinition.ContainsKey(connectedDeviceDefinition.DeviceId))
                     {
                         device = _CreatedDevicesByDefinition[connectedDeviceDefinition.DeviceId];

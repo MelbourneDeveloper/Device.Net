@@ -5,14 +5,14 @@ namespace Microsoft.Extensions.Logging
 {
     public readonly struct EventId
     {
-        public EventId(int id, string name = null)
+        public EventId(int id, string? name = null)
         {
             Id = id;
             Name = name;
         }
 
         public int Id { get; }
-        public string Name { get; }
+        public string? Name { get; }
     }
 }
 

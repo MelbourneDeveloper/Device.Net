@@ -16,16 +16,16 @@ namespace Device.Net.Windows
         private const string VendorFilterName = "System.DeviceInterface.WinUsb.UsbVendorId";
         private const string ProductFilterName = "System.DeviceInterface.WinUsb.UsbProductId";
 
-        private static string GetVendorPart(uint? vendorId, DeviceType deviceType)
+        private static string? GetVendorPart(uint? vendorId, DeviceType deviceType)
         {
-            string vendorPart = null;
+            string? vendorPart = null;
             if (vendorId.HasValue) vendorPart = $"{ (deviceType == DeviceType.Hid ? HidVendorFilterName : VendorFilterName)}:={vendorId.Value}";
             return vendorPart;
         }
 
-        private static string GetProductPart(uint? productId, DeviceType deviceType)
+        private static string? GetProductPart(uint? productId, DeviceType deviceType)
         {
-            string productPart = null;
+            string? productPart = null;
             if (productId.HasValue) productPart = $"{(deviceType == DeviceType.Hid ? HidProductFilterName : ProductFilterName) }:={productId.Value}";
             return productPart;
         }

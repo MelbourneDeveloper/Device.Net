@@ -26,7 +26,7 @@ namespace Device.Net
         #region Constructor
         public AggregateDeviceFactory(
             IReadOnlyCollection<IDeviceFactory> deviceFactories,
-            ILoggerFactory loggerFactory = null)
+            ILoggerFactory? loggerFactory = null)
         {
             _loggerFactory = loggerFactory ?? new NullLoggerFactory();
             _logger = _loggerFactory.CreateLogger<AggregateDeviceFactory>();

@@ -16,12 +16,12 @@ namespace Device.Net
         /// <param name="deviceFactories"></param>
         /// <param name="loggerFactory"></param>
         /// <returns></returns>
-        public static IDeviceFactory Aggregate(this IList<IDeviceFactory> deviceFactories, ILoggerFactory loggerFactory = null)
+        public static IDeviceFactory Aggregate(this IList<IDeviceFactory> deviceFactories, ILoggerFactory? loggerFactory = null)
             => deviceFactories == null ? throw new ArgumentNullException(nameof(deviceFactories)) :
             new AggregateDeviceFactory(new ReadOnlyCollection<IDeviceFactory>(deviceFactories), loggerFactory);
 
 
-        public static IDeviceFactory Aggregate(this IDeviceFactory deviceFactory, IDeviceFactory newDeviceFactory, ILoggerFactory loggerFactory = null)
+        public static IDeviceFactory Aggregate(this IDeviceFactory deviceFactory, IDeviceFactory newDeviceFactory, ILoggerFactory? loggerFactory = null)
             => deviceFactory == null ? throw new ArgumentNullException(nameof(deviceFactory)) :
             new AggregateDeviceFactory(
                 new ReadOnlyCollection<IDeviceFactory>(

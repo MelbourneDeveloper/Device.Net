@@ -129,7 +129,7 @@ namespace Device.Net
             if (deviceId == null) throw new ArgumentNullException(nameof(deviceId));
 
             var indexOfSearchString = deviceId.IndexOf(searchString, StringComparison.OrdinalIgnoreCase);
-            string hexString = null;
+            string? hexString = null;
             if (indexOfSearchString > -1)
             {
                 hexString = deviceId.Substring(indexOfSearchString + searchString.Length, 4);
