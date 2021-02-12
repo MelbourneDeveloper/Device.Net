@@ -27,7 +27,7 @@ namespace Device.Net.LibUsb
             byte interfaceId,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null,
-            ILogger logger = null,
+            ILogger? logger = null,
             int timeout = 1000,
             Func<LibUsbDotNet.UsbDevice, SetupPacket, byte[], int?, Task<TransferResult>> performControlTransferAsync = null)
             : base(
@@ -91,7 +91,11 @@ namespace Device.Net.LibUsb
         #endregion
 
         #region Private Methods
-        private static Task<TransferResult> PerformControlTransferLibUsbAsync(LibUsbDotNet.UsbDevice usbDevice, SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default) =>
+        private static Task<TransferResult> PerformControlTransferLibUsbAsync(
+            LibUsbDotNet.UsbDevice usbDevice,
+            SetupPacket setupPacket,
+            byte[]? buffer = null,
+            CancellationToken cancellationToken = default) =>
             Task.Run(() =>
             {
                 if (setupPacket == null) throw new ArgumentNullException(nameof(setupPacket));

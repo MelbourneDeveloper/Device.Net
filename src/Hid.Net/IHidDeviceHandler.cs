@@ -6,7 +6,7 @@ namespace Hid.Net
 {
     public interface IHidDeviceHandler
     {
-        ConnectedDeviceDefinition ConnectedDeviceDefinition { get; }
+        ConnectedDeviceDefinition? ConnectedDeviceDefinition { get; }
         bool? IsReadOnly { get; }
         ushort? ReadBufferSize { get; }
         ushort? WriteBufferSize { get; }

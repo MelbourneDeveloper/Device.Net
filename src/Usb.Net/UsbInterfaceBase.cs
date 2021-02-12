@@ -174,7 +174,7 @@ namespace Usb.Net
         #region Constructor
         protected UsbInterfaceBase(
             PerformControlTransferAsync performControlTransferAsync,
-            ILogger logger = null,
+            ILogger? logger = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null)
         {

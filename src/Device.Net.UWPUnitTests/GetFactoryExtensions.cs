@@ -30,8 +30,8 @@ namespace Device.Net.UnitTests
         public static IDeviceFactory GetHidDeviceFactory(
             this FilterDeviceDefinition filterDeviceDefinition,
             ILoggerFactory loggerFactory,
-            Func<Report, TransferResult> readReportTransform = null,
-            WriteReportTransform writeReportTransform = null)
+            Func<Report, TransferResult>? readReportTransform = null,
+            WriteReportTransform? writeReportTransform = null)
             => filterDeviceDefinition.CreateUwpHidDeviceFactory(
                 loggerFactory,
                 readReportTransform: readReportTransform,
