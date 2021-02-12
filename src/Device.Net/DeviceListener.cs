@@ -117,17 +117,17 @@ namespace Device.Net
                     else
                     {
                         if (device.IsInitialized) continue;
+
+                        _logger.LogDebug("Attempting to initialize with DeviceId of {deviceId}", device.DeviceId);
+
+                        //The device is not initialized so initialize it
+                        await device.InitializeAsync(cancellationToken).ConfigureAwait(false);
+
+                        //Let listeners know a registered device was initialized
+                        DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
+
+                        _logger.LogDebug(Messages.InformationMessageDeviceConnected, device.DeviceId);
                     }
-
-                    _logger.LogDebug("Attempting to initialize with DeviceId of {deviceId}", device.DeviceId);
-
-                    //The device is not initialized so initialize it
-                    await device.InitializeAsync(cancellationToken).ConfigureAwait(false);
-
-                    //Let listeners know a registered device was initialized
-                    DeviceInitialized?.Invoke(this, new DeviceEventArgs(device));
-
-                    _logger.LogDebug(Messages.InformationMessageDeviceConnected, device.DeviceId);
                 }
 
                 var removeDeviceIds = new List<string>();

@@ -57,10 +57,16 @@ namespace Device.Net
             return returnValue;
         }
 
-        public static async Task<IDevice> GetFirstDeviceAsync(this IDeviceFactory deviceFactory)
-            => deviceFactory != null ?
-            await deviceFactory.GetDeviceAsync(await (await deviceFactory.GetConnectedDeviceDefinitionsAsync().ConfigureAwait(false)).FirstOrDefaultAsync().ConfigureAwait(false)).ConfigureAwait(false)
-            : throw new ArgumentNullException(nameof(deviceFactory));
+        public static async Task<IDevice?> GetFirstDeviceAsync(this IDeviceFactory deviceFactory)
+        {
+            if (deviceFactory == null) throw new ArgumentNullException(nameof(deviceFactory));
+
+            var enumerable = await deviceFactory.GetConnectedDeviceDefinitionsAsync().ConfigureAwait(false);
+
+            var connectedDeviceDefinition = await enumerable.FirstOrDefaultAsync().ConfigureAwait(false);
+
+            return connectedDeviceDefinition == null ? null : await deviceFactory.GetDeviceAsync(connectedDeviceDefinition).ConfigureAwait(false);
+        }
 
         public static async Task<IDevice> ConnectFirstAsync(this IDeviceFactory deviceFactory, ILogger? logger = null)
         {
