@@ -12,6 +12,8 @@ using Windows.Foundation;
 using Windows.Storage;
 using hidDevice = Windows.Devices.HumanInterfaceDevice.HidDevice;
 
+#nullable enable
+
 namespace Hid.Net.UWP
 {
     ///<inheritdoc cref="IHidDevice"/>
@@ -33,11 +35,11 @@ namespace Hid.Net.UWP
         public UwpHidDeviceHandler(
                     ConnectedDeviceDefinition connectedDeviceDefinition,
                     IDataReceiver dataReceiver,
-                    ILoggerFactory loggerFactory = null,
+                    ILoggerFactory? loggerFactory = null,
                     ushort? writeBufferSize = null,
                     ushort? readBufferSize = null,
-                    Func<TransferResult, Report> readTransferTransform = null,
-                    Func<byte[], byte, byte[]> writeTransferTransform = null
+                    Func<TransferResult, Report>? readTransferTransform = null,
+                    Func<byte[], byte, byte[]>? writeTransferTransform = null
             ) : base(connectedDeviceDefinition.DeviceId, dataReceiver, loggerFactory)
         {
             ConnectedDeviceDefinition = connectedDeviceDefinition ?? throw new ArgumentNullException(nameof(connectedDeviceDefinition));
@@ -86,7 +88,11 @@ namespace Hid.Net.UWP
 
             DataReceiver.Dispose();
             _WriteAndReadLock.Dispose();
-            ConnectedDevice.InputReportReceived -= ConnectedDevice_InputReportReceived;
+
+            if (ConnectedDevice != null)
+            {
+                ConnectedDevice.InputReportReceived -= ConnectedDevice_InputReportReceived;
+            }
 
             base.Dispose();
         }

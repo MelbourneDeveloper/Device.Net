@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 
+#nullable enable
+
 namespace Usb.Net.Android
 {
     public class AndroidUsbEndpoint : IUsbInterfaceEndpoint
@@ -17,7 +19,7 @@ namespace Usb.Net.Android
         public ushort MaxPacketSize => (ushort)UsbEndpoint.MaxPacketSize;
         public int InterfaceNumber { get; }
 
-        public AndroidUsbEndpoint(UsbEndpoint usbEndpoint, int interfaceNumber, ILogger logger = null)
+        public AndroidUsbEndpoint(UsbEndpoint usbEndpoint, int interfaceNumber, ILogger? logger = null)
         {
             _logger = logger ?? NullLogger.Instance;
             UsbEndpoint = usbEndpoint ?? throw new ArgumentNullException(nameof(usbEndpoint));
