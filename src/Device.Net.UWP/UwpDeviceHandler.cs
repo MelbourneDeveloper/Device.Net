@@ -5,6 +5,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 
+#nullable enable
+
 namespace Device.Net.UWP
 {
     public abstract class UwpDeviceHandler<T>
@@ -16,8 +18,8 @@ namespace Device.Net.UWP
 
         #region Protected Properties
         protected readonly IDataReceiver DataReceiver;
-        protected T ConnectedDevice { get; private set; }
-        public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; protected set; }
+        protected T? ConnectedDevice { get; private set; }
+        public ConnectedDeviceDefinition? ConnectedDeviceDefinition { get; protected set; }
         protected ILoggerFactory LoggerFactory { get; private set; }
         protected ILogger<UwpDeviceHandler<T>> Logger { get; }
         #endregion
@@ -30,7 +32,7 @@ namespace Device.Net.UWP
         protected UwpDeviceHandler(
             string deviceId,
             IDataReceiver dataReceiver,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory? loggerFactory)
         {
             DeviceId = deviceId;
             LoggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
