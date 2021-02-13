@@ -72,7 +72,7 @@ namespace Usb.Net.Windows
         #endregion
 
         #region internal Methods
-        internal static string GetDescriptor(SafeFileHandle defaultInterfaceHandle, byte index, string errorMessage, ILogger logger)
+        internal static string? GetDescriptor(SafeFileHandle defaultInterfaceHandle, byte index, string errorMessage, ILogger logger)
         {
             logger ??= NullLogger.Instance;
 

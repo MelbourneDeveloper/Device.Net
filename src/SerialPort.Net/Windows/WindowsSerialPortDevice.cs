@@ -17,7 +17,7 @@ namespace SerialPort.Net.Windows
         private readonly byte _ByteSize;
         private bool disposed;
         private readonly Parity _Parity;
-        private SafeFileHandle _ReadSafeFileHandle;
+        private SafeFileHandle? _ReadSafeFileHandle;
         private readonly StopBits _StopBits;
         private ushort ReadBufferSize { get; }
         #endregion
@@ -39,8 +39,8 @@ namespace SerialPort.Net.Windows
             Parity parity = Parity.None,
             byte byteSize = 8,
             ushort readBufferSize = 1024,
-            ILoggerFactory loggerFactory = null,
-            IApiService apiService = null) : base(
+            ILoggerFactory? loggerFactory = null,
+            IApiService? apiService = null) : base(
                 deviceId,
                 loggerFactory,
                 (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsSerialPortDevice>())
@@ -72,7 +72,11 @@ namespace SerialPort.Net.Windows
         #region Public Methods
         public Task InitializeAsync(CancellationToken cancellationToken = default) => Task.Run(Initialize, cancellationToken);
 
-        private uint Write(byte[] data) => data == null ? 0 : ApiService.AWriteFile(_ReadSafeFileHandle, data, data.Length, out var bytesWritten, 0) ? (uint)bytesWritten : 0;
+        private static SafeFileHandle GetSafeSafeFileHandle(SafeFileHandle? safeFileHandle)
+            => safeFileHandle != null ? safeFileHandle :
+            throw new InvalidOperationException(Messages.ErrorMessageNotInitialized);
+
+        private uint Write(byte[] data) => data == null ? 0 : ApiService.AWriteFile(GetSafeSafeFileHandle(_ReadSafeFileHandle), data, data.Length, out var bytesWritten, 0) ? (uint)bytesWritten : 0;
 
         public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
@@ -100,12 +104,11 @@ namespace SerialPort.Net.Windows
         }
 
         public override Task Flush(CancellationToken cancellationToken = default)
-        {
-            ValidateConnection();
-
-            return Task.Run(() => ApiService.APurgeComm(_ReadSafeFileHandle, APICalls.PURGE_RXCLEAR | APICalls.PURGE_TXCLEAR),
+        => Task.Run(() =>
+        ApiService.APurgeComm(
+            GetSafeSafeFileHandle(_ReadSafeFileHandle),
+            APICalls.PURGE_RXCLEAR | APICalls.PURGE_TXCLEAR),
                 cancellationToken);
-        }
 
         public override void Dispose()
         {
@@ -193,6 +196,7 @@ namespace SerialPort.Net.Windows
 
         private uint Read(byte[] data)
         =>
+            _ReadSafeFileHandle == null ? throw new InvalidOperationException(Messages.ErrorMessageNotInitialized) :
              ApiService.AReadFile(_ReadSafeFileHandle, data, data.Length, out var bytesRead, 0)
                 ? bytesRead
                 : throw new IOException(Messages.ErrorMessageRead);

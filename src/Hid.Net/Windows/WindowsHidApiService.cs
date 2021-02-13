@@ -90,11 +90,11 @@ namespace Hid.Net.Windows
                 classGuid: GetHidGuid());
         }
 
-        public string GetManufacturer(SafeFileHandle safeFileHandle) => GetHidString(safeFileHandle, HidD_GetManufacturerString, Logger);
+        public string? GetManufacturer(SafeFileHandle safeFileHandle) => GetHidString(safeFileHandle, HidD_GetManufacturerString, Logger);
 
-        public string GetProduct(SafeFileHandle safeFileHandle) => GetHidString(safeFileHandle, HidD_GetProductString, Logger);
+        public string? GetProduct(SafeFileHandle safeFileHandle) => GetHidString(safeFileHandle, HidD_GetProductString, Logger);
 
-        public string GetSerialNumber(SafeFileHandle safeFileHandle) => GetHidString(safeFileHandle, HidD_GetSerialNumberString, Logger);
+        public string? GetSerialNumber(SafeFileHandle safeFileHandle) => GetHidString(safeFileHandle, HidD_GetSerialNumberString, Logger);
 
         public HidAttributes GetHidAttributes(SafeFileHandle safeFileHandle)
         {
@@ -143,7 +143,7 @@ namespace Hid.Net.Windows
         #endregion
 
         #region Private Methods
-        private static string GetHidString(SafeFileHandle safeFileHandle, GetString getString, ILogger logger, [CallerMemberName] string callMemberName = null)
+        private static string? GetHidString(SafeFileHandle safeFileHandle, GetString getString, ILogger logger, [CallerMemberName] string callMemberName = null)
         {
             try
             {

@@ -48,7 +48,7 @@ namespace Hid.Net
 
         #region Public Properties
 
-        public ConnectedDeviceDefinition ConnectedDeviceDefinition => _hidDeviceHandler.ConnectedDeviceDefinition;
+        public ConnectedDeviceDefinition? ConnectedDeviceDefinition => _hidDeviceHandler.ConnectedDeviceDefinition;
         public bool IsInitialized => _hidDeviceHandler.IsInitialized;
         public bool? IsReadOnly => _hidDeviceHandler.IsReadOnly;
         public ushort ReadBufferSize => _hidDeviceHandler.ReadBufferSize ?? throw new InvalidOperationException("Read buffer size unknown");

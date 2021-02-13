@@ -14,7 +14,7 @@ namespace Usb.Net.Windows
     {
         #region Fields
         private bool disposed;
-        private SafeFileHandle _DeviceHandle;
+        private SafeFileHandle? _DeviceHandle;
         protected ushort? ReadBufferSizeProtected { get; set; }
         protected ushort? WriteBufferSizeProtected { get; set; }
         #endregion
@@ -31,7 +31,7 @@ namespace Usb.Net.Windows
         #region Constructor
         public WindowsUsbInterfaceManager(
             string deviceId,
-            ILoggerFactory loggerFactory = null,
+            ILoggerFactory? loggerFactory = null,
             ushort? readBufferLength = null,
             ushort? writeBufferLength = null) : base(loggerFactory)
         {
@@ -170,15 +170,17 @@ namespace Usb.Net.Windows
 
         private static ConnectedDeviceDefinition GetDeviceDefinition(SafeFileHandle defaultInterfaceHandle, string deviceId, ILogger logger)
         {
+            if (defaultInterfaceHandle.IsInvalid) throw new InvalidOperationException("Interface handle invalid");
+
             var bufferLength = (uint)Marshal.SizeOf(typeof(USB_DEVICE_DESCRIPTOR));
 #pragma warning disable IDE0059 // Unnecessary assignment of a value
             var isSuccess2 = WinUsbApiCalls.WinUsb_GetDescriptor(defaultInterfaceHandle, WinUsbApiCalls.DEFAULT_DESCRIPTOR_TYPE, 0, WinUsbApiCalls.EnglishLanguageID, out var _UsbDeviceDescriptor, bufferLength, out var lengthTransferred);
 #pragma warning restore IDE0059 // Unnecessary assignment of a value
             _ = WindowsHelpers.HandleError(isSuccess2, "Couldn't get device descriptor", logger);
 
-            string productName = null;
-            string serialNumber = null;
-            string manufacturer = null;
+            string? productName = null;
+            string? serialNumber = null;
+            string? manufacturer = null;
 
             if (_UsbDeviceDescriptor.iProduct > 0)
             {

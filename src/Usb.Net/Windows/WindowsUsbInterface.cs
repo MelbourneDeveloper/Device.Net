@@ -28,10 +28,10 @@ namespace Usb.Net.Windows
         public WindowsUsbInterface(
             SafeFileHandle handle,
             byte interfaceNumber,
-            ILogger logger = null,
+            ILogger? logger = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSzie = null,
-            Func<SafeFileHandle, SetupPacket, byte[], CancellationToken, Task<TransferResult>> performControlTransferAsync = null) :
+            Func<SafeFileHandle, SetupPacket, byte[], CancellationToken, Task<TransferResult>>? performControlTransferAsync = null) :
             base(
                   performControlTransferAsync != null ?
                   //A func was passed in
@@ -95,10 +95,13 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Private Methods
-        private static Task<TransferResult> PerformControlTransferWindowsAsync(SafeFileHandle safeFileHandle, SetupPacket setupPacket, byte[] buffer, ILogger logger, CancellationToken cancellationToken = default) =>
+        private static Task<TransferResult> PerformControlTransferWindowsAsync(SafeFileHandle safeFileHandle, SetupPacket setupPacket, byte[]? buffer, ILogger logger, CancellationToken cancellationToken = default) =>
             Task.Run(() =>
             {
                 uint bytesTransferred = 0;
+
+                //This is just because the API call requires this
+                buffer ??= new byte[0];
 
                 var isSuccess = WinUsbApiCalls.WinUsb_ControlTransfer(safeFileHandle.DangerousGetHandle(),
                     setupPacket.ToWindowsSetupPacket(),

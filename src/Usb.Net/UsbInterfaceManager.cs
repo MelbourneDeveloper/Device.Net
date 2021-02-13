@@ -58,7 +58,7 @@ namespace Usb.Net
 
         #region Public Properties        
         public IList<IUsbInterface> UsbInterfaces { get; } = new List<IUsbInterface>();
-        public IUsbInterface ReadUsbInterface
+        public IUsbInterface? ReadUsbInterface
         {
             get => _ReadUsbInterface;
             set
@@ -68,7 +68,7 @@ namespace Usb.Net
             }
         }
 
-        public IUsbInterface WriteUsbInterface
+        public IUsbInterface? WriteUsbInterface
         {
             get => _WriteUsbInterface;
             set
@@ -78,7 +78,7 @@ namespace Usb.Net
             }
         }
 
-        public IUsbInterface ReadInterruptUsbInterface
+        public IUsbInterface? ReadInterruptUsbInterface
         {
             get => _ReadInterruptUsbInterface;
             set
@@ -88,7 +88,7 @@ namespace Usb.Net
             }
         }
 
-        public IUsbInterface WriteInterruptUsbInterface
+        public IUsbInterface? WriteInterruptUsbInterface
         {
             get => _WriteInterruptUsbInterface;
             set

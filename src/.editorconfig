@@ -313,9 +313,6 @@ dotnet_diagnostic.CA1823.severity = error
 # CA1824: Mark assemblies with NeutralResourcesLanguageAttribute
 dotnet_diagnostic.CA1824.severity = error
 
-# CA1825: Avoid zero-length array allocations
-dotnet_diagnostic.CA1825.severity = error
-
 # CA1826: Do not use Enumerable methods on indexable collections
 dotnet_diagnostic.CA1826.severity = error
 
@@ -776,3 +773,6 @@ dotnet_diagnostic.CA1816.severity = warning
 
 # CA1063: Implement IDisposable Correctly
 dotnet_diagnostic.CA1063.severity = warning
+
+# CA1825: Avoid zero-length array allocations
+dotnet_diagnostic.CA1825.severity = warning

@@ -29,7 +29,7 @@ namespace Device.Net
         /// <param name="supportsDevice">A delegate that returns whether or not this factory supports the connected device</param>
         public DeviceFactory(
 
-            ILoggerFactory loggerFactory,
+            ILoggerFactory? loggerFactory,
             GetConnectedDeviceDefinitionsAsync getConnectedDevicesAsync,
             GetDeviceAsync getDevice,
             Func<ConnectedDeviceDefinition, CancellationToken, Task<bool>> supportsDevice

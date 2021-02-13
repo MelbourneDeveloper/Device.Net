@@ -172,7 +172,7 @@ namespace Hid.Net.Windows
 
         #region Private Methods
 
-        private static ConnectedDeviceDefinition GetDeviceDefinition(string deviceId, IHidApiService HidService, ILogger logger)
+        private static ConnectedDeviceDefinition? GetDeviceDefinition(string deviceId, IHidApiService HidService, ILogger logger)
         {
             logger ??= NullLogger.Instance;
 

@@ -13,7 +13,7 @@ namespace Usb.Net
         public static IDeviceFactory CreateUsbDeviceFactory(
         GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync,
         GetUsbInterfaceManager getUsbInterfaceManager,
-        ILoggerFactory loggerFactory = null,
+        ILoggerFactory? loggerFactory = null,
         Guid? classGuid = null)
         =>
             new DeviceFactory(

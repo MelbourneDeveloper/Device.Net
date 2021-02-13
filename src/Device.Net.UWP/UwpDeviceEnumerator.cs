@@ -28,7 +28,7 @@ namespace Device.Net.UWP
             string aqf,
             DeviceType deviceType,
             TestConnection testConnection,
-            ILoggerFactory loggerFactory = null,
+            ILoggerFactory? loggerFactory = null,
             Func<wde.DeviceInformation, bool> idFilter = null
             )
         {

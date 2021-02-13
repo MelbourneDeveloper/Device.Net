@@ -13,7 +13,7 @@ namespace Device.Net.UWP
         private readonly Queue<TransferResult> _readQueue = new Queue<TransferResult>();
         private readonly SemaphoreSlim _readLock = new SemaphoreSlim(1, 1);
         private bool disposed;
-        private TaskCompletionSource<TransferResult> _readChunkTaskCompletionSource;
+        private TaskCompletionSource<TransferResult>? _readChunkTaskCompletionSource;
         private readonly ILogger _logger;
         private readonly IDisposable _dataReceivedSubscription;
         private readonly IObserver<TransferResult> _dataReceived;
@@ -26,7 +26,7 @@ namespace Device.Net.UWP
         #region Constructor
         public UwpDataReceiver(
             IObservable<TransferResult> dataRecievedObservable,
-            ILogger logger = null)
+            ILogger? logger = null)
         {
             _logger = logger ?? NullLogger.Instance;
             _dataReceived = new Observer<TransferResult>(DataReceived);

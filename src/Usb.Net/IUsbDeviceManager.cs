@@ -14,11 +14,11 @@ namespace Usb.Net
         /// <summary>
         /// Usb interface for reading from the device. Note: this will default to the first read Bulk interface. If this is incorrect, inspect the UsbInterfaces property.
         /// </summary>
-        IUsbInterface ReadUsbInterface { get; set; }
+        IUsbInterface? ReadUsbInterface { get; set; }
         /// <summary>
         /// Usb interface for writing to the device. Note: this will default to the first write Bulk interface. If this is incorrect, inspect the UsbInterfaces property.
         /// </summary>
-        IUsbInterface WriteUsbInterface { get; set; }
+        IUsbInterface? WriteUsbInterface { get; set; }
 
         //TODO: This should be a read only collection
         IList<IUsbInterface> UsbInterfaces { get; }

@@ -27,7 +27,7 @@ namespace SerialPort.Net.Windows
         #endregion
 
         #region Constructor
-        public WindowsSerialPortDeviceFactory(ILoggerFactory loggerFactory = null)
+        public WindowsSerialPortDeviceFactory(ILoggerFactory? loggerFactory = null)
         {
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;
 

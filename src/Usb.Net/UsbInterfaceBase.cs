@@ -17,10 +17,10 @@ namespace Usb.Net
     {
         #region Fields
         private readonly PerformControlTransferAsync _performControlTransferAsync;
-        private IUsbInterfaceEndpoint _ReadEndpoint;
-        private IUsbInterfaceEndpoint _WriteEndpoint;
-        private IUsbInterfaceEndpoint _WriteInterruptEndpoint;
-        private IUsbInterfaceEndpoint _ReadInterruptEndpoint;
+        private IUsbInterfaceEndpoint? _ReadEndpoint;
+        private IUsbInterfaceEndpoint? _WriteEndpoint;
+        private IUsbInterfaceEndpoint? _WriteInterruptEndpoint;
+        private IUsbInterfaceEndpoint? _ReadInterruptEndpoint;
         private readonly ushort? _ReadBufferSize;
         private readonly ushort? _WriteBufferSize;
         public abstract byte InterfaceNumber { get; }

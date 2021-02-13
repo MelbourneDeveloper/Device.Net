@@ -57,7 +57,7 @@ namespace Hid.Net.Windows
 
         #region Public Properties
 
-        public ConnectedDeviceDefinition ConnectedDeviceDefinition { get; private set; }
+        public ConnectedDeviceDefinition? ConnectedDeviceDefinition { get; private set; }
         public string DeviceId { get; }
         public bool IsInitialized { get; private set; }
         public bool? IsReadOnly { get; private set; }
