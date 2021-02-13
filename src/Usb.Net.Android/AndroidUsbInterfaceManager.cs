@@ -49,7 +49,7 @@ namespace Usb.Net.Android
             int deviceNumberId,
             IAndroidFactory androidFactory,
             Func<usbDevice, IUsbPermissionBroadcastReceiver> usbPermissionBroadcastReceiver,
-            ILoggerFactory loggerFactory = null,
+            ILoggerFactory? loggerFactory = null,
             ushort? readBufferLength = null,
             ushort? writeBufferLength = null) : base(loggerFactory)
         {

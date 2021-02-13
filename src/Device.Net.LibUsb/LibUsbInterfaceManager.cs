@@ -26,8 +26,8 @@ namespace Device.Net.LibUsb
         public int ProductId => GetProductId(UsbDevice);
         public int Timeout { get; }
         public bool IsInitialized { get; private set; }
-        public ushort WriteBufferSize => WriteUsbInterface.WriteEndpoint.MaxPacketSize;
-        public ushort ReadBufferSize => ReadUsbInterface.ReadEndpoint.MaxPacketSize;
+        public ushort WriteBufferSize => WriteUsbInterface.NullCheck(Messages.ErrorMessageNotInitialized).WriteEndpoint.MaxPacketSize;
+        public ushort ReadBufferSize => ReadUsbInterface.NullCheck(Messages.ErrorMessageNotInitialized).ReadEndpoint.MaxPacketSize;
         #endregion
 
         #region Constructor
@@ -170,7 +170,10 @@ namespace Device.Net.LibUsb
 
             try
             {
-                return await ReadUsbInterface.ReadAsync(ReadBufferSize).ConfigureAwait(false);
+                return await ReadUsbInterface
+                    .NullCheck(Messages.ErrorMessageNotInitialized)
+                    .ReadAsync(ReadBufferSize)
+                    .ConfigureAwait(false);
             }
             finally
             {
@@ -184,7 +187,10 @@ namespace Device.Net.LibUsb
 
             try
             {
-                _ = await WriteUsbInterface.WriteAsync(data).ConfigureAwait(false);
+                _ = await WriteUsbInterface
+                    .NullCheck(Messages.ErrorMessageNotInitialized)
+                    .WriteAsync(data)
+                    .ConfigureAwait(false);
             }
             finally
             {

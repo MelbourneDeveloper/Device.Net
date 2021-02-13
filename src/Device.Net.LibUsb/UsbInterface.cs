@@ -29,7 +29,7 @@ namespace Device.Net.LibUsb
             ushort? writeBufferSize = null,
             ILogger? logger = null,
             int timeout = 1000,
-            Func<LibUsbDotNet.UsbDevice, SetupPacket, byte[], int?, Task<TransferResult>> performControlTransferAsync = null)
+            Func<LibUsbDotNet.UsbDevice, SetupPacket, byte[]?, int?, Task<TransferResult>>? performControlTransferAsync = null)
             : base(
                   performControlTransferAsync != null ?
                   //A func was passed in
@@ -58,7 +58,7 @@ namespace Device.Net.LibUsb
 
             Logger.LogInformation(Messages.InformationMessageDisposingDevice, _usbDevice?.DevicePath);
 
-            _ = _usbDevice.Close();
+            _ = _usbDevice?.Close();
         }
 
         public Task<TransferResult> ReadAsync(uint bufferLength, CancellationToken cancellationToken) =>
