@@ -107,7 +107,7 @@ namespace Hid.Net
 
                 await _hidDeviceHandler.InitializeAsync(cancellationToken).ConfigureAwait(false);
 
-                Logger.LogInformation("Initialized\r\n{deviceDefinition}", ConnectedDeviceDefinition);
+                Logger.LogInformation("Initialized\r\n{deviceDefinition}", ConnectedDeviceDefinition.ToStringOrEmpty());
             }
             catch (Exception ex)
             {

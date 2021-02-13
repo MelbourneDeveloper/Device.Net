@@ -29,7 +29,7 @@ namespace Device.Net.UWP
             DeviceType deviceType,
             TestConnection testConnection,
             ILoggerFactory? loggerFactory = null,
-            Func<wde.DeviceInformation, bool> idFilter = null
+            Func<wde.DeviceInformation, bool>? idFilter = null
             )
         {
             _loggerFactory = loggerFactory ?? NullLoggerFactory.Instance;

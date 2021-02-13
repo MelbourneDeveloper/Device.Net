@@ -20,6 +20,7 @@
     <DocumentationFile>Device.Net.UWP.XML</DocumentationFile>
     <DebugType>embedded</DebugType>
     <Nullable>enable</Nullable>
+    <LangVersion>Latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>

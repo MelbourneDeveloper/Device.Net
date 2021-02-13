@@ -31,7 +31,7 @@ namespace Usb.Net.Windows
             ILogger? logger = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSzie = null,
-            Func<SafeFileHandle, SetupPacket, byte[], CancellationToken, Task<TransferResult>>? performControlTransferAsync = null) :
+            Func<SafeFileHandle, SetupPacket, byte[]?, CancellationToken, Task<TransferResult>>? performControlTransferAsync = null) :
             base(
                   performControlTransferAsync != null ?
                   //A func was passed in

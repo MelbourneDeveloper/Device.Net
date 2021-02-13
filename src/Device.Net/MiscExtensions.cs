@@ -26,5 +26,13 @@ namespace Device.Net
             where TException : Exception, new()
             => value ?? throw (Exception)Activator.CreateInstance(typeof(TException), message);
 
+        /// <summary>
+        /// Takes a potentially null value and returns the ToString(). 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <returns>Returns string.Empty if the value is null</returns>
+        public static string ToStringOrEmpty<T>(this T? value) => value?.ToString() ?? string.Empty;
+
     }
 }

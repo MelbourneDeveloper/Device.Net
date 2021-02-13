@@ -46,7 +46,7 @@ namespace Usb.Net
                 _ReadEndpoint = value;
 
 #pragma warning disable CA1062 // Validate arguments of public methods
-                Logger.LogInformation("ReadEndpoint set to pipeid {pipeid}", value?.PipeId);
+                Logger.LogInformation("ReadEndpoint set to pipeid {pipeid}", value.ToStringOrEmpty());
 #pragma warning restore CA1062 // Validate arguments of public methods
 
             }
@@ -60,7 +60,7 @@ namespace Usb.Net
                 if (value != null && !UsbInterfaceEndpoints.Contains(value)) throw new ValidationException(Messages.ErrorMessageInvalidEndpoint);
                 _WriteEndpoint = value;
 #pragma warning disable CA1062 // Validate arguments of public methods
-                Logger.LogInformation("WriteEndpoint set to pipeid {pipeid}", value?.PipeId);
+                Logger.LogInformation("WriteEndpoint set to pipeid {pipeid}", (value?.PipeId).ToStringOrEmpty());
 #pragma warning restore CA1062 // Validate arguments of public methods
             }
         }
@@ -119,7 +119,10 @@ namespace Usb.Net
         {
         }
 
-        public async Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default)
+        public async Task<TransferResult> PerformControlTransferAsync(
+            SetupPacket setupPacket,
+            byte[]? buffer,
+            CancellationToken cancellationToken = default)
         {
             if (setupPacket == null) throw new ArgumentNullException(nameof(setupPacket));
 
