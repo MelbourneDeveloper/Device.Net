@@ -11,6 +11,8 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace Usb.Net.Android
 {
     public static class AndroidUsbFactoryExtensions
@@ -19,13 +21,13 @@ namespace Usb.Net.Android
         this FilterDeviceDefinition filterDeviceDefinition,
         UsbManager usbManager,
         Context context,
-        ILoggerFactory loggerFactory = null,
-        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-        GetUsbInterfaceManager getUsbInterfaceManager = null,
+        ILoggerFactory? loggerFactory = null,
+        GetConnectedDeviceDefinitionsAsync? getConnectedDeviceDefinitionsAsync = null,
+        GetUsbInterfaceManager? getUsbInterfaceManager = null,
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null,
-        IAndroidFactory androidFactory = null,
-        Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver> getUsbPermissionBroadcastReceiver = null
+        IAndroidFactory? androidFactory = null,
+        Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver>? getUsbPermissionBroadcastReceiver = null
         ) =>
             CreateAndroidUsbDeviceFactory(
                 new ReadOnlyCollection<FilterDeviceDefinition>(new List<FilterDeviceDefinition> { filterDeviceDefinition }),
@@ -43,13 +45,13 @@ namespace Usb.Net.Android
         this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
         UsbManager usbManager,
         Context context,
-        ILoggerFactory loggerFactory = null,
-        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
-        GetUsbInterfaceManager getUsbInterfaceManager = null,
+        ILoggerFactory? loggerFactory = null,
+        GetConnectedDeviceDefinitionsAsync? getConnectedDeviceDefinitionsAsync = null,
+        GetUsbInterfaceManager? getUsbInterfaceManager = null,
         ushort? readBufferSize = null,
         ushort? writeBufferSize = null,
-        IAndroidFactory androidFactory = null,
-        Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver> getUsbPermissionBroadcastReceiver = null
+        IAndroidFactory? androidFactory = null,
+        Func<AndroidUsbDevice, IUsbPermissionBroadcastReceiver>? getUsbPermissionBroadcastReceiver = null
         )
         {
             if (usbManager == null) throw new ArgumentNullException(nameof(usbManager));

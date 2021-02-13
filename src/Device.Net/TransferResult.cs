@@ -31,10 +31,10 @@ namespace Device.Net
         #endregion
 
         #region Constructor
-        public TransferResult(byte[] data, uint bytesRead)
+        public TransferResult(byte[] data, uint bytesTransferred)
         {
             Data = data;
-            BytesTransferred = bytesRead;
+            BytesTransferred = bytesTransferred;
         }
         #endregion
 

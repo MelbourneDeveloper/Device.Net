@@ -170,7 +170,7 @@ namespace Hid.Net.Windows
             }
 
             //Read the data
-            var bytes = new byte[ReadBufferSize.Value];
+            var bytes = new byte[ReadBufferSize ?? throw new InvalidOperationException(Messages.ErrorMessageNotInitialized)];
             var bytesRead = (uint)await _readFileStream.ReadAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
 
             var transferResult = new TransferResult(bytes, bytesRead);

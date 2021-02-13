@@ -5,7 +5,7 @@ namespace Device.Net
     internal static class MiscExtensions
     {
         /// <summary>
-        /// Ensures that the value is null
+        /// Ensures that the value is not null
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="value">The value to check for null</param>
@@ -15,7 +15,7 @@ namespace Device.Net
             => NullCheck<T, InvalidOperationException>(value, message);
 
         /// <summary>
-        /// Ensures that the value is null
+        /// Ensures that the value is not null
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="value">The value to check for null</param>
