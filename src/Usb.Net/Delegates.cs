@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace Usb.Net
 {
-    public delegate Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer, CancellationToken cancellationToken = default);
+    public delegate Task<TransferResult> PerformControlTransferAsync(
+        SetupPacket setupPacket,
+        byte[]? buffer,
+        CancellationToken cancellationToken = default);
 
 }

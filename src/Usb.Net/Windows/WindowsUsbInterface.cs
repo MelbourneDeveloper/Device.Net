@@ -95,7 +95,12 @@ namespace Usb.Net.Windows
         #endregion
 
         #region Private Methods
-        private static Task<TransferResult> PerformControlTransferWindowsAsync(SafeFileHandle safeFileHandle, SetupPacket setupPacket, byte[]? buffer, ILogger logger, CancellationToken cancellationToken = default) =>
+        private static Task<TransferResult> PerformControlTransferWindowsAsync(
+            SafeFileHandle safeFileHandle,
+            SetupPacket setupPacket,
+            byte[]? buffer,
+            ILogger logger,
+            CancellationToken cancellationToken = default) =>
             Task.Run(() =>
             {
                 uint bytesTransferred = 0;
