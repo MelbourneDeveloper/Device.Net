@@ -72,11 +72,7 @@ namespace SerialPort.Net.Windows
         #region Public Methods
         public Task InitializeAsync(CancellationToken cancellationToken = default) => Task.Run(Initialize, cancellationToken);
 
-        private static SafeFileHandle GetSafeSafeFileHandle(SafeFileHandle? safeFileHandle)
-            => safeFileHandle != null ? safeFileHandle :
-            throw new InvalidOperationException(Messages.ErrorMessageNotInitialized);
-
-        private uint Write(byte[] data) => data == null ? 0 : ApiService.AWriteFile(GetSafeSafeFileHandle(_ReadSafeFileHandle), data, data.Length, out var bytesWritten, 0) ? (uint)bytesWritten : 0;
+        private uint Write(byte[] data) => data == null ? 0 : ApiService.AWriteFile(NullCheck(_ReadSafeFileHandle, Messages.ErrorMessageNotInitialized), data, data.Length, out var bytesWritten, 0) ? (uint)bytesWritten : 0;
 
         public override Task<uint> WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
@@ -106,7 +102,7 @@ namespace SerialPort.Net.Windows
         public override Task Flush(CancellationToken cancellationToken = default)
         => Task.Run(() =>
         ApiService.APurgeComm(
-            GetSafeSafeFileHandle(_ReadSafeFileHandle),
+            _ReadSafeFileHandle.NullCheck(Messages.ErrorMessageNotInitialized),
             APICalls.PURGE_RXCLEAR | APICalls.PURGE_TXCLEAR),
                 cancellationToken);
 
@@ -210,5 +206,18 @@ namespace SerialPort.Net.Windows
             }
         }
         #endregion
+    }
+
+    public static class Ext
+    {
+        /// <summary>
+        /// Ensures that the value is null
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value">The value to check for null</param>
+        /// <param name="message">The message for the exception when the value is null</param>
+        /// <returns></returns>
+        public static T NullCheck<T>(this T? value, string message)
+            => value ?? throw new InvalidOperationException(message);
     }
 }
