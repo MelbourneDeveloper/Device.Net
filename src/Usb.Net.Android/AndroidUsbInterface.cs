@@ -8,6 +8,8 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace Usb.Net.Android
 {
     internal class AndroidUsbInterface : UsbInterfaceBase, IUsbInterface
@@ -24,11 +26,11 @@ namespace Usb.Net.Android
             UsbInterface usbInterface,
             UsbDeviceConnection usbDeviceConnection,
             IAndroidFactory androidFactory,
-            ILogger logger = null,
+            ILogger? logger = null,
             ushort? readBufferSize = null,
             ushort? writeBufferSize = null,
             int? timeout = null,
-            Func<UsbDeviceConnection, SetupPacket, byte[], int?, Task<TransferResult>> performControlTransferAsync = null)
+            Func<UsbDeviceConnection, SetupPacket, byte[]?, int?, Task<TransferResult>>? performControlTransferAsync = null)
             : base(
                   performControlTransferAsync != null ?
                   //A func was passed in
@@ -155,7 +157,7 @@ namespace Usb.Net.Android
 
             Logger.LogInformation(Messages.InformationMessageDisposingDevice, UsbInterface?.ToString());
 
-            UsbInterface.Dispose();
+            UsbInterface?.Dispose();
             _UsbDeviceConnection.Dispose();
         }
 
@@ -176,7 +178,7 @@ namespace Usb.Net.Android
         private static Task<TransferResult> PerformControlTransferAndroid(
             UsbDeviceConnection usbDeviceConnection,
             SetupPacket setupPacket,
-            byte[] buffer = null,
+            byte[]? buffer = null,
             int? timeout = null,
             CancellationToken cancellationToken = default)
         =>

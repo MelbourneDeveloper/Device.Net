@@ -50,13 +50,13 @@ namespace Device.Net.LibUsb
         {
             if (disposed)
             {
-                Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, _usbDevice?.DevicePath);
+                Logger.LogWarning(Messages.WarningMessageAlreadyDisposed, (_usbDevice?.DevicePath).ToStringOrEmpty());
                 return;
             }
 
             disposed = true;
 
-            Logger.LogInformation(Messages.InformationMessageDisposingDevice, _usbDevice?.DevicePath);
+            Logger.LogInformation(Messages.InformationMessageDisposingDevice, (_usbDevice?.DevicePath).ToStringOrEmpty());
 
             _ = _usbDevice?.Close();
         }
