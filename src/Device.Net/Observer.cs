@@ -19,8 +19,8 @@ namespace Device.Net
             )
         {
             _onNext = onNext;
-            _onError = onError ??= (e) => { };
-            _onCompleted = onCompleted ??= () => { }; ;
+            _onError = onError ?? ((e) => { });
+            _onCompleted = onCompleted ?? (() => { });
         }
 
 
