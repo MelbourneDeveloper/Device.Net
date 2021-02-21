@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;net45;net461</TargetFrameworks>
         <NoWarn>1701;1702;NU5125</NoWarn>
         <DocumentationFile>Usb.Net.xml</DocumentationFile>
         <DebugType>embedded</DebugType>

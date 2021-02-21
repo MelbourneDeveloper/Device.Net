@@ -1,4 +1,4 @@
-﻿#if !WINDOWS_UWP && !NET45
+﻿#if NETCOREAPP3_1
 
 using Java.Nio;
 
