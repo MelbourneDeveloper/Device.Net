@@ -11,6 +11,8 @@ using Windows.Storage.Streams;
 using windowsUsbInterface = Windows.Devices.Usb.UsbInterface;
 using wss = Windows.Storage.Streams;
 
+#nullable enable
+
 namespace Usb.Net.UWP
 {
     public class UwpUsbInterface : UsbInterfaceBase, IUsbInterface

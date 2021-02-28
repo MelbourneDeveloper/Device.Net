@@ -7,6 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.Devices.Usb;
 
+#nullable enable
+
 namespace Usb.Net.UWP
 {
     public class UwpUsbInterfaceInterruptReadEndpoint : UwpUsbInterfaceEndpoint<UsbInterruptInPipe>, IDisposable

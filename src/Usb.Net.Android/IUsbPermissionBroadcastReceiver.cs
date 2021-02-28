@@ -1,5 +1,7 @@
 ﻿using System;
 
+#nullable enable
+
 namespace Usb.Net.Android
 {
     public interface IUsbPermissionBroadcastReceiver

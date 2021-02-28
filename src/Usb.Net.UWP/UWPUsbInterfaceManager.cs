@@ -14,6 +14,8 @@ using usbControlTransferType = Windows.Devices.Usb.UsbControlTransferType;
 using usbSetupPacket = Windows.Devices.Usb.UsbSetupPacket;
 using windowsUsbDevice = Windows.Devices.Usb.UsbDevice;
 
+#nullable enable
+
 namespace Usb.Net.UWP
 {
     public class UwpUsbInterfaceManager : UwpDeviceHandler<windowsUsbDevice>, IUsbInterfaceManager

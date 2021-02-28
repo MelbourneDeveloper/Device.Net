@@ -6,6 +6,8 @@ using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using usbDevice = Android.Hardware.Usb.UsbDevice;
 
+#nullable enable
+
 namespace Usb.Net.Android
 {
     /// <summary>
@@ -61,7 +63,7 @@ namespace Usb.Net.Android
         #endregion
 
         #region Overrides 
-        public override void OnReceive(Context context, Intent intent)
+        public override void OnReceive(Context? context, Intent? intent)
         {
             if (context == null) throw new ArgumentNullException(nameof(context));
             if (intent == null) throw new ArgumentNullException(nameof(intent));

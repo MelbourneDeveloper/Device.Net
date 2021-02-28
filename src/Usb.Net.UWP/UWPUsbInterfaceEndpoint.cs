@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using Windows.Devices.Usb;
 
+#nullable enable
+
 namespace Usb.Net.UWP
 {
     public class UwpUsbInterfaceEndpoint<T> : IUsbInterfaceEndpoint

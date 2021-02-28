@@ -1,6 +1,8 @@
 ﻿using Android.Content;
 using Android.Hardware.Usb;
 
+#nullable enable
+
 namespace Usb.Net.Android
 {
     public class AndroidFactory : IAndroidFactory

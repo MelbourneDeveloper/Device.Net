@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using wde = Windows.Devices.Enumeration;
 using windowsUsbDevice = Windows.Devices.Usb.UsbDevice;
 
+#nullable enable
+
 namespace Usb.Net.UWP
 {
     public static class UwpUsbDeviceFactoryExtensions
