@@ -102,6 +102,8 @@ namespace Hid.Net.UWP
             //TODO: Put a lock here to stop reentrancy of multiple calls
             using var loggerScope = Logger?.BeginScope("DeviceId: {deviceId} Region: {region}", DeviceId, nameof(UwpHidDeviceHandler));
 
+            if (ConnectedDevice == null) throw new InvalidOperationException(Messages.ErrorMessageNotInitialized);
+
             Logger.LogInformation("Initializing Hid device {deviceId}", DeviceId);
 
             try
@@ -152,6 +154,8 @@ namespace Hid.Net.UWP
         public async Task<uint> WriteReportAsync(byte[] data, byte reportId, CancellationToken cancellationToken = default)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
+
+            if (ConnectedDevice == null) throw new InvalidOperationException(Messages.ErrorMessageNotInitialized);
 
             if (DataReceiver.HasData) Logger.LogWarning("Writing to device but data has already been received that has not been read");
 
@@ -206,9 +210,17 @@ namespace Hid.Net.UWP
 
         private void ConnectedDevice_InputReportReceived(hidDevice sender, HidInputReportReceivedEventArgs args)
         {
+            if (args?.Report == null)
+            {
+                Logger.LogWarning("InputReportReceived event fired but there is no input report");
+                return;
+            }
+
             Logger.LogDebug("Received Hid report Id: {id}", args?.Report?.Id);
 
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
             using var stream = args.Report.Data.AsStream();
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
 
             var bytes = new byte[args.Report.Data.Length];
 

@@ -8,6 +8,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using usbDevice = Android.Hardware.Usb.UsbDevice;
 
+#nullable enable
+
 namespace Usb.Net.Android
 {
     /// <summary>
@@ -87,8 +89,6 @@ namespace Usb.Net.Android
                 ReadUsbInterface?.Dispose();
                 WriteUsbInterface?.Dispose();
 
-                _UsbDeviceConnection = null;
-                _UsbDevice = null;
                 ReadUsbInterface = null;
                 WriteUsbInterface = null;
             }

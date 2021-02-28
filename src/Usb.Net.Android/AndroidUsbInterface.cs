@@ -69,6 +69,7 @@ namespace Usb.Net.Android
                         nameof(ReadAsync),
                         endpoint.EndpointNumber);
                     var byteBuffer = ByteBuffer.Allocate((int)bufferLength);
+                    if (byteBuffer == null) throw new InvalidOperationException("ByteBuffer created an null array");
                     var request = _androidFactory.CreateUsbRequest();
                     _ = request.Initialize(_UsbDeviceConnection, endpoint);
 #pragma warning disable CS0618
