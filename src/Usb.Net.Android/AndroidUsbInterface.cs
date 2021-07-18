@@ -183,8 +183,13 @@ namespace Usb.Net.Android
             //Use Task.Run so we can pass the cancellation token in instead of using the async control transfer method which doesn't have a cancellation token
             Task.Run(() =>
             {
+				UsbAddressing requestType;
+                if (setupPacket.RequestType.Direction == RequestDirection.In) requestType = UsbAddressing.In;
+                else if (setupPacket.RequestType.Direction == RequestDirection.Out) requestType = UsbAddressing.Out;
+                else requestType = (UsbAddressing)setupPacket.RequestType.Direction;
+				
                 var bytesTransferred = usbDeviceConnection.ControlTransfer(
-                    setupPacket.RequestType.Direction == RequestDirection.In ? UsbAddressing.In : UsbAddressing.Out,
+                    requestType,
                     setupPacket.Request,
                     setupPacket.Value,
                     setupPacket.Index,
