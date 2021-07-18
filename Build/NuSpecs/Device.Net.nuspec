@@ -8,10 +8,10 @@
 
 Alpha version. Please use 3.x for a stable release</description>
         <summary>Cross-platform .NET framework for talking to connected devices in a uniform way through dependency injection.</summary>
-        <version>4.0.0 </version>
+        <version>4.1.0</version>
         <authors>Christian Findlay</authors>
         <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
-        <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>
+        <releaseNotes>Fixes cancellation tokens on Hid devices</releaseNotes>
         <copyright>Copyright (c) 2021 Christian Findlay</copyright>
         <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
         <repository type="git" url="https://github.com/MelbourneDeveloper/Device.Net" commit="7819b5239f21c084da90f6dc5e7a1f30e5e513e1" />
