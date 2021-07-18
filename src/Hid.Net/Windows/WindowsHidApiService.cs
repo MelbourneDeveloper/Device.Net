@@ -137,9 +137,9 @@ namespace Hid.Net.Windows
         //TODO: These are not opening as async. If we do, we get an error. This is probably why cancellation tokens don't work.
         //https://github.com/MelbourneDeveloper/Device.Net/issues/188
 
-        public Stream OpenRead(SafeFileHandle readSafeFileHandle, ushort readBufferSize) => new FileStream(readSafeFileHandle, FileAccess.Read, readBufferSize, false);
+        public Stream OpenRead(SafeFileHandle readSafeFileHandle, ushort readBufferSize) => new FileStream(readSafeFileHandle, FileAccess.Read, readBufferSize, true);
 
-        public Stream OpenWrite(SafeFileHandle writeSafeFileHandle, ushort writeBufferSize) => new FileStream(writeSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
+        public Stream OpenWrite(SafeFileHandle writeSafeFileHandle, ushort writeBufferSize) => new FileStream(writeSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, true);
         #endregion
 
         #region Private Methods

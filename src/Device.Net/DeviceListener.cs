@@ -45,14 +45,12 @@ namespace Device.Net
         /// </summary>
         public DeviceListener(
             IDeviceFactory deviceFactory,
-            int? pollMilliseconds,
-            ILoggerFactory loggerFactory)
+            int? pollMilliseconds = 1000,
+            ILoggerFactory loggerFactory = null)
         {
             _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<DeviceListener>();
 
             DeviceFactory = deviceFactory ?? throw new ArgumentNullException(nameof(deviceFactory));
-
-            if (!pollMilliseconds.HasValue) return;
 
             _PollTimer = new timer(pollMilliseconds.Value);
             _PollTimer.Elapsed += PollTimer_Elapsed;

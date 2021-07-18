@@ -769,10 +769,10 @@ dotnet_diagnostic.CA1815.severity = error
 ######################## Warnings #################
 
 # CS1591: Missing XML comment for publicly visible type or member
-dotnet_diagnostic.CS1591.severity = warning
+dotnet_diagnostic.CS1591.severity = none
 
 # CA1816: Dispose methods should call SuppressFinalize
-dotnet_diagnostic.CA1816.severity = warning
+dotnet_diagnostic.CA1816.severity = none
 
 # CA1063: Implement IDisposable Correctly
-dotnet_diagnostic.CA1063.severity = warning
+dotnet_diagnostic.CA1063.severity = none
