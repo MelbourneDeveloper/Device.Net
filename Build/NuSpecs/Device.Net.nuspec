@@ -11,7 +11,7 @@ Alpha version. Please use 3.x for a stable release</description>
         <version>4.2.0</version>
         <authors>Christian Findlay</authors>
         <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
-        <releaseNotes>Fixes cancellation tokens on Hid devices</releaseNotes>
+        <releaseNotes>Fixes cancellation tokens on Hid devices. Enables control transfer on Android device hosts. I.e. you can update firmware from your phone</releaseNotes>
         <copyright>Copyright (c) 2021 Christian Findlay</copyright>
         <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
         <repository type="git" url="https://github.com/MelbourneDeveloper/Device.Net" commit="7819b5239f21c084da90f6dc5e7a1f30e5e513e1" />
