@@ -1,6 +1,8 @@
-﻿using Hid.Net.Windows;
+﻿using Device.Net.Windows;
+using Hid.Net.Windows;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32.SafeHandles;
+using System;
 using System.IO;
 
 namespace Device.Net.UnitTests
@@ -10,8 +12,10 @@ namespace Device.Net.UnitTests
     {
         private SafeFileHandle CreateFileHandle()
         {
-            var file = File.Create(Path.GetTempFileName(), 100, FileOptions.Asynchronous);
-            return file.SafeFileHandle;
+            return APICalls.CreateFile(Path.GetTempFileName(),
+                    FileAccessRights.GenericWrite | FileAccessRights.GenericRead,
+                    APICalls.FileShareRead | APICalls.FileShareWrite, IntPtr.Zero, APICalls.OpenExisting,
+                    APICalls.FileAttributeNormal | APICalls.FileFlagOverlapped, IntPtr.Zero);
         }
 
         [TestMethod]
