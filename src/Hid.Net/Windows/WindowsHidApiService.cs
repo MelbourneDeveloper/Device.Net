@@ -139,7 +139,7 @@ namespace Hid.Net.Windows
 
         public Stream OpenRead(SafeFileHandle readSafeFileHandle, ushort readBufferSize) => new FileStream(readSafeFileHandle, FileAccess.Read, readBufferSize, true);
 
-        public Stream OpenWrite(SafeFileHandle writeSafeFileHandle, ushort writeBufferSize) => new FileStream(writeSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, true);
+        public Stream OpenWrite(SafeFileHandle writeSafeFileHandle, ushort writeBufferSize) => writeBufferSize > 0 ? new FileStream(writeSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, true) : Stream.Null;
         #endregion
 
         #region Private Methods
