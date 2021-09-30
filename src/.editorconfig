@@ -776,3 +776,5 @@ dotnet_diagnostic.CA1816.severity = none
 
 # CA1063: Implement IDisposable Correctly
 dotnet_diagnostic.CA1063.severity = none
+
+dotnet_diagnostic.ide0130.severity = warning
