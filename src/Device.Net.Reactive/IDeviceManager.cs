@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Device.Net
@@ -15,5 +16,7 @@ namespace Device.Net
         void SelectDevice(ConnectedDeviceDefinition connectedDevice);
 
         void Start();
+
+        IObservable<IReadOnlyCollection<ConnectedDeviceDefinition>> ConnectedDevicesObservable { get; }
     }
 }

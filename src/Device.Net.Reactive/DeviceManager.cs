@@ -17,9 +17,9 @@ namespace Device.Net
         private readonly ILogger<DeviceManager> _logger;
         private readonly Func<IDevice, Task> _initializeDeviceAction;
         private IDevice _selectedDevice;
-        private readonly Queue<IRequest> _queuedRequests = new Queue<IRequest>();
-        private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1, 1);
-        private readonly SemaphoreSlim _semaphoreSlim2 = new SemaphoreSlim(1, 1);
+        private readonly Queue<IRequest> _queuedRequests = new();
+        private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
+        private readonly SemaphoreSlim _semaphoreSlim2 = new(1, 1);
         private readonly DeviceNotify _notifyDeviceInitialized;
         private readonly NotifyDeviceException _notifyDeviceException;
         private readonly DevicesNotify _notifyConnectedDevices;

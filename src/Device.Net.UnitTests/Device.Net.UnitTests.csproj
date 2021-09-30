@@ -8,6 +8,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Include="..\Device.Net.Reactive\Delegates.cs" Link="Rx\Delegates.cs" />
+	  <Compile Include="..\Device.Net.Reactive\DeviceManager.cs" Link="Rx\DeviceManager.cs" />
+	  <Compile Include="..\Device.Net.Reactive\IDeviceManager.cs" Link="Rx\IDeviceManager.cs" />
+	  <Compile Include="..\Device.Net.Reactive\IRequest.cs" Link="Rx\IRequest.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
 		<PackageReference Include="Moq" Version="4.14.5" />
 		<PackageReference Include="MSTest.TestAdapter" Version="2.1.2" />

@@ -10,7 +10,7 @@ namespace Device.Net
     internal class Observable<T> : IObservable<T>
     {
         #region Fields
-        private readonly List<IObserver<T>> _observers = new List<IObserver<T>>();
+        private readonly List<IObserver<T>> _observers = new();
         #endregion
 
         #region Implementation
