@@ -27,7 +27,7 @@ namespace Device.Net
         /// </summary>
         /// <param name="data"></param>
         public static implicit operator TransferResult(byte[] data) =>
-            new TransferResult(data, data != null ? (uint)data.Length : 0);
+            new(data, data != null ? (uint)data.Length : 0);
         #endregion
 
         #region Constructor

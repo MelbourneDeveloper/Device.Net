@@ -22,17 +22,17 @@ namespace Device.Net.UnitTests
         private const int TrezorEndpointCount = 2;
         private const int StmDfuEndpointCount = 0;
         private ILoggerFactory loggerFactory;
-        private readonly Mock<UsbManager> usbManagerMock = new Mock<UsbManager>();
-        private readonly Mock<Context> contextMock = new Mock<Context>();
-        private readonly Mock<IAndroidFactory> androidFactoryMock = new Mock<IAndroidFactory>();
-        private readonly Mock<UsbDevice> trezorUsbDevice = new Mock<UsbDevice>();
-        private readonly Mock<UsbDevice> stmDfuDevice = new Mock<UsbDevice>();
-        private readonly Mock<Intent> intentMock = new Mock<Intent>();
-        private readonly Mock<UsbDeviceConnection> usbDeviceConnection = new Mock<UsbDeviceConnection>();
-        private readonly Mock<UsbInterface> trezorUsbInterfaceMock = new Mock<UsbInterface>();
-        private readonly Mock<UsbInterface> stmDfuUsbInterfaceMock = new Mock<UsbInterface>();
-        private readonly Mock<UsbEndpoint> firstTrezorEndpointMock = new Mock<UsbEndpoint>();
-        private readonly Mock<UsbEndpoint> secondTrezorEndpointMock = new Mock<UsbEndpoint>();
+        private readonly Mock<UsbManager> usbManagerMock = new();
+        private readonly Mock<Context> contextMock = new();
+        private readonly Mock<IAndroidFactory> androidFactoryMock = new();
+        private readonly Mock<UsbDevice> trezorUsbDevice = new();
+        private readonly Mock<UsbDevice> stmDfuDevice = new();
+        private readonly Mock<Intent> intentMock = new();
+        private readonly Mock<UsbDeviceConnection> usbDeviceConnection = new();
+        private readonly Mock<UsbInterface> trezorUsbInterfaceMock = new();
+        private readonly Mock<UsbInterface> stmDfuUsbInterfaceMock = new();
+        private readonly Mock<UsbEndpoint> firstTrezorEndpointMock = new();
+        private readonly Mock<UsbEndpoint> secondTrezorEndpointMock = new();
         #endregion
 
         #region Setup

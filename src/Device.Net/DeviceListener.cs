@@ -21,13 +21,13 @@ namespace Device.Net
         #region Fields
         private bool _IsDisposed;
         private readonly timer _PollTimer;
-        private readonly SemaphoreSlim _ListenSemaphoreSlim = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _ListenSemaphoreSlim = new(1, 1);
         private readonly ILogger _logger;
 
         /// <summary>
         /// This is the list of Devices by their filter definition. Note this is not actually keyed by the connected definition.
         /// </summary>
-        private readonly Dictionary<string, IDevice> _CreatedDevicesByDefinition = new Dictionary<string, IDevice>();
+        private readonly Dictionary<string, IDevice> _CreatedDevicesByDefinition = new();
         #endregion
 
         #region Public Properties
