@@ -1,4 +1,7 @@
-﻿using System;
+﻿
+#if NETCOREAPP
+
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
@@ -12,12 +15,11 @@ namespace Device.Net.UnitTests
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public ImmutableList<DeviceDescription> DeviceDescriptions { get; private set; }
+        public ImmutableList<DeviceDescription> DeviceDescriptions { get; private set; } = ImmutableList<DeviceDescription>.Empty;
 
 
         public SomeViewModel(IDeviceManager deviceManager)
         {
-            this.deviceManager = deviceManager;
             var observer = new Observer<IReadOnlyCollection<ConnectedDeviceDefinition>>(DevicesListed);
             deviceManagerSubscription = deviceManager.ConnectedDevicesObservable.Subscribe(observer);
         }
@@ -37,3 +39,5 @@ namespace Device.Net.UnitTests
         public string Description { get; set; }
     }
 }
+
+#endif

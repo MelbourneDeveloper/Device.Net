@@ -62,7 +62,6 @@ namespace Device.Net
         /// <param name="loggerFactory"></param>
         public DeviceManager(
             DeviceNotify notifyDeviceInitialized,
-            DevicesNotify notifyConnectedDevices,
             NotifyDeviceException notifyDeviceException,
             Func<IDevice, Task> initializeDeviceAction,
             GetConnectedDevicesAsync getConnectedDevicesAsync,
@@ -72,7 +71,6 @@ namespace Device.Net
         {
             _notifyDeviceInitialized = notifyDeviceInitialized ?? throw new ArgumentNullException(nameof(notifyDeviceInitialized));
             _notifyDeviceException = notifyDeviceException ?? throw new ArgumentNullException(nameof(notifyDeviceException));
-            _notifyConnectedDevices = notifyConnectedDevices ?? throw new ArgumentNullException(nameof(notifyConnectedDevices));
             _getConnectedDevicesAsync = getConnectedDevicesAsync ?? throw new ArgumentNullException(nameof(getConnectedDevicesAsync));
             _getDevice = getDevice ?? throw new ArgumentNullException(nameof(getDevice));
 
@@ -80,6 +78,8 @@ namespace Device.Net
 
             _initializeDeviceAction = initializeDeviceAction;
             _pollMilliseconds = pollMilliseconds;
+
+            ConnectedDevicesObservable = new Observable<IReadOnlyCollection<ConnectedDeviceDefinition>>();
         }
         #endregion
 
