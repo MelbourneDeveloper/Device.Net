@@ -12,7 +12,7 @@ namespace Device.Net
     public abstract class DeviceBase : IDisposable
     {
         #region Fields
-        private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _WriteAndReadLock = new(1, 1);
         private bool disposed;
         #endregion
 

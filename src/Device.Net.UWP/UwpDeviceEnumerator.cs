@@ -17,8 +17,8 @@ namespace Device.Net.UWP
         private readonly ILoggerFactory _loggerFactory;
         private readonly ILogger _logger;
         private readonly string aqsFilter;
-        private readonly SemaphoreSlim _TestConnectionSemaphore = new SemaphoreSlim(1, 1);
-        private readonly Dictionary<string, ConnectionInfo> _ConnectionTestedDeviceIds = new Dictionary<string, ConnectionInfo>();
+        private readonly SemaphoreSlim _TestConnectionSemaphore = new(1, 1);
+        private readonly Dictionary<string, ConnectionInfo> _ConnectionTestedDeviceIds = new();
         private readonly DeviceType _deviceType;
         private readonly TestConnection _testConnection;
         private readonly Func<wde.DeviceInformation, bool> _deviceInformationFilter;

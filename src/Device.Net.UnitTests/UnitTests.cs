@@ -30,8 +30,8 @@ namespace Device.Net.UnitTests
         private const uint MockHidDeviceVendorId = 1;
 
 
-        private static readonly Mock<ILogger> _loggerMock = new Mock<ILogger>();
-        private static readonly Mock<ILoggerFactory> _LoggerFactoryMock = new Mock<ILoggerFactory>();
+        private static readonly Mock<ILogger> _loggerMock = new();
+        private static readonly Mock<ILoggerFactory> _LoggerFactoryMock = new();
 
         /// <summary>
         /// Dummy logger factory for now

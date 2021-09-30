@@ -45,7 +45,7 @@ namespace Hid.Net
         /// Converts a Report to a Tranfer result and inserts the report Id at index 0
         /// </summary>
         public static TransferResult ToTransferResult(this Report readReport, ILogger logger)
-            => new TransferResult(
+            => new(
                 InsertReportIdAtIndexZero(
                     readReport.TransferResult.Data,
                     readReport.ReportId,

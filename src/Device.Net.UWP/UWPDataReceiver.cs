@@ -10,8 +10,8 @@ namespace Device.Net.UWP
     public class UwpDataReceiver : IDisposable, IDataReceiver
     {
         #region Fields
-        private readonly Queue<TransferResult> _readQueue = new Queue<TransferResult>();
-        private readonly SemaphoreSlim _readLock = new SemaphoreSlim(1, 1);
+        private readonly Queue<TransferResult> _readQueue = new();
+        private readonly SemaphoreSlim _readLock = new(1, 1);
         private bool disposed;
         private TaskCompletionSource<TransferResult> _readChunkTaskCompletionSource;
         private readonly ILogger _logger;
