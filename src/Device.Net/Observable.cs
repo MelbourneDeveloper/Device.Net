@@ -13,6 +13,8 @@ namespace Device.Net
         private readonly List<IObserver<T>> _observers = new();
         #endregion
 
+        public void Next(T item) => Locked(() => _observers.ForEach(o => o.OnNext(item)));
+
         #region Implementation
         public IDisposable Subscribe(IObserver<T> observer)
         {

@@ -22,11 +22,11 @@ namespace Device.Net
         private readonly SemaphoreSlim _semaphoreSlim2 = new(1, 1);
         private readonly DeviceNotify _notifyDeviceInitialized;
         private readonly NotifyDeviceException _notifyDeviceException;
-        private readonly DevicesNotify _notifyConnectedDevices;
         private bool isDisposed;
         private readonly int _pollMilliseconds;
         private readonly GetConnectedDevicesAsync _getConnectedDevicesAsync;
         private readonly GetDeviceAsync _getDevice;
+        private readonly Observable<IReadOnlyCollection<ConnectedDeviceDefinition>> connectedDevicesObservable = new();
         #endregion
 
         #region Public Properties
@@ -35,7 +35,7 @@ namespace Device.Net
         /// </summary>
         public bool FilterMiddleMessages { get; set; }
 
-        public IObservable<IReadOnlyCollection<ConnectedDeviceDefinition>> ConnectedDevicesObservable { get; }
+        public IObservable<IReadOnlyCollection<ConnectedDeviceDefinition>> ConnectedDevicesObservable => connectedDevicesObservable;
 
         public IDevice SelectedDevice
         {
@@ -78,8 +78,6 @@ namespace Device.Net
 
             _initializeDeviceAction = initializeDeviceAction;
             _pollMilliseconds = pollMilliseconds;
-
-            ConnectedDevicesObservable = new Observable<IReadOnlyCollection<ConnectedDeviceDefinition>>();
         }
         #endregion
 
@@ -92,7 +90,7 @@ namespace Device.Net
                 {
                     var devices = await _getConnectedDevicesAsync();
                     _logger.LogInformation("Found {deviceCount} devices", devices.Count);
-                    _notifyConnectedDevices(devices);
+                    connectedDevicesObservable.Next(devices);
                     await Task.Delay(TimeSpan.FromMilliseconds(_pollMilliseconds));
                 }
             });
