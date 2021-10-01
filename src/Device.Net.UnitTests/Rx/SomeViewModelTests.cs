@@ -57,7 +57,7 @@ namespace Device.Net.UnitTests.Rx
             //Allow time for initialization
             await Task.Delay(100);
 
-            mockDevice.Verify(d => d.InitializeAsync(It.IsAny<CancellationToken>()), Times.Once)
+            mockDevice.Verify(d => d.InitializeAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         private static async Task WaitForDeviceList(SomeViewModel vm)

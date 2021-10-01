@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Device.Net.UnitTests
 {
@@ -32,7 +31,7 @@ namespace Device.Net.UnitTests
             DeviceDescriptions = devices.Select(d => new DeviceDescription(d)).ToImmutableList();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DeviceDescriptions)));
 
-            if (DeviceDescriptions.Count > 0 && deviceManager?.SelectedDevice?.ConnectedDeviceDefinition.DeviceId != devices.FirstOrDefault()?.DeviceId)
+            if (DeviceDescriptions.Count > 0 && deviceManager?.SelectedDevice?.ConnectedDeviceDefinition?.DeviceId != devices.FirstOrDefault()?.DeviceId)
             {
                 //A valid device was connected so select it
                 deviceManager.SelectDevice(devices.First());
