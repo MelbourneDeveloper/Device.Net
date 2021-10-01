@@ -15,6 +15,8 @@ namespace Device.Net
 
         void SelectDevice(ConnectedDeviceDefinition connectedDevice);
 
+        IDevice SelectedDevice { get; }
+
         void Start();
 
         IObservable<IReadOnlyCollection<ConnectedDeviceDefinition>> ConnectedDevicesObservable { get; }

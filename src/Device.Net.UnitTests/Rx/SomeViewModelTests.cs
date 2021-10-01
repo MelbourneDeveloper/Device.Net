@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
@@ -52,6 +53,11 @@ namespace Device.Net.UnitTests.Rx
             //Verify that the device is in the list
             Assert.AreEqual(vm.DeviceDescriptions.Count, 1);
             Assert.AreEqual(expectedConnectedDeviceDefinition.DeviceId, vm.DeviceDescriptions.First().Description);
+
+            //Allow time for initialization
+            await Task.Delay(100);
+
+            mockDevice.Verify(d => d.InitializeAsync(It.IsAny<CancellationToken>()), Times.Once)
         }
 
         private static async Task WaitForDeviceList(SomeViewModel vm)
