@@ -22,50 +22,51 @@ namespace Device.Net.UnitTests.Rx
             var loggerFactory = LoggerFactory.Create(builder => _ = builder.AddDebug().AddConsole().SetMinimumLevel(LogLevel.Trace));
             var devices = new List<ConnectedDeviceDefinition>();
             var mockDevice = new Mock<IDevice>();
+            _ = mockDevice.Setup(d => d.ConnectedDeviceDefinition).Returns(new ConnectedDeviceDefinition("123", DeviceType.Hid));
             var expectedConnectedDeviceDefinition = new ConnectedDeviceDefinition("123", DeviceType.Hid);
+            var observable = new Observable<IDevice>();
 
             var deviceManager = new DeviceManager(
-                (c) => { },
+                (c) => observable.Next(c),
                 (c, ex) => { },
-                (d) => d.InitializeAsync(),
+                async (d) =>
+                {
+                    //Simulate taking some time to init
+                    await Task.Delay(10);
+                    await d.InitializeAsync();
+                },
                 () => Task.FromResult<IReadOnlyList<ConnectedDeviceDefinition>>(devices),
                 (c, ct) => Task.FromResult(mockDevice.Object),
                 1,
                 loggerFactory);
             deviceManager.Start();
 
-            var vm = new SomeViewModel(deviceManager);
+            var vm = new SomeViewModel(deviceManager, observable);
 
             //Verify that there are no devices in the list
             Assert.AreEqual(vm.DeviceDescriptions.Count, 0);
 
-            //Wait for the view model to tell us that that there is a new list of devices
-            await WaitForDeviceList(vm);
-
             //Verify that there are no devices in the list
             Assert.AreEqual(vm.DeviceDescriptions.Count, 0);
+
+            var propertyChangedList = new List<string>();
+            vm.PropertyChanged += (s, e) => propertyChangedList.Add(e.PropertyName);
 
             //Add the device
             devices.Add(expectedConnectedDeviceDefinition);
 
-            await WaitForDeviceList(vm);
+            //Wait for events to occur
+            await Task.Delay(300);
 
             //Verify that the device is in the list
             Assert.AreEqual(vm.DeviceDescriptions.Count, 1);
             Assert.AreEqual(expectedConnectedDeviceDefinition.DeviceId, vm.DeviceDescriptions.First().Description);
+            //Assert.AreEqual(vm.ConnectedDevice, mockDevice.Object);
 
-            //Allow time for initialization
-            await Task.Delay(100);
+            Assert.IsTrue(propertyChangedList.Single(p => p == nameof(SomeViewModel.ConnectedDevice)) != null);
+            Assert.IsTrue(propertyChangedList.Contains(nameof(SomeViewModel.DeviceDescriptions)));
 
             mockDevice.Verify(d => d.InitializeAsync(It.IsAny<CancellationToken>()), Times.Once);
-        }
-
-        private static async Task WaitForDeviceList(SomeViewModel vm)
-        {
-            var taskCompletionSource = new TaskCompletionSource<string>();
-            vm.PropertyChanged += (s, e) => taskCompletionSource.TrySetResult(e.PropertyName);
-            var property = await taskCompletionSource.Task;
-            Assert.AreEqual(nameof(SomeViewModel.DeviceDescriptions), property);
         }
     }
 }

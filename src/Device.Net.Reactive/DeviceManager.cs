@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,7 +44,7 @@ namespace Device.Net
             private set
             {
                 _selectedDevice = value;
-                _notifyDeviceInitialized(value?.ConnectedDeviceDefinition);
+                _notifyDeviceInitialized(value);
             }
         }
         #endregion
@@ -102,6 +103,8 @@ namespace Device.Net
         /// <param name="connectedDevice"></param>
         public void SelectDevice(ConnectedDeviceDefinition connectedDevice)
         {
+            Debug.WriteLine("Select Device");
+
             _ = connectedDevice == null
                 ? throw new ArgumentNullException(nameof(connectedDevice))
                 : InitializeDeviceAsync(connectedDevice);
