@@ -37,7 +37,8 @@ namespace Device.Net.UnitTests.Rx
                 },
                 () => Task.FromResult<IReadOnlyList<ConnectedDeviceDefinition>>(devices),
                 (c, ct) => Task.FromResult(mockDevice.Object),
-                1,
+                //Note: if the polling is faster than the init, we could end up with more than one connected device connection
+                50,
                 loggerFactory);
             deviceManager.Start();
 
@@ -61,8 +62,9 @@ namespace Device.Net.UnitTests.Rx
             //Verify that the device is in the list
             Assert.AreEqual(vm.DeviceDescriptions.Count, 1);
             Assert.AreEqual(expectedConnectedDeviceDefinition.DeviceId, vm.DeviceDescriptions.First().Description);
-            //Assert.AreEqual(vm.ConnectedDevice, mockDevice.Object);
+            Assert.AreEqual(vm.ConnectedDevice, mockDevice.Object);
 
+            //Note: if the polling is faster than the init, we could end up with more than one connected device connection
             Assert.IsTrue(propertyChangedList.Single(p => p == nameof(SomeViewModel.ConnectedDevice)) != null);
             Assert.IsTrue(propertyChangedList.Contains(nameof(SomeViewModel.DeviceDescriptions)));
 
