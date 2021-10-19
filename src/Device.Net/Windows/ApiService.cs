@@ -14,7 +14,11 @@ namespace Device.Net.Windows
     internal class ApiService : IApiService
     {
         #region Fields
+#if NETFRAMEWORK
+        private const uint FILE_FLAG_OVERLAPPED = 0;
+#else
         private const uint FILE_FLAG_OVERLAPPED = 0x40000000;
+#endif
 
         protected ILogger Logger { get; }
         #endregion
