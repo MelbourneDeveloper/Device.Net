@@ -58,7 +58,7 @@ namespace Hid.Net.Windows
         private static extern void HidD_GetHidGuid(out Guid hidGuid);
 
         [DllImport("hid.dll", SetLastError = true)]
-        private static extern bool HidD_FreePreparsedData(ref IntPtr pointerToPreparsedData);
+        private static extern bool HidD_FreePreparsedData(IntPtr pointerToPreparsedData);
 
         private delegate bool GetString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
 
@@ -114,7 +114,7 @@ namespace Hid.Net.Windows
                 throw new ApiException($"Could not get Hid capabilities. Return code: {result}");
             }
 
-            isSuccess = HidD_FreePreparsedData(ref pointerToPreParsedData);
+            isSuccess = HidD_FreePreparsedData(pointerToPreParsedData);
             _ = WindowsHelpers.HandleError(isSuccess, "Could not release handle for getting Hid capabilities", Logger);
 
             return hidCollectionCapabilities;
