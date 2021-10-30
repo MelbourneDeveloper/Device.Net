@@ -12,7 +12,7 @@ Don't waste your time with the obscurities of connecting to devices and learning
 ### Version 4.x 
 is live on [Nuget.org](https://www.nuget.org/packages/Device.Net)! Take a look at the [4.0 project](https://github.com/MelbourneDeveloper/Device.Net/projects/11) to see new features and fixes. Version 4 has public interface changes. You will need to read through the documentation to upgrade from version 3 to version 4.
 
-#### New in 4.2.1
+#### New in 4.3.0-beta
 
 - You can do USB [control transfer from an Android host](https://github.com/MelbourneDeveloper/Device.Net/pull/216).
 - Cancellation tokens are [fixed](https://github.com/MelbourneDeveloper/Device.Net/pull/215) for Hid devices
