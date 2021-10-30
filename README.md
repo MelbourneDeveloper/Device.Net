@@ -9,8 +9,13 @@
 
 Don't waste your time with the obscurities of connecting to devices and learning their protocol. I've done this plenty of times and I can fast track you to building an app or getting something to work.
 
-### Version 4 
+### Version 4.x 
 is live on [Nuget.org](https://www.nuget.org/packages/Device.Net)! Take a look at the [4.0 project](https://github.com/MelbourneDeveloper/Device.Net/projects/11) to see new features and fixes. Version 4 has public interface changes. You will need to read through the documentation to upgrade from version 3 to version 4.
+
+#### New in 4.2.1
+
+- You can do USB [control transfer from an Android host](https://github.com/MelbourneDeveloper/Device.Net/pull/216).
+- Cancellation tokens are [fixed](https://github.com/MelbourneDeveloper/Device.Net/pull/215) for Hid devices
 
 This framework provides a common Task async programming interface across platforms and device types. This allows for dependency injection to use different types of devices on any platform with the same code. The supported device types are Hid, Serial Port, and USB. 
 
