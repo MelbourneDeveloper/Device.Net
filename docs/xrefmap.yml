@@ -634,6 +634,147 @@ references:
   isSpec: "True"
   fullName: Device.Net.DeviceListener.Stop
   nameWithType: DeviceListener.Stop
+- uid: Device.Net.DeviceManager
+  name: DeviceManager
+  href: api/Device.Net.DeviceManager.html
+  commentId: T:Device.Net.DeviceManager
+  fullName: Device.Net.DeviceManager
+  nameWithType: DeviceManager
+- uid: Device.Net.DeviceManager.#ctor(Device.Net.DeviceNotify,Device.Net.NotifyDeviceError,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task},Device.Net.GetConnectedDevicesAsync,Device.Net.GetDeviceAsync,System.Int32,Microsoft.Extensions.Logging.ILoggerFactory,System.Boolean)
+  name: DeviceManager(DeviceNotify, NotifyDeviceError, Func<IDevice, Task>, GetConnectedDevicesAsync, GetDeviceAsync, Int32, ILoggerFactory, Boolean)
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager__ctor_Device_Net_DeviceNotify_Device_Net_NotifyDeviceError_System_Func_Device_Net_IDevice_System_Threading_Tasks_Task__Device_Net_GetConnectedDevicesAsync_Device_Net_GetDeviceAsync_System_Int32_Microsoft_Extensions_Logging_ILoggerFactory_System_Boolean_
+  commentId: M:Device.Net.DeviceManager.#ctor(Device.Net.DeviceNotify,Device.Net.NotifyDeviceError,System.Func{Device.Net.IDevice,System.Threading.Tasks.Task},Device.Net.GetConnectedDevicesAsync,Device.Net.GetDeviceAsync,System.Int32,Microsoft.Extensions.Logging.ILoggerFactory,System.Boolean)
+  name.vb: DeviceManager(DeviceNotify, NotifyDeviceError, Func(Of IDevice, Task), GetConnectedDevicesAsync, GetDeviceAsync, Int32, ILoggerFactory, Boolean)
+  fullName: Device.Net.DeviceManager.DeviceManager(Device.Net.DeviceNotify, Device.Net.NotifyDeviceError, System.Func<Device.Net.IDevice, System.Threading.Tasks.Task>, Device.Net.GetConnectedDevicesAsync, Device.Net.GetDeviceAsync, System.Int32, Microsoft.Extensions.Logging.ILoggerFactory, System.Boolean)
+  fullName.vb: Device.Net.DeviceManager.DeviceManager(Device.Net.DeviceNotify, Device.Net.NotifyDeviceError, System.Func(Of Device.Net.IDevice, System.Threading.Tasks.Task), Device.Net.GetConnectedDevicesAsync, Device.Net.GetDeviceAsync, System.Int32, Microsoft.Extensions.Logging.ILoggerFactory, System.Boolean)
+  nameWithType: DeviceManager.DeviceManager(DeviceNotify, NotifyDeviceError, Func<IDevice, Task>, GetConnectedDevicesAsync, GetDeviceAsync, Int32, ILoggerFactory, Boolean)
+  nameWithType.vb: DeviceManager.DeviceManager(DeviceNotify, NotifyDeviceError, Func(Of IDevice, Task), GetConnectedDevicesAsync, GetDeviceAsync, Int32, ILoggerFactory, Boolean)
+- uid: Device.Net.DeviceManager.#ctor*
+  name: DeviceManager
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager__ctor_
+  commentId: Overload:Device.Net.DeviceManager.#ctor
+  isSpec: "True"
+  fullName: Device.Net.DeviceManager.DeviceManager
+  nameWithType: DeviceManager.DeviceManager
+- uid: Device.Net.DeviceManager.ConnectedDevicesObservable
+  name: ConnectedDevicesObservable
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_ConnectedDevicesObservable
+  commentId: P:Device.Net.DeviceManager.ConnectedDevicesObservable
+  fullName: Device.Net.DeviceManager.ConnectedDevicesObservable
+  nameWithType: DeviceManager.ConnectedDevicesObservable
+- uid: Device.Net.DeviceManager.ConnectedDevicesObservable*
+  name: ConnectedDevicesObservable
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_ConnectedDevicesObservable_
+  commentId: Overload:Device.Net.DeviceManager.ConnectedDevicesObservable
+  isSpec: "True"
+  fullName: Device.Net.DeviceManager.ConnectedDevicesObservable
+  nameWithType: DeviceManager.ConnectedDevicesObservable
+- uid: Device.Net.DeviceManager.Dispose
+  name: Dispose()
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_Dispose
+  commentId: M:Device.Net.DeviceManager.Dispose
+  fullName: Device.Net.DeviceManager.Dispose()
+  nameWithType: DeviceManager.Dispose()
+- uid: Device.Net.DeviceManager.Dispose*
+  name: Dispose
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_Dispose_
+  commentId: Overload:Device.Net.DeviceManager.Dispose
+  isSpec: "True"
+  fullName: Device.Net.DeviceManager.Dispose
+  nameWithType: DeviceManager.Dispose
+- uid: Device.Net.DeviceManager.FilterMiddleMessages
+  name: FilterMiddleMessages
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_FilterMiddleMessages
+  commentId: P:Device.Net.DeviceManager.FilterMiddleMessages
+  fullName: Device.Net.DeviceManager.FilterMiddleMessages
+  nameWithType: DeviceManager.FilterMiddleMessages
+- uid: Device.Net.DeviceManager.FilterMiddleMessages*
+  name: FilterMiddleMessages
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_FilterMiddleMessages_
+  commentId: Overload:Device.Net.DeviceManager.FilterMiddleMessages
+  isSpec: "True"
+  fullName: Device.Net.DeviceManager.FilterMiddleMessages
+  nameWithType: DeviceManager.FilterMiddleMessages
+- uid: Device.Net.DeviceManager.QueueRequest(Device.Net.IRequest)
+  name: QueueRequest(IRequest)
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_QueueRequest_Device_Net_IRequest_
+  commentId: M:Device.Net.DeviceManager.QueueRequest(Device.Net.IRequest)
+  fullName: Device.Net.DeviceManager.QueueRequest(Device.Net.IRequest)
+  nameWithType: DeviceManager.QueueRequest(IRequest)
+- uid: Device.Net.DeviceManager.QueueRequest*
+  name: QueueRequest
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_QueueRequest_
+  commentId: Overload:Device.Net.DeviceManager.QueueRequest
+  isSpec: "True"
+  fullName: Device.Net.DeviceManager.QueueRequest
+  nameWithType: DeviceManager.QueueRequest
+- uid: Device.Net.DeviceManager.SelectDevice(Device.Net.ConnectedDeviceDefinition)
+  name: SelectDevice(ConnectedDeviceDefinition)
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_SelectDevice_Device_Net_ConnectedDeviceDefinition_
+  commentId: M:Device.Net.DeviceManager.SelectDevice(Device.Net.ConnectedDeviceDefinition)
+  fullName: Device.Net.DeviceManager.SelectDevice(Device.Net.ConnectedDeviceDefinition)
+  nameWithType: DeviceManager.SelectDevice(ConnectedDeviceDefinition)
+- uid: Device.Net.DeviceManager.SelectDevice*
+  name: SelectDevice
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_SelectDevice_
+  commentId: Overload:Device.Net.DeviceManager.SelectDevice
+  isSpec: "True"
+  fullName: Device.Net.DeviceManager.SelectDevice
+  nameWithType: DeviceManager.SelectDevice
+- uid: Device.Net.DeviceManager.SelectedDevice
+  name: SelectedDevice
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_SelectedDevice
+  commentId: P:Device.Net.DeviceManager.SelectedDevice
+  fullName: Device.Net.DeviceManager.SelectedDevice
+  nameWithType: DeviceManager.SelectedDevice
+- uid: Device.Net.DeviceManager.SelectedDevice*
+  name: SelectedDevice
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_SelectedDevice_
+  commentId: Overload:Device.Net.DeviceManager.SelectedDevice
+  isSpec: "True"
+  fullName: Device.Net.DeviceManager.SelectedDevice
+  nameWithType: DeviceManager.SelectedDevice
+- uid: Device.Net.DeviceManager.Start
+  name: Start()
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_Start
+  commentId: M:Device.Net.DeviceManager.Start
+  fullName: Device.Net.DeviceManager.Start()
+  nameWithType: DeviceManager.Start()
+- uid: Device.Net.DeviceManager.Start*
+  name: Start
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_Start_
+  commentId: Overload:Device.Net.DeviceManager.Start
+  isSpec: "True"
+  fullName: Device.Net.DeviceManager.Start
+  nameWithType: DeviceManager.Start
+- uid: Device.Net.DeviceManager.WriteAndReadAsync*
+  name: WriteAndReadAsync
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_WriteAndReadAsync_
+  commentId: Overload:Device.Net.DeviceManager.WriteAndReadAsync
+  isSpec: "True"
+  fullName: Device.Net.DeviceManager.WriteAndReadAsync
+  nameWithType: DeviceManager.WriteAndReadAsync
+- uid: Device.Net.DeviceManager.WriteAndReadAsync``1(Device.Net.IRequest,System.Func{System.Byte[],``0})
+  name: WriteAndReadAsync<TResponse>(IRequest, Func<Byte[], TResponse>)
+  href: api/Device.Net.DeviceManager.html#Device_Net_DeviceManager_WriteAndReadAsync__1_Device_Net_IRequest_System_Func_System_Byte_____0__
+  commentId: M:Device.Net.DeviceManager.WriteAndReadAsync``1(Device.Net.IRequest,System.Func{System.Byte[],``0})
+  name.vb: WriteAndReadAsync(Of TResponse)(IRequest, Func(Of Byte(), TResponse))
+  fullName: Device.Net.DeviceManager.WriteAndReadAsync<TResponse>(Device.Net.IRequest, System.Func<System.Byte[], TResponse>)
+  fullName.vb: Device.Net.DeviceManager.WriteAndReadAsync(Of TResponse)(Device.Net.IRequest, System.Func(Of System.Byte(), TResponse))
+  nameWithType: DeviceManager.WriteAndReadAsync<TResponse>(IRequest, Func<Byte[], TResponse>)
+  nameWithType.vb: DeviceManager.WriteAndReadAsync(Of TResponse)(IRequest, Func(Of Byte(), TResponse))
+- uid: Device.Net.DeviceNotify
+  name: DeviceNotify
+  href: api/Device.Net.DeviceNotify.html
+  commentId: T:Device.Net.DeviceNotify
+  fullName: Device.Net.DeviceNotify
+  nameWithType: DeviceNotify
+- uid: Device.Net.DevicesNotify
+  name: DevicesNotify
+  href: api/Device.Net.DevicesNotify.html
+  commentId: T:Device.Net.DevicesNotify
+  fullName: Device.Net.DevicesNotify
+  nameWithType: DevicesNotify
 - uid: Device.Net.DeviceType
   name: DeviceType
   href: api/Device.Net.DeviceType.html
@@ -930,6 +1071,12 @@ references:
   commentId: T:Device.Net.GetConnectedDeviceDefinitionsAsync
   fullName: Device.Net.GetConnectedDeviceDefinitionsAsync
   nameWithType: GetConnectedDeviceDefinitionsAsync
+- uid: Device.Net.GetConnectedDevicesAsync
+  name: GetConnectedDevicesAsync
+  href: api/Device.Net.GetConnectedDevicesAsync.html
+  commentId: T:Device.Net.GetConnectedDevicesAsync
+  fullName: Device.Net.GetConnectedDevicesAsync
+  nameWithType: GetConnectedDevicesAsync
 - uid: Device.Net.GetDeviceAsync
   name: GetDeviceAsync
   href: api/Device.Net.GetDeviceAsync.html
@@ -1218,6 +1365,112 @@ references:
   isSpec: "True"
   fullName: Device.Net.IDeviceListener.Stop
   nameWithType: IDeviceListener.Stop
+- uid: Device.Net.IDeviceManager
+  name: IDeviceManager
+  href: api/Device.Net.IDeviceManager.html
+  commentId: T:Device.Net.IDeviceManager
+  fullName: Device.Net.IDeviceManager
+  nameWithType: IDeviceManager
+- uid: Device.Net.IDeviceManager.ConnectedDevicesObservable
+  name: ConnectedDevicesObservable
+  href: api/Device.Net.IDeviceManager.html#Device_Net_IDeviceManager_ConnectedDevicesObservable
+  commentId: P:Device.Net.IDeviceManager.ConnectedDevicesObservable
+  fullName: Device.Net.IDeviceManager.ConnectedDevicesObservable
+  nameWithType: IDeviceManager.ConnectedDevicesObservable
+- uid: Device.Net.IDeviceManager.ConnectedDevicesObservable*
+  name: ConnectedDevicesObservable
+  href: api/Device.Net.IDeviceManager.html#Device_Net_IDeviceManager_ConnectedDevicesObservable_
+  commentId: Overload:Device.Net.IDeviceManager.ConnectedDevicesObservable
+  isSpec: "True"
+  fullName: Device.Net.IDeviceManager.ConnectedDevicesObservable
+  nameWithType: IDeviceManager.ConnectedDevicesObservable
+- uid: Device.Net.IDeviceManager.QueueRequest(Device.Net.IRequest)
+  name: QueueRequest(IRequest)
+  href: api/Device.Net.IDeviceManager.html#Device_Net_IDeviceManager_QueueRequest_Device_Net_IRequest_
+  commentId: M:Device.Net.IDeviceManager.QueueRequest(Device.Net.IRequest)
+  fullName: Device.Net.IDeviceManager.QueueRequest(Device.Net.IRequest)
+  nameWithType: IDeviceManager.QueueRequest(IRequest)
+- uid: Device.Net.IDeviceManager.QueueRequest*
+  name: QueueRequest
+  href: api/Device.Net.IDeviceManager.html#Device_Net_IDeviceManager_QueueRequest_
+  commentId: Overload:Device.Net.IDeviceManager.QueueRequest
+  isSpec: "True"
+  fullName: Device.Net.IDeviceManager.QueueRequest
+  nameWithType: IDeviceManager.QueueRequest
+- uid: Device.Net.IDeviceManager.SelectDevice(Device.Net.ConnectedDeviceDefinition)
+  name: SelectDevice(ConnectedDeviceDefinition)
+  href: api/Device.Net.IDeviceManager.html#Device_Net_IDeviceManager_SelectDevice_Device_Net_ConnectedDeviceDefinition_
+  commentId: M:Device.Net.IDeviceManager.SelectDevice(Device.Net.ConnectedDeviceDefinition)
+  fullName: Device.Net.IDeviceManager.SelectDevice(Device.Net.ConnectedDeviceDefinition)
+  nameWithType: IDeviceManager.SelectDevice(ConnectedDeviceDefinition)
+- uid: Device.Net.IDeviceManager.SelectDevice*
+  name: SelectDevice
+  href: api/Device.Net.IDeviceManager.html#Device_Net_IDeviceManager_SelectDevice_
+  commentId: Overload:Device.Net.IDeviceManager.SelectDevice
+  isSpec: "True"
+  fullName: Device.Net.IDeviceManager.SelectDevice
+  nameWithType: IDeviceManager.SelectDevice
+- uid: Device.Net.IDeviceManager.SelectedDevice
+  name: SelectedDevice
+  href: api/Device.Net.IDeviceManager.html#Device_Net_IDeviceManager_SelectedDevice
+  commentId: P:Device.Net.IDeviceManager.SelectedDevice
+  fullName: Device.Net.IDeviceManager.SelectedDevice
+  nameWithType: IDeviceManager.SelectedDevice
+- uid: Device.Net.IDeviceManager.SelectedDevice*
+  name: SelectedDevice
+  href: api/Device.Net.IDeviceManager.html#Device_Net_IDeviceManager_SelectedDevice_
+  commentId: Overload:Device.Net.IDeviceManager.SelectedDevice
+  isSpec: "True"
+  fullName: Device.Net.IDeviceManager.SelectedDevice
+  nameWithType: IDeviceManager.SelectedDevice
+- uid: Device.Net.IDeviceManager.Start
+  name: Start()
+  href: api/Device.Net.IDeviceManager.html#Device_Net_IDeviceManager_Start
+  commentId: M:Device.Net.IDeviceManager.Start
+  fullName: Device.Net.IDeviceManager.Start()
+  nameWithType: IDeviceManager.Start()
+- uid: Device.Net.IDeviceManager.Start*
+  name: Start
+  href: api/Device.Net.IDeviceManager.html#Device_Net_IDeviceManager_Start_
+  commentId: Overload:Device.Net.IDeviceManager.Start
+  isSpec: "True"
+  fullName: Device.Net.IDeviceManager.Start
+  nameWithType: IDeviceManager.Start
+- uid: Device.Net.IDeviceManager.WriteAndReadAsync*
+  name: WriteAndReadAsync
+  href: api/Device.Net.IDeviceManager.html#Device_Net_IDeviceManager_WriteAndReadAsync_
+  commentId: Overload:Device.Net.IDeviceManager.WriteAndReadAsync
+  isSpec: "True"
+  fullName: Device.Net.IDeviceManager.WriteAndReadAsync
+  nameWithType: IDeviceManager.WriteAndReadAsync
+- uid: Device.Net.IDeviceManager.WriteAndReadAsync``1(Device.Net.IRequest,System.Func{System.Byte[],``0})
+  name: WriteAndReadAsync<TResponse>(IRequest, Func<Byte[], TResponse>)
+  href: api/Device.Net.IDeviceManager.html#Device_Net_IDeviceManager_WriteAndReadAsync__1_Device_Net_IRequest_System_Func_System_Byte_____0__
+  commentId: M:Device.Net.IDeviceManager.WriteAndReadAsync``1(Device.Net.IRequest,System.Func{System.Byte[],``0})
+  name.vb: WriteAndReadAsync(Of TResponse)(IRequest, Func(Of Byte(), TResponse))
+  fullName: Device.Net.IDeviceManager.WriteAndReadAsync<TResponse>(Device.Net.IRequest, System.Func<System.Byte[], TResponse>)
+  fullName.vb: Device.Net.IDeviceManager.WriteAndReadAsync(Of TResponse)(Device.Net.IRequest, System.Func(Of System.Byte(), TResponse))
+  nameWithType: IDeviceManager.WriteAndReadAsync<TResponse>(IRequest, Func<Byte[], TResponse>)
+  nameWithType.vb: IDeviceManager.WriteAndReadAsync(Of TResponse)(IRequest, Func(Of Byte(), TResponse))
+- uid: Device.Net.IRequest
+  name: IRequest
+  href: api/Device.Net.IRequest.html
+  commentId: T:Device.Net.IRequest
+  fullName: Device.Net.IRequest
+  nameWithType: IRequest
+- uid: Device.Net.IRequest.ToArray
+  name: ToArray()
+  href: api/Device.Net.IRequest.html#Device_Net_IRequest_ToArray
+  commentId: M:Device.Net.IRequest.ToArray
+  fullName: Device.Net.IRequest.ToArray()
+  nameWithType: IRequest.ToArray()
+- uid: Device.Net.IRequest.ToArray*
+  name: ToArray
+  href: api/Device.Net.IRequest.html#Device_Net_IRequest_ToArray_
+  commentId: Overload:Device.Net.IRequest.ToArray
+  isSpec: "True"
+  fullName: Device.Net.IRequest.ToArray
+  nameWithType: IRequest.ToArray
 - uid: Device.Net.LibUsb
   name: Device.Net.LibUsb
   href: api/Device.Net.LibUsb.html
@@ -1813,6 +2066,134 @@ references:
   isSpec: "True"
   fullName: Device.Net.LibUsb.WriteEndpoint.UsbEndpointWriter
   nameWithType: WriteEndpoint.UsbEndpointWriter
+- uid: Device.Net.NotifyDeviceError
+  name: NotifyDeviceError
+  href: api/Device.Net.NotifyDeviceError.html
+  commentId: T:Device.Net.NotifyDeviceError
+  fullName: Device.Net.NotifyDeviceError
+  nameWithType: NotifyDeviceError
+- uid: Device.Net.Observable`1
+  name: Observable<T>
+  href: api/Device.Net.Observable-1.html
+  commentId: T:Device.Net.Observable`1
+  name.vb: Observable(Of T)
+  fullName: Device.Net.Observable<T>
+  fullName.vb: Device.Net.Observable(Of T)
+  nameWithType: Observable<T>
+  nameWithType.vb: Observable(Of T)
+- uid: Device.Net.Observable`1.Next(`0)
+  name: Next(T)
+  href: api/Device.Net.Observable-1.html#Device_Net_Observable_1_Next__0_
+  commentId: M:Device.Net.Observable`1.Next(`0)
+  fullName: Device.Net.Observable<T>.Next(T)
+  fullName.vb: Device.Net.Observable(Of T).Next(T)
+  nameWithType: Observable<T>.Next(T)
+  nameWithType.vb: Observable(Of T).Next(T)
+- uid: Device.Net.Observable`1.Next*
+  name: Next
+  href: api/Device.Net.Observable-1.html#Device_Net_Observable_1_Next_
+  commentId: Overload:Device.Net.Observable`1.Next
+  isSpec: "True"
+  fullName: Device.Net.Observable<T>.Next
+  fullName.vb: Device.Net.Observable(Of T).Next
+  nameWithType: Observable<T>.Next
+  nameWithType.vb: Observable(Of T).Next
+- uid: Device.Net.Observable`1.Subscribe(System.IObserver{`0})
+  name: Subscribe(IObserver<T>)
+  href: api/Device.Net.Observable-1.html#Device_Net_Observable_1_Subscribe_System_IObserver__0__
+  commentId: M:Device.Net.Observable`1.Subscribe(System.IObserver{`0})
+  name.vb: Subscribe(IObserver(Of T))
+  fullName: Device.Net.Observable<T>.Subscribe(System.IObserver<T>)
+  fullName.vb: Device.Net.Observable(Of T).Subscribe(System.IObserver(Of T))
+  nameWithType: Observable<T>.Subscribe(IObserver<T>)
+  nameWithType.vb: Observable(Of T).Subscribe(IObserver(Of T))
+- uid: Device.Net.Observable`1.Subscribe*
+  name: Subscribe
+  href: api/Device.Net.Observable-1.html#Device_Net_Observable_1_Subscribe_
+  commentId: Overload:Device.Net.Observable`1.Subscribe
+  isSpec: "True"
+  fullName: Device.Net.Observable<T>.Subscribe
+  fullName.vb: Device.Net.Observable(Of T).Subscribe
+  nameWithType: Observable<T>.Subscribe
+  nameWithType.vb: Observable(Of T).Subscribe
+- uid: Device.Net.Observer`1
+  name: Observer<T>
+  href: api/Device.Net.Observer-1.html
+  commentId: T:Device.Net.Observer`1
+  name.vb: Observer(Of T)
+  fullName: Device.Net.Observer<T>
+  fullName.vb: Device.Net.Observer(Of T)
+  nameWithType: Observer<T>
+  nameWithType.vb: Observer(Of T)
+- uid: Device.Net.Observer`1.#ctor(System.Action{`0},System.Action{System.Exception},System.Action)
+  name: Observer(Action<T>, Action<Exception>, Action)
+  href: api/Device.Net.Observer-1.html#Device_Net_Observer_1__ctor_System_Action__0__System_Action_System_Exception__System_Action_
+  commentId: M:Device.Net.Observer`1.#ctor(System.Action{`0},System.Action{System.Exception},System.Action)
+  name.vb: Observer(Action(Of T), Action(Of Exception), Action)
+  fullName: Device.Net.Observer<T>.Observer(System.Action<T>, System.Action<System.Exception>, System.Action)
+  fullName.vb: Device.Net.Observer(Of T).Observer(System.Action(Of T), System.Action(Of System.Exception), System.Action)
+  nameWithType: Observer<T>.Observer(Action<T>, Action<Exception>, Action)
+  nameWithType.vb: Observer(Of T).Observer(Action(Of T), Action(Of Exception), Action)
+- uid: Device.Net.Observer`1.#ctor*
+  name: Observer
+  href: api/Device.Net.Observer-1.html#Device_Net_Observer_1__ctor_
+  commentId: Overload:Device.Net.Observer`1.#ctor
+  isSpec: "True"
+  fullName: Device.Net.Observer<T>.Observer
+  fullName.vb: Device.Net.Observer(Of T).Observer
+  nameWithType: Observer<T>.Observer
+  nameWithType.vb: Observer(Of T).Observer
+- uid: Device.Net.Observer`1.OnCompleted
+  name: OnCompleted()
+  href: api/Device.Net.Observer-1.html#Device_Net_Observer_1_OnCompleted
+  commentId: M:Device.Net.Observer`1.OnCompleted
+  fullName: Device.Net.Observer<T>.OnCompleted()
+  fullName.vb: Device.Net.Observer(Of T).OnCompleted()
+  nameWithType: Observer<T>.OnCompleted()
+  nameWithType.vb: Observer(Of T).OnCompleted()
+- uid: Device.Net.Observer`1.OnCompleted*
+  name: OnCompleted
+  href: api/Device.Net.Observer-1.html#Device_Net_Observer_1_OnCompleted_
+  commentId: Overload:Device.Net.Observer`1.OnCompleted
+  isSpec: "True"
+  fullName: Device.Net.Observer<T>.OnCompleted
+  fullName.vb: Device.Net.Observer(Of T).OnCompleted
+  nameWithType: Observer<T>.OnCompleted
+  nameWithType.vb: Observer(Of T).OnCompleted
+- uid: Device.Net.Observer`1.OnError(System.Exception)
+  name: OnError(Exception)
+  href: api/Device.Net.Observer-1.html#Device_Net_Observer_1_OnError_System_Exception_
+  commentId: M:Device.Net.Observer`1.OnError(System.Exception)
+  fullName: Device.Net.Observer<T>.OnError(System.Exception)
+  fullName.vb: Device.Net.Observer(Of T).OnError(System.Exception)
+  nameWithType: Observer<T>.OnError(Exception)
+  nameWithType.vb: Observer(Of T).OnError(Exception)
+- uid: Device.Net.Observer`1.OnError*
+  name: OnError
+  href: api/Device.Net.Observer-1.html#Device_Net_Observer_1_OnError_
+  commentId: Overload:Device.Net.Observer`1.OnError
+  isSpec: "True"
+  fullName: Device.Net.Observer<T>.OnError
+  fullName.vb: Device.Net.Observer(Of T).OnError
+  nameWithType: Observer<T>.OnError
+  nameWithType.vb: Observer(Of T).OnError
+- uid: Device.Net.Observer`1.OnNext(`0)
+  name: OnNext(T)
+  href: api/Device.Net.Observer-1.html#Device_Net_Observer_1_OnNext__0_
+  commentId: M:Device.Net.Observer`1.OnNext(`0)
+  fullName: Device.Net.Observer<T>.OnNext(T)
+  fullName.vb: Device.Net.Observer(Of T).OnNext(T)
+  nameWithType: Observer<T>.OnNext(T)
+  nameWithType.vb: Observer(Of T).OnNext(T)
+- uid: Device.Net.Observer`1.OnNext*
+  name: OnNext
+  href: api/Device.Net.Observer-1.html#Device_Net_Observer_1_OnNext_
+  commentId: Overload:Device.Net.Observer`1.OnNext
+  isSpec: "True"
+  fullName: Device.Net.Observer<T>.OnNext
+  fullName.vb: Device.Net.Observer(Of T).OnNext
+  nameWithType: Observer<T>.OnNext
+  nameWithType.vb: Observer(Of T).OnNext
 - uid: Device.Net.Trace
   name: Trace
   href: api/Device.Net.Trace.html
@@ -7420,30 +7801,12 @@ references:
   commentId: F:Usb.Net.Android.Resource.Id.always
   fullName: Usb.Net.Android.Resource.Id.always
   nameWithType: Resource.Id.always
-- uid: Usb.Net.Android.Resource.Id.application_name
-  name: application_name
-  href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_application_name
-  commentId: F:Usb.Net.Android.Resource.Id.application_name
-  fullName: Usb.Net.Android.Resource.Id.application_name
-  nameWithType: Resource.Id.application_name
-- uid: Usb.Net.Android.Resource.Id.APPLICATION_NAME
-  name: APPLICATION_NAME
-  href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_APPLICATION_NAME
-  commentId: F:Usb.Net.Android.Resource.Id.APPLICATION_NAME
-  fullName: Usb.Net.Android.Resource.Id.APPLICATION_NAME
-  nameWithType: Resource.Id.APPLICATION_NAME
 - uid: Usb.Net.Android.Resource.Id.async
   name: async
   href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_async
   commentId: F:Usb.Net.Android.Resource.Id.async
   fullName: Usb.Net.Android.Resource.Id.async
   nameWithType: Resource.Id.async
-- uid: Usb.Net.Android.Resource.Id.background
-  name: background
-  href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_background
-  commentId: F:Usb.Net.Android.Resource.Id.background
-  fullName: Usb.Net.Android.Resource.Id.background
-  nameWithType: Resource.Id.background
 - uid: Usb.Net.Android.Resource.Id.beginning
   name: beginning
   href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_beginning
@@ -7462,24 +7825,6 @@ references:
   commentId: F:Usb.Net.Android.Resource.Id.bottom
   fullName: Usb.Net.Android.Resource.Id.bottom
   nameWithType: Resource.Id.bottom
-- uid: Usb.Net.Android.Resource.Id.button1
-  name: button1
-  href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_button1
-  commentId: F:Usb.Net.Android.Resource.Id.button1
-  fullName: Usb.Net.Android.Resource.Id.button1
-  nameWithType: Resource.Id.button1
-- uid: Usb.Net.Android.Resource.Id.button2
-  name: button2
-  href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_button2
-  commentId: F:Usb.Net.Android.Resource.Id.button2
-  fullName: Usb.Net.Android.Resource.Id.button2
-  nameWithType: Resource.Id.button2
-- uid: Usb.Net.Android.Resource.Id.button3
-  name: button3
-  href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_button3
-  commentId: F:Usb.Net.Android.Resource.Id.button3
-  fullName: Usb.Net.Android.Resource.Id.button3
-  nameWithType: Resource.Id.button3
 - uid: Usb.Net.Android.Resource.Id.buttonPanel
   name: buttonPanel
   href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_buttonPanel
@@ -7618,12 +7963,6 @@ references:
   commentId: F:Usb.Net.Android.Resource.Id.icon_group
   fullName: Usb.Net.Android.Resource.Id.icon_group
   nameWithType: Resource.Id.icon_group
-- uid: Usb.Net.Android.Resource.Id.icon1
-  name: icon1
-  href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_icon1
-  commentId: F:Usb.Net.Android.Resource.Id.icon1
-  fullName: Usb.Net.Android.Resource.Id.icon1
-  nameWithType: Resource.Id.icon1
 - uid: Usb.Net.Android.Resource.Id.ifRoom
   name: ifRoom
   href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_ifRoom
@@ -7672,12 +8011,6 @@ references:
   commentId: F:Usb.Net.Android.Resource.Id.listMode
   fullName: Usb.Net.Android.Resource.Id.listMode
   nameWithType: Resource.Id.listMode
-- uid: Usb.Net.Android.Resource.Id.mask
-  name: mask
-  href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_mask
-  commentId: F:Usb.Net.Android.Resource.Id.mask
-  fullName: Usb.Net.Android.Resource.Id.mask
-  nameWithType: Resource.Id.mask
 - uid: Usb.Net.Android.Resource.Id.media_actions
   name: media_actions
   href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_media_actions
@@ -7750,12 +8083,6 @@ references:
   commentId: F:Usb.Net.Android.Resource.Id.parentPanel
   fullName: Usb.Net.Android.Resource.Id.parentPanel
   nameWithType: Resource.Id.parentPanel
-- uid: Usb.Net.Android.Resource.Id.progress
-  name: progress
-  href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_progress
-  commentId: F:Usb.Net.Android.Resource.Id.progress
-  fullName: Usb.Net.Android.Resource.Id.progress
-  nameWithType: Resource.Id.progress
 - uid: Usb.Net.Android.Resource.Id.progress_circular
   name: progress_circular
   href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_progress_circular
@@ -7870,12 +8197,6 @@ references:
   commentId: F:Usb.Net.Android.Resource.Id.search_voice_btn
   fullName: Usb.Net.Android.Resource.Id.search_voice_btn
   nameWithType: Resource.Id.search_voice_btn
-- uid: Usb.Net.Android.Resource.Id.secondaryProgress
-  name: secondaryProgress
-  href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_secondaryProgress
-  commentId: F:Usb.Net.Android.Resource.Id.secondaryProgress
-  fullName: Usb.Net.Android.Resource.Id.secondaryProgress
-  nameWithType: Resource.Id.secondaryProgress
 - uid: Usb.Net.Android.Resource.Id.select_dialog_listview
   name: select_dialog_listview
   href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_select_dialog_listview
@@ -7984,12 +8305,6 @@ references:
   commentId: F:Usb.Net.Android.Resource.Id.text
   fullName: Usb.Net.Android.Resource.Id.text
   nameWithType: Resource.Id.text
-- uid: Usb.Net.Android.Resource.Id.text1
-  name: text1
-  href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_text1
-  commentId: F:Usb.Net.Android.Resource.Id.text1
-  fullName: Usb.Net.Android.Resource.Id.text1
-  nameWithType: Resource.Id.text1
 - uid: Usb.Net.Android.Resource.Id.text2
   name: text2
   href: api/Usb.Net.Android.Resource.Id.html#Usb_Net_Android_Resource_Id_text2

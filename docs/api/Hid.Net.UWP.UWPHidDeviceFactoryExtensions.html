@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class UwpHidDeviceFactoryExtensions
    ">
-    <meta name="generator" content="docfx 2.56.6.0">
+    <meta name="generator" content="docfx 2.58.2.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -113,13 +113,8 @@
   </div>
   <h3 id="methods">Methods
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UwpHidDeviceFactoryExtensions_CreateUwpHidDeviceFactory_Device_Net_FilterDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Device_Net_GetDeviceAsync_System_Nullable_System_Guid__System_Func_Windows_Devices_Enumeration_DeviceInformation_System_Boolean__Device_Net_IDataReceiver_System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Hid_Net_Report_Device_Net_TransferResult__System_Func_Device_Net_TransferResult_Hid_Net_Report__System_Func_System_Byte___System_Byte_System_Byte____Hid_Net_WriteReportTransform_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(Device.Net.FilterDeviceDefinition%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CDevice.Net.GetConnectedDeviceDefinitionsAsync%2CDevice.Net.GetDeviceAsync%2CSystem.Nullable%7BSystem.Guid%7D%2CSystem.Func%7BWindows.Devices.Enumeration.DeviceInformation%2CSystem.Boolean%7D%2CDevice.Net.IDataReceiver%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Func%7BHid.Net.Report%2CDevice.Net.TransferResult%7D%2CSystem.Func%7BDevice.Net.TransferResult%2CHid.Net.Report%7D%2CSystem.Func%7BSystem.Byte%5B%5D%2CSystem.Byte%2CSystem.Byte%5B%5D%7D%2CHid.Net.WriteReportTransform)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UwpHidDeviceFactoryExtensions.cs/#L38">View Source</a>
-  </span>
+  
+  
   <a id="Hid_Net_UWP_UwpHidDeviceFactoryExtensions_CreateUwpHidDeviceFactory_" data-uid="Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory*"></a>
   <h4 id="Hid_Net_UWP_UwpHidDeviceFactoryExtensions_CreateUwpHidDeviceFactory_Device_Net_FilterDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Device_Net_GetDeviceAsync_System_Nullable_System_Guid__System_Func_Windows_Devices_Enumeration_DeviceInformation_System_Boolean__Device_Net_IDataReceiver_System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Hid_Net_Report_Device_Net_TransferResult__System_Func_Device_Net_TransferResult_Hid_Net_Report__System_Func_System_Byte___System_Byte_System_Byte____Hid_Net_WriteReportTransform_" data-uid="Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(Device.Net.FilterDeviceDefinition,Microsoft.Extensions.Logging.ILoggerFactory,Device.Net.GetConnectedDeviceDefinitionsAsync,Device.Net.GetDeviceAsync,System.Nullable{System.Guid},System.Func{Windows.Devices.Enumeration.DeviceInformation,System.Boolean},Device.Net.IDataReceiver,System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]},Hid.Net.WriteReportTransform)">CreateUwpHidDeviceFactory(FilterDeviceDefinition, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable&lt;Guid&gt;, Func&lt;DeviceInformation, Boolean&gt;, IDataReceiver, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;, Func&lt;Report, TransferResult&gt;, Func&lt;TransferResult, Report&gt;, Func&lt;Byte[], Byte, Byte[]&gt;, WriteReportTransform)</h4>
   <div class="markdown level1 summary"><p>Creates a <a class="xref" href="Device.Net.IDeviceFactory.html">IDeviceFactory</a> for UWP Hid devices</p>
@@ -127,7 +122,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IDeviceFactory CreateUwpHidDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition, ILoggerFactory loggerFactory = null, GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null, GetDeviceAsync getDevice = null, Guid? classGuid = default(Guid? ), Func&lt;DeviceInformation, bool&gt; deviceInformationFilter = null, IDataReceiver dataReceiver = null, ushort? writeBufferSize = default(ushort? ), ushort? readBufferSize = default(ushort? ), Func&lt;Report, TransferResult&gt; readReportTransform = null, Func&lt;TransferResult, Report&gt; readTransferTransform = null, Func&lt;byte[], byte, byte[]&gt; writeTransferTransform = null, WriteReportTransform writeReportTransform = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IDeviceFactory CreateUwpHidDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition, ILoggerFactory loggerFactory = null, GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null, GetDeviceAsync getDevice = null, Guid? classGuid = null, Func&lt;DeviceInformation, bool&gt; deviceInformationFilter = null, IDataReceiver dataReceiver = null, ushort? writeBufferSize = null, ushort? readBufferSize = null, Func&lt;Report, TransferResult&gt; readReportTransform = null, Func&lt;TransferResult, Report&gt; readTransferTransform = null, Func&lt;byte[], byte, byte[]&gt; writeTransferTransform = null, WriteReportTransform writeReportTransform = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -232,13 +227,8 @@
       </tr>
     </tbody>
   </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UwpHidDeviceFactoryExtensions_CreateUwpHidDeviceFactory_System_Collections_Generic_IEnumerable_Device_Net_FilterDeviceDefinition__Microsoft_Extensions_Logging_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Device_Net_GetDeviceAsync_System_Nullable_System_Guid__System_Func_Windows_Devices_Enumeration_DeviceInformation_System_Boolean__Device_Net_IDataReceiver_System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Hid_Net_Report_Device_Net_TransferResult__System_Func_Device_Net_TransferResult_Hid_Net_Report__System_Func_System_Byte___System_Byte_System_Byte____Hid_Net_WriteReportTransform_.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(System.Collections.Generic.IEnumerable%7BDevice.Net.FilterDeviceDefinition%7D%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CDevice.Net.GetConnectedDeviceDefinitionsAsync%2CDevice.Net.GetDeviceAsync%2CSystem.Nullable%7BSystem.Guid%7D%2CSystem.Func%7BWindows.Devices.Enumeration.DeviceInformation%2CSystem.Boolean%7D%2CDevice.Net.IDataReceiver%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Func%7BHid.Net.Report%2CDevice.Net.TransferResult%7D%2CSystem.Func%7BDevice.Net.TransferResult%2CHid.Net.Report%7D%2CSystem.Func%7BSystem.Byte%5B%5D%2CSystem.Byte%2CSystem.Byte%5B%5D%7D%2CHid.Net.WriteReportTransform)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UwpHidDeviceFactoryExtensions.cs/#L84">View Source</a>
-  </span>
+  
+  
   <a id="Hid_Net_UWP_UwpHidDeviceFactoryExtensions_CreateUwpHidDeviceFactory_" data-uid="Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory*"></a>
   <h4 id="Hid_Net_UWP_UwpHidDeviceFactoryExtensions_CreateUwpHidDeviceFactory_System_Collections_Generic_IEnumerable_Device_Net_FilterDeviceDefinition__Microsoft_Extensions_Logging_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Device_Net_GetDeviceAsync_System_Nullable_System_Guid__System_Func_Windows_Devices_Enumeration_DeviceInformation_System_Boolean__Device_Net_IDataReceiver_System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Hid_Net_Report_Device_Net_TransferResult__System_Func_Device_Net_TransferResult_Hid_Net_Report__System_Func_System_Byte___System_Byte_System_Byte____Hid_Net_WriteReportTransform_" data-uid="Hid.Net.UWP.UwpHidDeviceFactoryExtensions.CreateUwpHidDeviceFactory(System.Collections.Generic.IEnumerable{Device.Net.FilterDeviceDefinition},Microsoft.Extensions.Logging.ILoggerFactory,Device.Net.GetConnectedDeviceDefinitionsAsync,Device.Net.GetDeviceAsync,System.Nullable{System.Guid},System.Func{Windows.Devices.Enumeration.DeviceInformation,System.Boolean},Device.Net.IDataReceiver,System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Hid.Net.Report,Device.Net.TransferResult},System.Func{Device.Net.TransferResult,Hid.Net.Report},System.Func{System.Byte[],System.Byte,System.Byte[]},Hid.Net.WriteReportTransform)">CreateUwpHidDeviceFactory(IEnumerable&lt;FilterDeviceDefinition&gt;, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetDeviceAsync, Nullable&lt;Guid&gt;, Func&lt;DeviceInformation, Boolean&gt;, IDataReceiver, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;, Func&lt;Report, TransferResult&gt;, Func&lt;TransferResult, Report&gt;, Func&lt;Byte[], Byte, Byte[]&gt;, WriteReportTransform)</h4>
   <div class="markdown level1 summary"><p>Creates a <a class="xref" href="Device.Net.IDeviceFactory.html">IDeviceFactory</a> for UWP Hid devices</p>
@@ -246,7 +236,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IDeviceFactory CreateUwpHidDeviceFactory(this IEnumerable&lt;FilterDeviceDefinition&gt; filterDeviceDefinitions, ILoggerFactory loggerFactory = null, GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null, GetDeviceAsync getDevice = null, Guid? classGuid = default(Guid? ), Func&lt;DeviceInformation, bool&gt; deviceInformationFilter = null, IDataReceiver dataReceiver = null, ushort? writeBufferSize = default(ushort? ), ushort? readBufferSize = default(ushort? ), Func&lt;Report, TransferResult&gt; readReportTransform = null, Func&lt;TransferResult, Report&gt; readTransferTransform = null, Func&lt;byte[], byte, byte[]&gt; writeTransferTransform = null, WriteReportTransform writeReportTransform = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IDeviceFactory CreateUwpHidDeviceFactory(this IEnumerable&lt;FilterDeviceDefinition&gt; filterDeviceDefinitions, ILoggerFactory loggerFactory = null, GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null, GetDeviceAsync getDevice = null, Guid? classGuid = null, Func&lt;DeviceInformation, bool&gt; deviceInformationFilter = null, IDataReceiver dataReceiver = null, ushort? writeBufferSize = null, ushort? readBufferSize = null, Func&lt;Report, TransferResult&gt; readReportTransform = null, Func&lt;TransferResult, Report&gt; readTransferTransform = null, Func&lt;byte[], byte, byte[]&gt; writeTransferTransform = null, WriteReportTransform writeReportTransform = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -358,12 +348,6 @@
             <div class="sideaffix">
               <div class="contribution">
                 <ul class="nav">
-                  <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Hid_Net_UWP_UwpHidDeviceFactoryExtensions.md&amp;value=---%0Auid%3A%20Hid.Net.UWP.UwpHidDeviceFactoryExtensions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Hid.Net.UWP/UwpHidDeviceFactoryExtensions.cs/#L16" class="contribution-link">View Source</a>
-                  </li>
                 </ul>
               </div>
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">

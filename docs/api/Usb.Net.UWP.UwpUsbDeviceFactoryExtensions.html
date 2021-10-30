@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class UwpUsbDeviceFactoryExtensions
    ">
-    <meta name="generator" content="docfx 2.56.6.0">
+    <meta name="generator" content="docfx 2.58.2.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -112,20 +112,15 @@
   </div>
   <h3 id="methods">Methods
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UWP_UwpUsbDeviceFactoryExtensions_CreateUwpUsbDeviceFactory_Device_Net_FilterDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Usb_Net_GetUsbInterfaceManager_System_Nullable_System_UInt16__System_Nullable_System_UInt16__.md&amp;value=---%0Auid%3A%20Usb.Net.UWP.UwpUsbDeviceFactoryExtensions.CreateUwpUsbDeviceFactory(Device.Net.FilterDeviceDefinition%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CDevice.Net.GetConnectedDeviceDefinitionsAsync%2CUsb.Net.GetUsbInterfaceManager%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Nullable%7BSystem.UInt16%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net.UWP/UwpUsbDeviceFactoryExtensions.cs/#L17">View Source</a>
-  </span>
+  
+  
   <a id="Usb_Net_UWP_UwpUsbDeviceFactoryExtensions_CreateUwpUsbDeviceFactory_" data-uid="Usb.Net.UWP.UwpUsbDeviceFactoryExtensions.CreateUwpUsbDeviceFactory*"></a>
   <h4 id="Usb_Net_UWP_UwpUsbDeviceFactoryExtensions_CreateUwpUsbDeviceFactory_Device_Net_FilterDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Usb_Net_GetUsbInterfaceManager_System_Nullable_System_UInt16__System_Nullable_System_UInt16__" data-uid="Usb.Net.UWP.UwpUsbDeviceFactoryExtensions.CreateUwpUsbDeviceFactory(Device.Net.FilterDeviceDefinition,Microsoft.Extensions.Logging.ILoggerFactory,Device.Net.GetConnectedDeviceDefinitionsAsync,Usb.Net.GetUsbInterfaceManager,System.Nullable{System.UInt16},System.Nullable{System.UInt16})">CreateUwpUsbDeviceFactory(FilterDeviceDefinition, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetUsbInterfaceManager, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IDeviceFactory CreateUwpUsbDeviceFactory(this FilterDeviceDefinition filterDeviceDefinitions, ILoggerFactory loggerFactory = null, GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null, GetUsbInterfaceManager getUsbInterfaceManager = null, ushort? readBufferSize = default(ushort? ), ushort? writeBufferSize = default(ushort? ))</code></pre>
+    <pre><code class="lang-csharp hljs">public static IDeviceFactory CreateUwpUsbDeviceFactory(this FilterDeviceDefinition filterDeviceDefinitions, ILoggerFactory loggerFactory = null, GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null, GetUsbInterfaceManager getUsbInterfaceManager = null, ushort? readBufferSize = null, ushort? writeBufferSize = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -184,20 +179,15 @@
       </tr>
     </tbody>
   </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UWP_UwpUsbDeviceFactoryExtensions_CreateUwpUsbDeviceFactory_System_Collections_Generic_IEnumerable_Device_Net_FilterDeviceDefinition__Microsoft_Extensions_Logging_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Usb_Net_GetUsbInterfaceManager_System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Windows_Devices_Enumeration_DeviceInformation_System_Boolean__System_Func_Windows_Devices_Usb_UsbDevice_Usb_Net_SetupPacket_System_Byte___System_Threading_CancellationToken_System_Threading_Tasks_Task_Device_Net_TransferResult___Device_Net_IDataReceiver_.md&amp;value=---%0Auid%3A%20Usb.Net.UWP.UwpUsbDeviceFactoryExtensions.CreateUwpUsbDeviceFactory(System.Collections.Generic.IEnumerable%7BDevice.Net.FilterDeviceDefinition%7D%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CDevice.Net.GetConnectedDeviceDefinitionsAsync%2CUsb.Net.GetUsbInterfaceManager%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Func%7BWindows.Devices.Enumeration.DeviceInformation%2CSystem.Boolean%7D%2CSystem.Func%7BWindows.Devices.Usb.UsbDevice%2CUsb.Net.SetupPacket%2CSystem.Byte%5B%5D%2CSystem.Threading.CancellationToken%2CSystem.Threading.Tasks.Task%7BDevice.Net.TransferResult%7D%7D%2CDevice.Net.IDataReceiver)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net.UWP/UwpUsbDeviceFactoryExtensions.cs/#L33">View Source</a>
-  </span>
+  
+  
   <a id="Usb_Net_UWP_UwpUsbDeviceFactoryExtensions_CreateUwpUsbDeviceFactory_" data-uid="Usb.Net.UWP.UwpUsbDeviceFactoryExtensions.CreateUwpUsbDeviceFactory*"></a>
   <h4 id="Usb_Net_UWP_UwpUsbDeviceFactoryExtensions_CreateUwpUsbDeviceFactory_System_Collections_Generic_IEnumerable_Device_Net_FilterDeviceDefinition__Microsoft_Extensions_Logging_ILoggerFactory_Device_Net_GetConnectedDeviceDefinitionsAsync_Usb_Net_GetUsbInterfaceManager_System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Windows_Devices_Enumeration_DeviceInformation_System_Boolean__System_Func_Windows_Devices_Usb_UsbDevice_Usb_Net_SetupPacket_System_Byte___System_Threading_CancellationToken_System_Threading_Tasks_Task_Device_Net_TransferResult___Device_Net_IDataReceiver_" data-uid="Usb.Net.UWP.UwpUsbDeviceFactoryExtensions.CreateUwpUsbDeviceFactory(System.Collections.Generic.IEnumerable{Device.Net.FilterDeviceDefinition},Microsoft.Extensions.Logging.ILoggerFactory,Device.Net.GetConnectedDeviceDefinitionsAsync,Usb.Net.GetUsbInterfaceManager,System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Windows.Devices.Enumeration.DeviceInformation,System.Boolean},System.Func{Windows.Devices.Usb.UsbDevice,Usb.Net.SetupPacket,System.Byte[],System.Threading.CancellationToken,System.Threading.Tasks.Task{Device.Net.TransferResult}},Device.Net.IDataReceiver)">CreateUwpUsbDeviceFactory(IEnumerable&lt;FilterDeviceDefinition&gt;, ILoggerFactory, GetConnectedDeviceDefinitionsAsync, GetUsbInterfaceManager, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;, Func&lt;DeviceInformation, Boolean&gt;, Func&lt;UsbDevice, SetupPacket, Byte[], CancellationToken, Task&lt;TransferResult&gt;&gt;, IDataReceiver)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IDeviceFactory CreateUwpUsbDeviceFactory(this IEnumerable&lt;FilterDeviceDefinition&gt; filterDeviceDefinitions, ILoggerFactory loggerFactory, GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null, GetUsbInterfaceManager getUsbInterfaceManager = null, ushort? readBufferSize = default(ushort? ), ushort? writeBufferSize = default(ushort? ), Func&lt;DeviceInformation, bool&gt; deviceInformationFilter = null, Func&lt;UsbDevice, SetupPacket, byte[], CancellationToken, Task&lt;TransferResult&gt;&gt; performControlTransferAsync = null, IDataReceiver dataReceiver = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IDeviceFactory CreateUwpUsbDeviceFactory(this IEnumerable&lt;FilterDeviceDefinition&gt; filterDeviceDefinitions, ILoggerFactory loggerFactory, GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null, GetUsbInterfaceManager getUsbInterfaceManager = null, ushort? readBufferSize = null, ushort? writeBufferSize = null, Func&lt;DeviceInformation, bool&gt; deviceInformationFilter = null, Func&lt;UsbDevice, SetupPacket, byte[], CancellationToken, Task&lt;TransferResult&gt;&gt; performControlTransferAsync = null, IDataReceiver dataReceiver = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -278,12 +268,6 @@
             <div class="sideaffix">
               <div class="contribution">
                 <ul class="nav">
-                  <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Usb_Net_UWP_UwpUsbDeviceFactoryExtensions.md&amp;value=---%0Auid%3A%20Usb.Net.UWP.UwpUsbDeviceFactoryExtensions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Usb.Net.UWP/UwpUsbDeviceFactoryExtensions.cs/#L14" class="contribution-link">View Source</a>
-                  </li>
                 </ul>
               </div>
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
