@@ -12,6 +12,7 @@ namespace Microsoft.Extensions.Logging
         void LogInformation(string message, params object[] args);
         void LogWarning(string message, params object[] args);
         void LogDebug(string message, params object[] args);
+        void LogTrace(string message, params object[] args);
         void LogTrace<T>(T state);
     }
 

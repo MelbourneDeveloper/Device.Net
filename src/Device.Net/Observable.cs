@@ -7,11 +7,13 @@ namespace Device.Net
     /// Basic observable which does thib of the Rx extensions so that we don't have to add that dependency
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    internal class Observable<T> : IObservable<T>
+    public class Observable<T> : IObservable<T>
     {
         #region Fields
         private readonly List<IObserver<T>> _observers = new();
         #endregion
+
+        public void Next(T item) => Locked(() => _observers.ForEach(o => o.OnNext(item)));
 
         #region Implementation
         public IDisposable Subscribe(IObserver<T> observer)
