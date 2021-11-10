@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 #pragma warning disable CA1707 // Identifiers should not contain underscores
 #pragma warning disable CA1021 // Avoid out parameters
@@ -14,17 +15,36 @@ namespace Device.Net.Windows
     internal class ApiService : IApiService
     {
         #region Fields
-#if NETFRAMEWORK
-        private const uint FILE_FLAG_OVERLAPPED = 0;
-#else
         private const uint FILE_FLAG_OVERLAPPED = 0x40000000;
-#endif
+
+        private readonly uint fileFlag;
 
         protected ILogger Logger { get; }
         #endregion
 
         #region Constructor
-        public ApiService(ILogger logger = null) => Logger = logger ?? NullLogger.Instance;
+        public ApiService(ILogger logger = null)
+        {
+            Logger = logger ?? NullLogger.Instance;
+            fileFlag = FILE_FLAG_OVERLAPPED;
+            var runtime = RuntimeInformation.FrameworkDescription;
+            if (runtime.StartsWith(".NET Framework", StringComparison.InvariantCultureIgnoreCase))
+            {
+                fileFlag = 0;
+            }
+            else if (Regex.Match(runtime, @"^\.NET (\d+)") is { Success: true } m)
+            {
+                var majorVersion = m.Groups[1].Value;
+                if (majorVersion != "5")
+                {
+                    var isSwitchConfigured = AppContext.TryGetSwitch("System.IO.UseNet5CompatFileStream", out var isSwitchEnabled);
+                    if (!isSwitchConfigured || !isSwitchEnabled)
+                    {
+                        fileFlag = 0;
+                    }
+                }
+            }
+        }
         #endregion
 
         #region Implementation
@@ -44,7 +64,7 @@ namespace Device.Net.Windows
         private SafeFileHandle CreateConnection(string deviceId, FileAccessRights desiredAccess, uint shareMode, uint creationDisposition)
         {
             Logger.LogInformation("Calling {call} Area: {area} for DeviceId: {deviceId}. Desired Access: {desiredAccess}. Share mode: {shareMode}. Creation Disposition: {creationDisposition}", nameof(APICalls.CreateFile), nameof(ApiService), deviceId, desiredAccess, shareMode, creationDisposition);
-            return APICalls.CreateFile(deviceId, desiredAccess, shareMode, IntPtr.Zero, creationDisposition, FILE_FLAG_OVERLAPPED, IntPtr.Zero);
+            return APICalls.CreateFile(deviceId, desiredAccess, shareMode, IntPtr.Zero, creationDisposition, fileFlag, IntPtr.Zero);
         }
         #endregion
 
