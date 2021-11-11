@@ -11,7 +11,12 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
-    public delegate SafeFileHandle CreateConnection(string deviceId, FileAccessRights desiredAccess, uint shareMode, uint creationDisposition);
+    public delegate SafeFileHandle CreateConnection(
+        IHidApiService apiService,
+        string deviceId,
+        FileAccessRights desiredAccess,
+        uint shareMode,
+        uint creationDisposition);
 
     internal class WindowsHidHandler : IHidDeviceHandler
     {
@@ -57,11 +62,11 @@ namespace Hid.Net.Windows
             WriteBufferSize = writeBufferSize;
             ReadBufferSize = readBufferSize;
 
-            _createReadConnection = createReadConnection ??= (deviceId, fileAccessRights, shareMode, creationDisposition)
-                => hidApiService.CreateReadConnection(deviceId, fileAccessRights);
+            _createReadConnection = createReadConnection ??= (apiService, deviceId, fileAccessRights, shareMode, creationDisposition)
+                => apiService.CreateReadConnection(deviceId, fileAccessRights);
 
-            _createWriteConnection = createWriteConnection ??= (deviceId, fileAccessRights, shareMode, creationDisposition)
-                => hidApiService.CreateWriteConnection(deviceId);
+            _createWriteConnection = createWriteConnection ??= (apiService, deviceId, fileAccessRights, shareMode, creationDisposition)
+                => apiService.CreateWriteConnection(deviceId);
         }
 
         #endregion Public Constructors

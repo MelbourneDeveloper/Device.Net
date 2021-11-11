@@ -5,11 +5,7 @@ using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
 
-#pragma warning disable CA1707 // Identifiers should not contain underscores
-#pragma warning disable CA1021 // Avoid out parameters
-#pragma warning disable CA1401 // P/Invokes should not be visible
 #pragma warning disable CA5392 // Use DefaultDllImportSearchPaths attribute for P/Invokes
-#pragma warning disable CA1045 // Do not pass types by reference
 #pragma warning disable CA1060 // Move pinvokes to native methods class
 
 namespace Device.Net.Windows
