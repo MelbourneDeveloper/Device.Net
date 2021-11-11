@@ -11,9 +11,10 @@ using System.Threading.Tasks;
 
 namespace Hid.Net.Windows
 {
+    public delegate SafeFileHandle CreateConnection(string deviceId, FileAccessRights desiredAccess, uint shareMode, uint creationDisposition);
+
     internal class WindowsHidHandler : IHidDeviceHandler
     {
-
         #region Private Fields
 
         private readonly IHidApiService _hidService;
@@ -24,6 +25,8 @@ namespace Hid.Net.Windows
         private SafeFileHandle _readSafeFileHandle;
         private Stream _writeFileStream;
         private SafeFileHandle _writeSafeFileHandle;
+        private readonly CreateConnection _createReadConnection;
+        private readonly CreateConnection _createWriteConnection;
 
         #endregion Private Fields
 
@@ -36,7 +39,9 @@ namespace Hid.Net.Windows
             IHidApiService hidApiService = null,
             ILoggerFactory loggerFactory = null,
             Func<TransferResult, Report> readTransferTransform = null,
-            Func<byte[], byte, byte[]> writeTransferTransform = null)
+            Func<byte[], byte, byte[]> writeTransferTransform = null,
+            CreateConnection createReadConnection = null,
+            CreateConnection createWriteConnection = null)
         {
             _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidHandler>();
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
@@ -51,6 +56,12 @@ namespace Hid.Net.Windows
             _hidService = hidApiService ?? new WindowsHidApiService(loggerFactory);
             WriteBufferSize = writeBufferSize;
             ReadBufferSize = readBufferSize;
+
+            _createReadConnection = createReadConnection ??= (deviceId, fileAccessRights, shareMode, creationDisposition)
+                => hidApiService.CreateReadConnection(deviceId, fileAccessRights);
+
+            _createWriteConnection = createWriteConnection ??= (deviceId, fileAccessRights, shareMode, creationDisposition)
+                => hidApiService.CreateWriteConnection(deviceId);
         }
 
         #endregion Public Constructors

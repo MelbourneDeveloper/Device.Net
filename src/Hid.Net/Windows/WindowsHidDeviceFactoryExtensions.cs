@@ -114,6 +114,8 @@ namespace Hid.Net.Windows
         /// <param name="readTransferTransform">Exposes the raw data from the device (including Report Id) on reads and allows you to format the returned <see cref="TransferResult"/></param>
         /// <param name="writeTransferTransform">Given the Report Id and data supplied for the write, allow you to format the raw data that is sent to the device</param>
         /// <param name="writeReportTransform">Given the data supplied, allow you to divide the data in to a <see cref="Report"/></param>
+        /// <param name="createReadConnection">Allows you to specify the API level call to create the Read handle</param>
+        /// <param name="createWriteConnection">Allows you to specify the API level call to create the Write handle</param>
         /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
             this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
@@ -126,7 +128,9 @@ namespace Hid.Net.Windows
             Func<Report, TransferResult> readReportTransform = null,
             Func<TransferResult, Report> readTransferTransform = null,
             Func<byte[], byte, byte[]> writeTransferTransform = null,
-            WriteReportTransform writeReportTransform = null)
+            WriteReportTransform writeReportTransform = null,
+            CreateConnection createReadConnection = null,
+            CreateConnection createWriteConnection = null)
         {
             if (filterDeviceDefinitions == null) throw new ArgumentNullException(nameof(filterDeviceDefinitions));
 
@@ -160,7 +164,9 @@ namespace Hid.Net.Windows
                         hidApiService,
                         loggerFactory,
                         readTransferTransform,
-                        writeTransferTransform),
+                        writeTransferTransform,
+                        createReadConnection,
+                        createWriteConnection),
                     loggerFactory,
                     readReportTransform,
                     writeReportTransform
