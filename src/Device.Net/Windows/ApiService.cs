@@ -14,6 +14,12 @@ namespace Device.Net.Windows
     internal class ApiService : IApiService
     {
         #region Fields
+#if NETFRAMEWORK
+        private const uint FILE_FLAG_OVERLAPPED = 0;
+#else
+        private const uint FILE_FLAG_OVERLAPPED = 0x40000000;
+#endif
+
         protected ILogger Logger { get; }
         #endregion
 
@@ -38,7 +44,7 @@ namespace Device.Net.Windows
         private SafeFileHandle CreateConnection(string deviceId, FileAccessRights desiredAccess, uint shareMode, uint creationDisposition)
         {
             Logger.LogInformation("Calling {call} Area: {area} for DeviceId: {deviceId}. Desired Access: {desiredAccess}. Share mode: {shareMode}. Creation Disposition: {creationDisposition}", nameof(APICalls.CreateFile), nameof(ApiService), deviceId, desiredAccess, shareMode, creationDisposition);
-            return APICalls.CreateFile(deviceId, desiredAccess, shareMode, IntPtr.Zero, creationDisposition, 0, IntPtr.Zero);
+            return APICalls.CreateFile(deviceId, desiredAccess, shareMode, IntPtr.Zero, creationDisposition, FILE_FLAG_OVERLAPPED, IntPtr.Zero);
         }
         #endregion
 

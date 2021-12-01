@@ -23,6 +23,7 @@ namespace Microsoft.Extensions.Logging.Abstractions
         public void LogError(Exception exception, string message, params object[] args) => _logger.LogError(exception, message, args);
         public void LogInformation(string message, params object[] args) => _logger.LogInformation(message, args);
         public void LogTrace<T1>(T1 state) => _logger.LogTrace(state);
+        public void LogTrace(string message, params object[] args) => _logger.LogTrace(message, args);
         public void LogWarning(string message, params object[] args) => _logger.LogWarning(message, args);
     }
 }

@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace Device.Net
    ">
-    <meta name="generator" content="docfx 2.56.6.0">
+    <meta name="generator" content="docfx 2.58.2.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -92,8 +92,18 @@
       <h4><a class="xref" href="Device.Net.DeviceListener.html">DeviceListener</a></h4>
       <section><p>Handles connection of devices. This is not the recommended approach. Please use DeviceManager where possible. Documentation href=&quot;https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.iloggerfactory&quot;</p>
 </section>
+      <h4><a class="xref" href="Device.Net.DeviceManager.html">DeviceManager</a></h4>
+      <section><p>Manages the workflow of connecting and disconnecting devices for use with Observables.
+Slightly outdated documentation: href=&quot;https://melbournedeveloper.github.io/Device.Net/articles/DeviceManager.html&quot;</p>
+</section>
       <h4><a class="xref" href="Device.Net.FilterDeviceDefinition.html">FilterDeviceDefinition</a></h4>
       <section></section>
+      <h4><a class="xref" href="Device.Net.Observable-1.html">Observable&lt;T&gt;</a></h4>
+      <section><p>Basic observable which does thib of the Rx extensions so that we don't have to add that dependency</p>
+</section>
+      <h4><a class="xref" href="Device.Net.Observer-1.html">Observer&lt;T&gt;</a></h4>
+      <section><p>This class is a fill in for the Reactive extensions so that we don't need to depend on those at the low level</p>
+</section>
       <h4><a class="xref" href="Device.Net.Trace.html">Trace</a></h4>
       <section></section>
       <h4><a class="xref" href="Device.Net.UnsubscribeDisposable.html">UnsubscribeDisposable</a></h4>
@@ -115,17 +125,30 @@
 </section>
       <h4><a class="xref" href="Device.Net.IDeviceListener.html">IDeviceListener</a></h4>
       <section></section>
+      <h4><a class="xref" href="Device.Net.IDeviceManager.html">IDeviceManager</a></h4>
+      <section><p>This interface is a work in progress. It is not production ready.</p>
+</section>
+      <h4><a class="xref" href="Device.Net.IRequest.html">IRequest</a></h4>
+      <section></section>
     <h3 id="enums">Enums
   </h3>
       <h4><a class="xref" href="Device.Net.DeviceType.html">DeviceType</a></h4>
       <section></section>
     <h3 id="delegates">Delegates
   </h3>
+      <h4><a class="xref" href="Device.Net.DeviceNotify.html">DeviceNotify</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Device.Net.DevicesNotify.html">DevicesNotify</a></h4>
+      <section></section>
       <h4><a class="xref" href="Device.Net.GetConnectedDeviceDefinitionsAsync.html">GetConnectedDeviceDefinitionsAsync</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Device.Net.GetConnectedDevicesAsync.html">GetConnectedDevicesAsync</a></h4>
       <section></section>
       <h4><a class="xref" href="Device.Net.GetDeviceAsync.html">GetDeviceAsync</a></h4>
       <section></section>
       <h4><a class="xref" href="Device.Net.GetDeviceDefinition.html">GetDeviceDefinition</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Device.Net.NotifyDeviceError.html">NotifyDeviceError</a></h4>
       <section></section>
 </article>
           </div>

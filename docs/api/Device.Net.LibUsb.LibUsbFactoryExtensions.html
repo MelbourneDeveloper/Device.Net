@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class LibUsbFactoryExtensions
    ">
-    <meta name="generator" content="docfx 2.56.6.0">
+    <meta name="generator" content="docfx 2.58.2.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -112,20 +112,15 @@
   </div>
   <h3 id="methods">Methods
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbFactoryExtensions_CreateLibUsbDeviceFactory_Device_Net_FilterDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Int32__System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Device_Net_ConnectedDeviceDefinition_System_Threading_CancellationToken_System_Threading_Tasks_Task_System_Boolean___.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(Device.Net.FilterDeviceDefinition%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CSystem.Nullable%7BSystem.Int32%7D%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Func%7BDevice.Net.ConnectedDeviceDefinition%2CSystem.Threading.CancellationToken%2CSystem.Threading.Tasks.Task%7BSystem.Boolean%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbFactoryExtensions.cs/#L15">View Source</a>
-  </span>
+  
+  
   <a id="Device_Net_LibUsb_LibUsbFactoryExtensions_CreateLibUsbDeviceFactory_" data-uid="Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory*"></a>
   <h4 id="Device_Net_LibUsb_LibUsbFactoryExtensions_CreateLibUsbDeviceFactory_Device_Net_FilterDeviceDefinition_Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Int32__System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Device_Net_ConnectedDeviceDefinition_System_Threading_CancellationToken_System_Threading_Tasks_Task_System_Boolean___" data-uid="Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(Device.Net.FilterDeviceDefinition,Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.Int32},System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Device.Net.ConnectedDeviceDefinition,System.Threading.CancellationToken,System.Threading.Tasks.Task{System.Boolean}})">CreateLibUsbDeviceFactory(FilterDeviceDefinition, ILoggerFactory, Nullable&lt;Int32&gt;, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;, Func&lt;ConnectedDeviceDefinition, CancellationToken, Task&lt;Boolean&gt;&gt;)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IDeviceFactory CreateLibUsbDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition, ILoggerFactory loggerFactory = null, int? timeout = default(int? ), ushort? writeBufferSize = default(ushort? ), ushort? readBufferSize = default(ushort? ), Func&lt;ConnectedDeviceDefinition, CancellationToken, Task&lt;bool&gt;&gt; supportsDevice = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IDeviceFactory CreateLibUsbDeviceFactory(this FilterDeviceDefinition filterDeviceDefinition, ILoggerFactory loggerFactory = null, int? timeout = null, ushort? writeBufferSize = null, ushort? readBufferSize = null, Func&lt;ConnectedDeviceDefinition, CancellationToken, Task&lt;bool&gt;&gt; supportsDevice = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -184,20 +179,15 @@
       </tr>
     </tbody>
   </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbFactoryExtensions_CreateLibUsbDeviceFactory_System_Collections_Generic_IReadOnlyList_Device_Net_FilterDeviceDefinition__Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Int32__System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Device_Net_ConnectedDeviceDefinition_System_Threading_CancellationToken_System_Threading_Tasks_Task_System_Boolean___.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(System.Collections.Generic.IReadOnlyList%7BDevice.Net.FilterDeviceDefinition%7D%2CMicrosoft.Extensions.Logging.ILoggerFactory%2CSystem.Nullable%7BSystem.Int32%7D%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Nullable%7BSystem.UInt16%7D%2CSystem.Func%7BDevice.Net.ConnectedDeviceDefinition%2CSystem.Threading.CancellationToken%2CSystem.Threading.Tasks.Task%7BSystem.Boolean%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbFactoryExtensions.cs/#L33">View Source</a>
-  </span>
+  
+  
   <a id="Device_Net_LibUsb_LibUsbFactoryExtensions_CreateLibUsbDeviceFactory_" data-uid="Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory*"></a>
   <h4 id="Device_Net_LibUsb_LibUsbFactoryExtensions_CreateLibUsbDeviceFactory_System_Collections_Generic_IReadOnlyList_Device_Net_FilterDeviceDefinition__Microsoft_Extensions_Logging_ILoggerFactory_System_Nullable_System_Int32__System_Nullable_System_UInt16__System_Nullable_System_UInt16__System_Func_Device_Net_ConnectedDeviceDefinition_System_Threading_CancellationToken_System_Threading_Tasks_Task_System_Boolean___" data-uid="Device.Net.LibUsb.LibUsbFactoryExtensions.CreateLibUsbDeviceFactory(System.Collections.Generic.IReadOnlyList{Device.Net.FilterDeviceDefinition},Microsoft.Extensions.Logging.ILoggerFactory,System.Nullable{System.Int32},System.Nullable{System.UInt16},System.Nullable{System.UInt16},System.Func{Device.Net.ConnectedDeviceDefinition,System.Threading.CancellationToken,System.Threading.Tasks.Task{System.Boolean}})">CreateLibUsbDeviceFactory(IReadOnlyList&lt;FilterDeviceDefinition&gt;, ILoggerFactory, Nullable&lt;Int32&gt;, Nullable&lt;UInt16&gt;, Nullable&lt;UInt16&gt;, Func&lt;ConnectedDeviceDefinition, CancellationToken, Task&lt;Boolean&gt;&gt;)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public static IDeviceFactory CreateLibUsbDeviceFactory(this IReadOnlyList&lt;FilterDeviceDefinition&gt; filterDeviceDefinitions, ILoggerFactory loggerFactory = null, int? timeout = default(int? ), ushort? writeBufferSize = default(ushort? ), ushort? readBufferSize = default(ushort? ), Func&lt;ConnectedDeviceDefinition, CancellationToken, Task&lt;bool&gt;&gt; supportsDevice = null)</code></pre>
+    <pre><code class="lang-csharp hljs">public static IDeviceFactory CreateLibUsbDeviceFactory(this IReadOnlyList&lt;FilterDeviceDefinition&gt; filterDeviceDefinitions, ILoggerFactory loggerFactory = null, int? timeout = null, ushort? writeBufferSize = null, ushort? readBufferSize = null, Func&lt;ConnectedDeviceDefinition, CancellationToken, Task&lt;bool&gt;&gt; supportsDevice = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -256,13 +246,8 @@
       </tr>
     </tbody>
   </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbFactoryExtensions_GetConnectedDeviceDefinitionsAsync_System_Collections_Generic_IReadOnlyList_Device_Net_FilterDeviceDefinition__System_Threading_CancellationToken_.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbFactoryExtensions.GetConnectedDeviceDefinitionsAsync(System.Collections.Generic.IReadOnlyList%7BDevice.Net.FilterDeviceDefinition%7D%2CSystem.Threading.CancellationToken)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbFactoryExtensions.cs/#L61">View Source</a>
-  </span>
+  
+  
   <a id="Device_Net_LibUsb_LibUsbFactoryExtensions_GetConnectedDeviceDefinitionsAsync_" data-uid="Device.Net.LibUsb.LibUsbFactoryExtensions.GetConnectedDeviceDefinitionsAsync*"></a>
   <h4 id="Device_Net_LibUsb_LibUsbFactoryExtensions_GetConnectedDeviceDefinitionsAsync_System_Collections_Generic_IReadOnlyList_Device_Net_FilterDeviceDefinition__System_Threading_CancellationToken_" data-uid="Device.Net.LibUsb.LibUsbFactoryExtensions.GetConnectedDeviceDefinitionsAsync(System.Collections.Generic.IReadOnlyList{Device.Net.FilterDeviceDefinition},System.Threading.CancellationToken)">GetConnectedDeviceDefinitionsAsync(IReadOnlyList&lt;FilterDeviceDefinition&gt;, CancellationToken)</h4>
   <div class="markdown level1 summary"></div>
@@ -308,13 +293,8 @@
       </tr>
     </tbody>
   </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbFactoryExtensions_GetDevice_Device_Net_ConnectedDeviceDefinition_.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbFactoryExtensions.GetDevice(Device.Net.ConnectedDeviceDefinition)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbFactoryExtensions.cs/#L91">View Source</a>
-  </span>
+  
+  
   <a id="Device_Net_LibUsb_LibUsbFactoryExtensions_GetDevice_" data-uid="Device.Net.LibUsb.LibUsbFactoryExtensions.GetDevice*"></a>
   <h4 id="Device_Net_LibUsb_LibUsbFactoryExtensions_GetDevice_Device_Net_ConnectedDeviceDefinition_" data-uid="Device.Net.LibUsb.LibUsbFactoryExtensions.GetDevice(Device.Net.ConnectedDeviceDefinition)">GetDevice(ConnectedDeviceDefinition)</h4>
   <div class="markdown level1 summary"></div>
@@ -362,12 +342,6 @@
             <div class="sideaffix">
               <div class="contribution">
                 <ul class="nav">
-                  <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/new/develop/apiSpec/new?filename=Device_Net_LibUsb_LibUsbFactoryExtensions.md&amp;value=---%0Auid%3A%20Device.Net.LibUsb.LibUsbFactoryExtensions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
-                  </li>
-                  <li>
-                    <a href="https://github.com/MelbourneDeveloper/Device.Net/blob/develop/src/Device.Net.LibUsb/LibUsbFactoryExtensions.cs/#L13" class="contribution-link">View Source</a>
-                  </li>
                 </ul>
               </div>
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">

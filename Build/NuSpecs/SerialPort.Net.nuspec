@@ -6,10 +6,10 @@
         <title>SerialPort.Net</title>
         <description>Cross-platform .NET library for talking to Serial Port / COM devices. Backed by the Device.Net framework</description>
         <summary>Cross-platform .NET library for talking to Serial Port / COM devices. Backed by the Device.Net framework</summary>
-        <version>4.0.0 </version>
+        <version>4.3.0-beta</version>
         <authors>Christian Findlay</authors>
         <projectUrl>https://github.com/MelbourneDeveloper/Device.Net</projectUrl>
-        <releaseNotes>Alpha version. Please use 3.x for a stable release</releaseNotes>
+        <releaseNotes>Muiltple stability fixes</releaseNotes>
         <copyright>Copyright (c) 2021 Christian Findlay</copyright>
         <tags>Hid USB Android UWP Windows C# MacOS Linux</tags>
         <repository type="git" url="https://github.com/MelbourneDeveloper/Device.Net" commit="7819b5239f21c084da90f6dc5e7a1f30e5e513e1" />
@@ -19,10 +19,10 @@
         <license type="expression">MIT</license>
         <dependencies>
             <group targetFramework=".NETFramework4.5">
-                <dependency id="Device.Net" version="3.1.0" exclude="Build,Analyzers" />
+                <dependency id="Device.Net" version="4.3.0-beta" exclude="Build,Analyzers" />
             </group>
             <group targetFramework=".NETStandard2.0">
-                <dependency id="Device.Net" version="3.1.0" exclude="Build,Analyzers" />
+                <dependency id="Device.Net" version="4.3.0-beta" exclude="Build,Analyzers" />
                 <dependency id="Microsoft.Win32.Registry" version="4.5.0" exclude="Build,Analyzers" />
             </group>
         </dependencies>

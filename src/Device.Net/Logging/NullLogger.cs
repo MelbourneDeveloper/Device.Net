@@ -29,6 +29,10 @@ namespace Microsoft.Extensions.Logging.Abstractions
         {
         }
 
+        public void LogTrace(string message, params object[] args)
+        {
+        }
+
         public void LogWarning(string message, params object[] args)
         {
         }

@@ -14,7 +14,7 @@ namespace Device.Net.LibUsb
     public class LibUsbInterfaceManager : usbnet.UsbInterfaceManager, usbnet.IUsbInterfaceManager
     {
         #region Fields
-        private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _WriteAndReadLock = new(1, 1);
         private bool disposed;
         private readonly ushort? _writeBufferSize;
         private readonly ushort? _readBufferSize;

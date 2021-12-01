@@ -22,7 +22,7 @@ namespace Hid.Net.UWP
         #region Private Fields
 
         private readonly Func<TransferResult, Report> _readTransferTransform;
-        private readonly SemaphoreSlim _WriteAndReadLock = new SemaphoreSlim(1, 1);
+        private readonly SemaphoreSlim _WriteAndReadLock = new(1, 1);
         private readonly Func<byte[], byte, byte[]> _writeTransferTransform;
         private ushort? _readBufferSize = null;
         private ushort? _writeBufferSize = null;

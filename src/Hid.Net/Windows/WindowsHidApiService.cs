@@ -58,7 +58,7 @@ namespace Hid.Net.Windows
         private static extern void HidD_GetHidGuid(out Guid hidGuid);
 
         [DllImport("hid.dll", SetLastError = true)]
-        private static extern bool HidD_FreePreparsedData(ref IntPtr pointerToPreparsedData);
+        private static extern bool HidD_FreePreparsedData(IntPtr pointerToPreparsedData);
 
         private delegate bool GetString(SafeFileHandle hidDeviceObject, IntPtr pointerToBuffer, uint bufferLength);
 
@@ -114,7 +114,7 @@ namespace Hid.Net.Windows
                 throw new ApiException($"Could not get Hid capabilities. Return code: {result}");
             }
 
-            isSuccess = HidD_FreePreparsedData(ref pointerToPreParsedData);
+            isSuccess = HidD_FreePreparsedData(pointerToPreParsedData);
             _ = WindowsHelpers.HandleError(isSuccess, "Could not release handle for getting Hid capabilities", Logger);
 
             return hidCollectionCapabilities;
@@ -137,9 +137,14 @@ namespace Hid.Net.Windows
         //TODO: These are not opening as async. If we do, we get an error. This is probably why cancellation tokens don't work.
         //https://github.com/MelbourneDeveloper/Device.Net/issues/188
 
-        public Stream OpenRead(SafeFileHandle readSafeFileHandle, ushort readBufferSize) => new FileStream(readSafeFileHandle, FileAccess.Read, readBufferSize, false);
+#if NETFRAMEWORK
+        private const bool _isAsync = false;
+#else
+        private const bool _isAsync = true;
+#endif
+        public Stream OpenRead(SafeFileHandle readSafeFileHandle, ushort readBufferSize) => new FileStream(readSafeFileHandle, FileAccess.Read, readBufferSize, _isAsync);
 
-        public Stream OpenWrite(SafeFileHandle writeSafeFileHandle, ushort writeBufferSize) => new FileStream(writeSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, false);
+        public Stream OpenWrite(SafeFileHandle writeSafeFileHandle, ushort writeBufferSize) => new FileStream(writeSafeFileHandle, FileAccess.ReadWrite, writeBufferSize, _isAsync);
         #endregion
 
         #region Private Methods
