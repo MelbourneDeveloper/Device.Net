@@ -1,4 +1,5 @@
 ﻿
+using Device.Net.Windows;
 using Hid.Net;
 using Hid.Net.Windows;
 using Microsoft.Extensions.Logging;
@@ -40,11 +41,11 @@ namespace Device.Net.UnitTests
                 createReadConnection: (apiService, deviceId, fileAccessRights, shareMode, creationDisposition)
                 => apiService.CreateFile(
                     deviceId,
-                    Windows.FileAccessRights.GenericRead,
+                    FileAccessRights.GenericRead,
                     shareMode,
                     IntPtr.Zero,
                     creationDisposition,
-                    FILE_FLAG_OVERLAPPED,
+                    Constants.FILE_FLAG_OVERLAPPED,
                     IntPtr.Zero));
     }
 }

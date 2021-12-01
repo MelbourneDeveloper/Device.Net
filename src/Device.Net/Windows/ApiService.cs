@@ -4,22 +4,24 @@ using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
 
-#pragma warning disable CA1707 // Identifiers should not contain underscores
-#pragma warning disable CA1021 // Avoid out parameters
 #pragma warning disable CA5392 // Use DefaultDllImportSearchPaths attribute for P/Invokes
 #pragma warning disable CA1060 // Move pinvokes to native methods class
+#pragma warning disable CA1707 // Identifiers should not contain underscores
 
 namespace Device.Net.Windows
 {
+    public static class Constants
+    {
+#if NETFRAMEWORK
+        public const uint FILE_FLAG_OVERLAPPED = 0;
+#else
+        public const uint FILE_FLAG_OVERLAPPED = 0x40000000;
+#endif
+    }
+
     internal class ApiService : IApiService
     {
         #region Fields
-#if NETFRAMEWORK
-        private const uint FILE_FLAG_OVERLAPPED = 0;
-#else
-        private const uint FILE_FLAG_OVERLAPPED = 0x40000000;
-#endif
-
         protected ILogger Logger { get; }
         #endregion
 
@@ -44,8 +46,15 @@ namespace Device.Net.Windows
         private SafeFileHandle CreateConnection(string deviceId, FileAccessRights desiredAccess, uint shareMode, uint creationDisposition)
         {
             Logger.LogInformation("Calling {call} Area: {area} for DeviceId: {deviceId}. Desired Access: {desiredAccess}. Share mode: {shareMode}. Creation Disposition: {creationDisposition}", nameof(APICalls.CreateFile), nameof(ApiService), deviceId, desiredAccess, shareMode, creationDisposition);
-            return APICalls.CreateFile(deviceId, desiredAccess, shareMode, IntPtr.Zero, creationDisposition, FILE_FLAG_OVERLAPPED, IntPtr.Zero);
+            return CreateFile(deviceId, desiredAccess, shareMode, IntPtr.Zero, creationDisposition, Constants.FILE_FLAG_OVERLAPPED, IntPtr.Zero);
         }
+
+        /// <summary>
+        /// This will probably get refactored away or the others will
+        /// </summary>
+        /// <returns></returns>
+        public SafeFileHandle CreateFile(string lpFileName, FileAccessRights dwDesiredAccess, uint dwShareMode, IntPtr lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile)
+            => APICalls.CreateFile(lpFileName, dwDesiredAccess, dwShareMode, IntPtr.Zero, dwCreationDisposition, dwFlagsAndAttributes, IntPtr.Zero);
         #endregion
 
         #region DLL Imports

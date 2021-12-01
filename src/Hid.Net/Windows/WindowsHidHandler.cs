@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace Hid.Net.Windows
 {
     public delegate SafeFileHandle CreateConnection(
-        IHidApiService apiService,
+        IApiService apiService,
         string deviceId,
         FileAccessRights desiredAccess,
         uint shareMode,

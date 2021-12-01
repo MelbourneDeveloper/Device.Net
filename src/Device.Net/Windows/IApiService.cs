@@ -8,7 +8,7 @@ namespace Device.Net.Windows
 {
     public interface IApiService
     {
-        SafeFileHandle CreateFile(string lpFileName, FileAccessRights dwDesiredAccess, uint dwShareMode, IntPtr lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile)      
+        SafeFileHandle CreateFile(string lpFileName, FileAccessRights dwDesiredAccess, uint dwShareMode, IntPtr lpSecurityAttributes, uint dwCreationDisposition, uint dwFlagsAndAttributes, IntPtr hTemplateFile);
         SafeFileHandle CreateWriteConnection(string deviceId);
         SafeFileHandle CreateReadConnection(string deviceId, FileAccessRights desiredAccess);
         //TODO: Get rid of read/write. They can be done with file streams...
