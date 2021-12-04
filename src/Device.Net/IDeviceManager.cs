@@ -6,6 +6,7 @@ namespace Device.Net
 {
     public delegate void DevicesNotify(IReadOnlyCollection<ConnectedDeviceDefinition> connectedDevices);
     public delegate void DeviceNotify(IDevice connectedDevice);
+    public delegate void DeviceDisconnect();
     public delegate void NotifyDeviceError(ConnectedDeviceDefinition connectedDevice, Exception exception);
     public delegate Task<IReadOnlyList<ConnectedDeviceDefinition>> GetConnectedDevicesAsync();
 

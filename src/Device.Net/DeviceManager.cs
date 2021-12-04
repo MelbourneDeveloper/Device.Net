@@ -17,11 +17,12 @@ namespace Device.Net
         #region Fields
         private readonly ILogger<DeviceManager> _logger;
         private readonly Func<IDevice, Task> _initializeDeviceAction;
-        private IDevice _selectedDevice;
+        private IDevice? _selectedDevice;
         private readonly Queue<IRequest> _queuedRequests = new();
         private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
         private readonly SemaphoreSlim _semaphoreSlim2 = new(1, 1);
         private readonly DeviceNotify _notifyDeviceInitialized;
+        private readonly DeviceDisconnect _deviceDisconnect;
         private readonly NotifyDeviceError _notifyDeviceException;
         private bool isDisposed;
         private readonly int _pollMilliseconds;
@@ -38,7 +39,7 @@ namespace Device.Net
 
         public IObservable<IReadOnlyCollection<ConnectedDeviceDefinition>> ConnectedDevicesObservable => connectedDevicesObservable;
 
-        public IDevice SelectedDevice
+        public IDevice? SelectedDevice
         {
             get => _selectedDevice;
             private set
@@ -63,12 +64,13 @@ namespace Device.Net
         /// <param name="filterMiddleMessages"></param>
         public DeviceManager(
             DeviceNotify notifyDeviceInitialized,
+            DeviceDisconnect? notifyDeviceDisconnected,
             NotifyDeviceError notifyDeviceException,
             Func<IDevice, Task> initializeDeviceAction,
             GetConnectedDevicesAsync getConnectedDevicesAsync,
             GetDeviceAsync getDevice,
             int pollMilliseconds,
-            ILoggerFactory loggerFactory = null,
+            ILoggerFactory? loggerFactory = null,
             bool filterMiddleMessages = true)
         {
             _notifyDeviceInitialized = notifyDeviceInitialized ?? throw new ArgumentNullException(nameof(notifyDeviceInitialized));
