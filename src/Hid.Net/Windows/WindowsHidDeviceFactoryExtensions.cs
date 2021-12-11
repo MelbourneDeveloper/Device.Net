@@ -68,6 +68,8 @@ namespace Hid.Net.Windows
         /// <param name="readBufferSize">Override the input report size</param>
         /// <param name="writeBufferSize">Override the output report size</param>
         /// <param name="writeReportTransform">Given the data supplied, allow you to divide the data in to a <see cref="Report"/></param>
+        /// <param name="openReadAsync">Whether or not to open the handle in async mode</param>
+        /// <param name="openWriteAsync">Whether or not to open the handle in async mode</param>
         /// <param name="getConnectedDeviceDefinitionsAsync">Override the default call for getting definitions</param>
         /// <param name="readReportTransform">Allows you to manually convert the <see cref="Report"/> in to a <see cref="TransferResult"/> so that the Report Id is not discarded on ReadAsync. By default, this inserts the Report Id at index zero of the array.</param>
         /// <param name="readTransferTransform">Exposes the raw data from the device (including Report Id) on reads and allows you to format the returned <see cref="TransferResult"/></param>
@@ -84,7 +86,9 @@ namespace Hid.Net.Windows
         Func<Report, TransferResult> readReportTransform = null,
         Func<TransferResult, Report> readTransferTransform = null,
         Func<byte[], byte, byte[]> writeTransferTransform = null,
-        WriteReportTransform writeReportTransform = null)
+        WriteReportTransform writeReportTransform = null,
+        bool openReadAsync = true,
+        bool openWriteAsync = true)
         {
             return CreateWindowsHidDeviceFactory(
                 new ReadOnlyCollection<FilterDeviceDefinition>(new List<FilterDeviceDefinition> { filterDeviceDefinition }),
@@ -97,7 +101,9 @@ namespace Hid.Net.Windows
                 readReportTransform,
                 readTransferTransform,
                 writeTransferTransform,
-                writeReportTransform);
+                writeReportTransform,
+                openReadAsync,
+                openWriteAsync);
         }
 
         /// <summary>
@@ -114,6 +120,8 @@ namespace Hid.Net.Windows
         /// <param name="readTransferTransform">Exposes the raw data from the device (including Report Id) on reads and allows you to format the returned <see cref="TransferResult"/></param>
         /// <param name="writeTransferTransform">Given the Report Id and data supplied for the write, allow you to format the raw data that is sent to the device</param>
         /// <param name="writeReportTransform">Given the data supplied, allow you to divide the data in to a <see cref="Report"/></param>
+        /// <param name="openReadAsync">Whether or not to open the handle in async mode</param>
+        /// <param name="openWriteAsync">Whether or not to open the handle in async mode</param>
         /// <returns>A factory which enumerates and instantiates devices</returns>
         public static IDeviceFactory CreateWindowsHidDeviceFactory(
             this IEnumerable<FilterDeviceDefinition> filterDeviceDefinitions,
@@ -126,7 +134,9 @@ namespace Hid.Net.Windows
             Func<Report, TransferResult> readReportTransform = null,
             Func<TransferResult, Report> readTransferTransform = null,
             Func<byte[], byte, byte[]> writeTransferTransform = null,
-            WriteReportTransform writeReportTransform = null)
+            WriteReportTransform writeReportTransform = null,
+            bool openReadAsync = true,
+            bool openWriteAsync = true)
         {
             if (filterDeviceDefinitions == null) throw new ArgumentNullException(nameof(filterDeviceDefinitions));
 
@@ -160,7 +170,9 @@ namespace Hid.Net.Windows
                         hidApiService,
                         loggerFactory,
                         readTransferTransform,
-                        writeTransferTransform),
+                        writeTransferTransform,
+                        openReadAsync,
+                        openWriteAsync),
                     loggerFactory,
                     readReportTransform,
                     writeReportTransform

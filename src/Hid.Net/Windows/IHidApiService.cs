@@ -16,7 +16,7 @@ namespace Hid.Net.Windows
         string GetManufacturer(SafeFileHandle safeFileHandle);
         string GetProduct(SafeFileHandle safeFileHandle);
         string GetSerialNumber(SafeFileHandle safeFileHandle);
-        Stream OpenRead(SafeFileHandle readSafeFileHandle, ushort readBufferSize);
-        Stream OpenWrite(SafeFileHandle writeSafeFileHandle, ushort writeBufferSize);
+        Stream OpenRead(SafeFileHandle readSafeFileHandle, ushort readBufferSize, bool isAsync);
+        Stream OpenWrite(SafeFileHandle writeSafeFileHandle, ushort writeBufferSize, bool isAsync);
     }
 }

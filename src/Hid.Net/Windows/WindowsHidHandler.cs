@@ -1,4 +1,4 @@
-﻿using Device.Net;
+using Device.Net;
 using Device.Net.Exceptions;
 using Device.Net.Windows;
 using Microsoft.Extensions.Logging;
@@ -24,6 +24,8 @@ namespace Hid.Net.Windows
         private SafeFileHandle _readSafeFileHandle;
         private Stream _writeFileStream;
         private SafeFileHandle _writeSafeFileHandle;
+        private readonly bool _openReadAsync;
+        private readonly bool _openWriteAsync;
 
         #endregion Private Fields
 
@@ -36,7 +38,10 @@ namespace Hid.Net.Windows
             IHidApiService hidApiService = null,
             ILoggerFactory loggerFactory = null,
             Func<TransferResult, Report> readTransferTransform = null,
-            Func<byte[], byte, byte[]> writeTransferTransform = null)
+            Func<byte[], byte, byte[]> writeTransferTransform = null,
+            bool openReadAsync = true,
+            bool openWriteAsync = true
+            )
         {
             _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidHandler>();
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
@@ -51,6 +56,8 @@ namespace Hid.Net.Windows
             _hidService = hidApiService ?? new WindowsHidApiService(loggerFactory);
             WriteBufferSize = writeBufferSize;
             ReadBufferSize = readBufferSize;
+            _openReadAsync = openReadAsync;
+            _openWriteAsync = openWriteAsync;
         }
 
         #endregion Public Constructors
@@ -127,7 +134,7 @@ namespace Hid.Net.Windows
                           $"ReadBufferSize must be specified. HidD_GetAttributes may have failed or returned an InputReportByteLength of 0. Please specify this argument in the constructor");
                   }
 
-                  _readFileStream = _hidService.OpenRead(_readSafeFileHandle, ReadBufferSize.Value);
+                  _readFileStream = _hidService.OpenRead(_readSafeFileHandle, ReadBufferSize.Value, _openReadAsync);
 
                   if (_readFileStream.CanRead)
                   {
@@ -147,7 +154,7 @@ namespace Hid.Net.Windows
                   }
 
                   //Don't open if this is a read only connection
-                  _writeFileStream = _hidService.OpenWrite(_writeSafeFileHandle, WriteBufferSize.Value);
+                  _writeFileStream = _hidService.OpenWrite(_writeSafeFileHandle, WriteBufferSize.Value, _openWriteAsync);
 
                   if (_writeFileStream.CanWrite)
                   {
@@ -171,7 +178,11 @@ namespace Hid.Net.Windows
 
             //Read the data
             var bytes = new byte[ReadBufferSize.Value];
-            var bytesRead = (uint)await _readFileStream.ReadAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false);
+
+            var bytesRead = (uint)(_openReadAsync ?
+                await _readFileStream.ReadAsync(bytes, 0, bytes.Length, cancellationToken).ConfigureAwait(false) :
+                _readFileStream.Read(bytes, 0, bytes.Length));
+
 
             var transferResult = new TransferResult(bytes, bytesRead);
 
