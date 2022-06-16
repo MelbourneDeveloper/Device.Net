@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 namespace Device.Net
 {
     /// <summary>
-    /// This class is a work in progress. It is not production ready. Documentation: <see href="https://melbournedeveloper.github.io/Device.Net/articles/DeviceManager.html"/>
+    /// This class is a work in progress. It is not production ready.
+    /// <para>Documentation: <see href="https://melbournedeveloper.github.io/Device.Net/articles/DeviceManager.html"/></para>
     /// </summary>
     public class DeviceManager : IDeviceManager, IDisposable
     {
@@ -59,7 +60,7 @@ namespace Device.Net
         /// <param name="getConnectedDevicesAsync"></param>
         /// <param name="getDevice"></param>
         /// <param name="pollMilliseconds"></param>
-        /// <param name="loggerFactory"></param>
+        /// <param name="loggerFactory"><see href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.iloggerfactory"/></param>
         public DeviceManager(
             DeviceNotify notifyDeviceInitialized,
             DevicesNotify notifyConnectedDevices,
