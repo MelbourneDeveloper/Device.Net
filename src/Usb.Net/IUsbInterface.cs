@@ -29,8 +29,8 @@ namespace Usb.Net
 
         /// <summary>
         /// Performs a USB Control Transfer
-        /// https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-control-transfer
-        /// https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/how-to-send-a-usb-control-transfer--uwp-app-
+        /// <see href="https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-control-transfer"/>
+        /// <see href="https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/how-to-send-a-usb-control-transfer--uwp-app-"/>
         /// </summary>
         Task<TransferResult> PerformControlTransferAsync(SetupPacket setupPacket, byte[] buffer = null, CancellationToken cancellationToken = default);
     }
