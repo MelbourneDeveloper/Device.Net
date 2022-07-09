@@ -36,7 +36,8 @@ namespace Hid.Net.Windows
             IHidApiService hidApiService = null,
             ILoggerFactory loggerFactory = null,
             Func<TransferResult, Report> readTransferTransform = null,
-            Func<byte[], byte, byte[]> writeTransferTransform = null)
+            Func<byte[], byte, byte[]> writeTransferTransform = null,
+            Func<string, SafeFileHandle> createReadFileHandle = null)
         {
             _logger = (loggerFactory ?? NullLoggerFactory.Instance).CreateLogger<WindowsHidHandler>();
             DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
@@ -51,6 +52,7 @@ namespace Hid.Net.Windows
             _hidService = hidApiService ?? new WindowsHidApiService(loggerFactory);
             WriteBufferSize = writeBufferSize;
             ReadBufferSize = readBufferSize;
+            CreateReadFileHandle = createReadFileHandle ?? new Func<string, SafeFileHandle>((d) => _hidService.CreateReadConnection(d, FileAccessRights.GenericRead));
         }
 
         #endregion Public Constructors
@@ -63,6 +65,7 @@ namespace Hid.Net.Windows
         public bool? IsReadOnly { get; private set; }
         public ushort? ReadBufferSize { get; private set; }
         public ushort? WriteBufferSize { get; private set; }
+        public Func<string, SafeFileHandle> CreateReadFileHandle;
 
         #endregion Public Properties
 
@@ -101,7 +104,7 @@ namespace Hid.Net.Windows
                           $"{nameof(DeviceId)} must be specified before {nameof(InitializeAsync)} can be called.");
                   }
 
-                  _readSafeFileHandle = _hidService.CreateReadConnection(DeviceId, FileAccessRights.GenericRead);
+                  _readSafeFileHandle = CreateReadFileHandle(DeviceId);
                   _writeSafeFileHandle = _hidService.CreateWriteConnection(DeviceId);
 
                   if (_readSafeFileHandle.IsInvalid)
