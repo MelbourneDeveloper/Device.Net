@@ -98,7 +98,7 @@ namespace Device.Net.LibUsb
                 buffer ??= new byte[setupPacket.Length];
 
                 var sp = new UsbSetupPacket(
-                    (byte)setupPacket.RequestType.Type,
+                    setupPacket.RequestType.ToByte(),
                     setupPacket.Request,
                     setupPacket.Value,
                     setupPacket.Index,
