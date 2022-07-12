@@ -10,7 +10,7 @@ namespace Device.Net
 {
     /// <summary>
     /// Manages the workflow of connecting and disconnecting devices for use with Observables. 
-    /// Slightly outdated documentation: href="https://melbournedeveloper.github.io/Device.Net/articles/DeviceManager.html"
+    /// <para>Slightly outdated documentation: <see href="https://melbournedeveloper.github.io/Device.Net/articles/DeviceManager.html"/></para>
     /// </summary>
     public class DeviceManager : IDeviceManager, IDisposable
     {

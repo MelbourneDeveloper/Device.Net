@@ -14,7 +14,8 @@ using timer = System.Timers.Timer;
 namespace Device.Net
 {
     /// <summary>
-    /// Handles connection of devices. This is not the recommended approach. Please use DeviceManager where possible. Documentation href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.iloggerfactory" 
+    /// Handles connection of devices.
+    /// <para>This is not the recommended approach. Please use DeviceManager where possible.</para>
     /// </summary>
     public sealed class DeviceListener : IDeviceListener
     {
@@ -43,6 +44,7 @@ namespace Device.Net
         /// <summary>
         /// Handles connecting to and disconnecting from a set of potential devices by their definition
         /// </summary>
+        /// <param name="loggerFactory"><see href="https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.logging.iloggerfactory"/></param>
         public DeviceListener(
             IDeviceFactory deviceFactory,
             int? pollMilliseconds = 1000,
