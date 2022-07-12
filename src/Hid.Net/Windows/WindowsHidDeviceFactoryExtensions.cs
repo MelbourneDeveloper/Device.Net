@@ -129,7 +129,7 @@ namespace Hid.Net.Windows
             Func<TransferResult, Report> readTransferTransform = null,
             Func<byte[], byte, byte[]> writeTransferTransform = null,
             WriteReportTransform writeReportTransform = null,
-            Func<string, SafeFileHandle> createReadFileHandle = null)
+            Func<string, IHidApiService, SafeFileHandle> createReadFileHandle = null)
         {
             if (filterDeviceDefinitions == null) throw new ArgumentNullException(nameof(filterDeviceDefinitions));
 
