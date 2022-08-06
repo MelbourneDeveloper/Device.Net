@@ -15,7 +15,7 @@ namespace Device.Net
 {
     /// <summary>
     /// Handles connection of devices.
-    /// <para>This is not the recommended approach. Please use DeviceManager where possible.</para>
+    /// <para>This is not the recommended approach. Please use <see cref="DeviceManager"/> where possible.</para>
     /// </summary>
     public sealed class DeviceListener : IDeviceListener
     {
