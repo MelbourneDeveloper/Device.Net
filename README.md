@@ -1,6 +1,8 @@
 
 # Hid.Net, Usb.Net, SerialPort.Net (Device.Net)
 
+**Project Update**: this project is on pause. Please read the whole story [here](https://www.christianfindlay.com/blog/device-net-project-status).
+
 ![diagram](https://github.com/MelbourneDeveloper/Device.Net/blob/main/Diagram.png)
 
 **Cross-platform .NET framework for talking to connected devices such as USB, Serial Port and Hid devices**
