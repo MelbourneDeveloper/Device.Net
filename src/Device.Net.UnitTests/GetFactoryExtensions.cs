@@ -1,4 +1,5 @@
 ﻿
+using Device.Net.Windows;
 using Hid.Net;
 using Hid.Net.Windows;
 using Microsoft.Extensions.Logging;
@@ -36,7 +37,16 @@ namespace Device.Net.UnitTests
             => filterDeviceDefinition.CreateWindowsHidDeviceFactory(
                 loggerFactory,
                 readReportTransform: readReportTransform,
-                writeReportTransform: writeReportTransform);
+                writeReportTransform: writeReportTransform,
+                createReadConnection: (apiService, deviceId, fileAccessRights, shareMode, creationDisposition)
+                => apiService.CreateFile(
+                    deviceId,
+                    FileAccessRights.GenericRead,
+                    shareMode,
+                    IntPtr.Zero,
+                    creationDisposition,
+                    Constants.FILE_FLAG_OVERLAPPED,
+                    IntPtr.Zero));
     }
 }
 
