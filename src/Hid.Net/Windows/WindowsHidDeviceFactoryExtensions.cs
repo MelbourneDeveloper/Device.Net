@@ -18,6 +18,78 @@ namespace Hid.Net.Windows
     {
         #region Public Methods
 
+        public static IFactoryBuilder CreateWindowsHidDeviceFactory(
+        this IFactoryBuilder builder,
+        FilterDeviceDefinition filterDeviceDefinition,
+        IHidApiService hidApiService = null,
+        Guid? classGuid = null,
+        ushort? readBufferSize = null,
+        ushort? writeBufferSize = null,
+        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+        Func<Report, TransferResult> readReportTransform = null,
+        Func<TransferResult, Report> readTransferTransform = null,
+        Func<byte[], byte, byte[]> writeTransferTransform = null,
+        WriteReportTransform writeReportTransform = null)
+        {
+            _ = builder ?? throw new ArgumentNullException(nameof(builder));
+
+            var factories = new List<IDeviceFactory>(builder.Factories)
+            {
+                CreateWindowsHidDeviceFactory
+                (
+                new ReadOnlyCollection<FilterDeviceDefinition>(new List<FilterDeviceDefinition> { filterDeviceDefinition }),
+                builder.LoggerFactory,
+                hidApiService,
+                classGuid,
+                readBufferSize,
+                writeBufferSize,
+                getConnectedDeviceDefinitionsAsync,
+                readReportTransform,
+                readTransferTransform,
+                writeTransferTransform,
+                writeReportTransform
+                )
+            };
+
+            return new FactoryBuilder(factories, builder.LoggerFactory);
+        }
+
+        public static IFactoryBuilder CreateWindowsHidDeviceFactory(
+        this IFactoryBuilder builder,
+        FilterDeviceDefinition[] filterDeviceDefinitions,
+        IHidApiService hidApiService = null,
+        Guid? classGuid = null,
+        ushort? readBufferSize = null,
+        ushort? writeBufferSize = null,
+        GetConnectedDeviceDefinitionsAsync getConnectedDeviceDefinitionsAsync = null,
+        Func<Report, TransferResult> readReportTransform = null,
+        Func<TransferResult, Report> readTransferTransform = null,
+        Func<byte[], byte, byte[]> writeTransferTransform = null,
+        WriteReportTransform writeReportTransform = null)
+        {
+            _ = builder ?? throw new ArgumentNullException(nameof(builder));
+
+            var factories = new List<IDeviceFactory>(builder.Factories)
+            {
+                CreateWindowsHidDeviceFactory
+                (
+                new ReadOnlyCollection<FilterDeviceDefinition>(filterDeviceDefinitions),
+                builder.LoggerFactory,
+                hidApiService,
+                classGuid,
+                readBufferSize,
+                writeBufferSize,
+                getConnectedDeviceDefinitionsAsync,
+                readReportTransform,
+                readTransferTransform,
+                writeTransferTransform,
+                writeReportTransform
+                )
+            };
+
+            return new FactoryBuilder(factories, builder.LoggerFactory);
+        }
+
         /// <summary>
         /// Creates a <see cref="IDeviceFactory"/> for Windows Hid devices
         /// </summary>
