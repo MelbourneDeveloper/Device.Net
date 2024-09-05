@@ -1,7 +1,17 @@
 
 # Hid.Net, Usb.Net, SerialPort.Net (Device.Net)
 
-**Project Update**: this project is on pause. Please read the whole story [here](https://www.christianfindlay.com/blog/device-net-project-status).
+## Project Update
+
+**I am looking for monthly funding to support development so I can offer a Service Level Agreement as part of the company [Nimblesite](https://www.nimblesite.co/). There is a [GitHub Discussion here](https://github.com/MelbourneDeveloper/Device.Net/discussions/249) if you'd like to comment on it.**
+
+Aims:
+- Upgrade to .NET 8/9
+- Test on Windows 10 and 11
+- macOS Versions
+- Linux Versions
+
+**If you are in a position to fund the project, please [reach out](https://www.nimblesite.co/#contact)**
 
 ![diagram](https://github.com/MelbourneDeveloper/Device.Net/blob/main/Diagram.png)
 
