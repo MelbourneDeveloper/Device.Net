@@ -7,7 +7,7 @@ namespace Usb.Net.Windows
         public static WINUSB_SETUP_PACKET ToWindowsSetupPacket(this SetupPacket setupPacket)
             => setupPacket == null ? throw new ArgumentNullException(nameof(setupPacket)) : new WINUSB_SETUP_PACKET
             {
-                Index = setupPacket.Length,
+                Index = setupPacket.Index,
                 Length = setupPacket.Length,
                 Request = setupPacket.Request,
                 RequestType = setupPacket.RequestType.ToByte(),
